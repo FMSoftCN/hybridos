@@ -53,7 +53,7 @@ The blockchain technology may change this. The decentralized design of the block
 provides another way to enhance the security of IoT. HybridOS will try to use the 
 technologies to improve the security of IoT.
 
-## Techenical Terms
+## Technical Terminologies
 
   * Device: The IoT device; For HybridOS, the device here refers to a smart
     device that has direct access to the Internet and with or without a display.
