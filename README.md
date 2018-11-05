@@ -17,12 +17,12 @@ At present, when we want to develop a consumer IoT (Internet of Things) device,
 we have to build a software team which has five engineers at least due to 
 the complex software stack and protocol stack of IoT computing environment:
 
-    * At least one firmware engineer who writes programs in C/C++ for the IoT device, which
-      generally runs a RTOS or Linux.
-    * At least one server engineer who writes programs in PHP/Python for the cloud services.
-    * At least one front-end engineer who writes programs in JavaScript/CSS/HTML5 for webpages.
-    * At least two client-end engineers who write programs in Java, Objective C, or Swift
-      for smart phones, which run Android or iOS.
+  * At least one firmware engineer who writes programs in C/C++ for the IoT device, which
+    generally runs a RTOS or Linux.
+  * At least one server engineer who writes programs in PHP/Python for the cloud services.
+  * At least one front-end engineer who writes programs in JavaScript/CSS/HTML5 for webpages.
+  * At least two client-end engineers who write programs in Java, Objective C, or Swift
+    for smart phones, which run Android or iOS.
 
 In addition, for some devices which is used for business, we need one or two engineers
 to write desktop apps in C/C++ for Windows or macOS.
@@ -55,11 +55,11 @@ technologies to improve the security of IoT.
 
 ## Techenical Terms
 
-    * Device: The IoT device; For HybridOS, the device here refers to a smart
-      device that has direct access to the Internet and with or without a display.
-    * Device App: An app runs on a device, with or without GUI.
-    * Client: A desktop computer, a smart phone, or a tablet.
-    * Client App: An app runs on a client.
+  * Device: The IoT device; For HybridOS, the device here refers to a smart
+    device that has direct access to the Internet and with or without a display.
+  * Device App: An app runs on a device, with or without GUI.
+  * Client: A desktop computer, a smart phone, or a tablet.
+  * Client App: An app runs on a client.
 
 ## Goals of HybridOS
 
@@ -67,19 +67,19 @@ technologies to improve the security of IoT.
 
 HybridOS provides a new software stack for smart IoT device:
 
-    * A standard peripheral and task management interface based on hBus (an enhanced
-      edition of uBus), such as networking management, sensor (like GPS and 
-      gravity accelerometer) management, and USB interface management.
+  * A standard peripheral and task management interface based on hBus (an enhanced
+    edition of uBus), such as networking management, sensor (like GPS and 
+    gravity accelerometer) management, and USB interface management.
 
-    * Runtime support environment for various networking and cloud computing services
-      based on Python, such as MQTT, WebSocket, HTTP, streaming services, etc.
+  * Runtime support environment for various networking and cloud computing services
+    based on Python, such as MQTT, WebSocket, HTTP, streaming services, etc.
 
-    * A new and universal app framework for IoT devices and client apps.
-      The developers can write device GUI app and client apps for Windows, macOS, 
-      Andriod, and iOS operating systems by using a set of extended HTML5 tags 
-      and JavaScript language. You can even embedded your HybridOS app directly
-      in your webpages which are wrotten in standard HTML5 by importing the HybridOS
-      JavaScript library.
+  * A new and universal app framework for IoT devices and client apps.
+    The developers can write device GUI app and client apps for Windows, macOS, 
+    Andriod, and iOS operating systems by using a set of extended HTML5 tags 
+    and JavaScript language. You can even embedded your HybridOS app directly
+    in your webpages which are wrotten in standard HTML5 by importing the HybridOS
+    JavaScript library.
 
 Finally, the application programming languages of HybridOS will be reduced to two: 
 JavaScript for apps and Python for services. As a result, the development cost of 
@@ -110,7 +110,7 @@ the difficulty of supporting various protocol stacks, thus reducing development 
 
 ## Current Status
 
-    * Nov. 2018: Initiate this open source project.
+  * Nov. 2018: Initiate this open source project.
 
 ## Copying
 
