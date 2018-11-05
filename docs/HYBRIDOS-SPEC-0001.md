@@ -1,8 +1,9 @@
-# HybridOS Specification 0001
+# HybridOS UI Framework
 
-Author: Vincent Wei
-Category: UI Framework
-Date: November 2018
+HybridOS Specification 0001<br/>
+Author: Vincent Wei<br/>
+Category: UI Framework<br/>
+Date: November 2018<br/>
 Status: Proposal
 
 Copyright Notice
