@@ -43,17 +43,47 @@ a HTML5 DOM element.
 HybridOS defines four extended tags: `act`, `view`.
 
   * act: define an activity.
+  * view: define a view.
+
+To define a UI, we use a customized HTML5 markup tag `view`:
+
+    <view hbd-type="panel" hbd-name="main">
+    </view>
+
+We introduce some properties for view and act tags:
+
+  * hbd-name: The name of a view and an activity. Generally, the value of this
+    property will be a variable which you can refer to in your JavaScript or C++
+    program.
+  * hbd-type: The view type. It specifies the type of a view. Currently, HybridOS
+    provides the following view types:
+    * PanelView
+    * ScrollView
+    * ImageView
+    * AnimationImageView
+    * TextView
+    * ListView
+    * ItemView
+    * SlEditView
+    * MlEditView
+    * ...
+
+All the view types are implemented by a C++ GUI class library of HybridOS.
+This C++ class library is called mGNGUX, which is based on MiniGUI.
 
 ### act
 
 ### view
 
+### Properties
+
+### Differences from the standard HTML5 tags
+
+  * We DO NOT use text in the tags like:
+
+    <view>I am Vincent</view>
+
 ## A Sample
-
-To define a UI, we use a customized HTML5 markup tag `view`:
-
-    <view hbd-type="panel" id="main" class="">
-    </view>
 
 For example, if we want to show a user List with avatar and user name, we use
 the following markup statments:
