@@ -117,6 +117,7 @@ the difficulty of supporting various protocol stacks, thus reducing development 
 Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 
 For device side and client side, HybridOS uses GPL v3.
+
 For server side, HybridOS uses AGPL v3.
 
 Note that HybridOS integrets many mature open source software, such as SQLite, FreeType, 
