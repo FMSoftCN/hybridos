@@ -20,7 +20,11 @@ for device apps and client apps. The key features follow:
    the developer can write the device apps in JavaScript language. Or, the developer
    should write the device apps in C++ language.
 
-2. The developer can always describe the UIs of a device app in the extened HTML5
+2. For the device apps wrotten in JavaScript language, HybridOS provides an agent
+   like a Web browser. The agent contains the V8 JS engine and a customized HVML
+   renderer. We name the agent 'Hybrid Engine', HE for short.
+
+3. The developer can always describe the UIs of a device app in the extened HTML5
    tags combined with the CSS, and
     - the tags can be interpreted to one or more C++ source files, and every UI can be
       mapped to a C++ class, the DOM elements in a tag can be mapped to the member
@@ -30,7 +34,7 @@ for device apps and client apps. The key features follow:
       populate the tags by using a HybridOS JavaScript library and combined with a 
       CSS file, like AngularJS does.
 
-3. The device app wrotten in JavaScript can run on client (Linux/Windows/macOS/Android/iOS)
+4. The device app wrotten in JavaScript can run on client (Linux/Windows/macOS/Android/iOS)
    directly. Under this situation, the developer need a HybridOS SDK for specific
    client operating system.
 
@@ -293,4 +297,6 @@ Foundation C++ Class Library (`HFCL` for short, see HYBRIDOS-SPEC-0002.md).
 HFCL is derived a C++ GUI framework called mGNGUX, which is based on MiniGUI.
 We re-designed HFCL to make this library can be ported easily to other
 host operating system, for example, Windows or macOS.
+
+Indeed, Hybrid Engine is developed on HFCL.
 
