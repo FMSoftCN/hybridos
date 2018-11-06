@@ -22,6 +22,7 @@ for device apps and client apps. The key features follow:
 
   2. The developer can always describe the UIs of a device app in the extened HTML5
     tags combined with the CSS, and
+
     * the tags can be interpreted to one or more C++ source files, and every UI can be
       mapped to a C++ class, the DOM elements in a tag can be mapped to the member
       variables of the C++ class. So the developer can easily populate the UIs by using
@@ -30,7 +31,7 @@ for device apps and client apps. The key features follow:
       populate the tags by using a HybridOS JavaScript library and combined with a 
       CSS file, like AngularJS does.
 
-  3. The device app wrotten in JavaScript can run on client (Windows/macOS/Android/iOS)
+  3. The device app wrotten in JavaScript can run on client (Linux/Windows/macOS/Android/iOS)
      directly. Under this situation, the developer need a HybridOS SDK for specific
      client operating system.
 
@@ -79,13 +80,14 @@ This C++ class library is called mGNGUX, which is based on MiniGUI.
 
 ### Differences from the standard HTML5 tags
 
-  * We DO NOT use text in the tags like:
+We DO NOT use text in the tags like:
 
     <view>I am Vincent</view>
 
+
 ## A Sample
 
-For example, if we want to show a user List with avatar and user name, we use
+For example, if we want to show a user list with avatar and user name, we use
 the following markup statments:
 
     <!-- define a activity -->

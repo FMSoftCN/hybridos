@@ -1,7 +1,7 @@
 # HybridOS
 
-HybridOS is a totally new open source operating system designed for smart IoT devices and 
-cloud computing environment.
+HybridOS is a totally new open source operating system designed for smart IoT devices
+and cloud computing environment.
 
 HybridOS tries to provide the developers with more possibilities than just a
 traditional operating system for a stand-alone hardware environment.
@@ -11,7 +11,7 @@ on devices, it also provides programming interfaces for the cloud and the client
 providing developers with a new complete software stack and protocol stack 
 from device to cloud and client.
 
-## Why we design a new OS for IoT?
+## Why We Design a New OS for IoT?
 
 At present, when we want to develop a consumer IoT (Internet of Things) device, 
 we have to build a software team which has five engineers at least due to 
@@ -25,7 +25,7 @@ the complex software stack and protocol stack of IoT computing environment:
     for smart phones, which run Android or iOS.
 
 In addition, for some devices which is used for business, we need one or two engineers
-to write desktop apps in C/C++ for Windows or macOS.
+to write desktop apps in C/C++ for Linux, Windows or macOS.
 
 Obviously, the development cost of an IoT device is very higher than a tranditional 
 embedded device. We need a new operating system to simplify the software and protocol
@@ -75,7 +75,7 @@ HybridOS provides a new software stack for smart IoT device:
     based on Python, such as MQTT, WebSocket, HTTP, streaming services, etc.
 
   * A new and universal app framework for IoT devices and client apps.
-    The developers can write device GUI app and client apps for Windows, macOS, 
+    The developers can write device GUI app and client apps for Linux, Windows, macOS, 
     Andriod, and iOS operating systems by using a set of extended HTML5 tags 
     and JavaScript language. You can even embedded your HybridOS app directly
     in your webpages which are wrotten in standard HTML5 by importing the HybridOS
@@ -108,6 +108,15 @@ HybridOS's device-side system is based on the Linux kernel, making full use of t
 Linux kernel ecosystem, reducing the difficulty of developing various drivers and 
 the difficulty of supporting various protocol stacks, thus reducing development costs.
 
+## Source Tree
+
+    `-
+    |-- docs/           # The design documents for HybridOS.
+    |-- device-side/    # The source for device side.
+    |-- server-side/    # The source for server side.
+    |-- client-side/    # The source for client side.
+
+    
 ## Current Status
 
   * Nov. 2018: Initiate this open source project.
