@@ -22,13 +22,13 @@ for device apps and client apps. The key features follow:
 
   2. The developer can always describe the UIs of a device app in the extened HTML5
     tags combined with the CSS, and
-   * the tags can be interpreted to one or more C++ source files, and every UI can be
-     mapped to a C++ class, the DOM elements in a tag can be mapped to the member
-     variables of the C++ class. So the developer can easily populate the UIs by using
-     C++ language.
-   * the tags can be embedded in a standard HTML5 webpage, and the developer can
-     populate the tags by using a HybridOS JavaScript library and combined with a 
-     CSS file, like AngularJS does.
+    1. the tags can be interpreted to one or more C++ source files, and every UI can be
+       mapped to a C++ class, the DOM elements in a tag can be mapped to the member
+       variables of the C++ class. So the developer can easily populate the UIs by using
+       C++ language.
+    2. the tags can be embedded in a standard HTML5 webpage, and the developer can
+       populate the tags by using a HybridOS JavaScript library and combined with a 
+       CSS file, like AngularJS does.
 
   3. The device app wrotten in JavaScript can run on client (Linux/Windows/macOS/Android/iOS)
      directly. Under this situation, the developer need a HybridOS SDK for specific
