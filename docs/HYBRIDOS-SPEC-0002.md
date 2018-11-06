@@ -12,16 +12,16 @@ Copyright Notice
 
 ## Introduction
 
-HFCL (HybridOS Foundation Class Library) is C++ class library. It is derived
+HFCL (HybridOS Foundation Class Library) is a C++ class library. It is derived
 from mGNGUX, a C++ library for MiniGUI. mGNGUX had been used as the foundation
-of two MMI solutions (man-machine-interface) for feature phones.
+of two MMI (man-machine interface) solutions for feature phones.
 
 mGNGUX introduced a new framework for feature phone, and borrowed some concepts
 from other operating system (especially Android). mGNGUX also provided a new set
 of controls/widgets in C++ classes. These classes construct the view hierarchy
-of HybridOS app framework.
+of mGNGUX app framework.
 
-The most important feature of mGNGUX is that it introduced a new way to define 
+The most important feature of mGNGUX is it introduced a new way to define 
 the UI elements, including resource, views, and menus. And we can easily define
 the maps of views to C++ class member variables. Indeed, the UI definition files
 are C++ source files, but we wrote them in pre-defined C++ macros. This method
@@ -30,7 +30,7 @@ At the same time, we get a good separation of the data (UI resource) and the cod
 (the application logics). 
 
 However, there are some disadvantages in the design of mGNGUX, such as it does
-not use style definition method like CSS, some design are specific to feature
+not use a style definition method like CSS, some design are specific to feature
 phone, there is no support for touch panel, and so on.
 
 So we design HFCL, as the successor of mGNGUX. 
