@@ -197,11 +197,11 @@ An app can be defined by using the following markup statments:
         </script>
     </app>
 
-Obviously, if you use the method to define the app, you need prepare three files:
+Obviously, if you use the method above to define the app, you need prepare three files:
 
-* firstsample.hvml: the app
-* userlist.hvml: the userList activity
-* userinfo.hvml: the userInfo activity
+* firstsample.hvml: the app;
+* userlist.hvml: the userList activity;
+* userinfo.hvml: the userInfo activity.
 
 Otherwise, if your app is a simple one, you can organize your code in the following manner
 to use only one file:
@@ -227,14 +227,70 @@ to use only one file:
         </script>
     </app>
 
-## Embedded Activities into HTML5 Pages
+## Embed App into HTML5 Pages
 
+It is possible to embed a HybridOS app into an existed HTML5 page:
+
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+            <meta name="format-detection" content="telephone=yes"/>
+            <meta name="apple-touch-fullscreen" content="yes"/>
+
+            <title>The first sample of HybridOS embedded in a HTML5 page</title>
+
+            <link rel="stylesheet" type="text/css" href="//hybridos.fmsoft.cn/js/hybridos.css" />
+            <script type="text/javascript" src="//hybridos.fmsoft.cn/js/hybridos.js"></script>
+        </head>
+
+        <body>
+
+            <header>
+                <h1>The First Sample of HybridOS</h1>
+            </header>
+
+            <p>This page shows howto embedded a HybridOS app in a HTML5 page.</p>
+
+            <app hbd-name="firstSample">
+                <assets>
+                    <meta type="act" name="userList" content="#" />
+                    <meta type="act" name="userInfo" content="#" />
+                    <meta type="img" name="defAvatar"
+                        content="http://hyridos.fmsoft.cn/samples/firstSample/assets/def-avatar.png" />
+                </assets>
+
+                <act hbd-name="userList" hbd-app="firstSample">
+                    ...
+                </act>
+
+                <act hbd-name="userInfo" hbd-app="firstSample">
+                    ...
+                </act>
+
+                <script>
+                    ...
+                </script>
+            </app>
+
+            <footer>
+                ...
+            </footer>
+        </body>
+    </html>
+
+Note that we import `hybridos.css` and `hybridos.js` in the head of the HTML5 page.
+
+## HVML and CSS
+
+HybridOS uses CSS to define the style of all view types. You can apply your own
+CSS to any HVML element as well.
 
 ## Relationship with C++ App Framework
 
 Under C++ language, all the view types are implemented by the HybridOS 
 Foundation C++ Class Library (`HFCL` for short, see HYBRIDOS-SPEC-0002.md).
-HFCL is derived from mGNGUX, which is based on MiniGUI. We re-designed
-HFCL to make this library can be ported easily to other
-host operating system, for example, Linux desktop, Windows, macOS.
+HFCL is derived a C++ GUI framework called mGNGUX, which is based on MiniGUI.
+We re-designed HFCL to make this library can be ported easily to other
+host operating system, for example, Windows or macOS.
 
