@@ -16,23 +16,23 @@ Considering the performance and differences in computing power of different
 IoT hardware platforms, HybridOS will provide a complete new GUI framework
 for device apps and client apps. The key features follow:
 
-  1. If the hardware has enough computing power (at lease 64MB RAM and 600MHz CPU),
-    the developer can write the device apps in JavaScript language. Or, the developer
-    should write the device apps in C++ language.
+1. If the hardware has enough computing power (at lease 64MB RAM and 600MHz CPU),
+   the developer can write the device apps in JavaScript language. Or, the developer
+   should write the device apps in C++ language.
 
-  2. The developer can always describe the UIs of a device app in the extened HTML5
-    tags combined with the CSS, and
-    1. the tags can be interpreted to one or more C++ source files, and every UI can be
-       mapped to a C++ class, the DOM elements in a tag can be mapped to the member
-       variables of the C++ class. So the developer can easily populate the UIs by using
-       C++ language.
-    2. the tags can be embedded in a standard HTML5 webpage, and the developer can
-       populate the tags by using a HybridOS JavaScript library and combined with a 
-       CSS file, like AngularJS does.
+2. The developer can always describe the UIs of a device app in the extened HTML5
+   tags combined with the CSS, and
+    - the tags can be interpreted to one or more C++ source files, and every UI can be
+      mapped to a C++ class, the DOM elements in a tag can be mapped to the member
+      variables of the C++ class. So the developer can easily populate the UIs by using
+      C++ language.
+    - the tags can be embedded in a standard HTML5 webpage, and the developer can
+      populate the tags by using a HybridOS JavaScript library and combined with a 
+      CSS file, like AngularJS does.
 
-  3. The device app wrotten in JavaScript can run on client (Linux/Windows/macOS/Android/iOS)
-     directly. Under this situation, the developer need a HybridOS SDK for specific
-     client operating system.
+3. The device app wrotten in JavaScript can run on client (Linux/Windows/macOS/Android/iOS)
+   directly. Under this situation, the developer need a HybridOS SDK for specific
+   client operating system.
 
 This specification describes the extended HTML5 tags supported by HybridOS,
 and the method of binding a JavaScript variable or a C++ class member variable with
@@ -42,8 +42,8 @@ a HTML5 DOM element.
 
 HybridOS defines four extended tags: `act`, `view`.
 
-  * act: define an activity.
-  * view: define a view.
+* act: define an activity.
+* view: define a view.
 
 To define a UI, we use a customized HTML5 markup tag `view`:
 
@@ -52,10 +52,10 @@ To define a UI, we use a customized HTML5 markup tag `view`:
 
 We introduce some properties for view and act tags:
 
-  * hbd-name: The name of a view and an activity. Generally, the value of this
-    property will be a variable which you can refer to in your JavaScript or C++
-    program.
-  * hbd-type: The view type. It specifies the type of a view. Currently, HybridOS
+1. hbd-name: The name of a view and an activity. Generally, the value of this
+   property will be a variable which you can refer to in your JavaScript or C++
+   program.
+2. hbd-type: The view type. It specifies the type of a view. Currently, HybridOS
     provides the following view types:
     * PanelView
     * ScrollView
