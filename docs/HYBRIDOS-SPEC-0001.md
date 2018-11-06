@@ -1,8 +1,8 @@
-# HybridOS UI Framework
+# HybridOS App Framework
 
 HybridOS Specification 0001<br/>
 Author: Vincent Wei<br/>
-Category: UI Framework<br/>
+Category: App Framework<br/>
 Date: November 2018<br/>
 Status: Proposal
 
@@ -38,14 +38,16 @@ This specification describes the extended HTML5 tags supported by HybridOS,
 and the method of binding a JavaScript variable or a C++ class member variable with
 a HTML5 DOM element.
 
-## The Extended Tags
+## The HVML Tags
 
-HybridOS defines four extended tags: `act`, `view`.
+`HVML` means HybridOS View Markup Language, which defines some extended HTML5 tags.
+There are three main tags: `app`, `act`, and `view`.
 
+* app: define an app.
 * act: define an activity.
 * view: define a view.
 
-To define a UI, we use a customized HTML5 markup tag `view`:
+For example, to define a UI, we use the HVML tag `view`:
 
     <view hbd-type="panel" hbd-name="main">
     </view>
@@ -57,6 +59,7 @@ We introduce some properties for view and act tags:
    program.
 2. hbd-type: The view type. It specifies the type of a view. Currently, HybridOS
     provides the following view types:
+    * InvisibleView
     * PanelView
     * ScrollView
     * ImageView
@@ -67,9 +70,6 @@ We introduce some properties for view and act tags:
     * SlEditView
     * MlEditView
     * ...
-
-All the view types are implemented by a C++ GUI class library of HybridOS.
-This C++ class library is called mGNGUX, which is based on MiniGUI.
 
 ### act
 
@@ -83,17 +83,27 @@ We DO NOT use text in the tags like:
 
     <view>I am Vincent</view>
 
+Therefore, the DOM tree does not contain any text element. However, the HybridOS JavaScript
+library will create the text elements if need when we embedded a HybridOS activity in a HTML5
+webpage. For example, if there is a TextView.
 
 ## A Sample
 
-For example, if we want to show a user list with avatar and user name, we use
-the following markup statments:
+In this section, we provide a sample to show how the HybridOS extended tags work.
+In this sample, we show a user list with avatar and user name. When you clicked on a
+list item, the app will show the detailed information of the user.
 
-    <!-- define a activity -->
-    <act hbd-name="firstSample" hbd-scope="main" hbd-controller="myCtrl">
+### Define activities
+
+The following markup statments define the user list activity:
+
+    <!-- The user list activity -->
+    <act hbd-name="userList" hbd-app="firstSample">
 
         <!-- define a customized userItem view based on the standard item view for future use -->
         <view hbd-type="userItem:item" class="" >
+            <view hbd-type="hidden" hbd-name="id" />
+            </view>
             <view hbd-type="image" hbd-name="avatar" />
             </view>
             <view hbd-type="text" hbd-name="name" />
@@ -103,20 +113,126 @@ the following markup statments:
         <view hbd-type="panel" hbd-name="main" class="">
             <view hbd-type="list" hbd-name="userList" class="">
                 <!-- use userItem view and iterate the view with an array variable: users -->
-                <view hbd-type="userItem" hbd-iterate-by="users" class="">
+                <view hbd-type="userItem" hbd-name="userItem" hbd-iterate-by="users" class="">
                 </view>
             </view>
         </view>
+
+        <script>
+            /* get the app object */
+            var app = hybridos.app ('firstSample');
+
+            /* create the activity object and initialize the variables of the activity */
+            var act = app.activity ('userList', function ($app, $activity, $intent) {
+                $activity.users [] = {avatar: "http://www.avatar.org/a.png", name: "John"};
+                $activity.users [] = {avatar: "http://www.avatar.org/b.png", name: "Tom"};
+            });
+
+            /* bind the click event of userItem */
+            act.userItem.on ('click', function ($item) {
+                /* launcher userInfo activity */
+                app.launchActivity ("userInfo", {id: $item.id});
+            });
+
+            /* show the view named 'userList' */
+            act.showView ("userList");
+        </script>
     </act>
 
-    <script>
-        var act = hybridos.activity ('firstSample', {});
-        act.controller ('myCtrl', function ($scope) {
-            $scope.users [] = {avatar: "http://www.avatar.org/a.png", name: "John"};
-            $scope.users [] = {avatar: "http://www.avatar.org/b.png", name: "Tom"};
-        });
-    </script>
+The following markup statments define the user information activity:
 
-## Complie the UI tags into C++ resource and class files
+    <!-- The user information activity -->
+    <act hbd-name="userInfo" hbd-scope="firstSample">
+        <intent>
+            <meta name="id" content="" />
+        </intent>
 
+        <view hbd-type="panel" hbd-name="main" class="">
+        </view>
+
+        <script>
+            /* get the app object */
+            var app = hybridos.app ('firstSample');
+
+            /* create the activity object and initialize the variables of the activity */
+            var act = app.activity ('userList', function ($app, $activity, $intent) {
+                $activity.id = $intent.id;
+
+                /* fill the user information by calling method of $app */
+                $activity.avatar = "";
+                $activity.name = "";
+                $activity.bio = "";
+                $activity.org = "";
+                $activity.email = "";
+                $activity.link = "";
+            });
+
+            /* show the view named 'userInfo' */
+            act.showView ("userInfo");
+        </script>
+    </act>
+
+### Define app
+
+As you can see from the sample code above, we need to define an app object as the
+entry of the app and control the different activities.
+
+An app can be defined by using the following markup statments:
+
+    <app hbd-name="firstSample">
+        <!-- define the assets of the app, such as the activities, the UI resource, and so on -->
+        <assets>
+            <meta type="act" name="userList" content="userlist.hvml" />
+            <meta type="act" name="userInfo" content="userinfo.hvml" />
+            <meta type="img" name="defAvatar" content="http://hyridos.fmsoft.cn/samples/firstSample/assets/def-avatar.png" />
+        </assets>
+
+        <script>
+            /* create the app object */
+            var app = hybridos.app ('firstSample');
+
+            /* launch the userList activity */
+            app.launchActivity ("userList", {});
+        </script>
+    </app>
+
+Obviously, if you use the method to define the app, you need prepare three files:
+
+* firstsample.hvml: the app
+* userlist.hvml: the userList activity
+* userinfo.hvml: the userInfo activity
+
+Otherwise, if your app is a simple one, you can organize your code in the following manner
+to use only one file:
+
+    <app hbd-name="firstSample">
+        <assets>
+            <meta type="act" name="userList" content="#" />
+            <meta type="act" name="userInfo" content="#" />
+            <meta type="img" name="defAvatar" content="http://hyridos.fmsoft.cn/samples/firstSample/assets/def-avatar.png" />
+        </assets>
+
+        <act hbd-name="userList" hbd-app="firstSample">
+            ...
+        </act>
+
+        <act hbd-name="userInfo" hbd-app="firstSample">
+            ...
+        </act>
+
+        <script>
+            ...
+        </script>
+    </app>
+
+## Embedded Activities into HTML5 Pages
+
+
+## Relationship with C++ App Framework
+
+Under C++ language, all the view types are implemented by the HybridOS 
+Foundation C++ Class Library (`HFCL` for short, see HYBRIDOS-SPEC-0002.md).
+HFCL is derived from mGNGUX, which is based on MiniGUI. We re-designed
+HFCL to make this library can be ported easily to other
+host operating system, for example, Linux desktop, Windows, macOS.
 
