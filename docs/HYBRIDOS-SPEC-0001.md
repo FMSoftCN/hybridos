@@ -18,16 +18,18 @@ for device apps and client apps. The key features follow:
 
 1. If the hardware has enough computing power (at lease 64MB RAM and 600MHz CPU),
    the developer can write the device apps in JavaScript language. Or, the developer
-   should write the device apps in C++ language.
+   falls back to write the device apps in C++ language.
 
-2. For the device apps wrotten in JavaScript language, HybridOS provides an agent
-   like a Web browser. The agent contains the V8 JS engine and a HVML (a customized
-   markup language) renderer. We name the agent 'Hybrid Engine' (HE for short).
+2. For the device apps wrotten in JavaScript language, the developer uses HVML
+   (HybridOS View Markup Language, which defines a set of extended HTML5 tags)
+   to describe the GUI. HybridOS provides an agent like a Web browser. 
+   The agent contains the V8 JS engine and a HVML (a customized
+   markup language) renderer. We name the agent as 'Hybrid Engine' (HE for short).
 
-3. The developer can always describe the UIs of a device app in the extened HTML5
-   tags combined with the CSS, and
+3. The developer can always describe the UIs of a device app in HVML combined with CSS,
+   and
     - the tags can be interpreted to one or more C++ source files, and every UI can be
-      mapped to a C++ class, the DOM elements in a tag can be mapped to the member
+      mapped to a C++ class, the DOM elements in a UI can be mapped to the member
       variables of the C++ class. So the developer can easily populate the UIs by using
       C++ language.
     - the tags can be embedded in a standard HTML5 webpage, and the developer can
@@ -35,12 +37,12 @@ for device apps and client apps. The key features follow:
       CSS file, like AngularJS does.
 
 4. The device app wrotten in JavaScript can run on client (Linux/Windows/macOS/Android/iOS)
-   directly. Under this situation, the developer need a HybridOS SDK for specific
-   client operating system.
+   directly. Under this situation, the developer need a HE implementation or SDK for
+   the specific client operating system.
 
-In this way, we can use the same UI desciption files for device apps, client apps, and
+In this way, we can use the same UI description files for device apps, client apps, and
 even web apps. When the target hardware has not enough performance, we fall back to use
-C++ language directly. However, we can still use the UI  in HVML.
+C++ language directly. However, we can still describe the UIs in HVML.
 
 This specification describes the extended HTML5 tags (HVML tags) supported by HybridOS,
 and the framework to define a device app in JavaScript language.
@@ -241,7 +243,8 @@ It is possible to embed a HybridOS app into an existed HTML5 page:
     <!DOCTYPE html>
     <html>
         <head>
-            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+            <meta name="viewport"
+                content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
             <meta name="format-detection" content="telephone=yes"/>
             <meta name="apple-touch-fullscreen" content="yes"/>
 
