@@ -89,9 +89,9 @@ webpage. For example, if there is a TextView.
 
 ## A Sample
 
-In this section, we provide a sample to show how the HybridOS extended tags work.
-In this sample, we show a user list with avatar and user name. When you clicked on a
-list item, the app will show the detailed information of the user.
+In this section, we provide a sample to show how the HybridOS View Markup Language work.
+In this sample, we show a user list with avatars and user names. When you clicked on a
+user item, the app will show the detailed information of the user.
 
 ### Define activities
 
@@ -184,7 +184,8 @@ An app can be defined by using the following markup statments:
         <assets>
             <meta type="act" name="userList" content="userlist.hvml" />
             <meta type="act" name="userInfo" content="userinfo.hvml" />
-            <meta type="img" name="defAvatar" content="http://hyridos.fmsoft.cn/samples/firstSample/assets/def-avatar.png" />
+            <meta type="img" name="defAvatar"
+                content="http://hyridos.fmsoft.cn/samples/firstSample/assets/def-avatar.png" />
         </assets>
 
         <script>
@@ -209,7 +210,8 @@ to use only one file:
         <assets>
             <meta type="act" name="userList" content="#" />
             <meta type="act" name="userInfo" content="#" />
-            <meta type="img" name="defAvatar" content="http://hyridos.fmsoft.cn/samples/firstSample/assets/def-avatar.png" />
+            <meta type="img" name="defAvatar"
+                content="http://hyridos.fmsoft.cn/samples/firstSample/assets/def-avatar.png" />
         </assets>
 
         <act hbd-name="userList" hbd-app="firstSample">
