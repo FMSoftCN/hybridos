@@ -93,31 +93,31 @@ your C++ compiler in a magic way:
 * In a C++ header file, include the resource file in the following way
   to generate the identifiers and names of the resource:
 
-    #include "resdefines.head.h"
-    #include "firstsample.res.c"
-    #include "resundefines.h"
+        #include "resdefines.head.h"
+        #include "firstsample.res.c"
+        #include "resundefines.h"
 
-    #include "resdefines.name.h"
-    #include "firstsample.res.c"
-    #include "resundefines.h"
+        #include "resdefines.name.h"
+        #include "firstsample.res.c"
+        #include "resundefines.h"
 
 * In a C++ source file, include the resource file in the following way to
   generate the source code and the initialization code:
 
-    #include "resdefines.source.h"
-    #include "phonebook.res.c"
-    #include "resundefines.h"
+        #include "resdefines.source.h"
+        #include "phonebook.res.c"
+        #include "resundefines.h"
 
-    #include "resdefines.init.h"
-    #include "phonebook.res.c"
-    #include "resundefines.h"
+        #include "resdefines.init.h"
+        #include "phonebook.res.c"
+        #include "resundefines.h"
 
 By using the magic way described above, we do not need a utility tool
 to interpret the resource file and generate the souce code, the C++
 compiler will do this for us.
 
 The another advantage is that we seperate the resource data with the
-app logical code in a GREAT way.
+app logical code in a good way.
 
 The last advantage is that the resource file can be generated from
 the HVML tags. Thus, if you have to use C++ to write your device app
