@@ -105,11 +105,11 @@ your C++ compiler in a magic way:
   generate the source code and the initialization code:
 
         #include "resdefines.source.h"
-        #include "phonebook.res.c"
+        #include "firstsample.res.c"
         #include "resundefines.h"
 
         #include "resdefines.init.h"
-        #include "phonebook.res.c"
+        #include "firstsample.res.c"
         #include "resundefines.h"
 
 By using the magic way described above, we do not need a utility tool
