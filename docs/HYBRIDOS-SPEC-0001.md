@@ -20,7 +20,7 @@ for device apps and client apps. The key features follow:
    the developer can write the device apps in JavaScript language. Or, the developer
    falls back to write the device apps in C++ language.
 
-2. For the device apps wrotten in JavaScript language, the developer uses HVML
+2. For the device apps written in JavaScript language, the developer uses HVML
    (HybridOS View Markup Language, which defines a set of extended HTML5 tags)
    to describe the GUI. HybridOS provides an agent like a Web browser. 
    The agent contains the V8 JS engine and a HVML (a customized
@@ -36,7 +36,7 @@ for device apps and client apps. The key features follow:
       populate the tags by using a HybridOS JavaScript library and combined with a 
       CSS file, like AngularJS does.
 
-4. The device app wrotten in JavaScript can run on client (Linux/Windows/macOS/Android/iOS)
+4. The device app written in JavaScript can run on client (Linux/Windows/macOS/Android/iOS)
    directly. Under this situation, the developer need a HE implementation or SDK for
    the specific client operating system.
 
@@ -104,7 +104,7 @@ user item, the app will show the detailed information of the user.
 
 ### Define activities
 
-The following markup statments define the user list activity:
+The following markup statements define the user list activity:
 
     <!-- The user list activity -->
     <act hbd-name="userList" hbd-app="firstSample">
@@ -148,7 +148,7 @@ The following markup statments define the user list activity:
         </script>
     </act>
 
-The following markup statments define the user information activity:
+The following markup statements define the user information activity:
 
     <!-- The user information activity -->
     <act hbd-name="userInfo" hbd-scope="firstSample">
@@ -186,7 +186,7 @@ The following markup statments define the user information activity:
 As you can see from the sample code above, we need to define an app object as the
 entry of the app and control the different activities.
 
-An app can be defined by using the following markup statments:
+An app can be defined by using the following markup statements:
 
     <app hbd-name="firstSample">
         <!-- define the assets of the app, such as the activities, the UI resource, and so on -->

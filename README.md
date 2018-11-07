@@ -27,11 +27,11 @@ the complex software stack and protocol stack of IoT computing environment:
 In addition, for some devices which are used for business, we need one or two engineers
 to write desktop apps in C/C++ for Windows, macOS, or Linux.
 
-Obviously, the development cost of an IoT device is much higher than a tranditional 
+Obviously, the development cost of an IoT device is much higher than a traditional 
 embedded device. We need a new operating system to simplify the software and protocol
 stack of IoT applications, and reduce the development cost.
 
-Not only that, the popular cloud computing services we can get from AWS, AliYun, or Huawei
+Not only that, the popular cloud computing services we can get from AWS, Ali, or Huawei
 are not dedicated for IoT applications. We have to develop some cloud services by ourselves
 to implement some features for our IoT devices. Moreover, the security of an IoT service 
 is being seriously challenged.
@@ -77,9 +77,9 @@ HybridOS provides a new software stack for smart IoT device:
 
 * A new and universal app framework for IoT devices and client apps.
   The developers can write device app and client apps for Linux, Windows, macOS, 
-  Andriod, and iOS operating systems by using a set of extended HTML5 tags 
+  Android, and iOS operating systems by using a set of extended HTML5 tags 
   and JavaScript/CSS. You can even embedded your HybridOS app directly
-  in your webpages which are wrotten in standard HTML5 by importing the HybridOS
+  in your webpages which are written in standard HTML5 by importing the HybridOS
   JavaScript and CSS library.
 
 Finally, the application programming languages of HybridOS will be reduced to two: 
@@ -92,8 +92,8 @@ HybridOS integrates some cloud computing services which are dedicated to IoT,
 such as MQTT, identity authentication mechanism, and firmware upgrade.
 
 HybridOS also introduces the serverless technologies for the IoT cloud computing.
-In this way, the developer can easily integret the existed cloud services by 
-writting a simple script in Python.
+In this way, the developer can easily integrate the existed cloud services by 
+writing a simple script in Python.
 
 In the future, HybridOS will try to provide a blockchain-based IoT security service.  
 HybridOS will provide an enhanced MQTT implementation for communication between things
@@ -105,7 +105,7 @@ HybridOS will provide a variety of connectivity options for the IoT devices,
 including high-speed Wi-Fi (in the 2.4G/5G band), Bluetooth, 4G/LTE, NB-IoT, USB, 
 and so on. 
 
-HybridOS's device-side system is based on the Linux kernel, making full use of the
+The device-side system of HybridOS is based on the Linux kernel, making full use of the
 Linux kernel ecosystem, reducing the difficulty of developing various drivers and 
 the difficulty of supporting various protocol stacks, thus reducing development costs.
 
@@ -130,7 +130,7 @@ Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 * For server side, HybridOS uses AGPL v3.
 * For documents, GPL v3 applies.
 
-Note that HybridOS integrets many mature open source software, such as SQLite, FreeType, 
+Note that HybridOS integrates many mature open source software, such as SQLite, FreeType, 
 V8 JavaScript engine, and so on. For the copyright owners and licenses for these software, 
-please refer to the READM or LINCESE files contained in the source trees.
+please refer to the README or LICENSE files contained in the source trees.
 
