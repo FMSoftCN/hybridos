@@ -78,7 +78,7 @@ HybridOS provides a new software stack for smart IoT device:
 * A new and universal app framework for IoT devices and client apps.
   The developers can write device app and client apps for Linux, Windows, macOS, 
   Android, and iOS operating systems by using a set of extended HTML5 tags 
-  and JavaScript/CSS. You can even embedded your HybridOS app directly
+  and JavaScript/CSS. You can even embed your HybridOS app directly
   in your webpages which are written in standard HTML5 by importing the HybridOS
   JavaScript and CSS library.
 
