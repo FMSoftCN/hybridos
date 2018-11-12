@@ -247,9 +247,41 @@ as shown in the sample:
         ...
     end_view_template
 
+The `UserItemView` will be defined by the macro as a new view class
+in the resource header file, just a simply subclass of ItemView:
+
+    class UserItemView : public ItemView {
+        public:
+            UserItemView (View* parent) : ItemView (parent) { }
+            UserItemView (View* parent, StyleSet* style_set) : ItemView (parent, style_set) { }
+            virtual ~UserItemView () {};
+    }
+
+----
 The `UserItemView` will be defined by the macro as an interface class
-(a pure virtual class) in the resource header file, you need to 
-implement the implementation class by yourself.
+in the resource header file. You should define the implemetation class
+by yourself (in separated files):
+
+    class UserItemViewIf : public ItemView {
+        public:
+            UserItemViewIf (View* parent) : ItemView (parent) { }
+            UserItemViewIf (View* parent, StyleSet* ss) : ItemView (parent, ss) { }
+
+            virtual View* getChildByName (const char* name) = 0;
+            virtual ~UserItemViewIf () {};
+    }
+
+    class UserItemViewIm : public UserItemViewIf {
+        public:
+            UserItemViewIm (View* parent);
+            UserItemViewIm (View* parent, StyleSet* ss);
+            virtual View* getChildByName (const char* name);
+            ...
+            
+        private:
+            ...
+    }
+----
 
 Note that the resource source file can not reflect any details in your 
 HVML tags. You need to write the interaction code in your C++ source
@@ -258,8 +290,9 @@ an item from a template view by using the property `hbd-iterate-by`,
 but in HFCL, we can not do this for you. You need to initialize the
 list view in your implementation classes manually.
 
-Because of this, when you re-generate the resource source file from
-HVML tags, the translator will not override your own code.
+When you re-generate the resource source file from HVML tags, 
+because the real implemenations are seperated from the
+resource source files, the translator will not override your own code.
 
 ## Assets management
 
