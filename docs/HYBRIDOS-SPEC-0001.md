@@ -22,9 +22,9 @@ for device apps and client apps. The key features follow:
 
 2. For the device apps written in JavaScript language, the developer uses HVML
    (HybridOS View Markup Language, which defines a set of extended HTML5 tags)
-   to describe the GUI. HybridOS provides an agent like a Web browser. 
-   The agent contains the V8 JS engine and a HVML (a customized
-   markup language) renderer. We name the agent as 'Hybrid Engine' (HE for short).
+   to describe the GUI. HybridOS provides a user agent like a Web browser. 
+   The user agent contains the V8 JS engine and a HVML (a customized
+   markup language) renderer. We name the agent as 'Hybrid Engine' (`HE` for short).
 
 3. The developer can always describe the UIs of a device app in HVML combined with CSS,
    and
@@ -50,10 +50,11 @@ and the framework to define a device app in JavaScript language.
 ## The HVML Tags
 
 `HVML` means HybridOS View Markup Language, which defines some extended HTML5 tags.
-There are three main tags: `app`, `act`, and `view`.
+There are four main tags: `app`, `act`, `tmpl`, and `view`.
 
 * app: define an app.
 * act: define an activity.
+* tmpl: define a template.
 * view: define a view.
 
 For example, to define a UI, we use the HVML tag `view`:
@@ -61,30 +62,36 @@ For example, to define a UI, we use the HVML tag `view`:
     <view hbd-type="panel" hbd-name="main">
     </view>
 
-We introduce some properties for view and act tags:
+We introduce some properties for the tags:
 
 1. hbd-name: The name of a view and an activity. Generally, the value of this
    property will be a variable which you can refer to in your JavaScript or C++
    program.
 2. hbd-type: The view type. It specifies the type of a view. Currently, HybridOS
     provides the following view types:
-    * InvisibleView
-    * PanelView
-    * ScrollView
+    * HiddenView
     * ImageView
-    * AnimationImageView
     * TextView
+    * PanelView
     * ListView
     * ItemView
-    * SlEditView
-    * MlEditView
+    * InputView
+    * ProgressView
+    * DropdownView
+    * TooltipView
+    * PopoverView
+    * EditBoxView
     * ...
 
-### act
+### Tag app
 
-### view
+### Tag act
 
-### Properties
+### Tag view
+
+### Tag tmpl
+
+### Tag properties
 
 ### Differences from the standard HTML5 tags
 
@@ -94,7 +101,7 @@ We DO NOT use text in the tags like:
 
 Therefore, the DOM tree does not contain any text element. However, the HybridOS JavaScript
 library will create the text elements if need when we embedded a HybridOS activity in a HTML5
-webpage. For example, if there is a TextView.
+webpage. For example, if there is a `TextView`.
 
 ## A Sample
 
@@ -109,21 +116,27 @@ The following markup statements define the user list activity:
     <!-- The user list activity -->
     <act hbd-name="userList" hbd-app="firstSample">
 
-        <!-- define a customized userItem view based on the standard item view for future use -->
-        <view hbd-type="userItem:item" class="" >
-            <view hbd-type="hidden" hbd-name="id" />
+        <!-- define a template view based on the standard item view for future use -->
+        <tmpl hbd-type="UserItemView:ItemView" class="userItem">
+            <view hbd-type="HiddenView" hbd-name="id" />
             </view>
-            <view hbd-type="image" hbd-name="avatar" />
+            <view hbd-type="ImageView" hbd-name="avatar" />
             </view>
-            <view hbd-type="text" hbd-name="name" />
+            <view hbd-type="TextView" hbd-name="name" />
             </view>
-        </view>
+        </tmpl>
 
-        <view hbd-type="panel" hbd-name="main" class="">
-            <view hbd-type="list" hbd-name="userList" class="">
+        <view hbd-type="panel" hbd-name="thePanel" class="panel">
+            <view hbd-type="TextView" hbd-name="theHeader" hbd-content="$STRID_TITLE"
+                    class="panel-header">
+            </view>
+            <view hbd-type="ListView" hbd-name="theList" class="userList">
                 <!-- use userItem view and iterate the view with an array variable: users -->
-                <view hbd-type="userItem" hbd-name="userItem" hbd-iterate-by="users" class="">
+                <view hbd-type="UserItemView" hbd-iterate-by="users">
                 </view>
+            </view>
+            <view hbd-type="TextView" hbd-name="theFooter" hbd-content="$STRID_COPYING"
+                    class="panel-footer">
             </view>
         </view>
 
@@ -133,8 +146,8 @@ The following markup statements define the user list activity:
 
             /* create the activity object and initialize the variables of the activity */
             var act = app.activity ('userList', function ($app, $activity, $intent) {
-                $activity.users [] = {avatar: "http://www.avatar.org/a.png", name: "John"};
-                $activity.users [] = {avatar: "http://www.avatar.org/b.png", name: "Tom"};
+                $activity.users [] = {id: "1", avatar: "http://www.avatar.org/a.png", name: "John"};
+                $activity.users [] = {id: "2", avatar: "http://www.avatar.org/b.png", name: "Tom"};
             });
 
             /* bind the click event of userItem */
@@ -143,18 +156,15 @@ The following markup statements define the user list activity:
                 app.launchActivity ("userInfo", {id: $item.id});
             });
 
-            /* show the view named 'userList' */
-            act.showView ("userList");
+            /* show the view named 'thePanel' */
+            act.showView ("thePanel");
         </script>
     </act>
 
 The following markup statements define the user information activity:
 
     <!-- The user information activity -->
-    <act hbd-name="userInfo" hbd-scope="firstSample">
-        <intent>
-            <meta name="id" content="" />
-        </intent>
+    <act hbd-name="theUserInfo" hbd-scope="firstSample">
 
         <view hbd-type="panel" hbd-name="main" class="">
         </view>
@@ -176,8 +186,8 @@ The following markup statements define the user information activity:
                 $activity.link = "";
             });
 
-            /* show the view named 'userInfo' */
-            act.showView ("userInfo");
+            /* show the view named 'theUserInfo' */
+            act.showView ("theUserInfo");
         </script>
     </act>
 
@@ -189,17 +199,26 @@ entry of the app and control the different activities.
 An app can be defined by using the following markup statements:
 
     <app hbd-name="firstSample">
-        <!-- define the assets of the app, such as the activities, the UI resource, and so on -->
+        <!-- define the assets of the app, such as the activities, images, L10N text, CSS, and so on -->
         <assets>
-            <meta type="act" name="userList" content="userlist.hvml" />
-            <meta type="act" name="userInfo" content="userinfo.hvml" />
-            <meta type="img" name="defAvatar"
-                content="http://hyridos.fmsoft.cn/samples/firstSample/assets/def-avatar.png" />
+            <meta name="act:userList" content="userlist.hvml" />
+            <meta name="act:userInfo" content="userinfo.hvml" />
+            <meta name="img:defAvatar" content="/firstSample/assets/default.png" />
+
+            <!-- the links to the localization translation files */
+            <link rel="localtext" type="text/json" hreflang="zh_CN" href="/firstSample/assets/messages/zh_CN.json" />
+            <link rel="localtext" type="text/json" hreflang="zh_TW" href="/firstSample/assets/messages/zh_TW.json" />
+            <link rel="localtext" type="text/json" hreflang="en_US" href="/firstSample/assets/messages/en_US.json" />
+
+            <link rel="stylesheet" type="text/css" href="/firstSample/assets/default.css" />
         </assets>
 
         <script>
-            /* create the app object */
-            var app = hybridos.app ('firstSample');
+            /* create the app object
+             *  'firstSample': the name of app.
+             *  'zh_CN': the initial locale name. The locale name will be used to load the real L10N text file.
+             */
+            var app = hybridos.app ('firstSample', 'zh_CN');
 
             /* launch the userList activity */
             app.launchActivity ("userList", {});
@@ -209,18 +228,20 @@ An app can be defined by using the following markup statements:
 Obviously, if you use the method above to define the app, you need prepare three files:
 
 * firstsample.hvml: the app;
-* userlist.hvml: the userList activity;
-* userinfo.hvml: the userInfo activity.
+* userlist.hvml: the `userList` activity;
+* userinfo.hvml: the `userInfo` activity.
 
 Otherwise, if your app is a simple one, you can organize your code in the following manner
 to use only one file:
 
     <app hbd-name="firstSample">
         <assets>
-            <meta type="act" name="userList" content="#" />
-            <meta type="act" name="userInfo" content="#" />
-            <meta type="img" name="defAvatar"
-                content="http://hyridos.fmsoft.cn/samples/firstSample/assets/def-avatar.png" />
+            <meta name="act:userList" content="userlist.hvml" />
+            <meta name="act:userInfo" content="userinfo.hvml" />
+            <meta name="img:defAvatar" content="/firstSample/assets/default.css" />
+
+            <link rel="localtext" type="text/json" href="/firstSample/assets/messages/zh_CN.json" />
+            <link rel="stylesheet" type="text/css" href="/firstSample/assets/default.css" />
         </assets>
 
         <act hbd-name="userList" hbd-app="firstSample">
@@ -264,10 +285,7 @@ It is possible to embed a HybridOS app into an existed HTML5 page:
 
             <app hbd-name="firstSample">
                 <assets>
-                    <meta type="act" name="userList" content="#" />
-                    <meta type="act" name="userInfo" content="#" />
-                    <meta type="img" name="defAvatar"
-                        content="http://hyridos.fmsoft.cn/samples/firstSample/assets/def-avatar.png" />
+                    ...
                 </assets>
 
                 <act hbd-name="userList" hbd-app="firstSample">
@@ -295,6 +313,24 @@ Note that we import `hybridos.css` and `hybridos.js` in the head of the HTML5 pa
 
 HybridOS uses CSS to define the style of all view types. You can apply your own
 CSS to any HVML element as well.
+
+## L10N
+
+Different from webpages, HVML handles L10N text as an asset of an app. 
+HE (the HVML user agent) load the L10N file in JSON and translate the
+localization text according to the identifier.
+
+If you specify a content of `TextView` with a string started with `$`, the
+string will be treated as the identifier of a text not a literal string.
+
+The content of a L10N text file will look like:
+
+    {
+        "app": "firstSample",
+        "language": "zh_CN",
+        "STRID_TITLE": "HybridOS 的第一个示例应用",
+        "STRID_COPYRING": "版权所有 (C) 2018 飞漫软件",
+    }
 
 ## Relationship with C++ App Framework
 
