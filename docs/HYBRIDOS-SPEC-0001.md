@@ -220,7 +220,8 @@ An app can be defined by using the following markup statements:
         <script>
             /* create the app object
              *  'firstSample': the name of app.
-             *  'zh_CN': the initial locale name. The locale name will be used to load the real L10N text file.
+             *  'zh_CN': the initial locale name. The locale name will be used to load
+             *      the real L10N text file.
              */
             var app = hybridos.app ('firstSample', 'zh_CN');
 
