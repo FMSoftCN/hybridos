@@ -283,7 +283,7 @@ by yourself (in separated files):
     }
 ----
 
-Note that the resource source file can not reflect any details in your 
+Note that the resource source file can not reflect all details in your 
 HVML tags. You need to write the interaction code in your C++ source
 file. For example, in HVML tags, you can define the iteration of
 an item from a template view by using the property `hbd-iterate-by`,
@@ -314,5 +314,6 @@ source files for the app according to the L10N translation file specified
 in the assets section of the app.
 
 The identifiers referred as `STRID_TITLE` or `STRID_COPYING` will be
-defined as C++ macros, and the text can be zipped by using `zlib`.
+defined as C++ macros, and the translation text can be zipped by
+using `zlib`.
 

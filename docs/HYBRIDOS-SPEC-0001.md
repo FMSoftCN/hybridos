@@ -76,12 +76,13 @@ We introduce some properties for the tags:
     * ListView
     * ItemView
     * InputView
+    * EditBoxView
+    * CanvasView
+
     * ProgressView
     * DropdownView
     * TooltipView
     * PopoverView
-    * EditBoxView
-    * ...
 
 ### Tag app
 
@@ -100,8 +101,8 @@ We DO NOT use text in the tags like:
     <view>I am Vincent</view>
 
 Therefore, the DOM tree does not contain any text element. However, the HybridOS JavaScript
-library will create the text elements if need when we embedded a HybridOS activity in a HTML5
-webpage. For example, if there is a `TextView`.
+library will create the text elements if need when we embed a HybridOS activity in a HTML5
+webpage. Especially if there is a `TextView`.
 
 ## A Sample
 
@@ -206,9 +207,12 @@ An app can be defined by using the following markup statements:
             <meta name="img:defAvatar" content="/firstSample/assets/default.png" />
 
             <!-- the links to the localization translation files */
-            <link rel="localtext" type="text/json" hreflang="zh_CN" href="/firstSample/assets/messages/zh_CN.json" />
-            <link rel="localtext" type="text/json" hreflang="zh_TW" href="/firstSample/assets/messages/zh_TW.json" />
-            <link rel="localtext" type="text/json" hreflang="en_US" href="/firstSample/assets/messages/en_US.json" />
+            <link rel="localtext" type="text/json" hreflang="zh_CN"
+                    href="/firstSample/assets/messages/zh_CN.json" />
+            <link rel="localtext" type="text/json" hreflang="zh_TW"
+                    href="/firstSample/assets/messages/zh_TW.json" />
+            <link rel="localtext" type="text/json" hreflang="en_US"
+                    href="/firstSample/assets/messages/en_US.json" />
 
             <link rel="stylesheet" type="text/css" href="/firstSample/assets/default.css" />
         </assets>
@@ -316,21 +320,38 @@ CSS to any HVML element as well.
 
 ## L10N
 
-Different from webpages, HVML handles L10N text as an asset of an app. 
-HE (the HVML user agent) load the L10N file in JSON and translate the
+Different from webpages, HVML handles the L10N text as an asset of an app. 
+HE (the HVML user agent) loads the L10N file in JSON and translate the
 localization text according to the identifier.
 
 If you specify a content of `TextView` with a string started with `$`, the
-string will be treated as the identifier of a text not a literal string.
+string will be treated as the identifier of a text instead of the literal text.
 
 The content of a L10N text file will look like:
 
     {
         "app": "firstSample",
-        "language": "zh_CN",
+        "locale": "zh_CN",
         "STRID_TITLE": "HybridOS 的第一个示例应用",
         "STRID_COPYRING": "版权所有 (C) 2018 飞漫软件",
     }
+
+Obviously, `app` and `locale` are reserved keywords for L10N text file.
+
+## The HTML5 Technologies Supported
+
+The following HTML5 Technologies will be supported by HVML in the first official release:
+
+* canvas and canvas object.
+* WebStorage (including localStorage and sessionStorage)
+* WebSocket
+* Geolocation
+
+The following HTML5 Technologies will be supported in the future releases:
+
+* SVG
+* Audio
+* Video
 
 ## Relationship with C++ App Framework
 
@@ -340,5 +361,5 @@ HFCL is derived a C++ GUI framework called mGNGUX, which is based on MiniGUI.
 We re-designed HFCL to make this library can be ported easily to other
 host operating system, for example, Windows or macOS.
 
-Indeed, Hybrid Engine is developed on HFCL.
+Indeed, Hybrid Engine is developed based on HFCL.
 
