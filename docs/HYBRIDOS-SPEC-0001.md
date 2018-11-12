@@ -354,6 +354,14 @@ The following HTML5 Technologies will be supported in the future releases:
 * Audio
 * Video
 
+## Extended JavaScript Objects
+
+HybridOS will provide the following exteneded JavaScript Objects for app:
+
+* SQLite for local database.
+* hBus for communication with the local system services.
+* MQTT for communication with the cloud and clients.
+
 ## Relationship with C++ App Framework
 
 Under C++ language, all the view types are implemented by the HybridOS 
