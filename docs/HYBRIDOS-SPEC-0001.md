@@ -106,7 +106,7 @@ webpage. Especially if there is a `TextView`.
 
 ## A Sample
 
-In this section, we provide a sample to show how the HybridOS View Markup Language work.
+In this section, we provide a sample to show how the HybridOS View Markup Language works.
 In this sample, we show a user list with avatars and user names. When you clicked on a
 user item, the app will show the detailed information of the user.
 
