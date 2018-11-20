@@ -16,6 +16,7 @@ from devices to the cloud and the clients.
    [Why We Design a New OS for IoT?](#why-we-design-a-new-os-for-iot)  
    [Technical Terminologies](#technical-terminologies)  
    [Goals of HybridOS](#goals-of-hybridos)  
+    - [A simplified software stack](#a-simplified-software-stack)  
    [Design Documents and Specifications](#design-documents-and-specifications)  
    [Source Tree](#source-tree)  
    [Current Status](#current-status)  
