@@ -322,27 +322,27 @@ using `zlib`.
 The components of HFCL are classified into the folllowing categories:
 
 1. Basic utility classes
-  * The simplified implementation of string, list, vector, and map. 
-    You can also configure HFCL to use the STL (standard template library).
-  * The common classes: Object, Event, EventListner, Date, Time, UrlParser, and so on.
+    * The simplified implementation of string, list, vector, and map. 
+      You can also configure HFCL to use the STL (standard template library).
+    * The common classes: Object, Event, EventListner, Date, Time, UrlParser, and so on.
 
 1. System classes
-  * File and filesystem
-  * SQLite queries
-  * Key-value queries
-  * hBus event and task management
-  * AsyncTask management
-  * Peripheral management
+    * File and filesystem
+    * SQLite queries
+    * Key-value queries
+    * hBus event and task management
+    * AsyncTask management
+    * Peripheral management
 
 1. Networking classes
-  * WebSocket client
-  * MQTT client
+    * WebSocket client
+    * MQTT client
 
 1. App framework
-  * Graphics
-  * Resource management
-  * Style sheets
-  * View hierarchy
-  * Activity and intent
-  * Animation and transition
+    * Graphics
+    * Resource management
+    * Style sheets
+    * View hierarchy
+    * Activity and intent
+    * Animation and transition
 
