@@ -13,13 +13,13 @@ from devices to the cloud and the clients.
 
 ## Table of Contents
 
-   [Why We Design a New OS for IoT?](#why-we-design-a-new-os-for-iot)
-   [Technical Terminologies](#technical-terminologies)<
-   [Goals of HybridOS](#goals-of-hybridos)
-   [Design Documents and Specifications](#design-documents-and-specifications)
-   [Source Tree](#source-tree)
-   [Current Status](#current-status)
-   [Copying](#copying)
+   [Why We Design a New OS for IoT?](#why-we-design-a-new-os-for-iot)  
+   [Technical Terminologies](#technical-terminologies)  
+   [Goals of HybridOS](#goals-of-hybridos)  
+   [Design Documents and Specifications](#design-documents-and-specifications)  
+   [Source Tree](#source-tree)  
+   [Current Status](#current-status)  
+   [Copying](#copying)  
 
 ## Why We Design a New OS for IoT?
 
