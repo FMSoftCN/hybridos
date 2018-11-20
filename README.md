@@ -12,7 +12,11 @@ providing developers with a new complete software stack and protocol stack
 from devices to the cloud and the clients.
 
 [Why We Design a New OS for IoT?](#why-we-design-a-new-os-for-iot)
+
+[Source Tree](#source-tree)
+
 [Current Status](#current-status)
+
 [Copying](#copying)
 
 ## Why We Design a New OS for IoT?
@@ -113,7 +117,7 @@ The device-side system of HybridOS is based on the Linux kernel, making full use
 Linux kernel ecosystem, reducing the difficulty of developing various drivers and 
 the difficulty of supporting various protocol stacks, thus reducing development costs.
 
-## Design and Specifications
+## Design Documents and Specifications
 
 * [HybridOS Architecture]
 * [HybridOS App Framework]
