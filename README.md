@@ -122,6 +122,11 @@ the difficulty of supporting various protocol stacks, thus reducing development 
 
 * Nov. 2018: Initiate this open source project.
 
+## Specifications
+
+* [HybridOS App Framework]
+* [HybridOS Foundation Class Library]
+
 ## Copying
 
 Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
@@ -133,4 +138,8 @@ Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 Note that HybridOS integrates many mature open source software, such as SQLite, FreeType, 
 V8 JavaScript engine, and so on. For the copyright owners and licenses for these software, 
 please refer to the README or LICENSE files contained in the source trees.
+
+
+[HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
+[HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
 
