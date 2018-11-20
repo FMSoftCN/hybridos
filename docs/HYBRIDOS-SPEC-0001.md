@@ -365,10 +365,14 @@ HybridOS will provide the following exteneded JavaScript Objects for app:
 ## Relationship with C++ App Framework
 
 Under C++ language, all the view types are implemented by the HybridOS 
-Foundation C++ Class Library (`HFCL` for short, see HYBRIDOS-SPEC-0002.md).
+Foundation C++ Class Library (`HFCL` for short, see [HybridOS Foundation Class Library]).
 HFCL is derived a C++ GUI framework called mGNGUX, which is based on MiniGUI.
 We re-designed HFCL to make this library can be ported easily to other
 host operating system, for example, Windows or macOS.
 
 Indeed, Hybrid Engine is developed based on HFCL.
+
+[HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
+[HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
+[HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
 
