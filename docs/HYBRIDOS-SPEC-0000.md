@@ -39,10 +39,12 @@ HybridOS integrates the following components:
     * hBUS
     * ntpd
     * netifd (Network Interface Daemon)
+    * ...
 1. HybridOS services such as
     * WebSocket server
     * HTTP Responder (Python-based)
     * MQTT Broker (Python-based)
+    * ...
 
 #### HybridOS WebSocket Server
 
@@ -50,10 +52,10 @@ HybridOS WebSocket Server is an general-purpose implementation of WebSocket serv
 The other process can connect to the server via Unix Socket, and exchange the data
 with the remote clients. 
 
-Indeed, HybridOS WebSocket server acts as a proxy between the remote clients
-and the real service providers.
+Indeed, HybridOS WebSocket server acts as a broker between the remote clients
+and the real local service providers.
 
-Currently, HybridOS WebSorcket Server can 
+Currently, HybridOS WebSocket Server can 
 
   * act as a remote display of HybridOS app. The user can interact with a HybridOS app
     in a HTML5 browser, but the HybridOS app is running in the device actually.
@@ -78,9 +80,14 @@ The HybridOS HTTP Responder also runs in such manner.
 In addition to the standard glibc, HybridOS integrates the following third-party
 libraries:
 
+1. Common libraries, such as LibXML2, libZ, LibPNG, LibJPEG, ...
 1. SQLite
 1. FreeType
 1. MiniGUI
+1. CURL3
+1. V8 Engine
+1. HFCL (HybridOS Foundation Class Library)
+1. ...
 
 ## Cloud Side
 

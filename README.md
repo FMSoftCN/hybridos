@@ -109,6 +109,12 @@ The device-side system of HybridOS is based on the Linux kernel, making full use
 Linux kernel ecosystem, reducing the difficulty of developing various drivers and 
 the difficulty of supporting various protocol stacks, thus reducing development costs.
 
+## Design and Specifications
+
+* [HybridOS Architecture]
+* [HybridOS App Framework]
+* [HybridOS Foundation Class Library]
+
 ## Source Tree
 
     `
@@ -120,13 +126,7 @@ the difficulty of supporting various protocol stacks, thus reducing development 
     
 ## Current Status
 
-* Nov. 2018: Initiate this open source project.
-
-## Design and Specifications
-
-* [HybridOS Architecture]
-* [HybridOS App Framework]
-* [HybridOS Foundation Class Library]
+* Nov. 2018: Initiate this project organize specifications and design documents.
 
 ## Copying
 
