@@ -42,8 +42,8 @@ HybridOS integrates the following components:
     * ...
 1. HybridOS services such as
     * WebSocket server
-    * HTTP Responder (Python-based)
-    * MQTT Broker (Python-based)
+    * HTTP Responder
+    * MQTT Broker
     * ...
 
 #### HybridOS WebSocket Server
@@ -84,9 +84,10 @@ libraries:
 1. SQLite
 1. FreeType
 1. MiniGUI
-1. CURL3
+1. CURL
 1. V8 Engine
 1. HFCL (HybridOS Foundation Class Library)
+1. Python3 runtime environment
 1. ...
 
 ## Cloud Side
