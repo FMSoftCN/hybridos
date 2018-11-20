@@ -11,7 +11,9 @@ on devices, it also provides programming interfaces for the cloud and the client
 providing developers with a new complete software stack and protocol stack 
 from devices to the cloud and the clients.
 
-[TOC]
+[Why We Design a New OS for IoT?](#why-we-design-a-new-os-for-iot)
+[Current Status](#current-status)
+[Copying](#copying)
 
 ## Why We Design a New OS for IoT?
 
@@ -141,7 +143,6 @@ Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 Note that HybridOS integrates many mature open source software, such as SQLite, FreeType, 
 V8 JavaScript engine, and so on. For the copyright owners and licenses for these software, 
 please refer to the README or LICENSE files contained in the source trees.
-
 
 [HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
