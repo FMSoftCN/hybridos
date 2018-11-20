@@ -122,8 +122,9 @@ the difficulty of supporting various protocol stacks, thus reducing development 
 
 * Nov. 2018: Initiate this open source project.
 
-## Specifications
+## Design and Specifications
 
+* [HybridOS Architecture]
 * [HybridOS App Framework]
 * [HybridOS Foundation Class Library]
 
@@ -140,6 +141,7 @@ V8 JavaScript engine, and so on. For the copyright owners and licenses for these
 please refer to the README or LICENSE files contained in the source trees.
 
 
+[HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
 [HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
 
