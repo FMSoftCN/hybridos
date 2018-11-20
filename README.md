@@ -11,6 +11,8 @@ on devices, it also provides programming interfaces for the cloud and the client
 providing developers with a new complete software stack and protocol stack 
 from devices to the cloud and the clients.
 
+[TOC]
+
 ## Why We Design a New OS for IoT?
 
 At present, when we want to develop a consumer IoT (Internet of Things) device, 
