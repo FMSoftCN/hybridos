@@ -25,7 +25,8 @@ for device apps and client apps. The key features follow:
    (HybridOS View Markup Language, which defines a set of extended HTML5 tags)
    to describe the GUI. HybridOS provides a user agent like a Web browser. 
    The user agent contains the V8 JS engine and a HVML (a customized
-   markup language) renderer. We name the agent as 'Hybrid Engine' (`HE` for short).
+   markup language) renderer. We name the user agent as 'HybridOS App Engine'
+   (`HAE` for short).
 
 3. The developer can always describe the UIs of a device app in HVML combined with CSS,
    and
@@ -38,7 +39,7 @@ for device apps and client apps. The key features follow:
       CSS file, like AngularJS does.
 
 4. The device app written in JavaScript can run on client (Linux/Windows/macOS/Android/iOS)
-   directly. Under this situation, the developer need a HE implementation or SDK for
+   directly. Under this situation, the developer need a HAE implementation or SDK for
    the specific client operating system.
 
 In this way, we can use the same UI description files for device apps, client apps, and
@@ -323,7 +324,7 @@ CSS to any HVML element as well.
 ## L10N
 
 Different from webpages, HVML handles the L10N text as an asset of an app. 
-HE (the HVML user agent) loads the L10N file in JSON and translate the
+HAE (the HVML user agent) loads the L10N file in JSON and translate the
 localization text according to the identifier.
 
 If you specify a content of `TextView` with a string started with `$`, the

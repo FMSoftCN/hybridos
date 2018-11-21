@@ -21,7 +21,8 @@ on devices, it also provides programming interfaces for the cloud and the client
 providing developers with a new complete software stack and protocol stack 
 from devices to the cloud and the clients.
 
-We will describe the architecture and the key components of HybridOS in this document.
+In this document, we describe the architecture and the key components of HybridOS,
+and try to show you the whole picture of HybridOS and the key features.
 
 ## Device Side
 
@@ -37,12 +38,15 @@ HybridOS integrates the following components:
     * Busybox
 1. General system services such as
     * procd
-    * hBUS
     * ntpd
-    * netifd (Network Interface Daemon)
-    * Security service
+    * h-uBUS (The HybridOS variant of uBus)
+    * h-usbd (The HybridOS USB Device Monitoring Daemon)
+    * h-netifd (The HybridOS Network Interface Daemon)
+    * h-xinetd (The HybridOS variant of xinetd)
+    * h-logged (the HybridOS logging service)
+    * h-securityd (the HybridOS security service)
     * ...
-1. HybridOS services such as
+1. HybridOS servers such as
     * WebSocket Server
     * HTTP Server
     * CoAP Server
@@ -51,6 +55,20 @@ HybridOS integrates the following components:
     * ...
 
 ### Services
+
+The services in HybridOS are traditional ones like a Linux distribution. 
+Of course, they are compact ones. If you are familiar with OpenWRT, you
+will find that some services are almost same ones of OpenWRT.
+
+However, HybridOS integrates some specialized services for IoT applications:
+
+  * The HybridOS logging service. This service provide an general-purpose
+    logging infrastructure for IoT applications. Unlike a cloud server, 
+    this service stores log in a loop-buffer, and can feed the log via
+    HTTP, CoAP, or MQTT, so a remote client can get the system log easily.
+  * The HybridOS security service. This service acts a key role in HybridOS.
+    This service provides the central access control mechanisms for other
+    services and/or servers.
 
 ### Servers
 
@@ -153,16 +171,44 @@ libraries:
 1. FreeType
 1. MiniGUI
 1. CURL
-1. V8 Engine
-1. HFCL (HybridOS Foundation Class Library)
 1. Python 3 runtime environment
+1. V8 Engine
+1. HFCL ([HybridOS Foundation Class Library])
+1. HybridOS App runtime environment ([HybridOS App Framework])
 1. ...
 
 ## Client Side
 
-### Native Container
+On the client side, HybridOS provides the developers with some convenience, 
+making it easy to run the HybridOS app on various client platforms.
 
-### JS Library for HTML5 Web Browser
+In other words, it is possible to write an app by using the universal
+HybridOS API for IoT devices and various clients at the same.
+
+For more information, please refer to [HybridOS App Framework].
+
+### HybridOS app engine
+
+HybridOS app engine (`HAE` for short) can runs on various client platforms,
+including Android, iOS, Windows, and Linux.
+
+HAE is a user agent of HVML (HybridOS View Markup Language). It contains 
+the V8 JavaScript engine and the HVML renderer. 
+
+The developer can directly run a HybridOS app in HAE, just like visiting
+a webpage in a web browser. Or you can wrap the app with HAE SDK as a
+standalone app for a specific client platform.
+
+### JS libraries for HTML5 web browser
+
+It is possible to embed a HybridOS app in a HTML5 webpage. To run the
+HybridOS app in a web browser, you need import the HybridOS JavaScript
+libraries and the CSS files.
+
+The JS libraries including:
+
+  * hybrid.js: The core JavaScript library to translate HVML to HTML.
+  * hybrid.css: the core CSS which defines the default style of HVML.
 
 ## Cloud Side
 
