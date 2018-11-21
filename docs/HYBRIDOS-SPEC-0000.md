@@ -1,14 +1,15 @@
 # HybridOS Architecture
 
-HybridOS Specification 0000<br/>
-Author: Vincent Wei<br/>
-Category: System Architecture<br/>
-Date: November 2018<br/>
+HybridOS Specification 0000  
+Author: Vincent Wei  
+Category: System Architecture  
+Date: November 2018  
 Status: Proposal
 
-Copyright Notice
+*Copyright Notice*
 
-  Copyright (C) 2018 Beijing FMSoft Technologies. All Rights Reserved.
+Copyright (C) 2018 Beijing FMSoft Technologies.  
+All Rights Reserved.
 
 ## Introduction
 
@@ -39,41 +40,90 @@ HybridOS integrates the following components:
     * hBUS
     * ntpd
     * netifd (Network Interface Daemon)
+    * Security service
     * ...
 1. HybridOS services such as
-    * WebSocket server
-    * HTTP Responder
+    * WebSocket Server
+    * HTTP Server
+    * CoAP Server
+    * Streaming Server
     * MQTT Broker
     * ...
+
+### Services
+
+### Servers
+
+IoT devices, in most cases, operate more like a server. For example, an IoT device
+may run a HTTP server. The user can visit the device via standard HTTP by using
+a web browser or an client app.
+
+Therefore, HybridOS integrates common networking servers on device side. However, 
+HybridOS provides a different architecture for the implementation of the servers.
+Any HybridOS app or service can act as a real service provider of the
+server. On the other hand, a web server such as Apache/Nginx, which runs in the
+cloud, does not provide this mechanism for developers.
+
+Generally, you (the developer) can write an app or a service to connect to the
+HybridOS Servers via a specific Unix socket and act as the real service provider.
+The server handles the protocol details and passes the requests from a client
+to a specific app or service, which has registered as a service provider at a 
+specific endpoint (a namespace actually). If the app or the service returns the 
+responses to the server, the server passes them to the remote client.
+
+In this way, you do not need to write or run a complex HTTP server or a WebSocket
+server to handle the details of the protocols, you only need to write a service
+provider in your app or a service, register your endpoint to the server, and
+return the responses for the requests.
+
+We call a component which provides a specific services as a `service provider` or
+a `request responder`.
+
+However, unlike Apache or Nginx, these HybridOS servers are not designed for
+large concurrency. But, security is our number one priority when designing
+these servers.
+
+Therefore, we introduce an universal security service to check the validity 
+and compliance for each connect request.
 
 #### HybridOS WebSocket Server
 
 HybridOS WebSocket Server is an general-purpose implementation of WebSocket server. 
-The other process can connect to the server via Unix Socket, and exchange the data
+Your app or service can connect to the server via Unix Socket, and exchange the data
 with the remote clients. 
 
-Indeed, HybridOS WebSocket server acts as a broker between the remote clients
-and the real local service providers.
-
-Currently, HybridOS WebSocket Server can 
+The HybridOS WebSocket Server can 
 
   * act as a remote display of HybridOS app. The user can interact with a HybridOS app
     in a HTML5 browser, but the HybridOS app is running in the device actually.
-  * act as a H.264 streaming server.
+  * act as a simple H.264 streaming server.
   * act as a text-based command responder.
 
-You (the developer) can write an app or a service to connect to the
-HybridOS WebSocket Server via UNIX socket and act as the real service provider.
+#### HybridOS HTTP Server
 
-In this way, you do not need to write a WebSocket server to handle the details
-of the WebSocket protocol, you only need to write your own application logic
-to provide the services.
+HybridOS HTTP Server is a simple implementation of HTTP 2.0. Your app or service can 
+can register as a request responder at a specific endpoint. All requests sent to
+the endpoint will be passed by the server to your app or service. 
 
-The HybridOS HTTP Responder also runs in such manner.
+The HybridOS HTTP Server can
 
-#### HybridOS HTTP Responder
+  * provide a webpage for the system settings, like what a network router does.
+  * provide a webpage for a specific app/service, which shows the current work status.
+
+#### HybridOS CoAP Server
+
+#### HybridOS Streaming Server
+
+HybridOS Streaming Server can encode a H.264/265 media stream in RTMP and push
+the stream to the cloud. The server can also act as a streaming server to feed the
+stream in RTMP or raw H.264/H.265 frames to a client which directly connects to
+the device.
 
 #### HybridOS MQTT Broker
+
+HybridOS MQTT Broker
+
+HybridOS MQTT Broker
 
 ### Libraries
 
@@ -87,7 +137,7 @@ libraries:
 1. CURL
 1. V8 Engine
 1. HFCL (HybridOS Foundation Class Library)
-1. Python3 runtime environment
+1. Python 3 runtime environment
 1. ...
 
 ## Cloud Side

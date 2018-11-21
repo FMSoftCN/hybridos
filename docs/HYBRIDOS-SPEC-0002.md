@@ -1,14 +1,15 @@
 # HybridOS Foundation Class Library
 
-HybridOS Specification 0002<br/>
-Author: Vincent Wei<br/>
-Category: App Framework<br/>
-Date: November 2018<br/>
+HybridOS Specification 0002  
+Author: Vincent Wei  
+Category: App Framework  
+Date: November 2018  
 Status: Proposal
 
-Copyright Notice
+*Copyright Notice*
 
-  Copyright (C) 2018 Beijing FMSoft Technologies. All Rights Reserved.
+Copyright (C) 2018 Beijing FMSoft Technologies.  
+All Rights Reserved.
 
 ## Introduction
 
