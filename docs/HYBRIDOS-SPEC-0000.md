@@ -112,6 +112,17 @@ The HybridOS HTTP Server can
 
 #### HybridOS CoAP Server
 
+CoAP, the Constrained Application Protocol, is a specialized web transfer protocol
+for use with constrained nodes and constrained networks in the Internet of Things.
+
+Although the IoT device which can run HybridOS is not a constrained node, but
+the other devices connected to the device powered by HybridOS are constrained nodes.
+Therefore, HybridOS provides a CoAP server which can serves other nodes.
+
+Again, the HybridOS CoAP Server provides the same mechanism as HybridOS HTTP Server.
+You can implement the request responder of CoAP in your app or service, while
+the server hides the details of the implementation of the protocol and the security.
+
 #### HybridOS Streaming Server
 
 HybridOS Streaming Server can encode a H.264/265 media stream in RTMP and push
@@ -121,9 +132,16 @@ the device.
 
 #### HybridOS MQTT Broker
 
-HybridOS MQTT Broker
+HybridOS MQTT Broker is a simple implementation of MQTT broker and client.
 
-HybridOS MQTT Broker
+For apps and services on the device, this server acts as a broker, so an app
+or a service can connect to the server and provide subscription services for
+other apps or services.
+
+On the other hand, the broker can act as a client to the remote MQTT broker
+which runs on cloud. In this way, client apps which runs on desktop computers,
+smart phones, or tablets can exchange data via MQTT with an app or a service
+running in the device, or a constrained node which connected to the device.
 
 ### Libraries
 
@@ -140,15 +158,19 @@ libraries:
 1. Python 3 runtime environment
 1. ...
 
-## Cloud Side
-
-### MQTT Broker
-
-### Identity Authentication
-
 ## Client Side
-
-### Plugins for HTML5 Web Browser
 
 ### Native Container
 
+### JS Library for HTML5 Web Browser
+
+## Cloud Side
+
+### Distributed MQTT Broker
+
+### Identity Authentication
+
+
+[HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
+[HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
+[HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
