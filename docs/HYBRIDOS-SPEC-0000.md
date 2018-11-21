@@ -8,7 +8,7 @@ Status: Proposal
 
 *Copyright Notice*
 
-Copyright (C) 2018 [FMSoft Technologies]
+Copyright (C) 2018 [FMSoft Technologies]  
 All Rights Reserved.
 
 ## Introduction
