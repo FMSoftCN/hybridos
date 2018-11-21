@@ -62,7 +62,7 @@ will find that some services are almost same ones of OpenWRT.
 
 However, HybridOS integrates some specialized services for IoT applications:
 
-  * The HybridOS logging service. This service provide an general-purpose
+  * The HybridOS logging service. This service provide a general-purpose
     logging infrastructure for IoT applications. Unlike a cloud server, 
     this service stores log in a loop-buffer, and can feed the log via
     HTTP, CoAP, or MQTT, so a remote client can get the system log easily.

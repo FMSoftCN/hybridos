@@ -39,7 +39,7 @@ So we design HFCL, as the successor of mGNGUX.
 The key features of HFCL are follow:
 
 * It acts as the framework for HybridOS native app.
-* It provides a complete set of rich views with support for Style Set.
+* It provides a complete set of rich views with support for Style Sheet.
 * It is the foundation of Hybrid Engine.
 * It is cross multiple windowing platforms including MiniGUI, Windows, macOS,
   Gtk+, and others.
@@ -186,11 +186,11 @@ the HVML tags. Thus, if you have to use C++ to write your device app
 because the poor hardware performance, you can easily keep up your C++
 code with the JavaScript code.
 
-## Style Set
+## Style Sheet
 
 If you have some expirience with HTML and CSS, you will easily get the
-the define the style set of views with the same manner of CSS. For example,
-the style set of the user name corresponds to the following CSS definition:
+the define the style sheet of views with the same manner of CSS. For example,
+the style sheet of the user name corresponds to the following CSS definition:
 
     .userAvatar {
         display: inline-block;
@@ -215,8 +215,8 @@ We use the marcros to define every style element in C++ way instead:
         style(BorderRadius, HS_METRICS_UNIT_PX, 5, 5, 5, 5)
     end_style_set
 
-In the definition of a view which uses a style set, we passed the name of
-the style set in the following way:
+In the definition of a view which uses a style sheet, we passed the name of
+the style sheet in the following way:
 
     begin_view(ImageView, my_style_set(userAvatar)))
         ...
@@ -224,15 +224,15 @@ the style set in the following way:
 
 ### Translate HVML and CSS
 
-It will be a trouble if we write the style sets and views by hand in the way
+It will be a trouble if we write the style sheets and views by hand in the way
 above. So we introduce a interpreting tool which can translate the HVML tags
 and CSS into the HFCL resource source files.
 
 This tool is called `hfclify`, and it will be written in Python.
 
-### Change the style set on the fly
+### Change the style sheet on the fly
 
-If you want to change the style set of one view on the fly, you can call
+If you want to change the style sheet of one view on the fly, you can call
 one of the following APIs of HFCL:
 
     view->addStyleSet (HFCL_STYLE_SET_NAME (firstSample, activeItem));
@@ -332,12 +332,14 @@ The components of HFCL are classified into the folllowing categories:
     * SQLite queries
     * Key-value queries
     * hBus event and task management
-    * AsyncTask management
+    * Async task management
     * Peripheral management
 
 1. Networking classes
-    * WebSocket client
-    * MQTT client
+    * WebSocket responder
+    * HTTP responder
+    * MQTT service provider
+    * ...
 
 1. App framework
     * Graphics
