@@ -140,7 +140,7 @@ the difficulty of supporting various protocol stacks, thus reducing development 
 
 ## Copying
 
-Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
+Copyright (C) 2018 [Beijing FMSoft Technologies Co., Ltd.]
 
 * For device side and client side, HybridOS uses GPL v3.
 * For server side, HybridOS uses AGPL v3.
@@ -150,7 +150,8 @@ Note that HybridOS integrates many mature open source software, such as SQLite, 
 V8 JavaScript engine, and so on. For the copyright owners and licenses for these software, 
 please refer to the README or LICENSE files contained in the source trees.
 
+[Beijing FMSoft Technologies Co., Ltd.]: http://www.fmsoft.cn
+
 [HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
 [HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
-

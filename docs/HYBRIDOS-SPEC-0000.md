@@ -8,7 +8,7 @@ Status: Proposal
 
 *Copyright Notice*
 
-Copyright (C) 2018 Beijing FMSoft Technologies.  
+Copyright (C) 2018 [FMSoft Technologies]
 All Rights Reserved.
 
 ## Introduction
@@ -216,6 +216,9 @@ The JS libraries including:
 
 ### Identity Authentication
 
+
+[Beijing FMSoft Technologies Co., Ltd.]: http://www.fmsoft.cn
+[FMSoft Technologies]: http://www.fmsoft.cn
 
 [HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md

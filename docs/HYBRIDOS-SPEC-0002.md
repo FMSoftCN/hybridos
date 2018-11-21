@@ -8,7 +8,7 @@ Status: Proposal
 
 *Copyright Notice*
 
-Copyright (C) 2018 Beijing FMSoft Technologies.  
+Copyright (C) 2018 [FMSoft Technologies]
 All Rights Reserved.
 
 ## Introduction
@@ -347,3 +347,10 @@ The components of HFCL are classified into the folllowing categories:
     * Activity and intent
     * Animation and transition
 
+
+[Beijing FMSoft Technologies Co., Ltd.]: http://www.fmsoft.cn
+[FMSoft Technologies]: http://www.fmsoft.cn
+
+[HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
+[HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
+[HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
