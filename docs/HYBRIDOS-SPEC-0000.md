@@ -26,7 +26,7 @@ and try to show you the whole picture of HybridOS and the key features.
 
 ## Device Side
 
-### System Components
+### System components
 
 In this document, we call a software which runs as a process as a `component`. Generally,
 most of components are daemons.
