@@ -163,8 +163,7 @@ running in the device, or a constrained node which connected to the device.
 
 ### Libraries
 
-In addition to the standard glibc, HybridOS integrates the following third-party
-libraries:
+In addition to the standard glibc, HybridOS integrates the following libraries:
 
 1. Common libraries, such as LibXML2, libZ, LibPNG, LibJPEG, ...
 1. SQLite
@@ -193,7 +192,7 @@ HybridOS app engine (`HAE` for short) can runs on various client platforms,
 including Android, iOS, Windows, and Linux.
 
 HAE is a user agent of HVML (HybridOS View Markup Language). It contains 
-the V8 JavaScript engine and the HVML renderer. 
+the V8 JavaScript engine and the HVML renderer.
 
 The developer can directly run a HybridOS app in HAE, just like visiting
 a webpage in a web browser. Or you can wrap the app with HAE SDK as a
@@ -202,20 +201,48 @@ standalone app for a specific client platform.
 ### JS libraries for HTML5 web browser
 
 It is possible to embed a HybridOS app in a HTML5 webpage. To run the
-HybridOS app in a web browser, you need import the HybridOS JavaScript
+HybridOS app in a web browser, you need to import the HybridOS JavaScript
 libraries and the CSS files.
 
 The JS libraries including:
 
-  * hybrid.js: The core JavaScript library to translate HVML to HTML.
-  * hybrid.css: the core CSS which defines the default style of HVML.
+  * hybrid.js: The core JavaScript library which parses HVML.
+  * hybrid.css: The core CSS which defines the default style of HVML.
+  * mqtt.js: The JavaScript library for MQTT client.
+  * coap.js: The JavaScript library for CoAP client.
 
 ## Cloud Side
 
-### Distributed MQTT Broker
+We plan to address some of the common problems of IoT in the cloud
+computing environment by providing some new cloud services.
 
-### Identity Authentication
+  * Device certification and registration. This service can judge whether
+    a specific device is genuine or not, and provides the registration
+    and active statistics of the devices.
+  * Online firmware upgrade. This service provides CDN distribution, 
+    download, and upgrade of the firmware for your device.
+  * Online upgrade of an app or service. This service provides the 
+    online upgrade of a HybridOS app or service. It is somehow 
+    similar to the app store of smartphone.
+  * MQTT service. This service providing a ready-to-use MQTT server.
+  * Identity authentication service. This service provides
+    a security implementation to bind a HybridOS device with a client app.
+    It can also verify that an access request from an client to a centain
+    device is validity.
 
+In fact, some cloud services listed above are already very common on 
+smartphones. But they are basically provided by the smartphone
+manufacturers and are not open. By using the services provided by HybridOS,
+developers can easily implement these features for their IoT applications
+without having to develop and maintain them themselves.
+
+The HybridOS Security Service which runs on device side works closely with
+the cloud services above to ensure the security of your IoT application.
+
+On the cloud side, the identity authentication mechanisms is based on 
+blockchain technology in order to avoid hijacking device by cracker.
+
+In the future, we will provide serverless computing on the cloud side.
 
 [Beijing FMSoft Technologies Co., Ltd.]: http://www.fmsoft.cn
 [FMSoft Technologies]: http://www.fmsoft.cn
@@ -223,3 +250,4 @@ The JS libraries including:
 [HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
 [HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
+
