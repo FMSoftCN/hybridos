@@ -17,8 +17,8 @@ As we know, HybridOS tries to provide the developers with more possibilities
 than just a traditional operating system for a stand-alone hardware environment.
 
 HybridOS not only runs on smart IoT devices to support application development
-on devices, it also provides programming interfaces for the cloud and the clients,
-providing developers with a new complete software stack and protocol stack 
+on devices, but also provides programming interfaces for the cloud and the clients.
+It tries to give the developers a new complete software stack and protocol stack 
 from devices to the cloud and the clients.
 
 In this document, we describe the architecture and the key components of HybridOS,
@@ -120,7 +120,7 @@ The HybridOS WebSocket Server can
 #### HybridOS HTTP Server
 
 HybridOS HTTP Server is a simple implementation of HTTP 2.0. Your app or service can 
-can register as a request responder at a specific endpoint. All requests sent to
+register as a request responder at a specific endpoint. All requests sent to
 the endpoint will be passed by the server to your app or service. 
 
 The HybridOS HTTP Server can
