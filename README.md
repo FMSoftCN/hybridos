@@ -129,6 +129,9 @@ the difficulty of supporting various protocol stacks, thus reducing development 
 * [HybridOS Architecture]
 * [HybridOS App Framework]
 * [HybridOS Foundation Class Library]
+* [HybridOS Security Design]
+* [HybridOS Device Simulation Environment]
+* [HybridOS Code Convention]
 
 ## Source Tree
 
@@ -160,3 +163,6 @@ please refer to the README or LICENSE files contained in the source trees.
 [HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
 [HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
+[HybridOS Security Design]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0003.md
+[HybridOS Device Simulation Environment]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0004.md
+[HybridOS Code Convention]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0005.md
