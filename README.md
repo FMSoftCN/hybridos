@@ -7,8 +7,8 @@ HybridOS tries to provide the developers with more possibilities than just a
 traditional operating system for a stand-alone hardware environment.
 
 HybridOS not only runs on smart IoT devices to support application development
-on devices, it also provides programming interfaces for the cloud and the clients,
-providing developers with a new complete software stack and protocol stack 
+on devices, but also provides programming interfaces for the cloud and the clients.
+It tries to give the developers a new complete software stack and protocol stack 
 from devices to the cloud and the clients.
 
 ## Table of Contents
@@ -70,10 +70,12 @@ technologies to improve the security of IoT.
 * Device App: An app runs on a device, with or without GUI.
 * Client: A desktop computer, a smart phone, or a tablet.
 * Client App: An app runs on a client.
+* Node: The IoT node; For HybridOS, the node here refers to a constrained IoT
+  device in a constrained network.
 
 ## Goals of HybridOS
 
-### A simplified software stack
+### A specialized software stack
 
 HybridOS provides a new software stack for smart IoT device:
 
@@ -82,8 +84,10 @@ HybridOS provides a new software stack for smart IoT device:
   gravity accelerometer) management, and USB interface management. hBus exchanges
   data among apps and services in JSON, which is friendly for any programming language.
 
-* Runtime support environment for various networking and cloud computing services
-  based on Python, such as MQTT, WebSocket, HTTP, streaming services, etc.
+* Runtime support environment for various networking servers, such as MQTT, 
+  WebSocket, HTTP, CoAP, and streaming servers. HybridOS provides a different 
+  architecture for the implementation of the servers: any HybridOS app or service 
+  can act as a real service provider of the servers. 
 
 * A new and universal app framework for IoT devices and client apps.
   The developers can write device app and client apps for Linux, Windows, macOS, 
@@ -99,7 +103,8 @@ an IoT application will be reduced greatly by using HybridOS.
 ### IoT-dedicated cloud computing services
 
 HybridOS integrates some cloud computing services which are dedicated to IoT,
-such as MQTT, identity authentication mechanism, and firmware upgrade.
+such as distributed MQTT servers, identity authentication mechanism, 
+and some basic services, such as firmware upgrade.
 
 HybridOS also introduces the serverless technologies for the IoT cloud computing.
 In this way, the developer can easily integrate the existed cloud services by 
@@ -112,8 +117,8 @@ and an identity authentication mechanism based on blockchain technology.
 ### Rich connectivities
 
 HybridOS will provide a variety of connectivity options for the IoT devices, 
-including high-speed Wi-Fi (in the 2.4G/5G band), Bluetooth, 4G/LTE, NB-IoT, USB, 
-and so on. 
+including 4G/LTE, NB-IoT, Wi-Fi, Bluetooth, ZigBee, NFC, RFID, USB, Ethernet,
+RS232, and so on. 
 
 The device-side system of HybridOS is based on the Linux kernel, making full use of the
 Linux kernel ecosystem, reducing the difficulty of developing various drivers and 
