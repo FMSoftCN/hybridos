@@ -159,6 +159,8 @@ V8 JavaScript engine, and so on. For the copyright owners and licenses for these
 please refer to the README or LICENSE files contained in the source trees.
 
 [Beijing FMSoft Technologies Co., Ltd.]: http://www.fmsoft.cn
+[FMSoft Technologies]: http://www.fmsoft.cn
+[HybridOS Official Site]: http://www.hybridos.org
 
 [HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md

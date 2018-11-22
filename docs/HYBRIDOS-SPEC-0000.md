@@ -166,6 +166,7 @@ running in the device, or a constrained node which connected to the device.
 In addition to the standard glibc, HybridOS integrates the following libraries:
 
 1. Common libraries, such as LibXML2, libZ, LibPNG, LibJPEG, ...
+1. Berkeley DB
 1. SQLite
 1. FreeType
 1. MiniGUI
@@ -246,6 +247,7 @@ In the future, we will provide serverless computing on the cloud side.
 
 [Beijing FMSoft Technologies Co., Ltd.]: http://www.fmsoft.cn
 [FMSoft Technologies]: http://www.fmsoft.cn
+[HybridOS Official Site]: http://www.hybridos.org
 
 [HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
