@@ -94,6 +94,10 @@ server to handle the details of the protocols, you only need to write a service
 provider in your app or a service, register your endpoint to the server, and
 return the responses for the requests.
 
+Further, we can an abstract interface for various application protocols, such
+as HTTP, CoAP, MQTT, so that a HybridOS app or service can only implement
+a request provider once for different protocols.
+
 We call a component which provides a specific services as a `service provider` or
 a `request responder`.
 
@@ -240,8 +244,9 @@ without having to develop and maintain them themselves.
 The HybridOS Security Service which runs on device side works closely with
 the cloud services above to ensure the security of your IoT application.
 
-On the cloud side, the identity authentication mechanisms is based on 
-blockchain technology in order to avoid hijacking device by cracker.
+The identity authentication mechanisms of HybridOS will learn some ideas
+or concept from blockchain technology, in order to in order to avoid 
+hijacking device by cracker.
 
 In the future, we will provide serverless computing on the cloud side.
 

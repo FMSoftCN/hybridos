@@ -59,9 +59,9 @@ cameras. The current IoT products, like traditional Internet applications, have 
 improved much in terms of security. The scenes that we can often see from spy war 
 movies can still be easily performed in reality.
 
-The blockchain technology may change this. The decentralized design of the blockchain
-provides another way to enhance the security of IoT. HybridOS will try to use the 
-technologies to improve the security of IoT.
+Some ideas from the blockchain technology may change this. The decentralized 
+design of the blockchain provides another way to enhance the security of IoT.
+HybridOS will try to use the technologies to improve the security of IoT.
 
 ## Technical Terminologies
 
