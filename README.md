@@ -160,7 +160,7 @@ thus reducing development cost.
     
 ## Current Status
 
-* Nov. 2018: Initiate this project organize specifications and design documents.
+* Nov. 2018: Initiate this project and organize specifications and design documents.
 
 ## Copying
 
