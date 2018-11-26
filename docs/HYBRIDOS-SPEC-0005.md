@@ -101,6 +101,7 @@ The following code is an example:
 For C++ program, our coding style mainly complies with [Google C++ Style Guide],
 but with the following exceptions:
 
+* For structure data menubers, always use Unix convention without prefix.
 * For protected or private class data members, use Unix convention with
   the prefix of `m_`.
 * For public class data members, use lower camel casing with the prefix of `m_`.
