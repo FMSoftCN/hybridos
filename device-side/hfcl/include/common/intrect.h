@@ -16,15 +16,15 @@
 ** GNU General Public License for more details.
 **
 ** You should have received a copy of the GNU General Public License
-** along with this program. If not, see <https://www.gnu.org/licenses/>.
+** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #ifndef __NGUX_INTRECT_H__
 #define __NGUX_INTRECT_H__
 
-#include "nguxcommon.h"
+#include "common/common.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class IntRect {
     public:
@@ -303,7 +303,7 @@ class IntRect {
         int m_bottom;
 };
 
-NAMESPACE_END
+} // namespace hfcl
 
 #endif /* __NGUX_INTRECT_H__ */
 

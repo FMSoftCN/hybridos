@@ -1,11 +1,12 @@
 CLEANFILES=*.a
 EXTRA_DIST=
 
-SUBDIRS=activity view
+SUBDIRS=common activity view
 lib_LTLIBRARIES=libhfcl@LIB_SUFFIX@.la
 
 AM_CPPFLAGS=-I../include
 COMMON_LIBADD=  \
+	common/libhfcl_common.la \
 	activity/libhfcl_activiy.la \
 	view/libhfcl_view.la
 

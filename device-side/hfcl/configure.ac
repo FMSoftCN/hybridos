@@ -165,6 +165,7 @@ AC_OUTPUT([
     include/activity/Makefile
     include/view/Makefile
     src/Makefile
+    src/common/Makefile
     src/activity/Makefile
     src/view/Makefile
 ])
