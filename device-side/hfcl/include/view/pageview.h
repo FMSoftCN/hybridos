@@ -34,7 +34,7 @@ class PageView : public PanelView
 			:PanelView(p_parent, drset), m_cur_page(NULL) { 
                 setLoopAble(true);setFocusValid(true); 
             }
-		PageView (NGInt x, NGInt y, NGInt w, NGInt h, NGInt i_id)
+		PageView (int x, int y, int w, int h, int i_id)
 			:PanelView(x, y, w, h, i_id) , m_cur_page(NULL) { 
                 setLoopAble(true);setFocusValid(true); 
             }
@@ -44,28 +44,28 @@ class PageView : public PanelView
                 setLoopAble(true);setFocusValid(true); 
             }
 
-		virtual NGBool dispatchEvent(Event *event);
+		virtual bool dispatchEvent(Event *event);
 
 		View *nextPage(void);
 		View *prevPage(void);
 
-		NGBool setCurPage(View *page);
+		bool setCurPage(View *page);
 		View *getCurPage(void) { return m_cur_page; }
 
-		NGBool setCurPageByIndex(const NGUInt index);
-		NGInt getCurPageIndex(void);
+		bool setCurPageByIndex(const unsigned int index);
+		int getCurPageIndex(void);
 
-		NGUInt indexFromPage(View *page) { return getChildIndex(page); }
-		View* pageFromIndex(const NGUInt index) { return getChildByIndex(index); }
+		unsigned int indexFromPage(View *page) { return getChildIndex(page); }
+		View* pageFromIndex(const unsigned int index) { return getChildByIndex(index); }
 
-		NGBool addPage(View *);
-		NGBool appendPage(View *);
-		NGBool delPage(View *page) { return removeChild(page) == 0; }
+		bool addPage(View *);
+		bool appendPage(View *);
+		bool delPage(View *page) { return removeChild(page) == 0; }
 
-		NGInt getPageCount() {return viewCount();}
+		int getPageCount() {return viewCount();}
 
-		void setLoopAble(NGBool isLoop) { setFlag(isLoop, LOOPABLE);}
-		NGBool isLoopAble(void) {return m_flags & LOOPABLE;}
+		void setLoopAble(bool isLoop) { setFlag(isLoop, LOOPABLE);}
+		bool isLoopAble(void) {return m_flags & LOOPABLE;}
 
 
 	protected:

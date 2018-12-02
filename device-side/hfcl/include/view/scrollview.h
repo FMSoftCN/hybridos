@@ -51,68 +51,68 @@ class ScrollView : public PanelView, public TimerEventListener
          * * \param[in] x the destination X coordinate.
          * * \param[in] y the destination Y coordinate.
          * */
-        void moveViewport(NGInt x, NGInt y, NGBool bupdate =true);
+        void moveViewport(int x, int y, bool bupdate =true);
 
         void updateContentRect(void);
 
         void setContent(ContainerView* content);
         inline ContainerView* content(void) const {return m_content;}
        
-		virtual void drawContent(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/);
-        virtual void drawScroll(GraphicsContext* context, IntRect &rc, NGInt status/* = Style::NORMAL*/);
+		virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
+        virtual void drawScroll(GraphicsContext* context, IntRect &rc, int status/* = Style::NORMAL*/);
 
-		void getContentSize(NGInt *pw, NGInt *ph) {
+		void getContentSize(int *pw, int *ph) {
 			if(pw)
 				*pw = m_content ? m_content->getRect().width() : 0;
 			if(ph)
 				*ph = m_content ? m_content->getRect().height() : 0;
 		}
 		
-		NGBool dispatchEvent(Event*);
-        NGBool handleEvent(Event* event);
+		bool dispatchEvent(Event*);
+        bool handleEvent(Event* event);
     	
         /*
          * set vertical scrollbar and horizontal scrollbar width.
          */
-        void setBarWidth(NGInt barwidth);
-        void setBarMargin(NGInt barmargin);
+        void setBarWidth(int barwidth);
+        void setBarMargin(int barmargin);
 
         /*
          * set vertical scrollbar and horizontal scrollbar is visible.
          */
-        void setVBarVisible(NGBool b_isVisible) { setFlag(b_isVisible, VBAR_VISIBLE); }
-        void setHBarVisible(NGBool b_isVisible) { setFlag(b_isVisible, HBAR_VISIBLE); }
-        void setBarVisible(NGBool b_isVisible) { setFlag(b_isVisible, VBAR_VISIBLE | HBAR_VISIBLE); }
+        void setVBarVisible(bool b_isVisible) { setFlag(b_isVisible, VBAR_VISIBLE); }
+        void setHBarVisible(bool b_isVisible) { setFlag(b_isVisible, HBAR_VISIBLE); }
+        void setBarVisible(bool b_isVisible) { setFlag(b_isVisible, VBAR_VISIBLE | HBAR_VISIBLE); }
 		
-		NGBool vBarVisible(void) { return (m_flags & VBAR_VISIBLE) == VBAR_VISIBLE; }
-		NGBool hBarVisible(void) { return (m_flags & HBAR_VISIBLE) == HBAR_VISIBLE; }
+		bool vBarVisible(void) { return (m_flags & VBAR_VISIBLE) == VBAR_VISIBLE; }
+		bool hBarVisible(void) { return (m_flags & HBAR_VISIBLE) == HBAR_VISIBLE; }
 
-		void setLoopScroll(NGBool b) { setFlag(b, LOOP_SCROLL); }
-		NGBool loopScroll() { return m_flags & LOOP_SCROLL; }
-		NGBool autoShowBar() { return m_flags& AUTOSHOWBAR; }
-		NGBool scrollVisiable(NGInt * barWidth, NGBool isVertical = TRUE);
+		void setLoopScroll(bool b) { setFlag(b, LOOP_SCROLL); }
+		bool loopScroll() { return m_flags & LOOP_SCROLL; }
+		bool autoShowBar() { return m_flags& AUTOSHOWBAR; }
+		bool scrollVisiable(int * barWidth, bool isVertical = TRUE);
 		
-		void setAutoShowBar(NGBool b) { setFlag(isScrollBarAlwaysShow() ? true : b, AUTOSHOWBAR); }
+		void setAutoShowBar(bool b) { setFlag(isScrollBarAlwaysShow() ? true : b, AUTOSHOWBAR); }
 		
-		void setScrollBarAlwaysShow(NGBool b) { setFlag(b, ALWAYS_SHOW); }
-		NGBool isScrollBarAlwaysShow(void) { return (m_flags & ALWAYS_SHOW) == ALWAYS_SHOW; }
+		void setScrollBarAlwaysShow(bool b) { setFlag(b, ALWAYS_SHOW); }
+		bool isScrollBarAlwaysShow(void) { return (m_flags & ALWAYS_SHOW) == ALWAYS_SHOW; }
 
-		void setScrollBarFloating(NGBool b) { setFlag(b, BAR_FLOATING); }
-		NGBool isScrollBarFloating(void) { return (m_flags & BAR_FLOATING) == BAR_FLOATING; }
+		void setScrollBarFloating(bool b) { setFlag(b, BAR_FLOATING); }
+		bool isScrollBarFloating(void) { return (m_flags & BAR_FLOATING) == BAR_FLOATING; }
 
-		void setVScrollBarOnLeft(NGBool b) { setFlag(b, VBAR_ON_LEFT); }
-		NGBool isVScrollBarOnLeft(void) { return (m_flags & VBAR_ON_LEFT) == VBAR_ON_LEFT; }
+		void setVScrollBarOnLeft(bool b) { setFlag(b, VBAR_ON_LEFT); }
+		bool isVScrollBarOnLeft(void) { return (m_flags & VBAR_ON_LEFT) == VBAR_ON_LEFT; }
 		
-		static void SetAllScrollBarOnLeft(NGBool b){ g_is_all_scrollbar_on_left = b; }
-		static NGBool IsAllScrollBarOnLeft(void){ return g_is_all_scrollbar_on_left; }
-        void setVStep(NGUInt16 vstep){m_vStep = vstep;}
-        void setHStep(NGUInt16 hstep){m_hStep = hstep;}
+		static void SetAllScrollBarOnLeft(bool b){ g_is_all_scrollbar_on_left = b; }
+		static bool IsAllScrollBarOnLeft(void){ return g_is_all_scrollbar_on_left; }
+        void setVStep(Uint16 vstep){m_vStep = vstep;}
+        void setHStep(Uint16 hstep){m_hStep = hstep;}
 		
 	private:
-		void moveOffsetH(NGInt x);
-		void moveOffsetV(NGInt y);
+		void moveOffsetH(int x);
+		void moveOffsetV(int y);
 	
-		void drawScrollContent(GraphicsContext *gc, NGInt status);
+		void drawScrollContent(GraphicsContext *gc, int status);
 
 	protected:
 		void onChildSizeChanged(View *child) {
@@ -121,17 +121,17 @@ class ScrollView : public PanelView, public TimerEventListener
 		}
 
     protected:
-		NGUInt16 m_barWidth;
-		NGUInt16 m_barMargin;
-        NGUInt16 m_vStep;
-        NGUInt16 m_hStep;
-		NGInt m_offx;
-		NGInt m_offy;
+		Uint16 m_barWidth;
+		Uint16 m_barMargin;
+        Uint16 m_vStep;
+        Uint16 m_hStep;
+		int m_offx;
+		int m_offy;
         ContainerView* m_content;
 
     private:
-        NGInt m_timerId;
-		static NGBool g_is_all_scrollbar_on_left;
+        int m_timerId;
+		static bool g_is_all_scrollbar_on_left;
 		
 	DECLARE_CLASS_NAME(ScrollView)
 };

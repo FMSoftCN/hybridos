@@ -38,55 +38,55 @@ public:
 
     void setText(const char *text);
     void setText(const string text);
-    void setText(NGInt strId);
-    NGInt getTextId(void) { return m_stringId; }
+    void setText(int strId);
+    int getTextId(void) { return m_stringId; }
     char* getText(void);
-	NGInt getTextLength(void);
-    void setMargin(NGInt margin) { m_margin = margin; }
+	int getTextLength(void);
+    void setMargin(int margin) { m_margin = margin; }
 		
     void setTextColor(Color *c);
     void setTextColor(unsigned char r, unsigned char g, unsigned char b);
     void setTextColor(DWORD color);
 
-	void setTextOutMode(NGUInt mode);
-	void setTextAlign(NGUInt align);
-	void setTextValign(NGUInt valign);
+	void setTextOutMode(unsigned int mode);
+	void setTextAlign(unsigned int align);
+	void setTextValign(unsigned int valign);
 
-	NGUInt getTextAlign();
-	NGUInt getTextValign();
+	unsigned int getTextAlign();
+	unsigned int getTextValign();
 
-    void setTextOutLineMode(NGBool mode);
-    void setTextFont(NGUInt font);
+    void setTextOutLineMode(bool mode);
+    void setTextFont(unsigned int font);
 
-	void setTextBreak(NGInt tBreak);
-	NGInt getTextBreak(void);
+	void setTextBreak(int tBreak);
+	int getTextBreak(void);
 
-    inline void setLineAboveHeight(NGInt height) { m_lineAboveH = height; }
-    inline void setLineBellowHeight(NGInt height) { m_lineBellowH = height; }
+    inline void setLineAboveHeight(int height) { m_lineAboveH = height; }
+    inline void setLineBellowHeight(int height) { m_lineBellowH = height; }
 
 	////////////////////////////////////////////// 
 	//once is long-text, we can not go back to short text, cause that is NOT right.
-	NGBool setLongText(void);
-	NGBool isLongText(void);
+	bool setLongText(void);
+	bool isLongText(void);
 	
-	void setBidiCheck(NGBool bidiflag);
-	NGBool isBidiCheck(void);
+	void setBidiCheck(bool bidiflag);
+	bool isBidiCheck(void);
 	
-	virtual void drawContent(GraphicsContext* context, IntRect &rc, NGInt status/*= Style::NORMAL*/);
+	virtual void drawContent(GraphicsContext* context, IntRect &rc, int status/*= Style::NORMAL*/);
 
-	void setRollProp(NGBool roll) { stopRoll(); setFlag(roll, ROLLTEXT); }
-	NGBool getRollProp() { return m_flags & ROLLTEXT; }
+	void setRollProp(bool roll) { stopRoll(); setFlag(roll, ROLLTEXT); }
+	bool getRollProp() { return m_flags & ROLLTEXT; }
 
 	void startRoll();
 	void stopRoll();
 	void resetRoll();
 
-	void setAutoSize(NGBool b) { setFlag(b, AUTOSIZE); }
-	NGBool isAutoSize()        { return m_flags & AUTOSIZE; }
-	virtual void autoFitSize(NGBool auto_child_fit = false);
-	NGBool isNeedRoll();
-	void setRolling(NGBool b) { setFlag(b, ROLLING); }
-	NGBool isRolling() { return m_flags & ROLLING; }
+	void setAutoSize(bool b) { setFlag(b, AUTOSIZE); }
+	bool isAutoSize()        { return m_flags & AUTOSIZE; }
+	virtual void autoFitSize(bool auto_child_fit = false);
+	bool isNeedRoll();
+	void setRolling(bool b) { setFlag(b, ROLLING); }
+	bool isRolling() { return m_flags & ROLLING; }
 
 DECLARE_CLASS_NAME(TextView)
 
@@ -99,14 +99,14 @@ protected:
 		FLAG_SHIFT = ( 2 + View::FLAG_SHIFT)
 	};
 
-	NGBool  m_isLongText;
+	bool  m_isLongText;
 	string  m_textString;
 	char    m_textBuf[TEXT_BUFFER_LEN_OF_DEFAULT+1];
-    NGInt   m_stringId;
-	NGInt   m_lineAboveH;
-	NGInt   m_lineBellowH;
-    NGInt   m_margin;
-	NGBool  m_bidicheck;
+    int   m_stringId;
+	int   m_lineAboveH;
+	int   m_lineBellowH;
+    int   m_margin;
+	bool  m_bidicheck;
 };
 
 

@@ -44,16 +44,16 @@ BitMark::~BitMark()
 }
 
 // init mark
-NGBool BitMark::init(NGInt cnt)
+bool BitMark::init(int cnt)
 {
-	NGInt c = 0;
+	int c = 0;
 	if( m_bitbuf != NULL )
 		free(m_bitbuf);
     
     m_bitcount = 0;
 	c = cnt & 7 ? ((cnt>>3)+1) : cnt>>3;
 	
-	m_bitbuf = (NGUInt8 *)malloc(c);
+	m_bitbuf = (Uint8 *)malloc(c);
 	if (m_bitbuf != NULL) {
 		memset(m_bitbuf, 0, c);
 		m_bitcount = cnt;
@@ -64,14 +64,14 @@ NGBool BitMark::init(NGInt cnt)
 }
 
 // get count
-NGInt BitMark::count(void)
+int BitMark::count(void)
 {
 	return m_bitcount;
 }
 
 
 // get mark
-NGBool BitMark::getMark(NGInt index)
+bool BitMark::getMark(int index)
 {
 	if(m_bitcount == 0 || m_bitbuf == NULL || index >= m_bitcount || index < 0)
 		return false;
@@ -79,7 +79,7 @@ NGBool BitMark::getMark(NGInt index)
 	return m_bitbuf[index>>3] & 1<<(index&7);
 }
 // set mark
-void BitMark::setMark(NGInt index, NGBool mark)
+void BitMark::setMark(int index, bool mark)
 {
 	if(0 == m_bitcount || NULL == m_bitbuf || index >= m_bitcount || index < 0) {
 		return;
@@ -91,7 +91,7 @@ void BitMark::setMark(NGInt index, NGBool mark)
 		m_bitbuf[index>>3] &= ~(1<<(index&7));
 }
 
-void BitMark::move(NGInt from, NGInt to, NGInt cnt)
+void BitMark::move(int from, int to, int cnt)
 {
 	if(to == from || cnt == 0)
 		return;
@@ -133,9 +133,9 @@ PointerKeeper::~PointerKeeper()
 }
 
 // init pointer
-NGBool PointerKeeper::init(NGInt cnt)
+bool PointerKeeper::init(int cnt)
 {
-	NGInt c = 0;
+	int c = 0;
 	if( cnt <= 0 )
 		return false;
 		
@@ -144,7 +144,7 @@ NGBool PointerKeeper::init(NGInt cnt)
     m_pointercount = 0;
     
 	c = sizeof(void *);
-	m_pointerbuf = (NGUInt *)malloc(c*cnt);
+	m_pointerbuf = (unsigned int *)malloc(c*cnt);
 	if (m_pointerbuf != NULL) {
 		memset(m_pointerbuf, 0, c*cnt);
 		m_pointercount = cnt;
@@ -155,13 +155,13 @@ NGBool PointerKeeper::init(NGInt cnt)
 }
 
 // get count
-NGInt PointerKeeper::count(void)
+int PointerKeeper::count(void)
 {
 	return m_pointercount;
 }
 
 // get pointer
-void* PointerKeeper::getPointer(NGInt index)
+void* PointerKeeper::getPointer(int index)
 {
 	if(m_pointercount == 0 || m_pointerbuf == NULL || index >= m_pointercount || index < 0)
 		return NULL;
@@ -169,16 +169,16 @@ void* PointerKeeper::getPointer(NGInt index)
 	return (void *)m_pointerbuf[index];
 }
 // set pointer
-void PointerKeeper::setPointer(NGInt index, void* pointer)
+void PointerKeeper::setPointer(int index, void* pointer)
 {
 	if(0 == m_pointercount || NULL == m_pointerbuf || index >= m_pointercount || index < 0) {
 		return;
 	}
 
-	m_pointerbuf[index] = (NGUInt)pointer;
+	m_pointerbuf[index] = (unsigned int)pointer;
 }
 // move
-void PointerKeeper::move(NGInt from, NGInt to, NGInt cnt)
+void PointerKeeper::move(int from, int to, int cnt)
 {
 	if(to == from || cnt == 0)
 		return;

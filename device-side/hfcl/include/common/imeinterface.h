@@ -27,15 +27,15 @@ extern HWND g_imeWnd; //decleared in mFramework.cpp
 inline void registerImeWindow(HWND hWnd) { g_imeWnd = hWnd; }
 inline void unregisterImeWindow(void) { g_imeWnd = HWND_NULL; }
 
-inline NGBool isImeExist(void) { return HWND_NULL != g_imeWnd; }
+inline bool isImeExist(void) { return HWND_NULL != g_imeWnd; }
 
-inline NGBool isImeOpen(void) {
+inline bool isImeOpen(void) {
     if (isImeExist())
         return SendMessage(g_imeWnd, MSG_IME_GETSTATUS, IME_STATUS_OPENED, 0);
     return false;
 }
 
-inline NGBool isImeEnable(void) {
+inline bool isImeEnable(void) {
     if (isImeExist())
 		return SendMessage(g_imeWnd, MSG_IME_GETSTATUS, IME_STATUS_ENABLED, 0);
     return false;

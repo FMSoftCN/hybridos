@@ -41,75 +41,75 @@ class Window : public PanelView
         void setAppRect(const IntRect& irc);
         void getAppClientRect(IntRect& irc);
 
-        void show(NGBool bUpdateBack = true);
+        void show(bool bUpdateBack = true);
         void hide(void);
         void destroy(void);
 
-        virtual NGBool onKey(NGInt keyCode, KeyEvent* event);
+        virtual bool onKey(int keyCode, KeyEvent* event);
         virtual void onClick(POINT pt, Event::EventType type);
         virtual void onBack(void) { }
 		virtual void onIdle(void) { }
 
         //void paint(void);
-        void freezePaint(NGBool bFreeze) { m_freezePaint = bFreeze; }
-        NGBool isPaintFrozen(void) { return m_freezePaint; }
+        void freezePaint(bool bFreeze) { m_freezePaint = bFreeze; }
+        bool isPaintFrozen(void) { return m_freezePaint; }
 
 		// Synchronous
-        void updateWindow(NGBool isUpdateBkg = TRUE);
+        void updateWindow(bool isUpdateBkg = TRUE);
 
         HWND viewWindow(void) const;
         static Window* window(HWND hwnd);
 
-        NGUInt setActiveWindow(NGUInt hMainWnd);
-        NGUInt getActiveWindow(void);
+        unsigned int setActiveWindow(unsigned int hMainWnd);
+        unsigned int getActiveWindow(void);
 
 		// Asynchronous
-        void asyncUpdateRect(NGInt x, NGInt y, NGInt w, NGInt h, NGBool upBackGnd = true);
+        void asyncUpdateRect(int x, int y, int w, int h, bool upBackGnd = true);
 		// Synchronous
-        void syncUpdateRect(NGInt x, NGInt y, NGInt w, NGInt h, NGBool upBackGnd = true);
+        void syncUpdateRect(int x, int y, int w, int h, bool upBackGnd = true);
 
-        NGBool isTopView(void) { return true; }
+        bool isTopView(void) { return true; }
 
         virtual HPlatformOwner getPlatformOwner(void);
 
         void setBkgAlpha(unsigned char a){ m_bkg_alpha = a;}
         unsigned char bkgAlpha(){return m_bkg_alpha ;}
 
-		static NGBool updateLocked(void) { return m_updateLocked; }
-		static void setUpdateLock(NGBool lock) { m_updateLocked = lock; }
+		static bool updateLocked(void) { return m_updateLocked; }
+		static void setUpdateLock(bool lock) { m_updateLocked = lock; }
 
-        NGInt doModal(NGBool bAutoDestory = false);
-        NGUInt doModalView();
-        void endDlg(NGInt endCode);
+        int doModal(bool bAutoDestory = false);
+        unsigned int doModalView();
+        void endDlg(int endCode);
         
-        void lockKeyOnPainting (NGBool bLockable) { m_keyLockable = bLockable; }
-		virtual void drawScroll(GraphicsContext* context, IntRect &rc, NGInt status);
-        virtual void drawBackground(GraphicsContext* context, IntRect &rc, NGInt status);
+        void lockKeyOnPainting (bool bLockable) { m_keyLockable = bLockable; }
+		virtual void drawScroll(GraphicsContext* context, IntRect &rc, int status);
+        virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status);
 
     protected:
-        NGBool createMainWindow(void);
-        virtual NGBool createMainWindow(NGInt x, NGInt y, NGInt w, NGInt h, NGBool visible = true);
+        bool createMainWindow(void);
+        virtual bool createMainWindow(int x, int y, int w, int h, bool visible = true);
 
-		NGInt sendKeyMessage(Event::EventType ketype, WPARAM wParam, LPARAM lParam);
-		NGInt sendMouseMessage(Event::EventType Mousetype, WPARAM wParam, LPARAM lParam);
-		NGInt sendIdleMessage();
+		int sendKeyMessage(Event::EventType ketype, WPARAM wParam, LPARAM lParam);
+		int sendMouseMessage(Event::EventType Mousetype, WPARAM wParam, LPARAM lParam);
+		int sendIdleMessage();
         
         HWND m_viewWindow;
         HDC m_context;
         
-		static NGInt defaultAppProc(HWND hWnd, NGInt message, WPARAM wParam, LPARAM lParam);
+		static int defaultAppProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam);
         static HWND createMainWindow(const char* caption, WNDPROC proc,
-                NGInt x, NGInt y, NGInt width, NGInt height, DWORD addData, NGBool visible = true);
+                int x, int y, int width, int height, DWORD addData, bool visible = true);
     private:
         unsigned char m_bkg_alpha;   //default the value is 0, window is transparent
-        NGBool m_keyLockable;
-        NGBool m_keyLocked;
-        NGBool m_freezePaint;
+        bool m_keyLockable;
+        bool m_keyLocked;
+        bool m_freezePaint;
 		View *m_mouseDownView;
 		View *m_mouseMoveView;
-		static NGBool m_updateLocked;
+		static bool m_updateLocked;
 
-        virtual void inner_updateView(NGInt x, NGInt y, NGInt w, NGInt h, NGBool upBackGnd = true);
+        virtual void inner_updateView(int x, int y, int w, int h, bool upBackGnd = true);
 };
 
 NAMESPACE_END

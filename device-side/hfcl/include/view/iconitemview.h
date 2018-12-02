@@ -64,27 +64,27 @@ public:
 
 	void setText(const char* str);
 	void setText(const string& str);
-	void setText(const NGInt stringId);
-	const NGPStr getText();
-	const NGInt getTextId();
+	void setText(const int stringId);
+	const char * getText();
+	const int getTextId();
 
 	void setImage(Image* img);
 	Image* getImage() { return m_image; }
 
-	void setImageWithoutText(NGBool imageWithoutText) { m_imageWithoutText = imageWithoutText; }
+	void setImageWithoutText(bool imageWithoutText) { m_imageWithoutText = imageWithoutText; }
 
-	void setImageHeight(NGInt height) { m_imgHeight = height; }
-	NGInt  getImageHeight() { return m_imgHeight; }
+	void setImageHeight(int height) { m_imgHeight = height; }
+	int  getImageHeight() { return m_imgHeight; }
 
-	void drawContent(GraphicsContext* context, IntRect& rc, NGInt status);
+	void drawContent(GraphicsContext* context, IntRect& rc, int status);
 
 protected:
-	NGChar m_text[TEXT_BUFFER_LEN_OF_DEFAULT+1];
-	NGInt  m_textId;
+	char m_text[TEXT_BUFFER_LEN_OF_DEFAULT+1];
+	int  m_textId;
 	string m_buttonString;
-	NGBool m_isLong;
-	NGInt  m_imgHeight;
-	NGBool m_imageWithoutText;
+	bool m_isLong;
+	int  m_imgHeight;
+	bool m_imageWithoutText;
 	Image* m_image;
 
 	DECLARE_CLASS_NAME(IconItemView)

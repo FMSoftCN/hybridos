@@ -31,12 +31,12 @@ BaseApp::~BaseApp()
 	   free(m_name);
 }
 
-NGCPStr BaseApp::name(void)
+const char * BaseApp::name(void)
 {
 	return m_name;
 }
 
-void BaseApp::setName(NGCPStr p_name)
+void BaseApp::setName(const char * p_name)
 {
 	if (m_name != NULL)
 		free(m_name);
@@ -58,7 +58,7 @@ void BaseApp::close(void)
 	AppManager::getInstance()->exit(this);
 }
 
-NGBool BaseApp::isSuspendable(void)
+bool BaseApp::isSuspendable(void)
 {
 	return true;
 }

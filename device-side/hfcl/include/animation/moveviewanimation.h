@@ -40,7 +40,7 @@ class MoveViewAnimation : public ViewAnimation
 
     protected:
         /*the callback func, auto call.*/
-        void setProperty(NGInt id, void *value);
+        void setProperty(int id, void *value);
 };
 
 NAMESPACE_END

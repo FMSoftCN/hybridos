@@ -22,15 +22,10 @@
 #ifndef __NGUX_LOG_H__
 #define __NGUX_LOG_H__
 
-#include "nguxcommon.h"
-
-#define NGUXLOG     NULL
-
-#define g_sw_NGUX 7 // MMI_TRACE_LEVEL_7
-//#define g_sw_APOLLO 8 // MMI_TRACE_LEVEL_8
+#include "common/common.h"
+#include "common/intrect.h"
 
 NAMESPACE_BEGIN
-class IntRect;
 
 class Log {
     public:
@@ -41,8 +36,8 @@ class Log {
         bool enable(void) const { return m_enable; }
         void setEnable(bool benable) { m_enable = benable; }
 
-        NGInt logPrintf(const char* head, const char* format, va_list args);
-        NGInt logPrintf(const char* head, const char* file, const int line, const char* func,
+        int logPrintf(const char* head, const char* format, va_list args);
+        int logPrintf(const char* head, const char* file, const int line, const char* func,
                 const char* format, va_list args);
 
 #ifndef __CC_ARM
@@ -50,7 +45,7 @@ class Log {
         void logInfo(const char* format, ...);
         void logError(const char* format, ...);
         void logMemory(const char* format, ...);
-        void logHFLF(const char* head, const char* file, const NGInt line, const char* func,
+        void logHFLF(const char* head, const char* file, const int line, const char* func,
                 const char* format, ...);
         void dumpRect(const IntRect& rc);
 #endif

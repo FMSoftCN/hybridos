@@ -163,10 +163,10 @@ enum eDateFormat {
 class Date
 {
 public:
-    NGUInt year:16;
-    NGUInt month:4;
-    NGUInt wday:4; //week day
-    NGUInt mday:8; //month day
+    unsigned int year:16;
+    unsigned int month:4;
+    unsigned int wday:4; //week day
+    unsigned int mday:8; //month day
     Date() {
         year = 0;
         month = 0;
@@ -181,7 +181,7 @@ public:
         return dateSystem;
     }
 
-    static inline NGBool IsHijriLeapYear(NGInt year)
+    static inline bool IsHijriLeapYear(int year)
     {
         UINT8 temp = (year % 30);
         if(temp == 2 || temp == 5 || temp == 7 || temp == 10 || temp == 13 || temp == 16 || temp == 18 || temp == 21 || temp == 24 || temp == 26 || temp == 29)
@@ -191,7 +191,7 @@ public:
         return FALSE;
     }
 
-    static inline NGBool IsShamsiLeapYear(NGInt year)
+    static inline bool IsShamsiLeapYear(int year)
     {
         if(((((((year - (474)) % 2820) + 474) + 38) * 682) % 2816) < 682)
             return TRUE;
@@ -200,29 +200,29 @@ public:
     }
 #endif
 	
-    static inline NGBool IsLeapYear(NGInt year) {
+    static inline bool IsLeapYear(int year) {
         return ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0);
     }
     
-    inline NGBool  isLeapYear() {
+    inline bool  isLeapYear() {
         return IsLeapYear(year);
     }
 
-    static NGInt DaysOfMonth(NGInt y, NGInt m);
+    static int DaysOfMonth(int y, int m);
 
-    inline NGInt daysOfMonth() {
+    inline int daysOfMonth() {
         return DaysOfMonth(year, month);
     }
 
-    static NGInt DayOfWeek(NGInt y, NGInt m, NGInt d);
+    static int DayOfWeek(int y, int m, int d);
     
-    inline NGInt dayOfWeek() {
+    inline int dayOfWeek() {
         return DayOfWeek(year, month, mday);
     }
 
-    static NGInt DayOfYear(NGInt y, NGInt m, NGInt d);
+    static int DayOfYear(int y, int m, int d);
     
-    inline NGInt dayOfYear() {
+    inline int dayOfYear() {
         return DayOfYear(year, month, mday);
     }
 
@@ -247,8 +247,8 @@ public:
         }
     }
     
-    inline void setDay(NGInt d) {
-        NGInt days = daysOfMonth();
+    inline void setDay(int d) {
+        int days = daysOfMonth();
         if(d < 1) 
             d = 1;
         if(d > days)
@@ -256,7 +256,7 @@ public:
         mday = d;
     }
     
-    inline void setDate(NGInt y, NGInt m, NGInt d) {
+    inline void setDate(int y, int m, int d) {
         year = y;
         month = m;
         if( m < 1)
@@ -292,22 +292,22 @@ public:
         wday = d.wday;
     }
     
-    NGUInt toInt() {
+    unsigned int toInt() {
         return ((year)<<16) | (month <<8) | mday;
     }
     
-    void fromInt(NGUInt i) {
+    void fromInt(unsigned int i) {
         year = (i)>>16;
         month = (i&0xFF00) >> 8;
         mday = (i&0xFF);
         wday = 0;
     }
     
-    Date(NGUInt i) {
+    Date(unsigned int i) {
         fromInt(i);
     }
 
-    Date& operator=(NGUInt i) {
+    Date& operator=(unsigned int i) {
         fromInt(i);
         return *this;
     }

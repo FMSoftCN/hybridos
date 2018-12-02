@@ -96,14 +96,14 @@
 #undef style_image
 #undef style_font
 
-//sys ResID by name
+//sys HTResId by name
 #undef sysid_font
 #undef sysid_image
 #undef sysid_text
 #undef sysid_style
 #undef sysid_dr
 #undef sysid_drset
-//get ResID by name
+//get HTResId by name
 #undef my_font
 #undef my_image
 #undef my_text

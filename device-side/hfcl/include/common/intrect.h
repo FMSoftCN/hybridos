@@ -37,7 +37,7 @@ class IntRect {
 
         }
 
-        IntRect(NGInt ileft, NGInt itop = 0, NGInt iright = 0, NGInt ibottom = 0)
+        IntRect(int ileft, int itop = 0, int iright = 0, int ibottom = 0)
             : m_left(ileft)
             , m_top(itop)
             , m_right(iright)
@@ -67,15 +67,15 @@ class IntRect {
             return rect;
         }
 
-        NGInt left(void)   const { return m_left;   }
-        NGInt top(void)    const { return m_top;    }
-        NGInt right(void)  const { return m_right;  }
-        NGInt bottom(void) const { return m_bottom; }
+        int left(void)   const { return m_left;   }
+        int top(void)    const { return m_top;    }
+        int right(void)  const { return m_right;  }
+        int bottom(void) const { return m_bottom; }
 
-        NGInt width(void)  const { return m_right - m_left; }
-        NGInt height(void) const { return m_bottom - m_top; }
+        int width(void)  const { return m_right - m_left; }
+        int height(void) const { return m_bottom - m_top; }
 
-        NGBool isEmpty(void) const
+        bool isEmpty(void) const
         {
             return m_left >= m_right || m_top >= m_bottom;
         }
@@ -85,7 +85,7 @@ class IntRect {
             m_left = m_right = m_top = m_bottom = 0;
         }
 
-        void setRect(NGInt ileft, NGInt itop, NGInt iright, NGInt ibottom)
+        void setRect(int ileft, int itop, int iright, int ibottom)
         {
             m_left   = ileft;
             m_top    = itop;
@@ -101,7 +101,7 @@ class IntRect {
             m_bottom = irc.m_bottom;
         }
 
-        void getRect(NGInt* pleft, NGInt* ptop, NGInt* pright, NGInt* pbottom)
+        void getRect(int* pleft, int* ptop, int* pright, int* pbottom)
         {
             *pleft   = m_left;
             *ptop    = m_top;
@@ -109,15 +109,15 @@ class IntRect {
             *pbottom = m_bottom;
         }
 
-		void setWidth(NGInt iwidth) {
+		void setWidth(int iwidth) {
 			m_right = m_left + iwidth;
 		}
 
-		void setHeight(NGInt iheight) {
+		void setHeight(int iheight) {
 			m_bottom = m_top + iheight;
 		}
 
-		void setSize(NGInt iwidth, NGInt iheight) {
+		void setSize(int iwidth, int iheight) {
 			m_right = m_left + iwidth;
 			m_bottom = m_top + iheight;
 		}
@@ -153,7 +153,7 @@ class IntRect {
             return *this;
         }
 
-        NGBool operator==(const IntRect& irc) const
+        bool operator==(const IntRect& irc) const
         {
             if (&irc == this)
                 return true;
@@ -167,7 +167,7 @@ class IntRect {
             return true;
         }
 
-        NGBool operator!=(const IntRect& irc) const
+        bool operator!=(const IntRect& irc) const
         {
             if (&irc == this)
                 return false;
@@ -185,7 +185,7 @@ class IntRect {
          * Offset set the rectangle by adding x to its left and right,
          * and adding y to its top and bottom.
          */
-        void offset(NGInt x, NGInt y)
+        void offset(int x, int y)
         {
             m_left   += x;
             m_top    += y;
@@ -198,7 +198,7 @@ class IntRect {
          * making the rectangle narrower. If x is negative, then the sides are moved outwards,
          * making the rectangle wider. The same hods true for y and the top and bottom.
          */
-        void inset(NGInt x, NGInt y)
+        void inset(int x, int y)
         {
             m_left   += x;
             m_top    += y;
@@ -206,39 +206,39 @@ class IntRect {
             m_bottom -= y;
         }
 
-		void inset(NGInt ileft, NGInt itop, NGInt iright, NGInt ibottom) {
+		void inset(int ileft, int itop, int iright, int ibottom) {
 			m_left += ileft;
 			m_top  += itop;
 			m_right -= iright;
 			m_bottom -= ibottom;
 		}
 
-        NGBool contains(NGInt x, NGInt y) const
+        bool contains(int x, int y) const
         {
             return  (unsigned)(x - m_left) <= (unsigned)(m_right - m_left) &&
                     (unsigned)(y - m_top) <= (unsigned)(m_bottom - m_top);
         }
 
-        NGBool contains(NGInt ileft, NGInt itop, NGInt iright, NGInt ibottom) const
+        bool contains(int ileft, int itop, int iright, int ibottom) const
         {
             return  ileft < iright && itop < ibottom && !this->isEmpty() && // check for empties
                     m_left <= ileft && m_top <= itop &&
                     m_right >= iright && m_bottom >= ibottom;
         }
 
-        NGBool contains(const IntRect& irc) const
+        bool contains(const IntRect& irc) const
         {
             return  !irc.isEmpty() && !this->isEmpty() &&     // check for empties
                     m_left <= irc.m_left && m_top <= irc.m_top &&
                     m_right >= irc.m_right && m_bottom >= irc.m_bottom;
         }
 
-        NGBool intersect(const IntRect& irc)
+        bool intersect(const IntRect& irc)
         {
             return this->intersect(irc.m_left, irc.m_top, irc.m_right, irc.m_bottom);
         }
 
-        NGBool intersect(const IntRect& a, const IntRect& b)
+        bool intersect(const IntRect& a, const IntRect& b)
         {
             if (!a.isEmpty() && !b.isEmpty() &&
                     a.m_left < b.m_right && b.m_left < a.m_right &&
@@ -252,7 +252,7 @@ class IntRect {
             return false;
         }
         
-        NGBool intersect(NGInt ileft, NGInt itop, NGInt iright, NGInt ibottom)
+        bool intersect(int ileft, int itop, int iright, int ibottom)
         {
             if (ileft < iright && itop < ibottom && !this->isEmpty() &&
                     m_left < iright && ileft < m_right && m_top < ibottom && itop < m_bottom) {
@@ -270,7 +270,7 @@ class IntRect {
          * If this rectangle is empty, just set it to the specified rectangle. If the specified
          * rectangle is empty, do nothing.
          */
-        void join(NGInt ileft, NGInt itop, NGInt iright, NGInt ibottom);
+        void join(int ileft, int itop, int iright, int ibottom);
 
         /**
          * Update this rectangle to enclose itself and the specified rectangle.
@@ -291,16 +291,16 @@ class IntRect {
         void sort();
 
 
-		NGBool isIn(NGInt x, NGInt y) const {
+		bool isIn(int x, int y) const {
 			return (x >= m_left && x < m_right
 					&& y >= m_top && y < m_bottom);
 		}
     
     public:
-        NGInt m_left;
-        NGInt m_top;
-        NGInt m_right;
-        NGInt m_bottom;
+        int m_left;
+        int m_top;
+        int m_right;
+        int m_bottom;
 };
 
 NAMESPACE_END

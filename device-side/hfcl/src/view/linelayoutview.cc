@@ -76,7 +76,7 @@ void LineLayoutView::initDrawable(DrawableSelector* selector)
 }
 #endif
 
-void LineLayoutView::paint(GraphicsContext* context, NGInt status)
+void LineLayoutView::paint(GraphicsContext* context, int status)
 {
     LineLayoutNode* curNode = NULL;
 
@@ -91,7 +91,7 @@ void LineLayoutView::paint(GraphicsContext* context, NGInt status)
     }
 }
 
-NGBool LineLayoutView::dispatchEvent(Event* event)
+bool LineLayoutView::dispatchEvent(Event* event)
 {
     View::dispatchEvent(event);
 
@@ -101,8 +101,8 @@ NGBool LineLayoutView::dispatchEvent(Event* event)
         case Event::MOTION_CLICK: {
             LineLayoutNode* curNode = NULL;
             for (curNode = m_node; curNode; curNode = curNode->next) {
-                NGInt _x = ((MouseEvent *)event)->x();
-                NGInt _y = ((MouseEvent *)event)->y();
+                int _x = ((MouseEvent *)event)->x();
+                int _y = ((MouseEvent *)event)->y();
 
                 IntRect irc = (curNode->s_view)->getRect();
 
@@ -120,7 +120,7 @@ NGBool LineLayoutView::dispatchEvent(Event* event)
     return DISPATCH_CONTINUE_MSG;
 }
 
-NGBool LineLayoutView::setRect(const IntRect& irc)
+bool LineLayoutView::setRect(const IntRect& irc)
 {
     View::setRect(irc);
 
@@ -141,7 +141,7 @@ void LineLayoutView::recalc(void)
     }
 }
 
-NGBool LineLayoutView::prependView(View* aView, NGInt aType, NGInt aMinSize, NGInt aMaxSize)
+bool LineLayoutView::prependView(View* aView, int aType, int aMinSize, int aMaxSize)
 {
     if (NULL == aView)
         return false;
@@ -162,12 +162,12 @@ NGBool LineLayoutView::prependView(View* aView, NGInt aType, NGInt aMinSize, NGI
     return true;
 }
 
-NGBool LineLayoutView::addView(View* aView, NGInt aType, NGInt aMinSize, NGInt aMaxSize)
+bool LineLayoutView::addView(View* aView, int aType, int aMinSize, int aMaxSize)
 {
     return appendView(aView, aType, aMinSize, aMaxSize);
 }
 
-NGBool LineLayoutView::appendView(View* aView, NGInt aType, NGInt aMinSize, NGInt aMaxSize)
+bool LineLayoutView::appendView(View* aView, int aType, int aMinSize, int aMaxSize)
 {
     if (NULL == aView)
         return false;
@@ -220,9 +220,9 @@ void LineLayoutView::removeAll(void)
     m_childCount = 0;
 }
 
-NGInt LineLayoutView::getNodeCount(void)
+int LineLayoutView::getNodeCount(void)
 {
-    NGInt nodeCount = 0;
+    int nodeCount = 0;
     LineLayoutNode* node = m_node;
 
     while (NULL != node) {
@@ -233,7 +233,7 @@ NGInt LineLayoutView::getNodeCount(void)
     return nodeCount;
 }
 
-void LineLayoutView::setMargin(NGInt margin)
+void LineLayoutView::setMargin(int margin)
 {
     if (m_margin == margin)
         return;
@@ -242,7 +242,7 @@ void LineLayoutView::setMargin(NGInt margin)
     recalc();
 }
 
-void LineLayoutView::setSpace(NGInt space)
+void LineLayoutView::setSpace(int space)
 {
     if (m_space == space)
         return;
@@ -253,7 +253,7 @@ void LineLayoutView::setSpace(NGInt space)
 
 //===================== begin private function define =========================
 
-LineLayoutNode* LineLayoutView::newLineLayoutNode(View* aView, NGInt aType, NGInt aMinSize, NGInt aMaxSize)
+LineLayoutNode* LineLayoutView::newLineLayoutNode(View* aView, int aType, int aMinSize, int aMaxSize)
 {
     if (NULL == aView)
         return NULL;
@@ -275,7 +275,7 @@ LineLayoutNode* LineLayoutView::newLineLayoutNode(View* aView, NGInt aType, NGIn
     return newNode;
 }
 
-NGBool LineLayoutView::isExist(View* aView)
+bool LineLayoutView::isExist(View* aView)
 {
     if (NULL == aView)
         return true;
@@ -308,7 +308,7 @@ void LineLayoutView::fixedHorzRecalc(void)
     irc.m_top = /*m_rect.top() + */m_margin;
     irc.m_bottom = m_rect.height() - m_margin;
 
-    NGInt minNodeCount = 0;
+    int minNodeCount = 0;
     LineLayoutNode* minNode = NULL;
     LineLayoutNode* node = m_node;
 
@@ -334,12 +334,12 @@ void LineLayoutView::fixedHorzRecalc(void)
     }
 
     if (NULL != node && minNodeCount > 0) {
-        NGInt left = m_rect.width() - irc.m_left + m_space - m_margin;
-        NGInt offset = 0;
+        int left = m_rect.width() - irc.m_left + m_space - m_margin;
+        int offset = 0;
         if (left <= 0)
             goto FIXED_HORZ_RECALC_END;
 
-        NGInt avg = left / minNodeCount;
+        int avg = left / minNodeCount;
         for ( ; minNode; minNode = minNode->next) {
             IntRect minIrc = minNode->s_view->getRect();
             minIrc.m_left  += offset;
@@ -381,7 +381,7 @@ void LineLayoutView::autoHorzRecalc(void)
         }
 
         if (node->flags & LayoutView::LVSAT_AUTO) {
-            NGInt left = m_rect.width() - m_margin - irc.m_left;
+            int left = m_rect.width() - m_margin - irc.m_left;
             if (node->defMaxSize > 0 && left > node->defMaxSize)
                 left = node->defMaxSize;
             irc.m_right = irc.m_left + left;
@@ -417,7 +417,7 @@ void LineLayoutView::fixedVertRecalc(void)
     irc.m_top = /*m_rect.top() + */m_margin;
     irc.m_right = m_rect.width() - m_margin;
 
-    NGInt minNodeCount = 0;
+    int minNodeCount = 0;
     LineLayoutNode* minNode = NULL;
     LineLayoutNode* node = m_node;
 
@@ -442,12 +442,12 @@ void LineLayoutView::fixedVertRecalc(void)
     }
 
     if (NULL != node && minNodeCount > 0) {
-        NGInt bottom = m_rect.height() - irc.m_top + m_space - m_margin;
-        NGInt offset = 0;
+        int bottom = m_rect.height() - irc.m_top + m_space - m_margin;
+        int offset = 0;
         if (bottom <= 0)
             goto FIXED_VERT_RECALC_END;
 
-        NGInt avg = bottom / minNodeCount;
+        int avg = bottom / minNodeCount;
         for ( ; minNode; minNode = minNode->next) {
             IntRect minIrc = minNode->s_view->getRect();
             minIrc.m_top    += offset;
@@ -488,7 +488,7 @@ void LineLayoutView::autoVertRecalc(void)
         }
 
         if (node->flags & LayoutView::LVSAT_AUTO) {
-            NGInt bottom = m_rect.height() - m_margin - irc.m_top;
+            int bottom = m_rect.height() - m_margin - irc.m_top;
             if (node->defMaxSize > 0 && bottom > node->defMaxSize)
                 bottom = node->defMaxSize;
             irc.m_bottom = irc.m_top + bottom;

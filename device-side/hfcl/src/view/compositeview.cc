@@ -33,7 +33,7 @@ CompositeView::~CompositeView()
 }
 
 #if 0
-NGBool CompositeView::setDrawableSet(NGInt i_id, DrawableSet* drset)
+bool CompositeView::setDrawableSet(int i_id, DrawableSet* drset)
 {
 	if(m_drsets->setDrawableSet(i_id, drset))
 	{
@@ -44,12 +44,12 @@ NGBool CompositeView::setDrawableSet(NGInt i_id, DrawableSet* drset)
 }
 #endif
 
-DrawableSet* CompositeView::getDrawableSet(NGInt i_id, NGUInt view_class)
+DrawableSet* CompositeView::getDrawableSet(int i_id, unsigned int view_class)
 {
 	return m_drsets->getDrawableSet(i_id);
 }
 
-NGBool CompositeView::setDrawableSetGroup(DrawableSetGroup *g) 
+bool CompositeView::setDrawableSetGroup(DrawableSetGroup *g) 
 {
 	if(m_drsets != g && !(m_drsets->isCommon()) ) {
 		NGUX_DELETE(m_drsets);
@@ -61,7 +61,7 @@ NGBool CompositeView::setDrawableSetGroup(DrawableSetGroup *g)
 }
 
 
-void CompositeView::updateDrawableSets(NGInt i_id) 
+void CompositeView::updateDrawableSets(int i_id) 
 { 
 	if(i_id == -1 || i_id == DRSET_SELF) {
 		View::setDrawableSet(getDrawableSet(DRSET_SELF));

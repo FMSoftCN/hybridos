@@ -34,7 +34,7 @@ extern BOOL nguxActiveFlag;
 
 NAMESPACE_BEGIN
 
-NGBool Window::m_updateLocked = false;
+bool Window::m_updateLocked = false;
 
 Window::Window()
     : PanelView(NULL)
@@ -56,7 +56,7 @@ Window::~Window()
     destroy();
 }
 
-void Window::show(NGBool bUpdateBack)
+void Window::show(bool bUpdateBack)
 {
     ShowWindow(m_viewWindow, SW_SHOWNORMAL);
     InvalidateRect(m_viewWindow, NULL, bUpdateBack);
@@ -90,7 +90,7 @@ void Window::destroy(void)
     }
 }
 
-NGBool Window::onKey (NGInt keyCode, KeyEvent* event)
+bool Window::onKey (int keyCode, KeyEvent* event)
 {
     View* _focus = NULL;
 
@@ -106,12 +106,12 @@ void Window::onClick(POINT pt, Event::EventType type)
     // nothing...
 }
 
-void Window::inner_updateView(NGInt x, NGInt y, NGInt w, NGInt h, NGBool upBackGnd)
+void Window::inner_updateView(int x, int y, int w, int h, bool upBackGnd)
 {
     asyncUpdateRect(x, y, w, h, upBackGnd);
 }
 
-void Window::asyncUpdateRect(NGInt x, NGInt y, NGInt w, NGInt h, NGBool upBackGnd)
+void Window::asyncUpdateRect(int x, int y, int w, int h, bool upBackGnd)
 {
     RECT rc = {x, y, x + w, y + h};
     if (m_keyLockable) {
@@ -127,7 +127,7 @@ void Window::asyncUpdateRect(NGInt x, NGInt y, NGInt w, NGInt h, NGBool upBackGn
     }
 }
 
-void Window::syncUpdateRect(NGInt x, NGInt y, NGInt w, NGInt h, NGBool upBackGnd)
+void Window::syncUpdateRect(int x, int y, int w, int h, bool upBackGnd)
 {
     RECT rc = {x, y, x + w, y + h};
 
@@ -135,7 +135,7 @@ void Window::syncUpdateRect(NGInt x, NGInt y, NGInt w, NGInt h, NGBool upBackGnd
     UpdateInvalidClient (m_viewWindow, FALSE);
 }
 
-void Window::drawScroll(GraphicsContext* context, IntRect &rc, NGInt status)
+void Window::drawScroll(GraphicsContext* context, IntRect &rc, int status)
 {
     PanelView::drawScroll (context, rc, status);
     m_keyLocked = false;
@@ -144,7 +144,7 @@ void Window::drawScroll(GraphicsContext* context, IntRect &rc, NGInt status)
 void Window::drawBackground(GraphicsContext* context, IntRect &rc, int status)
 {
     if (m_drawLayer == -1) {
-        for (NGInt i = 0; i < context->getLayers(); i++) {
+        for (int i = 0; i < context->getLayers(); i++) {
             context->setLayer(i);
             context->fillRect(rc, 
                     GetRValue(Color::LAYER_COLOR_KEY),
@@ -191,17 +191,17 @@ Window* Window::window(HWND hwnd)
     return reinterpret_cast<Window*>(GetWindowAdditionalData(hwnd));
 }
 
-NGUInt Window::setActiveWindow(NGUInt hMainWnd)
+unsigned int Window::setActiveWindow(unsigned int hMainWnd)
 {
     return SetActiveWindow(hMainWnd);
 }
 
-NGUInt Window::getActiveWindow(void)
+unsigned int Window::getActiveWindow(void)
 {
     return GetActiveWindow();
 }
 
-NGInt Window::sendKeyMessage(Event::EventType keytype, WPARAM wParam, LPARAM lParam)
+int Window::sendKeyMessage(Event::EventType keytype, WPARAM wParam, LPARAM lParam)
 {
     if (!m_keyLocked) {
         KeyEvent event(keytype, wParam, lParam);
@@ -210,11 +210,11 @@ NGInt Window::sendKeyMessage(Event::EventType keytype, WPARAM wParam, LPARAM lPa
     return 0;
 }
 
-NGInt Window::sendMouseMessage(Event::EventType mouseType, WPARAM wParam, LPARAM lParam)
+int Window::sendMouseMessage(Event::EventType mouseType, WPARAM wParam, LPARAM lParam)
 {    
     //DWORD key_flags = (DWORD)wParam;
-    NGInt x_pos = LOSWORD (lParam);
-    NGInt y_pos = HISWORD (lParam);
+    int x_pos = LOSWORD (lParam);
+    int y_pos = HISWORD (lParam);
 
     View* f = getChildByPosition(x_pos, y_pos);
 
@@ -248,13 +248,13 @@ NGInt Window::sendMouseMessage(Event::EventType mouseType, WPARAM wParam, LPARAM
     return 0;
 }
 
-NGInt Window::sendIdleMessage()
+int Window::sendIdleMessage()
 {
 	onIdle();
 	return 0;
 }
 
-NGInt Window::defaultAppProc(HWND hWnd, NGInt message, WPARAM wParam, LPARAM lParam)
+int Window::defaultAppProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
 {
     Window* window = Window::window(hWnd);
     switch (message) {
@@ -386,7 +386,7 @@ NGInt Window::defaultAppProc(HWND hWnd, NGInt message, WPARAM wParam, LPARAM lPa
 }
 
 HWND Window::createMainWindow (const char* caption, WNDPROC proc,
-        NGInt x, NGInt y, NGInt width, NGInt height, DWORD addData, NGBool visible)
+        int x, int y, int width, int height, DWORD addData, bool visible)
 {
     MAINWINCREATE CreateInfo;
 
@@ -409,7 +409,7 @@ HWND Window::createMainWindow (const char* caption, WNDPROC proc,
 }
 
 //create main window and set m_viewWindow. only need call once in onCreate.
-NGBool Window::createMainWindow(NGInt x, NGInt y, NGInt w, NGInt h, NGBool visible)
+bool Window::createMainWindow(int x, int y, int w, int h, bool visible)
 {
     //has valid window
     if (m_viewWindow != HWND_INVALID)
@@ -429,29 +429,29 @@ NGBool Window::createMainWindow(NGInt x, NGInt y, NGInt w, NGInt h, NGBool visib
     return true;
 }
 
-NGBool Window::createMainWindow(void)
+bool Window::createMainWindow(void)
 {
     return createMainWindow(0, 0, _ngux_screen_w, _ngux_screen_h);
 }
 
-void Window::updateWindow(NGBool isUpdateBkg)
+void Window::updateWindow(bool isUpdateBkg)
 {
     if(!nguxActiveFlag)
         return;
     UpdateWindow(m_viewWindow, isUpdateBkg);
 }
 
-NGInt Window::doModal(NGBool bAutoDestory)
+int Window::doModal(bool bAutoDestory)
 {
     return mgclDoModal(m_viewWindow, bAutoDestory);
 }
 
-NGUInt Window::doModalView()
+unsigned int Window::doModalView()
 {
     return mgclDoModalView(m_viewWindow);
 }
 
-void Window::endDlg(NGInt endCode)
+void Window::endDlg(int endCode)
 {
     SendNotifyMessage(m_viewWindow, MGCL_MSG_MNWND_ENDDIALOG, 0, (LPARAM)endCode);
 }

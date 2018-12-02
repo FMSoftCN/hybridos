@@ -64,7 +64,7 @@ ButtonView::~ButtonView()
 
 void ButtonView::setText(const char* str)
 {
-	NGInt len = 0;
+	int len = 0;
 
 	if (NULL == str) {
         str = "";

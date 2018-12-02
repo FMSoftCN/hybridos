@@ -32,23 +32,23 @@ class EventListener;
 
 ///controller mode of resource
 typedef struct {
-	NGInt      id;
-	NGUInt     value;
-	NGUInt     cmd;
+	int      id;
+	unsigned int     value;
+	unsigned int     cmd;
 }ControllerMode;
 
 //static mode table
 typedef struct {
-	NGInt  mode_id;
-	NGInt  mode_count;
+	int  mode_id;
+	int  mode_count;
 	ControllerMode *modes;
 }ControllerModeList;	
 
 typedef struct {
 	ControllerModeList * mode_lists;
-	NGInt                list_count;
-	NGInt                def_mode_id;
-	ControllerModeList* getModeById(NGInt mode_id) {
+	int                list_count;
+	int                def_mode_id;
+	ControllerModeList* getModeById(int mode_id) {
 		for(int i = 0; i < list_count; i++)
 		{
 			if(mode_lists[i].mode_id == mode_id)
@@ -62,28 +62,28 @@ class ViewContext
 {
 public:
 	virtual ~ViewContext() { }
-	virtual void setView(NGInt view_id, View* view) = 0;
-	virtual EventListener* getHandle(NGInt handle_id, NGInt event_type) = 0;
+	virtual void setView(int view_id, View* view) = 0;
+	virtual EventListener* getHandle(int handle_id, int event_type) = 0;
 	virtual void setControllerModeManager(ControllerModeManager* mangers) { }
 };
 
-#define DECLARE_VIEWCONTEXT   protected: void setView(NGInt, View*); EventListener* getHandle(NGInt, int);
+#define DECLARE_VIEWCONTEXT   protected: void setView(int, View*); EventListener* getHandle(int, int);
 
-#define BEGIN_SETVIEW(clss)  void clss::setView(NGInt view_id, View* view) { switch(view_id) {
+#define BEGIN_SETVIEW(clss)  void clss::setView(int view_id, View* view) { switch(view_id) {
 
 #define END_SETVIEW  } }
 
 #define MAP_VIEW(var, id, type)  case id : (var) = (type*)(view); break;
 #define MAP_SUPPER_SETVIEW(super)  default: supper::setView(view_id, view); break;
 
-#define BEGIN_GETHANDLE(clss) EventListener* clss::getHandle(NGInt handle_id, NGInt event_id) { switch(handle_id) { 
+#define BEGIN_GETHANDLE(clss) EventListener* clss::getHandle(int handle_id, int event_id) { switch(handle_id) { 
 
 #define END_GETHANDLE  default: return NULL; } }
 
 #ifdef WIN32
 #define MAP_HANDLE(clss, handle_id, handle_name) \
 	case handle_id: { \
-		typedef NGBool (clss:: *PFUNC)(CustomEvent *e); \
+		typedef bool (clss:: *PFUNC)(CustomEvent *e); \
 		PFUNC p = &clss::handle_name; \
 		MethodEventListener::EventHandle *h = (MethodEventListener::EventHandle *)(&p); \
 		return NGUX_NEW_EX(MethodEventListener, ((void*)(this), *h, event_id)); \
@@ -93,52 +93,52 @@ public:
 #endif
 
 #define DECLARE_UI_TEMPL  \
-	public : static void setUITempl(ResID ui_id); \
-	private: static ResID _ui_templ_id;
+	public : static void setUITempl(HTResId ui_id); \
+	private: static HTResId _ui_templ_id;
 
 #define DEFINE_UI_TEMPL(clss) \
-	ResID clss::_ui_templ_id = 0; \
-	void clss::setUITempl(ResID ui_id) { _ui_templ_id = ui_id; }
+	HTResId clss::_ui_templ_id = 0; \
+	void clss::setUITempl(HTResId ui_id) { _ui_templ_id = ui_id; }
 
 #define UI_TEMPL    _ui_templ_id
 
-#define SET_UI_TEMPL(clss, id)  clss::setUITempl((ResID)id)
+#define SET_UI_TEMPL(clss, id)  clss::setUITempl((HTResId)id)
 
 
 class ContentProvider
 {
 public:
-	virtual void* getContentData(NGInt data_id, NGInt type) = 0;
-	virtual NGInt getContentStringId(NGInt data_id, NGInt type) = 0;
+	virtual void* getContentData(int data_id, int type) = 0;
+	virtual int getContentStringId(int data_id, int type) = 0;
 };
 
 typedef View * (*CB_CREATE_VIEW)(View* parent, ViewContext* viewContext, ContentProvider * cotentProvider);
 
 //The help class
 typedef struct _ContentElement {
-	NGInt data_id;
+	int data_id;
 	void *data;
-	NGInt string_id;
+	int string_id;
 }ContentElement;
 
 class DefaultContentProvider : public ContentProvider{
 	ContentElement * m_elements;
-	NGInt				 m_count;
+	int				 m_count;
 public:
-	DefaultContentProvider(ContentElement* elements, NGInt count)
+	DefaultContentProvider(ContentElement* elements, int count)
 		:m_elements(elements), m_count(count) { }
 	~DefaultContentProvider() { }
 
-	void * getContentData(NGInt data_id, NGInt type) {
-		for(NGInt i = 0; i < m_count; i++)
+	void * getContentData(int data_id, int type) {
+		for(int i = 0; i < m_count; i++)
 		{
 			if(m_elements[i].data_id == data_id)
 				return m_elements[i].data;
 		}
 		return NULL;
 	}
-	NGInt getContentStringId(NGInt data_id, NGInt type) {
-		for(NGInt i = 0; i < m_count; i++)
+	int getContentStringId(int data_id, int type) {
+		for(int i = 0; i < m_count; i++)
 		{
 			if(m_elements[i].data_id == data_id)
 				return m_elements[i].string_id;

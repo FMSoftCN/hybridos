@@ -43,7 +43,7 @@ class Application : public BaseApp, public Window
         virtual void onCreate(ContextStream* contextStream, Intent* intent);
 		virtual void onWakeup(void);
 
-        virtual NGBool onKey(NGInt keyCode, KeyEvent* event);
+        virtual bool onKey(int keyCode, KeyEvent* event);
         virtual void onClick(POINT pt, Event::EventType type);	
         virtual void onBack(void) { }
 		virtual void onIdle(void) { }
@@ -58,10 +58,10 @@ class Application : public BaseApp, public Window
 
         virtual EventListener* getEventHandle() { return NULL; };
 
-        virtual void setFullScreen(NGBool isFullScreen);
+        virtual void setFullScreen(bool isFullScreen);
 
 	protected:
-		View * getViewParent(NGInt view_id) { return (View*)this; }
+		View * getViewParent(int view_id) { return (View*)this; }
 
 	private:
 		Menu * m_menu;

@@ -130,7 +130,7 @@
 #define style_font(id, font_id)
 
 
-//sys ResID by name
+//sys HTResId by name
 #define sysid_font(name)  (SYSRESID(font_##name))
 #define sysid_image(name) (SYSRESID(img_##name))
 //#define sysid_text(name)  (SYSRESID(txt_##name))
@@ -138,7 +138,7 @@
 #define sysid_dr(name)    (SYSRESID(dr_##name))
 #define sysid_drset(name) (SYSRESID(drset_##name))
 
-//get ResID by name
+//get HTResId by name
 #define my_font(name) (RESID(font_##name))
 #define my_image(name) (RESID(img_##name))
 //#define my_text(name) (RESID(txt_##name))

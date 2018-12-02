@@ -41,22 +41,22 @@ class SlideSwitcher : public PanelView
          */
         SlideSwitcher(View* parent);
 		SlideSwitcher(View* parent, DrawableSet* drset);
-		SlideSwitcher(View* parent, NGInt id, NGInt x, NGInt y, NGInt w, NGInt h, SlideStyle style, NGInt gap_w);
+		SlideSwitcher(View* parent, int id, int x, int y, int w, int h, SlideStyle style, int gap_w);
         ~SlideSwitcher();
         /**
          * Add/Remove A Item To/From SlideSwitcher
          */
-        NGBool addItem(View *item, NGBool toRefresh = true);
-        NGBool removeItem(View *item);
+        bool addItem(View *item, bool toRefresh = true);
+        bool removeItem(View *item);
         /**
          * Set/Get ItemWidth ItemHeight GapWidth functions
          */
-        void setItemWidth(NGInt w) { m_item_width = w; }
-        NGInt itemWidth(void) { return m_item_width; }
-        void setItemHeight(NGInt h) { m_item_height = h; }
-        NGInt itemHeight(void) { return m_item_height; }
-        void setGapWidth(NGInt w) { m_gap_w = w; }
-		NGInt gapWidth(){ return m_gap_w; }
+        void setItemWidth(int w) { m_item_width = w; }
+        int itemWidth(void) { return m_item_width; }
+        void setItemHeight(int h) { m_item_height = h; }
+        int itemHeight(void) { return m_item_height; }
+        void setGapWidth(int w) { m_gap_w = w; }
+		int gapWidth(){ return m_gap_w; }
         /**
          * Set/Get Style
          */
@@ -65,7 +65,7 @@ class SlideSwitcher : public PanelView
         /**
          * Dispatch Events From Parent
          */
-        virtual NGBool dispatchEvent(Event* event);
+        virtual bool dispatchEvent(Event* event);
         /**
          * Relayout The SlideSwitcher
          */
@@ -77,14 +77,14 @@ class SlideSwitcher : public PanelView
          * @parem[in] forward Forward or Backward
          * @param[out] rect Result Rect Calculated
          */
-        void calcuItemRect(NGInt offindex, IntRect& rect, NGBool forward);
+        void calcuItemRect(int offindex, IntRect& rect, bool forward);
         /**
          * @brief Get Item According That Offset By Center (Focus) Item
          *
          * @param[in] offindex Item Index Offset To Center (Focus) Item
          * @param[in] forward Forward/Backward
          */
-        View* getItem(NGInt offindex, NGBool forward);
+        View* getItem(int offindex, bool forward);
         /**
          * SetFocusItem
          *
@@ -96,7 +96,7 @@ class SlideSwitcher : public PanelView
          */
         View* focusItem(void) { return m_curr_focus_view; };
 
-        //NGBool handleEvent(Event* event);     // GT_jyseo rollback 
+        //bool handleEvent(Event* event);     // GT_jyseo rollback 
 
     protected:
         /**
@@ -105,12 +105,12 @@ class SlideSwitcher : public PanelView
         void focusPrevItem();
         void focusNextItem();
      
-        NGBool onKeyPressed(NGInt keyCode);
+        bool onKeyPressed(int keyCode);
     private:
         /**
          * Keep GapWidth
          */
-        NGUInt16 m_gap_w;
+        Uint16 m_gap_w;
         /**
          * Keep Style
          */
@@ -118,8 +118,8 @@ class SlideSwitcher : public PanelView
         /**
          * Keep ItemWidth/ItemHeight
          */
-        NGInt m_item_width;
-        NGInt m_item_height;
+        int m_item_width;
+        int m_item_height;
         /**
          * Current Focus View
          */

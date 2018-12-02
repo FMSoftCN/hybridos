@@ -75,28 +75,28 @@ class GraphicsContext : public Object {
 
 		static GraphicsContext* screenGraphics();
 		static void deleteScreenGraphics(void);
-		void translation(NGInt offx, NGInt offy);
-		void getTranslation(NGInt& offx, NGInt & offy);
+		void translation(int offx, int offy);
+		void getTranslation(int& offx, int & offy);
 
 		Logfont* getLogFont(void);
 
 		void clip(const IntRect&);
 		void clipOut(const IntRect&);
 		void clipIn(const IntRect&);
-        NGBool rectVisible(IntRect&);
+        bool rectVisible(IntRect&);
 
-		void beginTransparencyLayer(NGInt alpha);
+		void beginTransparencyLayer(int alpha);
 		void endTransparencyLayer();
 
 		void save();
 		void restore();
 
-        inline NGInt setTextCharacterExtra(NGInt extra)  { return SetTextCharacterExtra (context(), extra); }
-        inline NGInt setTextAboveLineExtra(NGInt extra)  { return SetTextAboveLineExtra (context(), extra); }
-        inline NGInt setTextBellowLineExtra(NGInt extra) { return SetTextBellowLineExtra(context(), extra); }
-        inline NGInt getTextCharacterExtra(void)  { return GetTextCharacterExtra (context()); }
-        inline NGInt getTextAboveLineExtra(void)  { return GetTextAboveLineExtra (context()); }
-        inline NGInt getTextBellowLineExtra(void) { return GetTextBellowLineExtra(context()); }
+        inline int setTextCharacterExtra(int extra)  { return SetTextCharacterExtra (context(), extra); }
+        inline int setTextAboveLineExtra(int extra)  { return SetTextAboveLineExtra (context(), extra); }
+        inline int setTextBellowLineExtra(int extra) { return SetTextBellowLineExtra(context(), extra); }
+        inline int getTextCharacterExtra(void)  { return GetTextCharacterExtra (context()); }
+        inline int getTextAboveLineExtra(void)  { return GetTextAboveLineExtra (context()); }
+        inline int getTextBellowLineExtra(void) { return GetTextBellowLineExtra(context()); }
 
 		void fillRect(const IntRect& rc, Uint8 r, Uint8 g, Uint8 b, Uint8 a=0xFF);
         void fillBox(int x, int y, int w, int h);
@@ -105,10 +105,10 @@ class GraphicsContext : public Object {
 		void rectangle(int x0, int y0, int x1, int y1, Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
 		void drawLine(int x0, int y0, int x1, int y1, int width,
 				Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
-		void drawHVDotLine(int x, int y, int wh, NGBool isHorz,
+		void drawHVDotLine(int x, int y, int wh, bool isHorz,
 				Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-		void drawPolygonLine(Point *pts, NGInt nums, int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
-		void fillPolygon(const Point* pts, NGInt vertices, Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
+		void drawPolygonLine(Point *pts, int nums, int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
+		void fillPolygon(const Point* pts, int vertices, Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
 
         void getTextDrawSize (const string text, Logfont *f, int *w, int *h);
         void getTextDrawSize (const char *text, Logfont *f, int *w, int *h);
@@ -119,68 +119,68 @@ class GraphicsContext : public Object {
         int  getBiDiFirstChType (void);
         void setBiDiFirstChType (int type);
 
-        void textOut(NGInt x, NGInt y, NGCPStr text, NGInt len,
-                NGUInt color, Logfont * logfont = NULL);
-        void textOut(NGInt x, NGInt y, string text, NGUInt color, Logfont * logfont){
+        void textOut(int x, int y, const char * text, int len,
+                unsigned int color, Logfont * logfont = NULL);
+        void textOut(int x, int y, string text, unsigned int color, Logfont * logfont){
                 textOut(x, y, text.c_str(), text.size(), color, logfont);
         }
 
-		void textOutOmitted(NGInt x, NGInt y, NGCPStr text, NGInt len, NGInt max_extent);
-        void textOutOmitted(NGInt x, NGInt y, NGCPStr text, NGInt len, 
-                NGInt max_extent, NGUInt color, Logfont * logfont);
-		void textOutOmitted(NGInt x, NGInt y, const string& text, NGInt max_extent){
+		void textOutOmitted(int x, int y, const char * text, int len, int max_extent);
+        void textOutOmitted(int x, int y, const char * text, int len, 
+                int max_extent, unsigned int color, Logfont * logfont);
+		void textOutOmitted(int x, int y, const string& text, int max_extent){
 			textOutOmitted(x, y, text.c_str(), text.size(), max_extent);
 		}
-        void textOutOmitted(NGInt x, NGInt y, const string& text, 
-                NGInt max_extent, NGUInt color, Logfont * logfont) {
+        void textOutOmitted(int x, int y, const string& text, 
+                int max_extent, unsigned int color, Logfont * logfont) {
 			textOutOmitted(x, y, text.c_str(), text.size(), max_extent, color, logfont);
 		}
 
 		void drawText(const string& text, const IntRect& rc);
-		void drawText(NGCPStr text, const IntRect& rc, \
-				NGUInt color, Logfont * logfont, NGUInt format);
+		void drawText(const char * text, const IntRect& rc, \
+				unsigned int color, Logfont * logfont, unsigned int format);
 		void drawText(const string& text, const IntRect& rc, \
-				NGUInt color, Logfont * logfont, NGUInt format) {
+				unsigned int color, Logfont * logfont, unsigned int format) {
 			drawText(text.c_str(), rc, color, logfont, format);
 		}
-        NGInt drawTextToCalcRect(const string& text, IntRect& rect, NGUInt format, Logfont *font = NULL);
-        NGInt calcTextRectOnDrawing(const char *text, Logfont *f, 
-                NGUInt format, IntRect *rect, DTFIRSTLINE *firstline = NULL, Point *txtPos = NULL);
-        NGInt calcTextRectOnDrawing(const string& text, Logfont *f, 
-                NGUInt format, IntRect *rect, DTFIRSTLINE *firstline = NULL, Point *txtPos = NULL) {
+        int drawTextToCalcRect(const string& text, IntRect& rect, unsigned int format, Logfont *font = NULL);
+        int calcTextRectOnDrawing(const char *text, Logfont *f, 
+                unsigned int format, IntRect *rect, DTFIRSTLINE *firstline = NULL, Point *txtPos = NULL);
+        int calcTextRectOnDrawing(const string& text, Logfont *f, 
+                unsigned int format, IntRect *rect, DTFIRSTLINE *firstline = NULL, Point *txtPos = NULL) {
             return calcTextRectOnDrawing(text.c_str(), f, format, rect, firstline, txtPos);
         }
-        NGInt drawTextToGetLenght(const string& text);
-        NGInt getFontHeight(Logfont *f = NULL); 
-        NGInt getFontWidth(Logfont *f = NULL); 
+        int drawTextToGetLenght(const string& text);
+        int getFontHeight(Logfont *f = NULL); 
+        int getFontWidth(Logfont *f = NULL); 
 
 		//Bitmap
-		NGBool fillBoxWithBitmap(NGInt x, NGInt y, NGInt w, NGInt h, const Bitmap* pBitmap);
-		NGBool setReplaceColor(const DWORD color);
-		NGBool drawRotateBitmap(const Bitmap* pBitmap,NGInt lx, NGInt ty, NGInt angle);
-		NGBool fillBoxWithBitmapPart(NGInt x, NGInt y, NGInt w, NGInt h, const Bitmap* pBitmap, NGInt xo, NGInt yo);
-		NGInt loadBitmap(Bitmap* bmp, NGCPStr file_name);
-		NGInt loadBitmap(Bitmap** bmp, const void* data, NGInt size, NGCPStr extern_name);
+		bool fillBoxWithBitmap(int x, int y, int w, int h, const Bitmap* pBitmap);
+		bool setReplaceColor(const DWORD color);
+		bool drawRotateBitmap(const Bitmap* pBitmap,int lx, int ty, int angle);
+		bool fillBoxWithBitmapPart(int x, int y, int w, int h, const Bitmap* pBitmap, int xo, int yo);
+		int loadBitmap(Bitmap* bmp, const char * file_name);
+		int loadBitmap(Bitmap** bmp, const void* data, int size, const char * extern_name);
 		void unloadBitmap(Bitmap* pBitmap);
-		NGBool getBitmapSize(Bitmap* pBitmap, NGInt* w, NGInt* h);
+		bool getBitmapSize(Bitmap* pBitmap, int* w, int* h);
 		GraphicsContext* createGraphicsFromBitmap(Bitmap *pbmp);
-        NGBool initBitmap(NGInt w, NGInt h, Bitmap* pbmp);
+        bool initBitmap(int w, int h, Bitmap* pbmp);
 		//add interface for Image
-		//virtual void drawImage(Image *image, NGInt x, NGInt y, NGInt state);
-		//virtual void drawImage(Image *image, NGInt x, NGInt y, NGInt width, NGInt height, NGInt state);
+		//virtual void drawImage(Image *image, int x, int y, int state);
+		//virtual void drawImage(Image *image, int x, int y, int width, int height, int state);
 
 		//Font
 		Logfont* getCurFont(void);
-		Logfont* createLogFontByName(NGCPStr fontname);
+		Logfont* createLogFontByName(const char * fontname);
         
 		void deleteLogFont(Logfont* logfont);
 
-        void rotateBitmap(const Bitmap *pBitmap, NGInt lx, NGInt ty, NGInt angle);
+        void rotateBitmap(const Bitmap *pBitmap, int lx, int ty, int angle);
         HDC context(); 
-		NGBool captureScreen2Bitmap(Bitmap* pbmp);
+		bool captureScreen2Bitmap(Bitmap* pbmp);
 
         void setMapView(View *view);
-        void map(NGInt x, NGInt y, NGInt &x2, NGInt &y2);
+        void map(int x, int y, int &x2, int &y2);
         void mapRect(RECT &rc);
 
 		int getLayers(void);
@@ -190,23 +190,23 @@ class GraphicsContext : public Object {
 		void setLayerColorKey(int layer, BOOL enable, unsigned char r, unsigned char g, unsigned char b );
         
         // create memdc
-        GraphicsContext* createMemGc(NGInt w, NGInt h);
+        GraphicsContext* createMemGc(int w, int h);
 	private:
         GraphicsContextPrivate *m_data;
         static GraphicsContext *screen_graphics_context;
 };
 
-GraphicsContext* CreateMemGc(NGInt w, NGInt h);
+GraphicsContext* CreateMemGc(int w, int h);
 void DeleteMemGc(GraphicsContext *memGc);
 
-NGBool SaveScreenToFile (NGCPStr bmpFile);
+bool SaveScreenToFile (const char * bmpFile);
 
-NGInt GetFirstUTF8CharLen(const char *str, int len);
-NGInt GetLastUTF8CharLen(const char *str, int len);
-NGInt GetUTF8CharInfo(const char *mstr, int len, int *retPosChars);
-NGInt GetUTF8CharCount(const char *mstr, int len);
+int GetFirstUTF8CharLen(const char *str, int len);
+int GetLastUTF8CharLen(const char *str, int len);
+int GetUTF8CharInfo(const char *mstr, int len, int *retPosChars);
+int GetUTF8CharCount(const char *mstr, int len);
 BOOL HasUCS2Char(const char *mstr, int len);
-NGInt GetUTF8LenByCharCount(const char *mstr, int charcount);
+int GetUTF8LenByCharCount(const char *mstr, int charcount);
 U16 utf8_to_ucs2 (U8 *utf8);
 BOOL isNumberChar ( U16 inChar );
 BOOL isSymbolChar ( U16 inChar );

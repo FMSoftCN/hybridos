@@ -86,7 +86,7 @@ void TrackBarView::stepBackward()
     setPosition(m_curValue - m_stepValue);
 }
 
-void TrackBarView::setPosition(NGInt value)
+void TrackBarView::setPosition(int value)
 {
     if (value < m_minValue)
         value = m_minValue;
@@ -123,8 +123,8 @@ void TrackBarView::drawContent(GraphicsContext* context, IntRect &rc, int status
         LOGE("the maxValue is %d", m_maxValue);
         return ;
     }
-    NGInt w = 0, h = 0;
-    NGInt track_l = 0, track_w = 0, track_b = 0, track_h = 0;
+    int w = 0, h = 0;
+    int track_l = 0, track_w = 0, track_b = 0, track_h = 0;
     IntRect irc, thumb_irc;
 
 	m_drset->calcDrawableSize(DR_THUMB, DRAWSTATE_NORMAL, w, h);
@@ -164,7 +164,7 @@ void TrackBarView::drawContent(GraphicsContext* context, IntRect &rc, int status
             irc.setRect(rc.m_right-m_border, rc.m_top, rc.m_right, rc.m_bottom);
             m_drset->draw(context, DR_CONTENT2, DRAWSTATE_NORMAL, irc);
 	#if 0
-            for (NGInt i=1; i<m_maxValue; i++)
+            for (int i=1; i<m_maxValue; i++)
             {
                 track_w = (rc.width() - w) * i / m_maxValue;
                 //irc.setRect(track_l, rc.m_top, track_l + w, rc.m_bottom);

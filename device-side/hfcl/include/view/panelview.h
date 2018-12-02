@@ -36,22 +36,22 @@ class PanelView : public ContainerView
 public:
     PanelView(View* parent, DrawableSet* drset);
     PanelView(View* parent);
-    PanelView(NGInt id, NGInt x, NGInt y, NGInt w, NGInt h);
+    PanelView(int id, int x, int y, int w, int h);
     virtual ~PanelView();
 
     //Image* getBkImage();
-    NGBool setBkColor(const DWORD color);
-    NGBool setBkImage(NGCPStr image_file);
-    NGBool setBkImageEx(Image* image);
-    NGBool setUpdate(NGBool update);
+    bool setBkColor(const DWORD color);
+    bool setBkImage(const char * image_file);
+    bool setBkImageEx(Image* image);
+    bool setUpdate(bool update);
     
-    NGBool isUpdate(void){ return m_update;};
+    bool isUpdate(void){ return m_update;};
     
-	virtual void drawBackground(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/);
+	virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 
-    //NGBool setBkOpacity(unsigned char opacity);
+    //bool setBkOpacity(unsigned char opacity);
 
-    void setImageDrawMode(NGInt mode);
+    void setImageDrawMode(int mode);
 
 protected:
 
@@ -60,10 +60,10 @@ protected:
 	};
 
 private:
-	NGBool 	m_update;
+	bool 	m_update;
 	Image 	*m_bkImage;
-	NGInt 	m_imageDrawMode;
-	NGBool 	m_bkColorBeSet;
+	int 	m_imageDrawMode;
+	bool 	m_bkColorBeSet;
 	DWORD 	m_bkColor;
 
 DECLARE_CLASS_NAME(PanelView)

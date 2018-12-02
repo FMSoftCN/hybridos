@@ -84,7 +84,7 @@ EditView::EditView(View *p, DrawableSet *drs)
 EditView::~EditView()
 {
     //TODO
-    setImeTarget((NGInt)NULL, 2);
+    setImeTarget((int)NULL, 2);
 }
 
 void EditView::adaptViewStyle(void)
@@ -99,9 +99,9 @@ void EditView::changeTheme(void)
 	adaptViewStyle();
 }
 
-void EditView::raiseNotifyEvent(int notiCode, NGInt exParam1, NGInt exParam2)
+void EditView::raiseNotifyEvent(int notiCode, int exParam1, int exParam2)
 {
-    CustomEvent e(Event::CUSTOM_NOTIFY, notiCode, (NGInt)this);
+    CustomEvent e(Event::CUSTOM_NOTIFY, notiCode, (int)this);
 	e.setExParam(exParam1, exParam2);
     raiseEvent (&e);
 }
@@ -110,7 +110,7 @@ void EditView::onGetFocus(void)
 {
 	View::onGetFocus();
 	//adaptViewStyle();
-    setImeTarget((NGInt)this, 1);
+    setImeTarget((int)this, 1);
 
 #ifdef __MMI_T9__
     if(m_input_mode != 0xffff)
@@ -149,7 +149,7 @@ void EditView::onLoseFocus(void)
 	View::onLoseFocus();
 	//adaptViewStyle();
 
-    setImeTarget((NGInt)NULL, 1);	
+    setImeTarget((int)NULL, 1);	
 }
 
 void EditView::setInputMode(U16 mode)
@@ -309,7 +309,7 @@ void EditView::remove_Repeative_Zerodigit_WhenClear_in_calculator(char *str_all_
 
 }
 
-string EditView::apply_comma_multiple_value_in_calculator(char *str, NGInt *cursor)
+string EditView::apply_comma_multiple_value_in_calculator(char *str, int *cursor)
 {
 	U16 index_value=0,index_1_digit=0,index_merge=0,index_cursor=0;
 	char str_all[MAX_VALUES_IN_CALCULATOR_3COMMA][MAX_DIGIT_IN_CALCULATOR_3COMMA];

@@ -65,7 +65,7 @@ MenuBarView::~MenuBarView()
 	}
 }
 
-void MenuBarView::setLeftText(NGInt strid)
+void MenuBarView::setLeftText(int strid)
 {
     if (m_left_strid == strid)
         return;
@@ -76,7 +76,7 @@ void MenuBarView::setLeftText(NGInt strid)
     updateView (calcRect (rc, SEL_LEFT));
 }
 
-void MenuBarView::setMiddleText(NGInt strid)
+void MenuBarView::setMiddleText(int strid)
 {
     if (m_middle_strid == strid)
         return;
@@ -87,7 +87,7 @@ void MenuBarView::setMiddleText(NGInt strid)
     updateView (calcRect (rc, SEL_MIDDLE));
 }
 
-void MenuBarView::setRightText(NGInt strid)
+void MenuBarView::setRightText(int strid)
 {
     if (m_right_strid == strid)
         return;
@@ -143,7 +143,7 @@ void MenuBarView::setRightText(const char* txt)
     updateView (calcRect (rc, SEL_RIGHT));
 }
 
-void MenuBarView::drawContent(GraphicsContext* context, IntRect& rc, NGInt status)
+void MenuBarView::drawContent(GraphicsContext* context, IntRect& rc, int status)
 {
 	PanelView::drawContent(context, rc, status);
 
@@ -169,11 +169,11 @@ void MenuBarView::drawContent(GraphicsContext* context, IntRect& rc, NGInt statu
     drawImage(context, SEL_MIDDLE);
 }
 
-void MenuBarView::drawText(GraphicsContext* context, const string &str, NGInt item)
+void MenuBarView::drawText(GraphicsContext* context, const string &str, int item)
 {
 	if(str.length() > 0) {
 		IntRect rc;
-		NGInt state = DRAWSTATE_NORMAL;
+		int state = DRAWSTATE_NORMAL;
 
 		calcRect(rc, item);
 
@@ -194,7 +194,7 @@ void MenuBarView::drawText(GraphicsContext* context, const string &str, NGInt it
 		};
 
 #if 0
-		NGInt w, h;
+		int w, h;
 		if (m_drset->calcDrawableSize(DR_CONTENT, 
 				DRAWSTATE_NORMAL, w, h, (DWORD)&formatText, DRDT_FORMATTEXT))
 		{
@@ -208,10 +208,10 @@ void MenuBarView::drawText(GraphicsContext* context, const string &str, NGInt it
 	}
 }
 
-void MenuBarView::drawText(GraphicsContext* context, NGInt strId, NGInt item)
+void MenuBarView::drawText(GraphicsContext* context, int strId, int item)
 {
     IntRect rc;
-    NGInt state = DRAWSTATE_NORMAL;
+    int state = DRAWSTATE_NORMAL;
 
 	calcRect (rc, item);
 
@@ -235,16 +235,16 @@ void MenuBarView::drawText(GraphicsContext* context, NGInt strId, NGInt item)
     m_drset->draw (context, DR_CONTENT, state, rc, (DWORD)&formatText, DRDT_FORMATTEXT);
 
 #if 0
-	NGInt w, h;
+	int w, h;
 	if (m_drset->calcDrawableSize(DR_CONTENT, DRAWSTATE_NORMAL, w, h, (DWORD)&formatText, DRDT_FORMATTEXT))
 	{
-		NGInt mid_img_w = 14;
+		int mid_img_w = 14;
 		
 		if (item == SEL_LEFT)
 		{
 			if(m_right_strid > 0) // has right text
 			{
-				NGInt w_tmp = 0;
+				int w_tmp = 0;
 				FormatText formatText_r = {
 					GetTextRes(m_right_strid), 
 					TextMode::AlignRight | TextMode::ValignMiddle | TextMode::SingleLine | m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTLINEMODE)
@@ -283,7 +283,7 @@ void MenuBarView::drawText(GraphicsContext* context, NGInt strId, NGInt item)
 		{
 			if(m_left_strid > 0) // has left text 
 			{
-				NGInt w_tmp = 0;
+				int w_tmp = 0;
 				FormatText formatText_r = {
 					GetTextRes(m_left_strid), 
 					TextMode::AlignLeft | TextMode::ValignMiddle | TextMode::SingleLine | m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTLINEMODE)
@@ -323,7 +323,7 @@ void MenuBarView::drawText(GraphicsContext* context, NGInt strId, NGInt item)
 #endif
 }
 
-void MenuBarView::drawImage(GraphicsContext* context, NGInt item)
+void MenuBarView::drawImage(GraphicsContext* context, int item)
 {
     IntRect rc;
 	ImageFormat f;
@@ -412,12 +412,12 @@ void MenuBarView::setRightImage(Image* image)
     updateView (calcRect (rc, SEL_RIGHT));
 }
 
-NGBool MenuBarView::dispatchEvent(Event* event)
+bool MenuBarView::dispatchEvent(Event* event)
 {
-    NGInt t = event->eventType();
+    int t = event->eventType();
 
     if (t == Event::KEY_DOWN || t == Event::KEY_UP) {
-        NGInt item = SEL_NONE;
+        int item = SEL_NONE;
         switch(((KeyEvent*)event)->keyCode()) {
         case KeyEvent::KEYCODE_SL:
             item = SEL_LEFT;
@@ -440,10 +440,10 @@ NGBool MenuBarView::dispatchEvent(Event* event)
 }
 
 
-void MenuBarView::pressItem(NGInt item, NGBool bpress)
+void MenuBarView::pressItem(int item, bool bpress)
 {
     IntRect rc;
-    NGInt newitem = bpress ? item : SEL_NONE;
+    int newitem = bpress ? item : SEL_NONE;
 
     if(newitem != m_selItem) {
         if(m_selItem != SEL_NONE && m_selItem != item) {

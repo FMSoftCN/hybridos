@@ -59,7 +59,7 @@ View *PageView::prevPage(void)
 	return getCurPage();
 }
 
-NGBool PageView::setCurPage(View *page)
+bool PageView::setCurPage(View *page)
 {
 	if(NULL != m_cur_page)
 		m_cur_page->hide();
@@ -74,7 +74,7 @@ NGBool PageView::setCurPage(View *page)
 	return false;
 }
 
-NGBool PageView::appendPage(View *page)
+bool PageView::appendPage(View *page)
 {
 	IntRect irc(getRect());
 	irc.setRect(0, 0, irc.right(), irc.bottom());
@@ -90,7 +90,7 @@ NGBool PageView::appendPage(View *page)
 	return true;
 }
 
-NGBool PageView::addPage(View *page)
+bool PageView::addPage(View *page)
 {
 	IntRect irc(getRect());
 	irc.setRect(0, 0, irc.right(), irc.bottom());
@@ -106,7 +106,7 @@ NGBool PageView::addPage(View *page)
 	return false;
 }
 
-NGBool PageView::dispatchEvent(Event *event)
+bool PageView::dispatchEvent(Event *event)
 {
 	if(Event::CUSTOM_NOTIFY == event->eventType())
 	{
@@ -119,12 +119,12 @@ NGBool PageView::dispatchEvent(Event *event)
 
 }
 
-NGBool PageView::setCurPageByIndex(const NGUInt index)
+bool PageView::setCurPageByIndex(const unsigned int index)
 {
 	return setCurPage(pageFromIndex(index));
 }
 
-NGInt PageView::getCurPageIndex(void)
+int PageView::getCurPageIndex(void)
 {
 	return indexFromPage(getCurPage());
 }

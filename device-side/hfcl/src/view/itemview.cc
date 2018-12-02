@@ -24,11 +24,11 @@
 
 NAMESPACE_BEGIN
 
-NGBool ItemView::g_is_all_itemview_need_convert = false;
+bool ItemView::g_is_all_itemview_need_convert = false;
 
-void ItemView::paint(GraphicsContext* context, NGInt status)
+void ItemView::paint(GraphicsContext* context, int status)
 {	
-	NGInt cont_state = DRAWSTATE_NORMAL;
+	int cont_state = DRAWSTATE_NORMAL;
 	IntRect rc(0, 0, m_rect.width(), m_rect.height());
 
     if (!isPaintHilightFirst())
@@ -57,8 +57,8 @@ void ItemView::drawContent(GraphicsContext* context, IntRect& rc, int status)
 	if ((IsAllItemViewNeedConvert()  && !isConverted())
 		|| (!IsAllItemViewNeedConvert()  && isConverted()))
 	{
-		NGInt w = rc.width();
-		//NGInt h = rc.height();
+		int w = rc.width();
+		//int h = rc.height();
 		
 		for(View *view = firstChild(); view; view = view->nextSibling()) {
 			IntRect vrc = view->getRect();
@@ -70,7 +70,7 @@ void ItemView::drawContent(GraphicsContext* context, IntRect& rc, int status)
 }
 
 
-void ItemView::draw_select(GraphicsContext* context, IntRect &rc, NGInt status)
+void ItemView::draw_select(GraphicsContext* context, IntRect &rc, int status)
 {
     IntRect rect(rc);
 	
@@ -106,12 +106,12 @@ void ItemView::draw_select(GraphicsContext* context, IntRect &rc, NGInt status)
     }
 }
 
-void ItemView::draw_hilite(GraphicsContext* context, IntRect &rc, NGInt status)
+void ItemView::draw_hilite(GraphicsContext* context, IntRect &rc, int status)
 {
 	if(!(status & PAINT_NO_HILIGHT))
 	{
 		status &= PAINT_STATUS_MASK;
-		NGInt hilight_state = getHilightDrawState();
+		int hilight_state = getHilightDrawState();
 		if(hilight_state >= 0) {
 			if(m_drset) {
 				IntRect _rc = rc;
@@ -132,8 +132,8 @@ void ItemView::draw_hilite(GraphicsContext* context, IntRect &rc, NGInt status)
 	}
 }
 
-NGInt ItemView::getHilightDrawState() {
-	NGBool bfocused = isFocus();
+int ItemView::getHilightDrawState() {
+	bool bfocused = isFocus();
 	if(bfocused)
 		return DRAWSTATE_HILIGHT;
 	/*	
@@ -151,7 +151,7 @@ NGInt ItemView::getHilightDrawState() {
 
 
 
-void ItemView::setItemHeight(NGInt h)
+void ItemView::setItemHeight(int h)
 {
 	IntRect rect = (IntRect)getRect();
 	if(h <= 5)

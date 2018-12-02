@@ -67,10 +67,10 @@ HPlatformOwner Application::getPlatformOwner(void)
     return m_viewWindow;
 }
 
-NGBool Application::onKey(NGInt keyCode, KeyEvent* event)
+bool Application::onKey(int keyCode, KeyEvent* event)
 {
     View* _focus = NULL;
-    NGBool ret = true;
+    bool ret = true;
 
     if ((View *)0 != (_focus = focusView())) {
         ret = _focus->dispatchEvent(event);
@@ -120,7 +120,7 @@ void Application::updateAppNow(void)
 }
 
 
-void Application::setFullScreen(NGBool isFullScreen)
+void Application::setFullScreen(bool isFullScreen)
 {
     if (isFullScreen)
         setAppRect(IntRect(0, 0, _ngux_screen_w, _ngux_screen_h));

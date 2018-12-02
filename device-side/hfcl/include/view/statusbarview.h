@@ -35,13 +35,13 @@ class StatusBarView : public PanelView {
         };
 
         struct SBViewNode {
-            NGInt id;
-            NGInt location;
+            int id;
+            int location;
             View* pv;
-            NGInt pvWidth;
-            NGInt pvHeight;
+            int pvWidth;
+            int pvHeight;
 
-            SBViewNode(NGInt i_id, NGInt loca, View* v, NGInt w = 0, NGInt h = 0)
+            SBViewNode(int i_id, int loca, View* v, int w = 0, int h = 0)
                 : id(i_id), location(loca), pv(v), pvWidth(w), pvHeight(h) { }
             SBViewNode()
                 : id(0), location(SHOW_IN_RIGHT), pv(NULL), pvWidth(0), pvHeight(0) { }
@@ -59,25 +59,25 @@ class StatusBarView : public PanelView {
 
         void updateStatusBarView(void);
 
-        void setSpace(NGInt space) { m_space = space; }
-        NGInt getSpace(void) { return m_space; }
+        void setSpace(int space) { m_space = space; }
+        int getSpace(void) { return m_space; }
 
-        void setWidth(NGInt width) { m_width = width; }
-        NGInt getWidth(void) { return m_width; }
+        void setWidth(int width) { m_width = width; }
+        int getWidth(void) { return m_width; }
 
-        virtual NGBool dispatchEvent(Event* event);
+        virtual bool dispatchEvent(Event* event);
 
-        friend NGBool operator==(SBViewNode& sbvn1, SBViewNode& sbvn2) {
+        friend bool operator==(SBViewNode& sbvn1, SBViewNode& sbvn2) {
             if ((sbvn1.id == sbvn2.id) && (sbvn1.location == sbvn2.location) && (sbvn1.pv == sbvn2.pv))
                 return true;
             return false;
         }
 
-        NGBool setSBView(NGInt loca, View* v);
-        View* getSBView(NGInt v_id) const;
-        SBViewNode* find(NGInt v_id) const;
-        void setAutoRecalc(NGBool bsar = false);
-        // void RefreshViewState(NGInt id, NGInt level = 0);
+        bool setSBView(int loca, View* v);
+        View* getSBView(int v_id) const;
+        SBViewNode* find(int v_id) const;
+        void setAutoRecalc(bool bsar = false);
+        // void RefreshViewState(int id, int level = 0);
 
     protected:
         DECLARE_CLASS_NAME(StatusBarView)
@@ -87,10 +87,10 @@ class StatusBarView : public PanelView {
         void resetViewRect(SBViewNode* sbvn);
 
         SBVList  m_sbwList;
-        NGUInt16 m_space;
-        NGUInt16 m_width;
-        NGInt    m_sbvLeft;
-        NGInt    m_sbvRight;
+        Uint16 m_space;
+        Uint16 m_width;
+        int    m_sbvLeft;
+        int    m_sbvRight;
 };
 
 NAMESPACE_END

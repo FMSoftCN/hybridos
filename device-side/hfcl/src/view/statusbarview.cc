@@ -52,16 +52,16 @@ void StatusBarView::updateStatusBarView(void)
     updateView();
 }
 
-NGBool StatusBarView::dispatchEvent(Event* event)
+bool StatusBarView::dispatchEvent(Event* event)
 {
     return DISPATCH_CONTINUE_MSG;
 }
 
-NGBool StatusBarView::setSBView(NGInt loca, View* v)
+bool StatusBarView::setSBView(int loca, View* v)
 {
-    NGInt v_w = 0;
-    NGInt v_h = 0;
-    NGInt v_id = v->id();
+    int v_w = 0;
+    int v_h = 0;
+    int v_id = v->id();
     SBViewNode* node = find(v_id);
 
     if (node) {
@@ -80,14 +80,14 @@ NGBool StatusBarView::setSBView(NGInt loca, View* v)
     return true;
 }
 
-View* StatusBarView::getSBView(NGInt v_id) const
+View* StatusBarView::getSBView(int v_id) const
 {
     SBViewNode* node = find(v_id);
 
     return node ? node->pv : NULL;
 }
 
-StatusBarView::SBViewNode* StatusBarView::find(NGInt v_id) const
+StatusBarView::SBViewNode* StatusBarView::find(int v_id) const
 {
     for (SBVList::const_iterator it = m_sbwList.begin(); it != m_sbwList.end(); ++it) {
 		SBViewNode* nd = (*it);
@@ -99,13 +99,13 @@ StatusBarView::SBViewNode* StatusBarView::find(NGInt v_id) const
     return NULL;
 }
 
-void StatusBarView::setAutoRecalc(NGBool bsar)
+void StatusBarView::setAutoRecalc(bool bsar)
 {
     if (bsar)
         autoRecalc();
 }
 
-// void StatusBarView::RefreshViewState(NGInt id, NGInt level)
+// void StatusBarView::RefreshViewState(int id, int level)
 // {
 // }
 

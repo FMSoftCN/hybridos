@@ -69,14 +69,14 @@ class TableBarView : public CompositeView{
 
         TableBarView(View* p_parent, DrawableSetGroup* g = NULL);
         TableBarView(View* p_parent, DrawableSet* drset, DrawableSetGroup* g = NULL);
-        TableBarView(NGInt i_id, NGInt x, NGInt y, NGInt w, NGInt h);
+        TableBarView(int i_id, int x, int y, int w, int h);
         ~TableBarView();
         
-        void setTableHeight(NGInt   height);
-        NGInt tableHeight(void);
+        void setTableHeight(int   height);
+        int tableHeight(void);
         
-        void setTableGapH(NGInt value);
-        void setTableGapW(NGInt value);
+        void setTableGapH(int value);
+        void setTableGapW(int value);
         
         //bool setSelectTableBkg(Image* img);
         //bool setSelectTableBkg(const char * file);
@@ -94,16 +94,16 @@ class TableBarView : public CompositeView{
         bool addTablePage(ItemView* tabitem , View* tableInfo ); 
         
         bool delTablePage(View* table);
-        bool delTablePage(NGInt index );
+        bool delTablePage(int index );
         
-        View* tableInfoView(NGInt index);
+        View* tableInfoView(int index);
         View* tableInfoView(View *view);
         
-        bool  setSelectTableByIndex(NGInt index);
+        bool  setSelectTableByIndex(int index);
         
-        NGInt  selectTableIndex(void);
+        int  selectTableIndex(void);
         
-        bool setTablePos(NGInt pos);  // pos = 0; table pos is TOP, pos = 1; table pos is BOTTOM, other is failed;
+        bool setTablePos(int pos);  // pos = 0; table pos is TOP, pos = 1; table pos is BOTTOM, other is failed;
         
         bool  dispatchEvent (Event* event);
 
@@ -124,12 +124,12 @@ class TableBarView : public CompositeView{
         void relayout(void);
         bool init(void);
         bool relayoutRect(void);
-        NGInt    m_tableHeight; 
-        NGInt    m_tablePos; 
+        int    m_tableHeight; 
+        int    m_tablePos; 
         GridView* m_tablesGrid;
         PageView * m_pages;
 
-		virtual void updateDrawableSets(NGInt i_id) {
+		virtual void updateDrawableSets(int i_id) {
 			CompositeView::updateDrawableSets(i_id);
 			SETDRAWABLESET(m_tablesGrid, i_id, DRSET_TAB);
 			SETDRAWABLESET(m_pages, i_id, DRSET_PAGE);
@@ -167,7 +167,7 @@ public:
 	Image* selImage() { return m_selImg; }
 	Image* normalImage() { return m_normalImg; }
 
-	void drawContent(GraphicsContext* context, IntRect& rc, NGInt status)
+	void drawContent(GraphicsContext* context, IntRect& rc, int status)
 	{
 		Image *img = (status == DRAWSTATE_NORMAL ? m_normalImg : m_selImg);
 		if(img) {

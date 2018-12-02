@@ -42,7 +42,7 @@ NAMESPACE_BEGIN
 
 #define EM_ENABLECARET 0xF0D5 // same with minigui
 
-void WrapperView::createWnd(NGCPStr wnd_class)
+void WrapperView::createWnd(const char * wnd_class)
 {
 	if(!wnd_class || !m_parent)
 		return ;
@@ -70,7 +70,7 @@ void WrapperView::createWnd(NGCPStr wnd_class)
 #endif
 }
 
-void WrapperView::setTextMaxLimit(NGInt max)
+void WrapperView::setTextMaxLimit(int max)
 {
     SendMessage (m_wrapwnd, TEXT_LIMIT, max, 0);
 }
@@ -90,15 +90,15 @@ void WrapperView::replacePrevChar(const char *ch)
 
 
 
-void WrapperView ::setViewStyle(NGInt dwStyle, NGBool isInclude)
+void WrapperView ::setViewStyle(int dwStyle, bool isInclude)
 {
     if(isInclude)
-        IncludeWindowStyle(m_wrapwnd, (NGULong)dwStyle);
+        IncludeWindowStyle(m_wrapwnd, (unsigned long)dwStyle);
     else
-        ExcludeWindowStyle(m_wrapwnd, (NGULong)dwStyle);
+        ExcludeWindowStyle(m_wrapwnd, (unsigned long)dwStyle);
 }
 
-NGULong WrapperView :: viewStyle(void)
+unsigned long WrapperView :: viewStyle(void)
 {
     return GetWindowStyle(m_wrapwnd);
 }
@@ -135,7 +135,7 @@ WrapperView::~WrapperView()
 	}
 }
 
-NGBool WrapperView::isWrapprVisible ()
+bool WrapperView::isWrapprVisible ()
 {
     View *v = this;
     while (NULL != v)
@@ -147,17 +147,17 @@ NGBool WrapperView::isWrapprVisible ()
     return true;
 }
 
-void WrapperView::_notify_proc(HANDLE handle, NGInt id, NGInt nc, DWORD add_data)
+void WrapperView::_notify_proc(HANDLE handle, int id, int nc, DWORD add_data)
 {
 	//TODO get the notification of the window
 	WrapperView* self = (WrapperView*)GetWindowAdditionalData(handle);
     //_DBG_PRINTF("notify.....self= %p............handle=%x....\n", self, handle);
 	if(self)
 	{
-		NGInt enc = self->notifyToEventType(nc);
+		int enc = self->notifyToEventType(nc);
 		if(enc > 0)
 		{
-			CustomEvent e(Event::CUSTOM_NOTIFY, enc, (NGInt)self);
+			CustomEvent e(Event::CUSTOM_NOTIFY, enc, (int)self);
 			self->raiseEvent(&e);
 		}
 	}
@@ -165,14 +165,14 @@ void WrapperView::_notify_proc(HANDLE handle, NGInt id, NGInt nc, DWORD add_data
 
 void WrapperView::calcWndRect(IntRect &r)
 {
-	NGInt x = 0, y = 0;
+	int x = 0, y = 0;
 	if(m_parent)
 		m_parent->viewToWindow(&x, &y);
 	r.offset(x, y);
 }
 
 
-void WrapperView::setText(NGCPStr str)
+void WrapperView::setText(const char * str)
 {
 	if(::IsWindow(m_wrapwnd))
 	{
@@ -180,7 +180,7 @@ void WrapperView::setText(NGCPStr str)
 	}
 }
 
-NGBool WrapperView::setRect(const IntRect& r)
+bool WrapperView::setRect(const IntRect& r)
 {
 	View::setRect(r);
 	if(::IsWindow(m_wrapwnd))
@@ -197,7 +197,7 @@ NGBool WrapperView::setRect(const IntRect& r)
 	}
 	return true;
 }
-NGBool WrapperView::onKeyPressed(NGInt keyCode)
+bool WrapperView::onKeyPressed(int keyCode)
 {
     //_DBG_PRINTF("\n wrapperviewonKeyPressed   !!!!  the m_pressedKey is:%x  keyCode is %x\n",m_pressedKey, keyCode);
     switch(keyCode)
@@ -227,7 +227,7 @@ void WrapperView::closeTimer(void)
       }
 }
 #endif
-NGBool WrapperView::dispatchEvent(Event *event)
+bool WrapperView::dispatchEvent(Event *event)
 {
 	if(!::IsWindow(m_wrapwnd))
 		return DISPATCH_STOP_MSG;
@@ -244,7 +244,7 @@ NGBool WrapperView::dispatchEvent(Event *event)
 	     case Event::KEY_ALWAYSPRESS:
             {
 #if 0    // GT_jyseo delete timer
-                NGInt code = ((KeyEvent *)event)->keyCode();
+                int code = ((KeyEvent *)event)->keyCode();
                 if (onKeyPressed(code) && m_pressedKey == 0 && m_timerId == 0) 
                 {
                     m_timerId = TimerService::getInstance()->addTimerListener(_EDIT_LOOP_RATE_, this);
@@ -285,7 +285,7 @@ NGBool WrapperView::dispatchEvent(Event *event)
 }
 
 #if 0 // GT_jyseo rollback
-NGBool WrapperView::handleEvent(Event* event)
+bool WrapperView::handleEvent(Event* event)
 {
     if (event->eventType() == Event::TIMER 
             && m_timerId == ((TimerEvent *)event)->timerID())
@@ -321,17 +321,17 @@ string WrapperView::getText(){
 	if(!::IsWindow(m_wrapwnd))
 		return string("");
 
-	NGInt len = ::GetWindowTextLength(m_wrapwnd);
+	int len = ::GetWindowTextLength(m_wrapwnd);
 	if(len <= 0)
 		return string("");
 
 	if(len < 256) {
-		NGChar szbuf[256];
+		char szbuf[256];
 		::GetWindowText(m_wrapwnd, szbuf, sizeof(szbuf)-1);
 		return string(szbuf);
 	}
 	else {
-		NGChar * text = NGUX_NEW_ARR(NGChar, (len + 1));
+		char * text = NGUX_NEW_ARR(char, (len + 1));
 		::GetWindowText(m_wrapwnd, text, len);
 		string str = text;
 		NGUX_DELETE_ARR(text);
@@ -339,7 +339,7 @@ string WrapperView::getText(){
 	}
 }
 
-void WrapperView::showCaret(NGBool bShow)
+void WrapperView::showCaret(bool bShow)
 {
     if (bShow) {
         SendMessage(m_wrapwnd, EM_ENABLECARET, 1, 0);

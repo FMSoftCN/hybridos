@@ -41,7 +41,7 @@ Controller::~Controller() {
 	cleanAllClient();
 }
 
-NGUInt Controller::showView(NGInt view_id, NGParam param1, NGParam param2) //show a view in the stack
+unsigned int Controller::showView(int view_id, NGParam param1, NGParam param2) //show a view in the stack
 {	
 	ControllerClient* client = createClient(view_id, param1, param2);
 	if(!client)
@@ -94,7 +94,7 @@ void Controller::animationSwitch(ControllerClient* prev, ControllerClient* cur)
 */
 }
 
-NGUInt Controller::switchView(NGInt view_id, NGParam param1, NGParam param2) //switch a view with stack
+unsigned int Controller::switchView(int view_id, NGParam param1, NGParam param2) //switch a view with stack
 {
 	ControllerClient* client = createClient(view_id, param1, param2);
 	if(!client)
@@ -117,7 +117,7 @@ NGUInt Controller::switchView(NGInt view_id, NGParam param1, NGParam param2) //s
 	return 0;
 }
 
-NGUInt Controller::showModalView(NGInt view_id, NGParam param1, NGParam param2)
+unsigned int Controller::showModalView(int view_id, NGParam param1, NGParam param2)
 {
     int ret = -1;
 	if(( ret = showView(view_id, param1, param2)) == 0)
@@ -139,7 +139,7 @@ NGUInt Controller::showModalView(NGInt view_id, NGParam param1, NGParam param2)
 	return ret;
 }
 
-NGUInt Controller::backView(NGUInt endcode)
+unsigned int Controller::backView(unsigned int endcode)
 {
 	ControllerClient* client = getTop(0);
 	ControllerClient* underClient = getTop(1);
@@ -189,7 +189,7 @@ void Controller::push(ControllerClient* client)
 	m_list.push_front(client);
 }
 
-void Controller::moveClientToTop(NGInt view_id)
+void Controller::moveClientToTop(int view_id)
 {
 	int i = 0, s = 0;
 	ControllerClient* client = NULL;
@@ -233,7 +233,7 @@ void Controller::moveClientToTop(NGInt view_id)
 }
 
 
-NGInt Controller::getTopViewId(void)
+int Controller::getTopViewId(void)
 {
 	ControllerClient* top = getTop(0);
 
@@ -244,9 +244,9 @@ NGInt Controller::getTopViewId(void)
 		return -1;
 }
 
-ControllerClient* Controller::getTop(NGInt index)
+ControllerClient* Controller::getTop(int index)
 {
-	NGInt size = m_list.size();
+	int size = m_list.size();
 
 	if(index < 0 ||index > size)
 		return NULL;
@@ -267,7 +267,7 @@ ControllerClient* Controller::getTop(NGInt index)
 	return *it;
 }
 
-void Controller::setTop(ControllerClient* client, NGInt index)
+void Controller::setTop(ControllerClient* client, int index)
 {
 	if(index <= 0) {
 		index = -index;
@@ -291,7 +291,7 @@ void Controller::setTop(ControllerClient* client, NGInt index)
 	}
 }
 
-void Controller::pop(NGInt pop_count) 
+void Controller::pop(int pop_count) 
 { 
 	if(pop_count <= 0)
 		return ;
@@ -319,7 +319,7 @@ void Controller::cleanAllClient()
 	pop(m_list.size());
 }
 
-NGUInt Controller::passCommandToClient(NGInt view_id, NGUInt cmd, NGParam param1, NGParam param2) 
+unsigned int Controller::passCommandToClient(int view_id, unsigned int cmd, NGParam param1, NGParam param2) 
 {
 	ControllerClient* client = find(view_id);
 	if(!client)
@@ -328,7 +328,7 @@ NGUInt Controller::passCommandToClient(NGInt view_id, NGUInt cmd, NGParam param1
 	return client->onControllerCommand(cmd, param1, param2);
 }
 
-void Controller::deleteView(NGInt view_id, NGBool bExit)
+void Controller::deleteView(int view_id, bool bExit)
 {
     ControllerClient* _client = find(view_id);
 
@@ -358,7 +358,7 @@ void Controller::deleteView(NGInt view_id, NGBool bExit)
 	}
 }
 
-ControllerClient* Controller::find(NGInt view_id)
+ControllerClient* Controller::find(int view_id)
 {
     int i = 0;
     int s = m_list.size();
@@ -425,7 +425,7 @@ void ControllerClient::cleanBaseView()
     }
 }
 
-NGInt ControllerClient::GetValueFromCurrentMode(NGInt mode_id, NGInt sub_id) 
+int ControllerClient::GetValueFromCurrentMode(int mode_id, int sub_id) 
 {
     if(!m_modeManager)
         return -1;
@@ -434,7 +434,7 @@ NGInt ControllerClient::GetValueFromCurrentMode(NGInt mode_id, NGInt sub_id)
     if(!modeList)
         return -1;
 
-    for(NGInt i=0;i< modeList->mode_count;i++)
+    for(int i=0;i< modeList->mode_count;i++)
     {
         if(sub_id==modeList->modes[i].id)
             return modeList->modes[i].value;

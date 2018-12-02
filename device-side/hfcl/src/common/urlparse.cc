@@ -27,27 +27,27 @@
 #define GUIURL_PHONE_NUMBER_LEN_MIN 3
 #define GUIURL_PHONE_NUMBER_LEN_MAX 40
 
-NGBool IsDigit(NGChar c)
+bool IsDigit(char c)
 {
     return ('0' <= c && c <= '9');
 }
 
 
-NGBool IsPhoneNumberChar(NGChar c)
+bool IsPhoneNumberChar(char c)
 {
     return (IsDigit(c)
         || '*' == c
         || '#' == c);
 }
 
-NGBool IsPhoneNumberHyphen(NGChar c)
+bool IsPhoneNumberHyphen(char c)
 {
     return ('-' == c);
 }
 
 /*==============================================================================
 Description: 判定一个字符串是不是满足电话号码的模式
-Return: NGBool, *confirm_len_ptr会赋予不同的值
+Return: bool, *confirm_len_ptr会赋予不同的值
     TRUE - 是
         *confirm_len_ptr - 识别的长度
     FALSE - 否
@@ -60,15 +60,15 @@ Note: 简单的regEx可以写作: ([+0][*#\d])?[*#\d]{5,}(([Pp]+|[Ww])[*#\d]+))*
         2 连续的连字符不识别
     4 增加字符限制，去除连字符之后超过最大字符数的，不识别
 ==============================================================================*/
-NGBool URL_IsPhoneNumber(NGChar const * str_ptr, NGInt *confirm_len_ptr)
+bool URL_IsPhoneNumber(char const * str_ptr, int *confirm_len_ptr)
 {
-    NGInt extra_char_count = 0;
-    NGInt extra_digit_count = 0;
-    NGInt hyphen_count = 0;
-    NGInt tailer_hyphen_count = 0;
-    NGInt min_number_len = GUIURL_PHONE_NUMBER_LEN_MIN;
-    NGBool	is_atleast_onechar_numeric = FALSE;
-    NGChar const *str_pos_ptr = NULL;
+    int extra_char_count = 0;
+    int extra_digit_count = 0;
+    int hyphen_count = 0;
+    int tailer_hyphen_count = 0;
+    int min_number_len = GUIURL_PHONE_NUMBER_LEN_MIN;
+    bool	is_atleast_onechar_numeric = FALSE;
+    char const *str_pos_ptr = NULL;
     
     
     if (NULL == str_ptr || NULL == confirm_len_ptr)
@@ -184,19 +184,19 @@ NGBool URL_IsPhoneNumber(NGChar const * str_ptr, NGInt *confirm_len_ptr)
 /*==============================================================================
 Description: 解析字符串中的可识别字符串
 ==============================================================================*/
-NGInt URL_ParseDataGen(
+int URL_ParseDataGen(
     char const * str_ptr,
     int * addrTable,
     int tableSize
 )
 {
     char const *p = NULL;
-    NGInt pos = 0;
-    NGInt cnt = 0;
+    int pos = 0;
+    int cnt = 0;
 
-    NGInt pn_confirm_len = 0;
-    NGInt pn_len = 0;
-    NGBool is_pn = FALSE;
+    int pn_confirm_len = 0;
+    int pn_len = 0;
+    bool is_pn = FALSE;
 
 
     if (NULL == str_ptr || NULL == addrTable)

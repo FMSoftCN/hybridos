@@ -33,19 +33,19 @@ class BitMark
 		~BitMark();
 
 		// init
-		NGBool init(NGInt count);
+		bool init(int count);
 		// get count
-		NGInt count(void);
+		int count(void);
 		// get mark
-		NGBool getMark(NGInt index);
+		bool getMark(int index);
 		// set mark
-		void setMark(NGInt index, NGBool mark);
+		void setMark(int index, bool mark);
 
-		void move(NGInt from, NGInt to, NGInt count);
+		void move(int from, int to, int count);
 
 	private:
-		NGInt m_bitcount;
-		NGUInt8* m_bitbuf;
+		int m_bitcount;
+		Uint8* m_bitbuf;
 };
 class PointerKeeper
 {
@@ -54,19 +54,19 @@ class PointerKeeper
 		~PointerKeeper();
 
 		// init
-		NGBool init(NGInt count);
+		bool init(int count);
 		// get count
-		NGInt count(void);
+		int count(void);
 		// get pointer
-		void* getPointer(NGInt index);
+		void* getPointer(int index);
 		// set pointer
-		void setPointer(NGInt index, void* pointer);
+		void setPointer(int index, void* pointer);
 		
-		void move(NGInt from, NGInt to, NGInt count);
+		void move(int from, int to, int count);
 
 	private:
-		NGInt m_pointercount;
-		NGUInt* m_pointerbuf;
+		int m_pointercount;
+		unsigned int* m_pointerbuf;
 };
 
 NAMESPACE_END

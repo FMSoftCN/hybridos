@@ -34,7 +34,7 @@ class GroupAnimation : public Animation
 		GroupAnimation(enum EffAnimationType type, GroupAnimation * parent = NULL);
 
 		~GroupAnimation(); 
-		void setProperty(NGInt id, void *curvalue) {/* do nothing */}
+		void setProperty(int id, void *curvalue) {/* do nothing */}
 
 		void add(Animation *ani);
     protected:

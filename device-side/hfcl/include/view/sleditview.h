@@ -38,44 +38,44 @@ public:
 	SlEditView(View *p, DrawableSet* drset);
 	~SlEditView();
 	
-    void setText(NGCPStr str);
+    void setText(const char * str);
 	void setText(string str);
 	string getText();
-	NGUInt getTextLength() { return m_strings.size(); }
+	unsigned int getTextLength() { return m_strings.size(); }
 	void insertText(const char *text);
 	void replacePrevChar(const char *ch);
 	void deleteAllCharacters(void);
-	void setTextHighlight(NGBool IsHighlight = false) {  m_highlight = IsHighlight; }
-	NGBool getTextHighlight(void) { return m_highlight; }
+	void setTextHighlight(bool IsHighlight = false) {  m_highlight = IsHighlight; }
+	bool getTextHighlight(void) { return m_highlight; }
 
     enum {
         EDVS_PSWD      = 0x0100,
         EDVS_SPACE  = 0x0200,	
     };
-    void setPasswordStyle(NGBool bSet)  { bSet ? m_style |= EDVS_PSWD : m_style &= ~EDVS_PSWD; }
-	void setCharBreakStyle(NGBool bSet)  { bSet ? m_style |= EDVS_CHAR_BREAK : m_style &= ~EDVS_CHAR_BREAK; }
-    void setSpaceStyle(NGBool bSet)  { bSet ? m_style |= EDVS_SPACE : m_style &= ~EDVS_SPACE; }
-    NGBool isSpaceMode(void)   { return m_style & EDVS_SPACE; }
+    void setPasswordStyle(bool bSet)  { bSet ? m_style |= EDVS_PSWD : m_style &= ~EDVS_PSWD; }
+	void setCharBreakStyle(bool bSet)  { bSet ? m_style |= EDVS_CHAR_BREAK : m_style &= ~EDVS_CHAR_BREAK; }
+    void setSpaceStyle(bool bSet)  { bSet ? m_style |= EDVS_SPACE : m_style &= ~EDVS_SPACE; }
+    bool isSpaceMode(void)   { return m_style & EDVS_SPACE; }
 
     #ifdef __MMI_T9__
-    void setAddWordStyle(NGBool bAddWord)  { m_AddWord = bAddWord;}
+    void setAddWordStyle(bool bAddWord)  { m_AddWord = bAddWord;}
     #endif
     void setPasswordChar (char pswch) { m_pswdChar = pswch; }
     char passwordChar (void) { return m_pswdChar; }
 
-    NGInt setCaretPosition(NGInt pos) { NGInt slen = m_strings.size(); (pos < slen)? (m_caretPos = pos) : m_caretPos = slen; return 0; }
-	NGInt caretPosition(void) { return m_caretPos; }
+    int setCaretPosition(int pos) { int slen = m_strings.size(); (pos < slen)? (m_caretPos = pos) : m_caretPos = slen; return 0; }
+	int caretPosition(void) { return m_caretPos; }
 
-    NGInt getTextMCharLen(void);
+    int getTextMCharLen(void);
 
 	void onGetFocus(void);
 	void onLoseFocus(void);
 	void setFont(Logfont *f);
-	void setFont (ResID id);
+	void setFont (HTResId id);
 	void SlKeyupNoDraw(void);
-	NGBool dispatchEvent(Event *event);
-	void drawBackground(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/);
-	void drawContent(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/);
+	bool dispatchEvent(Event *event);
+	void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
+	void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 #ifdef __MMI_T9__	
 	void insertStringFromT9(char *ch, int cursor);
 	void entryAddWordMode(void);
@@ -83,30 +83,30 @@ public:
 	void SynText(void);
 	void DeleteChar(void);
 	void addWord(char *ch);
-	void displayAddWord(char *ch, NGInt* pos, NGInt wordlen,string &str, NGBool internal);
-	void ResetT9Mode(NGBool  Neednotifyevent = FALSE);
+	void displayAddWord(char *ch, int* pos, int wordlen,string &str, bool internal);
+	void ResetT9Mode(bool  Neednotifyevent = FALSE);
 #endif	
 
 private:
-    void innerDrawText(GraphicsContext *gc, const string s, const IntRect &rc, NGUInt color, Logfont *f, NGUInt format);
-    NGBool handleEvent(Event* event);
-    int CalculateCursor(GraphicsContext *gc,IntRect rc,string tmpStr ,NGInt  caretPos ,NGInt  *caretWidth);
+    void innerDrawText(GraphicsContext *gc, const string s, const IntRect &rc, unsigned int color, Logfont *f, unsigned int format);
+    bool handleEvent(Event* event);
+    int CalculateCursor(GraphicsContext *gc,IntRect rc,string tmpStr ,int  caretPos ,int  *caretWidth);
 
 private:
-    NGInt   m_timerId;
+    int   m_timerId;
     string  m_strings;
-    NGChar  m_pswdChar;
-    NGUInt  m_caretPos;
-    NGInt   m_SlTimerId;
-	NGBool  m_passwordStyleShow;
-	NGUInt  m_careTick;
-	NGUInt  m_char_pos;
-    NGBool  m_AddWord;
+    char  m_pswdChar;
+    unsigned int  m_caretPos;
+    int   m_SlTimerId;
+	bool  m_passwordStyleShow;
+	unsigned int  m_careTick;
+	unsigned int  m_char_pos;
+    bool  m_AddWord;
     #ifdef __MMI_T9__
-    NGInt   m_startPosX;
+    int   m_startPosX;
     #endif
-    NGUInt  m_prevEventType; 
-    NGBool  m_highlight;
+    unsigned int  m_prevEventType; 
+    bool  m_highlight;
 };
 
 NAMESPACE_END

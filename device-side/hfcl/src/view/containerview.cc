@@ -84,7 +84,7 @@ View* ContainerView::firstEnableChild(void)
     return view;
 }
 
-NGBool ContainerView::insertAfter(View* view, View *child)
+bool ContainerView::insertAfter(View* view, View *child)
 {
     View *next = NULL;
     if(view && view->parent() != this)
@@ -124,7 +124,7 @@ NGBool ContainerView::insertAfter(View* view, View *child)
     return true;
 }
 
-NGBool ContainerView::insertBefore(int idx, View* child)
+bool ContainerView::insertBefore(int idx, View* child)
 { 
     if(!child)
         return false;
@@ -134,7 +134,7 @@ NGBool ContainerView::insertBefore(int idx, View* child)
         return insertBefore(getChildByIndex(idx), child); 
 }
 
-NGBool ContainerView::insertBefore(View *view, View* child)
+bool ContainerView::insertBefore(View *view, View* child)
 {
     View *prev = NULL;
     if(view && view->parent() != this)
@@ -179,12 +179,12 @@ int ContainerView::detachChild(int index)
     return detachChild(getChildByIndex(index));
 }
 
-NGBool ContainerView::isChild(View* view) const
+bool ContainerView::isChild(View* view) const
 {
     return view && view->parent() == this;
 }
 
-int ContainerView::removeChild(int index, NGBool bRelease)
+int ContainerView::removeChild(int index, bool bRelease)
 {
     return removeChild(getChildByIndex(index), bRelease);
 }
@@ -251,7 +251,7 @@ int ContainerView::detachChild(View* view)
     return 0;
 }
 
-int ContainerView::removeChild(View * view, NGBool bRelease)
+int ContainerView::removeChild(View * view, bool bRelease)
 {
     if(detachChild(view) == 0) {
         if (bRelease)
@@ -405,7 +405,7 @@ void ContainerView::changeTheme(void)
 }
 
 
-NGBool ContainerView::dispatchEvent(Event* event)
+bool ContainerView::dispatchEvent(Event* event)
 {
     View::dispatchEvent(event);
 
@@ -494,12 +494,12 @@ void ContainerView::releaseFocusView(void)
     
     // FIXME ylwang changed at 2012-04-06
     /*
-    CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)NOTIFY_LOSE_FOCUS, (NGInt)m_focusView);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (int)NOTIFY_LOSE_FOCUS, (int)m_focusView);
     raiseEvent(&event);
     */
 }
 
-void ContainerView::autoFitSize(NGBool auto_child_fit) 
+void ContainerView::autoFitSize(bool auto_child_fit) 
 {
     IntRect rc;
     for(View *view = firstChild(); view ; view = view->nextSibling()) 

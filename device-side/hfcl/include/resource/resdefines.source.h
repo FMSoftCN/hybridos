@@ -87,7 +87,7 @@
 	(const char*)(start_mchar),  \
 	(unsigned int)(num_char), \
 	(int)(glyph_width), \
-	(ResID)(img_id) },
+	(HTResId)(img_id) },
 
 //sys resource
 #define sys_style(name)    GetStyleRes(SYSRESID(style_##name))
@@ -127,20 +127,20 @@
 //#define style_color(id, status, r, g, b)    style_color_rgba((Style::ElementId)id, (Style::ElementState)status, r, g, b, 0xFF)
 //#define style_image(id, status, img_id)    { (Style::ElementId)id, (Style::ElementState)status, (DWORD)img_id },
 //#define style_font(id, status, font_id)    { (Style::ElementId)id, (Style::ElementState)status, (DWORD)font_id },
-#define style(id, value)                    { (NGInt)id, (DWORD)(value) },
-#define style_color_rgba(id, r, g, b, a)    { (NGInt)id, (DWORD)rgba(r, g, b, a) },
+#define style(id, value)                    { (int)id, (DWORD)(value) },
+#define style_color_rgba(id, r, g, b, a)    { (int)id, (DWORD)rgba(r, g, b, a) },
 #define style_color(id, r, g, b)            style_color_rgba(id, r, g, b, 0xFF)
-#define style_image(id, img_id)             { (NGInt)id, (DWORD)(img_id) },
-#define style_font(id,  font_id)            { (NGInt)id, (DWORD)(font_id) },
+#define style_image(id, img_id)             { (int)id, (DWORD)(img_id) },
+#define style_font(id,  font_id)            { (int)id, (DWORD)(font_id) },
 
-//sys ResID by name
+//sys HTResId by name
 #define sysid_font(name)  (SYSRESID(font_##name))
 #define sysid_image(name) (SYSRESID(img_##name))
 //#define sysid_text(name)  (SYSRESID(txt_##name))
 #define sysid_style(name) (SYSRESID(style_##name))
 #define sysid_dr(name)    (SYSRESID(dr_##name))
 #define sysid_drset(name) (SYSRESID(drset_##name))
-//get ResID by name
+//get HTResId by name
 #define my_font(name) (RESID(font_##name))
 #define my_image(name) (RESID(img_##name))
 //#define my_text(name) (RESID(txt_##name))
@@ -187,7 +187,7 @@
 //#define end_drset  {-1, 0 } };
 #define end_drset  {-1, 0 } }, },
 
-#define dr(id, dr_id)   {(NGInt)(id),  (ResID)(dr_id)},
+#define dr(id, dr_id)   {(int)(id),  (HTResId)(dr_id)},
 
 #define begin_common_drset_res
 #define end_common_drset_res
@@ -210,7 +210,7 @@
 //#define end_drsetgroup {-1, 0} };
 #define end_drsetgroup {-1, 0} }, },
 
-#define drset(id, drset_id) { (NGInt)(id), (ResID)(drset_id) },
+#define drset(id, drset_id) { (int)(id), (HTResId)(drset_id) },
 
 #define begin_common_drsetgroup(view, super_group) \
 		static const TRDrawableSetGroupItem drsetgroup_common_view_##view##_info[] = {
@@ -307,9 +307,9 @@
 #define data_get(id, type)  ( __content_provider__ ? __content_provider__->getContentData(id, type) : NULL)
 #define data_get_any(id)    data_get(id, 0)
 #define data_get_image(id)  (Image*)data_get(id, R_TYPE_IMAGE)
-#define data_get_text(id)   (const NGPStr) data_get(id, R_TYPE_TEXT)
-#define data_get_text_id(id)   (const NGInt)( __content_provider__ ? __content_provider__->getContentStringId(id, R_TYPE_TEXT) : NULL)
-#define data_get_int(id)    (NGInt)data_get(id, 0)
+#define data_get_text(id)   (const char *) data_get(id, R_TYPE_TEXT)
+#define data_get_text_id(id)   (const int)( __content_provider__ ? __content_provider__->getContentStringId(id, R_TYPE_TEXT) : NULL)
+#define data_get_int(id)    (int)data_get(id, 0)
 
 #define begin_view(view_class) \
     do { view_class* __view = NGUX_NEW_EX(view_class, (_parent)); \
@@ -423,7 +423,7 @@
 
 #define end_mode };
 
-#define setMode(id, value, cmd) { (NGInt)(id), (NGUInt)(value), (NGUInt)(cmd) },
+#define setMode(id, value, cmd) { (int)(id), (unsigned int)(value), (unsigned int)(cmd) },
 
 #define begin_controller_modes \
 	static ControllerModeList _controller_mode_lists[] = {
@@ -471,7 +471,7 @@
 	
 #define my(name)    RESID(var_##name)
 
-#define begin_resid(name) static  ResID name[] = {
+#define begin_resid(name) static  HTResId name[] = {
 #define end_resid  };
 #define my_imageid(name) RESID(img_##name),
 #define my_textid(name)    name,

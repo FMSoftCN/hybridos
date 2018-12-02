@@ -247,7 +247,7 @@ Bitmap* ResLoader::getBitmap(const char* filename)
     info = GetImageResInfo(filename);
     if (NULL != (pbmp = NGUX_NEW_EX(Bitmap, ()))) {
         if (NULL != info) {
-            NGCPStr externs_name = NULL;
+            const char * externs_name = NULL;
 
             externs_name = strrchr(filename, '.');
             if (!externs_name) {
@@ -319,14 +319,14 @@ Image* ResLoader::InnerImage::get()
     return image;
 }
 
-NGCPStr* ResLoader::InnerImage::getBitmapdata()
+const char ** ResLoader::InnerImage::getBitmapdata()
 {
-    return (NGCPStr *)resInfo->data;
+    return (const char * *)resInfo->data;
 }
 
-NGUInt ResLoader::InnerImage::getBitmapdatasize()
+unsigned int ResLoader::InnerImage::getBitmapdatasize()
 {
-    return (NGUInt)resInfo->size;
+    return (unsigned int)resInfo->size;
 }
 
 INNER_RES_INFO* ResLoader::InnerImage::getResInfo(void)

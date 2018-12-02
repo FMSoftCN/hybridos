@@ -28,7 +28,7 @@
 
 NAMESPACE_BEGIN
 
-void TransitionManager::addTransition(NGUInt key, Transition* t)
+void TransitionManager::addTransition(unsigned int key, Transition* t)
 {
     if (!t)
         return;
@@ -47,7 +47,7 @@ void TransitionManager::addTransition(NGUInt key, Transition* t)
         m_timerId = registerTimer(m_interval, "TransitionManager");
 }
 
-void TransitionManager::removeTransition(NGUInt key)
+void TransitionManager::removeTransition(unsigned int key)
 {
     TransitionMap::iterator it = m_trMaps.find(key);
     if (it == m_trMaps.end())
@@ -57,7 +57,7 @@ void TransitionManager::removeTransition(NGUInt key)
     m_trMaps.erase(it);
 }
 
-NGBool TransitionManager::handleEvent(Event* event)
+bool TransitionManager::handleEvent(Event* event)
 {
     // wait next time to delete
     if (m_trMaps.size() <= 0 && m_timerId != 0) {
@@ -83,7 +83,7 @@ NGBool TransitionManager::handleEvent(Event* event)
 }
 
 
-Transition* TransitionManager::getTranition(NGUInt key)
+Transition* TransitionManager::getTranition(unsigned int key)
 {
     TransitionMap::iterator it = m_trMaps.find(key);
 
@@ -113,7 +113,7 @@ TransitionManager* GetCommonTransitionManager()
     return _commonTransitionManager;
 }
 
-Transition* GetTransition(NGUInt key)
+Transition* GetTransition(unsigned int key)
 {
     TransitionManager* tm = GetCommonTransitionManager();
     return tm ? tm->getTranition(key) : NULL;
@@ -122,7 +122,7 @@ Transition* GetTransition(NGUInt key)
 
 //////////////////////////////////////////////////////////////////////////////
 
-static NGInt utf8_to_ucs2 (U16 *ucs2, U8 *utf8)
+static int utf8_to_ucs2 (U16 *ucs2, U8 *utf8)
 {
 	unsigned char c = utf8[0];
 
@@ -145,9 +145,9 @@ static NGInt utf8_to_ucs2 (U16 *ucs2, U8 *utf8)
 	}
 }
 
-static inline NGBool is_bidi_right(unsigned char *_str)
+static inline bool is_bidi_right(unsigned char *_str)
 {
-	NGInt _clen;
+	int _clen;
 	Uint32 _dir;
 	U16 _unicode = 0;
 	
@@ -172,11 +172,11 @@ static inline NGBool is_bidi_right(unsigned char *_str)
 	return false;
 }
 
-NGBool RollTextTransition::DrawRollText(View *view, GraphicsContext* context,
-        DrawableSet* drset,  NGInt draw_id, NGInt draw_state,
-        const IntRect& rc, NGDword data, DR_DATA_TYPE type)
+bool RollTextTransition::DrawRollText(View *view, GraphicsContext* context,
+        DrawableSet* drset,  int draw_id, int draw_state,
+        const IntRect& rc, HTData data, DR_DATA_TYPE type)
 {
-    NGInt length, height;
+    int length, height;
     IntRect rcroll = rc;
 	unsigned char *_str = NULL;
 
@@ -195,7 +195,7 @@ NGBool RollTextTransition::DrawRollText(View *view, GraphicsContext* context,
 	if (!context  || !drset || data == 0)
         return false;
 
-    RollTextTransition* t = (RollTextTransition*)GetTransition((NGUInt)view);
+    RollTextTransition* t = (RollTextTransition*)GetTransition((unsigned int)view);
     if (t == NULL)
         return false;
 
@@ -230,14 +230,14 @@ NGBool RollTextTransition::DrawRollText(View *view, GraphicsContext* context,
     return true;
 }
 
-NGBool RollTextTransition::NeedRollText(DrawableSet* drset, NGInt draw_id, NGInt draw_state,
-        const IntRect& rc, NGDword data, DR_DATA_TYPE type)
+bool RollTextTransition::NeedRollText(DrawableSet* drset, int draw_id, int draw_state,
+        const IntRect& rc, HTData data, DR_DATA_TYPE type)
 {
     if (!drset || data == 0)
         return false;
 
-    NGInt length = rc.width();
-	NGInt height = rc.height();
+    int length = rc.width();
+	int height = rc.height();
 
     if (!drset->calcDrawableSize(draw_id, draw_state, length, height, data, type))
         return false;
@@ -258,7 +258,7 @@ void AddRollText(View* view, Transition* t)
         return;
 
     TransitionManager* tm = GetCommonTransitionManager();
-    tm->addTransition((NGUInt)view, t);
+    tm->addTransition((unsigned int)view, t);
 }
 
 void RemoveRollText(View* view)
@@ -267,7 +267,7 @@ void RemoveRollText(View* view)
         return;
 	
     TransitionManager* tm = GetCommonTransitionManager();
-    tm->removeTransition((NGUInt)view);
+    tm->removeTransition((unsigned int)view);
 }
 
 void ResetRollText(View *view)
@@ -276,7 +276,7 @@ void ResetRollText(View *view)
         return;
 
     TransitionManager* tm = GetCommonTransitionManager();
-    RollTextTransition* t = (RollTextTransition*)tm->getTranition((NGUInt)view);
+    RollTextTransition* t = (RollTextTransition*)tm->getTranition((unsigned int)view);
     if (t)
         t->reset();
 }

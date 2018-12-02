@@ -39,30 +39,30 @@ public:
 	~WrapperView();
     void hide();
     void show();
-    void showCaret(NGBool show);
-    NGBool isWrapprVisible ();
-	//virtual void drawContent(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/);
+    void showCaret(bool show);
+    bool isWrapprVisible ();
+	//virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 protected:
-	typedef NGUInt HANDLE;
+	typedef unsigned int HANDLE;
 	HANDLE m_wrapwnd; // the minigui window handle 
 
-	virtual void createWnd(NGCPStr wnd_class);
+	virtual void createWnd(const char * wnd_class);
 	void detachWnd();
 
 private:
-	static void _notify_proc(HANDLE handle, NGInt id, NGInt nc, DWORD add_data);
-	NGBool onKeyPressed(NGInt keyCode);
+	static void _notify_proc(HANDLE handle, int id, int nc, DWORD add_data);
+	bool onKeyPressed(int keyCode);
 #if 0   // GT_jyseo rollback
-	NGBool handleEvent(Event* event);
+	bool handleEvent(Event* event);
 	void closeTimer(void);
 #endif    
 	void calcWndRect(IntRect& r);
 #if 0   // GT_jyseo rollback
-	NGInt m_timerId;
-	NGInt m_timerCount;
+	int m_timerId;
+	int m_timerCount;
 #endif  	
-	NGInt m_pressedKey;
-	NGInt m_keyStatus;
+	int m_pressedKey;
+	int m_keyStatus;
 
 public:
     enum{
@@ -85,22 +85,22 @@ public:
 		NOTIFY_EDIT_ENTER,  // only in single-line edit
 		NOTIFY_EDIT_MAXTEXT,
 	};
-	void setText(NGCPStr str);
+	void setText(const char * str);
 	void setText(string str) { setText(str.c_str()); }
 	string getText();
-    void setViewStyle(NGInt dwStyle, NGBool isInclde);
-    void setIncludeStyle(NGInt dwStyle) { setViewStyle(dwStyle, true); }
-    void setExcludeStyle(NGInt dwStyle) { setViewStyle(dwStyle, false); }
-    void setTextMaxLimit(NGInt max);
+    void setViewStyle(int dwStyle, bool isInclde);
+    void setIncludeStyle(int dwStyle) { setViewStyle(dwStyle, true); }
+    void setExcludeStyle(int dwStyle) { setViewStyle(dwStyle, false); }
+    void setTextMaxLimit(int max);
 	void insertText(const char *text);
 	void replacePrevChar(const char *ch);
-    NGULong  viewStyle(void);
+    unsigned long  viewStyle(void);
 	virtual HPlatformOwner getPlatformOwner() { return m_wrapwnd; }
-	virtual void getOwnerOffset(NGInt &x, NGInt &y) { /* stop the offset  */}
+	virtual void getOwnerOffset(int &x, int &y) { /* stop the offset  */}
 
-    NGBool setRect(const IntRect& pirc);
+    bool setRect(const IntRect& pirc);
 	// to void drived class overide the base class 's function
-    NGBool setRect(NGInt left, NGInt top, NGInt right, NGInt bottom) { 
+    bool setRect(int left, int top, int right, int bottom) { 
 		return View::setRect(left, top, right, bottom); 
 	}
 
@@ -108,15 +108,15 @@ public:
 		SetWindowFont(m_wrapwnd, f->getLogfont());
 	}
 
-	virtual NGBool dispatchEvent(Event *event);
+	virtual bool dispatchEvent(Event *event);
 
 	virtual void onGetFocus(void);
 	virtual void onLoseFocus(void);
 
-	NGBool isWrapperView() { return true;}
+	bool isWrapperView() { return true;}
 
 protected:
-	virtual NGInt notifyToEventType(NGInt nc_code) { return 0; }
+	virtual int notifyToEventType(int nc_code) { return 0; }
 
 	DECLARE_CLASS_NAME(WrapperView)
 };

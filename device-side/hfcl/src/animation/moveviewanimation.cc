@@ -51,7 +51,7 @@ void MoveViewAnimation::setPoint(Point pt)
 	setEndValue((void *)&pt);
 }
 
-void MoveViewAnimation::setProperty(NGInt id, void *value)
+void MoveViewAnimation::setProperty(int id, void *value)
 {
 	if(NULL == value)
 		return;

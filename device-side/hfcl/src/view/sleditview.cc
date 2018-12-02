@@ -133,21 +133,21 @@ void SlEditView::setFont (Logfont *f)
     EditView::setFont(f);
 }
 
-void SlEditView::setFont (ResID id)
+void SlEditView::setFont (HTResId id)
 {
     EditView::setFont(GetFontRes(id));
 }
 
-void SlEditView::setText(NGCPStr str)
+void SlEditView::setText(const char * str)
 {
-	NGUInt len,valid_len;
-	NGChar *pStr = (NGChar *)str;
+	unsigned int len,valid_len;
+	char *pStr = (char *)str;
 	len = strlen(str);
 	valid_len = 0;
 
 	if(m_IsCharCount)
 	{
-	    NGUInt maxcount  =0;
+	    unsigned int maxcount  =0;
 	    maxcount =  GetUTF8CharCount(str,strlen(str));
 	    if(maxcount > m_txtLimit && m_txtLimit > 0)
 	    {
@@ -161,8 +161,8 @@ void SlEditView::setText(NGCPStr str)
 	}
 	while(valid_len <= len)
 	{
-		NGInt ch_len = 1;
-		NGChar ch = *pStr;
+		int ch_len = 1;
+		char ch = *pStr;
 		if(ch&0x80)
 		{
 			while(ch&(0x80 >> ch_len))
@@ -219,12 +219,12 @@ void SlEditView::setText(string str)
 {
     if(m_IsCharCount)
     {
-        NGUInt maxcount  =0;
+        unsigned int maxcount  =0;
         maxcount =  GetUTF8CharCount(str.c_str(),str.size());
         if (m_txtLimit < 0 || maxcount <= m_txtLimit){
                 m_strings = str;
             }else{
-                NGInt Len = GetUTF8LenByCharCount(str.c_str(),m_txtLimit);
+                int Len = GetUTF8LenByCharCount(str.c_str(),m_txtLimit);
                 m_strings = str.substr(0, Len);
             }
     }
@@ -262,8 +262,8 @@ string SlEditView::getText()
 
 void SlEditView::insertText(const char *text)
 {
-    NGUInt txtLen, insLen, currLen;
-    NGUInt txtcount=0, strcount=0;
+    unsigned int txtLen, insLen, currLen;
+    unsigned int txtcount=0, strcount=0;
     if (text == NULL || (m_style & EDVS_READONLY))
         return;
 	
@@ -300,7 +300,7 @@ void SlEditView::insertText(const char *text)
         memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
             if (insLen < txtLen) {
                 const char *p = text;
-                NGUInt charLen;
+                unsigned int charLen;
                 strncpy(m_edit_tempstr1, src, m_caretPos);
                 while (insLen > 0 && p != NULL){
                     charLen = GetFirstUTF8CharLen(p, txtLen);
@@ -332,8 +332,8 @@ void SlEditView::insertText(const char *text)
 
 void SlEditView::replacePrevChar(const char *ch)
 {
-    NGUInt totalLen = m_strings.size();
-    NGUInt insLen = (ch != NULL ? strlen(ch) : 0);
+    unsigned int totalLen = m_strings.size();
+    unsigned int insLen = (ch != NULL ? strlen(ch) : 0);
     int bTail = (totalLen == m_caretPos);
 
     memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
@@ -350,8 +350,8 @@ void SlEditView::replacePrevChar(const char *ch)
 
     if(m_IsCharCount)
     {
-        NGUInt strcount =  GetUTF8CharCount(m_strings.c_str(),m_strings.size());
-        NGUInt inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
+        unsigned int strcount =  GetUTF8CharCount(m_strings.c_str(),m_strings.size());
+        unsigned int inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
    
         if (m_txtLimit > 0 && strcount - 1 + inscount > m_txtLimit) {
             inscount = m_txtLimit -( strcount - 1);	
@@ -439,17 +439,17 @@ void SlEditView::deleteAllCharacters(void)
 #ifdef __MMI_T9__
 void SlEditView::insertStringFromT9(char *ch, int cursor)
 {
-    NGUInt len ;
+    unsigned int len ;
     if(m_IsCharCount)
     {
-        NGUInt maxcount  =0;
+        unsigned int maxcount  =0;
         maxcount =  GetUTF8CharCount(ch,strlen(ch));
         if(maxcount > m_txtLimit)
         {
-            NGInt Len = GetUTF8LenByCharCount(ch,m_txtLimit);
+            int Len = GetUTF8LenByCharCount(ch,m_txtLimit);
             memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
             strncpy(m_edit_tempstr1, ch,Len);
-            NGInt lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));   
+            int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));   
             m_edit_tempstr1[Len - lastChLen] = '\0';
             m_strings = m_edit_tempstr1;
             cursor = m_strings.size();
@@ -473,7 +473,7 @@ void SlEditView::insertStringFromT9(char *ch, int cursor)
         {
             memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
             strncpy(m_edit_tempstr1, ch,m_txtLimit);
-            NGInt lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));   
+            int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));   
             m_edit_tempstr1[m_txtLimit - lastChLen] = '\0';
             m_strings = m_edit_tempstr1;
             cursor = m_strings.size();
@@ -515,7 +515,7 @@ void SlEditView::DeleteChar(void)
     imeRefreshString();
 }
 
-void SlEditView::ResetT9Mode(NGBool  Neednotifyevent)
+void SlEditView::ResetT9Mode(bool  Neednotifyevent)
 {
 	m_addword = false;
 	m_bSelect = false;
@@ -544,10 +544,10 @@ void SlEditView::setCursorFromT9(void)
     }
     if(m_IsCharCount)
     {
-        NGUInt maxcount = GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+        unsigned int maxcount = GetUTF8CharCount(m_strings.c_str(),m_caretPos);
         if(maxcount > m_txtLimit)
         {
-            NGInt Len = GetUTF8LenByCharCount(m_strings.c_str(),m_txtLimit);
+            int Len = GetUTF8LenByCharCount(m_strings.c_str(),m_txtLimit);
             m_caretPos = Len;
         }
     }
@@ -567,13 +567,13 @@ void SlEditView::entryAddWordMode(void)
     updateView();
 }
 
-void SlEditView:: displayAddWord(char *ch, NGInt* pos, NGInt wordlen,string &str, NGBool internal)
+void SlEditView:: displayAddWord(char *ch, int* pos, int wordlen,string &str, bool internal)
 {
-    NGUInt totalLen = str.size();
-    NGUInt insLen = (ch != NULL ? strlen(ch) : 0);
-    NGUInt delcount = wordlen;	
-    NGInt bTail = ((NGInt)totalLen == *pos);
-    NGInt deslen = 0;
+    unsigned int totalLen = str.size();
+    unsigned int insLen = (ch != NULL ? strlen(ch) : 0);
+    unsigned int delcount = wordlen;	
+    int bTail = ((int)totalLen == *pos);
+    int deslen = 0;
     memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
     memset(m_edit_tempstr2,0,EDITOR_MAX_LEN);
     strcpy(m_edit_tempstr1, str.c_str());
@@ -584,7 +584,7 @@ void SlEditView:: displayAddWord(char *ch, NGInt* pos, NGInt wordlen,string &str
     }
     while(wordlen)
     {
-        NGInt lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
+        int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
         deslen += lastChLen;
         m_edit_tempstr1[*pos - deslen] = '\0';	
         wordlen--;
@@ -593,8 +593,8 @@ void SlEditView:: displayAddWord(char *ch, NGInt* pos, NGInt wordlen,string &str
 
     if(m_IsCharCount)
     {
-        NGUInt strcount =  GetUTF8CharCount(str.c_str(),str.size());
-        NGUInt inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
+        unsigned int strcount =  GetUTF8CharCount(str.c_str(),str.size());
+        unsigned int inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
    
         if (m_txtLimit > 0 && strcount - delcount + inscount > m_txtLimit) {
             inscount = m_txtLimit -( strcount - delcount);	
@@ -625,7 +625,7 @@ void SlEditView:: displayAddWord(char *ch, NGInt* pos, NGInt wordlen,string &str
     }
     
     *pos += insLen - deslen;
-    if (*pos > (NGInt)str.size()){
+    if (*pos > (int)str.size()){
         *pos = str.size();
     }
 
@@ -671,7 +671,7 @@ void SlEditView:: addWord(char *ch)
 }
 
 #endif
-NGInt SlEditView::getTextMCharLen(void)
+int SlEditView::getTextMCharLen(void)
 {
     return GetUTF8CharInfo(m_strings.c_str(), m_strings.size(), NULL);
 }
@@ -689,7 +689,7 @@ static inline char _charactor(int key_code)
     return -1;
 }
 
-NGBool SlEditView::dispatchEvent(Event *event)
+bool SlEditView::dispatchEvent(Event *event)
 {
     int code = ((KeyEvent *)event)->keyCode();
 
@@ -722,12 +722,12 @@ NGBool SlEditView::dispatchEvent(Event *event)
 		{
 			if(imeGetPreviousActiveMultitap() == code)
 			{
-				temp = (NGUInt16)getMultitapCharCode(code);
+				temp = (Uint16)getMultitapCharCode(code);
 				mmi_chset_ucs2_to_utf8((unsigned char *)utf8,(unsigned short)temp);
 				replacePrevChar((const char *)utf8);
 			}else
 			{
-				temp = (NGUInt16)getMultitapCharCode(code);
+				temp = (Uint16)getMultitapCharCode(code);
 				mmi_chset_ucs2_to_utf8((unsigned char *)utf8,(unsigned short)temp);
 				insertText((const char *)utf8);
 			}
@@ -853,12 +853,12 @@ NGBool SlEditView::dispatchEvent(Event *event)
 #ifdef __MMI_T9__
                 if(imeGetInputModeFlag() == INPUT_MODE_SMART)
                 {
-                    NGBool max_check = TRUE;
+                    bool max_check = TRUE;
                     m_bSelect = false;
 
                     if(m_IsCharCount)
                     {
-                        NGUInt strcount  =0;
+                        unsigned int strcount  =0;
                         strcount =  GetUTF8CharCount(m_strings.c_str(),m_caretPos);
                         if(strcount >= m_txtLimit)	
                             max_check = FALSE;
@@ -970,7 +970,7 @@ NGBool SlEditView::dispatchEvent(Event *event)
                 {
                     if(m_IsCharCount)
                     {
-                        NGUInt maxcount =  GetUTF8CharCount(m_strings.c_str(),m_strings.size());
+                        unsigned int maxcount =  GetUTF8CharCount(m_strings.c_str(),m_strings.size());
                         if(maxcount >=m_txtLimit)
                             return DISPATCH_STOP_MSG;
                     }
@@ -985,7 +985,7 @@ NGBool SlEditView::dispatchEvent(Event *event)
                         m_startPosX = m_caretPos;
                     }
                     showCaret(false);		
-                    setImeTarget((NGInt)this, 1);
+                    setImeTarget((int)this, 1);
                     imeInsertChar(ch[0]);
                 } 
             }
@@ -1004,7 +1004,7 @@ NGBool SlEditView::dispatchEvent(Event *event)
                 {
                     if(imeGetPreviousActiveMultitap() == code)
                     {
-                        temp =(NGUInt16)getMultitapCharCode(code);
+                        temp =(Uint16)getMultitapCharCode(code);
                         imeCheckMultitapPunctuationCharacter(m_strings,m_caretPos,true,isSpaceMode());		
 
                         if(imeIsMultiShiftInputMode() &&
@@ -1016,14 +1016,14 @@ NGBool SlEditView::dispatchEvent(Event *event)
                         replacePrevChar((char *)utf8);
                     }
                     else if(m_strings.length() < textMaxLimit() 
-						|| (m_IsCharCount && (NGUInt)GetUTF8CharCount(m_strings.c_str(),m_strings.size()) < textMaxLimit()) )
+						|| (m_IsCharCount && (unsigned int)GetUTF8CharCount(m_strings.c_str(),m_strings.size()) < textMaxLimit()) )
                     {
                         if(ch[0] == '0') 
                         {
                            m_addword = false;
                            imeChangeKeyzeroMultitaps(false,code);
                         }
-                        temp = (NGUInt16)getMultitapCharCode(code);
+                        temp = (Uint16)getMultitapCharCode(code);
                         imeSetPreMultitapShiftMode(SHIFT_STATE_INIT);		
                         imeCheckMultitapPunctuationCharacter(m_strings,m_caretPos,false,isSpaceMode());			
                         if(imeIsMultiShiftInputMode() &&(imeGetMultitapShiftMode()!=SHIFT_STATE_LOWER))
@@ -1175,14 +1175,14 @@ NGBool SlEditView::dispatchEvent(Event *event)
     return DISPATCH_CONTINUE_MSG;
 }
 
-void SlEditView::drawBackground(GraphicsContext* gc, IntRect &rc, NGInt status)
+void SlEditView::drawBackground(GraphicsContext* gc, IntRect &rc, int status)
 {
 	if(m_drset) {
 		m_drset->draw(gc, DR_BKGND, isFocus() ? DRAWSTATE_HILIGHT : DRAWSTATE_NORMAL, rc);
 	}
 }
 
-int SlEditView::CalculateCursor(GraphicsContext *gc,IntRect rc, string tmpStr, NGInt  caretPos, NGInt *caretWidth)
+int SlEditView::CalculateCursor(GraphicsContext *gc,IntRect rc, string tmpStr, int  caretPos, int *caretWidth)
 {
     int subw, subh;
    if (caretPos > 0) {
@@ -1190,8 +1190,8 @@ int SlEditView::CalculateCursor(GraphicsContext *gc,IntRect rc, string tmpStr, N
         U16 *bidiStrOrder = NULL;
         U16 visIndex, unicodeCaretPos;
         U16 tmpChar[2] = {0,};
-        NGInt w;
-        NGInt visual_str_len = GetUTF8CharCount(tmpStr.c_str(), tmpStr.length());
+        int w;
+        int visual_str_len = GetUTF8CharCount(tmpStr.c_str(), tmpStr.length());
         string tempStr = tmpStr;
 
         temp_unicode_str = (U16*)malloc((visual_str_len+1) * sizeof(U16));
@@ -1227,7 +1227,7 @@ int SlEditView::CalculateCursor(GraphicsContext *gc,IntRect rc, string tmpStr, N
             gc->getTextDrawSize(tmpChar, m_font, caretWidth, &subh);
         }
 
-        for(NGInt i = 0; i < visIndex; i++)
+        for(int i = 0; i < visIndex; i++)
         {
             tmpChar[0] = temp_unicode_str[bidiStrOrder[i]-1];
             gc->getTextDrawSize(tmpChar, m_font, &w, &subh);
@@ -1247,23 +1247,23 @@ int SlEditView::CalculateCursor(GraphicsContext *gc,IntRect rc, string tmpStr, N
     return subw;	
 }
 
-void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const IntRect &rc, NGUInt color, Logfont *f, NGUInt format)
+void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const IntRect &rc, unsigned int color, Logfont *f, unsigned int format)
 {
     int subw, subh, strw, strh, sw;;
     int caretWidth = 0;
-    NGInt tmpcur =0;	
+    int tmpcur =0;	
     string tmpStr(text);
 
-    NGInt len = m_strings.size();	
-    NGInt *info = (NGInt *)malloc ((len + 1) * sizeof(NGInt));
+    int len = m_strings.size();	
+    int *info = (int *)malloc ((len + 1) * sizeof(int));
 
 #ifdef __MMI_T9_ARABIC__	
     const char *str = m_strings.c_str();
     char tmpchar[8]={0};
-    NGInt realCount = GetUTF8CharInfo (m_strings.c_str(), len, info);	
+    int realCount = GetUTF8CharInfo (m_strings.c_str(), len, info);	
 
     info [realCount] = len; 
-    for (NGInt i = 1; i <= realCount; /*i++*/)
+    for (int i = 1; i <= realCount; /*i++*/)
     {
         memcpy(tmpchar, str + info[i-1], info[i] - info[i-1]);
         tmpchar [info[i] - info[i-1]] = '\0';
@@ -1297,13 +1297,13 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
         gc->getTextDrawSize (tmpStr, f, &strw, &strh);
 
         if(strw> rc.width()) {
-            NGInt len=0;
+            int len=0;
             char *str = (char *)tmpStr.c_str() ;
             char tmp[100] = {0};
             memset(tmp,0,100);
             while ( str != NULL){
-                NGInt _w, _h;
-                NGInt charLen = GetFirstUTF8CharLen((const char *)str, strlen((char *)str));
+                int _w, _h;
+                int charLen = GetFirstUTF8CharLen((const char *)str, strlen((char *)str));
                 if (charLen > 0) {
                     strncat(tmp, (char *)str, charLen);
                     gc->getTextDrawSize(tmp, f, &_w, &_h);
@@ -1322,15 +1322,15 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
 
     } else {
 
-        NGUInt add_charLen=0,charLen =0,count=0;      
+        unsigned int add_charLen=0,charLen =0,count=0;      
         char sub0[100]={0};   
         memset(sub0,0,100);
         strncpy(sub0, tmpStr.c_str(),m_caretPos);
         char *str = sub0;
-        memset(info, 0, (len + 1) * sizeof(NGInt));
+        memset(info, 0, (len + 1) * sizeof(int));
 
         while ( str != NULL){
-            NGInt charLen = GetFirstUTF8CharLen((const char *)str, strlen((char *)str));
+            int charLen = GetFirstUTF8CharLen((const char *)str, strlen((char *)str));
             info[count] = charLen;
             str = str+charLen;
             if(*str == 0)
@@ -1338,7 +1338,7 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
             count++;
         }		
         while (1){
-            NGInt _w, _h;			
+            int _w, _h;			
             charLen = info[count--];
             if (charLen <=  0)
             {
@@ -1375,11 +1375,11 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
     }
 
 #ifdef __MMI_T9__
-    if(m_bSelect && ((NGInt)m_caretPos != m_startPosX))
+    if(m_bSelect && ((int)m_caretPos != m_startPosX))
     {
-        NGInt startx = 0;
-        NGInt w, h;
-        NGInt caretWidth = 0;
+        int startx = 0;
+        int w, h;
+        int caretWidth = 0;
         string subCaretStr;
         int oldrop;
         oldrop = SetRasterOperation (gc->context(), ROP_XOR);
@@ -1402,8 +1402,8 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
                 gc->getTextDrawSize(subCaretStr, m_font, &w, &h);
                 caretWidth = w;				
             }else{
-                NGInt tmpstartx=0;
-                if ((NGInt)m_caretPos - tmpcur >= m_startPosX)
+                int tmpstartx=0;
+                if ((int)m_caretPos - tmpcur >= m_startPosX)
                     tmpstartx = 0;		
                 else
                     tmpstartx = m_startPosX -(m_caretPos -tmpcur); 
@@ -1528,10 +1528,10 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
 
 }
 
-void SlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
+void SlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
 {
-    NGUInt color = m_txtColor;
-    NGUInt format = DT_SINGLELINE;
+    unsigned int color = m_txtColor;
+    unsigned int format = DT_SINGLELINE;
     IntRect irc ( rc.left() + m_hMargin, rc.top() + m_vMargin,
             rc.right() - m_hMargin, rc.bottom() - m_vMargin);
 
@@ -1575,7 +1575,7 @@ void SlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
     if (m_strings.size() > 0) {
         if ((m_style & EDVS_PSWD) && m_pswdChar){
 			
-            NGUInt len = m_strings.size();
+            unsigned int len = m_strings.size();
             memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
 			
 			if(m_passwordStyleShow) {
@@ -1652,7 +1652,7 @@ void SlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
 #endif
 }
 
-NGBool SlEditView::handleEvent(Event* event)
+bool SlEditView::handleEvent(Event* event)
 {
     if (event->eventType() == Event::TIMER 
             && m_timerId == ((TimerEvent *)event)->timerID()

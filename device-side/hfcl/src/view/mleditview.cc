@@ -151,17 +151,17 @@ void MlEditView::setFont (Logfont *f)
     updateView();
 }
 
-void MlEditView::setText(NGCPStr str)
+void MlEditView::setText(const char * str)
 {
     if(m_IsCharCount)
     {
-        NGUInt maxcount  =0;
+        unsigned int maxcount  =0;
         maxcount = GetUTF8CharCount (str,strlen(str));
 
         if (m_txtLimit < 0 || maxcount <= m_txtLimit){
             m_strings = str;
         }else{
-            NGInt Len = GetUTF8LenByCharCount(str,m_txtLimit);
+            int Len = GetUTF8LenByCharCount(str,m_txtLimit);
             char *tmp = (char *)malloc(Len * sizeof(char) +2);
             memset(tmp, 0x0, Len * sizeof(char)+2);
             strncpy(tmp, str, Len);
@@ -212,12 +212,12 @@ void MlEditView::setText(string str)
 {
     if(m_IsCharCount)
     {
-       NGUInt maxcount  =0;
+       unsigned int maxcount  =0;
        maxcount =  GetUTF8CharCount(str.c_str(),str.size());
        if (m_txtLimit < 0 || maxcount <= m_txtLimit){
             m_strings = str;
         } else { 
-                NGInt Len = GetUTF8LenByCharCount(str.c_str(),m_txtLimit); 
+                int Len = GetUTF8LenByCharCount(str.c_str(),m_txtLimit); 
                 m_strings = str.substr(0, Len); 
         }
     }
@@ -258,10 +258,10 @@ string MlEditView::getText()
     return m_strings;
 }
 
-void MlEditView::_insertText(const char *text, NGInt* pos, string& str, NGBool internal)
+void MlEditView::_insertText(const char *text, int* pos, string& str, bool internal)
 {    
-    NGUInt txtLen, insLen, currLen;
-    NGUInt txtcount=0,strcount=0;
+    unsigned int txtLen, insLen, currLen;
+    unsigned int txtcount=0,strcount=0;
     txtLen = strlen(text);
     currLen = str.size();
     insLen = txtLen;
@@ -287,7 +287,7 @@ void MlEditView::_insertText(const char *text, NGInt* pos, string& str, NGBool i
         memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
         if (insLen < txtLen) {
             const char *p = text;
-            NGUInt charLen, tLen = 0;
+            unsigned int charLen, tLen = 0;
             strncpy(m_edit_tempstr1, src, *pos);
             while (insLen > 0 && p != NULL){
                 charLen = GetFirstUTF8CharLen(p, txtLen);
@@ -323,8 +323,8 @@ void MlEditView::_insertText(const char *text, NGInt* pos, string& str, NGBool i
         }
 
         if (internal) {
-            if (*pos > (NGInt)str.size()){
-                *pos = (NGInt)str.size();
+            if (*pos > (int)str.size()){
+                *pos = (int)str.size();
             }
             layoutStrings((m_isWordBreak && m_caretPosY>0)?m_caretPosY-1:m_caretPosY);
             showCaret(true);
@@ -339,7 +339,7 @@ void MlEditView::_insertText(const char *text, NGInt* pos, string& str, NGBool i
     }
 }
 
-void MlEditView::insertText(const char *text, NGInt *pos, string &str)
+void MlEditView::insertText(const char *text, int *pos, string &str)
 {
     _insertText(text, pos, str, false);
     
@@ -350,7 +350,7 @@ void MlEditView::insertText(const char *text)
     if (text == NULL || (m_style & EDVS_READONLY))
         return;
     
-    raiseNotifyEvent(NOTIFY_EDIT_READY_INSERT_TEXT, (NGInt)text, (NGInt)m_caretPos);
+    raiseNotifyEvent(NOTIFY_EDIT_READY_INSERT_TEXT, (int)text, (int)m_caretPos);
     _insertText(text, &m_caretPos, m_strings, true);
 }
 
@@ -360,21 +360,21 @@ void MlEditView::layoutStringsByWord(void)
     char *tmpStr;
     unsigned char *sub;
     char buf[256];
-    NGInt utfLen = 0;
+    int utfLen = 0;
     U16 tmpChar;
-    NGInt thisLineW = 0;
+    int thisLineW = 0;
                                 
     char * ptr = (char *)(m_strings.c_str());
     if(enableScroll() && m_hMargin < 2)  // we should reserve more margin for scroll. 
         m_hMargin = 2;
 
-    NGInt rcW = getRect().width() - (m_hMargin << 1);
+    int rcW = getRect().width() - (m_hMargin << 1);
 
     int sW = 0, sH = 0;
     unsigned int i = 0, j = 0;
     int lineend,counttmp;    
     
-    NGInt oldLineCount = m_lineCout;
+    int oldLineCount = m_lineCout;
 
     m_lineCout = 0;
     m_lineCharList.clear();
@@ -505,24 +505,24 @@ void MlEditView::layoutStringsByWord(void)
     }
 }
 
-void MlEditView::layoutStrings(NGInt fromLine)
+void MlEditView::layoutStrings(int fromLine)
 {
-    NGInt i, lineLen = 0;
+    int i, lineLen = 0;
 
     if(enableScroll() && m_hMargin < 2)  // we should reserve more margin for scroll. 
         m_hMargin = 2;
 
-    NGInt rcW = getRect().width() - (m_hMargin << 1);
+    int rcW = getRect().width() - (m_hMargin << 1);
 
     char *_str = (char *)(m_strings.c_str());
-    NGInt _total = m_strings.size();
-    NGInt oldLineCount = m_lineCout;
+    int _total = m_strings.size();
+    int oldLineCount = m_lineCout;
     char *_start = _str; 
-    NGInt thisLineW = 0;
-    NGInt lineEnd = 0;
-    NGInt w, h;
-    NGInt offset = 0;
-    NGInt count=0;
+    int thisLineW = 0;
+    int lineEnd = 0;
+    int w, h;
+    int offset = 0;
+    int count=0;
     BOOL findflag;
     GraphicsContext *gc = GraphicsContext::screenGraphics();
     
@@ -545,11 +545,11 @@ void MlEditView::layoutStrings(NGInt fromLine)
             
     while (_start != NULL) {
         char *_end = strchr (_start, '\n');
-        NGInt _len = (_end == NULL) ? strlen(_start) : _end - _start + 1;
+        int _len = (_end == NULL) ? strlen(_start) : _end - _start + 1;
             
-        NGInt *info = (NGInt *)malloc ((_len + 1) * sizeof(NGInt));
+        int *info = (int *)malloc ((_len + 1) * sizeof(int));
 
-        NGInt realCount = GetUTF8CharInfo (_start, _len, info);
+        int realCount = GetUTF8CharInfo (_start, _len, info);
         if (realCount == 0) {
             lineLen = 0;
             m_lineCharList.push_back(lineLen);
@@ -576,7 +576,7 @@ void MlEditView::layoutStrings(NGInt fromLine)
                     findflag=FALSE;
 
                     if(m_isWordBreak == TRUE) {
-                        NGInt counttmp = i;
+                        int counttmp = i;
                         while(counttmp>count) {
                             if(((U16*)m_edit_tempstr1)[counttmp]  == ' ') {    
                                 findflag = TRUE;
@@ -625,19 +625,19 @@ void MlEditView::layoutStrings(NGInt fromLine)
 
     if (m_lineCout < oldLineCount){
         m_startShowLine -= (oldLineCount - m_lineCout);
-        if ((NGInt)m_startShowLine < fromLine)
+        if ((int)m_startShowLine < fromLine)
             m_startShowLine = fromLine;
         _DBG_PRINTF ("MlEditView::layoutStrings > m_startShowLine: %d", m_startShowLine);
     }
 }
     
-void MlEditView::refreshCaretPos(NGBool fromXY)
+void MlEditView::refreshCaretPos(bool fromXY)
 {
     if (fromXY) {
         m_caretPos = 0;
         IntList::iterator it = m_lineCharList.begin();
         
-        for (NGInt i = 0; i < m_caretPosY; i++) {
+        for (int i = 0; i < m_caretPosY; i++) {
             m_caretPos += (*it);
             it++;
         }
@@ -645,7 +645,7 @@ void MlEditView::refreshCaretPos(NGBool fromXY)
         if (m_caretPosX > 0 && it != m_lineCharList.end() && *it > 0) {
             string lineString = m_strings.substr(m_caretPos, *it);
             char *_str = (char *)lineString.c_str();
-            NGInt len = lineString.size();
+            int len = lineString.size();
             
             if (len <= m_caretPosX) {
                 m_caretPos += len;
@@ -656,12 +656,12 @@ void MlEditView::refreshCaretPos(NGBool fromXY)
                 }
             }
             else {
-                NGInt *info = (NGInt *)malloc ((len + 1) * sizeof(NGInt));
-                NGInt realCount = GetUTF8CharInfo (_str, len, info);
+                int *info = (int *)malloc ((len + 1) * sizeof(int));
+                int realCount = GetUTF8CharInfo (_str, len, info);
                 
                 info [realCount] = len;
 
-                for (NGInt i = 0; i <= realCount; i++) {
+                for (int i = 0; i <= realCount; i++) {
                     if (info[i] >= m_caretPosX) {
                         m_caretPos += info[i];
                         // at the end of a line, 
@@ -678,7 +678,7 @@ void MlEditView::refreshCaretPos(NGBool fromXY)
         }
     } 
     else {
-        NGInt total = m_caretPos;
+        int total = m_caretPos;
 
         m_caretPosX = 0;
         m_caretPosY = 0;
@@ -704,12 +704,12 @@ void MlEditView::refreshCaretPos(NGBool fromXY)
     }
 }
 
-void MlEditView::_replacePrevChar(const char *ch, NGInt* pos, string &str, NGBool internal)
+void MlEditView::_replacePrevChar(const char *ch, int* pos, string &str, bool internal)
 {
-    NGUInt totalLen = str.size();
-    NGUInt insLen = (ch != NULL ? strlen(ch) : 0);
-    NGInt bTail = (totalLen == (NGUInt)*pos);
-    NGBool isNewline = FALSE;
+    unsigned int totalLen = str.size();
+    unsigned int insLen = (ch != NULL ? strlen(ch) : 0);
+    int bTail = (totalLen == (unsigned int)*pos);
+    bool isNewline = FALSE;
 
     memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
     memset(m_edit_tempstr2,0,EDITOR_MAX_LEN);
@@ -724,7 +724,7 @@ void MlEditView::_replacePrevChar(const char *ch, NGInt* pos, string &str, NGBoo
             (*pos)--;
         m_edit_tempstr1[*pos] = '\0';
     }
-    NGInt lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
+    int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
         
     if(m_edit_tempstr1[*pos - lastChLen] == '\n')
         isNewline = TRUE;
@@ -732,8 +732,8 @@ void MlEditView::_replacePrevChar(const char *ch, NGInt* pos, string &str, NGBoo
     m_edit_tempstr1[*pos - lastChLen] = '\0';
 
     if (m_IsCharCount) {
-        NGUInt strcount =  GetUTF8CharCount(str.c_str(),str.size());
-        NGUInt inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
+        unsigned int strcount =  GetUTF8CharCount(str.c_str(),str.size());
+        unsigned int inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
 
         if (m_txtLimit > 0 && strcount - 1 + inscount > m_txtLimit) {
             inscount = m_txtLimit -( strcount - 1);    
@@ -766,7 +766,7 @@ void MlEditView::_replacePrevChar(const char *ch, NGInt* pos, string &str, NGBoo
     if(*pos < 0) {
         *pos = 0;
     }
-    else if (*pos > (NGInt)str.size()) {
+    else if (*pos > (int)str.size()) {
         *pos = str.size();
     }
 
@@ -795,14 +795,14 @@ void MlEditView::_replacePrevChar(const char *ch, NGInt* pos, string &str, NGBoo
     }
 }
 
-void MlEditView::replacePrevChar(const char *ch, NGInt *pos, string &str)
+void MlEditView::replacePrevChar(const char *ch, int *pos, string &str)
 {
     _replacePrevChar(ch, pos, str, false);
 }
     
 void MlEditView::replacePrevChar(const char *ch)
 {
-    raiseNotifyEvent(NOTIFY_EDIT_REPLACING_TEXT, (NGInt)ch, (NGInt)m_caretPos);
+    raiseNotifyEvent(NOTIFY_EDIT_REPLACING_TEXT, (int)ch, (int)m_caretPos);
     _replacePrevChar(ch, &m_caretPos, m_strings, true);
 }
 
@@ -825,17 +825,17 @@ void MlEditView::deleteAllCharacters(void)
 #ifdef __MMI_T9__
 void MlEditView::insertStringFromT9(char *ch, int cursor)
 {
-    NGUInt len ;
+    unsigned int len ;
 
     if(m_IsCharCount) {
 
-        NGUInt maxcount  =0;
+        unsigned int maxcount  =0;
         maxcount =  GetUTF8CharCount(ch,strlen(ch));
         if (maxcount > m_txtLimit) {
-            NGInt Len = GetUTF8LenByCharCount (ch, m_txtLimit);
+            int Len = GetUTF8LenByCharCount (ch, m_txtLimit);
             memset (m_edit_tempstr1,0,EDITOR_MAX_LEN);
             strncpy (m_edit_tempstr1, ch,Len);
-            NGInt lastChLen = GetLastUTF8CharLen (m_edit_tempstr1, strlen(m_edit_tempstr1));   
+            int lastChLen = GetLastUTF8CharLen (m_edit_tempstr1, strlen(m_edit_tempstr1));   
             m_edit_tempstr1[Len - lastChLen] = '\0';
             m_strings = m_edit_tempstr1;
             cursor = m_strings.size();
@@ -856,7 +856,7 @@ void MlEditView::insertStringFromT9(char *ch, int cursor)
         if(len > m_txtLimit) {
             memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
             strncpy(m_edit_tempstr1, ch,m_txtLimit);
-            NGInt lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));   
+            int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));   
             m_edit_tempstr1[m_txtLimit - lastChLen] = '\0';
             m_strings = m_edit_tempstr1;
             cursor = m_strings.size();
@@ -900,7 +900,7 @@ void MlEditView::DeleteChar(void)
     imeRefreshString();
 }                        
 
-void MlEditView::ResetT9Mode (NGBool Neednotifyevent)
+void MlEditView::ResetT9Mode (bool Neednotifyevent)
 {
     m_addword = false;
     m_bSelect = false;
@@ -929,14 +929,14 @@ void MlEditView::setCursorFromT9(void)
     }
 
     if(m_IsCharCount) {
-        NGUInt maxcount = GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+        unsigned int maxcount = GetUTF8CharCount(m_strings.c_str(),m_caretPos);
         if(maxcount > m_txtLimit) {
-            NGInt Len = GetUTF8LenByCharCount(m_strings.c_str(),m_txtLimit);
+            int Len = GetUTF8LenByCharCount(m_strings.c_str(),m_txtLimit);
             m_caretPos = Len;
         }
     }
     else {
-        if (m_caretPos > (NGInt)m_txtLimit)
+        if (m_caretPos > (int)m_txtLimit)
             m_caretPos = m_txtLimit;
     }
 }
@@ -950,13 +950,13 @@ void MlEditView::entryAddWordMode(void)
     updateView();
 }
 
-void MlEditView::displayAddWord(char *ch, NGInt* pos, NGInt wordlen,string &str, NGBool internal)
+void MlEditView::displayAddWord(char *ch, int* pos, int wordlen,string &str, bool internal)
 {
-    NGUInt totalLen = str.size();
-    NGInt insLen = (ch != NULL ? strlen(ch) : 0);
-    NGInt delcount = wordlen;    
-    NGInt bTail = ((NGInt)totalLen == *pos);
-    NGInt deslen = 0;
+    unsigned int totalLen = str.size();
+    int insLen = (ch != NULL ? strlen(ch) : 0);
+    int delcount = wordlen;    
+    int bTail = ((int)totalLen == *pos);
+    int deslen = 0;
     memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
     memset(m_edit_tempstr2,0,EDITOR_MAX_LEN);
     strcpy(m_edit_tempstr1, str.c_str());
@@ -967,15 +967,15 @@ void MlEditView::displayAddWord(char *ch, NGInt* pos, NGInt wordlen,string &str,
     }
 
     while(wordlen) {
-        NGInt lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
+        int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
         deslen += lastChLen;
         m_edit_tempstr1[*pos - deslen] = '\0';    
         wordlen--;
     }
 
     if(m_IsCharCount) {
-        NGUInt strcount =  GetUTF8CharCount(str.c_str(),str.size());
-        NGUInt inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
+        unsigned int strcount =  GetUTF8CharCount(str.c_str(),str.size());
+        unsigned int inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
 
         if (m_txtLimit > 0 && strcount - delcount + inscount > m_txtLimit) {
             inscount = m_txtLimit -( strcount - delcount);    
@@ -1006,7 +1006,7 @@ void MlEditView::displayAddWord(char *ch, NGInt* pos, NGInt wordlen,string &str,
     }
     
     *pos += insLen - deslen;
-    if (*pos > (NGInt)str.size()){
+    if (*pos > (int)str.size()){
         *pos = str.size();
     }
 
@@ -1052,12 +1052,12 @@ void MlEditView::addWord(char *ch)
 
 #endif
 
-NGInt MlEditView::getTextMCharLen(void)
+int MlEditView::getTextMCharLen(void)
 {
     return GetUTF8CharInfo(m_strings.c_str(), m_strings.size(), NULL);
 }
     
-static inline char _charactor(NGInt key_code)
+static inline char _charactor(int key_code)
 {
     if (key_code == KeyEvent::KEYCODE_STAR){
         return '*';
@@ -1072,9 +1072,9 @@ static inline char _charactor(NGInt key_code)
 
 #define MAX_HILIGHT_NUM_CNT   (100)
 
-NGBool MlEditView::dispatchEvent(Event *event)
+bool MlEditView::dispatchEvent(Event *event)
 {
-    NGInt code = ((KeyEvent *)event)->keyCode();
+    int code = ((KeyEvent *)event)->keyCode();
 
     if(getExchangeFlag())
     { 
@@ -1107,7 +1107,7 @@ NGBool MlEditView::dispatchEvent(Event *event)
                 if (isImeExist() && isImeEnable() && !isImeOpen()
                             && ch[0] >= '2' && ch[0] <= '9'){
                     openImeWin();
-                    setImeTarget((NGInt)this, 1);
+                    setImeTarget((int)this, 1);
                     imeInsertChar(ch[0]);
                 } 
             }
@@ -1115,12 +1115,12 @@ NGBool MlEditView::dispatchEvent(Event *event)
             {
                 if(::imeGetPreviousActiveMultitap() == code)
                 {
-                    temp =(NGUInt16)getMultitapCharCode(code);
+                    temp =(Uint16)getMultitapCharCode(code);
                     mmi_chset_ucs2_to_utf8((unsigned char *)utf8,(unsigned short)temp);
                     replacePrevChar((char *)utf8);
                 }else
                 {
-                    temp = (NGUInt16)getMultitapCharCode(code);
+                    temp = (Uint16)getMultitapCharCode(code);
                     mmi_chset_ucs2_to_utf8((unsigned char *)utf8,(unsigned short)temp);
                     insertText((const char *)utf8);
                 }
@@ -1199,7 +1199,7 @@ NGBool MlEditView::dispatchEvent(Event *event)
                 else
 #endif                
                 if (m_caretPos > 0) {
-                    NGInt lastChLen = GetLastUTF8CharLen(m_strings.c_str(), m_caretPos);
+                    int lastChLen = GetLastUTF8CharLen(m_strings.c_str(), m_caretPos);
                     m_caretPos -= lastChLen;
                     refreshCaretPos(false);
                     showCaret(true);
@@ -1211,18 +1211,18 @@ NGBool MlEditView::dispatchEvent(Event *event)
 #ifdef __MMI_T9__
                    if(imeGetInputModeFlag() == INPUT_MODE_SMART)
                    {
-                    NGBool max_check = TRUE;        
+                    bool max_check = TRUE;        
                     m_bSelect = false;
                     if(m_IsCharCount)
                     {
-                        NGUInt strcount  =0;
+                        unsigned int strcount  =0;
                         strcount =  GetUTF8CharCount(m_strings.c_str(),m_caretPos);
                         if(strcount >= m_txtLimit)    
                             max_check = FALSE;
                     }
                     else
                     {
-                        if(m_caretPos >= (NGInt)m_txtLimit)
+                        if(m_caretPos >= (int)m_txtLimit)
                             max_check = FALSE;
                     }
                     if (max_check)
@@ -1249,12 +1249,12 @@ NGBool MlEditView::dispatchEvent(Event *event)
                    }
                    else
 #endif    
-                if (m_bInsertSpace && m_caretPos == (NGInt)getTextLength()){
+                if (m_bInsertSpace && m_caretPos == (int)getTextLength()){
                     insertText(" ");
                     return DISPATCH_STOP_MSG;
-                } else if (m_caretPos < (NGInt)getTextLength()) {
+                } else if (m_caretPos < (int)getTextLength()) {
                     string sub = m_strings.substr(m_caretPos, -1);
-                    NGInt firstChLen = GetFirstUTF8CharLen(sub.c_str(), (NGInt)getTextLength() - m_caretPos);
+                    int firstChLen = GetFirstUTF8CharLen(sub.c_str(), (int)getTextLength() - m_caretPos);
                     m_caretPos += firstChLen; 
                     refreshCaretPos(false);
                     showCaret(true);
@@ -1284,7 +1284,7 @@ NGBool MlEditView::dispatchEvent(Event *event)
                         }
                          else
                         {
-                            NGInt ret = switchLine(true);
+                            int ret = switchLine(true);
                             int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
                             imeT9KeyArrowUpHandlerMultilineInputBox(count);
                             
@@ -1323,7 +1323,7 @@ NGBool MlEditView::dispatchEvent(Event *event)
                         }
                         else
                         {
-                           NGBool ret = switchLine(false);
+                           bool ret = switchLine(false);
                            int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
                            imeT9KeyArrowDownHandlerMultilineInputBox(count);
 
@@ -1366,7 +1366,7 @@ NGBool MlEditView::dispatchEvent(Event *event)
                 {
                     if(m_IsCharCount)
                     {
-                        NGUInt maxcount = GetUTF8CharCount(m_strings.c_str(),m_strings.size());
+                        unsigned int maxcount = GetUTF8CharCount(m_strings.c_str(),m_strings.size());
                         if(maxcount >= m_txtLimit)
                             return DISPATCH_STOP_MSG;
                     }
@@ -1382,7 +1382,7 @@ NGBool MlEditView::dispatchEvent(Event *event)
                         m_startPosY=m_caretPosY;
                     }
                     showCaret(false);       
-                    setImeTarget((NGInt)this, 1);
+                    setImeTarget((int)this, 1);
                     imeInsertChar(ch[0]);
                 } 
             }
@@ -1394,7 +1394,7 @@ NGBool MlEditView::dispatchEvent(Event *event)
 
                 if(::imeGetPreviousActiveMultitap() == code)
                 {
-                    temp =(NGUInt16)getMultitapCharCode(code);
+                    temp =(Uint16)getMultitapCharCode(code);
                     if(temp == '\n')
                     {
                         replacePrevChar(NULL);
@@ -1413,14 +1413,14 @@ NGBool MlEditView::dispatchEvent(Event *event)
                     }
                 }
                 else if(m_strings.length() < textMaxLimit()
-                    || (m_IsCharCount && GetUTF8CharCount(m_strings.c_str(),m_strings.size()) < (NGInt)textMaxLimit()) )                    
+                    || (m_IsCharCount && GetUTF8CharCount(m_strings.c_str(),m_strings.size()) < (int)textMaxLimit()) )                    
                 {
                     if(ch[0] == '0')
                     {
                         m_addword = false;
                         imeChangeKeyzeroMultitaps(true,code);
                     }
-                    temp = (NGUInt16)getMultitapCharCode(code);
+                    temp = (Uint16)getMultitapCharCode(code);
                     if(temp == '\n')
                             insertText("\n");
                     else
@@ -1582,7 +1582,7 @@ NGBool MlEditView::dispatchEvent(Event *event)
     return DISPATCH_CONTINUE_MSG;
 }
     
-NGBool MlEditView::switchLine(NGBool isUpLine)
+bool MlEditView::switchLine(bool isUpLine)
 {
     if (isUpLine) //goto prev line
     {
@@ -1604,14 +1604,14 @@ NGBool MlEditView::switchLine(NGBool isUpLine)
     } 
     else {
         // goto next line  
-        if (m_caretPos >= (NGInt)getTextLength())
+        if (m_caretPos >= (int)getTextLength())
             return DISPATCH_CONTINUE_MSG;
 
         if (m_caretPosY < m_lineCout - 1) {
             m_caretPosY++;
             refreshCaretPos(true);
         } else {
-            m_caretPos = (NGInt)getTextLength();
+            m_caretPos = (int)getTextLength();
             refreshCaretPos(false);
         }
     }
@@ -1622,33 +1622,33 @@ NGBool MlEditView::switchLine(NGBool isUpLine)
     return DISPATCH_STOP_MSG;
 }
 
-void MlEditView::drawBackground(GraphicsContext* gc, IntRect &rc, NGInt status)
+void MlEditView::drawBackground(GraphicsContext* gc, IntRect &rc, int status)
 {
     if(m_drset) {
         m_drset->draw(gc, DR_BKGND, isFocus() ? DRAWSTATE_HILIGHT : DRAWSTATE_NORMAL, rc);
     }
 }
 
-NGInt MlEditView::hilightNumberPos(NGInt nextHilightIndex, NGInt *startPos, NGInt *len)
+int MlEditView::hilightNumberPos(int nextHilightIndex, int *startPos, int *len)
 {
-    NGInt i=0; 
-    NGInt cutStartPos = 0,    cut_len = 0, CaretPosition = -1;
-    NGInt __table[MAX_HILIGHT_NUM_CNT];
+    int i=0; 
+    int cutStartPos = 0,    cut_len = 0, CaretPosition = -1;
+    int __table[MAX_HILIGHT_NUM_CNT];
     string str;
     memset(__table, 0x0, sizeof(__table));
 
-    NGChar * ptr = NULL;
+    char * ptr = NULL;
     
     if(m_urlStringsLen < 0) // means parse all context, don't cut.
-        ptr = (NGChar*)m_strings.c_str();
+        ptr = (char*)m_strings.c_str();
     else {
         str         = m_strings;
-        NGInt  len     = m_strings.size();
-        ptr         = (NGChar *)str.c_str();
+        int  len     = m_strings.size();
+        ptr         = (char *)str.c_str();
         memset(ptr+m_urlStringsLen, 0x0, len - m_urlStringsLen);
     }
     
-    NGInt numberCnt = URL_ParseDataGen(ptr, __table, MAX_HILIGHT_NUM_CNT);
+    int numberCnt = URL_ParseDataGen(ptr, __table, MAX_HILIGHT_NUM_CNT);
 
     if(nextHilightIndex >= numberCnt)
         nextHilightIndex = numberCnt ;
@@ -1669,29 +1669,29 @@ NGInt MlEditView::hilightNumberPos(NGInt nextHilightIndex, NGInt *startPos, NGIn
 
 }
 
-void MlEditView::raiseHilightNumberNotify(NGBool isSelect)
+void MlEditView::raiseHilightNumberNotify(bool isSelect)
 {
     if(isSelect) {
-        NGChar number[40+1];
-        NGInt __table[MAX_HILIGHT_NUM_CNT];
+        char number[40+1];
+        int __table[MAX_HILIGHT_NUM_CNT];
         
         memset(__table, 0x0, sizeof(__table));
         memset(number, 0x0, sizeof(number));
-        NGChar * ptr = (NGChar*)(m_strings.c_str());
-        NGInt startPos = (__table[m_hilightNumberIndex] >>16)&0xFFFF;
-        NGInt len = __table[m_hilightNumberIndex] &0xFFFF;
+        char * ptr = (char*)(m_strings.c_str());
+        int startPos = (__table[m_hilightNumberIndex] >>16)&0xFFFF;
+        int len = __table[m_hilightNumberIndex] &0xFFFF;
         memcpy(number, ptr+startPos, len);
-        raiseNotifyEvent(NOTIFY_EDIT_HILIGHT_NUMBER_FOCUS, isSelect, (NGInt)number);
+        raiseNotifyEvent(NOTIFY_EDIT_HILIGHT_NUMBER_FOCUS, isSelect, (int)number);
     }
     else {
-        raiseNotifyEvent(NOTIFY_EDIT_HILIGHT_NUMBER_FOCUS, isSelect, (NGInt)0);
+        raiseNotifyEvent(NOTIFY_EDIT_HILIGHT_NUMBER_FOCUS, isSelect, (int)0);
     }
 }
 
-NGInt MlEditView::queryLineIndex(NGInt pos)
+int MlEditView::queryLineIndex(int pos)
 {
-    NGUInt i;
-    NGInt lineStart = 0, lineEnd = 0;
+    unsigned int i;
+    int lineStart = 0, lineEnd = 0;
     
     IntList::iterator it = m_lineCharList.begin(); 
     for(i =0; i< m_lineCharList.size(); i++) {
@@ -1707,38 +1707,38 @@ NGInt MlEditView::queryLineIndex(NGInt pos)
     return 0;
 }
 
-NGInt MlEditView::updateHilightNumber(NGInt keyCode)
+int MlEditView::updateHilightNumber(int keyCode)
 { 
     if(!m_urlNumberParseEnable)
         return -1;
     
-    NGInt __table[MAX_HILIGHT_NUM_CNT];
+    int __table[MAX_HILIGHT_NUM_CNT];
 
     memset(__table, 0x0, sizeof(__table));
-    NGUInt startLine, endLine, startCharPos = 0, endCharPos = 0;
-    NGInt w, h;
+    unsigned int startLine, endLine, startCharPos = 0, endCharPos = 0;
+    int w, h;
     
     getSize(&w, &h);
-    NGInt fontH = m_font->size; //GraphicsContext::screenGraphics()->getFontHeight(m_font);
-    NGInt lineH = fontH + m_lineAboveH + m_lineBellowH;
-    NGInt cnt = (h- m_vMargin)/lineH;
+    int fontH = m_font->size; //GraphicsContext::screenGraphics()->getFontHeight(m_font);
+    int lineH = fontH + m_lineAboveH + m_lineBellowH;
+    int cnt = (h- m_vMargin)/lineH;
 
-    NGChar * ptr = NULL;
+    char * ptr = NULL;
     string str;
     
     if(m_urlStringsLen < 0) // means parse all context, don't cut.
-        ptr = (NGChar*)m_strings.c_str();
+        ptr = (char*)m_strings.c_str();
     else {
         str = m_strings;
-        NGInt  len = m_strings.size();
-        ptr = (NGChar *)str.c_str();
+        int  len = m_strings.size();
+        ptr = (char *)str.c_str();
         memset(ptr+m_urlStringsLen, 0x0, len - m_urlStringsLen);
     }
     
-    NGInt numberCnt = URL_ParseDataGen(ptr, __table, MAX_HILIGHT_NUM_CNT);
-    NGInt curHilightIdx;
+    int numberCnt = URL_ParseDataGen(ptr, __table, MAX_HILIGHT_NUM_CNT);
+    int curHilightIdx;
     if(numberCnt > 0) {
-        NGBool isChange = FALSE;
+        bool isChange = FALSE;
         
         if(m_startShowLine > 0) {
             startLine = m_startShowLine ;
@@ -1751,7 +1751,7 @@ NGInt MlEditView::updateHilightNumber(NGInt keyCode)
             endLine   = cnt;
         }
 
-        NGUInt i;
+        unsigned int i;
         IntList::iterator it = m_lineCharList.begin(); 
         for(i =0; i< m_lineCharList.size(); i++) {
             if(i < startLine) {
@@ -1776,13 +1776,13 @@ NGInt MlEditView::updateHilightNumber(NGInt keyCode)
                 
                 if(curHilightIdx >= 0) {
 
-                    NGInt pos, len;
-                    NGUInt nextPos = hilightNumberPos(curHilightIdx, &pos, &len);
+                    int pos, len;
+                    unsigned int nextPos = hilightNumberPos(curHilightIdx, &pos, &len);
 
                     if(nextPos>= startCharPos && nextPos<= endCharPos) {
 
                         if(nextPos + len > endCharPos) {
-                            NGInt line = queryLineIndex(nextPos + len);
+                            int line = queryLineIndex(nextPos + len);
                             m_startShowLine = line;
                             _DBG_PRINTF ("MlEditView::updateHilightNumber_1 > m_startShowLine: %d", m_startShowLine);
                         }
@@ -1800,11 +1800,11 @@ NGInt MlEditView::updateHilightNumber(NGInt keyCode)
 
             }
             else {
-                NGInt pos, len;
+                int pos, len;
                 curHilightIdx = m_hilightNumberIndex -1;
 
                 if(curHilightIdx >= 0) {
-                    NGUInt startPos = hilightNumberPos(curHilightIdx, &pos, &len);
+                    unsigned int startPos = hilightNumberPos(curHilightIdx, &pos, &len);
 
                     if(startPos>= startCharPos && startPos <= endCharPos) {
                         m_hilightNumberIndex = curHilightIdx;
@@ -1819,8 +1819,8 @@ NGInt MlEditView::updateHilightNumber(NGInt keyCode)
                     }
                     else {
 
-                        NGInt curPos = hilightNumberPos(m_hilightNumberIndex, &pos, &len);
-                        NGUInt line = queryLineIndex(curPos);
+                        int curPos = hilightNumberPos(m_hilightNumberIndex, &pos, &len);
+                        unsigned int line = queryLineIndex(curPos);
                         if(line == (m_startShowLine + cnt -1)) {
                             m_startShowLine -= (cnt -1);
                             _DBG_PRINTF ("MlEditView::updateHilightNumber_4 > m_startShowLine: %d", m_startShowLine);
@@ -1838,11 +1838,11 @@ NGInt MlEditView::updateHilightNumber(NGInt keyCode)
                 if(curHilightIdx < 0)
                     curHilightIdx = 0;
                 
-                NGInt pos, len;
-                NGUInt nextPos = hilightNumberPos(curHilightIdx, &pos, &len);
+                int pos, len;
+                unsigned int nextPos = hilightNumberPos(curHilightIdx, &pos, &len);
                 if(nextPos>= startCharPos && nextPos <= endCharPos) {
                     if(nextPos + len > endCharPos) {
-                        NGInt line = queryLineIndex(nextPos);
+                        int line = queryLineIndex(nextPos);
                         m_startShowLine = line;
                         _DBG_PRINTF ("MlEditView::updateHilightNumber_5 > m_startShowLine: %d", m_startShowLine);
                         if(m_startShowLine + cnt > m_lineCharList.size())
@@ -1856,13 +1856,13 @@ NGInt MlEditView::updateHilightNumber(NGInt keyCode)
             }
             else {
                 curHilightIdx = m_hilightNumberIndex +1;
-                NGInt pos, len;
-                NGUInt nextPos = hilightNumberPos(curHilightIdx, &pos, &len);
+                int pos, len;
+                unsigned int nextPos = hilightNumberPos(curHilightIdx, &pos, &len);
 
                 if (nextPos>= startCharPos && nextPos <= endCharPos) {
 
                     if(nextPos + len > endCharPos) {
-                        NGInt line = queryLineIndex(nextPos);
+                        int line = queryLineIndex(nextPos);
                         m_startShowLine = line;
                         _DBG_PRINTF ("MlEditView::updateHilightNumber_6 > m_startShowLine: %d", m_startShowLine);
                         if(m_startShowLine + cnt > m_lineCharList.size()) {
@@ -1876,8 +1876,8 @@ NGInt MlEditView::updateHilightNumber(NGInt keyCode)
                 else {
                     if(m_startShowLine + cnt < m_lineCharList.size()) {
 
-                        NGInt curPos = hilightNumberPos(m_hilightNumberIndex, &pos, &len);
-                        NGUInt line = queryLineIndex(curPos);
+                        int curPos = hilightNumberPos(m_hilightNumberIndex, &pos, &len);
+                        unsigned int line = queryLineIndex(curPos);
                         if(line == (m_startShowLine + cnt -1)) {
                             m_startShowLine = line ;
                             _DBG_PRINTF ("MlEditView::updateHilightNumber_8 > m_startShowLine: %d", m_startShowLine);
@@ -1929,37 +1929,37 @@ NGInt MlEditView::updateHilightNumber(NGInt keyCode)
     return 0;
 }
 
-void MlEditView::drawHilightNumber(GraphicsContext* gc, NGInt x, NGInt y, NGInt startCharIdx, NGInt charCnt, NGChar* lineStrPtr)
+void MlEditView::drawHilightNumber(GraphicsContext* gc, int x, int y, int startCharIdx, int charCnt, char* lineStrPtr)
 {
-    NGInt i=0; 
-    NGInt startChar, endChar;
-    NGInt subTable[20];
-    NGBool hilightBkgTable[20];
-    NGChar hilightStrTable[20][40];
+    int i=0; 
+    int startChar, endChar;
+    int subTable[20];
+    bool hilightBkgTable[20];
+    char hilightStrTable[20][40];
     
-    NGInt subTableCnt =0;
+    int subTableCnt =0;
     string str;
-    NGInt lineLen = charCnt;
-    NGBool isDrawHilightBkg = FALSE;
-    NGInt cutStartPos = 0,  cut_len = 0, cutEndPos =0; //, CaretPosition = 0;
+    int lineLen = charCnt;
+    bool isDrawHilightBkg = FALSE;
+    int cutStartPos = 0,  cut_len = 0, cutEndPos =0; //, CaretPosition = 0;
 
-    NGInt __table[MAX_HILIGHT_NUM_CNT];
-    NGInt fontH = gc->getFontHeight(m_font);
+    int __table[MAX_HILIGHT_NUM_CNT];
+    int fontH = gc->getFontHeight(m_font);
 
     memset(__table, 0x0, sizeof(__table));
     memset(hilightStrTable, 0x0, sizeof(hilightStrTable));
-    NGChar * ptr = NULL;
+    char * ptr = NULL;
     
     if(m_urlStringsLen < 0) // means parse all context, don't cut.
-        ptr = (NGChar*)m_strings.c_str();
+        ptr = (char*)m_strings.c_str();
     else {
         str = m_strings;
-        NGInt  len = m_strings.size();
-        ptr = (NGChar *)str.c_str();
+        int  len = m_strings.size();
+        ptr = (char *)str.c_str();
         memset(ptr+m_urlStringsLen, 0x0, len - m_urlStringsLen);
     }
     
-    NGInt numberCnt = URL_ParseDataGen(ptr, __table, MAX_HILIGHT_NUM_CNT);
+    int numberCnt = URL_ParseDataGen(ptr, __table, MAX_HILIGHT_NUM_CNT);
     
     startChar = startCharIdx;
     endChar   = startCharIdx + charCnt;
@@ -1969,11 +1969,11 @@ void MlEditView::drawHilightNumber(GraphicsContext* gc, NGInt x, NGInt y, NGInt 
     
     for(i = 0; i < numberCnt; i++) {
         cutStartPos = (__table[i]&0xFFFF0000)>>16;
-        NGInt _x = 0, _w = 0, _h = 0;
-        NGInt off; //, copy_len = 0;
-        NGChar buf[256];
-        NGChar sub_buf[256];
-        NGChar * _ptr = (NGChar*)lineStrPtr;
+        int _x = 0, _w = 0, _h = 0;
+        int off; //, copy_len = 0;
+        char buf[256];
+        char sub_buf[256];
+        char * _ptr = (char*)lineStrPtr;
         
         memset(buf, 0x0, sizeof(buf));
         memset(sub_buf, 0x0, sizeof(sub_buf));
@@ -2057,14 +2057,14 @@ void MlEditView::drawHilightNumber(GraphicsContext* gc, NGInt x, NGInt y, NGInt 
 
     if(subTableCnt > 0) {
 
-        NGInt idx =0;
+        int idx =0;
         for(idx =0; idx < subTableCnt; idx ++) {                                                    
 
-            NGInt _x1        = (subTable[idx]&0xFFFF0000)>>16;
-            NGInt _width    = subTable[idx]&0xFFFF;
+            int _x1        = (subTable[idx]&0xFFFF0000)>>16;
+            int _width    = subTable[idx]&0xFFFF;
             
             if(isDrawHilightBkg && hilightBkgTable[idx]) {
-                RECT rc = {_x1, y, _x1 + _width, y + (NGInt)m_lineAboveH + fontH};
+                RECT rc = {_x1, y, _x1 + _width, y + (int)m_lineAboveH + fontH};
                 gc->fillRect(rc, 
                             (Color::GRAY >> 16) & 0xFF, 
                             (Color::GRAY >> 8) & 0xFF, 
@@ -2083,7 +2083,7 @@ void MlEditView::drawHilightNumber(GraphicsContext* gc, NGInt x, NGInt y, NGInt 
     }
 }
     
-void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
+void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
 {
     Point caretPos = {0, 0};
     IntRect irc ( rc.left() + m_hMargin, rc.top() + m_vMargin,
@@ -2092,10 +2092,10 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
     gc->setTextAboveLineExtra(m_lineAboveH);
     gc->setTextBellowLineExtra(m_lineBellowH);
     
-    NGInt fontH = gc->getFontHeight(m_font);
-    NGInt lineH = fontH + m_lineAboveH + m_lineBellowH;
-    NGInt len = m_strings.size();
-    NGInt caretWidth = 0;
+    int fontH = gc->getFontHeight(m_font);
+    int lineH = fontH + m_lineAboveH + m_lineBellowH;
+    int len = m_strings.size();
+    int caretWidth = 0;
 
     if (len <= 0) {
         // only draw the caret
@@ -2107,10 +2107,10 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
         }
     }
     else {
-        NGUInt start = 0;
-        NGUInt lineNo = 0;
-        NGInt x = irc.left();
-        NGInt y = irc.top();
+        unsigned int start = 0;
+        unsigned int lineNo = 0;
+        int x = irc.left();
+        int y = irc.top();
 
         _DBG_PRINTF ("MleditView: drawContent m_caretPosY: %d, m_startShowLine: %d", m_caretPosY, m_startShowLine);
         if(m_urlNumberParseEnable) {
@@ -2118,9 +2118,9 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
         }
         else {
             // calculator which line to show
-            if (m_caretPosY > (NGInt)m_startShowLine) {
-                NGInt rcH = irc.height();
-                while ((m_caretPosY - (NGInt)m_startShowLine + 1) * lineH > rcH) {
+            if (m_caretPosY > (int)m_startShowLine) {
+                int rcH = irc.height();
+                while ((m_caretPosY - (int)m_startShowLine + 1) * lineH > rcH) {
                     m_startShowLine++;
                 }
             }
@@ -2131,10 +2131,10 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
 
         IntList::iterator it = m_lineCharList.begin(); 
 #ifdef __MMI_T9_ARABIC__    
-        NGInt *info = (NGInt *)malloc ((len + 1) * sizeof(NGInt));
-        NGInt realCount = GetUTF8CharInfo (m_strings.c_str(), len, info);
+        int *info = (int *)malloc ((len + 1) * sizeof(int));
+        int realCount = GetUTF8CharInfo (m_strings.c_str(), len, info);
         info [realCount] = len; 
-        for (NGInt i = 1; i <= realCount; /*i++*/) {
+        for (int i = 1; i <= realCount; /*i++*/) {
 
             memcpy(tmpchar, str + info[i-1], info[i] - info[i-1]);
             tmpchar [info[i] - info[i-1]] = '\0';
@@ -2198,29 +2198,29 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
                     gc->drawText(lineStr, text_rc, m_txtColor, m_font, DT_LEFT | DT_TOP);
                     if(m_urlNumberParseEnable) {
                         string str = lineStr;
-                        drawHilightNumber(gc, x, y, start, *it, (NGChar*)(str.c_str()));
+                        drawHilightNumber(gc, x, y, start, *it, (char*)(str.c_str()));
                     }
                 }
 
                 if(!isReadOnly()) {
 #ifdef __MMI_T9__
                     if(m_bSelect) {
-                        NGInt w = 0, h;
-                        NGInt activeWordLen = 0;
-                        NGInt activeWordCount = imeT9GetActiveWordCount();
-                        NGInt i;
-                        NGInt total = 0;
+                        int w = 0, h;
+                        int activeWordLen = 0;
+                        int activeWordCount = imeT9GetActiveWordCount();
+                        int i;
+                        int total = 0;
                         U16 visIndex = 0xffff;
                         U16 visual_str_len, charDir;
                         U16 tmpChar[2] = {0,};
-                        NGInt unicodeStartPosX, unicodeCaretPosX;
+                        int unicodeStartPosX, unicodeCaretPosX;
                         
                         memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
                         strcpy(m_edit_tempstr1, m_strings.c_str());
 
                         if(activeWordCount >0) {
                             while(activeWordCount) {
-                                NGInt lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
+                                int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
                                 activeWordLen += lastChLen;
                                 m_edit_tempstr1[m_caretPos - activeWordLen] = '\0'; 
                                 activeWordCount--;
@@ -2247,7 +2247,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
                                 }
                             }
 
-                            if (m_startPosY <= (NGInt)lineNo && (NGInt)lineNo <= m_caretPosY) {
+                            if (m_startPosY <= (int)lineNo && (int)lineNo <= m_caretPosY) {
                                 // lineStr is occasionally the value changes by GetUTF8CharCount()
                                 strcpy(m_edit_tempstr2, lineStr.c_str());
                                 unicodeStartPosX = GetUTF8CharCount(m_edit_tempstr2, m_startPosX);
@@ -2273,7 +2273,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
                                 caretPos.y = y;                             
                                 caretWidth = 0;
 
-                                if (/*m_startPosY == m_caretPosY ||*/ m_startPosY == (NGInt)lineNo) {
+                                if (/*m_startPosY == m_caretPosY ||*/ m_startPosY == (int)lineNo) {
                                     if (getBidiTypeDirection(((unsigned short*)m_edit_tempstr2), unicodeStartPosX, visual_str_len, gc->getBiDiFlag()) == 1)
                                         charDir = 1;
                                     else
@@ -2305,7 +2305,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
                                     if (getBidiTypeDirection(((unsigned short*)m_edit_tempstr2), unicodeStartPosX, visual_str_len, gc->getBiDiFlag()) == 1)
                                         caretPos.x -= caretWidth;
                                 }
-                                else if ((NGInt)lineNo == m_caretPosY) {
+                                else if ((int)lineNo == m_caretPosY) {
                                     if (unicodeCaretPosX > 0) {
                                         if (getBidiTypeDirection(((unsigned short*)m_edit_tempstr2), unicodeCaretPosX-1, visual_str_len, gc->getBiDiFlag()) == 1)
                                             charDir = 0;
@@ -2343,7 +2343,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
 #endif
                     {
                         // Calc caret Pos
-                        if (lineNo == (NGUInt)m_caretPosY)
+                        if (lineNo == (unsigned int)m_caretPosY)
                         {
                             //FIXME , last is '\n' ?
                             U16 visIndex = 0xffff;
@@ -2378,7 +2378,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
                                 caretPos.y = m_vMargin + y;
                             }
                             else {
-                                NGInt w = 0, h;
+                                int w = 0, h;
                                 U16 tmpChar[2] = {0, };
 
                                 caretPos.x += irc.left();
@@ -2389,7 +2389,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
                                     caretPos.x += irc.right() - irc.left() - w;
                                 }
 
-                                for(NGInt i=0; i<visIndex; i++) {
+                                for(int i=0; i<visIndex; i++) {
                                     tmpChar[0] = ((unsigned short*)m_edit_tempstr2)[bidiStrOrder[i]-1];
                                     gc->getTextDrawSize(tmpChar, m_font, &w, &h);
                                     caretPos.x += w;
@@ -2413,7 +2413,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
     }
 
     if (m_style & EDVS_BASELINE) {
-        for (NGInt y = irc.top() + lineH; y < irc.bottom() ; y += lineH){
+        for (int y = irc.top() + lineH; y < irc.bottom() ; y += lineH){
             gc->drawHVDotLine(irc.left(), y, irc.right(), y, 
                     (m_txtColor >> 16) & 0xFF, 
                     (m_txtColor >> 8) & 0xFF, 
@@ -2432,7 +2432,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
         else {
             caretPos.y++;
             fontH--;
-            if(m_caretPos != (NGInt)getTextLength()) // P130819-02596
+            if(m_caretPos != (int)getTextLength()) // P130819-02596
                 caretPos.x--;
             caretWidth++;
         }
@@ -2453,7 +2453,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, NGInt status)
 }
 
 
-NGBool MlEditView::handleEvent(Event* event)
+bool MlEditView::handleEvent(Event* event)
 {
     if (event->eventType() == Event::TIMER 
             && m_timerId == ((TimerEvent *)event)->timerID()
@@ -2486,9 +2486,9 @@ NGBool MlEditView::handleEvent(Event* event)
     return true;
 }
 
-NGInt MlEditView::setCaretPosition(NGInt pos) 
+int MlEditView::setCaretPosition(int pos) 
 { 
-    NGInt old = m_caretPos; 
+    int old = m_caretPos; 
     m_caretPos = pos; 
 #ifdef __MMI_T9__
     if (imeGetInputModeFlag() == INPUT_MODE_SMART) {
@@ -2500,36 +2500,36 @@ NGInt MlEditView::setCaretPosition(NGInt pos)
     return old; 
 }
 
-void MlEditView::drawScroll (GraphicsContext* gc, IntRect &rc, NGInt status)
+void MlEditView::drawScroll (GraphicsContext* gc, IntRect &rc, int status)
 {
     if(!enableScroll() || !m_font )
         return;
 
-    NGInt w, h;
+    int w, h;
     IntRect _rc, bkgRc;
     
     getSize(&w, &h);
 
-    NGInt fontH         = m_font->size; // GraphicsContext::screenGraphics()->getFontHeight(m_font);
-    NGInt lineH         = fontH + m_lineAboveH + m_lineBellowH;
+    int fontH         = m_font->size; // GraphicsContext::screenGraphics()->getFontHeight(m_font);
+    int lineH         = fontH + m_lineAboveH + m_lineBellowH;
   
-    NGInt showCnt         = (h- m_vMargin)/lineH;
-    NGInt lines         = m_lineCharList.size();
-    NGInt scrollWith     = DEFAULT_EDIT_SCROLL_W;
+    int showCnt         = (h- m_vMargin)/lineH;
+    int lines         = m_lineCharList.size();
+    int scrollWith     = DEFAULT_EDIT_SCROLL_W;
     
     if(lines <= showCnt)
         return ;
 
-    NGInt posY;
+    int posY;
     
     if(m_startShowLine > 0)
         posY = rc.top() + (m_startShowLine*100*h/lines)/100;
     else
         posY = rc.top();
     
-    NGInt foreH = showCnt*h/lines;
+    int foreH = showCnt*h/lines;
     
-    if((NGInt)m_startShowLine + showCnt >= lines) {
+    if((int)m_startShowLine + showCnt >= lines) {
         if(gc->getBiDiFlag())
             _rc.setRect(rc.left(), posY, rc.left() +scrollWith/2, h);
         else

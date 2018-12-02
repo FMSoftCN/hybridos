@@ -35,7 +35,7 @@ IconItemView:: ~IconItemView()
 
 void IconItemView::setText(const char* str) 
 {
-	NGInt len = 0;
+	int len = 0;
 
 	if(NULL == str){
         m_text[len] = '\0';
@@ -73,13 +73,13 @@ void IconItemView::setText(const string& str)
 	setText(str.c_str());
 }
 
-void IconItemView::setText(const NGInt stringId) 
+void IconItemView::setText(const int stringId) 
 {
     m_text[0] = '\0'; 
     m_textId = stringId;	
 }
 
-const NGPStr IconItemView::getText() 
+const char * IconItemView::getText() 
 {
 	if(m_textId > 0) {
         return (char *)GetTextRes(m_textId);
@@ -90,12 +90,12 @@ const NGPStr IconItemView::getText()
     }
 }
 
-const NGInt IconItemView::getTextId() 
+const int IconItemView::getTextId() 
 {
 	return m_textId; 
 }
 
-void IconItemView::drawContent(GraphicsContext* context, IntRect& rc, NGInt status)
+void IconItemView::drawContent(GraphicsContext* context, IntRect& rc, int status)
 {
 	IntRect rctmp = rc;
 

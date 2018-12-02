@@ -36,14 +36,14 @@ class TrackBarView : public View
         TrackBarView();
         TrackBarView(View* parent);
         TrackBarView(View* parent, DrawableSet* drset);
-        TrackBarView(NGInt i_id, NGInt x, NGInt y, NGInt w, NGInt h);
+        TrackBarView(int i_id, int x, int y, int w, int h);
         //TrackBarView(Image* startImg, Image* pauseImg, GNInt min = 0, GNInt max = 100);
         ~TrackBarView();
         
         void setType(TRACKBARTYPE t_type){ m_type = t_type; }
         TRACKBARTYPE type(void){ return m_type; }
 
-        void setBorder(NGInt borderPixel){ m_border = borderPixel; }
+        void setBorder(int borderPixel){ m_border = borderPixel; }
 
         //set ThumbBlock image to startimage.
         //void start(void){ setThumbBlockImage(m_startImg); }
@@ -53,22 +53,22 @@ class TrackBarView : public View
         void stepForward(void); //go forward a distance of m_stepValue.
         void stepBackward(void);//go backword a distance of m_stepValue.
 
-        void setStepValue(NGInt value){ m_stepValue = value; }
-        NGInt stepValue(void){ return m_stepValue; }
+        void setStepValue(int value){ m_stepValue = value; }
+        int stepValue(void){ return m_stepValue; }
 
-        void setMaxValue(NGInt value){ m_maxValue = value; }
-        NGInt maxValue(void){ return m_maxValue; }
-        void setMinValue(NGInt value){ m_minValue = value; }
-        NGInt minValue(void){ return m_minValue; }
-        void setPosition(NGInt value); //update to the new position.
-        NGInt position(void){ return m_curValue; }
+        void setMaxValue(int value){ m_maxValue = value; }
+        int maxValue(void){ return m_maxValue; }
+        void setMinValue(int value){ m_minValue = value; }
+        int minValue(void){ return m_minValue; }
+        void setPosition(int value); //update to the new position.
+        int position(void){ return m_curValue; }
 
         //void setPauseImage(Image* img){ m_pauseImg = img; }
         //void setStartImage(Image* img){ m_startImg = img; }
         //void setTrackBarImage(Image* img);
         //void setThumbBlockImage(Image* img);
 
-        virtual void drawContent(GraphicsContext* context, IntRect &rc, NGInt status/* = Style::NORMAL*/);
+        virtual void drawContent(GraphicsContext* context, IntRect &rc, int status/* = Style::NORMAL*/);
 
     protected:
         //void initDrawable(DrawableSelector* selector);
@@ -78,11 +78,11 @@ class TrackBarView : public View
 
     protected:
         TRACKBARTYPE m_type;
-        NGInt m_curValue;
-        NGInt m_maxValue;
-        NGInt m_minValue;
-        NGInt m_stepValue;
-        NGInt m_border;
+        int m_curValue;
+        int m_maxValue;
+        int m_minValue;
+        int m_stepValue;
+        int m_border;
         //Image* m_startImg;
         //Image* m_pauseImg;
         //ImageDrawable* m_drTrackBar;

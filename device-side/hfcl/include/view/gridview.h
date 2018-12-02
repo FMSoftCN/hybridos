@@ -44,78 +44,78 @@ class GridView : public PanelView
         
         GridView(View* parent);
 		GridView(View* parent, DrawableSet* drset);
-		GridView(View* parent, NGInt id, NGInt x, NGInt y, NGInt w, NGInt h, 
-                NGInt row, NGInt col, NGInt gap_w, NGInt gap_h);
+		GridView(View* parent, int id, int x, int y, int w, int h, 
+                int row, int col, int gap_w, int gap_h);
         ~GridView();
         
-        NGInt addView(View *view);
-        NGInt remove(View *view);
-        NGInt remove(NGInt row, NGInt col);
+        int addView(View *view);
+        int remove(View *view);
+        int remove(int row, int col);
         
-        void setRows (NGInt row) ;
-        void setCols (NGInt col) ;
-        NGInt rows(){ return m_row; }
-        NGInt cols(){ return m_col; }
+        void setRows (int row) ;
+        void setCols (int col) ;
+        int rows(){ return m_row; }
+        int cols(){ return m_col; }
 
-        virtual void setGapWidth (NGInt gap_w);
-        virtual void setGapHeight (NGInt gap_h); 
-		NGInt gapWidth(){ return m_gap_w; }
-        NGInt gapHeight(){ return m_gap_h; }
+        virtual void setGapWidth (int gap_w);
+        virtual void setGapHeight (int gap_h); 
+		int gapWidth(){ return m_gap_w; }
+        int gapHeight(){ return m_gap_h; }
         
-        NGInt setFocusItem(NGInt row, NGInt col);
-        NGInt setFocusItem(NGInt index);
-        NGInt focusItemIdx(void) { return m_focusItem; }
-        NGInt focusItemPosition(NGInt* row, NGInt* col);
-		NGInt oldFocusItemIdx(void) { return m_oldFocusItem; }
+        int setFocusItem(int row, int col);
+        int setFocusItem(int index);
+        int focusItemIdx(void) { return m_focusItem; }
+        int focusItemPosition(int* row, int* col);
+		int oldFocusItemIdx(void) { return m_oldFocusItem; }
 		View * getOldFocusItem();
 
 		void onGetFocus();
 		void onLoseFocus();
 
-        virtual NGBool setRect(const IntRect& irc);
-        NGBool setRect(NGInt left, NGInt top, NGInt right, NGInt bottom){
+        virtual bool setRect(const IntRect& irc);
+        bool setRect(int left, int top, int right, int bottom){
 			return setRect(IntRect(left, top, right, bottom));
 		}
 
-        virtual NGBool dispatchEvent(Event* event);
+        virtual bool dispatchEvent(Event* event);
 
-		NGBool setOnBoundaryListener(EventListener* listener){
+		bool setOnBoundaryListener(EventListener* listener){
 			m_boundary_listener = listener; 
 			return true;
 		}
 
-		void setAutoConvert(NGBool bCon) { m_bNeedConvert = bCon; }
+		void setAutoConvert(bool bCon) { m_bNeedConvert = bCon; }
 
-        // NGBool handleEvent(Event* event);        // GT_jyseo rollbakc
+        // bool handleEvent(Event* event);        // GT_jyseo rollbakc
 
     protected:
-        NGInt gridWidth(){ return m_grid_w; }
-        NGInt gridHeight(){ return m_grid_h; }
+        int gridWidth(){ return m_grid_w; }
+        int gridHeight(){ return m_grid_h; }
         
 		virtual void changeFocusIndex(KEY_DIRECTION direction);
         
 		void reLayout(void);
         
-		NGBool notify2Parent(KEY_DIRECTION direction);
+		bool notify2Parent(KEY_DIRECTION direction);
         
-        NGBool onKeyPressed(NGInt keyCode);
+        bool onKeyPressed(int keyCode);
 
     protected:
 		enum { GRIDVIEW_FOCUS_INVALID = -1};
 
-        NGUInt16 m_col;
-        NGUInt16 m_row;
-        NGUInt16 m_grid_w;
-        NGUInt16 m_grid_h;
-        NGUInt16 m_gap_w;
-        NGUInt16 m_gap_h;
+        Uint16 m_col;
+        Uint16 m_row;
+        Uint16 m_grid_w;
+        Uint16 m_grid_h;
+        Uint16 m_gap_w;
+        Uint16 m_gap_h;
 
         EventListener* m_boundary_listener;
         
-		NGInt m_focusItem;
-		NGInt m_oldFocusItem;
+		int m_focusItem;
+		int m_oldFocusItem;
 
-		NGBool m_bNeedConvert;
+		bool m_bNeedConvert;
 
 		DECLARE_CLASS_NAME(GridView)
 

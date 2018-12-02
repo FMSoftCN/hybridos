@@ -43,7 +43,7 @@ FormatEditView::FormatEditView(View * p_parent)
     init();
 }
 
-FormatEditView::FormatEditView(NGInt i_id, NGInt x, NGInt y, NGInt w, NGInt h)
+FormatEditView::FormatEditView(int i_id, int x, int y, int w, int h)
     : View(i_id, x, y, w, h)
 {
     init();
@@ -71,10 +71,10 @@ void FormatEditView::focusPrev(void)
 {
 }
 
-void FormatEditView::drawContent(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/)
+void FormatEditView::drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/)
 {
-    NGInt i = 0, current_left = 0, current_top = 0, length = 0, height = visibleHeight();
-    ResID resid = SS_AM;
+    int i = 0, current_left = 0, current_top = 0, length = 0, height = visibleHeight();
+    HTResId resid = SS_AM;
     IntRect rect;
 
     current_left = m_margin_left;
@@ -164,11 +164,11 @@ void FormatEditView::drawContent(GraphicsContext* context, IntRect &rc, NGInt st
     }
 }
 
-NGInt FormatEditView::visibleWidth(void)
+int FormatEditView::visibleWidth(void)
 {
-    NGInt len = 0, i = 0;
-    NGInt length = 0, height = 0;
-    ResID resid = SS_AM;
+    int len = 0, i = 0;
+    int length = 0, height = 0;
+    HTResId resid = SS_AM;
     
     for (i = 0; i < m_field_count; ++i) {
 
@@ -213,16 +213,16 @@ NGInt FormatEditView::visibleWidth(void)
     return len;
 }
 
-NGInt FormatEditView::visibleHeight(void)
+int FormatEditView::visibleHeight(void)
 {
     // FIXME
     return getRect().height() - 2;
 }
 
-void FormatEditView::initEditor(NGInt field_count, 
-        NGCPStr* p_content_array, NGCPStr* p_formator_array, NGChar* p_content_max_nr)
+void FormatEditView::initEditor(int field_count, 
+        const char ** p_content_array, const char ** p_formator_array, char* p_content_max_nr)
 {
-    NGInt i = 0;
+    int i = 0;
     // 1. Get Data
     for (i = 0; i < field_count; ++i) {
         m_field_content[i] = p_content_array[i];
@@ -237,7 +237,7 @@ void FormatEditView::initEditor(NGInt field_count,
 
 void FormatEditView::addZero(void)
 {
-    NGInt has_len = 0, need_len = 0;
+    int has_len = 0, need_len = 0;
     if (-1 == m_current_index)
         return;
 
@@ -372,7 +372,7 @@ bool FormatEditView::dispatchEvent(Event* event)
     return DISPATCH_CONTINUE_MSG;
 }
 
-NGCPStr FormatEditView::getAlignZero(NGInt count)
+const char * FormatEditView::getAlignZero(int count)
 {
     // 20 zeros
     const char *zero = "00000000000000000000";
@@ -383,7 +383,7 @@ NGCPStr FormatEditView::getAlignZero(NGInt count)
         return NULL;
 }
 
-NGCPStr FormatEditView::getInputChar(NGInt key_code)
+const char * FormatEditView::getInputChar(int key_code)
 {
     switch(key_code)
     {
@@ -414,7 +414,7 @@ NGCPStr FormatEditView::getInputChar(NGInt key_code)
     return "\0";
 }
 
-NGBool FormatEditView::processNumberKey(NGInt key_code)
+bool FormatEditView::processNumberKey(int key_code)
 {
     if (-1 == m_current_index)
         return false;
@@ -443,7 +443,7 @@ NGBool FormatEditView::processNumberKey(NGInt key_code)
     return true;
 }
 
-NGBool FormatEditView::checkContent(void)
+bool FormatEditView::checkContent(void)
 {
     if (-1 == m_current_index)
         return false;
@@ -473,9 +473,9 @@ void FormatEditView::onLoseFocus()
     m_current_index = -1;
 }
 
-NGInt FormatEditView::getAmPos()
+int FormatEditView::getAmPos()
 {
-    NGInt i = 0;
+    int i = 0;
 
     for (i = 0; i < m_field_count; i++)
     {
@@ -490,9 +490,9 @@ NGInt FormatEditView::getAmPos()
 void FormatEditView::setAlignMargin(void)
 {
     // TODO, we should support Left/Middle/Right align, for now Just Middle.
-    NGInt w = visibleWidth();
-    NGInt h = visibleHeight();
-    NGInt align = m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTALIGN);
+    int w = visibleWidth();
+    int h = visibleHeight();
+    int align = m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTALIGN);
 
 #ifdef ENABLE_BIDI_LAGUAGE
     if(IsArabicSet()) {
@@ -536,9 +536,9 @@ void FormatEditView::reLayout(void)
     updateView();
 }
 
-void FormatEditView::setTextFont(NGUInt font)
+void FormatEditView::setTextFont(unsigned int font)
 {
-    if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_FONT, (NGDword)GetFontRes(font)))
+    if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_FONT, (HTData)GetFontRes(font)))
        updateView();
 }
 

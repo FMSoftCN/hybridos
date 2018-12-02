@@ -73,11 +73,11 @@ class GifAnimateView : public View, TimerEventListener {
 		//return True if the event was handled, false otherwise.
 		virtual bool dispatchEvent(Event* event);
 
-        NGBool start(void);
-        NGBool pause(void);
-	  	NGBool resume(void);
-        NGBool stop(void); 
-        NGBool reset(void);
+        bool start(void);
+        bool pause(void);
+	  	bool resume(void);
+        bool stop(void); 
+        bool reset(void);
         PlayState state(void) {return m_state;}
 
         void setGifAnimate(GifAnimate* animate);
@@ -93,8 +93,8 @@ class GifAnimateView : public View, TimerEventListener {
         PlayState   m_state;
         PlayType    m_playType;
         LoopType    m_loopType;
-        NGUInt32    m_start_ticks;
-	 	NGInt m_drawLayer;
+        Uint32    m_start_ticks;
+	 	int m_drawLayer;
 };
 
 NAMESPACE_END

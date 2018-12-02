@@ -18,29 +18,11 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef _SCALEVIEWANIMATION_H_
-#define _SCALEVIEWANIMATION_H_
 
-#include "viewanimation.h"
+#ifndef HFCL_HFCL_H_
+#define HFCL_HFCL_H_
 
-NAMESPACE_BEGIN
+#include "common/common.h"
 
-class ScaleViewAnimation  : public ViewAnimation 
-{
-    public:
-        ScaleViewAnimation(View *view, IntRect &rect)
-			:ViewAnimation(view, MGEFF_RECT){
-			//setStartValue((void *)&(view->getRect()));
-			setEndValue((void *)&rect);		
-		}
-        virtual ~ScaleViewAnimation(){
+#endif // HFCL_HFCL_H_
 
-		}
-
-	protected:
-		void setProperty(int id, void* value);
-		void onStart();
-};
-
-NAMESPACE_END
-#endif

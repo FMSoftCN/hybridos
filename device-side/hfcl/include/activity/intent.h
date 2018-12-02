@@ -33,18 +33,18 @@ NAMESPACE_BEGIN
  */
 class Intent {
     public:
-        Intent(NGInt action = 0, string data = "", NGInt tag = 0);
+        Intent(int action = 0, string data = "", int tag = 0);
         Intent(Intent * intent);
 
-        const NGInt action() const {return m_action;}
+        const int action() const {return m_action;}
         const string data() const {return m_data;}
         const void* dataEx() const {return m_dataEx;}
-        const NGInt tag() const {return m_tag;}
+        const int tag() const {return m_tag;}
 
-        void setAction(NGInt iaction) {m_action = iaction;}
+        void setAction(int iaction) {m_action = iaction;}
         void setData(string sdata) {m_data = sdata;}
         void setDataEx(void* sdata) {m_dataEx = sdata;}
-        void settag(NGInt itag) {m_tag = itag;}
+        void settag(int itag) {m_tag = itag;}
        /////////////////////////////////////////
 		void putValue(string& key, void* value);
 		void *getValue(string key);
@@ -60,7 +60,7 @@ class Intent {
          * m_action is globally defined ACTION.
          * e.g. ACTION_MOVE, ACTION_VIEW, ACTION_EDIT, ACTION_DIAL etc.
          */
-        NGInt m_action;
+        int m_action;
 
         /* 
          * m_date is transfer data.
@@ -74,7 +74,7 @@ class Intent {
          * e.g. App1 call App2 , App2 save m_tag value.
          * when App2 exit, return a intent(..., ..., m_tagvalue).
          */
-        NGInt m_tag;
+        int m_tag;
 	private:
 		MAPCLASSKEY(string, void*, IntentMap);
 		IntentMap m_intentStore;

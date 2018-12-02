@@ -35,12 +35,12 @@ class Transition;
 class TransitionManager : TimerEventListener
 {	
 	public:
-		MAP(NGUInt, Transition*, TransitionMap)
+		MAP(unsigned int, Transition*, TransitionMap)
 
 		TransitionMap m_trMaps;
 
-		NGInt m_timerId;
-		NGInt m_interval;
+		int m_timerId;
+		int m_interval;
 
 	public:
 		TransitionManager() { 
@@ -50,21 +50,21 @@ class TransitionManager : TimerEventListener
 
 		~TransitionManager();
 
-		void addTransition(NGUInt key, Transition* t);
-		void removeTransition(NGUInt key);
-		Transition* getTranition(NGUInt key);
+		void addTransition(unsigned int key, Transition* t);
+		void removeTransition(unsigned int key);
+		Transition* getTranition(unsigned int key);
 
-		NGInt setInterval(NGInt interval);
-		NGInt interval() { return m_interval; }
+		int setInterval(int interval);
+		int interval() { return m_interval; }
 
 	private:
-		NGBool handleEvent(Event *event);
+		bool handleEvent(Event *event);
 };
 
 class Transition 
 {
 	public:
-		virtual NGBool isEnd() = 0;
+		virtual bool isEnd() = 0;
 		virtual void update() = 0;
 		virtual ~Transition() { }
 
@@ -76,18 +76,18 @@ class RollTextTransition : public Transition
 {
 	protected:
 		View * m_owner;
-		NGInt  m_offset:20;
-		NGUInt  m_offsetStep:12;
-	    NGInt m_countdown;
+		int  m_offset:20;
+		unsigned int  m_offsetStep:12;
+	    int m_countdown;
 	public:	
-		RollTextTransition(View *owner, NGInt step) : m_owner(owner) {
+		RollTextTransition(View *owner, int step) : m_owner(owner) {
 			m_offsetStep = step;
 			m_offset = 0;
 			m_countdown = 5;
 		}
 		~RollTextTransition() { }
 
-		NGInt getOffset() { return m_offset; }
+		int getOffset() { return m_offset; }
 
 		void update() { 
 			if(--m_countdown > 0) 
@@ -99,7 +99,7 @@ class RollTextTransition : public Transition
 				m_owner->updateView(); 
 		}
 
-		NGBool isEnd() { return m_owner == NULL; }
+		bool isEnd() { return m_owner == NULL; }
 
 		void reset() {
 			m_offset = 0;
@@ -109,14 +109,14 @@ class RollTextTransition : public Transition
 		void nextOffset()  { m_offset += m_offsetStep; }
 
 
-		static NGBool DrawRollText(View* view, GraphicsContext* context,DrawableSet *drset, NGInt draw_id, NGInt draw_state, const IntRect& rc, NGDword data, DR_DATA_TYPE type);
+		static bool DrawRollText(View* view, GraphicsContext* context,DrawableSet *drset, int draw_id, int draw_state, const IntRect& rc, HTData data, DR_DATA_TYPE type);
 
-		static NGBool NeedRollText(DrawableSet *drset, NGInt draw_id, NGInt draw_state, const IntRect& rc, NGDword data, DR_DATA_TYPE type);
+		static bool NeedRollText(DrawableSet *drset, int draw_id, int draw_state, const IntRect& rc, HTData data, DR_DATA_TYPE type);
 };
 
 ///the common functions
 TransitionManager* GetCommonTransitionManager();
-Transition* GetTransition(NGUInt key);	
+Transition* GetTransition(unsigned int key);	
 void AddRollText(View *view, Transition* t);
 void RemoveRollText(View* view);
 void ResetRollText(View *view);

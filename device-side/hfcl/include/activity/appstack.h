@@ -52,10 +52,10 @@ class AppStack
 		bool popBackgroundRunningApp(BaseApp *app);
 		void clear();
 		int size();
-		AppInfo* top(NGInt n = 0);
-		AppInfo* bottom(NGInt n = 0);
-		BaseApp* getExistAppByName(NGCPStr name);
-		BaseApp* getExistAppRunBackgroundByName(NGCPStr name);
+		AppInfo* top(int n = 0);
+		AppInfo* bottom(int n = 0);
+		BaseApp* getExistAppByName(const char * name);
+		BaseApp* getExistAppRunBackgroundByName(const char * name);
 };
 
 NAMESPACE_END

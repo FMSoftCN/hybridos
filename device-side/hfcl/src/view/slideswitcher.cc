@@ -48,8 +48,8 @@ SlideSwitcher::SlideSwitcher(View * p_parent)
 {
 }
 
-SlideSwitcher::SlideSwitcher(View * p_parent, NGInt i_id, NGInt x, NGInt y, 
-		NGInt w, NGInt h, SlideStyle style, NGInt gap_w)
+SlideSwitcher::SlideSwitcher(View * p_parent, int i_id, int x, int y, 
+		int w, int h, SlideStyle style, int gap_w)
 	: PanelView(i_id, x, y, w, h)
 	, m_gap_w(gap_w)
     , m_style(style)
@@ -65,7 +65,7 @@ SlideSwitcher::~SlideSwitcher()
 {
 }
 
-View* SlideSwitcher::getItem(NGInt offindex, NGBool forward)
+View* SlideSwitcher::getItem(int offindex, bool forward)
 {
     View* tmp = NULL;
     tmp = m_curr_focus_view;
@@ -93,7 +93,7 @@ View* SlideSwitcher::getItem(NGInt offindex, NGBool forward)
     }
 }
 
-void SlideSwitcher::calcuItemRect(NGInt offindex, IntRect& rect, NGBool forward)
+void SlideSwitcher::calcuItemRect(int offindex, IntRect& rect, bool forward)
 {
     // adjust ItemHeight/ItemWidth, at least on item can be see
     if (m_item_height > getRect().height()) {
@@ -193,7 +193,7 @@ void SlideSwitcher::reLayout (void)
 {
     View* item = NULL;
     IntRect rect;
-    NGInt count = 0, left_top = 0, right_bottom = 0, i = 0;
+    int count = 0, left_top = 0, right_bottom = 0, i = 0;
     if (NULL == m_curr_focus_view)
         return;
 
@@ -278,13 +278,13 @@ void SlideSwitcher::setFocusItem(View* item)
     setFocusView(m_curr_focus_view);
 
     //raise event
-    CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)CustomEvent::CUS_SELCHANGED, (NGInt)this);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (int)CustomEvent::CUS_SELCHANGED, (int)this);
     raiseEvent(&event);
 
     reLayout();
 }
 
-NGBool SlideSwitcher::addItem(View *view, NGBool toRefresh)
+bool SlideSwitcher::addItem(View *view, bool toRefresh)
 {
     if (NULL == view)
         return false;
@@ -305,7 +305,7 @@ NGBool SlideSwitcher::addItem(View *view, NGBool toRefresh)
     return true;
 }
 
-NGBool SlideSwitcher::removeItem(View *item)
+bool SlideSwitcher::removeItem(View *item)
 {
     View* _tmp_item = NULL, *_tmp_next = NULL;
 	if (NULL != item) {
@@ -337,7 +337,7 @@ NGBool SlideSwitcher::removeItem(View *item)
     return false;
 }
 
-NGBool SlideSwitcher::dispatchEvent(Event* event)
+bool SlideSwitcher::dispatchEvent(Event* event)
 {
     switch(event->eventType())
     {
@@ -350,7 +350,7 @@ NGBool SlideSwitcher::dispatchEvent(Event* event)
         case Event::KEY_DOWN:
         case Event::KEY_ALWAYSPRESS:
         {
-            NGInt code = ((KeyEvent *)event)->keyCode();
+            int code = ((KeyEvent *)event)->keyCode();
             if ( onKeyPressed (code) ) {
 
                 return DISPATCH_STOP_MSG;
@@ -362,7 +362,7 @@ NGBool SlideSwitcher::dispatchEvent(Event* event)
     return DISPATCH_CONTINUE_MSG;
 }
 
-NGBool SlideSwitcher::onKeyPressed(NGInt keyCode)
+bool SlideSwitcher::onKeyPressed(int keyCode)
 {
     switch(keyCode)
     {

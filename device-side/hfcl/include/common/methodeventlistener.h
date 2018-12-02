@@ -33,19 +33,19 @@ class EventListener;
 class MethodEventListener : public EventListener
 {
 public:
-	typedef NGBool (MethodEventListener::*EventHandle)(Event* event);
+	typedef bool (MethodEventListener::*EventHandle)(Event* event);
 #ifdef WIN32
 	MethodEventListener() {}
 #endif
-	MethodEventListener(void* ctx, EventHandle event_handle, NGInt event_type);
+	MethodEventListener(void* ctx, EventHandle event_handle, int event_type);
 	virtual ~MethodEventListener();
 
-	NGBool handleEvent(Event* event);
+	bool handleEvent(Event* event);
 
 private:
 	void* m_ctx;
 	EventHandle m_eventHandle;
-	NGInt m_eventType;
+	int m_eventType;
 };
 
 #define METHOD_EVENT_HANDLE_EX(owner, Class, eventHandle, event_type) \

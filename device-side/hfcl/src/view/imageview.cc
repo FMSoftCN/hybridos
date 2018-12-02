@@ -38,20 +38,20 @@ ImageView::ImageView(View* p_parent, DrawableSet* drset)
 }
 
 ImageView::ImageView(Image* pImage,
-                     NGInt i_id,
-                     NGInt x, NGInt y, NGInt w, NGInt h)
+                     int i_id,
+                     int x, int y, int w, int h)
     : View(i_id, x, y, w, h)
 {
     init();
     m_image = pImage;
 }
 
-ImageView::ImageView(const NGPStr filePath,
-                     NGInt i_id,
-                     NGInt x, NGInt y, NGInt w, NGInt h,
-                     NGInt mode,
-                     NGInt align,
-                     NGInt valign)
+ImageView::ImageView(const char * filePath,
+                     int i_id,
+                     int x, int y, int w, int h,
+                     int mode,
+                     int align,
+                     int valign)
     : View(i_id, x, y, w, h)
 {
 	init();
@@ -68,12 +68,12 @@ ImageView::~ImageView()
 	}
 }
 
-void ImageView::drawBackground(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/)
+void ImageView::drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/)
 {
 	View::drawBackground(context, rc, status);
 }
 
-void ImageView::drawContent(GraphicsContext* context, IntRect &rc, NGInt status)
+void ImageView::drawContent(GraphicsContext* context, IntRect &rc, int status)
 {
 	if(m_format.rotationAngle != 0){
 		m_format.drawMode = DRAWMODE_ROTATIONANGLE;
@@ -102,26 +102,26 @@ bool ImageView::setImage(Image *pImg)
     return true;
 }
 
-NGBool ImageView::setReplaceColor(const DWORD color)
+bool ImageView::setReplaceColor(const DWORD color)
 {
     m_image->setReplaceColor(color);
     updateView();
     return true;
 }
 
-void ImageView::setPartBoxXoYo(NGInt xo, NGInt yo)
+void ImageView::setPartBoxXoYo(int xo, int yo)
 {
     m_xo = xo;
     m_yo = yo;
 }
 
-void ImageView::getPartBoxXoYo(NGInt& xo, NGInt& yo)
+void ImageView::getPartBoxXoYo(int& xo, int& yo)
 {
     xo = m_xo;
     yo = m_yo;
 }
 
-void ImageView::setFromImgRect(NGBool bSet)
+void ImageView::setFromImgRect(bool bSet)
 {
     if (!bSet)
         return;
@@ -132,7 +132,7 @@ void ImageView::setFromImgRect(NGBool bSet)
     setRect(0, 0, getImageWidth(), getImageHeight());
 }
 
-NGInt ImageView::getImageWidth(void)
+int ImageView::getImageWidth(void)
 {
     if (m_image != NULL)
         return m_image->width();
@@ -140,7 +140,7 @@ NGInt ImageView::getImageWidth(void)
     return 0;
 }
 
-NGInt ImageView::getImageHeight(void)
+int ImageView::getImageHeight(void)
 {
     if (m_image != NULL)
         return m_image->height();

@@ -28,11 +28,11 @@ NAMESPACE_BEGIN
 class AlphaViewAnimation: public ViewAnimation
 {
 public:
-	AlphaViewAnimation(View* view, NGInt endAlpha = 0);
+	AlphaViewAnimation(View* view, int endAlpha = 0);
 	~AlphaViewAnimation();
 
 protected:
-	void setProperty(NGInt id, void* value);
+	void setProperty(int id, void* value);
 	void onStart();
 
 private:

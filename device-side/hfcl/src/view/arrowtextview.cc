@@ -45,7 +45,7 @@ ArrowTextView:: ~ArrowTextView()
 
 void ArrowTextView::setText(const char* str)
 {
-	NGInt len = 0;
+	int len = 0;
 
 	if(NULL == str){
         m_text[len] = '\0';
@@ -201,7 +201,7 @@ void ArrowTextView::startRollText()
 				DR_CONTENT,
 				DR_HILIGHT,
 				txtRc,
-				(NGDword)&ft,
+				(HTData)&ft,
 				DRDT_FORMATTEXT))
 	{
 		AddRollText(this, NGUX_NEW_EX(RollTextTransition, (this, 2)));
@@ -214,9 +214,9 @@ void ArrowTextView::stopRollText()
 }
 
 //GT_mspark_20130916_for set font
-void ArrowTextView::setTextFont(NGUInt font)
+void ArrowTextView::setTextFont(unsigned int font)
 {
-    if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_FONT, (NGDword)GetFontRes(font)))
+    if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_FONT, (HTData)GetFontRes(font)))
         updateView();
 }    
 

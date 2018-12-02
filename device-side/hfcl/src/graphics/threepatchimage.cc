@@ -35,7 +35,7 @@ ThreePatchImage::~ThreePatchImage()
 	clean();
 }
 
-void ThreePatchImage::paint(GraphicsContext* context, const IntRect& rc, ImageFormat format, NGInt xo, NGInt yo)
+void ThreePatchImage::paint(GraphicsContext* context, const IntRect& rc, ImageFormat format, int xo, int yo)
 {
 	if (m_bLoadOnPainting) {
 		setImageBitmap(ResLoader::getInstance()->getBitmap(m_filePath.c_str()));

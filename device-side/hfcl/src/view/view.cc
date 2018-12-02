@@ -279,7 +279,7 @@ void View::releaseEventListeners()
 void View::onGetFocus()
 {
     // FIXME ylwang changed at 2012-04-06
-	CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)NOTIFY_GET_FOCUS, (NGInt)this);
+	CustomEvent event(Event::CUSTOM_NOTIFY, (int)NOTIFY_GET_FOCUS, (int)this);
 	raiseEvent(&event);
     
 	updateView();
@@ -288,7 +288,7 @@ void View::onGetFocus()
 void View::onLoseFocus()
 {
     // FIXME ylwang changed at 2012-04-06
-	CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)NOTIFY_LOSE_FOCUS, (NGInt)this);
+	CustomEvent event(Event::CUSTOM_NOTIFY, (int)NOTIFY_LOSE_FOCUS, (int)this);
 	raiseEvent(&event);
 
 	updateView();
@@ -303,7 +303,7 @@ bool View::setFocus(View * view)
 	return true;
 }
 
-void View::inner_updateView(int x, int y, int w, int h, NGBool upBackGnd)
+void View::inner_updateView(int x, int y, int w, int h, bool upBackGnd)
 {
 	ContainerView *p = parent();
 	if (p == NULL) 
@@ -329,7 +329,7 @@ void View::inner_updateViewRect(int x, int y, int w, int h)
     }
 }
 
-void View::updateView(NGInt x, NGInt y, NGInt w, NGInt h) 
+void View::updateView(int x, int y, int w, int h) 
 {
 	inner_updateView(x, y, w, h);
 }
@@ -339,7 +339,7 @@ void View::updateView(const IntRect &rc)
 	inner_updateView(rc.left(), rc.top(), rc.width(), rc.height());
 }
 
-void View::onChildUpdateView(View *child, NGInt x, NGInt y, NGInt w, NGInt h, NGBool upBackGnd) 
+void View::onChildUpdateView(View *child, int x, int y, int w, int h, bool upBackGnd) 
 {
 	inner_updateView(x, y, w, h, upBackGnd);
 }
@@ -354,7 +354,7 @@ void View::updateViewRect(void)
 	inner_updateViewRect(0, 0, m_rect.width(), m_rect.height());
 }
 
-void View::updateView(NGBool upBackGnd)
+void View::updateView(bool upBackGnd)
 {
 	inner_updateView(0, 0, m_rect.width(), m_rect.height(), upBackGnd);
 }
@@ -367,7 +367,7 @@ bool View::dispatchEvent(Event* event)
 		s.view = this;
 		s.x = ((MouseEvent *)event)->x();
 		s.y = ((MouseEvent *)event)->y();
-		CustomEvent e(Event::CUSTOM_NOTIFY, (NGInt)NOTIFY_ON_CLICK, (NGInt)&s);
+		CustomEvent e(Event::CUSTOM_NOTIFY, (int)NOTIFY_ON_CLICK, (int)&s);
 		return raiseEvent(&e);
 	}
 
@@ -385,7 +385,7 @@ bool View::raiseEvent(Event *event)
 	return false;
 }
 
-void View::viewToWindow(NGInt *x, NGInt *y) 
+void View::viewToWindow(int *x, int *y) 
 {
     if (x)
         *x += m_rect.left();
@@ -396,10 +396,10 @@ void View::viewToWindow(NGInt *x, NGInt *y)
         return ((View*)m_parent)->viewToWindow(x, y);
 }
 
-void View::windowToView(NGInt *x, NGInt *y) 
+void View::windowToView(int *x, int *y) 
 {
     if (m_parent) {
-        NGInt _tmpx, _tmpy;
+        int _tmpx, _tmpy;
         ((View*)m_parent)->getPosition(&_tmpx, &_tmpy);
 
         if(x)
@@ -431,7 +431,7 @@ void View::focusMe(void)
 
     /*
      * FIXME ylwang changed at 2012-04-06
-	CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)NOTIFY_GET_FOCUS, (NGInt)this);
+	CustomEvent event(Event::CUSTOM_NOTIFY, (int)NOTIFY_GET_FOCUS, (int)this);
 	raiseEvent(&event);
      */
 }

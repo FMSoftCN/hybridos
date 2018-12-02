@@ -75,7 +75,7 @@ ListView::~ListView(void)
 #endif
 }
 
-NGBool ListView::addItemByIndex(ItemView *item, NGInt index)
+bool ListView::addItemByIndex(ItemView *item, int index)
 {
     if (!m_content)
         return false;
@@ -85,7 +85,7 @@ NGBool ListView::addItemByIndex(ItemView *item, NGInt index)
     return true;
 }
 
-NGBool ListView::addItemWithAppend(ItemView *item)
+bool ListView::addItemWithAppend(ItemView *item)
 {
     int index;
     
@@ -100,7 +100,7 @@ NGBool ListView::addItemWithAppend(ItemView *item)
     return true;
 }
 
-NGBool ListView::removeItem(ItemView* item, NGBool bRelease)
+bool ListView::removeItem(ItemView* item, bool bRelease)
 {
     if (m_content && m_content->removeChild(item, bRelease) == 0) {
         if (m_hilightItem == item)
@@ -112,7 +112,7 @@ NGBool ListView::removeItem(ItemView* item, NGBool bRelease)
     return false;
 }
 
-void ListView::freeze(NGBool b_freeze)
+void ListView::freeze(bool b_freeze)
 {
     setFreezed(b_freeze);
     updateContent();
@@ -128,7 +128,7 @@ void ListView::clear(void)
     }
 }
 
-NGBool ListView::hilight(ItemView* view)
+bool ListView::hilight(ItemView* view)
 {
     // _DBG_PRINTF("ListView::hilight  %p   %p   ",view,m_hilightItem)
     // _DBG_PRINTF("ListView::hilight  %p   %p   ",m_content,m_content->isChild(view))
@@ -155,7 +155,7 @@ NGBool ListView::hilight(ItemView* view)
 
     makeHilightVisible();
 
-    CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)NOTIFY_SELCHANGED, (NGInt)this);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (int)NOTIFY_SELCHANGED, (int)this);
     raiseEvent(&event);
     return true;
 }
@@ -209,7 +209,7 @@ void ListView::downFindItem(void)
     }
 }
 
-NGBool ListView::singleSelect(NGInt index)
+bool ListView::singleSelect(int index)
 {
     ItemView *view = itemFromIndex(index);
 
@@ -235,7 +235,7 @@ NGBool ListView::singleSelect(NGInt index)
         return false;
 }
 
-NGBool ListView::select(NGInt index, NGBool toSelect)
+bool ListView::select(int index, bool toSelect)
 {
     ItemView *view = itemFromIndex(index);
     if (view) {
@@ -246,7 +246,7 @@ NGBool ListView::select(NGInt index, NGBool toSelect)
         return false;
 }
 
-void ListView::selectAll(NGBool bselect)
+void ListView::selectAll(bool bselect)
 {
     if (!m_content)
         return;
@@ -258,33 +258,33 @@ void ListView::selectAll(NGBool bselect)
     updateView();
 }
 
-void ListView::setSeparatorWidth(NGInt width)
+void ListView::setSeparatorWidth(int width)
 {
     if ( width < 0)
         return;
 
-    NGInt w, h;
+    int w, h;
 
     getSize(&w, &h);
 
     if (width <= w && width <= h) {
-        m_separatorWidth = (NGUInt8)width;
+        m_separatorWidth = (Uint8)width;
     }
 }
 
 
-void ListView::drawSeparator(GraphicsContext* context, NGInt status)
+void ListView::drawSeparator(GraphicsContext* context, int status)
 {
-    NGInt separatorw = m_separatorWidth;
+    int separatorw = m_separatorWidth;
     if (!m_content || separatorw < 1 )
         return;
 
     View* view = NULL;
-    NGInt bottom = getRect().height();
+    int bottom = getRect().height();
 
     IntRect rcSpec( m_hGap, 0, getRect().width(), m_rect.width() - m_hGap);
     for (view = m_content->firstChild(); view; view = view->nextSibling()) {
-        NGInt top = view->getRect().bottom() + ((m_vGap) - (m_vGap >> 1)) - m_offy;
+        int top = view->getRect().bottom() + ((m_vGap) - (m_vGap >> 1)) - m_offy;
         if (top < 0)
             continue;
 
@@ -326,7 +326,7 @@ void ListView::drawCenterHilight(GraphicsContext* gc)
 
     DrawableSet* drset = m_hilightItem->getDrawableSet();
     if (drset) {
-        NGInt h;
+        int h;
         IntRect rc(m_hGap, getRect().height() / 2, getRect().width() - m_hGap, 0);
         m_hilightItem->getSize(NULL, &h);
         rc.m_top -= h/2;
@@ -339,7 +339,7 @@ void ListView::drawCenterHilight(GraphicsContext* gc)
     }
 }
 
-void ListView::drawContent(GraphicsContext* context, IntRect &rc, NGInt status )
+void ListView::drawContent(GraphicsContext* context, IntRect &rc, int status )
 {
     if (!hilightTop())
         drawCenterHilight(context);
@@ -354,7 +354,7 @@ void ListView::drawContent(GraphicsContext* context, IntRect &rc, NGInt status )
         drawCenterHilight(context);
 }
 
-NGBool ListView::dispatchEvent(Event* event)
+bool ListView::dispatchEvent(Event* event)
 {
     if (operationMode() == OPM_BROWSER)
         return ScrollView::dispatchEvent(event);
@@ -363,7 +363,7 @@ NGBool ListView::dispatchEvent(Event* event)
         case Event::KEY_ALWAYSPRESS:
         case Event::KEY_DOWN:
         {
-            NGInt code = ((KeyEvent *)event)->keyCode();
+            int code = ((KeyEvent *)event)->keyCode();
             if ( DISPATCH_STOP_MSG == onKeyPressed (code) ) {
                 return DISPATCH_STOP_MSG;
             }
@@ -384,16 +384,16 @@ void ListView::updateContent()
     makeHilightVisible();
 }
 
-void ListView::relayout(NGBool isScrollGap)
+void ListView::relayout(bool isScrollGap)
 {
     if (!m_content)
         return;
 
     IntRect rc(0, 0, 0, 0);
-    NGInt maxwidth = 0;
-    NGInt vgap = m_vGap + m_separatorWidth;
-    NGInt first_half_vgap = m_vGap >> 1;
-    NGInt last_half_vgap = vgap - first_half_vgap;
+    int maxwidth = 0;
+    int vgap = m_vGap + m_separatorWidth;
+    int first_half_vgap = m_vGap >> 1;
+    int last_half_vgap = vgap - first_half_vgap;
 
     fixed conth;
     fixed viewh;
@@ -421,7 +421,7 @@ void ListView::relayout(NGBool isScrollGap)
          *  ==========================    <-- separatorw
          *
          */
-        NGInt w, h;
+        int w, h;
 
         if(!view->isVisible())   // add by xulei 2012,03,31, hide disvsible Itemview
             continue;
@@ -473,8 +473,8 @@ void ListView::makeHilightVisible()
     if (!m_content || !m_hilightItem)
         return;
 
-    NGInt offy = m_offy;
-    NGInt separatorw = m_separatorWidth;
+    int offy = m_offy;
+    int separatorw = m_separatorWidth;
 
     if (loopScroll()) {
         const IntRect& rc = m_hilightItem->getRect();
@@ -485,11 +485,11 @@ void ListView::makeHilightVisible()
         }
     }
     else {
-        NGInt vgap = m_vGap + separatorw;
+        int vgap = m_vGap + separatorw;
         IntRect rc = m_hilightItem->getRect();
         rc.m_top -= vgap;
         rc.m_bottom += vgap;
-        NGInt h;
+        int h;
         getSize(NULL, &h); //get the viewport size
 
         if ((offy + h) < rc.m_bottom) {
@@ -508,7 +508,7 @@ void ListView::makeHilightVisible()
     }
 }
 
-ItemView* ListView::itemAt(NGInt x, NGInt y, NGInt* pidx) const
+ItemView* ListView::itemAt(int x, int y, int* pidx) const
 {
     if (pidx)
         *pidx = -1;
@@ -519,13 +519,13 @@ ItemView* ListView::itemAt(NGInt x, NGInt y, NGInt* pidx) const
     x += m_offx;
     y += m_offy;
 
-    NGInt right = getRect().width() + m_offx;
-    NGInt bottom = getRect().height() + m_offy;
+    int right = getRect().width() + m_offx;
+    int bottom = getRect().height() + m_offy;
 
     if (x < 0 || y < 0 || x > right || y > bottom)
         return NULL;
 
-    NGInt idx = 0;
+    int idx = 0;
     for (View* view = m_content->firstChild(); view; view = view->nextSibling(), idx++) {
         if (view->getRect().isIn(x, y)) {
             if (pidx)
@@ -541,14 +541,14 @@ ItemView* ListView::itemAt(NGInt x, NGInt y, NGInt* pidx) const
 }
 
 
-ItemView* ListView::selectedItem(NGInt* pidx) const
+ItemView* ListView::selectedItem(int* pidx) const
 {
     if (pidx)
         *pidx = -1;
     if (!m_content)
         return NULL;
 
-    NGInt idx = 0;
+    int idx = 0;
     for (ItemView* view = firstItem(); view; view = (ItemView*)view->nextSibling(), idx++) {
         if (view->isSelected()) {
             if (pidx)
@@ -618,12 +618,12 @@ static View* get_next_focus(ContainerView* c)
     return NULL;
 }
 
-NGBool ListView::nextFocus()
+bool ListView::nextFocus()
 {
     if (focusable()) {
         View *view;
         ItemView *item;
-        NGInt loop = 0;
+        int loop = 0;
 
 Next:
         loop++;
@@ -729,12 +729,12 @@ static View* get_prev_focus(ContainerView* c)
     return NULL;
 }
 
-NGBool ListView::prevFocus()
+bool ListView::prevFocus()
 {
     if (focusable()) {
         View *view;
         ItemView *item;
-        NGInt loop = 0;
+        int loop = 0;
 
 PREV:
         loop++;
@@ -770,7 +770,7 @@ PREV:
     return true;
 }
 
-NGBool ListView::onKeyPressed(NGInt keyCode)
+bool ListView::onKeyPressed(int keyCode)
 {   
     if (NULL == m_content 
             || m_content->viewCount() < 1) {
@@ -813,7 +813,7 @@ NGBool ListView::onKeyPressed(NGInt keyCode)
 
 #include <mgeff.h>
 
-void ListView::_set_y_offset(NGUInt handle, ListView* _this, NGInt id, NGInt *value)
+void ListView::_set_y_offset(unsigned int handle, ListView* _this, int id, int *value)
 {
     if (NULL != _this)
         _this->moveViewport(_this->m_offx, *value);
@@ -829,7 +829,7 @@ void ListView::_anim_finish_cb(MGEFF_ANIMATION handle)
 #endif
 }
 
-void ListView::animationScroll(NGInt offy)
+void ListView::animationScroll(int offy)
 {
     if (scrollAnimation()) {
 #if 0
@@ -837,7 +837,7 @@ void ListView::animationScroll(NGInt offy)
 #endif
         const IntRect& contentrc = m_content->getRect();
 
-        NGInt diff = abs(offy - m_offy);
+        int diff = abs(offy - m_offy);
         if (diff > (contentrc.height() >> 1))
             offy = m_offy + contentrc.height() - diff;
 

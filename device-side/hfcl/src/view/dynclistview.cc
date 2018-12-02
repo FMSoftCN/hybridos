@@ -104,15 +104,15 @@ void DyncListView::init(void)
 	m_focus = true;
 }
 
-NGBool DyncListView::setRect(const IntRect& irc)
+bool DyncListView::setRect(const IntRect& irc)
 {
     if (irc == m_rect)
         return false;
 
     if (m_rect != irc) {
         // VincentWei: call updateView only set a different rect
-        NGInt n;
-        NGInt oldv = m_visible_item_count;
+        int n;
+        int oldv = m_visible_item_count;
         m_rect = irc;
         
         if(m_item_count <= 0)
@@ -166,7 +166,7 @@ NGBool DyncListView::setRect(const IntRect& irc)
     return true;
 }
 
-NGBool DyncListView::prepareVisualitems(void)
+bool DyncListView::prepareVisualitems(void)
 {
     int n = m_visible_item_count;
     clean();
@@ -175,8 +175,8 @@ NGBool DyncListView::prepareVisualitems(void)
         n = m_item_count;
            
     D_PRT("DyncListView reinit itemview");
-    if(m_item_templete_id != (ResID)-1) {
-        for(NGInt c = 0; c < n; ++c) {
+    if(m_item_templete_id != (HTResId)-1) {
+        for(int c = 0; c < n; ++c) {
             ////////////////////////// parent is me, no viewcontext, no contentprovider
             CreateViewFromRes(m_item_templete_id, this, NULL, NULL);
         }
@@ -184,10 +184,10 @@ NGBool DyncListView::prepareVisualitems(void)
     return true;
 }
 
-NGInt DyncListView::reLoadData(void)
+int DyncListView::reLoadData(void)
 {
     View* item = NULL;
-    NGInt i = 0;
+    int i = 0;
     // check
     if(m_item_count <= 0 || m_visible_item_count <= 0)
         return 0;
@@ -212,24 +212,24 @@ void DyncListView::clear(void)
     D_PRT("clear>>>");
 }
 
-void DyncListView::initSelectMark(NGInt count)
+void DyncListView::initSelectMark(int count)
 {
 	if(m_select_mark.count() > 0)
 		return;
 	m_select_mark.init(count);
 }
 
-NGBool DyncListView::isItemSelected(NGInt index)
+bool DyncListView::isItemSelected(int index)
 {
 	return m_select_mark.getMark(index);
 }
 
-void DyncListView::selectItem(NGInt index, NGBool sel)
+void DyncListView::selectItem(int index, bool sel)
 {
 	m_select_mark.setMark(index, sel);
 }
 
-void DyncListView::select(NGInt index, NGBool sel)
+void DyncListView::select(int index, bool sel)
 {
 	ItemView* item = (ItemView*)itemFromIndex(index);
 	selectItem(index, sel);
@@ -244,9 +244,9 @@ void DyncListView::updateListView(void)
     updateView();
 }
 
-void DyncListView::selectAll(NGBool sel)
+void DyncListView::selectAll(bool sel)
 {
-    for(NGInt i = 0; i < itemCount(); i++){
+    for(int i = 0; i < itemCount(); i++){
         if(i < getVisibleItemCountNeed()){
             ItemView* item = (ItemView*)(getChildByIndex(i));
             item->setSelected(sel);
@@ -258,25 +258,25 @@ void DyncListView::selectAll(NGBool sel)
 }
 
 
-void DyncListView::initItemAddData(NGInt count)
+void DyncListView::initItemAddData(int count)
 {
 	if(m_data_keeper.count() > 0)
 		return;
 	m_data_keeper.init(count);
 }
 
-void DyncListView::setItemAddData(NGInt index, void* data)
+void DyncListView::setItemAddData(int index, void* data)
 {
     
 	m_data_keeper.setPointer(index, data);
 }
 
-void* DyncListView::itemAddData(NGInt index)
+void* DyncListView::itemAddData(int index)
 {
 	return m_data_keeper.getPointer(index);
 }
 
-void DyncListView::freeze(NGBool f)
+void DyncListView::freeze(bool f)
 {
 	m_freeze = f;
 }
@@ -286,7 +286,7 @@ View* DyncListView::hilightItem(void)
 	return getChildByIndex(m_hi_index - m_up_index);
 }
 
-View* DyncListView::itemFromIndex(NGInt index)
+View* DyncListView::itemFromIndex(int index)
 {
 	// check
 	if(index < m_up_index 
@@ -301,7 +301,7 @@ View* DyncListView::itemFromIndex(NGInt index)
 		return NULL;
 }
 
-NGBool DyncListView::addItem(void* add_data)
+bool DyncListView::addItem(void* add_data)
 {
 	// check
 	if(m_data_keeper.count() < 1)
@@ -314,13 +314,13 @@ NGBool DyncListView::addItem(void* add_data)
 	return true;
 }
 
-NGBool DyncListView::addItem(void)
+bool DyncListView::addItem(void)
 {
     if(m_select_mark.count() > 0) {
 		m_select_mark.setMark(m_item_count, false);
 	}
 	
-	NGInt n = getVisibleItemCountNeed();
+	int n = getVisibleItemCountNeed();
 	if(m_item_count < n )
 	{
 	    CreateViewFromRes(m_item_templete_id, this, NULL, NULL);
@@ -341,8 +341,8 @@ NGBool DyncListView::addItem(void)
 void DyncListView::reLayout(void)
 {
 	IntRect listRc = getRect();
-	NGBool bupdate = FALSE;
-	NGBool scrollVisible = FALSE;
+	bool bupdate = FALSE;
+	bool scrollVisible = FALSE;
 
 	if(m_item_count <= 0)
 			return ;
@@ -350,7 +350,7 @@ void DyncListView::reLayout(void)
 	scrollVisible = m_item_count > m_visible_item_count ? TRUE: FALSE;
 	
 	View *view = firstChild();
-	for (NGInt i = 0; view; i++)
+	for (int i = 0; view; i++)
 	{
 		/*
 		 * Every Item has the same height:
@@ -392,7 +392,7 @@ void DyncListView::reLayout(void)
 	    updateListView();
 }
 
-NGBool DyncListView::removeItem(NGInt index)
+bool DyncListView::removeItem(int index)
 {
      D_PRT("DyncListView::removeItem>>>index=%d",index);    
     if (index < 0 || index > m_item_count || -1 == m_hi_index)
@@ -457,55 +457,55 @@ NGBool DyncListView::removeItem(NGInt index)
     return true;
 }
 
-NGInt DyncListView::itemCount(void)
+int DyncListView::itemCount(void)
 {
     return m_item_count;
 }
-NGBool DyncListView::setItemHeight(NGInt height)
+bool DyncListView::setItemHeight(int height)
 {
     m_nm_height = height;
     return true;
 }
-NGInt DyncListView::itemHeight(void)
+int DyncListView::itemHeight(void)
 {
     return m_nm_height;
 }
-NGBool DyncListView::setHilightItemHeight(NGInt height)
+bool DyncListView::setHilightItemHeight(int height)
 {
     m_hi_height = height;
     return true;
 }
-NGInt DyncListView::hilightItemHeight(void)
+int DyncListView::hilightItemHeight(void)
 {
     return m_hi_height;
 }
-NGInt DyncListView::hilightItemIndex(void)
+int DyncListView::hilightItemIndex(void)
 {
     return m_hi_index;
 }
-void DyncListView::setScrollbarWidth(NGInt w)
+void DyncListView::setScrollbarWidth(int w)
 {
     m_v_scrollbar_width = w;
 }
-NGInt DyncListView::scrollbarWidth(void)
+int DyncListView::scrollbarWidth(void)
 {
     return m_v_scrollbar_width;
 }
-void DyncListView::setScrollbarMarginRight(NGInt m)
+void DyncListView::setScrollbarMarginRight(int m)
 {
     m_v_scrollbar_margin_right = m;
 }
-NGInt DyncListView::scrollbarMarginRight(void)
+int DyncListView::scrollbarMarginRight(void)
 {
     return m_v_scrollbar_margin_right;
 }
-void DyncListView::setItemTemplateId(NGInt item_res_id)
+void DyncListView::setItemTemplateId(int item_res_id)
 {
-    if (m_item_templete_id == (ResID)-1)
+    if (m_item_templete_id == (HTResId)-1)
         m_item_templete_id = item_res_id; 
 }
 
-void DyncListView::setItemRect(View * item,NGInt left, NGInt top, NGInt right, NGInt bottom)
+void DyncListView::setItemRect(View * item,int left, int top, int right, int bottom)
 {
     item->setRectNoUpdate(left,top,right,bottom);
     /*if(m_histart >= 0 && top < m_histart)
@@ -516,7 +516,7 @@ void DyncListView::setItemRect(View * item,NGInt left, NGInt top, NGInt right, N
         item->updateView(left,top,right - left + 1,bottom - top + 1);*/
 }
 
-void DyncListView::itemLayout(NGInt hilight_index)
+void DyncListView::itemLayout(int hilight_index)
 {
     if(m_dock_top)
         layoutUpToDown(0,hilight_index);
@@ -524,9 +524,9 @@ void DyncListView::itemLayout(NGInt hilight_index)
         layoutDownToUp(-1,hilight_index);
 }
 
-void DyncListView::layoutDownToUp(NGInt from_height, NGInt hilight_index)
+void DyncListView::layoutDownToUp(int from_height, int hilight_index)
 {
-    NGInt h = 0, w = 0, n = 1;
+    int h = 0, w = 0, n = 1;
     View* item = lastChild();
     w = getRect().width();
     
@@ -546,9 +546,9 @@ void DyncListView::layoutDownToUp(NGInt from_height, NGInt hilight_index)
     }
 }
 
-void DyncListView::layoutUpToDown(NGInt from_height, NGInt hilight_index)
+void DyncListView::layoutUpToDown(int from_height, int hilight_index)
 {
-    NGInt h = 0, w = 0, n = 1;
+    int h = 0, w = 0, n = 1;
     View* item = firstChild();
     h = from_height;
     w = getRect().width();
@@ -566,14 +566,14 @@ void DyncListView::layoutUpToDown(NGInt from_height, NGInt hilight_index)
         item = item->nextSibling();
     }
 }
-void DyncListView::onLoadItemData(NGInt index, View* view)
+void DyncListView::onLoadItemData(int index, View* view)
 {
     // check
     if(index < 0 || index > m_item_count - 1)
         return;
 
-    CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)CustomEvent::CUS_LOAD_DATA, (NGInt)this);
-    event.setExParam((NGInt)view, index);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (int)CustomEvent::CUS_LOAD_DATA, (int)this);
+    event.setExParam((int)view, index);
     raiseEvent(&event);
 }
 
@@ -587,15 +587,15 @@ View* DyncListView::lastVisibleItem(void)
     return lastChild();
 }
 
-NGInt DyncListView::getVisibleItemCountNeed(void)
+int DyncListView::getVisibleItemCountNeed(void)
 {
     return ((getRect().height() - m_hi_height + (m_nm_height - 1))/m_nm_height + 1);
 }
 
-void DyncListView::hilight(NGInt index)
+void DyncListView::hilight(int index)
 {
     View* last_hilight_item = NULL, *item = NULL;
-    NGBool jump = false;
+    bool jump = false;
     IntRect last_hilight_rect, rect;
     ///////////////////// we assume that : all VisibleItem is in screen.
     // check
@@ -604,7 +604,7 @@ void DyncListView::hilight(NGInt index)
 
 	// if index is current hilight index, we just send a notify.
 	if(m_hi_index == index && m_focus) {
-		CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)CustomEvent::CUS_SELCHANGED, (NGInt)this);
+		CustomEvent event(Event::CUSTOM_NOTIFY, (int)CustomEvent::CUS_SELCHANGED, (int)this);
 		raiseEvent(&event);
 		return;
 	}
@@ -679,12 +679,12 @@ void DyncListView::hilight(NGInt index)
             updateListView();
         }
         else{
-            NGInt vbot = getRect().bottom();
+            int vbot = getRect().bottom();
             D_PRT("bottom >>>index=%d,up=%d,down=%d",index,m_up_index,m_down_index);    
             item = getChildByIndex(index - m_up_index);
-            NGInt bot = item->getRect().bottom();
+            int bot = item->getRect().bottom();
             if( bot > vbot ){//the last is not full in display;
-                NGInt i;
+                int i;
                 View* first = firstChild();
                 // make order, first -> last
                 detachChild(first);
@@ -712,10 +712,10 @@ void DyncListView::hilight(NGInt index)
         }
         else{
             item = getChildByIndex(index - m_up_index);
-            NGInt top = item->getRect().top();
+            int top = item->getRect().top();
             D_PRT("top >>>index=%d,up=%d,down=%d",index,m_up_index,m_down_index);     
             if(top < 0){//the top is not full in display
-                NGInt i;
+                int i;
                 View* last = lastChild();
                 detachChild(last);
                 addChildHead(last);
@@ -773,7 +773,7 @@ hilight_end:
     m_hi_index = index;
     
     m_focus = true;
-    CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)CustomEvent::CUS_SELCHANGED, (NGInt)this);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (int)CustomEvent::CUS_SELCHANGED, (int)this);
     raiseEvent(&event);
 }
 
@@ -781,21 +781,21 @@ void DyncListView::setHilightView(View* view)
 {
     if(view){
         IntRect rect = view->getRect();
-        NGBool ret = view->setRectNoUpdate(rect.left(), rect.top(), rect.right(), rect.top() + m_hi_height - m_itemRowGap ); 
+        bool ret = view->setRectNoUpdate(rect.left(), rect.top(), rect.right(), rect.top() + m_hi_height - m_itemRowGap ); 
         setFocusView(view);
         if(ret)
             view->updateView(rect); 
     }
 }
 
-NGBool DyncListView::dispatchEvent(Event* event)
+bool DyncListView::dispatchEvent(Event* event)
 {
     switch (event->eventType()) {
         case Event::KEY_DOWN:
         case Event::KEY_LONGPRESSED:
         case Event::KEY_ALWAYSPRESS:
             {
-                NGInt code = ((KeyEvent *)event)->keyCode();
+                int code = ((KeyEvent *)event)->keyCode();
                 if ( onKeyPressed (code) ) {
                     return DISPATCH_STOP_MSG;
                 }
@@ -807,7 +807,7 @@ NGBool DyncListView::dispatchEvent(Event* event)
     return DISPATCH_CONTINUE_MSG;
 }
 
-NGBool DyncListView::onKeyPressed(NGInt keyCode)
+bool DyncListView::onKeyPressed(int keyCode)
 {
 	if((!m_focus)&&(keyCode!=KeyEvent::KEYCODE_DOWN))
 	{
@@ -819,7 +819,7 @@ NGBool DyncListView::onKeyPressed(NGInt keyCode)
 		return true;
 	}
     if(keyCode == KeyEvent::KEYCODE_UP) {
-        NGInt index = m_hi_index-1 >= 0 ? m_hi_index-1 : m_item_count-1;
+        int index = m_hi_index-1 >= 0 ? m_hi_index-1 : m_item_count-1;
         if(index == m_item_count-1)
             m_dock_top = false;
             
@@ -827,7 +827,7 @@ NGBool DyncListView::onKeyPressed(NGInt keyCode)
 		return true;
     }
     else if(keyCode == KeyEvent::KEYCODE_DOWN) {
-        NGInt index = m_hi_index+1 <= m_item_count-1 ? m_hi_index+1 : 0;
+        int index = m_hi_index+1 <= m_item_count-1 ? m_hi_index+1 : 0;
         if(index == 0)
             m_dock_top = true;
             
@@ -838,7 +838,7 @@ NGBool DyncListView::onKeyPressed(NGInt keyCode)
 	    return false;
 }
 
-void DyncListView::drawContent(GraphicsContext* context, IntRect &rc, NGInt status)
+void DyncListView::drawContent(GraphicsContext* context, IntRect &rc, int status)
 {
 	reLayout();
     PanelView::drawContent(context, rc, status);
@@ -846,7 +846,7 @@ void DyncListView::drawContent(GraphicsContext* context, IntRect &rc, NGInt stat
 
 #define MIN_BAR_OF_BLST  (5<<16)
 
-void DyncListView::drawScroll(GraphicsContext* context, IntRect &rc, NGInt status)
+void DyncListView::drawScroll(GraphicsContext* context, IntRect &rc, int status)
 {
     IntRect rcBar, rcBarBk;
 

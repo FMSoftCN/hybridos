@@ -53,20 +53,20 @@ class TextMode{
 		 TextOutOmitted = 0x0010000,
 		};
 
-		static NGUInt setAlign(NGUInt format, NGInt align) {
+		static unsigned int setAlign(unsigned int format, int align) {
 			return (format & ~3) | (align & 3);
 		}
-		static NGInt getAlign(NGUInt format) {
+		static int getAlign(unsigned int format) {
 			return format & 3;
 		}
 
-		static NGUInt setVAlign(NGUInt format, NGInt valign) {
+		static unsigned int setVAlign(unsigned int format, int valign) {
 			return (format & ~12) | (valign & 3) << 2;
 		}
-		static NGInt getVAlign(NGUInt format) {
+		static int getVAlign(unsigned int format) {
 			return (format >> 3) & 3;
 		}
-		static NGUInt setBreak(NGUInt format, NGInt brk) {
+		static unsigned int setBreak(unsigned int format, int brk) {
 			format &= ~(WordBreak|CharBreak|SingleLine);
 			switch(brk) {
 			case TEXTBREAK_WORD: return format|WordBreak;
@@ -75,7 +75,7 @@ class TextMode{
 				return format|SingleLine;
 			}
 		}
-		static NGInt getBreak(NGUInt brk) {
+		static int getBreak(unsigned int brk) {
 			switch(brk & (WordBreak|CharBreak|SingleLine)) {
 			case WordBreak: return TEXTBREAK_WORD;
 			case CharBreak: return TEXTBREAK_CHAR;
@@ -83,21 +83,21 @@ class TextMode{
 			}
 		}
 
-		static NGInt getTextOutMode(NGUInt brk) {
+		static int getTextOutMode(unsigned int brk) {
 			return brk & TextOutOmitted ? TEXTOUT_OMITTED : TEXTOUT_NORMAL;
 		}
 
-		static NGUInt setTextOutMode(NGUInt format, NGInt txtmod) {
+		static unsigned int setTextOutMode(unsigned int format, int txtmod) {
 			return (txtmod == TEXTOUT_OMITTED || txtmod & TextOutOmitted)? 
 				format | TextOutOmitted : format & (~TextOutOmitted);
 		}
 
-        static NGUInt setTextOutLineMode(NGUInt format, NGInt mode)
+        static unsigned int setTextOutLineMode(unsigned int format, int mode)
         {
             return mode?(format | OutLine):(format & ~OutLine);
         }
 
-        static NGUInt getTextOutLineMode(NGUInt format)
+        static unsigned int getTextOutLineMode(unsigned int format)
         {
             return (format & OutLine);
         }        

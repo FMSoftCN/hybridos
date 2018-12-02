@@ -37,26 +37,26 @@ class Image : public RefCount {
         virtual ~Image();
 
         /*static func to create a image or nine - patch image from file.*/
-        static Image* loadImage(NGCPStr file_path);
+        static Image* loadImage(const char * file_path);
 
         virtual void paint(GraphicsContext* context, const IntRect& rc,
-                ImageFormat format, NGInt xo = 0, NGInt yo = 0);
+                ImageFormat format, int xo = 0, int yo = 0);
 
-        virtual NGBool setImage(NGCPStr file_path);
-        virtual NGBool setImageBitmap(Bitmap* pbmp);
+        virtual bool setImage(const char * file_path);
+        virtual bool setImageBitmap(Bitmap* pbmp);
 
-		void setLoadOnPainting(NGBool bLoadOnPainting) { m_bLoadOnPainting = bLoadOnPainting; }
-		NGBool isLoadOnPainting(void) { return m_bLoadOnPainting; }
+		void setLoadOnPainting(bool bLoadOnPainting) { m_bLoadOnPainting = bLoadOnPainting; }
+		bool isLoadOnPainting(void) { return m_bLoadOnPainting; }
 		
-        NGInt width(void);
-        NGInt height(void);
-		NGBool setReplaceColor(const DWORD color);
+        int width(void);
+        int height(void);
+		bool setReplaceColor(const DWORD color);
 		
     protected:
-		void calc_pos_align(NGInt *px, NGInt *py, const IntRect *rc, NGInt imgw, NGInt imgh, ImageFormat format);
+		void calc_pos_align(int *px, int *py, const IntRect *rc, int imgw, int imgh, ImageFormat format);
 
     protected:
-		NGBool 		m_bLoadOnPainting;
+		bool 		m_bLoadOnPainting;
 	  	string      m_filePath;
         Bitmap*     m_pBitmap;
 		DWORD 	m_replaceColor;

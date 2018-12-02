@@ -341,8 +341,8 @@ bool ResPackage::addFontResource(const TResourceEntry *fonts)
 	return true;
 }
 
-//bool ResPackage::addStyleResource(ResID id, ResID superid, const Style::Element *elements, int count)
-bool ResPackage::addStyleResource(ResID id, ResID superid, const TRStyleElement *elements, int count)
+//bool ResPackage::addStyleResource(HTResId id, HTResId superid, const Style::Element *elements, int count)
+bool ResPackage::addStyleResource(HTResId id, HTResId superid, const TRStyleElement *elements, int count)
 {
 	if(id == 0) //add the common resource
 	{
@@ -369,7 +369,7 @@ bool ResPackage::addStyleResource(ResID id, ResID superid, const TRStyleElement 
 	return true;
 }
 
-bool ResPackage::addUIResource(ResID id, CB_CREATE_VIEW cb_createView)
+bool ResPackage::addUIResource(HTResId id, CB_CREATE_VIEW cb_createView)
 {
 	m_resources[R_TYPE_UI].uiRes().push_back(cb_createView);
 
@@ -391,7 +391,7 @@ bool ResPackage::addMenuResource(MENU_RES_ARRAY *pMnuArray, int nMenuCount)
 	return true;
 }
 
-bool ResPackage::addMenuResource(ResID id, CB_CREATE_MENU cb_createMenu)
+bool ResPackage::addMenuResource(HTResId id, CB_CREATE_MENU cb_createMenu)
 {
 	m_resources[R_TYPE_MENU].menuRes().push_back(cb_createMenu);
 
@@ -399,13 +399,13 @@ bool ResPackage::addMenuResource(ResID id, CB_CREATE_MENU cb_createMenu)
 }
 
 // ---------------------
-void ResPackage::addDrawableResource(TRDrawableArrayItem* all_elements, NGInt size)
+void ResPackage::addDrawableResource(TRDrawableArrayItem* all_elements, int size)
 {
 	m_drawableResource = all_elements;
 	m_drawableResourceSize = size;
 }
 
-static DrawableSet* create_drawable_set_from_res(ResID drset_super_id, 
+static DrawableSet* create_drawable_set_from_res(HTResId drset_super_id, 
 		const TRDrawableSetItem* items) 
 {
 	DrawableSet *drset_super = NULL;
@@ -417,7 +417,7 @@ static DrawableSet* create_drawable_set_from_res(ResID drset_super_id,
 
 	DrawableSet * drset = NGUX_NEW_EX(SimpleDrawableSet,(drset_super));
 
-	for(NGInt i=0; items[i].dr_id != -1; i++)
+	for(int i=0; items[i].dr_id != -1; i++)
 	{
 		Drawable *dr = NULL;
 		if(items[i].drres_id != 0)
@@ -428,7 +428,7 @@ static DrawableSet* create_drawable_set_from_res(ResID drset_super_id,
 	return drset;
 }
 
-static DrawableSetGroup* create_drawable_set_group_from_res(ResID drsetgroup_super_id, 
+static DrawableSetGroup* create_drawable_set_group_from_res(HTResId drsetgroup_super_id, 
 		const TRDrawableSetGroupItem* items) 
 {
 	DrawableSetGroup* drsetgroup_super = NULL;
@@ -445,20 +445,20 @@ static DrawableSetGroup* create_drawable_set_group_from_res(ResID drsetgroup_sup
 	return drsetgroup;
 }
 
-void ResPackage::addDrawableSetResource(TRDrawableSetArrayItem* all_items, NGInt size)
+void ResPackage::addDrawableSetResource(TRDrawableSetArrayItem* all_items, int size)
 {
 	m_drawablesetResource = all_items;
 	m_drawablesetResourceSize = size;
 }
 
-void ResPackage::addDrawableSetGroupResource(TRDrawableSetGroupArrayItem* all_groups, NGInt size)
+void ResPackage::addDrawableSetGroupResource(TRDrawableSetGroupArrayItem* all_groups, int size)
 {
 	m_drawablesetGroupResource = all_groups;
 	m_drawablesetGroupResourceSize = size;
 }
 
-void ResPackage::addDrawableSetGroupResource(ResID drsetgroup_id, 
-		ResID drsetgroup_super_id, const TRDrawableSetGroupItem * items)
+void ResPackage::addDrawableSetGroupResource(HTResId drsetgroup_id, 
+		HTResId drsetgroup_super_id, const TRDrawableSetGroupItem * items)
 {
 	DrawableSetGroup* drsetgroup = 
 		create_drawable_set_group_from_res(drsetgroup_super_id, items);
@@ -467,7 +467,7 @@ void ResPackage::addDrawableSetGroupResource(ResID drsetgroup_id,
 	m_resources[R_TYPE_DRSETGROUP].drawableSetGroupRes().push_back(drsetgroup);
 }
 
-void ResPackage::addThemeResource(ResID theme_id, const char* theme_name, 
+void ResPackage::addThemeResource(HTResId theme_id, const char* theme_name, 
 		const TRThemeItem* items)
 {
 	ThemeRes* themeR = NGUX_NEW_EX(ThemeRes,());
@@ -478,7 +478,7 @@ void ResPackage::addThemeResource(ResID theme_id, const char* theme_name,
 	}
 }
 
-void *ResPackage::getRes(ResID id)
+void *ResPackage::getRes(HTResId id)
 {
 	switch (RESTYPE(id))
 	{
@@ -504,14 +504,14 @@ void *ResPackage::getRes(ResID id)
 	return (void*)NULL;
 }
 
-const char *ResPackage::getText(ResID id)
+const char *ResPackage::getText(HTResId id)
 {
 	if (R_TYPE_TEXT != RESTYPE(id))
 		return (const char*)NULL;
 	return (const char*)(m_curLangTextRes[RESINDEX(id) - 1].value);
 }
 
-Style *ResPackage::getStyle(ResID id)
+Style *ResPackage::getStyle(HTResId id)
 {
 	int idx = RESINDEX(id) - 1;
 	if(id == 0)
@@ -524,7 +524,7 @@ Style *ResPackage::getStyle(ResID id)
 	return m_resources[RESTYPE(id)].styleRes()[idx];
 }
 
-GifAnimate *ResPackage::getGifAnimate(ResID id)
+GifAnimate *ResPackage::getGifAnimate(HTResId id)
 {
 	int idx = RESINDEX(id) - 1;
 	if (R_TYPE_IMAGE != RESTYPE(id) || idx < 0 
@@ -534,7 +534,7 @@ GifAnimate *ResPackage::getGifAnimate(ResID id)
 	return ResLoader::getInstance()->getGifAnimate(m_imageTResourceEntry[idx].value);
 }
 
-Image *ResPackage::getImage(ResID id)
+Image *ResPackage::getImage(HTResId id)
 {
 	int idx = RESINDEX(id) - 1;
 
@@ -545,7 +545,7 @@ Image *ResPackage::getImage(ResID id)
     return ResLoader::getInstance()->getImage(m_imageTResourceEntry[idx].value);
 }
 
-Bitmap *ResPackage::getBitmap(ResID id)
+Bitmap *ResPackage::getBitmap(HTResId id)
 {
 	int idx = RESINDEX(id) - 1;
 
@@ -556,7 +556,7 @@ Bitmap *ResPackage::getBitmap(ResID id)
     return ResLoader::getInstance()->getBitmap(m_imageTResourceEntry[idx].value);
 }
 
-Logfont *ResPackage::getFont(ResID id)
+Logfont *ResPackage::getFont(HTResId id)
 {
 	int idx = RESINDEX(id) - 1;
 	if (R_TYPE_FONT != RESTYPE(id) || idx < 0 
@@ -565,7 +565,7 @@ Logfont *ResPackage::getFont(ResID id)
 	return m_resources[RESTYPE(id)].fontRes()[idx].get();
 }
 
-CB_CREATE_VIEW ResPackage::getUi(ResID id)
+CB_CREATE_VIEW ResPackage::getUi(HTResId id)
 {
 	int idx = RESINDEX(id) - 1;
 	if (R_TYPE_UI != RESTYPE(id) || idx < 0 
@@ -574,7 +574,7 @@ CB_CREATE_VIEW ResPackage::getUi(ResID id)
 	return (CB_CREATE_VIEW)m_pUIResArray[idx].UiFunction; //m_resources[RESTYPE(id)].uiRes()[idx];
 }
 
-View *ResPackage::createView(ResID id, 
+View *ResPackage::createView(HTResId id, 
 		View *parent, ViewContext *viewContext, ContentProvider* provider)
 {
 	CB_CREATE_VIEW cb = (CB_CREATE_VIEW)getRes(id);
@@ -583,7 +583,7 @@ View *ResPackage::createView(ResID id,
 	return cb(parent, viewContext, provider);
 }
 
-CB_CREATE_MENU ResPackage::getMenu(ResID id)
+CB_CREATE_MENU ResPackage::getMenu(HTResId id)
 {
 	int idx = RESINDEX(id) - 1;
 	if (R_TYPE_MENU != RESTYPE(id) || idx < 0 
@@ -593,7 +593,7 @@ CB_CREATE_MENU ResPackage::getMenu(ResID id)
 		//m_resources[RESTYPE(id)].menuRes()[idx];
 }
 
-Menu* ResPackage::createMenu(ResID id, Menu *parent, EventListener* listener)
+Menu* ResPackage::createMenu(HTResId id, Menu *parent, EventListener* listener)
 {
 	CB_CREATE_MENU cbm = (CB_CREATE_MENU)getRes(id);
 	if (NULL == cbm)
@@ -601,7 +601,7 @@ Menu* ResPackage::createMenu(ResID id, Menu *parent, EventListener* listener)
 	return cbm(parent, listener);
 }
 
-Drawable* ResPackage::getDrawable(ResID id)
+Drawable* ResPackage::getDrawable(HTResId id)
 {
     int idx = RESINDEX(id) - 1;
 
@@ -612,7 +612,7 @@ Drawable* ResPackage::getDrawable(ResID id)
 	Drawable * dr = NULL;
 	TRStyleElement* elements = NULL;
 	const char* name = m_drawableResource[idx].base_name;
-	ResID super_style_id = m_drawableResource[idx].super_style_id;
+	HTResId super_style_id = m_drawableResource[idx].super_style_id;
 
 	elements = (TRStyleElement*)m_drawableResource[idx].style_element;
 
@@ -640,7 +640,7 @@ Drawable* ResPackage::getDrawable(ResID id)
 	return dr;
 }
 
-DrawableSet* ResPackage::getDrawableSet(ResID id)
+DrawableSet* ResPackage::getDrawableSet(HTResId id)
 {
     int idx = RESINDEX(id) - 1;
 	
@@ -648,20 +648,20 @@ DrawableSet* ResPackage::getDrawableSet(ResID id)
 			|| idx >= m_drawablesetResourceSize)
         return (DrawableSet *)NULL;
 
-	NGInt drset_super_id = m_drawablesetResource[idx].super_drset_id;
+	int drset_super_id = m_drawablesetResource[idx].super_drset_id;
 	TRDrawableSetItem *items = (TRDrawableSetItem *)m_drawablesetResource[idx].drawables;
 
 	return create_drawable_set_from_res(drset_super_id, items);
 }
 
-DrawableSetGroup* ResPackage::getDrawableSetGroup(ResID id)
+DrawableSetGroup* ResPackage::getDrawableSetGroup(HTResId id)
 {
     int idx = RESINDEX(id) - 1;
     if (R_TYPE_DRSETGROUP != RESTYPE(id) || idx < 0 
 			|| idx >= m_drawablesetGroupResourceSize)
         return (DrawableSetGroup *)NULL;
 
-	NGInt drgroup_super_id = m_drawablesetGroupResource[idx].drsetgroup_super_id;
+	int drgroup_super_id = m_drawablesetGroupResource[idx].drsetgroup_super_id;
 	TRDrawableSetGroupItem* items = (TRDrawableSetGroupItem *)m_drawablesetGroupResource[idx].drawablesets;
 
 	DrawableSetGroup* group = create_drawable_set_group_from_res(drgroup_super_id , items);
@@ -669,7 +669,7 @@ DrawableSetGroup* ResPackage::getDrawableSetGroup(ResID id)
 	return group;
 }
 
-ThemeRes* ResPackage::getThemeRes(ResID id)
+ThemeRes* ResPackage::getThemeRes(HTResId id)
 {
     int idx = RESINDEX(id) - 1;
     if (R_TYPE_THEME!= RESTYPE(id) || idx < 0 
@@ -678,7 +678,7 @@ ThemeRes* ResPackage::getThemeRes(ResID id)
     return m_resources[RESTYPE(id)].themeRes()[idx];
 }
 
-DrawableSet* ResPackage::getThemeDrawableSet(NGInt theme_drset_id)
+DrawableSet* ResPackage::getThemeDrawableSet(int theme_drset_id)
 {
 	if (NULL != m_theme) {
 		return m_theme->getDrawableSet(theme_drset_id);
@@ -686,7 +686,7 @@ DrawableSet* ResPackage::getThemeDrawableSet(NGInt theme_drset_id)
 	return NULL;
 }
 
-NGBool ResPackage::setTheme(ResID theme_res_id, NGBool update_system)
+bool ResPackage::setTheme(HTResId theme_res_id, bool update_system)
 {
 	ThemeRes* themeR = getThemeRes(theme_res_id);
 	if (NULL == themeR)
@@ -712,7 +712,7 @@ ThemeRes* ResPackage::theme(void)
 	return m_theme;
 }
 
-ResID ResPackage::themeId(void)
+HTResId ResPackage::themeId(void)
 {
 	return m_theme_id;
 }
@@ -777,7 +777,7 @@ bool RegisterCommonDrawableFromRes(int dr_id,
 }
 
 bool RegisterViewDrawableSetFromRes(const char* view_name,
-		ResID super_drset, const TRDrawableSetItem *items)
+		HTResId super_drset, const TRDrawableSetItem *items)
 {
 	if(!view_name)
 		return false;
@@ -791,8 +791,8 @@ bool RegisterViewDrawableSetFromRes(const char* view_name,
 	return true;
 }
 
-NGBool RegisterViewDrawableSetGroupFromRes(NGCPStr view_name, 
-		ResID super_drsetgroup, const TRDrawableSetGroupItem *items)
+bool RegisterViewDrawableSetGroupFromRes(const char * view_name, 
+		HTResId super_drsetgroup, const TRDrawableSetGroupItem *items)
 {
 	if(!view_name)
 		return false;

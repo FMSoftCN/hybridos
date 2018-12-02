@@ -31,7 +31,7 @@
 
 NAMESPACE_BEGIN
 
-typedef NGULong NGParam;
+typedef unsigned long NGParam;
 
 class ControllerClient;
 class View;
@@ -42,27 +42,27 @@ public:
 	Controller();
 	virtual ~Controller();
 
-	virtual NGUInt showView(NGInt view_id, NGParam param1, NGParam param2); //show a view in the stack
-	virtual NGUInt switchView(NGInt view_id, NGParam param1, NGParam param2); //switch a view with stack
-	virtual	NGUInt showModalView(NGInt view_id, NGParam param1, NGParam param2);
-	virtual NGUInt backView(NGUInt endcode = 0);
+	virtual unsigned int showView(int view_id, NGParam param1, NGParam param2); //show a view in the stack
+	virtual unsigned int switchView(int view_id, NGParam param1, NGParam param2); //switch a view with stack
+	virtual	unsigned int showModalView(int view_id, NGParam param1, NGParam param2);
+	virtual unsigned int backView(unsigned int endcode = 0);
 
-	virtual NGUInt setMode(ControllerModeList* modeList) { return 0; }
+	virtual unsigned int setMode(ControllerModeList* modeList) { return 0; }
 
-	virtual NGUInt onClientCommand(NGInt sender, NGUInt cmd_id, NGParam param1, NGParam param2) { return 0; }
+	virtual unsigned int onClientCommand(int sender, unsigned int cmd_id, NGParam param1, NGParam param2) { return 0; }
 
 	void cleanAllClient();
 
 	virtual void exit() { NGUX_DELETE(this); }
 	
-    ControllerClient* getTop(NGInt index = 0);
-	void moveClientToTop(NGInt view_id);
-	void pop(NGInt pop_count);
+    ControllerClient* getTop(int index = 0);
+	void moveClientToTop(int view_id);
+	void pop(int pop_count);
 
-	ControllerClient* find(NGInt view_id);
-    void deleteView(NGInt view_id, NGBool bExit = true);
+	ControllerClient* find(int view_id);
+    void deleteView(int view_id, bool bExit = true);
 	int getClientCount() { return m_list.size();}
-    NGInt getTopViewId(void);
+    int getTopViewId(void);
 
 protected:
 	LIST(ControllerClient*, ControllerClientList)
@@ -72,23 +72,23 @@ protected:
 	virtual void animationSwitch(ControllerClient* prev, ControllerClient* cur);
 
 	void push(ControllerClient* client);
-	void setTop(ControllerClient* client,  NGInt index = 0);
+	void setTop(ControllerClient* client,  int index = 0);
 
-	NGUInt passCommandToClient(NGInt client_id, NGUInt cmd_id, NGParam param1, NGParam param);
+	unsigned int passCommandToClient(int client_id, unsigned int cmd_id, NGParam param1, NGParam param);
 
 
-	virtual ControllerClient*  createClient(NGInt view_id, NGParam param1, NGParam param2) { return NULL; }
+	virtual ControllerClient*  createClient(int view_id, NGParam param1, NGParam param2) { return NULL; }
 
-	virtual View * getViewParent(NGInt view_id) = 0; 
+	virtual View * getViewParent(int view_id) = 0; 
 
-	NGInt m_modalCount;
+	int m_modalCount;
 };
 
 #define DECLARE_CONTROLLER_CLIENTS \
-	protected: virtual ControllerClient* createClient(NGInt view_id, NGParam param1, NGParam param2);
+	protected: virtual ControllerClient* createClient(int view_id, NGParam param1, NGParam param2);
 
 #define BEGIN_CONTROLLER_CLIENTS(clss) \
-	ControllerClient* clss::createClient(NGInt view_id, NGParam param1, NGParam param2) { switch(view_id) { 
+	ControllerClient* clss::createClient(int view_id, NGParam param1, NGParam param2) { switch(view_id) { 
 
 #define END_CONTROLLER_CLIENTS \
 	} return NULL;}
@@ -110,9 +110,9 @@ class ControllerClient : public ViewContext
 protected:
 	Controller* m_owner; //the controller onwer
 	View*       m_baseView; //the view of ui
-	NGInt       m_id;
-	NGInt      m_inactiveTimes;
-	NGBool  m_bModal;
+	int       m_id;
+	int      m_inactiveTimes;
+	bool  m_bModal;
 	ControllerModeManager *m_modeManager;
 	ControllerModeList    *m_currentList;
 public:
@@ -125,7 +125,7 @@ public:
          , m_currentList(NULL) 
 	{}
 
-	ControllerClient(Controller* owner, NGInt id, View *p_baseView) 
+	ControllerClient(Controller* owner, int id, View *p_baseView) 
         : m_owner(owner)
           , m_baseView(p_baseView)
           , m_id(id)
@@ -134,7 +134,7 @@ public:
           , m_currentList(NULL) 
     { }
 
-	ControllerClient(Controller* owner, NGInt id, View * parent, NGParam param1, NGParam param2)
+	ControllerClient(Controller* owner, int id, View * parent, NGParam param1, NGParam param2)
         : m_owner(owner)
           , m_baseView(NULL)
           , m_id(id)
@@ -145,20 +145,20 @@ public:
 
 	virtual ~ControllerClient();
 
-	void setId(NGInt id) { m_id = id; }
-	NGInt getId() { return m_id; }
-	NGInt getInActiveTimes() { return m_inactiveTimes; }
+	void setId(int id) { m_id = id; }
+	int getId() { return m_id; }
+	int getInActiveTimes() { return m_inactiveTimes; }
 
-	NGBool isTop() {
+	bool isTop() {
 	    return ((m_owner->getTop() == this) && (AppManager::getInstance()->getCurrentApp() == (BaseApp *)m_owner));
 	}
-	void setModal(NGBool bModal ) { m_bModal = bModal;}
-	NGBool isModal (void) {return m_bModal;}
+	void setModal(bool bModal ) { m_bModal = bModal;}
+	bool isModal (void) {return m_bModal;}
 
 	virtual void active();
 	virtual void inactive();
 
-	virtual NGUInt onControllerCommand(NGUInt cmd_id,NGParam param1, NGParam param2) {
+	virtual unsigned int onControllerCommand(unsigned int cmd_id,NGParam param1, NGParam param2) {
 		return 0;
 	}
 
@@ -167,11 +167,11 @@ public:
 	virtual void onSleep() {} //when the view is destoried
 	virtual void onWakeup() {}
 
-	virtual NGBool onKey(NGInt keyCode, KeyEvent* event){ return DISPATCH_CONTINUE_MSG; }
-	virtual void onBackView(NGUInt endcode) { }
-	virtual void onPopView(NGUInt endcode) { }
+	virtual bool onKey(int keyCode, KeyEvent* event){ return DISPATCH_CONTINUE_MSG; }
+	virtual void onBackView(unsigned int endcode) { }
+	virtual void onPopView(unsigned int endcode) { }
 
-	virtual NGBool setCurrentMode(NGInt mode_id) {
+	virtual bool setCurrentMode(int mode_id) {
 		if(!m_modeManager)
 			return false;
 
@@ -185,33 +185,33 @@ public:
 		return true;
 	}
 	
-	virtual NGInt GetValueFromCurrentMode(NGInt mode_id,NGInt sub_id); 
+	virtual int GetValueFromCurrentMode(int mode_id,int sub_id); 
 
-	NGUInt getCurrentModeId() {
+	unsigned int getCurrentModeId() {
 		return m_currentList ? m_currentList->mode_id : 0;
 	}
 
-	NGUInt showView(NGInt view_id, NGParam param1, NGParam param2){
+	unsigned int showView(int view_id, NGParam param1, NGParam param2){
 		if(m_owner)
 			return m_owner->showView(view_id, param1, param2);
 		return 0;
 	}
 
-	NGUInt switchView(NGInt view_id, NGParam param1, NGParam param2) //switch a view with stack
+	unsigned int switchView(int view_id, NGParam param1, NGParam param2) //switch a view with stack
 	{
 		if(m_owner)
 			return m_owner->switchView(view_id, param1, param2);
 		return 0;
 	}
 
-	NGUInt showModalView(NGInt view_id, NGParam param1, NGParam param2)
+	unsigned int showModalView(int view_id, NGParam param1, NGParam param2)
 	{
 		if(m_owner)
 			return m_owner->showModalView(view_id, param1, param2);
 		return 0;
 	}
 
-	NGUInt backView(NGUInt end_code = 0)
+	unsigned int backView(unsigned int end_code = 0)
 	{
 		if(m_owner)
 			return m_owner->backView(end_code);
@@ -231,7 +231,7 @@ public:
 
 	void cleanBaseView();
 
-	NGUInt sendCommand(NGUInt cmd_id, NGParam param1, NGParam param2) {
+	unsigned int sendCommand(unsigned int cmd_id, NGParam param1, NGParam param2) {
 		if(m_owner)
 			return m_owner->onClientCommand(getId(), cmd_id, param1, param2);
 		return 0;
@@ -251,9 +251,9 @@ protected:
 			m_currentList = NULL;
 	}
 
-	void setView(NGInt view_id, View* view) { }
+	void setView(int view_id, View* view) { }
 
-	EventListener* getHandle(NGInt handle_id, NGInt event_type) { return NULL; }
+	EventListener* getHandle(int handle_id, int event_type) { return NULL; }
 };
 
 

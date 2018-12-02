@@ -54,7 +54,7 @@ void SelectedIconItemView::setSelectedImage(Image* img)
 	m_selImg = img; 
 }
 
-void SelectedIconItemView::drawContent(GraphicsContext* context, IntRect &rc, NGInt status)
+void SelectedIconItemView::drawContent(GraphicsContext* context, IntRect &rc, int status)
 {
 	ImageFormat format;	
 	format.align = ALIGN_CENTER;

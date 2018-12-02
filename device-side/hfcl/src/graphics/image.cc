@@ -53,9 +53,9 @@ Image::~Image()
     }
 }
 
-static NGInt get_image_type(NGCPStr file)
+static int get_image_type(const char * file)
 {
-    NGInt len = strlen(file);
+    int len = strlen(file);
     
     if (len > 4 && (strcasecmp(file + len - 4, ".png") == 0
                 || strcasecmp(file + len - 4, ".gif") == 0)) {
@@ -70,7 +70,7 @@ static NGInt get_image_type(NGCPStr file)
     return IMAGE_TYPE_NORMAL;
 }
 
-Image* Image::loadImage(NGCPStr file_path)
+Image* Image::loadImage(const char * file_path)
 {
     Image* pImg = NULL;
 
@@ -98,7 +98,7 @@ Image* Image::loadImage(NGCPStr file_path)
     return pImg;
 }
 
-NGBool Image::setImage(NGCPStr file_path)
+bool Image::setImage(const char * file_path)
 {
     if (file_path) {
 		m_filePath = file_path;
@@ -113,7 +113,7 @@ NGBool Image::setImage(NGCPStr file_path)
     return true;
 }
 
-NGBool Image::setImageBitmap(Bitmap* pbmp)
+bool Image::setImageBitmap(Bitmap* pbmp)
 {
     if (m_pBitmap != pbmp)
     {
@@ -126,9 +126,9 @@ NGBool Image::setImageBitmap(Bitmap* pbmp)
     return true;
 }
 
-NGInt Image::width(void) 
+int Image::width(void) 
 { 
-	NGInt w = 0;
+	int w = 0;
 	
 	if (m_bLoadOnPainting) {
 		setImageBitmap(ResLoader::getInstance()->getBitmap(m_filePath.c_str()));
@@ -148,9 +148,9 @@ NGInt Image::width(void)
 	return w;
 }
 
-NGInt Image::height(void) 
+int Image::height(void) 
 { 
-	NGInt h = 0;
+	int h = 0;
 	
 	if (m_bLoadOnPainting) {
 		setImageBitmap(ResLoader::getInstance()->getBitmap(m_filePath.c_str()));
@@ -170,14 +170,14 @@ NGInt Image::height(void)
 	return h;
 }
 
-NGBool Image::setReplaceColor(const DWORD color)
+bool Image::setReplaceColor(const DWORD color)
 {
     m_replaceColor = color;
     return true;
 }
 
-void Image::calc_pos_align(NGInt *px, NGInt *py,
-        const IntRect *rc, NGInt imgw, NGInt imgh, ImageFormat format)
+void Image::calc_pos_align(int *px, int *py,
+        const IntRect *rc, int imgw, int imgh, ImageFormat format)
 {
     if (format.align == ALIGN_CENTER)
         *px = (rc->left() + rc->right() - imgw)/2;
@@ -194,9 +194,9 @@ void Image::calc_pos_align(NGInt *px, NGInt *py,
         *py = rc->top();
 }
 
-void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat format, NGInt xo, NGInt yo)
+void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat format, int xo, int yo)
 {
-    NGInt x = 0, y = 0, w = 0, h = 0;
+    int x = 0, y = 0, w = 0, h = 0;
     
 	if (m_bLoadOnPainting) {
 		setImageBitmap(ResLoader::getInstance()->getBitmap(m_filePath.c_str()));
@@ -232,16 +232,16 @@ void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat forma
             if (context->getBitmapSize(m_pBitmap, &w, &h)) {
                 if (w == 0 || h == 0)
                     return;
-                NGInt xCheck = rc.width() - w;
-                NGInt yCHeck = rc.height() - h;
+                int xCheck = rc.width() - w;
+                int yCHeck = rc.height() - h;
 
                 if (xCheck < yCHeck)
                     context->fillBoxWithBitmap(rc.left(),
-                            (rc.top() + (rc.height() - ((NGReal)h/(NGReal)w)*rc.width())/2),
-                            rc.width(), (((NGReal)h/(NGReal)w)*rc.width()), m_pBitmap);
+                            (rc.top() + (rc.height() - ((HTReal)h/(HTReal)w)*rc.width())/2),
+                            rc.width(), (((HTReal)h/(HTReal)w)*rc.width()), m_pBitmap);
                 else
-                    context->fillBoxWithBitmap((rc.left() + (rc.width() - ((NGReal)w/(NGReal)h)*rc.height())/2),
-                            rc.top(), (((NGReal)w/(NGReal)h)*rc.height()), rc.height(), m_pBitmap);
+                    context->fillBoxWithBitmap((rc.left() + (rc.width() - ((HTReal)w/(HTReal)h)*rc.height())/2),
+                            rc.top(), (((HTReal)w/(HTReal)h)*rc.height()), rc.height(), m_pBitmap);
             }
             break;
         }

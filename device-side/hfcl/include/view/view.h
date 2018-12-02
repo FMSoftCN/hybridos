@@ -34,7 +34,7 @@ NAMESPACE_BEGIN
 class GraphicsContext;
 class ContainerView;
 
-typedef NGUInt HPlatformOwner;
+typedef unsigned int HPlatformOwner;
 
 enum {
 	PAINT_STATUS_SHIFT = 24,
@@ -44,8 +44,8 @@ enum {
 
 typedef struct {
 	View *view;
-	NGInt x;
-	NGInt y;
+	int x;
+	int y;
 } ViewClickEventStruct;
 
 class View : public Object {
@@ -53,7 +53,7 @@ class View : public Object {
 		View();
         View(View* parent);
 		View(View* parent, DrawableSet* drset);
-		View(NGInt id, NGInt x, NGInt y, NGInt w, NGInt h);
+		View(int id, int x, int y, int w, int h);
 		virtual ~View();
 
 		enum {
@@ -64,18 +64,18 @@ class View : public Object {
 			NOTIFY_VIEW_MAX
 		};
 
-		NGInt id(void) const { return m_id; }
-		void setId(NGInt iid) { m_id = iid; }
+		int id(void) const { return m_id; }
+		void setId(int iid) { m_id = iid; }
 
-        NGBool setRect(NGInt left, NGInt top, NGInt right, NGInt bottom) {
+        bool setRect(int left, int top, int right, int bottom) {
 			return setRect(IntRect(left, top, right, bottom));
 		}
 
-        NGBool setRectWH(NGInt left, NGInt top, NGInt width, NGInt height) {
+        bool setRectWH(int left, int top, int width, int height) {
 			return setRect(IntRect(left, top, width + left, height + top));
         }
         
-        NGBool setRectNoUpdate(NGInt left, NGInt top, NGInt right, NGInt bottom) {
+        bool setRectNoUpdate(int left, int top, int right, int bottom) {
             IntRect irc = IntRect(left, top, right, bottom);
             if (irc == m_rect)
                 return false;
@@ -93,7 +93,7 @@ class View : public Object {
 			return false;
         }
         
-        virtual NGBool setRect(const IntRect& irc) { 
+        virtual bool setRect(const IntRect& irc) { 
             if (irc == m_rect)
                 return false;
 
@@ -110,7 +110,7 @@ class View : public Object {
 		}
 		inline const IntRect& getRect(void) const{ return m_rect; }
 
-        void setPosition(NGInt x, NGInt y, NGBool bupdate = true) {
+        void setPosition(int x, int y, bool bupdate = true) {
             IntRect rc(x, y, m_rect.width()+x, m_rect.height()+y);
 
             if (bupdate)
@@ -119,12 +119,12 @@ class View : public Object {
                 m_rect = rc;
         }
 
-		void getPosition(NGInt *x, NGInt *y) {
+		void getPosition(int *x, int *y) {
 			if(x) *x = m_rect.left();
 			if(y) *y = m_rect.top();
 		}
 
-		void getSize(NGInt *w, NGInt *h) {
+		void getSize(int *w, int *h) {
 			if(w) *w = m_rect.width();
 			if(h) *h = m_rect.height();
 		}
@@ -137,34 +137,34 @@ class View : public Object {
 			setVisible(false);
             updateView();
         }
-		inline NGBool isVisible() { return visible(); }
+		inline bool isVisible() { return visible(); }
 
 		void addEventListener(EventListener* listener);
-		void addEventListener(EventListener* listener, NGInt event_type) { }
+		void addEventListener(EventListener* listener, int event_type) { }
 		void removeEventListener(EventListener* listener);
 
-		virtual void paint(GraphicsContext* context, NGInt status /*= Style::NORMAL*/);
-		virtual void onPaint(GraphicsContext* context, NGInt status /*= Style::NORMAL*/);
+		virtual void paint(GraphicsContext* context, int status /*= Style::NORMAL*/);
+		virtual void onPaint(GraphicsContext* context, int status /*= Style::NORMAL*/);
 		virtual void changeTheme(void);
-		virtual void drawBackground(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/);
-		virtual void drawContent(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/);
-		virtual void drawScroll(GraphicsContext* context, IntRect &rc, NGInt status /*=Style::NORMAL*/);
+		virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
+		virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
+		virtual void drawScroll(GraphicsContext* context, IntRect &rc, int status /*=Style::NORMAL*/);
 
 		virtual void onGetFocus();
 		virtual void onLoseFocus();
-		NGBool setFocus(View *view);
+		bool setFocus(View *view);
 
 		//return True if the event was handled, false otherwise.
-		virtual NGBool dispatchEvent(Event* event);
+		virtual bool dispatchEvent(Event* event);
 
 		// x,y coordiat from view, e.g (0,0) is same as m_rect.left, m_rect.top
-		void updateView(NGInt x, NGInt y, NGInt w, NGInt h);
+		void updateView(int x, int y, int w, int h);
 		void updateView(const IntRect &rc);
 		
-		virtual void onChildUpdateView(View *child, NGInt x, NGInt y, NGInt w, NGInt h, NGBool upBackGnd = true);
+		virtual void onChildUpdateView(View *child, int x, int y, int w, int h, bool upBackGnd = true);
 		void updateViewRect(const IntRect &rc);
 		void updateViewRect(void);
-		void updateView(NGBool upBackGnd = true);
+		void updateView(bool upBackGnd = true);
 
 		void setParent(ContainerView* view) { m_parent = view; }
 		void setPrevSlibling(View* view) { m_prev = view; }
@@ -179,11 +179,11 @@ class View : public Object {
 		ContainerView* rootView(void);
 
 		virtual void focusMe(void);
-		NGBool isFocus(void);
+		bool isFocus(void);
 
-		virtual NGBool isTopView(void) { return false; }
-		virtual NGBool isContainerView(void) { return false; }
-		virtual NGBool isWrapperView(void) { return false; }
+		virtual bool isTopView(void) { return false; }
+		virtual bool isContainerView(void) { return false; }
+		virtual bool isWrapperView(void) { return false; }
 
         void setAlpha(unsigned char trans);
         unsigned char alpha();
@@ -192,10 +192,10 @@ class View : public Object {
 			return m_parent ? ((View*)m_parent)->getPlatformOwner() : 0;
 		}
 
-        virtual void viewToWindow(NGInt *x, NGInt *y);
-        virtual void windowToView(NGInt *x, NGInt *y);
+        virtual void viewToWindow(int *x, int *y);
+        virtual void windowToView(int *x, int *y);
 
-		virtual NGBool raiseEvent(Event *event);
+		virtual bool raiseEvent(Event *event);
 
         void setAddData(void *paddData) {m_addData = paddData;}
         void *addData(void) {return m_addData;}
@@ -205,14 +205,14 @@ class View : public Object {
 		DrawableSet* getDrawableSet(void) const;
 		void setDrawableSet(DrawableSet* drset);
 
-		NGBool isDisabled() { return m_flags & DISABLED; }
-		void disable(NGBool b) { return setFlag(b, DISABLED); }
+		bool isDisabled() { return m_flags & DISABLED; }
+		void disable(bool b) { return setFlag(b, DISABLED); }
 
 		// theme related
-		NGBool isThemeAble() { return m_flags & THEMEABLE; }
-		void themeAble(NGBool b) { return setFlag(b, THEMEABLE); }
-		NGInt themeDrsetId(void) { return m_theme_drset_id; }
-		void setThemeDrsetId(NGInt iid) { m_theme_drset_id = iid; }
+		bool isThemeAble() { return m_flags & THEMEABLE; }
+		void themeAble(bool b) { return setFlag(b, THEMEABLE); }
+		int themeDrsetId(void) { return m_theme_drset_id; }
+		void setThemeDrsetId(int iid) { m_theme_drset_id = iid; }
 
 		enum {
 			NORMAL,
@@ -221,13 +221,13 @@ class View : public Object {
 			FOCUS
 		};
 
-		virtual void autoFitSize(NGBool auto_child_fit = false) {  }
+		virtual void autoFitSize(bool auto_child_fit = false) {  }
 
     protected:
-		NGBool performClick();
+		bool performClick();
 
 		IntRect m_rect;
-		NGInt m_id;
+		int m_id;
 		DrawableSet* m_drset;
         unsigned char m_alpha;
 		DWORD m_flags;
@@ -235,14 +235,14 @@ class View : public Object {
 		View *m_next;
 		ContainerView *m_parent;
         void *m_addData;
-		NGInt m_theme_drset_id;
-		NGInt m_drawLayer;
+		int m_theme_drset_id;
+		int m_drawLayer;
 
         /* VincentWei: Whether the view is opaque; true by default.
          * If it was opaque, the rectangle of the view will be excluded when erasing background of parent.
-        NGBool m_opaque;
-        NGBool isOpaque() { return m_opaque; }
-        void setOpaque(NGBool opaque) { m_opaque = opaque; }
+        bool m_opaque;
+        bool isOpaque() { return m_opaque; }
+        void setOpaque(bool opaque) { m_opaque = opaque; }
          */
 
 		LISTEX(EventListener *, EventListenerList, do{return *v1 == *v2;}while (0), do{(*n)->unref();} while (0));
@@ -259,41 +259,41 @@ class View : public Object {
 			FLAG_SHIFT  = 6
 		};
 
-		inline void setFlag(NGBool b, NGUInt flag) {
+		inline void setFlag(bool b, unsigned int flag) {
 			if(b) 
 				m_flags |= flag;
 			else
 				m_flags &= (~flag);
 		}
 
-		virtual void inner_updateView(NGInt x, NGInt y, NGInt w, NGInt h, NGBool upBackGnd = true);
-		void inner_updateViewRect(NGInt x, NGInt y, NGInt w, NGInt h);
+		virtual void inner_updateView(int x, int y, int w, int h, bool upBackGnd = true);
+		void inner_updateViewRect(int x, int y, int w, int h);
 
 public:
         void freezeUpdate () {
             setFlag (true, FROZEN);
         }
-        void unfreezeUpdate (NGBool update = true) {
+        void unfreezeUpdate (bool update = true) {
             setFlag (false, FROZEN);
             if (update) {
                 updateView ();
             }
         }
-        NGBool shouldUpdate () {
+        bool shouldUpdate () {
             return (m_flags & FROZEN) != FROZEN;
         }
 
-		void setVisible(NGBool b) { setFlag(b, VISIBLE); }
-		NGBool visible() { return (m_flags & VISIBLE) == VISIBLE; }
+		void setVisible(bool b) { setFlag(b, VISIBLE); }
+		bool visible() { return (m_flags & VISIBLE) == VISIBLE; }
 
-		void setFocusValid(NGBool b) { setFlag(b, FOCUSVALID); }
-		NGBool focusValid() { return (m_flags & FOCUSVALID) == FOCUSVALID; }
+		void setFocusValid(bool b) { setFlag(b, FOCUSVALID); }
+		bool focusValid() { return (m_flags & FOCUSVALID) == FOCUSVALID; }
 
-		inline NGBool focusable() { return (isVisible() && !isDisabled()); }
+		inline bool focusable() { return (isVisible() && !isDisabled()); }
 
-		void setFocusStop(NGBool b) { setFlag(b, FOCUSSTOP); }
-		NGBool isFocusStop() { return m_flags & FOCUSSTOP; }
-		NGBool focusStopable() { return focusable() && isFocusStop(); }
+		void setFocusStop(bool b) { setFlag(b, FOCUSSTOP); }
+		bool isFocusStop() { return m_flags & FOCUSSTOP; }
+		bool focusStopable() { return focusable() && isFocusStop(); }
 
 		int setLayer(int layerNo) { int old = m_drawLayer; m_drawLayer = layerNo; return old; }
 		int layer () { return m_drawLayer; }

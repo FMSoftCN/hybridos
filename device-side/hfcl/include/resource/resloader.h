@@ -61,8 +61,8 @@ class ResLoader {
 			InnerImage() : resInfo(NULL), image(NULL) { }
 			Image * get();
 			BitmapFrameArray* getBitmapFrame();
-			NGCPStr* getBitmapdata();
-			NGUInt getBitmapdatasize();
+			const char ** getBitmapdata();
+			unsigned int getBitmapdatasize();
 			INNER_RES_INFO* getResInfo(void);
 		};
 

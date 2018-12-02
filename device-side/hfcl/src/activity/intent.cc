@@ -24,7 +24,7 @@
 #include "intent.h"
 
 NAMESPACE_BEGIN
-Intent::Intent(NGInt i_action, string s_data, NGInt i_tag)
+Intent::Intent(int i_action, string s_data, int i_tag)
     :m_action(i_action)
     ,m_data(s_data)
     ,m_tag(i_tag)

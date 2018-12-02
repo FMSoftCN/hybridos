@@ -47,7 +47,7 @@ public:
     virtual ~NinePatchImage();
 
     virtual void paint(GraphicsContext* context, const IntRect& rc,
-			ImageFormat format, NGInt xo = 0, NGInt yo = 0);
+			ImageFormat format, int xo = 0, int yo = 0);
     bool setImage(const char *image_file);
 
 	virtual bool setImageBitmap(Bitmap* pbmp) {

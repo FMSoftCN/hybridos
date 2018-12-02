@@ -24,7 +24,7 @@
 
 NAMESPACE_BEGIN
 
-void ScaleViewAnimation::setProperty(NGInt id, void* value){
+void ScaleViewAnimation::setProperty(int id, void* value){
 	getView()->setRect(*(IntRect*)value);
 	_DBG_PRINTF ("Sale set property......%d %d %d %d\n", 
 			((IntRect*)value)->left(), ((IntRect*)value)->top(), 

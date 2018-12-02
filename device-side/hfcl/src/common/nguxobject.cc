@@ -48,7 +48,7 @@ size_t string::npos = (size_t)-1;
 void* operator new(unsigned int size)
 {
     void * pointer = 0x00;
-    //NGUInt32 nCallerAdd = 0x00;
+    //Uint32 nCallerAdd = 0x00;
     //COS_GET_RA(&nCallerAdd);
 
     if (size == 0)
@@ -72,7 +72,7 @@ void operator delete(void *p)
 void* operator new[](unsigned int size)
 {
     void * pointer = 0x00;
-    //NGUInt32 nCallerAdd = 0x00;
+    //Uint32 nCallerAdd = 0x00;
     //COS_GET_RA(&nCallerAdd);
 
     if (size == 0)

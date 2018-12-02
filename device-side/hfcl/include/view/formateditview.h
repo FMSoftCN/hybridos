@@ -52,7 +52,7 @@ class FormatEditView : public View
          */
         FormatEditView(View* parent);
         FormatEditView(View* parent, DrawableSet* drset);
-        FormatEditView(NGInt id, NGInt x, NGInt y, NGInt w, NGInt h);
+        FormatEditView(int id, int x, int y, int w, int h);
         ~FormatEditView();
 
         /**
@@ -64,11 +64,11 @@ class FormatEditView : public View
          */
         virtual void onGetFocus();
         virtual void onLoseFocus();
-        NGInt getCurrentIndex(void) { return m_current_index; }
-        NGInt getAmPos();
+        int getCurrentIndex(void) { return m_current_index; }
+        int getAmPos();
         void setAlignMargin();
 
-		void setTextFont(NGUInt font);
+		void setTextFont(unsigned int font);
 
     protected:
         /**
@@ -95,14 +95,14 @@ class FormatEditView : public View
          *
          * @param p_content_max_nr Pointer To Max Char Nr Array
          * e.g. :
-         * NGChar max_char[] =
+         * char max_char[] =
          * {
          *  2,
          *  2,
          *  2
          * };
          */
-        void initEditor(NGInt field_count, NGCPStr* p_content_array, NGCPStr* p_formator_array, NGChar* p_content_max_nr);
+        void initEditor(int field_count, const char ** p_content_array, const char ** p_formator_array, char* p_content_max_nr);
         /**
          * Dispatch Events From Parent
          */
@@ -114,17 +114,17 @@ class FormatEditView : public View
          *
          * This interface return width of visible things in edit
          */
-        NGInt visibleWidth(void);
+        int visibleWidth(void);
         /**
          * GetVisibleHeight
          *
          * This interface return height of visible things in edit
          */
-        NGInt visibleHeight(void);
+        int visibleHeight(void);
         /**
          * Process Number Key Event
          */
-        virtual NGBool processNumberKey(NGInt key_code);
+        virtual bool processNumberKey(int key_code);
         /**
          * Move To Filed
          */
@@ -136,32 +136,32 @@ class FormatEditView : public View
         /**
          * Auto Add Zero Flag Set/Get
          */
-        NGBool autoAddZero(void) { return m_auto_add_zero; }
-        void setAutoAddZero(NGBool add) { m_auto_add_zero = add; }
+        bool autoAddZero(void) { return m_auto_add_zero; }
+        void setAutoAddZero(bool add) { m_auto_add_zero = add; }
         void addZero(void);
         /**
          * Auto Next
          */
-        NGBool autoNext(void) { return m_auto_next; }
-        void setAutoNext(NGBool next) { m_auto_next = next; }
+        bool autoNext(void) { return m_auto_next; }
+        void setAutoNext(bool next) { m_auto_next = next; }
 
         /**
          * Check Content
          */
-        virtual NGBool checkContent(void);
+        virtual bool checkContent(void);
 
     protected:
         /**
          * Get Input Char From KeyCode
          */
-        NGCPStr getInputChar(NGInt key_code);
-        NGCPStr getAlignZero(NGInt count);
+        const char * getInputChar(int key_code);
+        const char * getAlignZero(int count);
         /**
          * Pre Change Field Content
          *
          * @retval true means continue process filed content
          */
-        virtual NGBool onChangeField(void) { return true; }
+        virtual bool onChangeField(void) { return true; }
 
         /**
          * Internal Init
@@ -175,17 +175,17 @@ class FormatEditView : public View
         /**
          * DrawContent
          */
-        virtual void drawContent(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/);
+        virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
         /**
          * calcFieldWidth
          */
-        NGInt calcTextWidth(NGPStr str);
+        int calcTextWidth(char * str);
 
     protected:
         /**
          * Field Count
          */
-        NGInt m_field_count;
+        int m_field_count;
         /**
          * Field Content
          */
@@ -197,31 +197,31 @@ class FormatEditView : public View
         /**
          * Field Max Char Nr
          */
-        NGByte m_field_max_char[FE_MAX_FIELD_NR];
+        unsigned char m_field_max_char[FE_MAX_FIELD_NR];
         /**
          * margin_left
          */
-        NGInt m_margin_left;
+        int m_margin_left;
         /**
          * margin_top
          */
-        NGInt m_margin_top;
+        int m_margin_top;
         /**
          * Current Edit
          */
-        NGInt m_current_index;
+        int m_current_index;
         /**
          * Show Flag Of Current Hilight
          */
-        NGBool m_show_current_hilight;
+        bool m_show_current_hilight;
         /**
          * Auto Patch Zero Flag
          */
-        NGBool m_auto_add_zero;
+        bool m_auto_add_zero;
         /**
          * Auto Next Filed
          */
-        NGBool m_auto_next;
+        bool m_auto_next;
 
 		DECLARE_CLASS_NAME(FormatEditView)
 };

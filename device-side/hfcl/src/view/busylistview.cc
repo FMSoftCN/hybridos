@@ -105,10 +105,10 @@ void BusyListView::init(void)
 	m_focus = true;
 }
 
-NGInt BusyListView::reLoadData(void)
+int BusyListView::reLoadData(void)
 {
     View* item = NULL;
-    NGInt i = 0;
+    int i = 0;
     // check
     if(m_item_count <= 0 || m_visible_item_count <= 0)
         return 0;
@@ -125,24 +125,24 @@ void BusyListView::clear(void)
 	clean();
     reInit();
 }
-void BusyListView::initSelectMark(NGInt count)
+void BusyListView::initSelectMark(int count)
 {
 	if(m_select_mark.count() > 0)
 		return;
 	m_select_mark.init(count);
 }
 
-NGBool BusyListView::isItemSelected(NGInt index)
+bool BusyListView::isItemSelected(int index)
 {
 	return m_select_mark.getMark(index);
 }
 
-void BusyListView::selectItem(NGInt index, NGBool sel)
+void BusyListView::selectItem(int index, bool sel)
 {
 	m_select_mark.setMark(index, sel);
 }
 
-void BusyListView::select(NGInt index, NGBool sel)
+void BusyListView::select(int index, bool sel)
 {
 	ItemView* item = (ItemView*)itemFromIndex(index);
 	selectItem(index, sel);
@@ -152,9 +152,9 @@ void BusyListView::select(NGInt index, NGBool sel)
 	}
 }
 
-void BusyListView::selectAll(NGBool sel)
+void BusyListView::selectAll(bool sel)
 {
-    for(NGInt i = 0; i < itemCount(); i++){
+    for(int i = 0; i < itemCount(); i++){
         if(i < getVisibleItemCountNeed()){
             ItemView* item = (ItemView*)(getChildByIndex(i));
             item->setSelected(sel);
@@ -166,7 +166,7 @@ void BusyListView::selectAll(NGBool sel)
 }
 
 
-void BusyListView::initItemAddData(NGInt count)
+void BusyListView::initItemAddData(int count)
 {
 	if(m_data_keeper.count() > 0)
 		return;
@@ -174,17 +174,17 @@ void BusyListView::initItemAddData(NGInt count)
 	m_data_keeper.init(count);
 }
 
-void BusyListView::setItemAddData(NGInt index, void* data)
+void BusyListView::setItemAddData(int index, void* data)
 {
 	m_data_keeper.setPointer(index, data);
 }
 
-void* BusyListView::itemAddData(NGInt index)
+void* BusyListView::itemAddData(int index)
 {
 	return m_data_keeper.getPointer(index);
 }
 
-void BusyListView::freeze(NGBool f)
+void BusyListView::freeze(bool f)
 {
 	//TODO
 	m_freeze = f;
@@ -195,7 +195,7 @@ View* BusyListView::hilightItem(void)
 	return getChildByIndex(m_hi_index - m_up_index);
 }
 
-View* BusyListView::itemFromIndex(NGInt index)
+View* BusyListView::itemFromIndex(int index)
 {
 	// check
 	if(index < m_up_index 
@@ -210,7 +210,7 @@ View* BusyListView::itemFromIndex(NGInt index)
 		return NULL;
 }
 
-NGBool BusyListView::addItemByIndex(NGInt index, void* add_data)
+bool BusyListView::addItemByIndex(int index, void* add_data)
 {
 	// check
 	if(m_data_keeper.count() < 1)
@@ -229,10 +229,10 @@ NGBool BusyListView::addItemByIndex(NGInt index, void* add_data)
 }
 
 
-NGBool BusyListView::addItemByIndex(NGInt index)
+bool BusyListView::addItemByIndex(int index)
 {
     View* item = NULL;
-    NGInt i = 0;
+    int i = 0;
     // check range
     if(index < 0 || index > m_item_count)
         return false;
@@ -297,7 +297,7 @@ NGBool BusyListView::addItemByIndex(NGInt index)
 	return true;
 }
 
-NGBool BusyListView::addItem(void* add_data)
+bool BusyListView::addItem(void* add_data)
 {
 	// check
 	if(m_data_keeper.count() < 1)
@@ -315,7 +315,7 @@ void BusyListView::reLayout(void)
 {
 	IntRect listRc = getRect();
 	
-	NGBool scrollVisible = FALSE;
+	bool scrollVisible = FALSE;
 
 	if(m_item_count <= 0)
 			return ;
@@ -323,7 +323,7 @@ void BusyListView::reLayout(void)
 	scrollVisible = m_item_count > m_visible_item_count ? TRUE: FALSE;
 	
 	View *view = firstChild();
-	for (NGInt i = 0; view; i++)
+	for (int i = 0; view; i++)
 	{
 		/*
 		 * Every Item has the same height:
@@ -364,10 +364,10 @@ void BusyListView::reLayout(void)
 }
 
 
-NGBool BusyListView::addItem(void)
+bool BusyListView::addItem(void)
 {
     View* item = NULL;
-    NGInt i = 0;
+    int i = 0;
     // counter
     ++m_item_count;
     if (!m_items_enough)
@@ -403,9 +403,9 @@ NGBool BusyListView::addItem(void)
     return true;
 }
 
-NGBool BusyListView::removeItem(NGInt index)
+bool BusyListView::removeItem(int index)
 {
-    NGInt i = 0;
+    int i = 0;
     View* item = NULL;
     // right range?
     if (index < 0 || index > m_item_count || -1 == m_hi_index)
@@ -500,57 +500,57 @@ NGBool BusyListView::removeItem(NGInt index)
     return true;
 }
 
-NGInt BusyListView::itemCount(void)
+int BusyListView::itemCount(void)
 {
     return m_item_count;
 }
-NGBool BusyListView::setItemHeight(NGInt height)
+bool BusyListView::setItemHeight(int height)
 {
     m_nm_height = height;
     return true;
 }
-NGInt BusyListView::itemHeight(void)
+int BusyListView::itemHeight(void)
 {
     return m_nm_height;
 }
-NGBool BusyListView::setHilightItemHeight(NGInt height)
+bool BusyListView::setHilightItemHeight(int height)
 {
     m_hi_height = height;
     return true;
 }
-NGInt BusyListView::hilightItemHeight(void)
+int BusyListView::hilightItemHeight(void)
 {
     return m_hi_height;
 }
-NGInt BusyListView::hilightItemIndex(void)
+int BusyListView::hilightItemIndex(void)
 {
     return m_hi_index;
 }
-void BusyListView::setScrollbarWidth(NGInt w)
+void BusyListView::setScrollbarWidth(int w)
 {
     m_v_scrollbar_width = w;
 }
-NGInt BusyListView::scrollbarWidth(void)
+int BusyListView::scrollbarWidth(void)
 {
     return m_v_scrollbar_width;
 }
-void BusyListView::setScrollbarMarginRight(NGInt m)
+void BusyListView::setScrollbarMarginRight(int m)
 {
     m_v_scrollbar_margin_right = m;
 }
-NGInt BusyListView::scrollbarMarginRight(void)
+int BusyListView::scrollbarMarginRight(void)
 {
     return m_v_scrollbar_margin_right;
 }
-void BusyListView::setItemTemplateId(NGInt item_res_id)
+void BusyListView::setItemTemplateId(int item_res_id)
 {
-    if (m_item_templete_id == (ResID)-1)
+    if (m_item_templete_id == (HTResId)-1)
         m_item_templete_id = item_res_id; 
 }
 
-void BusyListView::layoutDownToUp(NGInt from_height, NGInt hilight_index)
+void BusyListView::layoutDownToUp(int from_height, int hilight_index)
 {
-    NGInt h = 0, w = 0, n = 1;
+    int h = 0, w = 0, n = 1;
     View* item = lastChild();
     w = getRect().width();
     //h = getRect().height();
@@ -588,9 +588,9 @@ void BusyListView::layoutDownToUp(NGInt from_height, NGInt hilight_index)
     m_dock_top = false;
 }
 
-void BusyListView::layoutUpToDown(NGInt from_height, NGInt hilight_index)
+void BusyListView::layoutUpToDown(int from_height, int hilight_index)
 {
-    NGInt h = 0, w = 0, n = 1;
+    int h = 0, w = 0, n = 1;
     View* item = firstChild();
     h = from_height;
     w = getRect().width();
@@ -624,14 +624,14 @@ void BusyListView::layoutUpToDown(NGInt from_height, NGInt hilight_index)
     // mark dock status
     m_dock_top = true;
 }
-void BusyListView::onLoadItemData(NGInt index, View* view)
+void BusyListView::onLoadItemData(int index, View* view)
 {
     // check
     if(index < 0 || index > m_item_count - 1)
         return;
 
-    CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)CustomEvent::CUS_LOAD_DATA, (NGInt)this);
-    event.setExParam((NGInt)view, index);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (int)CustomEvent::CUS_LOAD_DATA, (int)this);
+    event.setExParam((int)view, index);
     raiseEvent(&event);
 }
 
@@ -645,15 +645,15 @@ View* BusyListView::lastVisibleItem(void)
     return lastChild();
 }
 
-NGInt BusyListView::getVisibleItemCountNeed(void)
+int BusyListView::getVisibleItemCountNeed(void)
 {
     return ((getRect().height() - m_hi_height + (m_nm_height - 1))/m_nm_height + 1);
 }
 
-void BusyListView::hilight(NGInt index)
+void BusyListView::hilight(int index)
 {
     View* last_hilight_item = NULL, *item = NULL;
-    NGBool jump = false;
+    bool jump = false;
     IntRect last_hilight_rect, rect;
     ///////////////////// we assume that : all VisibleItem is in screen.
     // check
@@ -662,7 +662,7 @@ void BusyListView::hilight(NGInt index)
 
 	// if index is current hilight index, we just send a notify.
 	if(m_hi_index == index && m_focus) {
-		CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)CustomEvent::CUS_SELCHANGED, (NGInt)this);
+		CustomEvent event(Event::CUSTOM_NOTIFY, (int)CustomEvent::CUS_SELCHANGED, (int)this);
 		raiseEvent(&event);
 		return;
 	}
@@ -672,7 +672,7 @@ void BusyListView::hilight(NGInt index)
 
     // first time or jump here? request all data, reset m_up_index and m_down_index
     if(-1 == m_hi_index || -2 == m_hi_index || jump) {
-        NGInt i = 0;
+        int i = 0;
         // not enough one screen
         if(m_visible_item_count < getVisibleItemCountNeed()) {
             m_up_index = 0;
@@ -821,7 +821,7 @@ hilight_end:
     m_hi_index = index;
     
     m_focus = true;
-    CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)CustomEvent::CUS_SELCHANGED, (NGInt)this);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (int)CustomEvent::CUS_SELCHANGED, (int)this);
     raiseEvent(&event);
 }
 
@@ -832,10 +832,10 @@ void BusyListView::setHilightView(View* view)
     setFocusView(view);
 }
 
-void BusyListView::hilight(NGInt index, NGBool focus)
+void BusyListView::hilight(int index, bool focus)
 {
     View* last_hilight_item = NULL, *item = NULL;
-    NGBool jump = false;
+    bool jump = false;
     IntRect last_hilight_rect, rect;
     ///////////////////// we assume that : all VisibleItem is in screen.
     // check
@@ -845,7 +845,7 @@ void BusyListView::hilight(NGInt index, NGBool focus)
 	m_focus = focus;
 	// if index is current hilight index, we just send a notify.
 	if(m_hi_index == index) {
-		CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)CustomEvent::CUS_SELCHANGED, (NGInt)this);
+		CustomEvent event(Event::CUSTOM_NOTIFY, (int)CustomEvent::CUS_SELCHANGED, (int)this);
 		raiseEvent(&event);
 		return;
 	}
@@ -855,7 +855,7 @@ void BusyListView::hilight(NGInt index, NGBool focus)
 
     // first time or jump here? request all data, reset m_up_index and m_down_index
     if(-1 == m_hi_index || -2 == m_hi_index || jump) {
-        NGInt i = 0;
+        int i = 0;
         // not enough one screen
         if(m_visible_item_count < getVisibleItemCountNeed()) {
             m_up_index = 0;
@@ -980,12 +980,12 @@ hilight_end:
     	setHilightView(item);
     m_hi_index = index;
     
-    CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)CustomEvent::CUS_SELCHANGED, (NGInt)this);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (int)CustomEvent::CUS_SELCHANGED, (int)this);
     raiseEvent(&event);
 }
-void BusyListView::prepareVisibleItems(NGBool add_one, NGBool clean_all)
+void BusyListView::prepareVisibleItems(bool add_one, bool clean_all)
 {
-    NGInt c = 0, n = 0;
+    int c = 0, n = 0;
     IntRect new_rc, last_rc;
 
 	// we clean all first
@@ -1007,7 +1007,7 @@ void BusyListView::prepareVisibleItems(NGBool add_one, NGBool clean_all)
         return;
 
     // re-add visible item
-    if(m_item_templete_id != (ResID)-1) {
+    if(m_item_templete_id != (HTResId)-1) {
         //add all here
         if (!add_one) {
             for(c = 0; c < n; ++c) {
@@ -1028,14 +1028,14 @@ void BusyListView::prepareVisibleItems(NGBool add_one, NGBool clean_all)
 	
 }
 
-NGBool BusyListView::dispatchEvent(Event* event)
+bool BusyListView::dispatchEvent(Event* event)
 {
     switch (event->eventType()) {
         case Event::KEY_DOWN:
         case Event::KEY_LONGPRESSED:
         case Event::KEY_ALWAYSPRESS:
             {
-                NGInt code = ((KeyEvent *)event)->keyCode();
+                int code = ((KeyEvent *)event)->keyCode();
                 if ( onKeyPressed (code) ) {
                     return DISPATCH_STOP_MSG;
                 }
@@ -1047,7 +1047,7 @@ NGBool BusyListView::dispatchEvent(Event* event)
     return DISPATCH_CONTINUE_MSG;
 }
 
-NGBool BusyListView::onKeyPressed(NGInt keyCode)
+bool BusyListView::onKeyPressed(int keyCode)
 {
 	if((!m_focus)&&(keyCode!=KeyEvent::KEYCODE_DOWN))
 	{
@@ -1070,7 +1070,7 @@ NGBool BusyListView::onKeyPressed(NGInt keyCode)
 	    return false;
 }
 
-void BusyListView::drawContent(GraphicsContext* context, IntRect &rc, NGInt status)
+void BusyListView::drawContent(GraphicsContext* context, IntRect &rc, int status)
 {
 	reLayout();
     PanelView::drawContent(context, rc, status);
@@ -1078,7 +1078,7 @@ void BusyListView::drawContent(GraphicsContext* context, IntRect &rc, NGInt stat
 
 #define MIN_BAR_OF_BLST  (5<<16)
 
-void BusyListView::drawScroll(GraphicsContext* context, IntRect &rc, NGInt status)
+void BusyListView::drawScroll(GraphicsContext* context, IntRect &rc, int status)
 {
     IntRect rcBar, rcBarBk;
 

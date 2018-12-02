@@ -94,7 +94,7 @@ class GraphicsContextPrivate {
 #endif
         }
 
-        void beginTransparencyLayer(NGInt alpha)
+        void beginTransparencyLayer(int alpha)
         {
 #ifdef _NGUX_DC_TRANSPARENT_
             HDC hMemDC = HDC_INVALID;
@@ -204,7 +204,7 @@ class GraphicsContextPrivate {
             }
         }
 
-        void map(NGInt x, NGInt y, NGInt &x2, NGInt &y2) {
+        void map(int x, int y, int &x2, int &y2) {
             x2 = x + m_winPos.x - m_dcAbsPos.x;
             y2 = y + m_winPos.y - m_dcAbsPos.y;
         }
@@ -218,13 +218,13 @@ class GraphicsContextPrivate {
             }
         }
 
-        void translation(NGInt offx, NGInt offy)
+        void translation(int offx, int offy)
         {
             m_winPos.x += offx;
             m_winPos.y += offy;
         }
 
-        void getTranslation(NGInt &offx, NGInt &offy)
+        void getTranslation(int &offx, int &offy)
         {
             offx = m_winPos.x;
             offy = m_winPos.y;
@@ -271,12 +271,12 @@ void GraphicsContext::setMapView(View* view)
     m_data->setMapView(view);
 }
 
-void GraphicsContext::translation(NGInt offx, NGInt offy)
+void GraphicsContext::translation(int offx, int offy)
 {
     m_data->translation(offx, offy);
 }
 
-void GraphicsContext::getTranslation(NGInt &offx, NGInt &offy)
+void GraphicsContext::getTranslation(int &offx, int &offy)
 {
     m_data->getTranslation(offx, offy);
 }
@@ -286,7 +286,7 @@ Logfont* GraphicsContext::getLogFont(void)
 	return GetCurFont(m_data->m_context);
 }
 
-void GraphicsContext::map(NGInt x, NGInt y, NGInt &x2, NGInt &y2)
+void GraphicsContext::map(int x, int y, int &x2, int &y2)
 {
     m_data->map(x, y, x2, y2);
 }
@@ -334,14 +334,14 @@ void GraphicsContext::setBiDiFirstChType (int type)
     SetBIDIFirstCharType (m_data->m_context, type);
 }
 
-void GraphicsContext::textOutOmitted(NGInt x, NGInt y, NGCPStr text, NGInt len, NGInt max_extent)
+void GraphicsContext::textOutOmitted(int x, int y, const char * text, int len, int max_extent)
 {
     if (!text)
         return;
 
-    NGInt outx, outy;
+    int outx, outy;
     HDC hdc = m_data->m_context;
-    NGUInt oldBkMode = SetBkMode(hdc, BM_TRANSPARENT);
+    unsigned int oldBkMode = SetBkMode(hdc, BM_TRANSPARENT);
 
     map(x, y, outx, outy);
     TextOutOmitted(hdc, outx, outy, text, len, max_extent);
@@ -349,17 +349,17 @@ void GraphicsContext::textOutOmitted(NGInt x, NGInt y, NGCPStr text, NGInt len, 
     SetBkMode(hdc, oldBkMode);
 }
 
-void GraphicsContext::textOutOmitted(NGInt x, NGInt y, NGCPStr text, 
-        NGInt len, NGInt max_extent, NGUInt color, Logfont * logfont)
+void GraphicsContext::textOutOmitted(int x, int y, const char * text, 
+        int len, int max_extent, unsigned int color, Logfont * logfont)
 {
     if (!text)
         return;
 
     Color clr(color);
-    NGUInt oldColor;
-    NGUInt oldBkMode;
+    unsigned int oldColor;
+    unsigned int oldBkMode;
 
-    NGInt outx, outy;
+    int outx, outy;
     HDC hdc = m_data->m_context;
     map(x, y, outx, outy);
 
@@ -372,8 +372,8 @@ void GraphicsContext::textOutOmitted(NGInt x, NGInt y, NGCPStr text,
     SetBkMode(hdc, oldBkMode);
 }
 
-void GraphicsContext::textOut(NGInt x, NGInt y, NGCPStr text, NGInt len,
-        NGUInt color, Logfont * logfont)
+void GraphicsContext::textOut(int x, int y, const char * text, int len,
+        unsigned int color, Logfont * logfont)
 {
 	IntRect rc (x, y, _ngux_screen_w, _ngux_screen_h);
     
@@ -479,7 +479,7 @@ END:
 #endif
 }
 
-NGInt GraphicsContext::drawTextToCalcRect(const string& text, IntRect& rect, NGUInt format, Logfont *font)
+int GraphicsContext::drawTextToCalcRect(const string& text, IntRect& rect, unsigned int format, Logfont *font)
 {
     RECT rc = { rect.left(), rect.top(), rect.right(), rect.bottom() };
 
@@ -496,8 +496,8 @@ NGInt GraphicsContext::drawTextToCalcRect(const string& text, IntRect& rect, NGU
     return RECTH(rc);
 }
         
-NGInt GraphicsContext::calcTextRectOnDrawing(const char *text, 
-        Logfont *f, NGUInt format, IntRect *rect, DTFIRSTLINE *firstline, Point *txtPos)
+int GraphicsContext::calcTextRectOnDrawing(const char *text, 
+        Logfont *f, unsigned int format, IntRect *rect, DTFIRSTLINE *firstline, Point *txtPos)
 {
     if (rect == NULL)
         return -1;
@@ -515,10 +515,10 @@ NGInt GraphicsContext::calcTextRectOnDrawing(const char *text,
     return RECTH(rc);
 }
 
-NGInt GraphicsContext::drawTextToGetLenght(const string& text)
+int GraphicsContext::drawTextToGetLenght(const string& text)
 {
 #ifdef USE_RDA_FONT
-    NGInt w = 0, h = 0;
+    int w = 0, h = 0;
     char *pUcs2 = NULL;
     const char *pUtf8 = text.c_str();
     unsigned int nCount = text.size();
@@ -542,11 +542,11 @@ NGInt GraphicsContext::drawTextToGetLenght(const string& text)
 #endif
 }
 
-NGInt GraphicsContext::getFontHeight(Logfont *f) 
+int GraphicsContext::getFontHeight(Logfont *f) 
 {
 #ifdef USE_RDA_FONT
     if (f != NULL) {
-        NGInt ret = 0;
+        int ret = 0;
         UI_font_type oldFont = UI_get_font();
         UI_set_font(f);
         ret = Get_CharHeight();
@@ -565,11 +565,11 @@ NGInt GraphicsContext::getFontHeight(Logfont *f)
 #endif
 }
 
-NGInt GraphicsContext::getFontWidth(Logfont *f)
+int GraphicsContext::getFontWidth(Logfont *f)
 {
 #ifdef USE_RDA_FONT
     if (f != NULL) {
-        NGInt ret = 0;
+        int ret = 0;
         UI_font_type oldFont = UI_get_font();
         UI_set_font(f);
         ret = Get_FontWidth();
@@ -629,8 +629,8 @@ static int utf8_len_first_char (unsigned char* mstr, int len)
 }
 
 
-void GraphicsContext::drawText(NGCPStr text, const IntRect& rect,
-        NGUInt color, Logfont * logfont, NGUInt format)
+void GraphicsContext::drawText(const char * text, const IntRect& rect,
+        unsigned int color, Logfont * logfont, unsigned int format)
 {
 #ifdef USE_RDA_FONT
     RECT rc = RECT(rect);
@@ -648,12 +648,12 @@ void GraphicsContext::drawText(NGCPStr text, const IntRect& rect,
 	SetTextColor(hdc, RGB2Pixel(hdc, clr.r(), clr.g(), clr.b()));
 
     if (format & TextMode::TextOutOmitted) {
-		NGInt _tw, _th;
+		int _tw, _th;
 		getTextDrawSize(text, logfont, &_tw, &_th);
         if (_tw > RECTW(rc)) { //need text ommit
             //calc the size
-            NGInt dotW, dotH;
-			NGInt _len;
+            int dotW, dotH;
+			int _len;
 			unsigned char *p = NULL;
 			const char *dotS = "...";
 			char *tmp = (char *)malloc(strlen (text) + 4);
@@ -669,8 +669,8 @@ void GraphicsContext::drawText(NGCPStr text, const IntRect& rect,
 			*tmp = '\0';
 			_len = 0;
 			while (p != NULL){
-				NGInt _w, _h;
-				NGInt charLen = GetFirstUTF8CharLen((const char *)p, strlen((char *)p));
+				int _w, _h;
+				int charLen = GetFirstUTF8CharLen((const char *)p, strlen((char *)p));
 				if (charLen > 0) {
 					strncat(tmp, (char *)p, charLen);
 					getTextDrawSize(tmp, logfont, &_w, &_h);
@@ -720,7 +720,7 @@ void GraphicsContext::drawText(NGCPStr text, const IntRect& rect,
         GetTextExtent(hdc, text, -1, &size);
         if (size.cx > RECTW(rc)) { //need text ommit
             //calc the size
-            NGInt y = rc.top;
+            int y = rc.top;
             if (format & TextMode::ValignMiddle) {
                 y = (rc.top + rc.bottom - size.cy) / 2;
             }
@@ -737,7 +737,7 @@ void GraphicsContext::drawText(NGCPStr text, const IntRect& rect,
             (format & TextMode::ValignBottom)) {
         RECT rcc = rc;
         DrawText (hdc, text, -1, &rcc, format | DT_CALCRECT);
-        NGInt h = rcc.bottom - rc.top + 1;
+        int h = rcc.bottom - rc.top + 1;
         if (format & TextMode::ValignMiddle) {
             rc.top = (rc.top + rc.bottom - h) / 2;
         }
@@ -775,7 +775,7 @@ void GraphicsContext::clipIn(const IntRect& rect)
     IncludeClipRect(m_data->m_context, &rc);
 }
 
-NGBool GraphicsContext::rectVisible(IntRect &rect)
+bool GraphicsContext::rectVisible(IntRect &rect)
 {
     RECT rc = RECT(rect);
     mapRect(rc);
@@ -793,7 +793,7 @@ void GraphicsContext::restore()
     RestoreDC(m_data->m_context, -1);
 }
 
-GraphicsContext* GraphicsContext::createMemGc(NGInt w, NGInt h)
+GraphicsContext* GraphicsContext::createMemGc(int w, int h)
 {
     HDC memdc = CreateCompatibleDCEx(m_data->m_context, w, h);
 
@@ -824,7 +824,7 @@ void GraphicsContext::fillRect(const IntRect& rc, Uint8 r, Uint8 g, Uint8 b, Uin
     mapRect(rect);
 
     if (a == NGUX_DEFAULT_OPACITY) {
-        NGUInt oldColor = SetBrushColor(hdc, RGBA2Pixel(hdc, r, g, b, a));
+        unsigned int oldColor = SetBrushColor(hdc, RGBA2Pixel(hdc, r, g, b, a));
         FillBox(hdc, rect.left, rect.top, RECTW(rect), RECTH(rect));
         SetBrushColor(hdc, oldColor);
     }
@@ -832,8 +832,8 @@ void GraphicsContext::fillRect(const IntRect& rc, Uint8 r, Uint8 g, Uint8 b, Uin
         return;
     }
     else {
-        NGInt width = RECTW(rect);
-        NGInt height = RECTH(rect);
+        int width = RECTW(rect);
+        int height = RECTH(rect);
 #if 0
 #  ifdef __MMI_SAMSUNG_GT_FEATURE__
         HDC memdc = CreateCompatibleDCEx(hdc, width, height);
@@ -864,7 +864,7 @@ void GraphicsContext::fillRect(const IntRect& rc, Uint8 r, Uint8 g, Uint8 b, Uin
         FillBox(memdc, 0, 0, width, 1);
         SetMemDCAlpha(memdc, MEMDC_FLAG_SRCALPHA, a);
 
-        for (NGInt i = 0; i < height; i++) {
+        for (int i = 0; i < height; i++) {
             BitBlt(memdc, 0, 0, width, 1, hdc, rect.left, rect.top++, 0);
         }
 
@@ -873,9 +873,9 @@ void GraphicsContext::fillRect(const IntRect& rc, Uint8 r, Uint8 g, Uint8 b, Uin
     }
 }
 
-void GraphicsContext::rectangle(NGInt x0, NGInt y0, NGInt x1, NGInt y1)
+void GraphicsContext::rectangle(int x0, int y0, int x1, int y1)
 {
-    NGInt out_x0, out_y0, out_x1, out_y1;
+    int out_x0, out_y0, out_x1, out_y1;
     map(x0, y0, out_x0, out_y0);
     map(x1, y1, out_x1, out_y1);
     Rectangle(m_data->m_context, out_x0, out_y0, out_x1, out_y1);
@@ -889,10 +889,10 @@ void GraphicsContext::rectangle(int x0, int y0, int x1, int y1, Uint8 r, Uint8 g
     drawLine(x0, y1, x0, y0, 1, r, g, b, a);
 }
 
-void GraphicsContext::drawLine(NGInt x0, NGInt y0, NGInt x1, NGInt y1,
-                NGInt width, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+void GraphicsContext::drawLine(int x0, int y0, int x1, int y1,
+                int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
-    NGInt out_x0, out_y0, out_x1, out_y1;
+    int out_x0, out_y0, out_x1, out_y1;
     HDC hdc = m_data->m_context;
 
     int oldW = SetPenWidth(hdc, width);
@@ -907,10 +907,10 @@ void GraphicsContext::drawLine(NGInt x0, NGInt y0, NGInt x1, NGInt y1,
     SetPenWidth(hdc, oldW);
 }
 
-void GraphicsContext::drawHVDotLine(int x, int y, int wh, NGBool isHorz,
+void GraphicsContext::drawHVDotLine(int x, int y, int wh, bool isHorz,
 				Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
-    NGInt out_x, out_y;
+    int out_x, out_y;
     HDC hdc = m_data->m_context;
     
     gal_pixel oldC = SetPenColor(hdc, RGBA2Pixel(hdc, r, g, b, a));
@@ -921,7 +921,7 @@ void GraphicsContext::drawHVDotLine(int x, int y, int wh, NGBool isHorz,
     SetPenColor(hdc, oldC);
 }
 
-void GraphicsContext::drawPolygonLine(Point *pts, NGInt nums, int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+void GraphicsContext::drawPolygonLine(Point *pts, int nums, int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
 	HDC hdc = m_data->m_context;
 	Point* p = NGUX_NEW_ARR(Point, (sizeof(Point) * nums));
@@ -935,7 +935,7 @@ void GraphicsContext::drawPolygonLine(Point *pts, NGInt nums, int width, Uint8 r
 	SetPenCapStyle(hdc, PT_CAP_ROUND);
     SetPenColor(hdc, RGBA2Pixel(hdc, r, g, b, a));
 
-    for (NGInt c = 0; c < nums; ++c) {
+    for (int c = 0; c < nums; ++c) {
         map(pts[c].x, pts[c].y, p[c].x, p[c].y);
     }
 
@@ -947,10 +947,10 @@ void GraphicsContext::drawPolygonLine(Point *pts, NGInt nums, int width, Uint8 r
     }
 }
 
-void GraphicsContext::fillPolygon(const Point* pts, NGInt vertices, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+void GraphicsContext::fillPolygon(const Point* pts, int vertices, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     HDC hdc = m_data->m_context;
-    NGInt c = 0;
+    int c = 0;
     Point* p = NGUX_NEW_ARR(Point, (sizeof(Point) * vertices));
     if (NULL == p) {
         _ERR_PRINTF("NGUX_NEW_ARR for fillPolygon fail..\n");
@@ -970,9 +970,9 @@ void GraphicsContext::fillPolygon(const Point* pts, NGInt vertices, Uint8 r, Uin
     }
 }
 
-NGBool GraphicsContext::fillBoxWithBitmap(NGInt x, NGInt y, NGInt w, NGInt h, const Bitmap* pBitmap)
+bool GraphicsContext::fillBoxWithBitmap(int x, int y, int w, int h, const Bitmap* pBitmap)
 {
-    NGInt outx, outy;
+    int outx, outy;
     HDC hdc = m_data->m_context;
 
     map(x, y, outx, outy);
@@ -981,13 +981,13 @@ NGBool GraphicsContext::fillBoxWithBitmap(NGInt x, NGInt y, NGInt w, NGInt h, co
 }
 
 extern "C" Uint32 __mg_newgal_replace_color;
-NGBool GraphicsContext::setReplaceColor(const DWORD color)
+bool GraphicsContext::setReplaceColor(const DWORD color)
 {
     __mg_newgal_replace_color = (Uint32)color;
     return true;
 }
 
-NGBool GraphicsContext::drawRotateBitmap(const Bitmap* pBitmap,NGInt lx, NGInt ty, NGInt angle)
+bool GraphicsContext::drawRotateBitmap(const Bitmap* pBitmap,int lx, int ty, int angle)
 {
     HDC hdc = m_data->m_context;
 
@@ -995,9 +995,9 @@ NGBool GraphicsContext::drawRotateBitmap(const Bitmap* pBitmap,NGInt lx, NGInt t
     return true;
 }
 
-NGBool GraphicsContext::fillBoxWithBitmapPart(NGInt x, NGInt y, NGInt w, NGInt h, const Bitmap* pBitmap, NGInt xo, NGInt yo)
+bool GraphicsContext::fillBoxWithBitmapPart(int x, int y, int w, int h, const Bitmap* pBitmap, int xo, int yo)
 {
-    NGInt outx, outy;
+    int outx, outy;
     HDC hdc = m_data->m_context;
 
     map(x, y, outx, outy);
@@ -1005,16 +1005,16 @@ NGBool GraphicsContext::fillBoxWithBitmapPart(NGInt x, NGInt y, NGInt w, NGInt h
     return FillBoxWithBitmapPart(hdc, outx, outy, w, h, 0, 0, pBitmap, xo, yo);
 }
 
-NGInt GraphicsContext::loadBitmap(Bitmap* bmp, NGCPStr file_name)
+int GraphicsContext::loadBitmap(Bitmap* bmp, const char * file_name)
 {
-    NGInt ret = LoadBitmapFromFile(m_data->m_viewdc, bmp, file_name);
+    int ret = LoadBitmapFromFile(m_data->m_viewdc, bmp, file_name);
     if (ret != 0) {
         _ERR_PRINTF ("Load Bitmap [%s] error.\n", file_name);
     }
 
     return ret;
 }
-NGInt GraphicsContext::loadBitmap(Bitmap **bmp, const void* data, NGInt size, NGCPStr extern_name)
+int GraphicsContext::loadBitmap(Bitmap **bmp, const void* data, int size, const char * extern_name)
 {
 #ifdef _NGUX_INCORE_BMPDATA
     return LoadBitmapFromMem(m_data->m_viewdc, *bmp, data, size, extern_name);
@@ -1050,17 +1050,17 @@ GraphicsContext* GraphicsContext::createGraphicsFromBitmap(Bitmap *pbmp)
     return this;
 }
 
-NGBool GraphicsContext::initBitmap(NGInt w, NGInt h, Bitmap* pbmp)
+bool GraphicsContext::initBitmap(int w, int h, Bitmap* pbmp)
 {
     return InitBitmap(context(), w, h, 0, NULL, pbmp);
 }
 
-NGBool GraphicsContext::captureScreen2Bitmap(Bitmap* pbmp)
+bool GraphicsContext::captureScreen2Bitmap(Bitmap* pbmp)
 {
     return GetBitmapFromDC(m_data->m_context, 0, 0, _ngux_screen_w, _ngux_screen_h, pbmp);
 }
 
-NGBool GraphicsContext::getBitmapSize(Bitmap* pBitmap, NGInt* w, NGInt* h)
+bool GraphicsContext::getBitmapSize(Bitmap* pBitmap, int* w, int* h)
 {
     if (!pBitmap)
         return false;
@@ -1082,7 +1082,7 @@ Logfont* GraphicsContext::getCurFont(void)
 #endif
 }
 
-Logfont* GraphicsContext::createLogFontByName(NGCPStr fontname)
+Logfont* GraphicsContext::createLogFontByName(const char * fontname)
 {
 #ifdef USE_RDA_FONT
     return NULL;
@@ -1098,14 +1098,14 @@ void GraphicsContext::deleteLogFont(Logfont* logfont)
 #endif
 }
 
-void GraphicsContext::rotateBitmap(const Bitmap *pBitmap, NGInt lx, NGInt ty, NGInt angle)
+void GraphicsContext::rotateBitmap(const Bitmap *pBitmap, int lx, int ty, int angle)
 {
-    NGInt outx, outy;
+    int outx, outy;
     map(lx, ty, outx, outy);
     RotateBitmap(context(), pBitmap, outx, outy, angle);
 }
 
-void GraphicsContext::beginTransparencyLayer(NGInt alpha)
+void GraphicsContext::beginTransparencyLayer(int alpha)
 {
     m_data->beginTransparencyLayer(alpha);
 }
@@ -1167,7 +1167,7 @@ void GraphicsContext::setLayerColorKey(int layer, BOOL enable,
 
 /////////////////////////////////////////////////////////
 
-GraphicsContext* CreateMemGc(NGInt w, NGInt h)
+GraphicsContext* CreateMemGc(int w, int h)
 {
 	GraphicsContext* gc = NULL;
 	gc = GraphicsContext::screenGraphics();
@@ -1185,7 +1185,7 @@ void DeleteMemGc(GraphicsContext *memGc)
     }
 }
 
-NGBool SaveScreenToFile(NGCPStr bmpFile)
+bool SaveScreenToFile(const char * bmpFile)
 {
 #if defined (_MGMISC_SAVESCREEN)
     RECT rc = {0, 0, _ngux_screen_w, _ngux_screen_h};
@@ -1194,7 +1194,7 @@ NGBool SaveScreenToFile(NGCPStr bmpFile)
     return false;
 }
 
-NGInt GetUTF8CharInfo(const char *mstr, int len, int *retPosChars)
+int GetUTF8CharInfo(const char *mstr, int len, int *retPosChars)
 {
     int count = 0;
     int left_bytes = len;
@@ -1261,7 +1261,7 @@ NGInt GetUTF8CharInfo(const char *mstr, int len, int *retPosChars)
     return count;
 }
     
-NGInt GetLastUTF8CharLen(const char *str, int len)
+int GetLastUTF8CharLen(const char *str, int len)
 {
     int left_bytes = len;
     int len_cur_char;
@@ -1291,7 +1291,7 @@ NGInt GetLastUTF8CharLen(const char *str, int len)
     return lastlen;
 }
 
-NGInt GetFirstUTF8CharLen(const char *str, int len)
+int GetFirstUTF8CharLen(const char *str, int len)
 {
     if(str == NULL || len <= 0)
     {
@@ -1303,7 +1303,7 @@ NGInt GetFirstUTF8CharLen(const char *str, int len)
 	return utf8_len_first_char((unsigned char*)str, len);
 }
 
-NGInt GetUTF8CharCount(const char *mstr, int len)
+int GetUTF8CharCount(const char *mstr, int len)
 {
     int count = 0;
     int left_bytes = len;
@@ -1332,10 +1332,10 @@ NGInt GetUTF8CharCount(const char *mstr, int len)
 }
 
 
-NGInt GetUTF8LenByCharCount(const char *mstr, int charcount)
+int GetUTF8LenByCharCount(const char *mstr, int charcount)
 {
    char *str_temp = NULL;
-   NGInt charLen, tLen = 0;
+   int charLen, tLen = 0;
    
     if(mstr == NULL || charcount <= 0)
     {
@@ -1364,7 +1364,7 @@ BOOL HasUCS2Char(const char *mstr, int len)
 	len = CheckUtf8Strings(str, len);
 
 	while (len > 0 && str != NULL){
-		NGInt charLen = GetFirstUTF8CharLen((const char *)str, strlen((char *)str));
+		int charLen = GetFirstUTF8CharLen((const char *)str, strlen((char *)str));
 
 		//If it is GSM defined char,then do not use SMSAL_UCS2_DCS
 		if(charLen == 2)

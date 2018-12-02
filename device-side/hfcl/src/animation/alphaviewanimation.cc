@@ -24,7 +24,7 @@
 
 NAMESPACE_BEGIN
 
-AlphaViewAnimation::AlphaViewAnimation(View* view, NGInt endAlpha)
+AlphaViewAnimation::AlphaViewAnimation(View* view, int endAlpha)
 	:ViewAnimation(view, MGEFF_INT)
 {
 	setEndValue(&endAlpha);
@@ -34,12 +34,12 @@ AlphaViewAnimation::~AlphaViewAnimation()
 {
 }
 
-void AlphaViewAnimation::setProperty(NGInt id, void* value)
+void AlphaViewAnimation::setProperty(int id, void* value)
 {
 	if (NULL == m_view) {
 		return;
 	}
-	m_view->setAlpha(*(NGInt*)value);
+	m_view->setAlpha(*(int*)value);
 
 	m_view->updateView();
 }
@@ -47,7 +47,7 @@ void AlphaViewAnimation::setProperty(NGInt id, void* value)
 void AlphaViewAnimation::onStart()
 {
 	if (NULL != m_view) {
-		NGInt opacity = m_view->alpha();
+		int opacity = m_view->alpha();
 		setStartValue(&opacity);
 	}
 }

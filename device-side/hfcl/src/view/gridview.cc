@@ -58,8 +58,8 @@ GridView::GridView(View * p_parent)
 	setFocusValid(true);
 }
 
-GridView::GridView(View * p_parent, NGInt i_id, NGInt x, NGInt y, 
-		NGInt w, NGInt h, NGInt row, NGInt col, NGInt gap_w, NGInt gap_h)
+GridView::GridView(View * p_parent, int i_id, int x, int y, 
+		int w, int h, int row, int col, int gap_w, int gap_h)
 	: PanelView(i_id, x, y, w, h)
 	, m_col(col), m_row(row)
 	, m_grid_w(0), m_grid_h(0)
@@ -86,7 +86,7 @@ GridView::~GridView()
 
 }
 
-void GridView::setRows (NGInt row)
+void GridView::setRows (int row)
 {
 	if (row <= 0 || m_row == row)
 		return;
@@ -97,7 +97,7 @@ void GridView::setRows (NGInt row)
     reLayout();
 }
 
-void GridView::setCols (NGInt col)
+void GridView::setCols (int col)
 {
 	if (col <= 0 || m_col == col)
 		return;
@@ -108,7 +108,7 @@ void GridView::setCols (NGInt col)
     reLayout();
 }
 
-void GridView::setGapWidth (NGInt gap_w) 
+void GridView::setGapWidth (int gap_w) 
 { 
 	if (gap_w < 0 || m_gap_w == gap_w)
 		return;
@@ -120,7 +120,7 @@ void GridView::setGapWidth (NGInt gap_w)
 	reLayout(); 
 }
 
-void GridView::setGapHeight (NGInt gap_h) 
+void GridView::setGapHeight (int gap_h) 
 { 
 	if (gap_h < 0 || m_gap_h == gap_h )
 		return;
@@ -135,12 +135,12 @@ void GridView::setGapHeight (NGInt gap_h)
 #define GRID_X0 4
 void GridView::reLayout (void)
 {
-	NGInt x, y;
+	int x, y;
 	View *view = firstChild();
 	
-	for (NGInt i = 0; view && i < m_row; i++)
+	for (int i = 0; view && i < m_row; i++)
 	{
-		for (NGInt j = 0; view && j < m_col; j++)
+		for (int j = 0; view && j < m_col; j++)
 		{
 			if (m_bNeedConvert) {
 				x = GRID_X0 + m_gap_w * ((m_col - j)) + m_grid_w * (m_col - j - 1);
@@ -156,9 +156,9 @@ void GridView::reLayout (void)
     updateView(); 
 }
 
-NGBool GridView::setRect(const IntRect& irc)
+bool GridView::setRect(const IntRect& irc)
 {
-    NGBool ret = PanelView::setRect(irc);
+    bool ret = PanelView::setRect(irc);
 
 	if (ret && m_col > 0 && m_row > 0) {
 		m_grid_w = (irc.width() - (m_col + 1) * m_gap_w) / m_col;
@@ -170,10 +170,10 @@ NGBool GridView::setRect(const IntRect& irc)
     return ret;
 }
 
-NGInt GridView::addView(View *view)
+int GridView::addView(View *view)
 {
-	NGInt index;
-	NGInt x, y;
+	int index;
+	int x, y;
 
 	if (m_col <= 0 || m_row <= 0)
 		return -1;
@@ -182,7 +182,7 @@ NGInt GridView::addView(View *view)
 	// maybe it was in the tree ?
 	addChild(view); 
 	
-	NGInt count = viewCount();
+	int count = viewCount();
 
 	if(count > m_col * m_row)
 		return -1;
@@ -202,7 +202,7 @@ NGInt GridView::addView(View *view)
 	return 0;
 }
 
-NGInt GridView::remove(View *view)
+int GridView::remove(View *view)
 {
 #if 0   // GT_jyseo rollback
 	if (0 == removeChild (view)) {
@@ -213,9 +213,9 @@ NGInt GridView::remove(View *view)
 	return 0;
 }
 
-NGInt GridView::remove(NGInt row, NGInt col)
+int GridView::remove(int row, int col)
 {
-	NGInt index = row * m_col + col;
+	int index = row * m_col + col;
 	View *view = getChildByIndex(index);
 	
 	if (NULL != view) {
@@ -261,7 +261,7 @@ void GridView::onLoseFocus()
     updateView(); 
 }
 
-NGInt GridView::focusItemPosition(NGInt *row, NGInt *col)
+int GridView::focusItemPosition(int *row, int *col)
 {
     if(m_focusItem < 0 || m_col <= 0)
         return -1;
@@ -274,9 +274,9 @@ NGInt GridView::focusItemPosition(NGInt *row, NGInt *col)
     return m_focusItem;
 }
 
-NGBool GridView::notify2Parent(KEY_DIRECTION direction)
+bool GridView::notify2Parent(KEY_DIRECTION direction)
 {
-    NGInt flag = -1;
+    int flag = -1;
 
 	if(m_focusItem < 0)
 		return false;
@@ -284,7 +284,7 @@ NGBool GridView::notify2Parent(KEY_DIRECTION direction)
     Event::EventType eventType = Event::CUSTOM_NOTIFY;
     
     View * p = parent();
-	NGInt count = viewCount();
+	int count = viewCount();
 
     if(p == NULL || count <= 0)
         return true;
@@ -333,7 +333,7 @@ void GridView::changeFocusIndex(KEY_DIRECTION direction)
     if(m_boundary_listener && !notify2Parent(direction)) 
         return ;
 
-	NGInt count = viewCount();
+	int count = viewCount();
 
 	m_oldFocusItem = m_focusItem;
 	
@@ -373,7 +373,7 @@ void GridView::changeFocusIndex(KEY_DIRECTION direction)
             }
             else if(m_focusItem - m_col < 0 && m_col > 0) 
             {    
-                NGInt row = count % m_col ? (count / m_col + 1) : count / m_col;    
+                int row = count % m_col ? (count / m_col + 1) : count / m_col;    
                 int cur_col = m_focusItem%m_col;    
                 int idx = (row-1) * m_col + cur_col-1;    
                 while(idx > count)     
@@ -416,7 +416,7 @@ void GridView::changeFocusIndex(KEY_DIRECTION direction)
 	setFocusItem(m_focusItem);
 }
 
-NGInt GridView::setFocusItem(NGInt index)
+int GridView::setFocusItem(int index)
 {	
 	View *focus = getChildByIndex(index); 
 	
@@ -425,7 +425,7 @@ NGInt GridView::setFocusItem(NGInt index)
         m_focusItem = index;
 		setFocusView(focus);
 		//raise event
-		CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)CustomEvent::CUS_SELCHANGED, (NGInt)this);
+		CustomEvent event(Event::CUSTOM_NOTIFY, (int)CustomEvent::CUS_SELCHANGED, (int)this);
 		raiseEvent(&event);
 	    return 0;
 	}
@@ -433,12 +433,12 @@ NGInt GridView::setFocusItem(NGInt index)
 	return -1;
 }
 
-NGInt GridView::setFocusItem(NGInt row, NGInt col)
+int GridView::setFocusItem(int row, int col)
 {
     return setFocusItem(row * m_col + col); 
 }
 
-NGBool GridView::dispatchEvent(Event* event)
+bool GridView::dispatchEvent(Event* event)
 {
 	switch(event->eventType())
 	{
@@ -451,7 +451,7 @@ NGBool GridView::dispatchEvent(Event* event)
         case Event::KEY_DOWN:
         case Event::KEY_ALWAYSPRESS:
         {
-            NGInt code = ((KeyEvent *)event)->keyCode();
+            int code = ((KeyEvent *)event)->keyCode();
             if ( onKeyPressed (code) ) {
 
                 return DISPATCH_STOP_MSG;
@@ -468,7 +468,7 @@ View * GridView::getOldFocusItem()
 	return getChildByIndex(m_oldFocusItem);
 }
 
-NGBool GridView::onKeyPressed(NGInt keyCode)
+bool GridView::onKeyPressed(int keyCode)
 {
     switch(keyCode)
     {
@@ -491,7 +491,7 @@ NGBool GridView::onKeyPressed(NGInt keyCode)
 }
 
 #if 0   // GT_jyseo rollback
-NGBool GridView::handleEvent(Event* event)
+bool GridView::handleEvent(Event* event)
 {
     if (event->eventType() == Event::TIMER 
             && m_timerId == ((TimerEvent *)event)->timerID())

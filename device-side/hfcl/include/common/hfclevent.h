@@ -89,22 +89,22 @@ class CustomEvent : public Event{
             CUS_LOAD_DATA,
             CUS_MAX,
         };
-        CustomEvent(EventType type, NGInt wparam, int lparam)
+        CustomEvent(EventType type, int wparam, int lparam)
         :Event(type)
         ,m_customWparam(wparam)
         ,m_customLparam(lparam)
         {}
         virtual ~CustomEvent() { }
-        NGInt customWparam(){return m_customWparam;}
-        NGInt customLparam(){return m_customLparam;}
-        NGInt customExParam1(){return m_customExParam1;}
-        NGInt customExParam2(){return m_customExParam2;}
-        void setExParam(NGInt param1, NGInt param2){m_customExParam1=param1;m_customExParam2=param2;}
+        int customWparam(){return m_customWparam;}
+        int customLparam(){return m_customLparam;}
+        int customExParam1(){return m_customExParam1;}
+        int customExParam2(){return m_customExParam2;}
+        void setExParam(int param1, int param2){m_customExParam1=param1;m_customExParam2=param2;}
     private:
-        NGInt m_customWparam;
-        NGInt m_customLparam;
-        NGInt m_customExParam1;
-        NGInt m_customExParam2;
+        int m_customWparam;
+        int m_customLparam;
+        int m_customExParam1;
+        int m_customExParam2;
 
 };
 
@@ -150,7 +150,7 @@ class KeyEvent : public Event {
             KEYCODE_INVALID = 0xFE
         };
 
-        KeyEvent(EventType type, NGInt scancode, NGUInt keystatus)
+        KeyEvent(EventType type, int scancode, unsigned int keystatus)
         :Event(type)
         ,m_keyStatus(keystatus)
         {
@@ -188,21 +188,21 @@ class KeyEvent : public Event {
             }
         }
 
-        NGInt keyCode() {return m_keyCode;}
+        int keyCode() {return m_keyCode;}
         virtual ~KeyEvent() { }
-        inline NGInt keyCode() const { return m_keyCode; }
-        inline NGUInt keyStatus() const { return m_keyStatus; }
-        inline void  setKeyStatus(NGUInt st){ m_keyStatus = st; }
+        inline int keyCode() const { return m_keyCode; }
+        inline unsigned int keyStatus() const { return m_keyStatus; }
+        inline void  setKeyStatus(unsigned int st){ m_keyStatus = st; }
 
     private:
-        NGInt m_keyCode;
-        NGUInt m_keyStatus;
+        int m_keyCode;
+        unsigned int m_keyStatus;
 
 };
 
 class MouseEvent : public Event {
     public:
-        MouseEvent(EventType type, NGInt ix, int iy)
+        MouseEvent(EventType type, int ix, int iy)
         :Event(type)
          ,m_x(ix), m_y(iy)
         {
@@ -210,17 +210,17 @@ class MouseEvent : public Event {
         }
         virtual ~MouseEvent() {}
 
-        inline NGInt x() const { return m_x; }
-        inline NGInt y() const { return m_y; }
+        inline int x() const { return m_x; }
+        inline int y() const { return m_y; }
 
     private:
-        NGInt m_x;
-        NGInt m_y;
+        int m_x;
+        int m_y;
 };
 
 class TimerEvent : public Event {
     public:
-        TimerEvent(EventType type, NGInt timerId)
+        TimerEvent(EventType type, int timerId)
         :Event(type)
          ,m_timerId(timerId)
         {
@@ -228,15 +228,15 @@ class TimerEvent : public Event {
 
         virtual ~TimerEvent() {}
 
-        inline NGInt timerID() const { return m_timerId; }
+        inline int timerID() const { return m_timerId; }
 
     private:
-        NGInt m_timerId;
+        int m_timerId;
 };
 
 class ChargeEarPhoneEvent : public Event {
     public:
-        ChargeEarPhoneEvent(EventType type, NGInt evevtId, NGInt info)
+        ChargeEarPhoneEvent(EventType type, int evevtId, int info)
         :Event(type)
          ,m_eventID(evevtId)
          ,m_info(info)
@@ -245,18 +245,18 @@ class ChargeEarPhoneEvent : public Event {
 
         virtual ~ChargeEarPhoneEvent() {}
 
-        inline NGInt eventID() const { return m_eventID; }
-        inline NGInt Info()const{return m_info;}
+        inline int eventID() const { return m_eventID; }
+        inline int Info()const{return m_info;}
 
     private:
-        NGInt m_eventID;
-        NGInt m_info;
+        int m_eventID;
+        int m_info;
 };
 
 
 class MediaEvent : public Event {
     public:
-        MediaEvent(EventType type, NGInt istate, NGInt idata)
+        MediaEvent(EventType type, int istate, int idata)
         :Event(type)
         , m_state(istate)
         , m_data(idata)
@@ -282,12 +282,12 @@ class MediaEvent : public Event {
         };
 
         virtual ~MediaEvent() {}
-        inline NGInt state() const {return m_state;}
-        inline NGInt data() const {return m_data;}
+        inline int state() const {return m_state;}
+        inline int data() const {return m_data;}
 
     private:
-        NGInt m_state;
-        NGInt m_data;
+        int m_state;
+        int m_data;
 };
 
 class ProtocolEvent : public Event {
@@ -305,20 +305,20 @@ class ProtocolEvent : public Event {
         virtual ~ProtocolEvent(){}
 
         // datas
-        NGInt eventId;
+        int eventId;
         void* buffer;
         void* param1;
         void* param2;
-        NGInt simId;
+        int simId;
 };
 
 class EventListener : public RefCount 
 {
     public:
         EventListener(): RefCount(0) { }
-        virtual NGBool handleEvent(Event* event) = 0; 
+        virtual bool handleEvent(Event* event) = 0; 
     protected:
-        EventListener(NGInt start_ref) : RefCount(start_ref) { }
+        EventListener(int start_ref) : RefCount(start_ref) { }
 };
 
 class EventBroadcaster

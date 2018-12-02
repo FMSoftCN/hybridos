@@ -22,7 +22,7 @@
 #ifndef __NGUX_URLPARSE_H__
 #define __NGUX_URLPARSE_H__
 
-NGInt URL_ParseDataGen(NGChar const * strPtr,NGInt * addrTable, int tableSize);
+int URL_ParseDataGen(char const * strPtr,int * addrTable, int tableSize);
 
 #endif  // __NGUX_URLPARSE_H__
 

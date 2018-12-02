@@ -45,20 +45,20 @@ AnimateImageView::AnimateImageView(View* p_parent, DrawableSet* drset)
 }
 
 AnimateImageView::AnimateImageView(Image* pImage,
-                     NGInt i_id,
-                     NGInt x, NGInt y, NGInt w, NGInt h)
+                     int i_id,
+                     int x, int y, int w, int h)
     : View(i_id, x, y, w, h)
 {
     init();
     m_image = pImage;
 }
 
-AnimateImageView::AnimateImageView(const NGPStr filePath,
-                     NGInt i_id,
-                     NGInt x, NGInt y, NGInt w, NGInt h,
-                     NGInt mode,
-                     NGInt align,
-                     NGInt valign)
+AnimateImageView::AnimateImageView(const char * filePath,
+                     int i_id,
+                     int x, int y, int w, int h,
+                     int mode,
+                     int align,
+                     int valign)
     : View(i_id, x, y, w, h)
 {
 	init();
@@ -76,12 +76,12 @@ AnimateImageView::~AnimateImageView()
 	}
 }
 
-void AnimateImageView::drawBackground(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/)
+void AnimateImageView::drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/)
 {
 	View::drawBackground(context, rc, status);
 }
 
-void AnimateImageView::drawContent(GraphicsContext* context, IntRect &rc, NGInt status)
+void AnimateImageView::drawContent(GraphicsContext* context, IntRect &rc, int status)
 {
 	if(m_format.rotationAngle != 0){
 		m_format.drawMode = DRAWMODE_ROTATIONANGLE;
@@ -106,26 +106,26 @@ bool AnimateImageView::setImage(Image *pImg)
     return true;
 }
 
-NGBool AnimateImageView::setReplaceColor(const DWORD color)
+bool AnimateImageView::setReplaceColor(const DWORD color)
 {
     m_image->setReplaceColor(color);
     updateView();
     return true;
 }
 
-void AnimateImageView::setPartBoxXoYo(NGInt xo, NGInt yo)
+void AnimateImageView::setPartBoxXoYo(int xo, int yo)
 {
     m_xo = xo;
     m_yo = yo;
 }
 
-void AnimateImageView::getPartBoxXoYo(NGInt& xo, NGInt& yo)
+void AnimateImageView::getPartBoxXoYo(int& xo, int& yo)
 {
     xo = m_xo;
     yo = m_yo;
 }
 
-void AnimateImageView::setFromImgRect(NGBool bSet)
+void AnimateImageView::setFromImgRect(bool bSet)
 {
     if (!bSet)
         return;
@@ -136,7 +136,7 @@ void AnimateImageView::setFromImgRect(NGBool bSet)
     setRect(0, 0, getImageWidth(), getImageHeight());
 }
 
-NGInt AnimateImageView::getImageWidth(void)
+int AnimateImageView::getImageWidth(void)
 {
     if (m_image != NULL)
         return m_image->width();
@@ -144,7 +144,7 @@ NGInt AnimateImageView::getImageWidth(void)
     return 0;
 }
 
-NGInt AnimateImageView::getImageHeight(void)
+int AnimateImageView::getImageHeight(void)
 {
     if (m_image != NULL)
         return m_image->height();
@@ -152,7 +152,7 @@ NGInt AnimateImageView::getImageHeight(void)
     return 0;
 }
 
-NGBool AnimateImageView::start(void)
+bool AnimateImageView::start(void)
 {
     if (Play == m_state)
         return false;
@@ -168,7 +168,7 @@ NGBool AnimateImageView::start(void)
     return true;
 }
 
-NGBool AnimateImageView::stop(void)
+bool AnimateImageView::stop(void)
 {
     if (m_timer_id >= 0)
     {
@@ -181,7 +181,7 @@ NGBool AnimateImageView::stop(void)
     return true;
 }
 
-NGBool AnimateImageView::setImageIdArray(unsigned int * array, unsigned int num, int timeDuration,const DWORD color)
+bool AnimateImageView::setImageIdArray(unsigned int * array, unsigned int num, int timeDuration,const DWORD color)
 {
     m_imageId_array = array;
     m_imageId_array_num = num;

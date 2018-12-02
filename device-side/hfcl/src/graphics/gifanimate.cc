@@ -533,14 +533,14 @@ void GifAnimate::createGifAnimateFromRes(BitmapFrameArray* bitmap_frame_array)
 
     m_mem_gc = CreateMemGc(m_max_width, m_max_height);
 #ifdef _NGUX_GIF_TRACE_ 
-    if(NULL == m_mem_gc || HDC_INVALID == (NGUInt) m_mem_gc) {
+    if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
 		_DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromRes CreateMemGc Error. 1\n");
     }
 #endif
 }
 
 #ifdef _NGUX_INCORE_BMPDATA
-void GifAnimate::createGifAnimateFromMem(NGCPStr data, NGUInt size)
+void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
 {
     unsigned char c;
     int ok = 0;
@@ -680,7 +680,7 @@ ret_tag_0:
     m_mem_gc = CreateMemGc(m_max_width, m_max_height);
 
 #ifdef _NGUX_GIF_TRACE_ 
-    if(NULL == m_mem_gc || HDC_INVALID == (NGUInt) m_mem_gc) {
+    if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem CreateMemGc Error. 0\n");
     }
 #endif
@@ -799,7 +799,7 @@ ret_tag:
 
         m_mem_gc = CreateMemGc(m_max_width, m_max_height);
 #ifdef _NGUX_GIF_TRACE_
-        if(NULL == m_mem_gc || HDC_INVALID == (NGUInt) m_mem_gc) {
+        if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
             _DBG_PRINTF ("GifAnimate::createGifAnimateFromMem CreateMemGc Error. 0\n");
         }
 #endif
@@ -923,13 +923,13 @@ ret_tag_0:
 
     m_mem_gc = CreateMemGc(m_max_width, m_max_height);
 #ifdef _NGUX_GIF_TRACE_
-    if(NULL == m_mem_gc || HDC_INVALID == (NGUInt) m_mem_gc) {
+    if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem CreateMemGc Error. 0\n");
     }
 #endif
 }
 #else
-void GifAnimate::createGifAnimateFromMem(NGCPStr data, NGUInt size)
+void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
 {
     unsigned char c;
     int ok = 0;
@@ -1027,7 +1027,7 @@ void GifAnimate::createGifAnimateFromMem(NGCPStr data, NGUInt size)
         m_mem_gc = CreateMemGc(m_max_width, m_max_height);
 
 #ifdef _NGUX_GIF_TRACE_
-        if(NULL == m_mem_gc || HDC_INVALID == (NGUInt) m_mem_gc) {
+        if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
             _DBG_PRINTF ("GifAnimate::createGifAnimateFromMem CreateMemGc Error. 0\n");
         }
 #endif
@@ -1191,7 +1191,7 @@ GifAnimate::GifAnimate() :RefCount(0)
         _ERR_PRINTF("GifAnimate::GifAnimate some where not free");
     }
     m_mem_gc = CreateMemGc(_ngux_screen_w, _ngux_screen_h);
-	if(! m_mem_gc || HDC_INVALID == (NGUInt) m_mem_gc)
+	if(! m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc)
 	{
 //		_ERR_PRINTF("GifAnimate::GifAnimate malloc fail");
 	}
@@ -1216,7 +1216,7 @@ GifAnimate::GifAnimate(int ops) :RefCount(0)
     m_mem_gc = CreateMemGc(_ngux_screen_w, _ngux_screen_h);
 
 #ifdef _NGUX_GIF_TRACE_
-	if(NULL == m_mem_gc || HDC_INVALID == (NGUInt) m_mem_gc) {
+	if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
 		_DBG_PRINTF ("GifAnimate::GifAnimate CreateMemGc Error. 2\n");
 	}
 #endif

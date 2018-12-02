@@ -24,7 +24,7 @@
 
 NAMESPACE_BEGIN
 
-NGInt Animation::initAnimation()
+int Animation::initAnimation()
 {
 	//FIXED: cannot call mGEffInit when init, 
 	// because, mGEffInit need call SetTimerEx, this function need a message queue
@@ -41,7 +41,7 @@ void Animation::deinitAnimation()
 Animation::Animation(enum EffVariantType varianttype)
 {
     m_stop_in_progress = false;
-	static NGInt _mgeff_is_inited = 0;
+	static int _mgeff_is_inited = 0;
 	// init the mGEff when needed!
 	if(!_mgeff_is_inited)
 	{
@@ -83,7 +83,7 @@ void Animation::_finishcb(MGEFF_ANIMATION handle)
 	}
 }
 
-void Animation::_setProperty(MGEFF_ANIMATION handle, void *target, NGInt id, void *value)
+void Animation::_setProperty(MGEFF_ANIMATION handle, void *target, int id, void *value)
 {
 	Animation *animation = (Animation*)mGEffAnimationGetContext(handle);
 	if(animation) {
@@ -91,12 +91,12 @@ void Animation::_setProperty(MGEFF_ANIMATION handle, void *target, NGInt id, voi
 	}
 }
 
-void Animation::setAttribute(NGInt id, NGInt value)
+void Animation::setAttribute(int id, int value)
 {
     mGEffAnimationSetProperty(m_animation, (enum EffAnimProperty)id, value);
 }
 
-NGInt Animation::getAttribute(NGInt id)
+int Animation::getAttribute(int id)
 {
     return mGEffAnimationGetProperty(m_animation, (enum EffAnimProperty)id);
 }
@@ -131,7 +131,7 @@ const void * Animation::getEndValue()
     return mGEffAnimationGetEndValue(m_animation);
 }
 
-void Animation::start(NGBool auto_delete, NGBool sync)
+void Animation::start(bool auto_delete, bool sync)
 {
     this->onStart();
 

@@ -66,7 +66,7 @@ class RefCount : Noncopyable {
          * Default construct, initializing the reference count to 1.
          */
         RefCount() : m_refCount(1) { }
-        RefCount(NGInt start_ref) : m_refCount(start_ref) { } //for special use
+        RefCount(int start_ref) : m_refCount(start_ref) { } //for special use
 
         /**
          * Destruct, asserting that the reference count is 1.
@@ -76,7 +76,7 @@ class RefCount : Noncopyable {
         /**
          * Return the reference count.
          */
-        NGInt getRefCnt() const { return m_refCount; }
+        int getRefCnt() const { return m_refCount; }
 
 		inline int refInc() {return ++m_refCount;}
 		inline int refDec() {return --m_refCount;}
@@ -84,7 +84,7 @@ class RefCount : Noncopyable {
         /**
          * Increment the reference count. Must be balanced by a call to unref().
          */
-        NGInt ref() 
+        int ref() 
         {
             return refInc();
         }
@@ -95,7 +95,7 @@ class RefCount : Noncopyable {
          * case, then the object needs to have been allocated via new, and not on
          * the stack.
          */
-        NGInt unref() 
+        int unref() 
         {
 			if (refDec () == 0) {
 				NGUX_DELETE(this);
@@ -108,7 +108,7 @@ class RefCount : Noncopyable {
          * Helper version of ref(), that first checks to see if this is not null.
          * If this is null, then do nothing.
          */
-        inline NGInt safeRef() 
+        inline int safeRef() 
         {
             return ref();
         }
@@ -117,13 +117,13 @@ class RefCount : Noncopyable {
          * Helper version of unref(), that first checks to see if this is not null.
          * If this is null, then do nothing.
          */
-        inline NGInt safeUnref() 
+        inline int safeUnref() 
         {
             return unref();
         }
 
     private:
-        mutable NGInt m_refCount;
+        mutable int m_refCount;
 };
 
 
@@ -165,14 +165,14 @@ public:
             _ptr->ref();
     }
 
-    friend NGBool operator==(AutoPtr& ap1, AutoPtr& ap2)
+    friend bool operator==(AutoPtr& ap1, AutoPtr& ap2)
     {
         if (ap1._ptr == ap2._ptr)
             return true;
         return false;
     }
 
-    NGBool operator!() const { return _ptr == NULL; }
+    bool operator!() const { return _ptr == NULL; }
 
     RefCount* ptr() const { return _ptr; }
 };

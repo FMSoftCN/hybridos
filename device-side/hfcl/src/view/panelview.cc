@@ -43,7 +43,7 @@ PanelView::PanelView(View* p_parent, DrawableSet* drset)
     m_update = true;
 }
 
-PanelView::PanelView(NGInt i_id, NGInt x, NGInt y, NGInt w, NGInt h)
+PanelView::PanelView(int i_id, int x, int y, int w, int h)
     : ContainerView(i_id, x, y, w, h)
     , m_bkImage(NULL)
     , m_imageDrawMode(DRAWMODE_NORMAL)
@@ -61,7 +61,7 @@ PanelView::~PanelView()
     }
 }
 
-NGBool PanelView::setBkImage(NGCPStr image_file)
+bool PanelView::setBkImage(const char * image_file)
 {
     if (NULL == image_file) {
         return false;
@@ -70,7 +70,7 @@ NGBool PanelView::setBkImage(NGCPStr image_file)
     return setBkImageEx(Image::loadImage(image_file));
 }
 
-NGBool PanelView::setBkImageEx(Image* image)
+bool PanelView::setBkImageEx(Image* image)
 {
     if(!image)
         return false;
@@ -86,7 +86,7 @@ NGBool PanelView::setBkImageEx(Image* image)
     return true;
 }
 
-NGBool PanelView::setBkColor(const DWORD color)
+bool PanelView::setBkColor(const DWORD color)
 {
     if (m_bkImage != NULL)
     {
@@ -100,12 +100,12 @@ NGBool PanelView::setBkColor(const DWORD color)
     return true;
 }
 
-void PanelView::setImageDrawMode(NGInt mode)
+void PanelView::setImageDrawMode(int mode)
 {
     m_imageDrawMode = mode;
 }
 
-NGBool PanelView::setUpdate(NGBool update) {
+bool PanelView::setUpdate(bool update) {
     m_update = update;
     return true;
 }

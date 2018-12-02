@@ -107,14 +107,14 @@
 #define style_image(id, img_id)
 #define style_font(id, font_id)
 
-//sys ResID by name
+//sys HTResId by name
 #define sysid_font(name)  
 #define sysid_image(name) 
 //#define sysid_text(name)  
 #define sysid_style(name) 
 #define sysid_dr(name)    
 #define sysid_drset(name)    
-//get ResID by name
+//get HTResId by name
 #define my_font(name)
 #define my_image(name)
 //#define my_text(name)

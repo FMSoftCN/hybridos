@@ -41,45 +41,45 @@ class AnimateImageView : public View, TimerEventListener
 		
         AnimateImageView(View* parent);
         AnimateImageView(View* parent, DrawableSet* drset);
-        AnimateImageView(Image* pImage, NGInt id, NGInt x, NGInt y, NGInt w, NGInt h);
-        AnimateImageView(const NGPStr filePath, NGInt id, NGInt x, NGInt y, NGInt w, NGInt h,
-                NGInt mode = DRAWMODE_NORMAL,
-                NGInt align = ALIGN_CENTER,
-                NGInt valign = VALIGN_MIDDLE);
+        AnimateImageView(Image* pImage, int id, int x, int y, int w, int h);
+        AnimateImageView(const char * filePath, int id, int x, int y, int w, int h,
+                int mode = DRAWMODE_NORMAL,
+                int align = ALIGN_CENTER,
+                int valign = VALIGN_MIDDLE);
 
         virtual ~AnimateImageView();
 
         bool setImage(Image* pImg);
 		Image *getImage(void) { return m_image; }
 		
-        void setImageDrawMode(NGInt  mode) {
+        void setImageDrawMode(int  mode) {
             m_format.drawMode = mode;
         }
-        void setImageAlign(NGInt halign) {
+        void setImageAlign(int halign) {
             m_format.align = halign;
         }
-        void setImageVAlign(NGInt valign) {
+        void setImageVAlign(int valign) {
             m_format.valign = valign;
         }
-	 	void setImageRotationAngle(NGInt RotationAngle) {
+	 	void setImageRotationAngle(int RotationAngle) {
             m_format.rotationAngle = RotationAngle;
         }
 
         virtual void drawContent(GraphicsContext* context,
-                IntRect &rc, NGInt status/*= Style::NORMAL*/);
+                IntRect &rc, int status/*= Style::NORMAL*/);
 
-        virtual void drawBackground(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/);
+        virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 
-        void setPartBoxXoYo(NGInt xo = 0, NGInt yo = 0);
-        void getPartBoxXoYo(NGInt& xo, NGInt& yo);
+        void setPartBoxXoYo(int xo = 0, int yo = 0);
+        void getPartBoxXoYo(int& xo, int& yo);
 
-        void setFromImgRect(NGBool bSet = false);
-        NGInt getImageWidth(void);
-        NGInt getImageHeight(void);
-		NGBool setReplaceColor(const DWORD color);
-		NGBool start(void);
-        NGBool stop(void); 
-		NGBool setImageIdArray(unsigned int * array, unsigned int num, int timeDuration,const DWORD color);
+        void setFromImgRect(bool bSet = false);
+        int getImageWidth(void);
+        int getImageHeight(void);
+		bool setReplaceColor(const DWORD color);
+		bool start(void);
+        bool stop(void); 
+		bool setImageIdArray(unsigned int * array, unsigned int num, int timeDuration,const DWORD color);
 		bool handleEvent(Event* event);
 		
     protected:
@@ -111,8 +111,8 @@ class AnimateImageView : public View, TimerEventListener
 
         DECLARE_CLASS_NAME(AnimateImageView)
     private:
-        NGInt m_xo;
-        NGInt m_yo;
+        int m_xo;
+        int m_yo;
         int         m_timer_id;
         PlayState   m_state;
         DWORD 	m_replaceColor;

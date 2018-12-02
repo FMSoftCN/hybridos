@@ -42,7 +42,7 @@ TimeEditor::TimeEditor(View * p_parent)
     timeEditorInit();
 }
 
-TimeEditor::TimeEditor(NGInt i_id, NGInt x, NGInt y, NGInt w, NGInt h)
+TimeEditor::TimeEditor(int i_id, int x, int y, int w, int h)
     : FormatEditView(i_id, x, y, w, h)
 {
     timeEditorInit();
@@ -82,7 +82,7 @@ void TimeEditor::timeEditorInit(void)
         ""
     };
 
-    NGChar max_char[] =
+    char max_char[] =
     {
         2,
         2,
@@ -117,10 +117,10 @@ void TimeEditor::timeEditorInit(void)
     }
 }
 
-void TimeEditor::setHour(NGInt h)
+void TimeEditor::setHour(int h)
 {
     char buf[64];
-    NGInt tmp = m_current_index;
+    int tmp = m_current_index;
     sprintf(buf, "%02d", h);
 
     m_field_content[m_field_h] = buf;
@@ -130,15 +130,15 @@ void TimeEditor::setHour(NGInt h)
     m_current_index = tmp;
 }
 
-NGInt TimeEditor::hour(void)
+int TimeEditor::hour(void)
 {
     return atoi(m_field_content[m_field_h].c_str());
 }
 
-void TimeEditor::setMinute(NGInt m)
+void TimeEditor::setMinute(int m)
 {
     char buf[64];
-    NGInt tmp = m_current_index;
+    int tmp = m_current_index;
     sprintf(buf, "%02d", m);
 
     m_field_content[m_field_m] = buf;
@@ -148,12 +148,12 @@ void TimeEditor::setMinute(NGInt m)
     m_current_index = tmp;
 }
 
-NGInt TimeEditor::minute(void)
+int TimeEditor::minute(void)
 {
     return atoi(m_field_content[m_field_m].c_str());
 }
 
-void TimeEditor::setAm(NGBool am)
+void TimeEditor::setAm(bool am)
 {
     if (am) {
         m_field_content[m_field_ap] = "AM";
@@ -171,7 +171,7 @@ void TimeEditor::setAm(NGBool am)
     }
 }
 
-NGBool TimeEditor::isAm(void)
+bool TimeEditor::isAm(void)
 {
     if (m_field_content[m_field_ap].length() > 1
             && m_field_content[m_field_ap].c_str()[0] == 'A') {
@@ -182,7 +182,7 @@ NGBool TimeEditor::isAm(void)
 
 void TimeEditor::setTimeFormat(TimeFormat format)
 { 
-    NGInt num = 0;
+    int num = 0;
     char buf[64];
     int i;
 
@@ -308,7 +308,7 @@ void TimeEditor::refresh(void)
     reLayout();
 }
 
-NGBool TimeEditor::dispatchEvent(Event* event)
+bool TimeEditor::dispatchEvent(Event* event)
 {
     // 2 means am/pm field
     if (m_current_index == m_field_ap
@@ -336,14 +336,14 @@ NGBool TimeEditor::dispatchEvent(Event* event)
         return FormatEditView::dispatchEvent(event);
 }
 
-NGBool TimeEditor::onChangeField(void)
+bool TimeEditor::onChangeField(void)
 { 
     return true;
 }
 
-NGBool TimeEditor::checkContent(void)
+bool TimeEditor::checkContent(void)
 {
-    NGInt num = 0, tmp = 0;
+    int num = 0, tmp = 0;
     char buf[64];
     
     if (-1 == m_current_index || m_field_ap == m_current_index)

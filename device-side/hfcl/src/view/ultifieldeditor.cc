@@ -48,7 +48,7 @@ MultiFieldEditor::MultiFieldEditor(View * p_parent)
 {
 }
 
-MultiFieldEditor::MultiFieldEditor(NGInt i_id, NGInt x, NGInt y, NGInt w, NGInt h)
+MultiFieldEditor::MultiFieldEditor(int i_id, int x, int y, int w, int h)
     : FormatEditView(i_id, x, y, w, h)
 {
 }
@@ -57,12 +57,12 @@ MultiFieldEditor::~MultiFieldEditor()
 {
 }
 
-void MultiFieldEditor::multiFieldEditorInit(NGInt field_count, NGCPStr* p_content_array, 
-                NGCPStr* p_formator_array, NGChar* p_content_max_nr, NGInt* p_value_range, FIELD_FORMAT field_format, NGInt date_system
+void MultiFieldEditor::multiFieldEditorInit(int field_count, const char ** p_content_array, 
+                const char ** p_formator_array, char* p_content_max_nr, int* p_value_range, FIELD_FORMAT field_format, int date_system
                 )
 {
-    NGInt i = 0;
-    NGInt* p = 0;
+    int i = 0;
+    int* p = 0;
     const char *content[] =
     {
         "01",
@@ -77,14 +77,14 @@ void MultiFieldEditor::multiFieldEditorInit(NGInt field_count, NGCPStr* p_conten
         ""
     };
 
-    NGChar max_char[] =
+    char max_char[] =
     {
         2,
         2,
         4
     };
     
-    NGInt range[] = 
+    int range[] = 
     {
         1, 12,
         1, 31,
@@ -123,17 +123,17 @@ void MultiFieldEditor::refresh(void)
     reLayout();
 }
 
-NGBool MultiFieldEditor::dispatchEvent(Event* event)
+bool MultiFieldEditor::dispatchEvent(Event* event)
 {
     return FormatEditView::dispatchEvent(event);
 }
 
-NGBool MultiFieldEditor::onChangeField(void)
+bool MultiFieldEditor::onChangeField(void)
 { 
     return true;
 }
 
-NGBool MultiFieldEditor::setRange(NGInt index, NGInt min, NGInt max)
+bool MultiFieldEditor::setRange(int index, int min, int max)
 {
     if (index < 0 || index > m_field_count)
         return false;
@@ -144,7 +144,7 @@ NGBool MultiFieldEditor::setRange(NGInt index, NGInt min, NGInt max)
     return true;
 }
 
-NGInt MultiFieldEditor::getValue(NGInt index)
+int MultiFieldEditor::getValue(int index)
 {
     if (index < 0 || index > m_field_count)
         return false;
@@ -152,10 +152,10 @@ NGInt MultiFieldEditor::getValue(NGInt index)
     return atoi(m_field_content[index].c_str());
 }
 
-NGBool MultiFieldEditor::setValue(NGInt index, NGInt value)
+bool MultiFieldEditor::setValue(int index, int value)
 {
     char buf[64];
-    NGInt tmp = 0;
+    int tmp = 0;
     if (index < 0 || index > m_field_count)
         return false;
 
@@ -168,7 +168,7 @@ NGBool MultiFieldEditor::setValue(NGInt index, NGInt value)
     return true;
 }
 
-void MultiFieldEditor::setTextAlign(NGUInt align)
+void MultiFieldEditor::setTextAlign(unsigned int align)
 {
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_TEXTALIGN, align))
         updateView();
@@ -176,10 +176,10 @@ void MultiFieldEditor::setTextAlign(NGUInt align)
 
 void MultiFieldEditor::checkDays(void)
 {
-    NGInt day = 0;
-    NGInt month = 0;
-    NGInt year = 0;
-    NGInt temp = 0;
+    int day = 0;
+    int month = 0;
+    int year = 0;
+    int temp = 0;
 
     if(m_dateFormat == YYYYMMDD)
     {
@@ -274,9 +274,9 @@ void MultiFieldEditor::checkDays(void)
     }
 }
 
-NGBool MultiFieldEditor::checkContent(void)
+bool MultiFieldEditor::checkContent(void)
 {
-    NGInt num = 0, tmp = 0;
+    int num = 0, tmp = 0;
     char buf[64];
     if (-1 == m_current_index)
         return false;

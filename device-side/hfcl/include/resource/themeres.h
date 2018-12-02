@@ -30,7 +30,7 @@ class ThemeRes {
         ~ThemeRes();
 
 		void setDrawableSetMapTable(TRThemeItem* items);
-		DrawableSet* getDrawableSet(NGInt theme_drset_id);
+		DrawableSet* getDrawableSet(int theme_drset_id);
 
 	
     private:

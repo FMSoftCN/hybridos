@@ -22,7 +22,7 @@
 #ifndef __RESPKGMANAGER_H
 #define __RESPKGMANAGER_H
 
-//typedef unsigned int ResID; 
+//typedef unsigned int HTResId; 
 
 //enum { RPKG_sys = 0 };
 
@@ -55,7 +55,7 @@ class ResPkgManager
 		
 		static ResPkgManager* m_singleton;
 		ResPkgList m_packageList;
-		NGInt m_lang;
+		int m_lang;
 
     private:
 		~ResPkgManager();
@@ -73,8 +73,8 @@ class ResPkgManager
 		
 		inline int count(void) {return m_packageList.size();}
 		
-		bool setCurrentLang (NGInt langId);
-		NGInt getCurrentLang (void) { return m_lang; }
+		bool setCurrentLang (int langId);
+		int getCurrentLang (void) { return m_lang; }
 };
 
 
@@ -94,32 +94,32 @@ bool UnregisterResPackageById(int id);
 #define GetResPackage(id) 		 	GetResPackageById(id)
 #define UnregisterResPackage(id) 	UnregisterResPackageById(id)
 
-void * GetRes(ResID id);
-Logfont * GetFontRes(ResID id/*, Style* style = NULL*/);
-Style * GetStyleRes(ResID id);
-Image * GetImageRes(ResID id);
-Bitmap * GetBitmapRes(ResID id);
-GifAnimate* GetGifAnimateRes(ResID id);
-Drawable* GetDrawableRes(ResID id);
-DrawableSet* GetDrawableSetRes(ResID id);
-ThemeRes* GetThemeRes(ResID id);
-DrawableSet* GetDrawableSetResFromTheme(NGInt theme_drset_id);
-DrawableSetGroup* GetDrawableSetGroupRes(ResID id);
+void * GetRes(HTResId id);
+Logfont * GetFontRes(HTResId id/*, Style* style = NULL*/);
+Style * GetStyleRes(HTResId id);
+Image * GetImageRes(HTResId id);
+Bitmap * GetBitmapRes(HTResId id);
+GifAnimate* GetGifAnimateRes(HTResId id);
+Drawable* GetDrawableRes(HTResId id);
+DrawableSet* GetDrawableSetRes(HTResId id);
+ThemeRes* GetThemeRes(HTResId id);
+DrawableSet* GetDrawableSetResFromTheme(int theme_drset_id);
+DrawableSetGroup* GetDrawableSetGroupRes(HTResId id);
 
-View * CreateViewFromRes(ResID id, View *parent, ViewContext *viewContext, ContentProvider* provider = NULL);
+View * CreateViewFromRes(HTResId id, View *parent, ViewContext *viewContext, ContentProvider* provider = NULL);
 #define GetUITempl(id)   (CB_CREATE_VIEW)GetRes(id)
 
 // add the support for the menu, by wangxin 2011-08-05
-Menu * CreateMenuFromRes(ResID id, Menu* parent, EventListener* listener);
+Menu * CreateMenuFromRes(HTResId id, Menu* parent, EventListener* listener);
 
 void RegisterInnerResource(int type, INNER_RES_INFO *resource, int count);
 void RegisterAudiorResource();
 
 #define REGISTER_RESPKG(name) FRRegister_##name##_resource()
 
-bool SetResourceLanguage (NGInt lang);
-NGInt GetResourceLanguage (void);
-const char * GetTextRes (ResID id);
+bool SetResourceLanguage (int lang);
+int GetResourceLanguage (void);
+const char * GetTextRes (HTResId id);
 const char* GetPLMNDisplayName (const char* plmn);
 
 NAMESPACE_END

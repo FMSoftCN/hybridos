@@ -26,8 +26,8 @@
 
 NAMESPACE_BEGIN
 
-PageNavigateView::PageNavigateView(NGInt i_id,
-                    NGInt x, NGInt y, NGInt w, NGInt h,
+PageNavigateView::PageNavigateView(int i_id,
+                    int x, int y, int w, int h,
                     PageView* pageView,
                     const char* normalImageFile,
                     const char* curImageFile,
@@ -101,7 +101,7 @@ PageNavigateView::~PageNavigateView()
 
 }
 
-NGBool PageNavigateView::isInit()
+bool PageNavigateView::isInit()
 {
     if(!m_pageView)
         return false;
@@ -116,9 +116,9 @@ NGBool PageNavigateView::isInit()
 }
 
 #if 0
-NGBool PageNavigateView::setScaled(bool isScaled)
+bool PageNavigateView::setScaled(bool isScaled)
 {
-    NGInt mode;
+    int mode;
 
     if(isScaled)
         mode = DRAWMODE_SCALED;//IMAGE_DRAWMODE_SCALED;
@@ -145,10 +145,10 @@ NGBool PageNavigateView::setScaled(bool isScaled)
 }
 #endif
 
-NGBool PageNavigateView::init()
+bool PageNavigateView::init()
 {
     IntRect girc;
-    NGInt    i,total;
+    int    i,total;
     ImageView *tmpImageView;
 
     girc = getRect();
@@ -211,11 +211,11 @@ NGBool PageNavigateView::init()
     return true;
 }
 
-NGBool PageNavigateView::next()
+bool PageNavigateView::next()
 {
     IntRect irc;
     IntRect girc;
-    NGBool isLoop = true;
+    bool isLoop = true;
 
     if(!isInit())
         return false;
@@ -244,11 +244,11 @@ NGBool PageNavigateView::next()
     return true;
 }
 
-NGBool PageNavigateView::prev()
+bool PageNavigateView::prev()
 {
     IntRect irc;
     IntRect girc;
-    NGBool isLoop = true;
+    bool isLoop = true;
 
     if(!isInit())
         return false;
@@ -295,7 +295,7 @@ void PageNavigateView::onLoseFocus()
         m_rightImageView->hide();
 }
 #if 0
-NGBool PageNavigateView::pageViewChanged()
+bool PageNavigateView::pageViewChanged()
 {
 
     if(!isInit())
@@ -320,7 +320,7 @@ NGBool PageNavigateView::pageViewChanged()
 }
 #endif
 
-NGBool PageNavigateView::dispatchEvent(Event *event)
+bool PageNavigateView::dispatchEvent(Event *event)
 {
     if(Event::KEY_DOWN == event->eventType())
     {

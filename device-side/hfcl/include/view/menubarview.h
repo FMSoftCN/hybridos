@@ -36,12 +36,12 @@ public:
     MenuBarView(View* parent, DrawableSet* dr); 
     virtual ~MenuBarView();
 
-    void setMargin(NGInt margin) { m_margin = margin; }
-    void setImageBorderLen(NGInt len) { m_border_len = len; }
+    void setMargin(int margin) { m_margin = margin; }
+    void setImageBorderLen(int len) { m_border_len = len; }
 
-    void setLeftText(NGInt strid);
-    void setMiddleText(NGInt strid);
-    void setRightText(NGInt strid);
+    void setLeftText(int strid);
+    void setMiddleText(int strid);
+    void setRightText(int strid);
 
     void setLeftText(const char* txt);
     void setMiddleText(const char* txt);
@@ -66,7 +66,7 @@ public:
     void setLeftImage(Image* image);
     void setMiddleImage(Image* image);
     void setRightImage(Image *image);
-    NGBool IsLeftTextNull(void)  { 
+    bool IsLeftTextNull(void)  { 
         if((m_left_strid <= 0) && (0 == m_left.length()))
         {
             return true;
@@ -74,24 +74,24 @@ public:
         return false;
     }
 
-    virtual NGBool dispatchEvent(Event* event);
+    virtual bool dispatchEvent(Event* event);
 
 private:
     string m_left;
     string m_middle;
     string m_right;
 
-    NGInt m_left_strid;
-    NGInt m_middle_strid;
-    NGInt m_right_strid;
+    int m_left_strid;
+    int m_middle_strid;
+    int m_right_strid;
 
     Image* m_left_image;
     Image* m_middle_image;
     Image* m_right_image;
 
-    NGUInt16 m_margin;
-    NGUInt16 m_border_len;
-    NGUInt16 m_selItem; 
+    Uint16 m_margin;
+    Uint16 m_border_len;
+    Uint16 m_selItem; 
     
     enum {
         SEL_NONE = 0,
@@ -100,7 +100,7 @@ private:
         SEL_RIGHT
     };
 
-    IntRect& calcRect (IntRect& rc, NGInt item, NGBool bWhole = false)
+    IntRect& calcRect (IntRect& rc, int item, bool bWhole = false)
     {
         if (bWhole) {
             rc.m_top    = 0;
@@ -109,8 +109,8 @@ private:
             rc.m_right  = m_rect.width();
         } 
         else {
-            NGInt middle_width = m_rect.width() / 3;
-            NGInt spacing = (m_rect.width() % 3) / 2;
+            int middle_width = m_rect.width() / 3;
+            int spacing = (m_rect.width() % 3) / 2;
 
             rc.m_top    = 0;
             rc.m_bottom = m_rect.height();
@@ -147,13 +147,13 @@ private:
 
 
 protected:
-    virtual void drawContent(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/);
+    virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 
-    void drawText(GraphicsContext* context, const string &str, NGInt item);
-    void drawText(GraphicsContext* context, NGInt strid, NGInt item);
-    void drawImage(GraphicsContext* context, NGInt item);
+    void drawText(GraphicsContext* context, const string &str, int item);
+    void drawText(GraphicsContext* context, int strid, int item);
+    void drawImage(GraphicsContext* context, int item);
 
-    void pressItem(NGInt item, NGBool bpress);
+    void pressItem(int item, bool bpress);
 
     DECLARE_CLASS_NAME(MenuBarView)
 };

@@ -35,18 +35,18 @@ class ContainerView : public View {
 		ContainerView(int id, int x, int y, int w, int h);
 		virtual ~ContainerView();
 
-		NGBool isChild(View* view) const;
-		NGBool insertBefore(View *view, View *child);
-		NGBool insertAfter(View *view, View *child);
-		NGBool insertBefore(int idx, View* child);
-		NGBool insertAfter(int idx, View* child) { return (child) ? insertAfter(getChildByIndex(idx), child) : false; }
+		bool isChild(View* view) const;
+		bool insertBefore(View *view, View *child);
+		bool insertAfter(View *view, View *child);
+		bool insertBefore(int idx, View* child);
+		bool insertAfter(int idx, View* child) { return (child) ? insertAfter(getChildByIndex(idx), child) : false; }
 
-		NGBool addChild(View* child) { return insertAfter(m_lastChild, child); }
-		NGBool addChildHead(View* child) { return insertBefore(m_firstChild, child); }
+		bool addChild(View* child) { return insertAfter(m_lastChild, child); }
+		bool addChildHead(View* child) { return insertBefore(m_firstChild, child); }
         // by default , we delete the child, but NOT when bRelease = false
-		int  removeChild(View* child, NGBool bRelease = true);
+		int  removeChild(View* child, bool bRelease = true);
         // by default , we delete the child, but NOT when bRelease = false
-		int  removeChild(int index, NGBool bRelease = true);
+		int  removeChild(int index, bool bRelease = true);
 		int  removeAll();
 		int  detachChild(View* child);
 		int  detachChild(int child);
@@ -64,15 +64,15 @@ class ContainerView : public View {
 		int  viewCount(void) const { return m_childCount;}
 
 		virtual void changeTheme(void);
-		NGBool isContainerView(void) { return true; }
+		bool isContainerView(void) { return true; }
 		void setFocusView(View* view);
 		void releaseFocusView(void);
 		View* focusView(void) const { return m_focusView;}
-		virtual void drawBackground(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/);
+		virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 		virtual void drawContent(GraphicsContext *context, IntRect &rc, int status/* = Style::NORMAL*/);
-		virtual NGBool dispatchEvent(Event* event);
+		virtual bool dispatchEvent(Event* event);
 
-		virtual void autoFitSize(NGBool auto_child_fit = false);
+		virtual void autoFitSize(bool auto_child_fit = false);
 
 		virtual void onChildSizeChanged(View* child) { 
 			if(isAutoSize()) {
@@ -97,8 +97,8 @@ class ContainerView : public View {
 
 	public:
 
-		void setAutoSize(NGBool b) { setFlag(b, AUTOSIZE); }
-		NGBool isAutoSize(void) { return m_flags & AUTOSIZE; }
+		void setAutoSize(bool b) { setFlag(b, AUTOSIZE); }
+		bool isAutoSize(void) { return m_flags & AUTOSIZE; }
 };
 
 NAMESPACE_END

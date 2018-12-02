@@ -29,9 +29,9 @@ NAMESPACE_BEGIN
 
 typedef struct __tag_LineLayoutNode {
     View* s_view;
-    NGUInt flags : 8;
-    NGUInt defMinSize : 12;
-    NGUInt defMaxSize : 12;
+    unsigned int flags : 8;
+    unsigned int defMinSize : 12;
+    unsigned int defMaxSize : 12;
     struct __tag_LineLayoutNode* prev;
     struct __tag_LineLayoutNode* next;
 } LineLayoutNode, *PLineLayoutNode;
@@ -44,23 +44,23 @@ class LineLayoutView : public LayoutView {
 
         ~LineLayoutView();
 
-		void paint(GraphicsContext* context, NGInt status /*= Style::NORMAL*/);
-		NGBool dispatchEvent(Event* event);
+		void paint(GraphicsContext* context, int status /*= Style::NORMAL*/);
+		bool dispatchEvent(Event* event);
 		void paint(GraphicsContext* context = NULL);
 		void paint(GraphicsContext* context, const IntRect& irc);
-        NGBool setRect(const IntRect& pirc);
+        bool setRect(const IntRect& pirc);
 		// to void drived class overide the base class 's function
-        NGBool setRect(NGInt left, NGInt top, NGInt right, NGInt bottom) { return View::setRect(left, top, right, bottom); }
+        bool setRect(int left, int top, int right, int bottom) { return View::setRect(left, top, right, bottom); }
 
         void recalc(void);
-        NGBool prependView(View* aView = NULL, NGInt aType = 0, NGInt aMinSize = 0, NGInt aMaxSize = 0);
-        NGBool addView(View* aView = NULL, NGInt aType = 0, NGInt aMinSize = 0, NGInt aMaxSize = 0);
-        NGBool appendView(View* aView = NULL, NGInt aType = 0, NGInt aMinSize = 0, NGInt aMaxSize = 0);
+        bool prependView(View* aView = NULL, int aType = 0, int aMinSize = 0, int aMaxSize = 0);
+        bool addView(View* aView = NULL, int aType = 0, int aMinSize = 0, int aMaxSize = 0);
+        bool appendView(View* aView = NULL, int aType = 0, int aMinSize = 0, int aMaxSize = 0);
         LineLayoutNode* findNode(View* aView = NULL);
         void removeAll(void);
-        NGInt  getNodeCount(void);
+        int  getNodeCount(void);
 
-        void setLineHeight(NGInt aLineHeight = 0)
+        void setLineHeight(int aLineHeight = 0)
         {
             if (aLineHeight <= 0)
                 return;
@@ -68,18 +68,18 @@ class LineLayoutView : public LayoutView {
             m_lineHeight = aLineHeight;
         }
 
-        NGInt  getLineHeight(void) const { return m_lineHeight; }
+        int  getLineHeight(void) const { return m_lineHeight; }
 
-        void setMargin(NGInt margin = 0);
-        void setSpace(NGInt space = 0);
+        void setMargin(int margin = 0);
+        void setSpace(int space = 0);
 
         LineLayoutView(View *parent);
     protected:
         //void initDrawable(DrawableSelector* selector);
 
     private:
-        LineLayoutNode* newLineLayoutNode(View* aView = NULL, NGInt aType = 0, NGInt aMinSize = 0, NGInt aMaxSize = 0);
-        NGBool isExist(View* aView = NULL);
+        LineLayoutNode* newLineLayoutNode(View* aView = NULL, int aType = 0, int aMinSize = 0, int aMaxSize = 0);
+        bool isExist(View* aView = NULL);
         void horizontalRecalc(void);
         void fixedHorzRecalc(void);
         void autoHorzRecalc(void);
@@ -90,7 +90,7 @@ class LineLayoutView : public LayoutView {
 
         LineLayoutNode* m_node;
         LineLayoutNode* m_tailNode;
-        NGInt             m_lineHeight;
+        int             m_lineHeight;
 };
 
 NAMESPACE_END

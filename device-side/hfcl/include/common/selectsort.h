@@ -29,7 +29,7 @@ extern "C" {
 typedef int (*Compare)(const void *, const void *);
 
 // inc means increase or descrease
-void selectSort(void* base, unsigned num, unsigned width, Compare comp, NGBool inc);
+void selectSort(void* base, unsigned num, unsigned width, Compare comp, bool inc);
 
 #ifdef __cplusplus
 }

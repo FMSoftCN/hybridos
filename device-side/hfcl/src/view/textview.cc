@@ -69,7 +69,7 @@ TextView::~TextView()
     stopRoll();
 }
 
-NGBool TextView::setLongText(void)
+bool TextView::setLongText(void)
 {
 	// already is
 	if(m_textString.length() > 0 || m_isLongText)
@@ -85,17 +85,17 @@ NGBool TextView::setLongText(void)
 	return true;
 }
 
-NGBool TextView::isLongText(void)
+bool TextView::isLongText(void)
 {
 	return m_isLongText;
 }
 
-void TextView::setBidiCheck(NGBool bidiflag)
+void TextView::setBidiCheck(bool bidiflag)
 {
 	m_bidicheck = true;
 }
 
-NGBool TextView::isBidiCheck(void)
+bool TextView::isBidiCheck(void)
 {
 	return m_bidicheck;
 }
@@ -107,7 +107,7 @@ void TextView::setText(const string text)
 
 void TextView::setText(const char* text)
 {
-	NGInt len = 0;
+	int len = 0;
 	m_stringId = -1;
 
     /* VincentWei > OPT: do not update the content if... */
@@ -131,7 +131,7 @@ void TextView::setText(const char* text)
     updateView();
 }
 
-void TextView::setText(NGInt strId)
+void TextView::setText(int strId)
 {
     /* VincentWei > OPT: Only update the content if... */
     if (!m_isLongText && m_stringId == strId) {
@@ -172,7 +172,7 @@ char* TextView::getText(void)
     }
 }
 
-NGInt TextView::getTextLength(void)
+int TextView::getTextLength(void)
 {
 	if(m_stringId > 0) {
 		return strlen(GetTextRes(m_stringId));
@@ -183,7 +183,7 @@ NGInt TextView::getTextLength(void)
     }
 }
 
-void TextView::drawContent(GraphicsContext* context, IntRect &rc, NGInt status)
+void TextView::drawContent(GraphicsContext* context, IntRect &rc, int status)
 {
 	char* buf = NULL;
 
@@ -196,12 +196,12 @@ void TextView::drawContent(GraphicsContext* context, IntRect &rc, NGInt status)
 
     {
         char tmpchar[8]={0};
-        NGInt len = strlen(buf);
+        int len = strlen(buf);
         char *str = buf;
-        NGInt *info = (NGInt *)malloc ((len + 1) * sizeof(NGInt));
-        NGInt realCount = GetUTF8CharInfo (buf, len, info);	
+        int *info = (int *)malloc ((len + 1) * sizeof(int));
+        int realCount = GetUTF8CharInfo (buf, len, info);	
         info [realCount] = len; 
-        for (NGInt i = 1; i <= realCount; /*i++*/)
+        for (int i = 1; i <= realCount; /*i++*/)
         {
             memcpy(tmpchar, str + info[i-1], info[i] - info[i-1]);
             tmpchar [info[i] - info[i-1]] = '\0';
@@ -247,65 +247,65 @@ void TextView::drawContent(GraphicsContext* context, IntRect &rc, NGInt status)
     context->setBiDiFirstChType (BIDI_CHAR_TYPE_INIT);
 }
 
-void TextView::setTextOutMode(NGUInt mode)
+void TextView::setTextOutMode(unsigned int mode)
 {
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTMODE, mode))
         updateView();
 }
 
-void TextView::setTextOutLineMode(NGBool mode)
+void TextView::setTextOutLineMode(bool mode)
 {
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTLINEMODE, mode))
         updateView();
 }
 
-void TextView::setTextAlign(NGUInt align)
+void TextView::setTextAlign(unsigned int align)
 {
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_TEXTALIGN, align))
         updateView();
 }
 
-NGUInt TextView::getTextAlign()
+unsigned int TextView::getTextAlign()
 {
     return m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTALIGN);
 }
 
-NGUInt TextView::getTextValign()
+unsigned int TextView::getTextValign()
 {
     return m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTVALIGN);
 }
 
-void TextView::setTextValign(NGUInt valign)
+void TextView::setTextValign(unsigned int valign)
 {
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_TEXTVALIGN, valign))
         updateView();
 }
 
-void TextView::setTextBreak(NGInt tBreak)
+void TextView::setTextBreak(int tBreak)
 {
 	if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_TEXTBREAK, tBreak))
         updateView();
 }
 
-NGInt TextView::getTextBreak(void)
+int TextView::getTextBreak(void)
 {
     return m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTBREAK);
 }
 
-void TextView::setTextFont(NGUInt font)
+void TextView::setTextFont(unsigned int font)
 {
-    if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_FONT, (NGDword)GetFontRes(font)))
+    if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_FONT, (HTData)GetFontRes(font)))
         updateView();
 }    
 
-void TextView::autoFitSize(NGBool auto_child_fit)
+void TextView::autoFitSize(bool auto_child_fit)
 {
 	char* buf = NULL;
     if (!isAutoSize())
         return ;
 
-    NGInt w = m_rect.width();
-    NGInt h = m_rect.height();
+    int w = m_rect.width();
+    int h = m_rect.height();
 
 	if(m_stringId > 0)
         buf = (char *)GetTextRes(m_stringId);
@@ -348,7 +348,7 @@ void TextView::resetRoll()
     }
 }
 
-NGBool TextView::isNeedRoll()
+bool TextView::isNeedRoll()
 {
 	char* buf = NULL;
     IntRect rc(0, 0, m_rect.width(), m_rect.height());

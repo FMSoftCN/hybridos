@@ -32,42 +32,42 @@ class ImageView : public View {
     public:
         ImageView(View* parent);
         ImageView(View* parent, DrawableSet* drset);
-        ImageView(Image* pImage, NGInt id, NGInt x, NGInt y, NGInt w, NGInt h);
-        ImageView(const NGPStr filePath, NGInt id, NGInt x, NGInt y, NGInt w, NGInt h,
-                NGInt mode = DRAWMODE_NORMAL,
-                NGInt align = ALIGN_CENTER,
-                NGInt valign = VALIGN_MIDDLE);
+        ImageView(Image* pImage, int id, int x, int y, int w, int h);
+        ImageView(const char * filePath, int id, int x, int y, int w, int h,
+                int mode = DRAWMODE_NORMAL,
+                int align = ALIGN_CENTER,
+                int valign = VALIGN_MIDDLE);
 
         virtual ~ImageView();
 
         bool setImage(Image* pImg);
 		Image *getImage(void) { return m_image; }
 		
-        void setImageDrawMode(NGInt  mode) {
+        void setImageDrawMode(int  mode) {
             m_format.drawMode = mode;
         }
-        void setImageAlign(NGInt halign) {
+        void setImageAlign(int halign) {
             m_format.align = halign;
         }
-        void setImageVAlign(NGInt valign) {
+        void setImageVAlign(int valign) {
             m_format.valign = valign;
         }
-	 	void setImageRotationAngle(NGInt RotationAngle) {
+	 	void setImageRotationAngle(int RotationAngle) {
             m_format.rotationAngle = RotationAngle;
         }
 
         virtual void drawContent(GraphicsContext* context,
-                IntRect &rc, NGInt status/*= Style::NORMAL*/);
+                IntRect &rc, int status/*= Style::NORMAL*/);
 
-        virtual void drawBackground(GraphicsContext* context, IntRect &rc, NGInt status /*= Style::NORMAL*/);
+        virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 
-        void setPartBoxXoYo(NGInt xo = 0, NGInt yo = 0);
-        void getPartBoxXoYo(NGInt& xo, NGInt& yo);
+        void setPartBoxXoYo(int xo = 0, int yo = 0);
+        void getPartBoxXoYo(int& xo, int& yo);
 
-        void setFromImgRect(NGBool bSet = false);
-        NGInt getImageWidth(void);
-        NGInt getImageHeight(void);
-		NGBool setReplaceColor(const DWORD color);
+        void setFromImgRect(bool bSet = false);
+        int getImageWidth(void);
+        int getImageHeight(void);
+		bool setReplaceColor(const DWORD color);
 
     protected:
         Image*    m_image;
@@ -87,8 +87,8 @@ class ImageView : public View {
 
         DECLARE_CLASS_NAME(ImageView)
     private:
-        NGInt m_xo;
-        NGInt m_yo;
+        int m_xo;
+        int m_yo;
 };
 
 NAMESPACE_END

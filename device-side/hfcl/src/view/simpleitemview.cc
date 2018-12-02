@@ -97,7 +97,7 @@ void SimpleItemView:: setText(const char* str)
     }
 }
 
-void SimpleItemView::setText(NGInt strid)
+void SimpleItemView::setText(int strid)
 { 
 	m_stringId = strid; 
 	m_simpleString = "";
@@ -108,7 +108,7 @@ void SimpleItemView::setText(const string& str)
 	setText(str.c_str()); 
 }
 
-NGPStr SimpleItemView::getText(void)
+char * SimpleItemView::getText(void)
 {
 	return (char *)(m_stringId > 0 ? GetTextRes(m_stringId) : (m_simpleString.c_str()));
 }
@@ -223,7 +223,7 @@ void SimpleItemView::resetRoll()
     }
 }
 
-NGBool SimpleItemView::isNeedRoll()
+bool SimpleItemView::isNeedRoll()
 {
 	IntRect txtRc, imgRc;
     IntRect rc(0, 0, m_rect.width(), m_rect.height());

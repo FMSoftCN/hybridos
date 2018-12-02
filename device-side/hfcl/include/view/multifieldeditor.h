@@ -41,19 +41,19 @@ class MultiFieldEditor : public FormatEditView
          */
         MultiFieldEditor(View* parent);
         MultiFieldEditor(View* parent, DrawableSet* drset);
-		MultiFieldEditor(NGInt id, NGInt x, NGInt y, NGInt w, NGInt h);
+		MultiFieldEditor(int id, int x, int y, int w, int h);
         ~MultiFieldEditor();
 
         /**
          * Init. Param like FormatEditView.init
          */
-        void multiFieldEditorInit(NGInt field_count, 
-                NGCPStr* p_content_array, 
-                NGCPStr* p_formator_array, 
-                NGChar* p_content_max_nr,
-                NGInt* value_range,
+        void multiFieldEditorInit(int field_count, 
+                const char ** p_content_array, 
+                const char ** p_formator_array, 
+                char* p_content_max_nr,
+                int* value_range,
                 FIELD_FORMAT field_format,
-                NGInt date_system = 0
+                int date_system = 0
                 );
         /**
          * Refresh
@@ -62,11 +62,11 @@ class MultiFieldEditor : public FormatEditView
                 /**
          * Dispatch Events From Parent
          */
-        virtual NGBool dispatchEvent(Event* event);
+        virtual bool dispatchEvent(Event* event);
         /**
          * Set Range
          */
-        NGBool setRange(NGInt index, NGInt min, NGInt max);
+        bool setRange(int index, int min, int max);
         /**
          * Set Value
          *
@@ -74,31 +74,31 @@ class MultiFieldEditor : public FormatEditView
          * @param index field index to set the value.
          * @return true when set, false when not set
          */
-        NGBool setValue(NGInt index, NGInt value);
-        NGInt getValue(NGInt index);
-        void setTextAlign(NGUInt align);
+        bool setValue(int index, int value);
+        int getValue(int index);
+        void setTextAlign(unsigned int align);
         void checkDays(void);
     protected:
         /**
          * Dispatch Events From Parent
          */
-        virtual NGBool checkContent(void);
+        virtual bool checkContent(void);
         /**
          * Pre Change Field Content
          *
          * @retval true means continue process filed content
          */
-        virtual NGBool onChangeField(void);
+        virtual bool onChangeField(void);
 
 
     private:
         // max vals : FE_MAX_FIELD_NR from FormatEditView
-        NGInt m_max[FE_MAX_FIELD_NR];
+        int m_max[FE_MAX_FIELD_NR];
         // min vals : FE_MAX_FIELD_NR from FormatEditView
-        NGInt m_min[FE_MAX_FIELD_NR];
+        int m_min[FE_MAX_FIELD_NR];
         FIELD_FORMAT m_field_format;
-        NGInt m_dateFormat;
-        NGInt m_dateSystem;        
+        int m_dateFormat;
+        int m_dateSystem;        
 		DECLARE_CLASS_NAME(MultiFieldEditor)
 };
 

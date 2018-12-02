@@ -132,7 +132,7 @@ ResPackage* ResPkgManager::getPackage(const char * name)
 static char* resPkgStringsBucket = NULL;
 static const char* resPkgStrings [MAX_STRID];
 
-bool ResPkgManager::setCurrentLang (NGInt langId)
+bool ResPkgManager::setCurrentLang (int langId)
 {
     if (langId < 0 || langId >= MAX_LANGID)
         return false;
@@ -239,7 +239,7 @@ bool UnregisterResPackageById(int id)
     return GetResPkgManager()->unregisterPackage(id);
 }
 
-void* GetRes(ResID id)
+void* GetRes(HTResId id)
 {
     ResPackage *resPkg = GetResPackage(RPKGID(id));
 
@@ -249,7 +249,7 @@ void* GetRes(ResID id)
 	return NULL;
 }
 
-Logfont* GetFontRes(ResID id/*, Style* style*/)
+Logfont* GetFontRes(HTResId id/*, Style* style*/)
 {
     ResPackage *resPkg = GetResPackage(RPKGID(id));
     if(resPkg && (RESTYPE(id)& R_TYPE_FONT))
@@ -258,7 +258,7 @@ Logfont* GetFontRes(ResID id/*, Style* style*/)
 	return NULL;
 }
 
-Style* GetStyleRes(ResID id)
+Style* GetStyleRes(HTResId id)
 {
     ResPackage * resPkg = NULL;
     if(id == 0)
@@ -270,7 +270,7 @@ Style* GetStyleRes(ResID id)
 	return NULL;
 }
 
-GifAnimate* GetGifAnimateRes(ResID id)
+GifAnimate* GetGifAnimateRes(HTResId id)
 {
     ResPackage *resPkg = GetResPackage(RPKGID(id));
 
@@ -280,7 +280,7 @@ GifAnimate* GetGifAnimateRes(ResID id)
 	return NULL;
 }
 
-Image * GetImageRes(ResID id)
+Image * GetImageRes(HTResId id)
 {
     ResPackage *resPkg = GetResPackage(RPKGID(id));
 
@@ -290,7 +290,7 @@ Image * GetImageRes(ResID id)
 	return NULL;
 }
 
-Bitmap * GetBitmapRes(ResID id)
+Bitmap * GetBitmapRes(HTResId id)
 {
     ResPackage *resPkg = GetResPackage(RPKGID(id));
 
@@ -300,7 +300,7 @@ Bitmap * GetBitmapRes(ResID id)
 	return NULL;
 }
 
-const char * GetTextRes(ResID id)
+const char * GetTextRes(HTResId id)
 {
     if (id >= MAX_NL10N_STRID) {
         _DBG_PRINTF ("GetTextRes: bad STRID: %d", id);
@@ -319,7 +319,7 @@ const char * GetTextRes(ResID id)
     return text;
 }
 
-Drawable* GetDrawableRes(ResID id)
+Drawable* GetDrawableRes(HTResId id)
 {
 	ResPackage *resPkg = GetResPackage(RPKGID(id));
 
@@ -329,7 +329,7 @@ Drawable* GetDrawableRes(ResID id)
 	return NULL;
 }
 
-DrawableSet* GetDrawableSetRes(ResID id)
+DrawableSet* GetDrawableSetRes(HTResId id)
 {
 	if(!(RESTYPE(id) & R_TYPE_DRAWABLESET))
 		return NULL;
@@ -341,7 +341,7 @@ DrawableSet* GetDrawableSetRes(ResID id)
 	return NULL;
 }
 
-ThemeRes* GetThemeRes(ResID id)
+ThemeRes* GetThemeRes(HTResId id)
 {
 	if(!(RESTYPE(id) & R_TYPE_THEME))
 		return NULL;
@@ -362,7 +362,7 @@ ResPackage* GetSystemPackage(void)
 }
 
 // we just get drawable set res from sysres.res.c package
-DrawableSet* GetDrawableSetResFromTheme(NGInt theme_drset_id)
+DrawableSet* GetDrawableSetResFromTheme(int theme_drset_id)
 {
 	if (theme_drset_id <= 0)
 		return NULL;
@@ -376,7 +376,7 @@ DrawableSet* GetDrawableSetResFromTheme(NGInt theme_drset_id)
 	return NULL;
 }
 
-DrawableSetGroup* GetDrawableSetGroupRes(ResID id)
+DrawableSetGroup* GetDrawableSetGroupRes(HTResId id)
 {
 	if(!(RESTYPE(id) & R_TYPE_DRSETGROUP))
 		return NULL;
@@ -389,7 +389,7 @@ DrawableSetGroup* GetDrawableSetGroupRes(ResID id)
 
 }
 
-View* CreateViewFromRes(ResID id, View *parent, ViewContext *viewContext, ContentProvider* provider /*= NULL*/)
+View* CreateViewFromRes(HTResId id, View *parent, ViewContext *viewContext, ContentProvider* provider /*= NULL*/)
 {
     ResPackage * resPkg = GetResPackage(RPKGID(id));
 
@@ -399,7 +399,7 @@ View* CreateViewFromRes(ResID id, View *parent, ViewContext *viewContext, Conten
 	return NULL;
 }
 
-Menu* CreateMenuFromRes(ResID id, Menu* parent, EventListener* listener)
+Menu* CreateMenuFromRes(HTResId id, Menu* parent, EventListener* listener)
 {
     ResPackage* resPkg = GetResPackage(RPKGID(id));
 
@@ -409,12 +409,12 @@ Menu* CreateMenuFromRes(ResID id, Menu* parent, EventListener* listener)
 	return NULL;
 }
 
-NGInt GetResourceLanguage (void)
+int GetResourceLanguage (void)
 {
     return GetResPkgManager()->getCurrentLang();
 }
 
-bool SetResourceLanguage (NGInt lang)
+bool SetResourceLanguage (int lang)
 {
     return GetResPkgManager()->setCurrentLang (lang);
 }

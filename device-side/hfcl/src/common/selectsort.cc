@@ -32,9 +32,9 @@ static void swap(char* p, char* q, unsigned int width);
 
 // we need the method stable !!!!
 // inc means increase or descrease
-void selectSort(void* base, unsigned num, unsigned width, Compare comp, NGBool inc)
+void selectSort(void* base, unsigned num, unsigned width, Compare comp, bool inc)
 {
-    NGUInt i = 0, j = 0, idx = 0;
+    unsigned int i = 0, j = 0, idx = 0;
     char* max_min = NULL;
     for (i = 0; i < num; ++i) {
         idx = i;

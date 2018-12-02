@@ -79,37 +79,37 @@ class File {
 #endif
 
         File();
-        File(NGCPStr filename);
+        File(const char * filename);
 
         virtual ~File();
 
-        NGInt open(NGCPStr filename, NGInt mode = File::MODE_TXT_READ);
-        NGInt close(void);
-        NGInt close(NGFsHandle fsHandle);
+        int open(const char * filename, int mode = File::MODE_TXT_READ);
+        int close(void);
+        int close(HTHandle fsHandle);
 
-        NGInt read(void* ptr, NGInt size, NGInt nmemb);
-        NGInt write(const void* ptr, NGInt size, NGInt nmemb);
+        int read(void* ptr, int size, int nmemb);
+        int write(const void* ptr, int size, int nmemb);
 
-        NGInt puts(const char* ptr);
-        NGPStr gets(char* ptr, NGInt size);
+        int puts(const char* ptr);
+        char * gets(char* ptr, int size);
 
-        NGBool isOpen(void) const;
+        bool isOpen(void) const;
 
-        NGInt  eof(void);
-        void seek(NGLong offset, FileSeekType fst = File::SEEKSET);
-        NGLong tell(void) const;
-        NGLong length(void);
-	 	NGInt truncate(NGUInt32 size);
-        static NGInt remove(NGCPStr pathname);
-        static NGInt rename(NGCPStr oldpath, NGCPStr newpath);
+        int  eof(void);
+        void seek(long offset, FileSeekType fst = File::SEEKSET);
+        long tell(void) const;
+        long length(void);
+	 	int truncate(Uint32 size);
+        static int remove(const char * pathname);
+        static int rename(const char * oldpath, const char * newpath);
 
-        inline NGCPStr name(void){return m_fileName;}
+        inline const char * name(void){return m_fileName;}
     private:
-        NGPStr openMode(FileModeType mode);
+        char * openMode(FileModeType mode);
 
-        NGCPStr m_fileName;
-        NGFsHandle m_filePointer;
-        NGLong m_fileSize;
+        const char * m_fileName;
+        HTHandle m_filePointer;
+        long m_fileSize;
 };
 
 NAMESPACE_END

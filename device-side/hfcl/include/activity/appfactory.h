@@ -19,16 +19,14 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-#ifndef _NGUX_APPFACTORY_H
-#define _NGUX_APPFACTORY_H
+#ifndef HFCL_ACTIVITY_APPINFO_H_
+#define HFCL_ACTIVITY_APPINFO_H_
 
 NAMESPACE_BEGIN
 
 #include "image.h"
 
 class BaseApp;
-class Image;
 
 enum {
 	POS_HIDE = 0,
@@ -36,22 +34,22 @@ enum {
 	POS_MAINFRAME = 0x02,
 };
 
-typedef NGBool (*CB_APP_ONBOOT) (void);
+typedef bool (*CB_APP_ONBOOT) (void);
 
 class AppFactory {
     public:
         virtual BaseApp* create(void) = 0;
 
 		struct AppInformation {
-			NGInt 	position;
-			NGInt 	pos_row;
-			NGInt 	pos_col;
-			NGCPStr name;
-			NGCPStr description;
-			NGInt   captionId;
-			NGInt   iconId;
-			NGInt   smallIconId;
-			NGInt   bigIconId;
+			int 	position;
+			int 	pos_row;
+			int 	pos_col;
+			const char * name;
+			const char * description;
+			int   captionId;
+			int   iconId;
+			int   smallIconId;
+			int   bigIconId;
             CB_APP_ONBOOT onBoot;
 		};
 
@@ -122,5 +120,5 @@ class AppFactory {
 
 NAMESPACE_END
 
-#endif /* NGUX_APPFACTORY_H */
+#endif /* HFCL_ACTIVITY_APPINFO_H_ */
 

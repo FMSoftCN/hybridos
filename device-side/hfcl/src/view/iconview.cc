@@ -57,10 +57,10 @@ void IconView::makeHilightVisible()
     if (NULL == m_gridView)
         return;
 
-    NGInt idxF = m_gridView->focusItemIdx();
+    int idxF = m_gridView->focusItemIdx();
     View *f = m_gridView->getChildByIndex(idxF);
     if (NULL != f) {
-        NGInt h;
+        int h;
         int offY = m_offy;
         IntRect rc = f->getRect();
         getSize(NULL, &h); //get the viewport size
@@ -75,7 +75,7 @@ void IconView::makeHilightVisible()
     }
 }
 
-NGBool IconView::handleEvent(Event* event)
+bool IconView::handleEvent(Event* event)
 {
     if (event->eventType() == Event::CUSTOM_NOTIFY
             && ((CustomEvent *)event)->customWparam() == CustomEvent::CUS_SELCHANGED)
@@ -89,7 +89,7 @@ NGBool IconView::handleEvent(Event* event)
     return ScrollView::handleEvent(event);
 }
 
-NGBool IconView::dispatchEvent(Event *e)
+bool IconView::dispatchEvent(Event *e)
 {
     if (NULL != m_gridView)
         return m_gridView->dispatchEvent(e);

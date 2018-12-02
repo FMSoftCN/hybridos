@@ -30,7 +30,7 @@ File::File()
 {
 }
 
-File::File(NGCPStr filename)
+File::File(const char * filename)
     : m_fileName(filename)
     , m_filePointer(0)
     , m_fileSize(0)
@@ -49,30 +49,30 @@ File::~File()
 #endif
 }
 
-NGInt File::open(NGCPStr filename, NGInt mode)
+int File::open(const char * filename, int mode)
 {
     m_filePointer = mgclFopen(filename, mode);
     if (m_filePointer == 0)
         return -1;
 
-    m_fileName = (NGPStr)filename;
+    m_fileName = (char *)filename;
     length();
     
 	return m_filePointer;
 }
 
-NGInt File::close(void)
+int File::close(void)
 {
-    NGInt ret = mgclFclose(m_filePointer);
+    int ret = mgclFclose(m_filePointer);
     m_filePointer = 0;
     m_fileSize = 0;
 
     return ret;
 }
 
-NGInt File::close(NGFsHandle fsHandle)
+int File::close(HTHandle fsHandle)
 {
-    NGInt ret;
+    int ret;
 	if (fsHandle == 0)
         return -1;
 
@@ -85,43 +85,43 @@ NGInt File::close(NGFsHandle fsHandle)
 }
 
 
-NGBool File::isOpen(void) const
+bool File::isOpen(void) const
 {
     return (m_filePointer != 0);
 }
 
-NGInt File::read(void* ptr, NGInt size, NGInt nmemb)
+int File::read(void* ptr, int size, int nmemb)
 {
     return mgclFread(ptr, size, nmemb, m_filePointer);
 }
 
-NGInt File::write(const void* ptr, NGInt size, NGInt nmemb)
+int File::write(const void* ptr, int size, int nmemb)
 {
     return mgclFwrite(ptr, size, nmemb, m_filePointer);
 }
 
-NGInt File::puts(const char* ptr)
+int File::puts(const char* ptr)
 {
     return mgclFputs(ptr, m_filePointer);
 }
 
-NGPStr File::gets(char* ptr, NGInt size)
+char * File::gets(char* ptr, int size)
 {
     return mgclFgets(ptr, size, m_filePointer);
 }
 
-NGInt File::eof(void)
+int File::eof(void)
 {
     return mgclFeof(m_filePointer);
 }
 
-void File::seek(NGLong offset, FileSeekType fst_id)
+void File::seek(long offset, FileSeekType fst_id)
 {
     if (!isOpen()) {
         return;
     }
 
-    switch ((NGInt)fst_id) {
+    switch ((int)fst_id) {
         case SEEKSET:
             mgclFseek(m_filePointer, offset, SEEK_SET);
             break;
@@ -140,15 +140,15 @@ void File::seek(NGLong offset, FileSeekType fst_id)
 }
 
 // BUG FIXME
-NGLong File::length(void)
+long File::length(void)
 {
     if (!isOpen())
         return 0;
 
-    NGLong curpos = tell();
+    long curpos = tell();
 
     seek(0, SEEKEND);
-    NGLong endpos = tell();
+    long endpos = tell();
 
     seek(curpos, SEEKSET);
     m_fileSize = endpos;
@@ -156,34 +156,34 @@ NGLong File::length(void)
     return endpos;
 }
 
-NGLong File::tell(void) const
+long File::tell(void) const
 {
     return mgclFtell(m_filePointer);
 }
 
-NGInt File::remove(NGCPStr pathname)
+int File::remove(const char * pathname)
 {
     return mgclRemove(pathname);
 }
 
-NGInt File::rename(NGCPStr oldpath, NGCPStr newpath)
+int File::rename(const char * oldpath, const char * newpath)
 {
     return mgclRename(oldpath, newpath);
 }
 
-NGInt File::truncate(NGUInt32 size)
+int File::truncate(Uint32 size)
 {
     return mgclTruncate(m_filePointer, size);
 }
 
 //===================== begin private function define =========================
 
-NGPStr File::openMode(FileModeType mode)
+char * File::openMode(FileModeType mode)
 {
-    static NGPStr fileOpenMode[] = { (NGPStr)"r", (NGPStr)"w", (NGPStr)"w+", (NGPStr)"r+", (NGPStr)"a", (NGPStr)"a+",
-        (NGPStr)"rb", (NGPStr)"wb", (NGPStr)"wb+", (NGPStr)"rb+", (NGPStr)"ab", (NGPStr)"ab+" };
+    static char * fileOpenMode[] = { (char *)"r", (char *)"w", (char *)"w+", (char *)"r+", (char *)"a", (char *)"a+",
+        (char *)"rb", (char *)"wb", (char *)"wb+", (char *)"rb+", (char *)"ab", (char *)"ab+" };
 
-    return fileOpenMode[(NGInt)mode];
+    return fileOpenMode[(int)mode];
 }
 
 //====================== end private function define ==========================

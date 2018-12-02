@@ -20,18 +20,18 @@
 */
 
 
-#ifndef _NGUX_BaseApp_h
-#define _NGUX_BaseApp_h
+#ifndef HFCL_ACTIVITY_BASEAPP_H_
+#define HFCL_ACTIVITY_BASEAPP_H_
 
-#include "nguxcommon.h"
-#include "controller.h"
+#include "common/nguxcommon.h"
+#include "activity/controller.h"
 
 NAMESPACE_BEGIN
 
 class ContextStream;
 class Intent;
 
-class BaseApp : public Controller{
+class BaseApp : public Controller {
 	public:
 		typedef enum _tagAPP_STATE
 		{
@@ -45,8 +45,8 @@ class BaseApp : public Controller{
 		BaseApp():m_priority(PRIORITY_HIGH), m_name(NULL), m_state(INIT){};
 		virtual ~BaseApp();
 
-		NGCPStr name(void);
-		void setName(NGCPStr name);
+		const char * name(void);
+		void setName(const char * name);
 		APP_STATE state(void);
 		void setState(APP_STATE state);
 		void close(void);
@@ -57,10 +57,10 @@ class BaseApp : public Controller{
 		virtual void onWakeup(void){}
 		virtual void onMove2Top(void) {}
 		virtual Intent *onDestroy(ContextStream *contextStream){return NULL;}
-		virtual NGBool isSuspendable(void);
+		virtual bool isSuspendable(void);
 
         /* VincentWei: add this method as virtual */
-        virtual NGBool beInLockFrame(void) {return false;};
+        virtual bool beInLockFrame(void) {return false;};
 
 		virtual void exit() { close(); }
 
@@ -76,11 +76,11 @@ class BaseApp : public Controller{
 		int priority(void) { return m_priority; }
 
 	protected:
-		NGInt m_priority;
+		int m_priority;
 		char * m_name;
 		APP_STATE m_state;
 
-		View* getViewParent(NGInt view_id) { return NULL; }
+		View* getViewParent(int view_id) { return NULL; }
 };
 
 NAMESPACE_END

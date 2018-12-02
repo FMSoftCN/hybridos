@@ -39,60 +39,60 @@ class IconView : public ScrollView
         IconView(View *parent, DrawableSet *drset);
         virtual ~IconView(void);
 
-        inline NGInt addView(View *view) {
+        inline int addView(View *view) {
             if (m_gridView) return m_gridView->addView(view);
             return 0;
         }
-        inline NGInt remove(View *view) {
+        inline int remove(View *view) {
             if (m_gridView) return m_gridView->remove(view);
             return 0;
         }
-        inline NGInt remove(NGInt row, NGInt col) {
+        inline int remove(int row, int col) {
             if (m_gridView) return m_gridView->remove(row, col);
             return 0;
         }
-        inline void setRows (NGInt row) {
+        inline void setRows (int row) {
             if (m_gridView) m_gridView->setRows(row);
         }
-        inline void setCols (NGInt col) {
+        inline void setCols (int col) {
             if (m_gridView) m_gridView->setCols(col);
         }
-        inline NGInt rows() {
+        inline int rows() {
             if (m_gridView) return m_gridView->rows();
             return 0;
         }
-        inline NGInt cols(){
+        inline int cols(){
             if (m_gridView) return m_gridView->cols();
             return 0;
         }
-        inline NGInt setFocusItem(NGInt row, NGInt col){
+        inline int setFocusItem(int row, int col){
             if (m_gridView) return m_gridView->setFocusItem(row, col);
             return 0;
         }
-        inline NGInt setFocusItem(NGInt index){
+        inline int setFocusItem(int index){
             if (m_gridView) return m_gridView->setFocusItem(index);
             return 0;
         }
-        inline NGInt focusItem(void) { 
+        inline int focusItem(void) { 
             if (m_gridView) return m_gridView->focusItemIdx();
             return 0;
         }
-        inline NGInt focusItem(NGInt* row, NGInt* col){
+        inline int focusItem(int* row, int* col){
             if (m_gridView) return m_gridView->focusItemPosition(row, col);
             return 0;
         }
-        inline void setGridsRect (NGInt left, NGInt top, NGInt right, NGInt bottom) {
+        inline void setGridsRect (int left, int top, int right, int bottom) {
             if (m_gridView) m_gridView->setRect(left, top, right, bottom);
         }
-		inline void setAutoConvert(NGBool bCon) { 
+		inline void setAutoConvert(bool bCon) { 
 			if (m_gridView) m_gridView->setAutoConvert(bCon); 
 		}
 		
         void makeHilightVisible();
 
-        virtual NGBool handleEvent(Event* event);
+        virtual bool handleEvent(Event* event);
 
-        NGBool dispatchEvent(Event*);
+        bool dispatchEvent(Event*);
 
     protected:
         virtual void onGetFocus(){

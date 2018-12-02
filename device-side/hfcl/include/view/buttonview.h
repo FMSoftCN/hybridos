@@ -39,7 +39,7 @@ public:
     virtual void onGetFocus();
     virtual void onLoseFocus();
 
-	void setText(NGInt strId) { m_stringId=strId; }
+	void setText(int strId) { m_stringId=strId; }
 	void setText(const char* str);
 	void setText(const string& str) { setText(str.c_str()); }
 	const char* getText();
@@ -87,7 +87,7 @@ protected:
 		m_drset->draw(context, DR_CONTENT, getDrawStatus(), rc, (DWORD)m_text, DRDT_TEXT);
 	}
 
-	NGChar   m_text[TEXT_BUFFER_LEN_OF_DEFAULT+1];
+	char   m_text[TEXT_BUFFER_LEN_OF_DEFAULT+1];
 
 private:
     void keyDown(Event* event);
@@ -99,8 +99,8 @@ private:
     void lButtonClick(Event* event);
 	
 private:
-	NGBool m_isLong;
-	NGInt m_stringId;
+	bool m_isLong;
+	int m_stringId;
 	string m_buttonString;
 	
 	DECLARE_CLASS_NAME(ButtonView)

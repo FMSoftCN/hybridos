@@ -65,11 +65,11 @@ bool AppStack::isExist(BaseApp *app)
 	return false;
 }
 
-BaseApp* AppStack::getExistAppByName(NGCPStr name)
+BaseApp* AppStack::getExistAppByName(const char * name)
 {
 	AppInfoList::iterator item = m_apps.begin();
 
-	for(NGInt i = 0; i < size(); i++, item++)
+	for(int i = 0; i < size(); i++, item++)
 	{
 		BaseApp *rt = (*item)->getApp();
 		if (rt != NULL) {
@@ -83,7 +83,7 @@ BaseApp* AppStack::getExistAppByName(NGCPStr name)
 	return NULL;
 }
 
-BaseApp* AppStack::getExistAppRunBackgroundByName(NGCPStr name)
+BaseApp* AppStack::getExistAppRunBackgroundByName(const char * name)
 {
 	AppInfoList::iterator item;
 
@@ -117,9 +117,9 @@ bool AppStack::remove(BaseApp *app)
 	return false;
 }
 
-AppInfo* AppStack::top(NGInt n)
+AppInfo* AppStack::top(int n)
 {
-	if (m_apps.size() > (NGUInt)n)
+	if (m_apps.size() > (unsigned int)n)
     {
 		if (n == 0) {
 			return m_apps.back();
@@ -138,9 +138,9 @@ AppInfo* AppStack::top(NGInt n)
     return NULL;
 }
 
-AppInfo* AppStack::bottom(NGInt n)
+AppInfo* AppStack::bottom(int n)
 {
-    if (m_apps.size() > (NGUInt)n)
+    if (m_apps.size() > (unsigned int)n)
     {
 		if (n == 0) {
 			return m_apps.front();

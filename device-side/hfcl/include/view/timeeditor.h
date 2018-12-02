@@ -40,7 +40,7 @@ class TimeEditor : public FormatEditView
          */
         TimeEditor(View* parent);
         TimeEditor(View* parent, DrawableSet* drset);
-		TimeEditor(NGInt id, NGInt x, NGInt y, NGInt w, NGInt h);
+		TimeEditor(int id, int x, int y, int w, int h);
         ~TimeEditor();
 
         /*
@@ -51,7 +51,7 @@ class TimeEditor : public FormatEditView
         /**
          * Dispatch Events From Parent
          */
-        virtual NGBool dispatchEvent(Event* event);
+        virtual bool dispatchEvent(Event* event);
 
         /**
          * Set/Get Time Format
@@ -61,12 +61,12 @@ class TimeEditor : public FormatEditView
         /**
          * Set/Get Hour/Minute
          */
-        void setHour(NGInt hour);
-        NGInt hour(void);
-        void setMinute(NGInt minute);
-        NGInt minute(void);
-        void setAm(NGBool am);
-        NGBool isAm(void);
+        void setHour(int hour);
+        int hour(void);
+        void setMinute(int minute);
+        int minute(void);
+        void setAm(bool am);
+        bool isAm(void);
 
     protected:
         /**
@@ -76,24 +76,24 @@ class TimeEditor : public FormatEditView
         /**
          * Dispatch Events From Parent
          */
-        virtual NGBool checkContent(void);
+        virtual bool checkContent(void);
         /**
          * Pre Change Field Content
          *
          * @retval true means continue process filed content
          */
-        virtual NGBool onChangeField(void);
+        virtual bool onChangeField(void);
 
 
     private:
         TimeFormat m_format;
-        NGInt m_max_h;
-        NGInt m_min_h;
-        NGInt m_max_m;
-        NGInt m_min_m;
-        NGInt m_field_h;
-        NGInt m_field_m;
-        NGInt m_field_ap;
+        int m_max_h;
+        int m_min_h;
+        int m_max_m;
+        int m_min_m;
+        int m_field_h;
+        int m_field_m;
+        int m_field_ap;
 
 		DECLARE_CLASS_NAME(TimeEditor)
 };

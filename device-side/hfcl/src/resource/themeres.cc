@@ -44,9 +44,9 @@ void ThemeRes::setDrawableSetMapTable(TRThemeItem* items)
 	m_maptable = items;
 }
 
-DrawableSet* ThemeRes::getDrawableSet(NGInt theme_drset_id)
+DrawableSet* ThemeRes::getDrawableSet(int theme_drset_id)
 {
-	NGInt drset_id = 0, i = 0;
+	int drset_id = 0, i = 0;
 	if(m_maptable != NULL) {
 		while(m_maptable[i].theme_drset_id != -1) {
 			if(m_maptable[i].theme_drset_id == theme_drset_id) {

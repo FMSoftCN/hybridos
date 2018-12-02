@@ -51,7 +51,7 @@ TableBarView:: TableBarView(View * p_parent, DrawableSet * drset, DrawableSetGro
     init();
 }
 
-TableBarView:: TableBarView(NGInt i_id, NGInt x, NGInt y, NGInt w, NGInt h)
+TableBarView:: TableBarView(int i_id, int x, int y, int w, int h)
 :CompositeView(i_id, x, y, w, h, DEFAULT_VIEW_DRAWABLESETGROUP(TableBarView))
 ,m_tablesGrid(NULL)
 ,m_pages(NULL)
@@ -76,7 +76,7 @@ void TableBarView ::relayout(void)
     relayoutRect();
 }
 
-bool TableBarView ::setTablePos(NGInt pos)
+bool TableBarView ::setTablePos(int pos)
 {
     if(pos < TableBarView::TABLE_POS_TOP || pos >TABLE_POS_BOTTOM)
         return false;
@@ -89,7 +89,7 @@ bool TableBarView ::setTablePos(NGInt pos)
     return true;
 }
 
-void TableBarView ::setTableHeight(NGInt height)
+void TableBarView ::setTableHeight(int height)
 {
     if(height <= 0)
         return ;
@@ -98,16 +98,16 @@ void TableBarView ::setTableHeight(NGInt height)
     relayout();
 }
 
-NGInt TableBarView :: tableHeight(void)
+int TableBarView :: tableHeight(void)
 {
     return m_tableHeight;
 }
-void TableBarView::setTableGapW(NGInt value)
+void TableBarView::setTableGapW(int value)
 {
     m_tablesGrid->setGapWidth(value);  
 }
 
-void TableBarView::setTableGapH(NGInt value)
+void TableBarView::setTableGapH(int value)
 {
     m_tablesGrid->setGapHeight(value);  
 }
@@ -201,8 +201,8 @@ bool TableBarView::setTableBkg(Image * img)
 bool TableBarView::setSelectTableBkg(Image * img)
 {
     bool ret = false;
-    NGInt count =0;
-    NGInt i =0;
+    int count =0;
+    int i =0;
 
     if(NULL == img)
         return false;
@@ -252,7 +252,7 @@ bool TableBarView:: relayoutRect(void)
     IntRect tableBarRc;
     IntRect gridRc;
     IntRect pageRc;
-    NGInt gap = 0;
+    int gap = 0;
 
    tableBarRc = getRect();
    if(tableBarRc.width()<=0  ||tableBarRc.height()<= 0)
@@ -289,9 +289,9 @@ bool TableBarView::addTablePage(const char * tableFile, const char* selectTableF
     if(!tableFile || !tableInfo)
         return false;
 
-    tableView = NGUX_NEW_EX(ImageView, ((NGPStr)tableFile, 0, 0, 0, 0, 0, DRAWMODE_NORMAL, ALIGN_CENTER, VALIGN_MIDDLE)); 
+    tableView = NGUX_NEW_EX(ImageView, ((char *)tableFile, 0, 0, 0, 0, 0, DRAWMODE_NORMAL, ALIGN_CENTER, VALIGN_MIDDLE)); 
     if(selectTableFile)
-        selectView = NGUX_NEW_EX(ImageView, ((NGPStr)selectTableFile, 0, 0, 0, 0, 0, DRAWMODE_NORMAL, ALIGN_CENTER, VALIGN_MIDDLE)); 
+        selectView = NGUX_NEW_EX(ImageView, ((char *)selectTableFile, 0, 0, 0, 0, 0, DRAWMODE_NORMAL, ALIGN_CENTER, VALIGN_MIDDLE)); 
    return addTablePage(tableView, selectView, tableInfo); 
 }
 #endif
@@ -361,12 +361,12 @@ bool TableBarView:: delTablePage(View * table)
     return true;
 }
 
-bool TableBarView:: delTablePage(NGInt index)
+bool TableBarView:: delTablePage(int index)
 {
     return true;
 }
 
-View * TableBarView ::tableInfoView(NGInt index)
+View * TableBarView ::tableInfoView(int index)
 {
     if(m_pages)
         return m_pages->pageFromIndex(index);
@@ -378,7 +378,7 @@ View * TableBarView ::tableInfoView(View * tableView)
     return NULL;
 }
 
-bool TableBarView::setSelectTableByIndex(NGInt index)
+bool TableBarView::setSelectTableByIndex(int index)
 {
     if(m_pages&& m_tablesGrid && m_pages->getPageCount()> index)
     {
@@ -390,7 +390,7 @@ bool TableBarView::setSelectTableByIndex(NGInt index)
     return false;
 }
 
-NGInt TableBarView::selectTableIndex(void)
+int TableBarView::selectTableIndex(void)
 {
     if(m_tablesGrid)
         return m_tablesGrid->focusItemIdx();
@@ -433,7 +433,7 @@ bool TableBarView::dispatchEvent(Event * event)
 					case KeyEvent::KEYCODE_LEFT :
 					case KeyEvent::KEYCODE_RIGHT :
                         {
-                            NGInt code = ((KeyEvent *)event)->keyCode();
+                            int code = ((KeyEvent *)event)->keyCode();
                             if(!m_tablesGrid->isFocus())
                                 m_tablesGrid->setFocus(m_tablesGrid);
 
@@ -447,7 +447,7 @@ bool TableBarView::dispatchEvent(Event * event)
                             else
                                 m_pages->nextPage();
 
-                            CustomEvent e_event(Event::CUSTOM_NOTIFY, (NGInt)(CustomEvent::CUS_PAGECHANGED), (NGInt)this);
+                            CustomEvent e_event(Event::CUSTOM_NOTIFY, (int)(CustomEvent::CUS_PAGECHANGED), (int)this);
                             raiseEvent(&e_event);
 
                         }

@@ -38,41 +38,41 @@ class Animation : public Object
 	public:
 		Animation();
 		virtual ~Animation();
-        static NGInt initAnimation();
+        static int initAnimation();
         static void deinitAnimation();
 
-		void start(NGBool keepalive=true, NGBool sync=true);
+		void start(bool keepalive=true, bool sync=true);
 		void stop();
 		void pause();
 		void resume();
         void wait();
 
-		void setAttribute(NGInt id, NGInt value);
-		NGInt getAttribute(NGInt id);
+		void setAttribute(int id, int value);
+		int getAttribute(int id);
 
-		inline void setDuration(NGInt duration) { 
+		inline void setDuration(int duration) { 
 			setAttribute(MGEFF_PROP_DURATION, duration); 
 		}
-		inline NGInt  getDuration() { return getAttribute(MGEFF_PROP_DURATION); }
+		inline int  getDuration() { return getAttribute(MGEFF_PROP_DURATION); }
 		
-		inline void setLoopCount(NGInt loopcount = MGEFF_INFINITE) { 
+		inline void setLoopCount(int loopcount = MGEFF_INFINITE) { 
 			setAttribute(MGEFF_PROP_LOOPCOUNT, loopcount); 
 		}
-		inline NGInt getLoopCount() { return getAttribute(MGEFF_PROP_LOOPCOUNT); }
+		inline int getLoopCount() { return getAttribute(MGEFF_PROP_LOOPCOUNT); }
 		
-		inline void setDirection(NGInt direction = MGEFF_DIR_FORWARD) { 
+		inline void setDirection(int direction = MGEFF_DIR_FORWARD) { 
 			setAttribute(MGEFF_PROP_DIRECTION, direction); 
 		}
-		inline NGInt  getDirection() { return getAttribute(MGEFF_PROP_DIRECTION); }
+		inline int  getDirection() { return getAttribute(MGEFF_PROP_DIRECTION); }
 		
-		inline void setKeepLive(NGBool bkeeplive = true) { 
+		inline void setKeepLive(bool bkeeplive = true) { 
 			setAttribute(MGEFF_PROP_KEEPALIVE, bkeeplive); 
 		}
-		inline NGBool getKeepLive() { return getAttribute(MGEFF_PROP_KEEPALIVE); }
+		inline bool getKeepLive() { return getAttribute(MGEFF_PROP_KEEPALIVE); }
 		
-		inline NGInt  getCurLoop() { return getAttribute(MGEFF_PROP_CURLOOP); }
-		inline NGInt  getCurFrame() { return getAttribute(MGEFF_PROP_CURFRAME); }
-		inline NGInt  getCurState() { return getAttribute(MGEFF_PROP_STATE); }
+		inline int  getCurLoop() { return getAttribute(MGEFF_PROP_CURLOOP); }
+		inline int  getCurFrame() { return getAttribute(MGEFF_PROP_CURFRAME); }
+		inline int  getCurState() { return getAttribute(MGEFF_PROP_STATE); }
 
         void setCurve(enum EffMotionType curve);
         MGEFF_MOTIONCURVE getCurve(); 
@@ -84,13 +84,13 @@ class Animation : public Object
 
 	protected:
 		static void _finishcb(MGEFF_ANIMATION handle);
-		virtual void setProperty(NGInt id, void *curvalue) = 0;
-		static void _setProperty(MGEFF_ANIMATION handle, void *target, NGInt id, void *value);
+		virtual void setProperty(int id, void *curvalue) = 0;
+		static void _setProperty(MGEFF_ANIMATION handle, void *target, int id, void *value);
 		virtual void onStart(){};
 
 
     private:
-        NGBool m_stop_in_progress;
+        bool m_stop_in_progress;
 };
 
 NAMESPACE_END

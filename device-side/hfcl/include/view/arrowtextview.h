@@ -75,10 +75,10 @@ class ArrowTextView : public View
 
 	virtual ~ArrowTextView();
 
-	void setText(NGInt strId) {m_stringId=strId; }
+	void setText(int strId) {m_stringId=strId; }
 	void setText(const char* str); 
 	void setText(const string& str) { 	setText(str.c_str()); }
-	NGPStr getText();
+	char * getText();
 
 	void setLeftImage(Image *img);
 	Image* getLeftImage() { return  m_limg; }
@@ -101,26 +101,26 @@ class ArrowTextView : public View
 	void onGetFocus() { if(!m_roll) startRollText(); }
 	void onLoseFocus() { if(!m_roll) stopRollText(); }
 
-	void setRollProp(NGBool roll) { m_roll = roll; }
+	void setRollProp(bool roll) { m_roll = roll; }
 
 	void startRollText();
 	void stopRollText();
 
-	void setTextFont(NGUInt font);//GT_mspark_20130916_for set font
+	void setTextFont(unsigned int font);//GT_mspark_20130916_for set font
     
     private:
-	NGChar  m_text[TEXT_BUFFER_LEN_OF_DEFAULT+1]; //the text 
+	char  m_text[TEXT_BUFFER_LEN_OF_DEFAULT+1]; //the text 
 	string  m_textstring;
-	NGBool  m_isLongText;
-	NGInt   m_stringId;
+	bool  m_isLongText;
+	int   m_stringId;
 	Image*  m_limg; //the left arrow
 	Image*  m_rimg; //the right arrow 
-	NGUInt  m_hasImage:1;
-	NGUInt  m_hasText:1;
-	NGUInt  m_imgWidth:30; //the width of image
-	NGUInt  m_imgHeight:30;
-	NGBool  m_roll;
-	NGUInt  m_textOutLine;
+	unsigned int  m_hasImage:1;
+	unsigned int  m_hasText:1;
+	unsigned int  m_imgWidth:30; //the width of image
+	unsigned int  m_imgHeight:30;
+	bool  m_roll;
+	unsigned int  m_textOutLine;
 
 	void calcRect(const IntRect& rc, IntRect& txtRc, IntRect& leftArrowRc, IntRect& rightArrowRc);
 

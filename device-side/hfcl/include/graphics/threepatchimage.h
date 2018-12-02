@@ -48,7 +48,7 @@ public:
     virtual ~ThreePatchImage();
 
     virtual void paint(GraphicsContext* context, const IntRect& rc, 
-			ImageFormat format, NGInt xo = 0, NGInt yo = 0);
+			ImageFormat format, int xo = 0, int yo = 0);
     bool setImage(const char *image_file);
 
     bool typeHoriz() const { return m_typeHoriz; }

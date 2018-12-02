@@ -1,9 +1,8 @@
-AM_CPPFLAGS=-I../ -I./
+SUBDIRS=common activity view
 
 # The directory where the include files will be installed
-libhfclincludedir = $(includedir)/hfcl
+myincludedir=$(includedir)/hfcl
 
 # Which header files to install
-libhfclinclude_HEADERS = hfcl.h  
+myinclude_HEADERS=hfcl.h
 
-TOP_DIR=../

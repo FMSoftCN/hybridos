@@ -161,6 +161,9 @@ AC_OUTPUT([
     Makefile
     m4/Makefile
     include/Makefile
+    include/common/Makefile
+    include/activity/Makefile
+    include/view/Makefile
     src/Makefile
     src/activity/Makefile
     src/view/Makefile

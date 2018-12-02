@@ -35,7 +35,7 @@ NAMESPACE_BEGIN
 #define DEF_SCROLL_WIDTH	2
 #endif
 
-NGBool ScrollView::g_is_all_scrollbar_on_left = false;
+bool ScrollView::g_is_all_scrollbar_on_left = false;
 
 ScrollView::ScrollView(View *p_parent)
     :PanelView(p_parent, DEFAULT_VIEW_DRAWABLESET(ScrollView))
@@ -96,33 +96,33 @@ ScrollView::~ScrollView(void)
 }
 
 
-void ScrollView::setBarWidth(NGInt barwidth)
+void ScrollView::setBarWidth(int barwidth)
 {
-    NGInt w,h;
+    int w,h;
 
     getSize(&w, &h);
 
     if(barwidth >= 0 && barwidth <= MIN(w, h))
 	{
-	   m_barWidth = (NGUInt16)barwidth;
+	   m_barWidth = (Uint16)barwidth;
 	}
 }
 
-void ScrollView::setBarMargin(NGInt barmargin)
+void ScrollView::setBarMargin(int barmargin)
 {
-    NGInt w, h;
+    int w, h;
 
 	getSize(&w, &h);
 
     if (barmargin >= 0 && barmargin <= MIN(w, h))
 	{
-		m_barMargin = (NGUInt16)barmargin;
+		m_barMargin = (Uint16)barmargin;
 	}
 }
 
 #define MIN_BAR  (5<<16)
 
-NGBool ScrollView::scrollVisiable(NGInt * barWidth, NGBool isVertical)
+bool ScrollView::scrollVisiable(int * barWidth, bool isVertical)
 {
 	fixed contw, conth;
 	fixed vieww, viewh;
@@ -155,15 +155,15 @@ NGBool ScrollView::scrollVisiable(NGInt * barWidth, NGBool isVertical)
 	return FALSE;
 }
 
-void ScrollView::drawScroll(GraphicsContext* context, IntRect &rc, NGInt status)
+void ScrollView::drawScroll(GraphicsContext* context, IntRect &rc, int status)
 {
 	fixed contw, conth;
 	fixed vieww, viewh;
 	
-	NGInt barWidth = m_barWidth;
-	NGInt barmargin = m_barMargin; 
+	int barWidth = m_barWidth;
+	int barmargin = m_barMargin; 
 	
-	NGBool isdraw = false;
+	bool isdraw = false;
 
     if(!vBarVisible() && !hBarVisible())
         return;
@@ -267,7 +267,7 @@ void ScrollView::drawScroll(GraphicsContext* context, IntRect &rc, NGInt status)
     }
 }
 
-NGBool ScrollView::handleEvent(Event* event)
+bool ScrollView::handleEvent(Event* event)
 {
     if (event->eventType() == Event::TIMER
 		    && m_timerId > 0 
@@ -310,15 +310,15 @@ void ScrollView::updateContentRect(void)
 	moveViewport(m_offx, m_offy);
 }
 
-void ScrollView::moveViewport(NGInt x, NGInt y, NGBool bupdate)
+void ScrollView::moveViewport(int x, int y, bool bupdate)
 {
     if (m_content) 
 	{
 		const IntRect & contentrc = m_content->getRect();
 		const IntRect & viewportrc = getRect();
 
-		NGInt   move_w = contentrc.width() - viewportrc.width();
-		NGInt   move_h = contentrc.height() - viewportrc.height();
+		int   move_w = contentrc.width() - viewportrc.width();
+		int   move_h = contentrc.height() - viewportrc.height();
 		
 		if(loopScroll()) {
 			while(y < 0)
@@ -371,7 +371,7 @@ void ScrollView::moveViewport(NGInt x, NGInt y, NGBool bupdate)
 
 }
 
-void ScrollView::drawScrollContent(GraphicsContext *gc, NGInt status)
+void ScrollView::drawScrollContent(GraphicsContext *gc, int status)
 {
     m_content->onPaint(gc, status);
 
@@ -381,13 +381,13 @@ void ScrollView::drawScrollContent(GraphicsContext *gc, NGInt status)
     if (m_offx != 0 || m_offy != 0) {
         //content info 
         const IntRect& rcCont = m_content->getRect();
-        NGInt cx = rcCont.right();
-        NGInt cy = rcCont.bottom();
+        int cx = rcCont.right();
+        int cy = rcCont.bottom();
 
         //view info
         const IntRect& rcView = getRect();
-        NGInt vieww = rcView.width();
-        NGInt viewh = rcView.height();
+        int vieww = rcView.width();
+        int viewh = rcView.height();
 
         if (cx >= vieww && cy >= viewh) {
             return;
@@ -436,7 +436,7 @@ void ScrollView::drawScrollContent(GraphicsContext *gc, NGInt status)
     }
 }
 
-void ScrollView::drawContent(GraphicsContext* context, IntRect &rc, NGInt status)
+void ScrollView::drawContent(GraphicsContext* context, IntRect &rc, int status)
 {
 	for (View *view = firstChild(); view; view = view->nextSibling()) {
 		if(!view->isVisible() || view->getRect().isEmpty())
@@ -453,17 +453,17 @@ void ScrollView::drawContent(GraphicsContext* context, IntRect &rc, NGInt status
 	}
 }
 
-void ScrollView::moveOffsetH(NGInt x)
+void ScrollView::moveOffsetH(int x)
 {
     moveViewport(m_offx + x, m_offy); 
 }
 
-void ScrollView::moveOffsetV(NGInt y)
+void ScrollView::moveOffsetV(int y)
 {
     moveViewport(m_offx, m_offy + y); 
 }
 
-NGBool ScrollView::dispatchEvent(Event* event)
+bool ScrollView::dispatchEvent(Event* event)
 {
     if (DISPATCH_STOP_MSG == PanelView::dispatchEvent(event))
         return DISPATCH_STOP_MSG;

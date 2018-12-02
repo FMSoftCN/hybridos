@@ -44,8 +44,8 @@ class PageNavigateView : public PanelView
          * param leftImageFile is left arrow image file name.
          * param rightImageFile is right arrow image file name.
          */
-        PageNavigateView(NGInt id,
-                            NGInt x, NGInt y, NGInt w, NGInt h,
+        PageNavigateView(int id,
+                            int x, int y, int w, int h,
                             PageView* pageView,
                             const char* normalImageFile,
                             const char* curImageFile,
@@ -95,8 +95,8 @@ class PageNavigateView : public PanelView
          *
          * if use this func sould called in front of init().
          */
-        void setScaled(NGBool b_isScaled) { setFlag(b_isScaled, SCALED); }
-		NGBool isScaled() { return m_flags & SCALED; }
+        void setScaled(bool b_isScaled) { setFlag(b_isScaled, SCALED); }
+		bool isScaled() { return m_flags & SCALED; }
 
         /*
          * by m_pageview, m_normalImage, m_curImage, m_leftImage
@@ -107,18 +107,18 @@ class PageNavigateView : public PanelView
          * PageNavigateView(...) will auto
          * call this func.
          */
-        NGBool init();
+        bool init();
 
         /*
          * judge m_pageView, m_normalImageView and m_curImageView not NULL.
          */
-        NGBool isInit();
+        bool isInit();
 
         /*left move current image.*/
-        NGBool next();
+        bool next();
 
         /*right move current image.*/
-        NGBool prev();
+        bool prev();
 
         /*get focus will show two arrows.*/
         void onGetFocus();
@@ -126,15 +126,15 @@ class PageNavigateView : public PanelView
         /*lose focus will hide two arrows.*/
         void onLoseFocus();
 
-        NGBool dispatchEvent(Event *event);
+        bool dispatchEvent(Event *event);
 
 
         PageNavigateView(View *parent);
 
-//        NGBool pageViewChanged();        //no use.
+//        bool pageViewChanged();        //no use.
 
     private:
-        NGInt m_width;
+        int m_width;
 
         Image* m_normalImage;
         Image* m_curImage;

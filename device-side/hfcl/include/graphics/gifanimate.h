@@ -71,16 +71,16 @@ class GifAnimate : public RefCount
 
         // create from innner res : BitmapFrameArray *
         void createGifAnimateFromRes(BitmapFrameArray* bitmap_frame_array);
-        void createGifAnimateFromMem(NGCPStr data,NGUInt size);
+        void createGifAnimateFromMem(const char * data,unsigned int size);
         void loadGifAnimateNextFrameFromMem(void);
         void drawOneFrame(GraphicsContext* graphics, const IntRect &rect, GifAnimateFrame* frame = NULL);
 
-        inline NGInt currentFrameDelay(void) { return m_current_frame ? m_current_frame->delay_time : -1; }
+        inline int currentFrameDelay(void) { return m_current_frame ? m_current_frame->delay_time : -1; }
 
-        NGInt frameCount(void) {return m_nr_frames;}
+        int frameCount(void) {return m_nr_frames;}
 
-        NGBool isLastFrame(void) { return (m_last_frame == m_current_frame);}
-	  NGUInt getNextFrameIndex(void){return m_nextFrameIndex;}
+        bool isLastFrame(void) { return (m_last_frame == m_current_frame);}
+	  unsigned int getNextFrameIndex(void){return m_nextFrameIndex;}
 
     protected:
         void restorePrevFrame(const IntRect &rect, GifAnimateFrame* frame);
@@ -91,16 +91,16 @@ class GifAnimate : public RefCount
         GifAnimateFrame* m_frames;
         GifAnimateFrame* m_current_frame;
         GifAnimateFrame* m_last_frame;
-        NGUInt m_nr_frames;
-        NGUInt m_max_width;
-        NGUInt m_max_height;
-        NGBool m_is_scale;
+        unsigned int m_nr_frames;
+        unsigned int m_max_width;
+        unsigned int m_max_height;
+        bool m_is_scale;
         GraphicsContext* m_mem_gc;
 
         unsigned char m_c;
         MG_RWops* m_area;
         GIFSCREEN m_GifScreen;
-        NGUInt m_nextFrameIndex;
+        unsigned int m_nextFrameIndex;
 };
 
 NAMESPACE_END

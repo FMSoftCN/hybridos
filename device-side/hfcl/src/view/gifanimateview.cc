@@ -98,7 +98,7 @@ GifAnimateView::~GifAnimateView()
 	}
 }
 
-NGBool GifAnimateView::start(void)
+bool GifAnimateView::start(void)
 {
     if (NULL == m_animate)
         return false;
@@ -116,7 +116,7 @@ NGBool GifAnimateView::start(void)
     return true;
 }
 
-NGBool GifAnimateView::pause(void)
+bool GifAnimateView::pause(void)
 {
     if (Play != m_state)
         return false;
@@ -131,7 +131,7 @@ NGBool GifAnimateView::pause(void)
     return true;
 }
 
-NGBool GifAnimateView::resume(void)
+bool GifAnimateView::resume(void)
 {
     if (NULL == m_animate)
         return false;
@@ -153,7 +153,7 @@ NGBool GifAnimateView::resume(void)
     return true;
 }
 
-NGBool GifAnimateView::stop(void)
+bool GifAnimateView::stop(void)
 {
     if (m_timer_id != 0)
     {
@@ -166,13 +166,13 @@ NGBool GifAnimateView::stop(void)
 	if(m_animate== NULL) return false;
 	m_animate->firstFrame();
     // stop notity event
-	CustomEvent event(Event::CUSTOM_NOTIFY, (NGInt)NOTIFY_GIFANIMATE_STOP, (NGInt)this);
+	CustomEvent event(Event::CUSTOM_NOTIFY, (int)NOTIFY_GIFANIMATE_STOP, (int)this);
 	raiseEvent(&event);
 
     return true;
 }
 
-NGBool GifAnimateView::reset(void)
+bool GifAnimateView::reset(void)
 {
     if (NULL == m_animate)
         return false;
@@ -282,8 +282,8 @@ bool GifAnimateView::handleEvent(Event* event)
 				}
 			}
 			else {
-	            NGInt32 cur_tick = GetTickCount();
-	            m_elapsed_10ms = (NGUInt64) (cur_tick - m_start_ticks)*10;
+	            Sint32 cur_tick = GetTickCount();
+	            m_elapsed_10ms = (Uint64) (cur_tick - m_start_ticks)*10;
 			}
 		}
 	}

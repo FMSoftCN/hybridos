@@ -46,131 +46,131 @@ class BusyListView : public PanelView
         virtual ~BusyListView();
 
         ///////////// item ops
-        NGBool addItem(void);
-		NGBool addItem(void* addData);
-        NGBool addItemByIndex(NGInt index);
-		NGBool addItemByIndex(NGInt index, void* addData);
-        NGBool removeItem(NGInt index);
-        NGInt itemCount(void);
+        bool addItem(void);
+		bool addItem(void* addData);
+        bool addItemByIndex(int index);
+		bool addItemByIndex(int index, void* addData);
+        bool removeItem(int index);
+        int itemCount(void);
         ///////////// set/get normal item height
-        NGBool setItemHeight(NGInt height);
-        NGInt itemHeight(void);
+        bool setItemHeight(int height);
+        int itemHeight(void);
         ////////////// set/get hilight item height
-        NGBool setHilightItemHeight(NGInt height);
-        NGInt hilightItemHeight(void);
+        bool setHilightItemHeight(int height);
+        int hilightItemHeight(void);
         ////////////// ui item
-        void setItemTemplateId(NGInt item_res_id);
+        void setItemTemplateId(int item_res_id);
         ////////////// hilight item
-        void hilight(NGInt index);
-        void hilight(NGInt index, NGBool focus);
-        NGInt hilightItemIndex(void);
-        NGBool isFocus(void){return m_focus;}
+        void hilight(int index);
+        void hilight(int index, bool focus);
+        int hilightItemIndex(void);
+        bool isFocus(void){return m_focus;}
 		View* hilightItem(void);
-		View* itemFromIndex(NGInt index);
+		View* itemFromIndex(int index);
         ////////////// dispatch event
-        virtual NGBool dispatchEvent(Event* event);
-        //virtual NGBool setRect(const IntRect& irc);
-        void reLayout(NGInt index);
+        virtual bool dispatchEvent(Event* event);
+        //virtual bool setRect(const IntRect& irc);
+        void reLayout(int index);
 		void reLayout(void);
 
-		void setScrollGap(NGInt gapWidth){m_scrollGap = gapWidth;}
-		NGInt scrollGap(void){return m_scrollGap;}
+		void setScrollGap(int gapWidth){m_scrollGap = gapWidth;}
+		int scrollGap(void){return m_scrollGap;}
 		
-		void setItemRowGap(NGInt gapHeight){m_itemRowGap = gapHeight;}
-		NGInt itemRowGap(void){return m_itemRowGap;}
+		void setItemRowGap(int gapHeight){m_itemRowGap = gapHeight;}
+		int itemRowGap(void){return m_itemRowGap;}
 		
         ////////////// scrollbar related
-        void setScrollbarWidth(NGInt w);
-        NGInt scrollbarWidth(void);
-        void setScrollbarMarginRight(NGInt m);
-        NGInt scrollbarMarginRight(void);
+        void setScrollbarWidth(int w);
+        int scrollbarWidth(void);
+        void setScrollbarMarginRight(int m);
+        int scrollbarMarginRight(void);
         ///////////// re-load data
-        NGInt reLoadData(void);
+        int reLoadData(void);
 		///////////// clear
 		void clear(void);
 		///////////// freeze
-		void freeze(NGBool f);
+		void freeze(bool f);
 		///////////// status & addData
-		void initSelectMark(NGInt count);
-		void selectItem(NGInt index, NGBool sel);
-		void select(NGInt index, NGBool sel);
-        void selectAll(NGBool sel);
-		NGBool isItemSelected(NGInt index);
-		void initItemAddData(NGInt count);
-		void setItemAddData(NGInt index, void* data);
-		void* itemAddData(NGInt index);
+		void initSelectMark(int count);
+		void selectItem(int index, bool sel);
+		void select(int index, bool sel);
+        void selectAll(bool sel);
+		bool isItemSelected(int index);
+		void initItemAddData(int count);
+		void setItemAddData(int index, void* data);
+		void* itemAddData(int index);
 
-		void setScrollBarFloating(NGBool b) { m_bScrollFloating = b; }
-		NGBool isScrollBarFloating(void) { return m_bScrollFloating; }
-		void setSpecialItemIndex(NGInt index){m_special_item_index = index;}
+		void setScrollBarFloating(bool b) { m_bScrollFloating = b; }
+		bool isScrollBarFloating(void) { return m_bScrollFloating; }
+		void setSpecialItemIndex(int index){m_special_item_index = index;}
     protected:
         void init(void);
         void reInit(void);
 
-        virtual void prepareVisibleItems(NGBool add_one = true, NGBool clean = false);
+        virtual void prepareVisibleItems(bool add_one = true, bool clean = false);
 
         ////////////// key process
-        NGBool onKeyPressed(NGInt keyCode);
+        bool onKeyPressed(int keyCode);
         
         void   setHilightView(View* view);
 
         ////////////// draw ops
-		virtual void drawContent(GraphicsContext* context, IntRect &rc, NGInt status);
-		virtual void drawScroll(GraphicsContext* context, IntRect &rc, NGInt status);
+		virtual void drawContent(GraphicsContext* context, IntRect &rc, int status);
+		virtual void drawScroll(GraphicsContext* context, IntRect &rc, int status);
 
         ////////////// layout
-        virtual void layoutDownToUp(NGInt from_height = -1, NGInt hilight_index = 1);
-        virtual void layoutUpToDown(NGInt from_height = 0, NGInt hilight_index = 1);
+        virtual void layoutDownToUp(int from_height = -1, int hilight_index = 1);
+        virtual void layoutUpToDown(int from_height = 0, int hilight_index = 1);
 
         ////////////// load data notify
-        virtual void onLoadItemData(NGInt index, View* view);
+        virtual void onLoadItemData(int index, View* view);
 
         ////////////// item ops
         virtual View* firstVisibleItem(void);
         virtual View* lastVisibleItem(void);
-        virtual NGInt getVisibleItemCountNeed(void);
+        virtual int getVisibleItemCountNeed(void);
 
     private:
 
     private:
         /// item count
-        NGInt m_item_count;
+        int m_item_count;
         /// normal item height
-        NGInt m_nm_height;
+        int m_nm_height;
         /// hilight item height
-        NGInt m_hi_height;
+        int m_hi_height;
         /// special item count
-        NGInt m_special_item_index;
+        int m_special_item_index;
         /// visible item count
-        NGInt m_visible_item_count;
+        int m_visible_item_count;
         /// item view template id
-        NGUInt m_item_templete_id;
+        unsigned int m_item_templete_id;
         /// up index
-        NGInt m_up_index;
+        int m_up_index;
         /// down index
-        NGInt m_down_index;
+        int m_down_index;
         /// hi index
-        NGInt m_hi_index;
+        int m_hi_index;
         /// items ready ?
-        NGBool m_items_enough;
+        bool m_items_enough;
         /// scrollbar margin right
-        NGInt m_v_scrollbar_margin_right;
+        int m_v_scrollbar_margin_right;
         /// scrollbar width
-        NGInt m_v_scrollbar_width;
+        int m_v_scrollbar_width;
         /// top dock - true, bottom dock - false
-        NGInt m_dock_top;
+        int m_dock_top;
 		/// freeze mark
-		NGBool m_freeze;
+		bool m_freeze;
 		/// select mark
 		BitMark m_select_mark;
 		/// add data keeper
 		PointerKeeper m_data_keeper;
 		// the gap from item to scroll.
-		NGInt m_scrollGap;
-		NGInt m_itemRowGap;
+		int m_scrollGap;
+		int m_itemRowGap;
 
-		NGBool  m_focus;
-		NGBool  m_bScrollFloating;
+		bool  m_focus;
+		bool  m_bScrollFloating;
 
         DECLARE_CLASS_NAME(BusyListView)
 };

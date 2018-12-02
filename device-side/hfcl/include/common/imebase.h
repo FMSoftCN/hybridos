@@ -44,7 +44,7 @@ public:
 	ImeBase() {};
 	virtual ~ImeBase() {};
 
-    virtual void enable (NGBool b_enable) = 0;
+    virtual void enable (bool b_enable) = 0;
     virtual void setInputMode (U16 mode) = 0;
     virtual void changeInputboxMode (U16 mode) = 0;
     virtual int  getCurrentInputMode () = 0;

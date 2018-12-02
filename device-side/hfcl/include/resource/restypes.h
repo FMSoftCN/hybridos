@@ -164,7 +164,7 @@ typedef struct INNER_RES_ARRAY
 {
     enumResType type;
     INNER_RES_INFO *pInner_res_info;
-    NGUInt  number;
+    unsigned int  number;
 }INNER_RES_ARRAY;
 
 typedef struct MENU_RES_ARRAY
@@ -181,52 +181,52 @@ typedef struct UI_RES_ARRAY
 
 ///// BMPFont information
 typedef struct TRBMPDevFontItemInfo {
-	NGCPStr      start_mchar;
-	NGUInt       num_char;
-	NGUInt       glyph_width;
-	ResID        bmp_id;
+	const char *      start_mchar;
+	unsigned int       num_char;
+	unsigned int       glyph_width;
+	HTResId        bmp_id;
 }TRBMPDevFontItemInfo;
 
 typedef struct TRStyleElement {
-	NGInt id;
+	int id;
 	DWORD value;
 }TRStyleElement;
 
 typedef struct TRDrawableArrayItem {
-	NGInt id;
+	int id;
 	const char* base_name;
-	NGInt super_style_id;
+	int super_style_id;
 	TRStyleElement style_element[DR_DRSET_DRSETGROUP_ARRAY_SIZE];
 }TRDrawableArrayItem;
 
 //DrawableSet Data
 typedef struct TRDrawableSetItem {
-	NGInt  dr_id;
-	NGInt  drres_id;
+	int  dr_id;
+	int  drres_id;
 }TRDrawableSetItem;
 
 //DrawableSet Data
 typedef struct TRDrawableSetArrayItem {
-	NGInt    drset_id;
-	NGInt    super_drset_id;
+	int    drset_id;
+	int    super_drset_id;
 	TRDrawableSetItem drawables[DR_DRSET_DRSETGROUP_ARRAY_SIZE];
 }TRDrawableSetArrayItem;
 
 //Theme Data
 typedef struct TRThemeItem {
-	NGInt   theme_drset_id;
-	NGInt   drset_id;
+	int   theme_drset_id;
+	int   drset_id;
 }TRThemeItem;
 
 //DrawableSet Group 
 typedef struct TRDrawableSetGroupItem {
-	NGInt    drset_id;
-	NGInt    drsetres_id;
+	int    drset_id;
+	int    drsetres_id;
 }TRDrawableSetGroupItem;
 
 typedef struct TRDrawableSetGroupArrayItem {
-	NGInt    drsetgroup_id;
-	ResID    drsetgroup_super_id;
+	int    drsetgroup_id;
+	HTResId    drsetgroup_super_id;
 	TRDrawableSetGroupItem drawablesets[DR_DRSET_DRSETGROUP_ARRAY_SIZE];
 }TRDrawableSetGroupArrayItem;
 

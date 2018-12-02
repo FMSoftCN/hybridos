@@ -51,7 +51,7 @@ public:
 	Image* getNormalImage() { return m_normalImg; }
 	Image* getSelectedImage() { return m_selImg; }
 
-	void drawContent(GraphicsContext* context, IntRect &rc, NGInt status);
+	void drawContent(GraphicsContext* context, IntRect &rc, int status);
 
 protected:
 	Image* m_normalImg;

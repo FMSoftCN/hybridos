@@ -54,7 +54,7 @@ AppManager* AppManager::getInstance()
     return s_appManager;
 }
 
-BaseApp* AppManager::getAppByName(NGCPStr name)
+BaseApp* AppManager::getAppByName(const char * name)
 {
 	return m_appstack.getExistAppByName(name);
 }
@@ -64,7 +64,7 @@ BaseApp* AppManager::getCurrentApp()
     return getTopApp(0);
 }
 
-BaseApp* AppManager::getTopApp(NGUInt iTop)
+BaseApp* AppManager::getTopApp(unsigned int iTop)
 {
 	AppInfo *ai = m_appstack.top(iTop);
     return (NULL != ai) ? ai->getApp() : NULL;
@@ -130,12 +130,12 @@ bool AppManager::appIsExist(BaseApp *obj)
     return m_appstack.isExist(obj);
 }
 
-bool AppManager::appIsExist(const NGChar * appName)
+bool AppManager::appIsExist(const char * appName)
 {
 	return getAppByName(appName) != NULL;
 }
 
-bool AppManager::moveApp2Top(NGCPStr name)
+bool AppManager::moveApp2Top(const char * name)
 {
 	BaseApp* app = NULL;
 	AppInfo* curApp = NULL;
@@ -171,7 +171,7 @@ bool AppManager::moveApp2Top(NGCPStr name)
 }
 
 
-bool AppManager::moveApp2Bottom(NGCPStr name)
+bool AppManager::moveApp2Bottom(const char * name)
 {
 	BaseApp* app = NULL;
 	AppInfo* curApp = NULL;
@@ -212,7 +212,7 @@ bool AppManager::moveApp2Bottom(NGCPStr name)
     return false;
 }
 
-bool AppManager::pushAppRunningInBackground(NGCPStr name)
+bool AppManager::pushAppRunningInBackground(const char * name)
 {
 	BaseApp* app = NULL;
 	AppInfo* curApp = NULL;
@@ -254,7 +254,7 @@ bool AppManager::pushAppRunningInBackground(NGCPStr name)
 }
 
 
-BaseApp* AppManager::popAppRunningToFrontdesk(NGCPStr name)
+BaseApp* AppManager::popAppRunningToFrontdesk(const char * name)
 {
 	BaseApp* app = NULL;
 	AppInfo* curApp = NULL;
@@ -292,7 +292,7 @@ BaseApp* AppManager::popAppRunningToFrontdesk(NGCPStr name)
     return NULL;
 }
 
-NGBool AppManager::isAppRunningInBackground(NGCPStr name)
+bool AppManager::isAppRunningInBackground(const char * name)
 {
 	return m_appstack.getExistAppRunBackgroundByName(name) != NULL;
 }
@@ -408,7 +408,7 @@ int AppManager::defaultHostingProc(HWND hWnd, int message, WPARAM wParam, LPARAM
     return DefaultMainWinProc(hWnd, message, wParam, lParam);
 }
 
-NGInt AppManager::broadcastMessage(NGInt msg, NGInt wParam, NGInt lParam)
+int AppManager::broadcastMessage(int msg, int wParam, int lParam)
 {
 	return BroadcastMessage(msg, (WPARAM)wParam, (WPARAM)lParam);
 }
@@ -451,7 +451,7 @@ bool AppManager::init()
 	return true;
 }
 
-NGBool AppManager::processKeyHook(MSG* msg)
+bool AppManager::processKeyHook(MSG* msg)
 {
 #ifdef ENABLE_AUTOTEST
     RecordCurrKeyHandler(msg->wParam,msg->message);

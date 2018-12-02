@@ -163,7 +163,7 @@ string FormatDateTimeString (const NguxTime *pTime,
 
 const static unsigned char daysInMonth[12]= {31,28,31,30,31,30,31,31,30,31,30,31};
 
-NGInt Date::DaysOfMonth(NGInt y, NGInt m) 
+int Date::DaysOfMonth(int y, int m) 
 {
 #ifdef __CALENDAR_ARABIC__
     DATE_SYS_ENUM dateSystem = GetDateSystem();
@@ -178,16 +178,16 @@ NGInt Date::DaysOfMonth(NGInt y, NGInt m)
     }
 }
 
-NGInt Date::DayOfWeek(NGInt y, NGInt m, NGInt d)
+int Date::DayOfWeek(int y, int m, int d)
 {
 #ifdef __CALENDAR_ARABIC__
     DATE_SYS_ENUM dateSystem = GetDateSystem();
     if(dateSystem == DATE_HIJRI ||dateSystem == DATE_SHAMSI)
     {
-        NGInt w = 0;
-        NGInt daysOfYear = 0;
-        NGInt baseYear = 0;
-        NGInt weekOfBase = 0;
+        int w = 0;
+        int daysOfYear = 0;
+        int baseYear = 0;
+        int weekOfBase = 0;
 
         if(dateSystem == DATE_HIJRI)
         {
@@ -200,10 +200,10 @@ NGInt Date::DayOfWeek(NGInt y, NGInt m, NGInt d)
             weekOfBase = 5; //Friday
         }
 
-        for(NGInt i = 0; i < y-baseYear; i++)
+        for(int i = 0; i < y-baseYear; i++)
         {
             daysOfYear = 0;
-            for(NGInt j = 0; j < 12 ; j++)
+            for(int j = 0; j < 12 ; j++)
             {
                 daysOfYear += TM_GetDaysOneMonthByDateSystem(i+baseYear, j+1, dateSystem);
             }
@@ -218,13 +218,13 @@ NGInt Date::DayOfWeek(NGInt y, NGInt m, NGInt d)
     else
 #endif
     {
-    	// optimize 1 : w NGInt to register NGInt
-        register NGInt w = 1;
+    	// optimize 1 : w int to register int
+        register int w = 1;
         y = (y-1)%400 + 1;
-        register NGInt ly = (y-1)/4;
+        register int ly = (y-1)/4;
         ly = ly - (y-1)/100;
         ly = ly + (y-1)/400;
-        register NGInt ry = y - 1 - ly;
+        register int ry = y - 1 - ly;
         w = w + ry;
         w = w + 2*ly;
         w = w + DayOfYear(y,m,d);
@@ -233,10 +233,10 @@ NGInt Date::DayOfWeek(NGInt y, NGInt m, NGInt d)
     }
 }
 
-NGInt Date::DayOfYear(NGInt y, NGInt m, NGInt d)
+int Date::DayOfYear(int y, int m, int d)
 {
-    register NGInt c = 0;
-    for (register NGInt i = 1; i< m; i++) 
+    register int c = 0;
+    for (register int i = 1; i< m; i++) 
     {
         c = c + DaysOfMonth(y,i);
     }
