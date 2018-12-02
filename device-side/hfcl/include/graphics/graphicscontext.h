@@ -1,0 +1,216 @@
+/* 
+** HFCL - HybridOS Foundation Class Library
+** 
+** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
+**
+** This file is part of HFCL.
+**
+** This program is free software: you can redistribute it and/or modify
+** it under the terms of the GNU General Public License as published by
+** the Free Software Foundation, either version 3 of the License, or
+** (at your option) any later version.
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with this program. If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#ifndef _NGUX_GraphicsContext_h
+#define _NGUX_GraphicsContext_h
+
+#include "nguxcommon.h"
+#include "mgcl.h"
+#include "log.h"
+#include "nguxobject.h"
+#include "intrect.h"
+
+typedef BITMAP 	Bitmap;
+
+#ifdef  USE_NGUX_FONT
+typedef DEVFONT Devfont;
+#endif
+typedef POINT 	Point;
+
+// for inner resource 
+typedef struct _tagBitmapFrame {
+    int off_x;
+    int off_y;
+    int disposal;
+    unsigned int delay_time;
+    PBITMAP bmp;
+    struct _tagBitmapFrame* next;
+    struct _tagBitmapFrame* prev;
+}BitmapFrame;
+
+typedef struct _tagBitmapFrameArray
+{
+    int nr_frames;
+    BitmapFrame* frames;
+}BitmapFrameArray;
+
+#define NGUX_BMP_TYPE_NORMAL         0x00
+#define NGUX_BMP_TYPE_RLE            0x01
+#define NGUX_BMP_TYPE_ALPHA          0x02
+#define NGUX_BMP_TYPE_ALPHACHANNEL   0x04
+#define NGUX_BMP_TYPE_COLORKEY       0x10
+#define NGUX_BMP_TYPE_ALPHA_MASK     0x20
+#define NGUX_BMP_TYPE_PRIV_PIXEL     0x00
+
+NAMESPACE_BEGIN
+
+typedef LOGFONT Logfont;
+
+class Image;
+class View;
+class GraphicsContextPrivate;
+
+class GraphicsContext : public Object {
+	public:
+		GraphicsContext(HDC);
+		~GraphicsContext();
+
+		static GraphicsContext* screenGraphics();
+		static void deleteScreenGraphics(void);
+		void translation(NGInt offx, NGInt offy);
+		void getTranslation(NGInt& offx, NGInt & offy);
+
+		Logfont* getLogFont(void);
+
+		void clip(const IntRect&);
+		void clipOut(const IntRect&);
+		void clipIn(const IntRect&);
+        NGBool rectVisible(IntRect&);
+
+		void beginTransparencyLayer(NGInt alpha);
+		void endTransparencyLayer();
+
+		void save();
+		void restore();
+
+        inline NGInt setTextCharacterExtra(NGInt extra)  { return SetTextCharacterExtra (context(), extra); }
+        inline NGInt setTextAboveLineExtra(NGInt extra)  { return SetTextAboveLineExtra (context(), extra); }
+        inline NGInt setTextBellowLineExtra(NGInt extra) { return SetTextBellowLineExtra(context(), extra); }
+        inline NGInt getTextCharacterExtra(void)  { return GetTextCharacterExtra (context()); }
+        inline NGInt getTextAboveLineExtra(void)  { return GetTextAboveLineExtra (context()); }
+        inline NGInt getTextBellowLineExtra(void) { return GetTextBellowLineExtra(context()); }
+
+		void fillRect(const IntRect& rc, Uint8 r, Uint8 g, Uint8 b, Uint8 a=0xFF);
+        void fillBox(int x, int y, int w, int h);
+        void bitBlt(GraphicsContext* src, int sx, int sy, int sw, int sh, int dx, int dy, Uint32 op);
+		void rectangle(int x0, int y0, int x1, int y1);
+		void rectangle(int x0, int y0, int x1, int y1, Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
+		void drawLine(int x0, int y0, int x1, int y1, int width,
+				Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
+		void drawHVDotLine(int x, int y, int wh, NGBool isHorz,
+				Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+		void drawPolygonLine(Point *pts, NGInt nums, int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
+		void fillPolygon(const Point* pts, NGInt vertices, Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
+
+        void getTextDrawSize (const string text, Logfont *f, int *w, int *h);
+        void getTextDrawSize (const char *text, Logfont *f, int *w, int *h);
+        void getTextDrawSize (const unsigned short *text, Logfont *f, int *w, int *h);
+
+        bool getBiDiFlag (void);
+        void setBiDiFlag (bool bidi);
+        int  getBiDiFirstChType (void);
+        void setBiDiFirstChType (int type);
+
+        void textOut(NGInt x, NGInt y, NGCPStr text, NGInt len,
+                NGUInt color, Logfont * logfont = NULL);
+        void textOut(NGInt x, NGInt y, string text, NGUInt color, Logfont * logfont){
+                textOut(x, y, text.c_str(), text.size(), color, logfont);
+        }
+
+		void textOutOmitted(NGInt x, NGInt y, NGCPStr text, NGInt len, NGInt max_extent);
+        void textOutOmitted(NGInt x, NGInt y, NGCPStr text, NGInt len, 
+                NGInt max_extent, NGUInt color, Logfont * logfont);
+		void textOutOmitted(NGInt x, NGInt y, const string& text, NGInt max_extent){
+			textOutOmitted(x, y, text.c_str(), text.size(), max_extent);
+		}
+        void textOutOmitted(NGInt x, NGInt y, const string& text, 
+                NGInt max_extent, NGUInt color, Logfont * logfont) {
+			textOutOmitted(x, y, text.c_str(), text.size(), max_extent, color, logfont);
+		}
+
+		void drawText(const string& text, const IntRect& rc);
+		void drawText(NGCPStr text, const IntRect& rc, \
+				NGUInt color, Logfont * logfont, NGUInt format);
+		void drawText(const string& text, const IntRect& rc, \
+				NGUInt color, Logfont * logfont, NGUInt format) {
+			drawText(text.c_str(), rc, color, logfont, format);
+		}
+        NGInt drawTextToCalcRect(const string& text, IntRect& rect, NGUInt format, Logfont *font = NULL);
+        NGInt calcTextRectOnDrawing(const char *text, Logfont *f, 
+                NGUInt format, IntRect *rect, DTFIRSTLINE *firstline = NULL, Point *txtPos = NULL);
+        NGInt calcTextRectOnDrawing(const string& text, Logfont *f, 
+                NGUInt format, IntRect *rect, DTFIRSTLINE *firstline = NULL, Point *txtPos = NULL) {
+            return calcTextRectOnDrawing(text.c_str(), f, format, rect, firstline, txtPos);
+        }
+        NGInt drawTextToGetLenght(const string& text);
+        NGInt getFontHeight(Logfont *f = NULL); 
+        NGInt getFontWidth(Logfont *f = NULL); 
+
+		//Bitmap
+		NGBool fillBoxWithBitmap(NGInt x, NGInt y, NGInt w, NGInt h, const Bitmap* pBitmap);
+		NGBool setReplaceColor(const DWORD color);
+		NGBool drawRotateBitmap(const Bitmap* pBitmap,NGInt lx, NGInt ty, NGInt angle);
+		NGBool fillBoxWithBitmapPart(NGInt x, NGInt y, NGInt w, NGInt h, const Bitmap* pBitmap, NGInt xo, NGInt yo);
+		NGInt loadBitmap(Bitmap* bmp, NGCPStr file_name);
+		NGInt loadBitmap(Bitmap** bmp, const void* data, NGInt size, NGCPStr extern_name);
+		void unloadBitmap(Bitmap* pBitmap);
+		NGBool getBitmapSize(Bitmap* pBitmap, NGInt* w, NGInt* h);
+		GraphicsContext* createGraphicsFromBitmap(Bitmap *pbmp);
+        NGBool initBitmap(NGInt w, NGInt h, Bitmap* pbmp);
+		//add interface for Image
+		//virtual void drawImage(Image *image, NGInt x, NGInt y, NGInt state);
+		//virtual void drawImage(Image *image, NGInt x, NGInt y, NGInt width, NGInt height, NGInt state);
+
+		//Font
+		Logfont* getCurFont(void);
+		Logfont* createLogFontByName(NGCPStr fontname);
+        
+		void deleteLogFont(Logfont* logfont);
+
+        void rotateBitmap(const Bitmap *pBitmap, NGInt lx, NGInt ty, NGInt angle);
+        HDC context(); 
+		NGBool captureScreen2Bitmap(Bitmap* pbmp);
+
+        void setMapView(View *view);
+        void map(NGInt x, NGInt y, NGInt &x2, NGInt &y2);
+        void mapRect(RECT &rc);
+
+		int getLayers(void);
+		void setLayer(int layer);
+		void setLayerEnable(int layer, BOOL enable);
+		void setLayerOpacity(int layer, BOOL enable, unsigned char opacity_value);
+		void setLayerColorKey(int layer, BOOL enable, unsigned char r, unsigned char g, unsigned char b );
+        
+        // create memdc
+        GraphicsContext* createMemGc(NGInt w, NGInt h);
+	private:
+        GraphicsContextPrivate *m_data;
+        static GraphicsContext *screen_graphics_context;
+};
+
+GraphicsContext* CreateMemGc(NGInt w, NGInt h);
+void DeleteMemGc(GraphicsContext *memGc);
+
+NGBool SaveScreenToFile (NGCPStr bmpFile);
+
+NGInt GetFirstUTF8CharLen(const char *str, int len);
+NGInt GetLastUTF8CharLen(const char *str, int len);
+NGInt GetUTF8CharInfo(const char *mstr, int len, int *retPosChars);
+NGInt GetUTF8CharCount(const char *mstr, int len);
+BOOL HasUCS2Char(const char *mstr, int len);
+NGInt GetUTF8LenByCharCount(const char *mstr, int charcount);
+U16 utf8_to_ucs2 (U8 *utf8);
+BOOL isNumberChar ( U16 inChar );
+BOOL isSymbolChar ( U16 inChar );
+BOOL isArabicSymbol ( U16 inChar );
+NAMESPACE_END
+
+#endif /* _NGUX_GraphicsContext_h */

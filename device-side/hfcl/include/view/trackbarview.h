@@ -1,0 +1,95 @@
+/* 
+** HFCL - HybridOS Foundation Class Library
+** 
+** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
+**
+** This file is part of HFCL.
+**
+** This program is free software: you can redistribute it and/or modify
+** it under the terms of the GNU General Public License as published by
+** the Free Software Foundation, either version 3 of the License, or
+** (at your option) any later version.
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with this program. If not, see <https://www.gnu.org/licenses/>.
+*/
+
+
+#ifndef _NGUX_TrackBarView_h
+#define _NGUX_TrackBarView_h
+
+#include "view.h"
+
+NAMESPACE_BEGIN
+
+class TrackBarView : public View
+{
+    public:
+        typedef enum _TrackBarType{ VERTICAL, HORIZONTAL} TRACKBARTYPE;
+
+
+        TrackBarView();
+        TrackBarView(View* parent);
+        TrackBarView(View* parent, DrawableSet* drset);
+        TrackBarView(NGInt i_id, NGInt x, NGInt y, NGInt w, NGInt h);
+        //TrackBarView(Image* startImg, Image* pauseImg, GNInt min = 0, GNInt max = 100);
+        ~TrackBarView();
+        
+        void setType(TRACKBARTYPE t_type){ m_type = t_type; }
+        TRACKBARTYPE type(void){ return m_type; }
+
+        void setBorder(NGInt borderPixel){ m_border = borderPixel; }
+
+        //set ThumbBlock image to startimage.
+        //void start(void){ setThumbBlockImage(m_startImg); }
+        //set ThumbBlock image to pauseimage.
+        //void pause(void){ setThumbBlockImage(m_pauseImg); }
+
+        void stepForward(void); //go forward a distance of m_stepValue.
+        void stepBackward(void);//go backword a distance of m_stepValue.
+
+        void setStepValue(NGInt value){ m_stepValue = value; }
+        NGInt stepValue(void){ return m_stepValue; }
+
+        void setMaxValue(NGInt value){ m_maxValue = value; }
+        NGInt maxValue(void){ return m_maxValue; }
+        void setMinValue(NGInt value){ m_minValue = value; }
+        NGInt minValue(void){ return m_minValue; }
+        void setPosition(NGInt value); //update to the new position.
+        NGInt position(void){ return m_curValue; }
+
+        //void setPauseImage(Image* img){ m_pauseImg = img; }
+        //void setStartImage(Image* img){ m_startImg = img; }
+        //void setTrackBarImage(Image* img);
+        //void setThumbBlockImage(Image* img);
+
+        virtual void drawContent(GraphicsContext* context, IntRect &rc, NGInt status/* = Style::NORMAL*/);
+
+    protected:
+        //void initDrawable(DrawableSelector* selector);
+
+    private:
+        void initTrackBarView(void);
+
+    protected:
+        TRACKBARTYPE m_type;
+        NGInt m_curValue;
+        NGInt m_maxValue;
+        NGInt m_minValue;
+        NGInt m_stepValue;
+        NGInt m_border;
+        //Image* m_startImg;
+        //Image* m_pauseImg;
+        //ImageDrawable* m_drTrackBar;
+        //ImageDrawable* m_drThumbBlock;
+
+	DECLARE_CLASS_NAME(TrackBarView)
+};
+
+NAMESPACE_END
+#endif /*_NGUX_TrackBarView_h*/
