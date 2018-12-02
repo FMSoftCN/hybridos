@@ -23,7 +23,7 @@
 #include "baseapp.h"
 #include "appmanager.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 BaseApp::~BaseApp()
 {
@@ -63,4 +63,4 @@ bool BaseApp::isSuspendable(void)
 	return true;
 }
 
-NAMESPACE_END
+} // namespace hfcl {

@@ -19,12 +19,12 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __NGUX_ANIMATIONGROUP_H__
-#define __NGUX_ANIMATIONGROUP_H__
+#ifndef __HFCL_ANIMATIONGROUP_H__
+#define __HFCL_ANIMATIONGROUP_H__
 
 #include "nguxanimation.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class GroupAnimation : public Animation
 {
@@ -44,6 +44,6 @@ class GroupAnimation : public Animation
 		AMILIST m_amiList;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif //__NGUX_ANIMATIONGROUP_H__
+#endif //__HFCL_ANIMATIONGROUP_H__

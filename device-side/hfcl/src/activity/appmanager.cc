@@ -43,14 +43,14 @@
 extern void RecordCurrKeyHandler(S16 keyCode, S16 keyType);
 #endif
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 AppManager* AppManager::s_appManager = NULL;
 
 AppManager* AppManager::getInstance()
 {
     if (s_appManager == NULL)
-        s_appManager = NGUX_NEW_EX(AppManager, ());
+        s_appManager = HFCL_NEW_EX(AppManager, ());
     return s_appManager;
 }
 
@@ -334,8 +334,8 @@ BaseApp* AppManager::startApp(string app_name, Intent *intent)
 
 	if(_newApp != NULL)
     {
-        //ContextStream *cs = NGUX_NEW_EX(ContextStream, ());
-		AppInfo *app_info = NGUX_NEW_EX(AppInfo, (app_name, _newApp, NULL));
+        //ContextStream *cs = HFCL_NEW_EX(ContextStream, ());
+		AppInfo *app_info = HFCL_NEW_EX(AppInfo, (app_name, _newApp, NULL));
 
 		_newApp->setState(BaseApp::RUNNING);
         _newApp->setName(app_name.c_str());
@@ -390,10 +390,10 @@ int AppManager::defaultHostingProc(HWND hWnd, int message, WPARAM wParam, LPARAM
         case MSG_CLOSE:
             DestroyMainWindow(hWnd);
             break;
-        case NGUX_MSG_ADP_EVENT:
+        case HFCL_MSG_ADP_EVENT:
             CoolSand_DispatchMMIEvent((COS_EVENT *)wParam);
             break;
-		case NGUX_MSG_SEND_NETWORK_EVENT:
+		case HFCL_MSG_SEND_NETWORK_EVENT:
 			{
 				MYQUEUE *msg = (MYQUEUE *)wParam;
 				CoolSand_ExecuteProtocolEvent((U16)msg->wMsgId, 
@@ -520,10 +520,10 @@ void AppManager::stopTimerService(void)
     TimerService::getInstance()->stop();
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 
 extern "C" void nguxDispatchAdpEvent(COS_EVENT* ev, unsigned int handle, int event)
 {
-    SendMessage (NGUX::AppManager::getInstance()->hosting(), NGUX_MSG_ADP_EVENT, (WPARAM)ev, 0); 
+    SendMessage (NGUX::AppManager::getInstance()->hosting(), HFCL_MSG_ADP_EVENT, (WPARAM)ev, 0); 
 }
 

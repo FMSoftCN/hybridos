@@ -20,14 +20,14 @@
 */
 
 
-#ifndef _NGUX_WrapperView_h
-#define _NGUX_WrapperView_h
+#ifndef _HFCL_WrapperView_h
+#define _HFCL_WrapperView_h
 
 #include "control.h"
 #include "view.h"
 #include "font.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class WrapperView : public View     // GT_jyseo rollback  , public EventListener
 {
@@ -122,7 +122,7 @@ protected:
 };
 
 
-NAMESPACE_END
+} // namespace hfcl {
 
 
 #endif

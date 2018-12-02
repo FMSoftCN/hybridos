@@ -24,7 +24,7 @@
 #include "fontres.h"
 #include "resloader.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 FontRes::FontRes(const char *fontname)
     : m_fontname(fontname)
@@ -52,5 +52,5 @@ Logfont* FontRes::get(/*Style* style = NULL*/)
     return m_font;
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

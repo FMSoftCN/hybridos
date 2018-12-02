@@ -22,24 +22,24 @@
 
 #include "selectediconitemview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 DEFINE_CLASS_NAME(SelectedIconItemView)
 
 SelectedIconItemView::~SelectedIconItemView()
 {
 	if(m_normalImg) {
-		NGUX_DELETE(m_normalImg);
+		HFCL_DELETE(m_normalImg);
 	}
 	if(m_selImg) {
-		NGUX_DELETE(m_selImg);
+		HFCL_DELETE(m_selImg);
 	}
 }
 
 void SelectedIconItemView::setNormalImage(Image *img) 
 {
 	if(m_normalImg && m_normalImg != img) {
-		NGUX_DELETE(m_normalImg);
+		HFCL_DELETE(m_normalImg);
 		m_normalImg = NULL;
 	}
 	m_normalImg = img;
@@ -48,7 +48,7 @@ void SelectedIconItemView::setNormalImage(Image *img)
 void SelectedIconItemView::setSelectedImage(Image* img) 
 {
 	if(m_selImg && m_selImg != img) {
-		NGUX_DELETE(m_selImg);
+		HFCL_DELETE(m_selImg);
 		m_selImg = NULL;
 	}
 	m_selImg = img; 
@@ -73,6 +73,6 @@ void SelectedIconItemView::drawContent(GraphicsContext* context, IntRect &rc, in
 }
 
 
-NAMESPACE_END
+} // namespace hfcl {
 
 

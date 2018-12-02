@@ -32,7 +32,7 @@
 
 #include "hal_misc.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 ////////////////////// Features /////////////////////////
 // 1. equal item height.
 // 2. special hilight item height.
@@ -1130,4 +1130,4 @@ void BusyListView::drawScroll(GraphicsContext* context, IntRect &rc, int status)
 }
 
 
-NAMESPACE_END
+} // namespace hfcl {

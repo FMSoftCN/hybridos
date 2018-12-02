@@ -20,15 +20,15 @@
 */
 
 
-#ifndef _NGUX_PanelView_h
-#define _NGUX_PanelView_h
+#ifndef _HFCL_PanelView_h
+#define _HFCL_PanelView_h
 
 #define FILE_NAME_LEN 256
 
 #include "containerview.h"
 #include "graphicscontext.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 class Image;
 
 class PanelView : public ContainerView
@@ -70,6 +70,6 @@ DECLARE_CLASS_NAME(PanelView)
 
 }; //end of PanelView
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* NGUX_PanelView_h */
+#endif /* HFCL_PanelView_h */

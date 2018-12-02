@@ -24,7 +24,7 @@
 
 #include "panelview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define _GRIDVIEW_TEST 1
 
@@ -122,6 +122,6 @@ class GridView : public PanelView
         friend class TableBarView;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif

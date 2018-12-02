@@ -20,12 +20,12 @@
 */
 
 
-#ifndef _NGUX_Intent_h
-#define _NGUX_Intent_h
+#ifndef _HFCL_Intent_h
+#define _HFCL_Intent_h
 
 #include "nguxcommon.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 /*
  * class Intent
@@ -80,6 +80,6 @@ class Intent {
 		IntentMap m_intentStore;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* NGUX_Intent_h */
+#endif /* HFCL_Intent_h */

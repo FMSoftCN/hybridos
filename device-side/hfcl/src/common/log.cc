@@ -29,7 +29,7 @@
 #include "intrect.h"
 #include "log.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 Log *Log::m_log = NULL;
 
@@ -56,8 +56,8 @@ Log* Log::getLog(void)
 {
     if (Log::m_log == NULL){
         //Log::m_log = new Log (NGUXLOG, true);
-		Log::m_log = NGUX_NEW_EX(Log, (NGUXLOG, true));      
-        // Log::m_log = NGUX_NEW_EX(Log, (NGUXLOG, true));  // not use
+		Log::m_log = HFCL_NEW_EX(Log, (NGUXLOG, true));      
+        // Log::m_log = HFCL_NEW_EX(Log, (NGUXLOG, true));  // not use
 	}
     return Log::m_log;
 }
@@ -66,7 +66,7 @@ void Log::releaseLog(void)
 {
     if (NULL != Log::m_log)
         delete (Log::m_log);
-        // NGUX_DELETE(Log::m_log);
+        // HFCL_DELETE(Log::m_log);
     Log::m_log = NULL;
 }
 
@@ -167,5 +167,5 @@ void Log::dumpRect(const IntRect& rc)
 
 #endif /* __CC_ARM */
 
-NAMESPACE_END
+} // namespace hfcl {
 

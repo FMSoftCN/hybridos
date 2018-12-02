@@ -36,7 +36,7 @@
 		return ret_aim; }
 
 #define group_begin(type) do{ \
-	GroupAnimation* tmp_group = NGUX_NEW_EX(GroupAnimation, ((type), __group)); \
+	GroupAnimation* tmp_group = HFCL_NEW_EX(GroupAnimation, ((type), __group)); \
 	GroupAnimation* __group = tmp_group; \
 	Animation* __anim = (Animation*)__group;
 
@@ -53,10 +53,10 @@
 #define set_startvalue(n)   __anim->setStartValue((n))
 #define set_endtvalue(n)    __anim->setEndValue((n))
 
-#define move_view(view, target_pt) ret_aim = (Animation*) NGUX_NEW_EX(MoveViewAnimation, ((view), (target_pt)))
+#define move_view(view, target_pt) ret_aim = (Animation*) HFCL_NEW_EX(MoveViewAnimation, ((view), (target_pt)))
 
 #define move_view_begin(view, target_pt) do{ \
-	Animation* __anim = (Animation*) NGUX_NEW_EX(MoveViewAnimation, ((view), (target_pt))); 
+	Animation* __anim = (Animation*) HFCL_NEW_EX(MoveViewAnimation, ((view), (target_pt))); 
 
 #define move_view_end \
 	if(__group) __group->add(__anim); \
@@ -64,22 +64,22 @@
 
 
 #define scale_view_begin(view, target_rect) do{ \
-	Animation* __anim = (Animation*) NGUX_NEW_EX(ScaleViewAnimation, ((view), (target_rect))); 
+	Animation* __anim = (Animation*) HFCL_NEW_EX(ScaleViewAnimation, ((view), (target_rect))); 
 
 #define alpha_view_begin(view, target_alpha) do{ \
-	Animation* __anim = (Animation*) NGUX_NEW_EX(AlphaViewAnimation, ((view), (target_alpha)));
+	Animation* __anim = (Animation*) HFCL_NEW_EX(AlphaViewAnimation, ((view), (target_alpha)));
 
 #define scale_view_end \
 	if(__group) __group->add(__anim); \
 	ret_aim = __anim; } while(0);
 
-#define scale_view(view, target_rect) ret_aim = (Animation*) NGUX_NEW_EX(MoveViewAnimation, ((view), (target_rect)))
+#define scale_view(view, target_rect) ret_aim = (Animation*) HFCL_NEW_EX(MoveViewAnimation, ((view), (target_rect)))
 
 #define alpha_view_end \
 	if(__group) __group->add(__anim); \
 	ret_aim = __anim; } while(0);
 
-#define alpha_view(view, target_alpha) ret_aim = (Animation*) NGUX_NEW_EX(AlphaViewAnimation, ((view), (target_alpha)))
+#define alpha_view(view, target_alpha) ret_aim = (Animation*) HFCL_NEW_EX(AlphaViewAnimation, ((view), (target_alpha)))
 
 
 #define RunAnimation(anim_name, args) \

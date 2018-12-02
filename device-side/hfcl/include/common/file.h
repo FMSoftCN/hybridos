@@ -19,15 +19,15 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __NGUX_NGUXFILE_H__
-#define __NGUX_NGUXFILE_H__
+#ifndef __HFCL_NGUXFILE_H__
+#define __HFCL_NGUXFILE_H__
 
 #include "nguxcommon.h"
 #include "log.h"
 #include "mgcl.h"
 #include "hal_fs.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class File {
     public:
@@ -112,7 +112,7 @@ class File {
         long m_fileSize;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* __NGUX_NGUXFILE_H__ */
+#endif /* __HFCL_NGUXFILE_H__ */
 

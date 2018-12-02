@@ -19,14 +19,14 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __NGUX_DATETIME_H__
-#define __NGUX_DATETIME_H__
+#ifndef __HFCL_DATETIME_H__
+#define __HFCL_DATETIME_H__
 
 #include "nguxcommon.h"
 #include "log.h"
 #include "tm.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class NguxTime {
 	public:
@@ -130,7 +130,7 @@ class NguxTime {
             g_date_time = tm_ft.DateTime;
 
 			if (g_sys_time == NULL)
-				g_sys_time = NGUX_NEW_EX(NguxTime, ());
+				g_sys_time = HFCL_NEW_EX(NguxTime, ());
 
             TM_SYSTEMTIME systime;
             TM_FILETIME fileTime;
@@ -353,7 +353,7 @@ string FormatDateTimeString (const NguxTime *pTime,
  */
 #define TIMEINSECONDS (NguxTime::getSysTimeInSec())
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif  /* __NGUX_DATETIME_H__ */
+#endif  /* __HFCL_DATETIME_H__ */
 

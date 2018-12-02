@@ -23,7 +23,7 @@
 #include "graphicscontext.h"
 #include "trackbarview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 DEFINE_CLASS_NAME(TrackBarView)
 
@@ -37,8 +37,8 @@ void TrackBarView::initTrackBarView()
     m_border = 1;
     //m_startImg = NULL;
     //m_pauseImg = NULL;
-    //m_drTrackBar = NGUX_NEW(ImageDrawable);
-    //m_drThumbBlock = NGUX_NEW(ImageDrawable);
+    //m_drTrackBar = HFCL_NEW(ImageDrawable);
+    //m_drThumbBlock = HFCL_NEW(ImageDrawable);
 }
 
 TrackBarView::TrackBarView()
@@ -175,4 +175,4 @@ void TrackBarView::drawContent(GraphicsContext* context, IntRect &rc, int status
         }
     }
 }
-NAMESPACE_END
+} // namespace hfcl {

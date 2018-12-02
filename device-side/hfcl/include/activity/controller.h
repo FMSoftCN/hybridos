@@ -20,8 +20,8 @@
 */
 
 
-#ifndef NGUX_CONTROLLER_H
-#define NGUX_CONTROLLER_H
+#ifndef HFCL_CONTROLLER_H
+#define HFCL_CONTROLLER_H
 
 #include "nguxcommon.h"
 #include "log.h"
@@ -29,7 +29,7 @@
 #include "nguxevent.h"
 #include "appmanager.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 typedef unsigned long NGParam;
 
@@ -53,7 +53,7 @@ public:
 
 	void cleanAllClient();
 
-	virtual void exit() { NGUX_DELETE(this); }
+	virtual void exit() { HFCL_DELETE(this); }
 	
     ControllerClient* getTop(int index = 0);
 	void moveClientToTop(int view_id);
@@ -98,7 +98,7 @@ protected:
 
 #define CONTROLLER_CLIENT(view_id, ClientClass) \
 	case view_id:  \
-		return NGUX_NEW_EX(ClientClass, (this, \
+		return HFCL_NEW_EX(ClientClass, (this, \
 				view_id, \
 				getViewParent(view_id), \
 				param1, param2));
@@ -223,7 +223,7 @@ public:
 			m_owner->exit();
 		}
 		else {
-			NGUX_DELETE(this);
+			HFCL_DELETE(this);
 		}
 	}
 	
@@ -257,7 +257,7 @@ protected:
 };
 
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif
 

@@ -28,12 +28,12 @@
 
 #include "hal_misc.h"
 
-NGUX_BEGIN_EXTERN_C
+HFCL_BEGIN_EXTERN_C
 
 extern U8 isTransformArabic ( U16 inChar );
 
-NGUX_END_EXTERN_C
-NAMESPACE_BEGIN
+HFCL_END_EXTERN_C
+namespace hfcl {
 
 //define for roll text
 #define ROLLOFFSET 5
@@ -328,7 +328,7 @@ void TextView::startRoll()
 {
     stopRoll();
     if (getRollProp() && isNeedRoll()) {
-        AddRollText(this, NGUX_NEW_EX(RollTextTransition, (this, ROLLOFFSET)));
+        AddRollText(this, HFCL_NEW_EX(RollTextTransition, (this, ROLLOFFSET)));
         setRolling(true);
     }
 }
@@ -369,5 +369,5 @@ bool TextView::isNeedRoll()
 		DRDT_TEXT);
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

@@ -19,19 +19,19 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_NguxEventh
-#define _NGUX_NguxEventh
+#ifndef HFCL_COMMON_EVENT_H_
+#define HFCL_COMMON_EVENT_H_
+
 //return True if the event was handled, false otherwise.
 #define EVENT_HANDLED      1
 #define EVENT_NOT_HANDLED  0
 
-#include "nguxobject.h"
-#include "hal_misc.h"
-
-NAMESPACE_BEGIN
+#include "common/object.h"
 
 #define DISPATCH_CONTINUE_MSG  false
 #define DISPATCH_STOP_MSG      true
+
+namespace hfcl {
 
 class Event {
     public:
@@ -348,7 +348,6 @@ class EventBroadcaster
         EventListener* m_want_to_remove;        
 };
 
+} // namespace hfcl
 
-NAMESPACE_END
-
-#endif /* NGUX_NguxEvent.h */
+#endif /* HFCL_COMMON_EVENT_H_ */

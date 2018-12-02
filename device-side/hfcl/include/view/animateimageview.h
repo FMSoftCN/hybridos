@@ -20,14 +20,14 @@
 */
 
 
-#ifndef _NGUX_AnimateImageView_h
-#define _NGUX_AnimateImageView_h
+#ifndef _HFCL_AnimateImageView_h
+#define _HFCL_AnimateImageView_h
 
 #include "image.h"
 #include "view.h"
 #include "timerservice.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class AnimateImageView : public View, TimerEventListener
 {
@@ -118,7 +118,7 @@ class AnimateImageView : public View, TimerEventListener
         DWORD 	m_replaceColor;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* NGUX_ImageView_h */
+#endif /* HFCL_ImageView_h */
 

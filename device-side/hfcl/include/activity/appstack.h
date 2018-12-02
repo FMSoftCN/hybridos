@@ -20,12 +20,12 @@
 */
 
 
-#ifndef _NGUX_AppStack_h
-#define _NGUX_AppStack_h
+#ifndef _HFCL_AppStack_h
+#define _HFCL_AppStack_h
 
 #include "nguxcommon.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 class AppInfo;
 
 class BaseApp;
@@ -58,6 +58,6 @@ class AppStack
 		BaseApp* getExistAppRunBackgroundByName(const char * name);
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* _NGUX_AppStack_h */
+#endif /* _HFCL_AppStack_h */

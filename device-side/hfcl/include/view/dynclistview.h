@@ -23,7 +23,7 @@
 #ifndef  _DYNCLISTVIEW_H 
 #define  _DYNCLISTVIEW_H
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class BitMark;
 class PointerKeeper;
@@ -184,6 +184,6 @@ class DyncListView : public PanelView
         DECLARE_CLASS_NAME(DyncListView)
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif

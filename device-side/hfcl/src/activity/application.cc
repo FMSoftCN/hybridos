@@ -26,7 +26,7 @@
 #include "intent.h"
 #include "application.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 Application::Application()
     : Window()
@@ -134,5 +134,5 @@ void FullScreenApp::onCreate(ContextStream* contextStream, Intent* intent)
     createMainWindow();
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

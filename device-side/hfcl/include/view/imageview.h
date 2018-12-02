@@ -20,13 +20,13 @@
 */
 
 
-#ifndef _NGUX_ImageView_h
-#define _NGUX_ImageView_h
+#ifndef _HFCL_ImageView_h
+#define _HFCL_ImageView_h
 
 #include "image.h"
 #include "view.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ImageView : public View {
     public:
@@ -91,7 +91,7 @@ class ImageView : public View {
         int m_yo;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* NGUX_ImageView_h */
+#endif /* HFCL_ImageView_h */
 

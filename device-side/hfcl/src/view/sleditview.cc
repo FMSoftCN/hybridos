@@ -43,7 +43,7 @@ extern char m_edit_tempstr2[EDITOR_MAX_LEN];
 
 #define DEF_PSWD_CHAR       '*'
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 DEFINE_CLASS_NAME(SlEditView)
 
@@ -1682,5 +1682,5 @@ bool SlEditView::handleEvent(Event* event)
 	return true;
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

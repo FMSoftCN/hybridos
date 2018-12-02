@@ -5,16 +5,15 @@ noinst_LTLIBRARIES=libhfcl_common.la
 
 AM_CPPFLAGS=-D__HFCL_LIB__ -I../../include
 libhfcl_common_la_SOURCES = \
-    codeconvert.cc \
+    intrect.cc \
+    event.cc \
+    object.cc \
     contextstream.cc \
     datetime.cc \
-    file.cc \
-    intrect.cc \
     log.cc \
-    Makefile.am \
+    file.cc \
     methodeventlistener.cc \
-    nguxevent.cc \
-    nguxobject.cc \
-    quicksort.cc \
+    codeconvert.cc \
     rbtree.cc \
+    quicksort.cc \
     selectsort.cc

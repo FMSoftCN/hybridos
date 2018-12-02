@@ -19,10 +19,10 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __NGUX_URLPARSE_H__
-#define __NGUX_URLPARSE_H__
+#ifndef __HFCL_URLPARSE_H__
+#define __HFCL_URLPARSE_H__
 
 int URL_ParseDataGen(char const * strPtr,int * addrTable, int tableSize);
 
-#endif  // __NGUX_URLPARSE_H__
+#endif  // __HFCL_URLPARSE_H__
 

@@ -20,14 +20,14 @@
 */
 
 
-#ifndef _NGUX_EDITVIEW_H
-#define _NGUX_EDITVIEW_H
+#ifndef _HFCL_EDITVIEW_H
+#define _HFCL_EDITVIEW_H
 
 #define  EDITOR_MAX_LEN  1024
 #define MAX_VALUES_IN_CALCULATOR_3COMMA     51
 #define MAX_DIGIT_IN_CALCULATOR_3COMMA      20
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class EditView : public View
 {
@@ -203,7 +203,7 @@ protected:
     U16     m_writing_language;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif
 

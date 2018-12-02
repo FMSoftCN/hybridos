@@ -19,9 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "ngux.h"
-#include "nguxcommon.h"
-#include "codeconvert.h"
+#include "common/common.h"
+#include "common/codeconvert.h"
 
 #define NOT_CONVERTIBLE 0xFFFF
 

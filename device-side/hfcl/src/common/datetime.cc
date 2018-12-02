@@ -25,7 +25,7 @@
 
 #include "datetime.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 time_t NguxTime::g_date_time = 0;
 NguxTime* NguxTime::g_sys_time = NULL;
 
@@ -244,4 +244,4 @@ int Date::DayOfYear(int y, int m, int d)
     return c;
 }
 
-NAMESPACE_END
+} // namespace hfcl {

@@ -20,12 +20,12 @@
 */
 
 
-#ifndef __NGUX_STATUSBARVIEW_H__
-#define __NGUX_STATUSBARVIEW_H__
+#ifndef __HFCL_STATUSBARVIEW_H__
+#define __HFCL_STATUSBARVIEW_H__
 
 #include "panelview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class StatusBarView : public PanelView {
     public:
@@ -52,7 +52,7 @@ class StatusBarView : public PanelView {
         };
 
         //LIST(SBViewNode *, SBVList)
-		LISTEX(SBViewNode *, SBVList, do{return *v1 == *v2;}while (0), do{NGUX_DELETE(*n);} while (0));
+		LISTEX(SBViewNode *, SBVList, do{return *v1 == *v2;}while (0), do{HFCL_DELETE(*n);} while (0));
 
         StatusBarView(View* p_parent);
         StatusBarView(View* p_parent, DrawableSet* dr);
@@ -93,7 +93,7 @@ class StatusBarView : public PanelView {
         int    m_sbvRight;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif  // __NGUX_STATUSBARVIEW_H__
+#endif  // __HFCL_STATUSBARVIEW_H__
 

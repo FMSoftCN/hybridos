@@ -20,12 +20,12 @@
 */
 
 
-#ifndef __NGUX_BOXLAYOUTVIEW_H__
-#define __NGUX_BOXLAYOUTVIEW_H__
+#ifndef __HFCL_BOXLAYOUTVIEW_H__
+#define __HFCL_BOXLAYOUTVIEW_H__
 
 #include "layoutview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 typedef struct __tag_BoxLayoutNode {
     View* s_view;
@@ -81,8 +81,8 @@ class BoxLayoutView : public LayoutView {
         BoxLayoutNode* m_cells;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 
-#endif  /* __NGUX_BOXLAYOUTVIEW_H__ */
+#endif  /* __HFCL_BOXLAYOUTVIEW_H__ */
 

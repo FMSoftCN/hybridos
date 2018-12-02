@@ -27,7 +27,7 @@
 #include "nguxcommon.h"
 #include "contextstream.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 void AppStack::push(AppInfo *app)
 {
@@ -50,7 +50,7 @@ void AppStack::clear()
 		AppInfo *a = top();
 		pop();
 		// delete a;
-        NGUX_DELETE(a);
+        HFCL_DELETE(a);
 	}
 }
 
@@ -110,7 +110,7 @@ bool AppStack::remove(BaseApp *app)
 		if(a != NULL && a->getApp() == app)
 		{
 			m_apps.remove(a);
-			NGUX_DELETE(a);
+			HFCL_DELETE(a);
 			return true;
 		}
 	}
@@ -170,13 +170,13 @@ bool AppStack::move2Top(BaseApp *app)
 		AppInfo *_old = *item;
 		if(_old != NULL && _old->getApp() == app)
 		{
-    		AppInfo *app_info = NGUX_NEW_EX(AppInfo, (_old->getName(), app, NULL));
+    		AppInfo *app_info = HFCL_NEW_EX(AppInfo, (_old->getName(), app, NULL));
    			if(app_info)
    			{
    				m_apps.erase(item);	
 				// delete the old app info, but don't delete the baseapp
 				_old->setApp(NULL);
-				NGUX_DELETE(_old);
+				HFCL_DELETE(_old);
 				m_apps.push_back(app_info);
 				return true;
    			}
@@ -195,13 +195,13 @@ bool AppStack::move2Bottom(BaseApp *app)
 		AppInfo *_old = *item;
 		if(_old != NULL && _old->getApp() == app)
 		{
-    		AppInfo *app_info = NGUX_NEW_EX(AppInfo, (_old->getName(), app, NULL));
+    		AppInfo *app_info = HFCL_NEW_EX(AppInfo, (_old->getName(), app, NULL));
    			if(app_info)
    			{
    				m_apps.erase(item);	
 				// delete the old app info, but don't delete the baseapp
 				_old->setApp(NULL);
-				NGUX_DELETE(_old);
+				HFCL_DELETE(_old);
 				m_apps.push_front(app_info);
 				return true;
    			}
@@ -217,7 +217,7 @@ bool AppStack::pushBackgroundRunningApp(BaseApp *app)
 	{
 		if((*item)->getApp() == app)
 		{
-    		AppInfo *app_info = NGUX_NEW_EX(AppInfo, ((*item)->getName(), app, NULL));
+    		AppInfo *app_info = HFCL_NEW_EX(AppInfo, ((*item)->getName(), app, NULL));
    			if(app_info)
    			{
    				m_apps.pop_back();
@@ -236,7 +236,7 @@ bool AppStack::popBackgroundRunningApp(BaseApp *app)
 	{
 		if((*item)->getApp() == app)
 		{
-    		AppInfo *app_info = NGUX_NEW_EX(AppInfo, ((*item)->getName(), app, NULL));
+    		AppInfo *app_info = HFCL_NEW_EX(AppInfo, ((*item)->getName(), app, NULL));
    			if(app_info)
    			{
 				m_apps_runbackground.erase(item);
@@ -247,4 +247,4 @@ bool AppStack::popBackgroundRunningApp(BaseApp *app)
 	}
 	return false;
 }
-NAMESPACE_END
+} // namespace hfcl {

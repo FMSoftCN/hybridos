@@ -19,14 +19,14 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_ArrowTextView_h
-#define _NGUX_ArrowTextView_h
+#ifndef _HFCL_ArrowTextView_h
+#define _HFCL_ArrowTextView_h
 
 #include "view.h"
 #include "image.h"
 #include "textmode.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ArrowTextView : public View
 {
@@ -128,6 +128,6 @@ class ArrowTextView : public View
 };
 
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* _NGUX_ArrowTextView_h */
+#endif /* _HFCL_ArrowTextView_h */

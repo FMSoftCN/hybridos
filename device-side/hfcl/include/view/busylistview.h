@@ -23,7 +23,7 @@
 #ifndef  _BUSYLISTVIEW_H 
 #define  _BUSYLISTVIEW_H
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 ////////////////////// Features /////////////////////////
 class BitMark;
@@ -175,6 +175,6 @@ class BusyListView : public PanelView
         DECLARE_CLASS_NAME(BusyListView)
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif

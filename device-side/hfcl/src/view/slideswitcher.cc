@@ -22,7 +22,7 @@
 
 #include "slideswitcher.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 SlideSwitcher::SlideSwitcher(View * p_parent, DrawableSet* drset)
 	:PanelView(p_parent, drset)
@@ -398,5 +398,5 @@ bool SlideSwitcher::onKeyPressed(int keyCode)
 
 DEFINE_CLASS_NAME(SlideSwitcher)
 
-NAMESPACE_END
+} // namespace hfcl {
 

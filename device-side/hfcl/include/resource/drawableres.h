@@ -23,7 +23,7 @@
 #define __DRAWABLERES_H_
 
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class DrawableRes {
     public:
@@ -38,7 +38,7 @@ class DrawableRes {
         Drawable* m_drawable;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif /* DRAWABLERES_H_ */
 

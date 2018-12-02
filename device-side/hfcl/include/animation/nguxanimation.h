@@ -18,13 +18,13 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef _NGUX_ANIMATION_H
-#define _NGUX_ANIMATION_H
+#ifndef _HFCL_ANIMATION_H
+#define _HFCL_ANIMATION_H
 
 #include "mgcl.h"
 #include "nguxobject.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class Animation : public Object
 {
@@ -93,6 +93,6 @@ class Animation : public Object
         bool m_stop_in_progress;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif

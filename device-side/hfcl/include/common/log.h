@@ -19,49 +19,47 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __NGUX_LOG_H__
-#define __NGUX_LOG_H__
+#ifndef HFCL_COMMON_LOG_H_
+#define HFCL_COMMON_LOG_H_
 
 #include "common/common.h"
 #include "common/intrect.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class Log {
-    public:
-        ~Log();
-        static Log* getLog(void);
-        static void releaseLog(void);
+public:
+    ~Log();
+    static Log* getLog(void);
+    static void releaseLog(void);
 
-        bool enable(void) const { return m_enable; }
-        void setEnable(bool benable) { m_enable = benable; }
+    bool enable(void) const { return m_enable; }
+    void setEnable(bool benable) { m_enable = benable; }
 
-        int logPrintf(const char* head, const char* format, va_list args);
-        int logPrintf(const char* head, const char* file, const int line, const char* func,
-                const char* format, va_list args);
+    int logPrintf(const char* head, const char* format, va_list args);
+    int logPrintf(const char* head, const char* file, const int line, const char* func,
+            const char* format, va_list args);
 
 #ifndef __CC_ARM
-        void logDebug(const char* format, ...);
-        void logInfo(const char* format, ...);
-        void logError(const char* format, ...);
-        void logMemory(const char* format, ...);
-        void logHFLF(const char* head, const char* file, const int line, const char* func,
-                const char* format, ...);
-        void dumpRect(const IntRect& rc);
+    void logDebug(const char* format, ...);
+    void logInfo(const char* format, ...);
+    void logError(const char* format, ...);
+    void logMemory(const char* format, ...);
+    void logHFLF(const char* head, const char* file, const int line, const char* func,
+            const char* format, ...);
+    void dumpRect(const IntRect& rc);
 #endif
 
-    private:
-        Log(const char* logFile, bool benable);
+private:
+    Log(const char* logFile, bool benable);
 
-        FILE* m_fpLog;
-        bool  m_enable;
+    FILE* m_fpLog;
+    bool  m_enable;
 
-        static Log* m_log;
+    static Log* m_log;
 };
 
-NAMESPACE_END
-
-USE_NGUX_NAMESPACE 
+} // namespace hfcl
 
 #ifndef __CC_ARM
 #define LOGDEBUG Log::getLog()->logDebug
@@ -72,24 +70,23 @@ USE_NGUX_NAMESPACE
 #define LOGHFLF     Log::getLog()->logHFLF
 #define DUMPRECT    Log::getLog()->dumpRect
 
-
 /**
  * Normally we strip LOGV (VERBOSE messages) from release builds.
- * You can modify this (for example with "#define NGUX_NDEBUG 1"
+ * You can modify this (for example with "#define HFCL_NDEBUG 1"
  * at the top of your source file) to change that behavior.
  */
-#define NGUX_NDEBUG 1
-#ifndef	NGUX_LOG_NDEBUG
-#if defined(NGUX_NDEBUG) && !defined(MMI_NO_TRACE)
-#define	NGUX_LOG_NDEBUG	1
+#define HFCL_NDEBUG 1
+#ifndef	HFCL_LOG_NDEBUG
+#if defined(HFCL_NDEBUG) && !defined(MMI_NO_TRACE)
+#define	HFCL_LOG_NDEBUG	1
 #else
-#define	NGUX_LOG_NDEBUG	0
+#define	HFCL_LOG_NDEBUG	0
 #endif
 #endif
 
 // debug  print, macro difine
 #ifndef	LOGD
-#if	NGUX_LOG_NDEBUG
+#if	HFCL_LOG_NDEBUG
 #define	LOGD(...)   LOGHFLF("NGUX DEBUG >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
 #else
 #define	LOGD(...)   ((void)0)
@@ -98,7 +95,7 @@ USE_NGUX_NAMESPACE
 
 // info print, macro difine
 #ifndef	LOGI
-#if	NGUX_LOG_NDEBUG
+#if	HFCL_LOG_NDEBUG
 #define	LOGI(...)   LOGHFLF("NGUX INFO >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
 #else
 #define	LOGI(...)   ((void)0)
@@ -107,7 +104,7 @@ USE_NGUX_NAMESPACE
 
 // error  print, macro difine
 #ifndef	LOGE
-#if	NGUX_LOG_NDEBUG
+#if	HFCL_LOG_NDEBUG
 #define	LOGE(...)   LOGHFLF("NGUX Error >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
 #else
 #define	LOGE(...)   ((void)0)
@@ -137,5 +134,5 @@ USE_NGUX_NAMESPACE
 
 #endif /* __CC_ARM */
 
-#endif  /* __NGUX_LOG_H__ */
+#endif  /* HFCL_COMMON_LOG_H_ */
 

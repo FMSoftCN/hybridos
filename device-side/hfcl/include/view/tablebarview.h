@@ -35,8 +35,8 @@
  ** Create Date     : 星期三 九月 14, 2011
  */ 
 
-#ifndef _NGUX_TABLEBARVIEW_H
-#define _NGUX_TABLEBARVIEW_H
+#ifndef _HFCL_TABLEBARVIEW_H
+#define _HFCL_TABLEBARVIEW_H
 
 #include "compositeview.h"
 #include "pageview.h"
@@ -45,7 +45,7 @@
 #include "image.h"
 
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class TableBarView : public CompositeView{
 
@@ -180,6 +180,6 @@ public:
 	}
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif 

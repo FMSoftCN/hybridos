@@ -25,7 +25,7 @@
 
 extern BOOL IsArabicSet(void);
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define EDIT_FILED_WIDTH 16
 #define EDIT_FIELD_GAP 5
@@ -544,5 +544,5 @@ void FormatEditView::setTextFont(unsigned int font)
 
 DEFINE_CLASS_NAME(FormatEditView)
 
-NAMESPACE_END
+} // namespace hfcl {
 

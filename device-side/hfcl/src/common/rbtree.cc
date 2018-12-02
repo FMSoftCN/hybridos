@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "nguxconfig.h"
-#ifdef _NGUX_DONT_SUPPORT_TEMPLATE
+#ifdef _HFCL_DONT_SUPPORT_TEMPLATE
 #include "rbtree.h"
 
 static void __rb_rotate_left(struct rb_node *node, struct rb_root *root)

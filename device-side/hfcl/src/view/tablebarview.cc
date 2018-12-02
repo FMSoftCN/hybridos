@@ -23,7 +23,7 @@
 #include "graphicscontext.h"
 #include "tablebarview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 /*
 TableBarView:: TableBarView()
@@ -116,16 +116,16 @@ void TableBarView::setTableGapH(int value)
 TableItemView::~TableItemView()
 {
 	if(m_normalImg) {
-		NGUX_DELETE(m_normalImg);
+		HFCL_DELETE(m_normalImg);
 	}
 	if(m_selImg) {
-		NGUX_DELETE(m_selImg);
+		HFCL_DELETE(m_selImg);
 	}
 }
 
 void TableItemView::setNormalImage(Image* img) {
 	if(m_normalImg && img != m_normalImg) {
-		NGUX_DELETE(m_normalImg);
+		HFCL_DELETE(m_normalImg);
 		m_normalImg = NULL;
 	}
 	m_normalImg = img;
@@ -134,7 +134,7 @@ void TableItemView::setNormalImage(Image* img) {
 void TableItemView::setSelImage(Image* img) 
 {
 	if(m_selImg && img != m_selImg) {
-		NGUX_DELETE(m_selImg);
+		HFCL_DELETE(m_selImg);
 		m_selImg = NULL;
 	}
 	m_selImg = img;
@@ -289,9 +289,9 @@ bool TableBarView::addTablePage(const char * tableFile, const char* selectTableF
     if(!tableFile || !tableInfo)
         return false;
 
-    tableView = NGUX_NEW_EX(ImageView, ((char *)tableFile, 0, 0, 0, 0, 0, DRAWMODE_NORMAL, ALIGN_CENTER, VALIGN_MIDDLE)); 
+    tableView = HFCL_NEW_EX(ImageView, ((char *)tableFile, 0, 0, 0, 0, 0, DRAWMODE_NORMAL, ALIGN_CENTER, VALIGN_MIDDLE)); 
     if(selectTableFile)
-        selectView = NGUX_NEW_EX(ImageView, ((char *)selectTableFile, 0, 0, 0, 0, 0, DRAWMODE_NORMAL, ALIGN_CENTER, VALIGN_MIDDLE)); 
+        selectView = HFCL_NEW_EX(ImageView, ((char *)selectTableFile, 0, 0, 0, 0, 0, DRAWMODE_NORMAL, ALIGN_CENTER, VALIGN_MIDDLE)); 
    return addTablePage(tableView, selectView, tableInfo); 
 }
 #endif
@@ -301,7 +301,7 @@ bool TableBarView::addTablePage(Image* tableImg, Image* selectTableImg, View * t
     if(!tableImg && !tableInfo)
         return false;
 
-	TableItemView * item = NGUX_NEW_EX(TableItemView, (NULL, GROUP_GETDRAWABLESET(DRSET_TABITEM, ItemView)));
+	TableItemView * item = HFCL_NEW_EX(TableItemView, (NULL, GROUP_GETDRAWABLESET(DRSET_TABITEM, ItemView)));
 	item->setSelImage(selectTableImg);
 	item->setNormalImage(tableImg);
 
@@ -330,8 +330,8 @@ bool TableBarView:: init(void)
 {
    if(m_tablesGrid == NULL && m_pages == NULL)
    {
-       m_tablesGrid = NGUX_NEW_EX(GridView, (this, GROUP_GETDRAWABLESET(DRSET_TAB, GridView)));
-       m_pages = NGUX_NEW_EX(PageView, (this, GROUP_GETDRAWABLESET(DRSET_PAGE, PageView)));
+       m_tablesGrid = HFCL_NEW_EX(GridView, (this, GROUP_GETDRAWABLESET(DRSET_TAB, GridView)));
+       m_pages = HFCL_NEW_EX(PageView, (this, GROUP_GETDRAWABLESET(DRSET_PAGE, PageView)));
        //addChild(m_tablesGrid);
        //addChild(m_pages);
        return relayoutRect();
@@ -567,4 +567,4 @@ void TableItemView:: paint(GraphicsContext * context, int status)
 #endif
 #endif
 
-NAMESPACE_END
+} // namespace hfcl {

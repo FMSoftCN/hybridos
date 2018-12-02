@@ -18,12 +18,12 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef __NGUX_VIEWANIMATION_H_
-#define __NGUX_VIEWANIMATION_H_
+#ifndef __HFCL_VIEWANIMATION_H_
+#define __HFCL_VIEWANIMATION_H_
 
 #include "nguxanimation.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class View;
 
@@ -41,5 +41,5 @@ class ViewAnimation  : public Animation
 
 
 
-NAMESPACE_END
-#endif /* __NGUX_VIEWANIMATION_H_ */
+} // namespace hfcl {
+#endif /* __HFCL_VIEWANIMATION_H_ */

@@ -23,7 +23,7 @@
 #include "linelayoutview.h"
 
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 LineLayoutView::LineLayoutView()
     : m_node(0)
@@ -209,9 +209,9 @@ void LineLayoutView::removeAll(void)
         m_node = m_node->next;
         // TODO: delete View
         // delete curNode->s_view;
-        NGUX_DELETE(curNode->s_view);
+        HFCL_DELETE(curNode->s_view);
         // delete curNode;
-        NGUX_DELETE(curNode);
+        HFCL_DELETE(curNode);
     }
 
     m_node = NULL;
@@ -263,7 +263,7 @@ LineLayoutNode* LineLayoutView::newLineLayoutNode(View* aView, int aType, int aM
 
     LineLayoutNode* newNode = NULL;
 
-    newNode = NGUX_NEW(LineLayoutNode);
+    newNode = HFCL_NEW(LineLayoutNode);
     if (NULL == newNode)
         return NULL;
 
@@ -517,5 +517,5 @@ void LineLayoutView::remainingClearedNodeRect(LineLayoutNode* node)
 
 //====================== end private function define ==========================
 
-NAMESPACE_END
+} // namespace hfcl {
 

@@ -24,7 +24,7 @@
 #include "appinfo.h"
 #include "baseapp.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 
 AppInfo::AppInfo()
@@ -45,12 +45,12 @@ AppInfo::~AppInfo()
 {
     if (m_app)
         // delete m_app;
-        NGUX_DELETE(m_app);
+        HFCL_DELETE(m_app);
     m_app = NULL;
 	/*
     if (m_stream)
         // delete m_stream;
-        NGUX_DELETE(m_stream);
+        HFCL_DELETE(m_stream);
     m_stream = NULL;
     */
 }
@@ -85,5 +85,5 @@ void AppInfo::setContextStream(ContextStream* cs)
 	m_stream = cs;
 }
 */
-NAMESPACE_END
+} // namespace hfcl {
 

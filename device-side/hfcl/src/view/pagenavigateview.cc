@@ -24,7 +24,7 @@
 #include "imageview.h"
 #include "pageview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 PageNavigateView::PageNavigateView(int i_id,
                     int x, int y, int w, int h,
@@ -172,15 +172,15 @@ bool PageNavigateView::init()
 
     m_width = girc.width()/(total + 2);
 
-    m_panelView = NGUX_NEW_EX(ContainerView, (0, m_width, 0, girc.width() - m_width*2, girc.height()));
+    m_panelView = HFCL_NEW_EX(ContainerView, (0, m_width, 0, girc.width() - m_width*2, girc.height()));
 
     for(i = 0; i < total; i++)
     {
-        tmpImageView = NGUX_NEW_EX(ImageView, (m_normalImage, 0, i * m_width, 0, m_width, girc.height()));
+        tmpImageView = HFCL_NEW_EX(ImageView, (m_normalImage, 0, i * m_width, 0, m_width, girc.height()));
         m_panelView->addChild(tmpImageView);
     }
 
-    m_curImageView = NGUX_NEW_EX(ImageView, (m_curImage, 0, 0, 0, 0, 0));
+    m_curImageView = HFCL_NEW_EX(ImageView, (m_curImage, 0, 0, 0, 0, 0));
     m_curImageView->setRect(IntRect(0, 0, m_width, girc.height()));
 
     m_panelView->addChild(m_curImageView);
@@ -191,7 +191,7 @@ bool PageNavigateView::init()
 
     if(NULL != m_leftImage)
     {
-        m_leftImageView = NGUX_NEW_EX(ImageView, (m_leftImage, 0, 0, 0, 0, 0));
+        m_leftImageView = HFCL_NEW_EX(ImageView, (m_leftImage, 0, 0, 0, 0, 0));
 
         m_leftImageView->setRect(IntRect(0, 0, m_width, girc.height()));
         addChild(m_leftImageView);
@@ -200,7 +200,7 @@ bool PageNavigateView::init()
 
     if(NULL != m_rightImage)
     {
-        m_rightImageView = NGUX_NEW_EX(ImageView, (m_rightImage, 0, 0, 0, 0, 0));
+        m_rightImageView = HFCL_NEW_EX(ImageView, (m_rightImage, 0, 0, 0, 0, 0));
 
         m_rightImageView->setRect(IntRect(girc.width() - m_width, 0, girc.width(), girc.height()));
         addChild(m_rightImageView);
@@ -302,18 +302,18 @@ bool PageNavigateView::pageViewChanged()
         return false;
 
     removeChild(m_panelView);
-    NGUX_DELETE(m_panelView);
+    HFCL_DELETE(m_panelView);
 
     if(m_leftImageView)
     {
         removeChild(m_leftImageView);
-        NGUX_DELETE(m_leftImageView);
+        HFCL_DELETE(m_leftImageView);
     }
 
     if(m_rightImageView)
     {
         removeChild(m_rightImageView);
-        NGUX_DELETE(m_rightImageView);
+        HFCL_DELETE(m_rightImageView);
     }
 
     return init();
@@ -345,4 +345,4 @@ bool PageNavigateView::dispatchEvent(Event *event)
 }
 
 
-NAMESPACE_END
+} // namespace hfcl {

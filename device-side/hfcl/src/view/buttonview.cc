@@ -22,7 +22,7 @@
 
 #include "buttonview.h"
 #include "respkgmanager.h"
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define BTN_DEFAULT_WIDTH    40
 #define BTN_DEFAULT_HEIGHT   20
@@ -192,5 +192,5 @@ void ButtonView::onLoseFocus()
 
 DEFINE_CLASS_NAME(ButtonView)
 
-NAMESPACE_END
+} // namespace hfcl {
 

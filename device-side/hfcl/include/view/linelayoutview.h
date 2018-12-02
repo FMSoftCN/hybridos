@@ -20,12 +20,12 @@
 */
 
 
-#ifndef __NGUX_LINELAYOUTVIEW_H__
-#define __NGUX_LINELAYOUTVIEW_H__
+#ifndef __HFCL_LINELAYOUTVIEW_H__
+#define __HFCL_LINELAYOUTVIEW_H__
 
 #include "layoutview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 typedef struct __tag_LineLayoutNode {
     View* s_view;
@@ -93,7 +93,7 @@ class LineLayoutView : public LayoutView {
         int             m_lineHeight;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif  /* __NGUX_LINELAYOUTVIEW_H__ */
+#endif  /* __HFCL_LINELAYOUTVIEW_H__ */
 

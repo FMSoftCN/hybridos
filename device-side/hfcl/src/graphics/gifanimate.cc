@@ -23,10 +23,10 @@
 
 #include "gifanimate.h"
 
-//#define _NGUX_GIF_TRACE_ 1
+//#define _HFCL_GIF_TRACE_ 1
 
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define MAXCOLORMAPSIZE         256
 #define MAX_LWZ_BITS            12
@@ -414,7 +414,7 @@ static int ReadImage (MG_RWops* area, MYBITMAP* bmp, IMAGEDESC* ImageDesc, GIFSC
     bmp->depth = 8;
     bmpComputePitch (bmp->depth, bmp->w, &bmp->pitch, TRUE);
     // bmp->bits = (BYTE *)malloc (bmp->h * bmp->pitch);
-    bmp->bits = NGUX_NEW_ARR(BYTE, (bmp->h * bmp->pitch));
+    bmp->bits = HFCL_NEW_ARR(BYTE, (bmp->h * bmp->pitch));
 
     if(!bmp->bits)
         return -1;
@@ -486,7 +486,7 @@ void GifAnimate::createGifAnimateFromRes(BitmapFrameArray* bitmap_frame_array)
     {
         // frame = (GifAnimateFrame*) calloc(1, sizeof(GifAnimateFrame));
 
-        frame = NGUX_NEW(GifAnimateFrame);
+        frame = HFCL_NEW(GifAnimateFrame);
         curren_bitmap = bitmap_frame_array->frames + i; // add this
         if(!frame)
             return;
@@ -532,14 +532,14 @@ void GifAnimate::createGifAnimateFromRes(BitmapFrameArray* bitmap_frame_array)
     }
 
     m_mem_gc = CreateMemGc(m_max_width, m_max_height);
-#ifdef _NGUX_GIF_TRACE_ 
+#ifdef _HFCL_GIF_TRACE_ 
     if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
 		_DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromRes CreateMemGc Error. 1\n");
     }
 #endif
 }
 
-#ifdef _NGUX_INCORE_BMPDATA
+#ifdef _HFCL_INCORE_BMPDATA
 void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
 {
     unsigned char c;
@@ -551,21 +551,21 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
 	GifAnimateFrame *current = NULL;
 
     if (!(m_area = MGUI_RWFromMem ((void*)data, size))) {
-#ifdef _NGUX_GIF_TRACE_ 
+#ifdef _HFCL_GIF_TRACE_ 
         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (m_area == NULL).\n");
 #endif
         return;
     }
 
     if (ReadGIFGlobal (m_area, &m_GifScreen) < 0) {
-#ifdef _NGUX_GIF_TRACE_ 
+#ifdef _HFCL_GIF_TRACE_ 
         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ReadGIFGlobal < 0).\n");
 #endif
         return;
     }
 
     if ((ok = ReadOK (m_area, &c, 1)) == 0) {
-#ifdef _NGUX_GIF_TRACE_ 
+#ifdef _HFCL_GIF_TRACE_ 
         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ReadOK == 0).\n");
 #endif
         return;
@@ -575,7 +575,7 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
         switch (c) {
             case '!':
                 if ( (ok = ReadOK (m_area, &c, 1)) == 0) {
-#ifdef _NGUX_GIF_TRACE_ 
+#ifdef _HFCL_GIF_TRACE_ 
                     _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (case '!' ReadOK == 0).\n");
 #endif
                     return;
@@ -585,24 +585,24 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
 
             case ',':
                 if (ReadImageDesc (m_area, &ImageDesc, &m_GifScreen) < 0) {
-#ifdef _NGUX_GIF_TRACE_ 
+#ifdef _HFCL_GIF_TRACE_ 
                     _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ReadImageDesc < 0).\n");
 #endif
                     return;
                 }
                 else {
                     if (ReadImage (m_area, &mybmp, &ImageDesc, &m_GifScreen, 0) < 0) {
-#ifdef _NGUX_GIF_TRACE_ 
+#ifdef _HFCL_GIF_TRACE_ 
                         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ReadImage < 0).\n");
 #endif
                         return;
                     }
                 }
 
-                frame = NGUX_NEW(GifAnimateFrame);
+                frame = HFCL_NEW(GifAnimateFrame);
 
                 if(!frame) {
-#ifdef _NGUX_GIF_TRACE_ 
+#ifdef _HFCL_GIF_TRACE_ 
                     _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (new frame).\n");
 #endif
                     return;
@@ -617,12 +617,12 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
                 if(ExpandMyBitmap(HDC_SCREEN, &frame->bmp, &mybmp, ImageDesc.ColorMap, 0) != 0)
                 {
                     if(frame)
-                        NGUX_DELETE(frame);
+                        HFCL_DELETE(frame);
                     frame = NULL;
                     if(mybmp.bits)
-                        NGUX_DELETE_ARR(mybmp.bits);
+                        HFCL_DELETE_ARR(mybmp.bits);
                     mybmp.bits = NULL;
-#ifdef _NGUX_GIF_TRACE_ 
+#ifdef _HFCL_GIF_TRACE_ 
                     _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ExpandMyBitmap).\n");
 #endif
                     return;
@@ -644,7 +644,7 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
                 m_nr_frames++;
 
                 if(mybmp.bits)
-                    NGUX_DELETE_ARR(mybmp.bits);
+                    HFCL_DELETE_ARR(mybmp.bits);
 
                 if(m_nr_frames >= 2)
                 {
@@ -679,7 +679,7 @@ ret_tag_0:
 
     m_mem_gc = CreateMemGc(m_max_width, m_max_height);
 
-#ifdef _NGUX_GIF_TRACE_ 
+#ifdef _HFCL_GIF_TRACE_ 
     if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem CreateMemGc Error. 0\n");
     }
@@ -700,7 +700,7 @@ void GifAnimate::loadGifAnimateNextFrameFromMem()
 	if(NULL != (current = m_frames)) {
 		m_frames = m_frames->next;
 		UnloadBitmap(&current->bmp);
-		NGUX_DELETE(current);
+		HFCL_DELETE(current);
 		current = m_frames;
 		if(current)
              	current->prev = NULL;
@@ -724,7 +724,7 @@ void GifAnimate::loadGifAnimateNextFrameFromMem()
                         return;
                 }
 
-                frame = NGUX_NEW(GifAnimateFrame);
+                frame = HFCL_NEW(GifAnimateFrame);
 
 
                 if(!frame)
@@ -740,10 +740,10 @@ void GifAnimate::loadGifAnimateNextFrameFromMem()
                 if(ExpandMyBitmap(HDC_SCREEN, &frame->bmp, &mybmp, ImageDesc.ColorMap, 0) != 0)
                 {
                     if(frame)
-                        NGUX_DELETE(frame);
+                        HFCL_DELETE(frame);
                     frame = NULL;
                     if(mybmp.bits)
-                        NGUX_DELETE_ARR(mybmp.bits);
+                        HFCL_DELETE_ARR(mybmp.bits);
                     mybmp.bits = NULL;
                     return;
                 }
@@ -764,7 +764,7 @@ void GifAnimate::loadGifAnimateNextFrameFromMem()
                 m_nr_frames++;
 
                 if(mybmp.bits)
-                    NGUX_DELETE_ARR(mybmp.bits);
+                    HFCL_DELETE_ARR(mybmp.bits);
 
                 if(m_nr_frames >= 2)
                 {
@@ -798,7 +798,7 @@ ret_tag:
         }
 
         m_mem_gc = CreateMemGc(m_max_width, m_max_height);
-#ifdef _NGUX_GIF_TRACE_
+#ifdef _HFCL_GIF_TRACE_
         if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
             _DBG_PRINTF ("GifAnimate::createGifAnimateFromMem CreateMemGc Error. 0\n");
         }
@@ -851,7 +851,7 @@ void GifAnimate::createGifAnimateFromFile (const char* file)
                         return;
                 }
 
-                frame = NGUX_NEW(GifAnimateFrame);
+                frame = HFCL_NEW(GifAnimateFrame);
 
                 if(!frame)
                     return;
@@ -866,10 +866,10 @@ void GifAnimate::createGifAnimateFromFile (const char* file)
                 if(ExpandMyBitmap(HDC_SCREEN, &frame->bmp, &mybmp, ImageDesc.ColorMap, 0) != 0)
                 {
                     if(frame)
-                        NGUX_DELETE(frame);
+                        HFCL_DELETE(frame);
                     frame = NULL;
                     if(mybmp.bits)
-                        NGUX_DELETE_ARR(mybmp.bits);
+                        HFCL_DELETE_ARR(mybmp.bits);
                     mybmp.bits = NULL;
                     return;
                 }
@@ -889,7 +889,7 @@ void GifAnimate::createGifAnimateFromFile (const char* file)
 
                 m_nr_frames++;
                 if(mybmp.bits)
-                    NGUX_DELETE_ARR(mybmp.bits);
+                    HFCL_DELETE_ARR(mybmp.bits);
                 if(m_nr_frames >= 2)
                 {
                     ok = ReadOK (m_area, &c, 1);
@@ -922,7 +922,7 @@ ret_tag_0:
     }
 
     m_mem_gc = CreateMemGc(m_max_width, m_max_height);
-#ifdef _NGUX_GIF_TRACE_
+#ifdef _HFCL_GIF_TRACE_
     if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem CreateMemGc Error. 0\n");
     }
@@ -969,7 +969,7 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
                 }
 
                 // frame = (GifAnimateFrame*) calloc(1, sizeof(GifAnimateFrame));
-                frame = NGUX_NEW(GifAnimateFrame);
+                frame = HFCL_NEW(GifAnimateFrame);
 
                 if(!frame)
                     return;
@@ -984,10 +984,10 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
                 if(ExpandMyBitmap(HDC_SCREEN, &frame->bmp, &mybmp, ImageDesc.ColorMap, 0) != 0)
                 {
                     if(frame)
-                        NGUX_DELETE(frame);
+                        HFCL_DELETE(frame);
                     frame = NULL;
                     if(mybmp.bits)
-                        NGUX_DELETE_ARR(mybmp.bits);
+                        HFCL_DELETE_ARR(mybmp.bits);
                     mybmp.bits = NULL;
                     return;
                 }
@@ -1026,7 +1026,7 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
 
         m_mem_gc = CreateMemGc(m_max_width, m_max_height);
 
-#ifdef _NGUX_GIF_TRACE_
+#ifdef _HFCL_GIF_TRACE_
         if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
             _DBG_PRINTF ("GifAnimate::createGifAnimateFromMem CreateMemGc Error. 0\n");
         }
@@ -1076,7 +1076,7 @@ void GifAnimate::createGifAnimateFromFile (const char* file)
                 }
 
                 // frame = (GifAnimateFrame*) calloc(1, sizeof(GifAnimateFrame));
-                frame = NGUX_NEW(GifAnimateFrame);
+                frame = HFCL_NEW(GifAnimateFrame);
 
                 if(!frame)
                     return;
@@ -1091,10 +1091,10 @@ void GifAnimate::createGifAnimateFromFile (const char* file)
                 if(ExpandMyBitmap(HDC_SCREEN, &frame->bmp, &mybmp, ImageDesc.ColorMap, 0) != 0)
                 {
                     if(frame)
-                        NGUX_DELETE(frame);
+                        HFCL_DELETE(frame);
                     frame = NULL;
                     if(mybmp.bits)
-                        NGUX_DELETE_ARR(mybmp.bits);
+                        HFCL_DELETE_ARR(mybmp.bits);
                     mybmp.bits = NULL;
                     return;
                 }
@@ -1130,7 +1130,7 @@ void GifAnimate::createGifAnimateFromFile (const char* file)
 
 void GifAnimate::nextFrame(void)
 {
-#ifdef _NGUX_INCORE_BMPDATA
+#ifdef _HFCL_INCORE_BMPDATA
     m_nextFrameIndex++;
     if(m_nextFrameIndex >= 2)
     {
@@ -1155,7 +1155,7 @@ void GifAnimate::nextFrame(void)
 
 void GifAnimate::firstFrame(void)
 {
-#ifdef _NGUX_INCORE_BMPDATA
+#ifdef _HFCL_INCORE_BMPDATA
     int ok = 0;
     m_area->seek(m_area,0,SEEK_SET);
     
@@ -1215,7 +1215,7 @@ GifAnimate::GifAnimate(int ops) :RefCount(0)
     
     m_mem_gc = CreateMemGc(_ngux_screen_w, _ngux_screen_h);
 
-#ifdef _NGUX_GIF_TRACE_
+#ifdef _HFCL_GIF_TRACE_
 	if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
 		_DBG_PRINTF ("GifAnimate::GifAnimate CreateMemGc Error. 2\n");
 	}
@@ -1228,15 +1228,15 @@ GifAnimate::~GifAnimate()
 
 	while(NULL != (f = m_frames)) {
 		m_frames = m_frames->next;
-#ifdef _NGUX_INCORE_BMPDATA
+#ifdef _HFCL_INCORE_BMPDATA
 		UnloadBitmap(&f->bmp);
 #endif
-		NGUX_DELETE(f);
-#ifdef _NGUX_GIF_TRACE_
+		HFCL_DELETE(f);
+#ifdef _HFCL_GIF_TRACE_
 		_DBG_PRINTF ("GifAnimate::GifAnimate delete f=%x", f);
 #endif
 	}
-#ifdef _NGUX_INCORE_BMPDATA
+#ifdef _HFCL_INCORE_BMPDATA
     MGUI_RWclose (m_area);
 #endif
 
@@ -1291,13 +1291,13 @@ void GifAnimate::restorePrevFrame(const IntRect &rect, GifAnimateFrame* frame)
 void GifAnimate::drawFrameOnMem(const IntRect &rect, GifAnimateFrame* frame)
 {
     if (NULL == frame) {
-#ifdef _NGUX_GIF_TRACE_
+#ifdef _HFCL_GIF_TRACE_
         _DBG_PRINTF ("Error :: GifAnimate::drawFrameOnMem ... frame == NULL \n");
 #endif
         return;
     }
     if (NULL == m_mem_gc) {
-#ifdef _NGUX_GIF_TRACE_
+#ifdef _HFCL_GIF_TRACE_
         _DBG_PRINTF ("Error :: GifAnimate::drawFrameOnMem ... m_mem_gc == NULL \n");
 #endif
         return;
@@ -1319,21 +1319,21 @@ void GifAnimate::drawOneFrame(GraphicsContext* graphics,
 		const IntRect &rect, GifAnimateFrame* frame)
 { 
     if (NULL == graphics) {
-#ifdef _NGUX_GIF_TRACE_
+#ifdef _HFCL_GIF_TRACE_
         _DBG_PRINTF ("Error :: GifAnimate::drawOneFrame ... graphics == NULL \n");
 #endif
         return;
     }
     
     if (NULL == m_current_frame) {
-#ifdef _NGUX_GIF_TRACE_
+#ifdef _HFCL_GIF_TRACE_
         _DBG_PRINTF ("Error :: GifAnimate::drawOneFrame ... m_current_frame == NULL \n");
 #endif
         return;
     }
 
     if (NULL == m_mem_gc) {
-#ifdef _NGUX_GIF_TRACE_
+#ifdef _HFCL_GIF_TRACE_
         _DBG_PRINTF ("Error :: GifAnimate::drawOneFrame ... m_mem_gc == NULL \n");
 #endif
         return;
@@ -1345,6 +1345,6 @@ void GifAnimate::drawOneFrame(GraphicsContext* graphics,
 			m_max_width, m_max_height, rect.left(), rect.top(), 0);
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 
 

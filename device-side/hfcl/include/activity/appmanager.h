@@ -20,14 +20,14 @@
 */
 
 
-#ifndef _NGUX_AppManager_h
-#define _NGUX_AppManager_h
+#ifndef _HFCL_AppManager_h
+#define _HFCL_AppManager_h
 
 #include "mgcl.h"
 #include "nguxcommon.h"
 #include "appstack.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class Intent;
 class BaseApp;
@@ -123,6 +123,6 @@ private:
 	int  m_disableLockTick;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* NGUX_AppManager_h */
+#endif /* HFCL_AppManager_h */

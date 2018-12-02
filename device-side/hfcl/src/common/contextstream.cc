@@ -37,15 +37,15 @@
 #include <string.h>
 #include "contextstream.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define STREAM_BUF_LEN         256
 #define STRING_LENGTH_LEN      2
 
 ContextStream::ContextStream()
 {
-    m_buf = NGUX_NEW_ARR(char, (STREAM_BUF_LEN * sizeof(char)));
-    NGUX_ASSERT(m_buf != NULL);
+    m_buf = HFCL_NEW_ARR(char, (STREAM_BUF_LEN * sizeof(char)));
+    HFCL_ASSERT(m_buf != NULL);
     m_total = STREAM_BUF_LEN;
     m_inPos  = 0;
     m_outPos = 0;
@@ -54,7 +54,7 @@ ContextStream::ContextStream()
 ContextStream::~ContextStream()
 {
     if (NULL != m_buf) {
-        NGUX_DELETE_ARR(m_buf);
+        HFCL_DELETE_ARR(m_buf);
         m_buf = NULL;
     }
 }
@@ -248,15 +248,15 @@ ContextStream& ContextStream::output(char* data, unsigned short& len)
 inline void ContextStream::extendBuffer()
 {
     int size = (m_total + STREAM_BUF_LEN) * sizeof(char);
-    char* tmp_buf = NGUX_NEW_ARR(char, (size));
-    NGUX_ASSERT(tmp_buf != NULL);
+    char* tmp_buf = HFCL_NEW_ARR(char, (size));
+    HFCL_ASSERT(tmp_buf != NULL);
     memset(tmp_buf, 0x00, size);
     memcpy(tmp_buf, m_buf, m_total * sizeof(char));
     m_total += STREAM_BUF_LEN;
     if (NULL != m_buf)
-        NGUX_DELETE_ARR(m_buf);
+        HFCL_DELETE_ARR(m_buf);
     m_buf = tmp_buf;
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

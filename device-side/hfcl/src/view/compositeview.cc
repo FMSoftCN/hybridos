@@ -21,13 +21,13 @@
 
 #include "compositeview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 CompositeView::~CompositeView()
 {
 	if(m_drsets &&
 		!(m_drsets->isCommon()) ) {
-		NGUX_DELETE(m_drsets);
+		HFCL_DELETE(m_drsets);
 		m_drsets = NULL;
 	}
 }
@@ -52,7 +52,7 @@ DrawableSet* CompositeView::getDrawableSet(int i_id, unsigned int view_class)
 bool CompositeView::setDrawableSetGroup(DrawableSetGroup *g) 
 {
 	if(m_drsets != g && !(m_drsets->isCommon()) ) {
-		NGUX_DELETE(m_drsets);
+		HFCL_DELETE(m_drsets);
 		m_drsets = NULL;
 	}
 	m_drsets = g;
@@ -71,4 +71,4 @@ void CompositeView::updateDrawableSets(int i_id)
 
 DEFINE_CLASS_NAME(CompositeView)
 
-NAMESPACE_END
+} // namespace hfcl {

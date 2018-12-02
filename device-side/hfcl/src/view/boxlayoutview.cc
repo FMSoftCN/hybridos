@@ -25,7 +25,7 @@
 #include "boxlayoutview.h"
 
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 BoxLayoutView::BoxLayoutView()
     : m_count(0)
@@ -179,7 +179,7 @@ void BoxLayoutView::removeAllCell(void)
 {
     for (int i = 0; i < m_count; i++) {
         // delete m_cells[i].s_view;
-        NGUX_DELETE(m_cells[i].s_view);
+        HFCL_DELETE(m_cells[i].s_view);
         m_cells[i].s_view = NULL;
     }
 
@@ -191,12 +191,12 @@ void BoxLayoutView::resizeBoxLayout(int count)
     if (count == m_count)
         return;
 
-    BoxLayoutNode* cells = NGUX_NEW_ARR(BoxLayoutNode, count);
+    BoxLayoutNode* cells = HFCL_NEW_ARR(BoxLayoutNode, count);
     if (NULL != cells && m_count > 0) {
         memset(cells, 0x00, count * sizeof(BoxLayoutNode));
         memcpy(cells, m_cells, (m_count < count ? m_count : count) * sizeof(BoxLayoutNode));
         for (int i = count; i < m_count; i++) {
-            NGUX_DELETE(m_cells[i].s_view);
+            HFCL_DELETE(m_cells[i].s_view);
             m_cells[i].s_view = NULL;
         }
     }
@@ -288,7 +288,7 @@ void BoxLayoutView::recalVertBox(void)
     if (m_count <= 0)
         return;
 
-    int* sizes = NGUX_NEW_ARR(int, m_count);
+    int* sizes = HFCL_NEW_ARR(int, m_count);
     if (NULL == sizes)
         return;
 
@@ -305,7 +305,7 @@ void BoxLayoutView::recalVertBox(void)
     }
 
     if (NULL != sizes)
-        NGUX_DELETE_ARR(sizes);
+        HFCL_DELETE_ARR(sizes);
     sizes = NULL;
 }
 
@@ -314,7 +314,7 @@ void BoxLayoutView::recalHorzBox(void)
     if (m_count <= 0)
         return;
 
-    int* sizes = NGUX_NEW_ARR(int, m_count);
+    int* sizes = HFCL_NEW_ARR(int, m_count);
     if (NULL == sizes)
         return;
 
@@ -331,14 +331,14 @@ void BoxLayoutView::recalHorzBox(void)
     }
 
     if (NULL != sizes)
-        NGUX_DELETE_ARR(sizes);
+        HFCL_DELETE_ARR(sizes);
     sizes = NULL;
 }
 
 void BoxLayoutView::deleteCells(void)
 {
     if (NULL != m_cells && m_count > 0) {
-        NGUX_DELETE_ARR(m_cells);
+        HFCL_DELETE_ARR(m_cells);
         m_cells = NULL;
         m_count = 0;
     }
@@ -346,5 +346,5 @@ void BoxLayoutView::deleteCells(void)
 
 //====================== end private function define ==========================
 
-NAMESPACE_END
+} // namespace hfcl {
 

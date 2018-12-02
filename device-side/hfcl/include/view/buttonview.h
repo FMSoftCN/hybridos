@@ -20,12 +20,12 @@
 */
 
 
-#ifndef _NGUX_ButtonView_h
-#define _NGUX_ButtonView_h
+#ifndef _HFCL_ButtonView_h
+#define _HFCL_ButtonView_h
 
 #include "view.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ButtonView : public View {
 public:
@@ -106,6 +106,6 @@ private:
 	DECLARE_CLASS_NAME(ButtonView)
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* NGUX_ButtonView_h */
+#endif /* HFCL_ButtonView_h */

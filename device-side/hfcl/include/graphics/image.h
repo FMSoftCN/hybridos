@@ -19,8 +19,8 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_Image_h
-#define _NGUX_Image_h
+#ifndef _HFCL_Image_h
+#define _HFCL_Image_h
 
 #include "log.h"
 #include "nguxobject.h"
@@ -28,7 +28,7 @@
 #include "graphicscontext.h"
 #include "drawable-id.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 
 class Image : public RefCount {
@@ -65,7 +65,7 @@ class Image : public RefCount {
 
 AUTOPTR(Image)
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif  /* NGUX_Image_h */
+#endif  /* HFCL_Image_h */
 

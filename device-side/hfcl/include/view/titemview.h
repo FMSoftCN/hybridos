@@ -29,8 +29,8 @@
  *
  * use macro, you create a new file, such as my_item.h, and
  *
- * #ifndef _NGUX_MyItemView_h
- * #define _NGUX_MyItemView_h
+ * #ifndef _HFCL_MyItemView_h
+ * #define _HFCL_MyItemView_h
  *
  * #define ItemViewName MyItemView
  * #define ItemBaseName View
@@ -42,7 +42,7 @@
  * 
  */
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ItemViewName : public ItemBaseName
 {
@@ -87,5 +87,5 @@ protected:
 
 }; //end of ItemViewName
 
-NAMESPACE_END
+} // namespace hfcl {
 

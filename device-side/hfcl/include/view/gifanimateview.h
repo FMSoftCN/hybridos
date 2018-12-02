@@ -20,13 +20,13 @@
 */
 
 
-#ifndef _NGUX_GifAnimateView_h
-#define _NGUX_GifAnimateView_h
+#ifndef _HFCL_GifAnimateView_h
+#define _HFCL_GifAnimateView_h
 
 #include "view.h"
 #include "timerservice.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class GifAnimate;
 
@@ -97,6 +97,6 @@ class GifAnimateView : public View, TimerEventListener {
 	 	int m_drawLayer;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* NGUX_GifAnimateView_h */
+#endif /* HFCL_GifAnimateView_h */

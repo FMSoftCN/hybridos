@@ -20,13 +20,13 @@
 */
 
 
-#ifndef _NGUX_TEXTMODE_h
-#define _NGUX_TEXTMODE_h
+#ifndef _HFCL_TEXTMODE_h
+#define _HFCL_TEXTMODE_h
 
 #include "nguxcommon.h"
 #include "drawable-id.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class TextMode{
 	public:
@@ -104,6 +104,6 @@ class TextMode{
 };
 
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* NGUX_TextMode_h */
+#endif /* HFCL_TextMode_h */

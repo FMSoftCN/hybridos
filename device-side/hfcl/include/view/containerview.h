@@ -20,12 +20,12 @@
 */
 
 
-#ifndef _NGUX_ContainerView_h
-#define _NGUX_ContainerView_h
+#ifndef _HFCL_ContainerView_h
+#define _HFCL_ContainerView_h
 
 #include "view.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ContainerView : public View {
     public:
@@ -101,6 +101,6 @@ class ContainerView : public View {
 		bool isAutoSize(void) { return m_flags & AUTOSIZE; }
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* NGUX_ContainerView_h */
+#endif /* HFCL_ContainerView_h */

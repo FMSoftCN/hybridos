@@ -20,12 +20,12 @@
 */
 
 
-#ifndef __NGUX_PAIRLAYOUTVIEW_H__
-#define __NGUX_PAIRLAYOUTVIEW_H__
+#ifndef __HFCL_PAIRLAYOUTVIEW_H__
+#define __HFCL_PAIRLAYOUTVIEW_H__
 
 #include "layoutview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class PairLayoutView : public LayoutView {
     public:
@@ -90,7 +90,7 @@ class PairLayoutView : public LayoutView {
         int   m_firstSize;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif  /* __NGUX_PAIRLAYOUTVIEW_H__ */
+#endif  /* __HFCL_PAIRLAYOUTVIEW_H__ */
 

@@ -19,13 +19,13 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_MoveViewAnimation_h
-#define _NGUX_MoveViewAnimation_h
+#ifndef _HFCL_MoveViewAnimation_h
+#define _HFCL_MoveViewAnimation_h
 
 #include "viewanimation.h"
 #include "graphicscontext.h"//for Point
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class MoveViewAnimation : public ViewAnimation
 {
@@ -43,6 +43,6 @@ class MoveViewAnimation : public ViewAnimation
         void setProperty(int id, void *value);
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* _NGUX_MoveViewAnimation_h */
+#endif /* _HFCL_MoveViewAnimation_h */

@@ -24,7 +24,7 @@
 
 #include "font.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class FontRes {
     public:
@@ -42,7 +42,7 @@ class FontRes {
         Logfont* m_font;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif /* __FONTRES_H */
 

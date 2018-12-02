@@ -23,7 +23,7 @@
 #include "textmode.h"
 #include "respkgmanager.h"
 #include "menubarview.h"
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define MENUBAR_MARGIN  0
 #define MENUBAR_BORDER_LEN 16
@@ -55,13 +55,13 @@ MenuBarView::MenuBarView(View* p_parent, DrawableSet* drset)
 MenuBarView::~MenuBarView()
 {
 	if(m_left_image) {
-		NGUX_DELETE(m_left_image);
+		HFCL_DELETE(m_left_image);
 	}
 	if(m_middle_image) {
-		NGUX_DELETE(m_middle_image);
+		HFCL_DELETE(m_middle_image);
 	}
 	if(m_right_image) {
-		NGUX_DELETE(m_right_image);
+		HFCL_DELETE(m_right_image);
 	}
 }
 
@@ -377,7 +377,7 @@ void MenuBarView::setLeftImage(Image* image)
 		return;
 	
 	if (m_left_image != NULL) {
-		NGUX_DELETE(m_left_image);
+		HFCL_DELETE(m_left_image);
 	}
 
 	m_left_image = image;
@@ -392,7 +392,7 @@ void MenuBarView::setMiddleImage(Image* image)
 		return;
 	
 	if (m_middle_image != NULL) {
-		NGUX_DELETE(m_middle_image);
+		HFCL_DELETE(m_middle_image);
 	}
 
     IntRect rc;
@@ -405,7 +405,7 @@ void MenuBarView::setRightImage(Image* image)
 		return;
 	
 	if (m_right_image != NULL) {
-		NGUX_DELETE(m_right_image);
+		HFCL_DELETE(m_right_image);
 	}
 
     IntRect rc;
@@ -457,5 +457,5 @@ void MenuBarView::pressItem(int item, bool bpress)
 
 DEFINE_CLASS_NAME(MenuBarView)
 
-NAMESPACE_END
+} // namespace hfcl {
 

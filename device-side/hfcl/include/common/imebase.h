@@ -24,7 +24,7 @@
 
 #include "imeres.h"
 
-USE_NGUX_NAMESPACE
+using ::hfcl;
 
 typedef enum {
     SHIFT_STATE_INIT,

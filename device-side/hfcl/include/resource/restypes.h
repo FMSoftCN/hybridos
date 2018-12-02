@@ -18,8 +18,8 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef NGUX_RESTYPE_H
-#define NGUX_RESTYPE_H
+#ifndef HFCL_RESTYPE_H
+#define HFCL_RESTYPE_H
 
 #include "nguxcommon.h"
 
@@ -151,7 +151,7 @@ enum ResEncoding
 };
 
 #ifdef __cplusplus
-NAMESPACE_BEGIN
+namespace hfcl {
 /////////////////////////////////////////////////
 //the inner resource support
 typedef struct INNER_RES_INFO {
@@ -233,7 +233,7 @@ typedef struct TRDrawableSetGroupArrayItem {
 
 
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif
 #endif

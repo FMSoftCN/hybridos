@@ -22,7 +22,7 @@
 #include "scaleviewanimation.h"
 #include "view.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 void ScaleViewAnimation::setProperty(int id, void* value){
 	getView()->setRect(*(IntRect*)value);
@@ -35,4 +35,4 @@ void ScaleViewAnimation::onStart(){
 	setStartValue((void *)&(view->getRect()));
 }
 
-NAMESPACE_END
+} // namespace hfcl {

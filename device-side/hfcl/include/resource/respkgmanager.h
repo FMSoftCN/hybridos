@@ -32,7 +32,7 @@
 #include "ngux_string_ids.h"
 #include "ngux_nl10n_string_ids.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ResPackage;
 class Menu;
@@ -122,7 +122,7 @@ int GetResourceLanguage (void);
 const char * GetTextRes (HTResId id);
 const char* GetPLMNDisplayName (const char* plmn);
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif /* __RESPKGMANAGER_H */
 

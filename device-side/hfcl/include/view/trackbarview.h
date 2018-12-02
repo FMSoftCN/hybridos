@@ -20,12 +20,12 @@
 */
 
 
-#ifndef _NGUX_TrackBarView_h
-#define _NGUX_TrackBarView_h
+#ifndef _HFCL_TrackBarView_h
+#define _HFCL_TrackBarView_h
 
 #include "view.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class TrackBarView : public View
 {
@@ -91,5 +91,5 @@ class TrackBarView : public View
 	DECLARE_CLASS_NAME(TrackBarView)
 };
 
-NAMESPACE_END
-#endif /*_NGUX_TrackBarView_h*/
+} // namespace hfcl {
+#endif /*_HFCL_TrackBarView_h*/

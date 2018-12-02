@@ -22,7 +22,7 @@
 
 #include "itemview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 bool ItemView::g_is_all_itemview_need_convert = false;
 
@@ -162,4 +162,4 @@ void ItemView::setItemHeight(int h)
 
 DEFINE_CLASS_NAME(ItemView)
 
-NAMESPACE_END
+} // namespace hfcl {

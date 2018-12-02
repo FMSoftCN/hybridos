@@ -19,10 +19,10 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "nguxcommon.h"
-#include "intrect.h"
+#include "common/common.h"
+#include "common/intrect.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 void IntRect::join(int i_left, int i_top, int i_right, int i_bottom)
 {
@@ -57,5 +57,5 @@ void IntRect::sort()
     }
 }
 
-NAMESPACE_END
+} // namespace hfcl
 

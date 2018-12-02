@@ -89,4 +89,4 @@ Glyph32* NGUCS2ConvertToGlyph32 (const unsigned short* ucs2Text, int* nrGlyphs, 
 }
 #endif
 
-#endif //_NGUX_COMM_H
+#endif //_HFCL_COMM_H

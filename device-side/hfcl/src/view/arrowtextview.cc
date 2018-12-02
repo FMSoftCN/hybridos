@@ -23,7 +23,7 @@
 #include "arrowtextview.h"
 #include "transition.h"
 #include "respkgmanager.h"
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define SPACE 2
 
@@ -32,11 +32,11 @@ DEFINE_CLASS_NAME(ArrowTextView)
 ArrowTextView:: ~ArrowTextView()
 {
 	if(m_limg) {
-		NGUX_DELETE(m_limg);
+		HFCL_DELETE(m_limg);
 	}
 
 	if(m_rimg) {
-		NGUX_DELETE(m_rimg);
+		HFCL_DELETE(m_rimg);
 	}
 	
 	stopRollText();
@@ -81,7 +81,7 @@ char* ArrowTextView::getText(void)
 void ArrowTextView::setRightImage(Image *img) 
 { 
 	if(m_rimg && img != m_rimg) {
-		NGUX_DELETE(m_rimg);
+		HFCL_DELETE(m_rimg);
 		m_rimg = NULL;
 	}
 	m_rimg = img;
@@ -90,7 +90,7 @@ void ArrowTextView::setRightImage(Image *img)
 void ArrowTextView::setLeftImage(Image *img) 
 { 
 	if(m_limg && img != m_limg) {
-		NGUX_DELETE(m_limg);
+		HFCL_DELETE(m_limg);
 		m_limg = NULL;
 	}
 	m_limg = img;
@@ -204,7 +204,7 @@ void ArrowTextView::startRollText()
 				(HTData)&ft,
 				DRDT_FORMATTEXT))
 	{
-		AddRollText(this, NGUX_NEW_EX(RollTextTransition, (this, 2)));
+		AddRollText(this, HFCL_NEW_EX(RollTextTransition, (this, 2)));
 	}
 }
 
@@ -220,4 +220,4 @@ void ArrowTextView::setTextFont(unsigned int font)
         updateView();
 }    
 
-NAMESPACE_END
+} // namespace hfcl {

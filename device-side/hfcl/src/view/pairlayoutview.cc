@@ -22,7 +22,7 @@
 
 #include "pairlayoutview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 PairLayoutView::PairLayoutView(View* aFirV, View* aSecV, int aStyle, int aSize)
     : m_firstView(aFirV)
@@ -218,13 +218,13 @@ void PairLayoutView::removeAll(void)
 {
     if (NULL != m_firstView) {
         // delete m_firstView;
-        NGUX_DELETE(m_firstView);
+        HFCL_DELETE(m_firstView);
         m_firstView = NULL;
     }
 
     if (NULL != m_secondView) {
         // delete m_secondView;
-        NGUX_DELETE(m_secondView);
+        HFCL_DELETE(m_secondView);
         m_secondView = NULL;
     }
 }
@@ -273,5 +273,5 @@ void PairLayoutView::calcHorzFirstSecondSize(const IntRect& pirc, IntRect& fIrc,
 
 //====================== end private function define ==========================
 
-NAMESPACE_END
+} // namespace hfcl {
 

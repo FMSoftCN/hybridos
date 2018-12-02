@@ -261,12 +261,12 @@
 #define end_menu_res    return ret_menu; }
 
 #define begin_menu() \
-    do { Menu* __menu = NGUX_NEW_EX(Menu, ()); \
+    do { Menu* __menu = HFCL_NEW_EX(Menu, ()); \
         setMenu(Parent, _parent) \
         _parent = __menu;
 
 #define begin_theme_menu(list_theme_drset_id, item_theme_drset_id, menubar_theme_drset_id) \
-	do { Menu* __menu = NGUX_NEW_EX(Menu, (list_theme_drset_id, item_theme_drset_id, menubar_theme_drset_id)); \
+	do { Menu* __menu = HFCL_NEW_EX(Menu, (list_theme_drset_id, item_theme_drset_id, menubar_theme_drset_id)); \
 		setMenu(Parent, _parent) \
 		_parent = __menu;
 
@@ -312,12 +312,12 @@
 #define data_get_int(id)    (int)data_get(id, 0)
 
 #define begin_view(view_class) \
-    do { view_class* __view = NGUX_NEW_EX(view_class, (_parent)); \
+    do { view_class* __view = HFCL_NEW_EX(view_class, (_parent)); \
         View* _parent = (View*)__view; \
         _parent = _parent;
 
 #define begin_theme_view(view_class, theme_drset_id) \
-	    do { view_class* __view = NGUX_NEW_EX(view_class, (_parent, GetDrawableSetResFromTheme(theme_drset_id))); \
+	    do { view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSetResFromTheme(theme_drset_id))); \
 		__view->themeAble(true); \
 		__view->setThemeDrsetId(theme_drset_id); \
         View* _parent = (View*)__view; \
@@ -326,23 +326,23 @@
 #define begin_view_ex(view_class, drsetid) \
     do { \
         view_class* __view; \
-        __view = NGUX_NEW_EX(view_class, (_parent, GetDrawableSetRes(drsetid))); \
+        __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSetRes(drsetid))); \
         View* _parent = (View*)__view; \
         _parent = _parent;
 
 #define begin_view_id_ex(view_class, view_classname, setid) \
     do { \
-        view_class* __view = NGUX_NEW_EX(view_class, (_parent, GetDrawableSelector(RESPKGID, #view_classname, setid))); \
+        view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSelector(RESPKGID, #view_classname, setid))); \
         View* _parent = (View*)__view; \
         _parent = _parent;
 
 #define begin_scrollable_view(view_class) \
-    do { view_class* __view = NGUX_NEW_EX(view_class, (_parent)); \
+    do { view_class* __view = HFCL_NEW_EX(view_class, (_parent)); \
         ContainerView* _parent = __view->content(); \
         _parent = _parent;
 
 #define begin_theme_scrollable_view(view_class, theme_drset_id) \
-    do { view_class* __view = NGUX_NEW_EX(view_class, (_parent, GetDrawableSetResFromTheme(theme_drset_id))); \
+    do { view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSetResFromTheme(theme_drset_id))); \
 		__view->themeAble(true); \
 		__view->setThemeDrsetId(theme_drset_id); \
         ContainerView* _parent = __view->content(); \
@@ -352,37 +352,37 @@
     do { \
         view_class* __view; \
         if(!strcmp(#setid,"0"))\
-            __view = NGUX_NEW_EX(view_class, (_parent, GetDrawableSelector(RESPKGID, #view_classname, 0))); \
+            __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSelector(RESPKGID, #view_classname, 0))); \
         else\
-            __view = NGUX_NEW_EX(view_class, (_parent, GetDrawableSelector(RESPKGID, #view_classname, RESID(drset_##setid)))); \
+            __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSelector(RESPKGID, #view_classname, RESID(drset_##setid)))); \
         ContainerView* _parent = __view->content(); \
         _parent = _parent;
 
 #define begin_scrollable_view_id_ex(view_class, view_classname, setid) \
     do { \
-        view_class* __view = NGUX_NEW_EX(view_class, (_parent, GetDrawableSelector(RESPKGID, #view_classname, setid))); \
+        view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSelector(RESPKGID, #view_classname, setid))); \
         ContainerView* _parent = __view->content(); \
         _parent = _parent;
 
 #define begin_item(view_class) \
-    do { view_class* __view = NGUX_NEW(view_class); \
+    do { view_class* __view = HFCL_NEW(view_class); \
         ((ListView*)_parent)->addItem((ItemView*)__view); \
         View *_parent = (View*)__view; 
 
 #define begin_theme_item(view_class, theme_drset_id) \
-    do { view_class* __view = NGUX_NEW_EX(view_class, (_parent, GetDrawableSetResFromTheme(theme_drset_id))); \
+    do { view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSetResFromTheme(theme_drset_id))); \
         __view->themeAble(true); \
         __view->setThemeDrsetId(theme_drset_id); \
         ((ListView*)_parent)->addItem((ItemView*)__view); \
         View* _parent = (View*)__view; \
 
 #define begin_item_ex(view_class, drset) \
-    do { view_class* __view = NGUX_NEW_EX(view_class, (NULL, GetDrawableSetRes(drset))); \
+    do { view_class* __view = HFCL_NEW_EX(view_class, (NULL, GetDrawableSetRes(drset))); \
         ((ListView*)_parent)->addItem((ItemView*)__view); \
         View *_parent = (View*)__view;
 
 #define begin_composite_view(view_class, drset_group_id) \
-    do { view_class* __view = NGUX_NEW_EX(view_class, (_parent, GetDrawableSetGroupRes(drset_group_id))); \
+    do { view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSetGroupRes(drset_group_id))); \
         View* _parent = (View*)__view; 
 
 #define end_item end_view

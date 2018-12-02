@@ -32,7 +32,7 @@
 
 #include "hal_misc.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 Controller::Controller(): m_modalCount(0) {
 }
@@ -52,7 +52,7 @@ unsigned int Controller::showView(int view_id, NGParam param1, NGParam param2) /
 	if(!AppManager::getInstance()->appIsExist((BaseApp *)this)) // the current client or app maybe destory durning create client.
 		return 1;
 	
-	_DBG_PRINTF ("NGUX_CONT_TRACE -- controller -- create client <%p>", client);
+	_DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- create client <%p>", client);
 
 	ControllerClient* top = getTop();
 
@@ -60,7 +60,7 @@ unsigned int Controller::showView(int view_id, NGParam param1, NGParam param2) /
 
 	//push it into the top
 	push(client);
-	_DBG_PRINTF ("NGUX_CONT_TRACE -- controller -- showView ---- view count : %d", getClientCount());
+	_DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- showView ---- view count : %d", getClientCount());
 
 	if(top) {
         _DBG_PRINTF ("Controller::showView: calling inactive() for %p", top);
@@ -84,7 +84,7 @@ void Controller::animationSwitch(ControllerClient* prev, ControllerClient* cur)
 	//TODO
 	Point destp = {0, 0};
 	Point srcp = {240,0};
-	MoveViewAnimation *animation = NGUX_NEW_EX(MoveViewAnimation, (cur, srcp));
+	MoveViewAnimation *animation = HFCL_NEW_EX(MoveViewAnimation, (cur, srcp));
 	animation->setPoint(destp);
 	animation->setDiration(1000);
 	animation->setLoopCount(1);
@@ -102,7 +102,7 @@ unsigned int Controller::switchView(int view_id, NGParam param1, NGParam param2)
 
 	client->setModal(false);
 
-	_DBG_PRINTF ("NGUX_CONT_TRACE -- controller -- create client <%p>", client);
+	_DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- create client <%p>", client);
 
 	ControllerClient* top = getTop();
 
@@ -184,7 +184,7 @@ void Controller::push(ControllerClient* client)
 	if(!client)
 		return ;
 	
-	_DBG_PRINTF ("NGUX_CONT_TRACE -- controller -- push client <%p>", client);
+	_DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- push client <%p>", client);
 
 	m_list.push_front(client);
 }
@@ -211,7 +211,7 @@ void Controller::moveClientToTop(int view_id)
             if(i == 0) //the view id at top
                 return;
 
-            //NGUX_DELETE(*it);don't destrory the instance
+            //HFCL_DELETE(*it);don't destrory the instance
             i = 0xff;
             break;
         }
@@ -219,7 +219,7 @@ void Controller::moveClientToTop(int view_id)
 
 	if( client && ( i == 0xff ) )
 	{
-		_DBG_PRINTF ("NGUX_CONT_TRACE -- controller -- remove client <%p>", client);
+		_DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- remove client <%p>", client);
 		m_list.remove(client);
 
 		top = getTop(0);
@@ -285,8 +285,8 @@ void Controller::setTop(ControllerClient* client, int index)
 	if (_clt != NULL)
 	{
 		_clt->cleanBaseView();
-		_DBG_PRINTF ("NGUX_CONT_TRACE -- controller -- delete client <%p>", _clt);
-		NGUX_DELETE(_clt);
+		_DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- delete client <%p>", _clt);
+		HFCL_DELETE(_clt);
 		*it = client;
 	}
 }
@@ -301,12 +301,12 @@ void Controller::pop(int pop_count)
     while(pop_count > 0 && it != m_list.end()) 
     {
 		ControllerClient *_clt = *it;
-		_DBG_PRINTF ("NGUX_CONT_TRACE -- controller -- remove client <%p>", _clt);
+		_DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- remove client <%p>", _clt);
 		++it;
 		m_list.remove(_clt);
 
-		_DBG_PRINTF ("NGUX_CONT_TRACE -- controller -- delete client <%p>", _clt);
-		NGUX_DELETE(_clt);
+		_DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- delete client <%p>", _clt);
+		HFCL_DELETE(_clt);
 		pop_count --;
 	}
 }
@@ -335,7 +335,7 @@ void Controller::deleteView(int view_id, bool bExit)
     if(NULL == _client)
         return;
 	
-	_DBG_PRINTF ("NGUX_CONT_TRACE -- controller -- remove client <%p>", _client);
+	_DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- remove client <%p>", _client);
 
 	if(m_modalCount > 0) {
 		if(_client && _client->isModal()) {
@@ -349,8 +349,8 @@ void Controller::deleteView(int view_id, bool bExit)
     m_list.remove(_client);
 
 	_client->cleanBaseView();
-    NGUX_DELETE(_client);
-	_DBG_PRINTF ("NGUX_CONT_TRACE -- controller -- delete client <%p>", _client);
+    HFCL_DELETE(_client);
+	_DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- delete client <%p>", _client);
 
 	if (bExit && getClientCount() <= 0)
 	{
@@ -412,14 +412,14 @@ ControllerClient::~ControllerClient()
 
 void ControllerClient::cleanBaseView()
 {
-	_DBG_PRINTF ("NGUX_CONT_TRACE -- controller -- clear client <%p>", this);
+	_DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- clear client <%p>", this);
 
     if(m_baseView) {
 		ContainerView *p = m_baseView->parent(); 
         if(p != NULL){
             p->removeChild(m_baseView);
         } else {
-            NGUX_DELETE(m_baseView);
+            HFCL_DELETE(m_baseView);
         }
         m_baseView = NULL;
     }
@@ -442,7 +442,7 @@ int ControllerClient::GetValueFromCurrentMode(int mode_id, int sub_id)
     return -1;
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 
 
 

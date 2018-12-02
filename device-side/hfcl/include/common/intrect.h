@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __NGUX_INTRECT_H__
-#define __NGUX_INTRECT_H__
+#ifndef __HFCL_INTRECT_H__
+#define __HFCL_INTRECT_H__
 
 #include "common/common.h"
 
@@ -305,5 +305,5 @@ class IntRect {
 
 } // namespace hfcl
 
-#endif /* __NGUX_INTRECT_H__ */
+#endif /* __HFCL_INTRECT_H__ */
 

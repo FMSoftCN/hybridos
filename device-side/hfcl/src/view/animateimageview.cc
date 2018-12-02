@@ -30,7 +30,7 @@
 #include "animateimageview.h"
 #include "timerservice.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 AnimateImageView::AnimateImageView(View* p_parent)
     : View(p_parent, NULL)
@@ -72,7 +72,7 @@ AnimateImageView::~AnimateImageView()
 {
 	stop();
 	if(m_image) {
-		NGUX_DELETE(m_image);
+		HFCL_DELETE(m_image);
 	}
 }
 
@@ -98,7 +98,7 @@ bool AnimateImageView::setImage(Image *pImg)
 	}
 
 	if (m_image != NULL) {
-		NGUX_DELETE(m_image);
+		HFCL_DELETE(m_image);
 	}
 
 	m_image = pImg;
@@ -222,5 +222,5 @@ bool AnimateImageView::handleEvent(Event* event)
 
 DEFINE_CLASS_NAME(AnimateImageView)
 
-NAMESPACE_END
+} // namespace hfcl {
 

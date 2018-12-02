@@ -20,14 +20,14 @@
 */
 
 
-#ifndef _NGUX_SLEDITVIEW_H_
-#define _NGUX_SLEDITVIEW_H_
+#ifndef _HFCL_SLEDITVIEW_H_
+#define _HFCL_SLEDITVIEW_H_
 
 #include "editview.h"
 #include "graphicscontext.h"
 #include "timerservice.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 
 class SlEditView : public EditView, public TimerEventListener
@@ -109,8 +109,8 @@ private:
     bool  m_highlight;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif // _NGUX_SLEDITVIEW_H_
+#endif // _HFCL_SLEDITVIEW_H_
 
 

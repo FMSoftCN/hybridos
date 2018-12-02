@@ -20,14 +20,14 @@
 */
 
 
-#ifndef NGUX_RollableText_h
-#define NGUX_RollableText_h
+#ifndef HFCL_RollableText_h
+#define HFCL_RollableText_h
 
 #include "nguxevent.h"
 #include "view.h"
 #include "timerservice.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 
 class Transition;
@@ -69,7 +69,7 @@ class Transition
 		virtual ~Transition() { }
 
 		//use for mem manager
-		virtual void release() { NGUX_DELETE(this); }
+		virtual void release() { HFCL_DELETE(this); }
 };
 
 class RollTextTransition : public Transition 
@@ -121,7 +121,7 @@ void AddRollText(View *view, Transition* t);
 void RemoveRollText(View* view);
 void ResetRollText(View *view);
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif
 

@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __NGUX_QUICKSORT_H__
-#define __NGUX_QUICKSORT_H__
+#ifndef __HFCL_QUICKSORT_H__
+#define __HFCL_QUICKSORT_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,5 +34,5 @@ void quickSort(void* base, unsigned num, unsigned width, Compare comp);
 }
 #endif  /* __cplusplus */
 
-#endif  // __NGUX_QUICKSORT_H__
+#endif  // __HFCL_QUICKSORT_H__
 

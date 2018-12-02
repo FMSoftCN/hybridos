@@ -19,12 +19,12 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_COLOR_H_
-#define _NGUX_COLOR_H_
+#ifndef _HFCL_COLOR_H_
+#define _HFCL_COLOR_H_
 
 #include "nguxcommon.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class Color /*: public Object*/{
 public:
@@ -356,6 +356,6 @@ private:
     Uint8 m_a;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /*_NGUX_COLOR_H_*/
+#endif /*_HFCL_COLOR_H_*/

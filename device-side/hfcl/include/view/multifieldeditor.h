@@ -25,7 +25,7 @@
 
 #include "formateditview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 typedef enum 
 {
@@ -102,6 +102,6 @@ class MultiFieldEditor : public FormatEditView
 		DECLARE_CLASS_NAME(MultiFieldEditor)
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif //_MULTIFIELDEDITOR_H

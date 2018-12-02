@@ -23,7 +23,7 @@
 #include "image.h"
 #include "imagedrawable.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 PanelView::PanelView(View *p_parent)
     : ContainerView(p_parent, DEFAULT_VIEW_DRAWABLESET(PanelView))
@@ -57,7 +57,7 @@ PanelView::~PanelView()
 {
     if (m_bkImage != NULL)
     {
-        NGUX_DELETE(m_bkImage);
+        HFCL_DELETE(m_bkImage);
     }
 }
 
@@ -76,7 +76,7 @@ bool PanelView::setBkImageEx(Image* image)
         return false;
     
     if (m_bkImage != NULL){
-        NGUX_DELETE(m_bkImage);
+        HFCL_DELETE(m_bkImage);
     }
     m_bkImage = image;
     
@@ -90,7 +90,7 @@ bool PanelView::setBkColor(const DWORD color)
 {
     if (m_bkImage != NULL)
     {
-        NGUX_DELETE(m_bkImage);
+        HFCL_DELETE(m_bkImage);
         m_bkImage = NULL;
     }
     m_bkColor = color;
@@ -134,4 +134,4 @@ void PanelView::drawBackground(GraphicsContext* context, IntRect &rc, int status
 
 DEFINE_CLASS_NAME(PanelView)
 
-NAMESPACE_END
+} // namespace hfcl {

@@ -29,20 +29,20 @@
 
 #include "codeconvert.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 GraphicsContext* GraphicsContext::screen_graphics_context = NULL;
 
 VECTOR(HDC, DCVector);
 VECTOR(POINT*, PointVector);
 
-//#define _NGUX_DC_TRANSPARENT_ 1
+//#define _HFCL_DC_TRANSPARENT_ 1
 
-#ifdef _NGUX_DC_TRANSPARENT_
+#ifdef _HFCL_DC_TRANSPARENT_
 
-#define _NGUX_CACHED_DC_    1
+#define _HFCL_CACHED_DC_    1
 
-#ifdef _NGUX_CACHED_DC_
+#ifdef _HFCL_CACHED_DC_
 static HDC g_cached_dc = HDC_INVALID;
 
 void delete_cached_dc(void)
@@ -84,8 +84,8 @@ class GraphicsContextPrivate {
                 m_dcSize.cx = 0;
                 m_dcSize.cy = 0;
             }
-#ifdef _NGUX_DC_TRANSPARENT_
-#ifdef _NGUX_CACHED_DC_
+#ifdef _HFCL_DC_TRANSPARENT_
+#ifdef _HFCL_CACHED_DC_
             if (g_cached_dc == HDC_INVALID) {
                 g_cached_dc = CreateCompatibleDCEx(HDC_SCREEN, RECTW(g_rcScr), RECTH(g_rcScr));
                 SetBrushColor(g_cached_dc, RGBA2Pixel(g_cached_dc, 0, 0, 0, 255));
@@ -96,9 +96,9 @@ class GraphicsContextPrivate {
 
         void beginTransparencyLayer(int alpha)
         {
-#ifdef _NGUX_DC_TRANSPARENT_
+#ifdef _HFCL_DC_TRANSPARENT_
             HDC hMemDC = HDC_INVALID;
-            POINT *pPoint = NGUX_NEW_ARR(POINT, (2 * sizeof(POINT)));
+            POINT *pPoint = HFCL_NEW_ARR(POINT, (2 * sizeof(POINT)));
 
             if (pPoint) {
                 if (g_cached_dc != HDC_INVALID && m_layers.empty()) {
@@ -113,7 +113,7 @@ class GraphicsContextPrivate {
             // memory not enough
             if (hMemDC == HDC_INVALID) {
                 if (pPoint)
-                    NGUX_DELETE_ARR(pPoint);
+                    HFCL_DELETE_ARR(pPoint);
                 pPoint = NULL;
                 return;
             }
@@ -152,7 +152,7 @@ class GraphicsContextPrivate {
 
         void endTransparencyLayer()
         {
-#ifdef _NGUX_DC_TRANSPARENT_
+#ifdef _HFCL_DC_TRANSPARENT_
             HDC hMemDC = m_layers.back();
             m_layers.pop_back();
 
@@ -162,7 +162,7 @@ class GraphicsContextPrivate {
             POINT* pPoint = m_points.back();
             m_points.pop_back();
             if (pPoint)
-                NGUX_DELETE_ARR(pPoint);
+                HFCL_DELETE_ARR(pPoint);
             pPoint = NULL;
 
             if (!m_layers.empty()) {
@@ -252,14 +252,14 @@ class GraphicsContextPrivate {
 
 GraphicsContext* GraphicsContext::screenGraphics() {
 	if (NULL == screen_graphics_context) {
-		screen_graphics_context = NGUX_NEW_EX(GraphicsContext, (HDC_SCREEN));
+		screen_graphics_context = HFCL_NEW_EX(GraphicsContext, (HDC_SCREEN));
 	}
 	return screen_graphics_context;
 }
 
 void GraphicsContext::deleteScreenGraphics(void) {
 	if (NULL != screen_graphics_context)
-		NGUX_DELETE(screen_graphics_context);
+		HFCL_DELETE(screen_graphics_context);
 	screen_graphics_context = NULL;
 }
 
@@ -304,13 +304,13 @@ HDC GraphicsContext::context()
 GraphicsContext::GraphicsContext(HDC hdc)
     : m_data(NULL)
 {
-    m_data = NGUX_NEW_EX(GraphicsContextPrivate, (hdc));
+    m_data = HFCL_NEW_EX(GraphicsContextPrivate, (hdc));
 }
 
 GraphicsContext::~GraphicsContext()
 {
     if (m_data)
-        NGUX_DELETE(m_data);
+        HFCL_DELETE(m_data);
     m_data = NULL;
 }
 
@@ -523,13 +523,13 @@ int GraphicsContext::drawTextToGetLenght(const string& text)
     const char *pUtf8 = text.c_str();
     unsigned int nCount = text.size();
 
-    pUcs2 = (char *)NGUX_MALLOC((nCount + 1) * 2);
+    pUcs2 = (char *)HFCL_MALLOC((nCount + 1) * 2);
     if(pUcs2 != NULL)
     {
         memset(pUcs2, 0x00, (nCount + 1) * 2);
         NGUtf8ToUnicode((unsigned char *)pUtf8,(unsigned char *)pUcs2);
         Get_StringWidthHeight((U8 *)pUcs2, &w,&h);
-        NGUX_FREE(pUcs2);
+        HFCL_FREE(pUcs2);
     }
 
     return w;
@@ -798,7 +798,7 @@ GraphicsContext* GraphicsContext::createMemGc(int w, int h)
     HDC memdc = CreateCompatibleDCEx(m_data->m_context, w, h);
 
     if(memdc != HDC_INVALID)
-        return NGUX_NEW_EX(GraphicsContext, (memdc));
+        return HFCL_NEW_EX(GraphicsContext, (memdc));
     else
         return NULL;
 }
@@ -823,7 +823,7 @@ void GraphicsContext::fillRect(const IntRect& rc, Uint8 r, Uint8 g, Uint8 b, Uin
 
     mapRect(rect);
 
-    if (a == NGUX_DEFAULT_OPACITY) {
+    if (a == HFCL_DEFAULT_OPACITY) {
         unsigned int oldColor = SetBrushColor(hdc, RGBA2Pixel(hdc, r, g, b, a));
         FillBox(hdc, rect.left, rect.top, RECTW(rect), RECTH(rect));
         SetBrushColor(hdc, oldColor);
@@ -924,9 +924,9 @@ void GraphicsContext::drawHVDotLine(int x, int y, int wh, bool isHorz,
 void GraphicsContext::drawPolygonLine(Point *pts, int nums, int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
 	HDC hdc = m_data->m_context;
-	Point* p = NGUX_NEW_ARR(Point, (sizeof(Point) * nums));
+	Point* p = HFCL_NEW_ARR(Point, (sizeof(Point) * nums));
     if (NULL == p) {
-        _ERR_PRINTF("NGUX_NEW_ARR for fillPolygon fail..\n");
+        _ERR_PRINTF("HFCL_NEW_ARR for fillPolygon fail..\n");
         return;
     }
 
@@ -942,7 +942,7 @@ void GraphicsContext::drawPolygonLine(Point *pts, int nums, int width, Uint8 r, 
 	PolyLineEx(hdc, p, nums);
 
 	if (NULL != p) {
-        NGUX_DELETE_ARR(p);
+        HFCL_DELETE_ARR(p);
         p = NULL;
     }
 }
@@ -951,9 +951,9 @@ void GraphicsContext::fillPolygon(const Point* pts, int vertices, Uint8 r, Uint8
 {
     HDC hdc = m_data->m_context;
     int c = 0;
-    Point* p = NGUX_NEW_ARR(Point, (sizeof(Point) * vertices));
+    Point* p = HFCL_NEW_ARR(Point, (sizeof(Point) * vertices));
     if (NULL == p) {
-        _ERR_PRINTF("NGUX_NEW_ARR for fillPolygon fail..\n");
+        _ERR_PRINTF("HFCL_NEW_ARR for fillPolygon fail..\n");
         return;
     }
 
@@ -965,7 +965,7 @@ void GraphicsContext::fillPolygon(const Point* pts, int vertices, Uint8 r, Uint8
     FillPolygon(hdc, p, vertices);
 
     if (NULL != p) {
-        NGUX_DELETE_ARR(p);
+        HFCL_DELETE_ARR(p);
         p = NULL;
     }
 }
@@ -1016,7 +1016,7 @@ int GraphicsContext::loadBitmap(Bitmap* bmp, const char * file_name)
 }
 int GraphicsContext::loadBitmap(Bitmap **bmp, const void* data, int size, const char * extern_name)
 {
-#ifdef _NGUX_INCORE_BMPDATA
+#ifdef _HFCL_INCORE_BMPDATA
     return LoadBitmapFromMem(m_data->m_viewdc, *bmp, data, size, extern_name);
 #else
 // incore res is BITMAP *
@@ -1181,7 +1181,7 @@ void DeleteMemGc(GraphicsContext *memGc)
 {
     if (NULL != memGc) {
         DeleteMemDC(memGc->context());
-        NGUX_DELETE(memGc);
+        HFCL_DELETE(memGc);
     }
 }
 
@@ -1206,7 +1206,7 @@ int GetUTF8CharInfo(const char *mstr, int len, int *retPosChars)
         return 0;
     }
 
-	if ((_p_str = (unsigned char *)NGUX_MALLOC(len + 1)) == NULL)
+	if ((_p_str = (unsigned char *)HFCL_MALLOC(len + 1)) == NULL)
 	{
 		return 0;
 	}
@@ -1256,7 +1256,7 @@ int GetUTF8CharInfo(const char *mstr, int len, int *retPosChars)
         }
     }
 
-	NGUX_FREE(_p_str);
+	HFCL_FREE(_p_str);
 	
     return count;
 }
@@ -1436,5 +1436,5 @@ BOOL isArabicSymbol ( U16 inChar )
    else
       return FALSE;
 }
-NAMESPACE_END
+} // namespace hfcl {
 

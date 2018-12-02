@@ -19,10 +19,10 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_ContextStream_h
-#define _NGUX_ContextStream_h
+#ifndef _HFCL_ContextStream_h
+#define _HFCL_ContextStream_h
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ContextStream
 {
@@ -71,7 +71,7 @@ private:
 };
 
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* _NGUX_ContextStream_h */
+#endif /* _HFCL_ContextStream_h */
 

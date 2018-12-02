@@ -45,7 +45,7 @@ char m_edit_tempstr1[EDITOR_MAX_LEN];
 char m_edit_tempstr2[EDITOR_MAX_LEN];
 U16 bidiStrOrder[EDITOR_MAX_LEN];
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define DEFAULT_EDIT_SCROLL_W 4
 
@@ -2554,4 +2554,4 @@ void MlEditView::drawScroll (GraphicsContext* gc, IntRect &rc, int status)
 //    gc->fillRect(_rc,0x80,0x80,0x80,0xFF);
 }
 
-NAMESPACE_END
+} // namespace hfcl {

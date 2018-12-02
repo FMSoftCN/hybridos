@@ -22,7 +22,7 @@
 #include "nguxanimation.h"
 #include "appmanager.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 int Animation::initAnimation()
 {
@@ -173,4 +173,4 @@ void Animation::wait(void)
     mGEffAnimationWait((void*)&hwnd, m_animation);
 }
 
-NAMESPACE_END
+} // namespace hfcl {

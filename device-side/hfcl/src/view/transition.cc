@@ -26,7 +26,7 @@
 #include "transition.h"
 #include "timerservice.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 void TransitionManager::addTransition(unsigned int key, Transition* t)
 {
@@ -108,7 +108,7 @@ static TransitionManager* _commonTransitionManager;
 TransitionManager* GetCommonTransitionManager()
 {
     if (!_commonTransitionManager) {
-        _commonTransitionManager = NGUX_NEW(TransitionManager);
+        _commonTransitionManager = HFCL_NEW(TransitionManager);
     }
     return _commonTransitionManager;
 }
@@ -281,5 +281,5 @@ void ResetRollText(View *view)
         t->reset();
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

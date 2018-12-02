@@ -19,12 +19,12 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_NinePatchImage_h
-#define _NGUX_NinePatchImage_h
+#ifndef _HFCL_NinePatchImage_h
+#define _HFCL_NinePatchImage_h
 
 #include "image.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define PATCH_COUNT  9
 
@@ -72,6 +72,6 @@ private:
     Bitmap m_subBmp[PATCH_COUNT];
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* _NGUX_NinePatchImage_h */
+#endif /* _HFCL_NinePatchImage_h */

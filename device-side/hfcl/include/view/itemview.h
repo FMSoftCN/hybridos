@@ -20,12 +20,12 @@
 */
 
 
-#ifndef _NGUX_ItemView_h
-#define _NGUX_ItemView_h
+#ifndef _HFCL_ItemView_h
+#define _HFCL_ItemView_h
 
 #include "panelview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ItemView : public PanelView
 {
@@ -123,7 +123,7 @@ class ItemView : public PanelView
 
 }; //end of ItemView
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif
 

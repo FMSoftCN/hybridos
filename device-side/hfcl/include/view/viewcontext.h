@@ -20,12 +20,12 @@
 */
 
 
-#ifndef _NGUX_ViewContext_h
-#define _NGUX_ViewContext_h
+#ifndef _HFCL_ViewContext_h
+#define _HFCL_ViewContext_h
 
 #include "nguxcommon.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class View;
 class EventListener;
@@ -86,7 +86,7 @@ public:
 		typedef bool (clss:: *PFUNC)(CustomEvent *e); \
 		PFUNC p = &clss::handle_name; \
 		MethodEventListener::EventHandle *h = (MethodEventListener::EventHandle *)(&p); \
-		return NGUX_NEW_EX(MethodEventListener, ((void*)(this), *h, event_id)); \
+		return HFCL_NEW_EX(MethodEventListener, ((void*)(this), *h, event_id)); \
 	}
 #else
 #define MAP_HANDLE(clss, handle_id, handle_name) case handle_id: return METHOD_EVENT_HANDLE_EX(this, clss, handle_name, event_id);
@@ -148,6 +148,6 @@ public:
 };
 
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* _NGUX_ViewContext_h */
+#endif /* _HFCL_ViewContext_h */

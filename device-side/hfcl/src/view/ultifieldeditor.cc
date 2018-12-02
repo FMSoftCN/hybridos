@@ -31,7 +31,7 @@ extern const unsigned char hijri_1421_1440_DaysMonth[20][12];
 extern const unsigned char shamsi_daysInMonth[12];
 #endif
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define TM_STARTYEAR            2000
 #define TM_ENDYEAR              2127
@@ -312,5 +312,5 @@ bool MultiFieldEditor::checkContent(void)
 
 DEFINE_CLASS_NAME(MultiFieldEditor)
 
-NAMESPACE_END
+} // namespace hfcl {
 

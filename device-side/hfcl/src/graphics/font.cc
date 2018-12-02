@@ -21,7 +21,7 @@
 
 #include "font.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #ifdef USE_RDA_FONT
 
@@ -42,20 +42,20 @@ Font* Font::createFont(const char* fontname)
         return NULL;
 
     if (strcmp(fontname, "small font") == 0){
-        return NGUX_NEW_EX(Font, (&MMI_SMALL_FONT));
+        return HFCL_NEW_EX(Font, (&MMI_SMALL_FONT));
     } else if (strcmp(fontname, "medium font") == 0){
-        return NGUX_NEW_EX(Font, (&MMI_MEDIUM_FONT));
+        return HFCL_NEW_EX(Font, (&MMI_MEDIUM_FONT));
     } else if (strcmp(fontname, "medium bold font") == 0){
-        return NGUX_NEW_EX(Font, (&MMI_MEDIUM_BOLD_FONT));
+        return HFCL_NEW_EX(Font, (&MMI_MEDIUM_BOLD_FONT));
     } else if (strcmp(fontname, "large font") == 0){
-        return NGUX_NEW_EX(Font, (&MMI_LARGE_FONT));
+        return HFCL_NEW_EX(Font, (&MMI_LARGE_FONT));
     } else if (strcmp(fontname, "dial font 1") == 0){
-        return NGUX_NEW_EX(Font, (&MMI_DIALER_FONT1));
+        return HFCL_NEW_EX(Font, (&MMI_DIALER_FONT1));
     } else if (strcmp(fontname, "dial font 2") == 0){
-        return NGUX_NEW_EX(Font, (&MMI_DIALER_FONT2));
+        return HFCL_NEW_EX(Font, (&MMI_DIALER_FONT2));
     }
 
-	return NGUX_NEW_EX(Font, (&MMI_DEFAULT_FONT));
+	return HFCL_NEW_EX(Font, (&MMI_DEFAULT_FONT));
 }
 
 Font::~Font()
@@ -131,7 +131,7 @@ Font* Font::createFont(const char* fontname)
 	if(!logfont)
 		return NULL;
 
-	return NGUX_NEW_EX(Font, (logfont));
+	return HFCL_NEW_EX(Font, (logfont));
 }
 
 Font::~Font()
@@ -180,6 +180,6 @@ int Font::getFontRotation()
     return m_logfont->rotation;
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif

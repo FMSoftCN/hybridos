@@ -32,7 +32,7 @@ extern int g_ResCount;
 extern void InitRingRes();
 #endif  // ENABLE_MCI
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 INNER_RES_INFO* GetImageResInfo(const char *filepath)
 {
@@ -62,7 +62,7 @@ ResLoader::ResLoader()
 ResLoader* ResLoader::getInstance()
 {
     if (NULL == ResLoader::m_singleton)
-        ResLoader::m_singleton = NGUX_NEW_EX(ResLoader, ());
+        ResLoader::m_singleton = HFCL_NEW_EX(ResLoader, ());
 
     return ResLoader::m_singleton;
 }
@@ -166,11 +166,11 @@ GifAnimate* ResLoader::getGifAnimate(const char* filepath)
     INNER_RES_INFO* info = NULL;
 
     // GifAnimate : avoid mem leak TODO
-    gif = NGUX_NEW_EX(GifAnimate, ());
+    gif = HFCL_NEW_EX(GifAnimate, ());
     info = GetImageResInfo(filepath);
 
     if (info != NULL) {
-#ifdef _NGUX_INCORE_BMPDATA
+#ifdef _HFCL_INCORE_BMPDATA
         gif->createGifAnimateFromMem((const char*)info->data, info->size);
 #else
         gif->createGifAnimateFromRes((BitmapFrameArray *) info->data);
@@ -245,13 +245,13 @@ Bitmap* ResLoader::getBitmap(const char* filename)
     INNER_RES_INFO* info = NULL;
     
     info = GetImageResInfo(filename);
-    if (NULL != (pbmp = NGUX_NEW_EX(Bitmap, ()))) {
+    if (NULL != (pbmp = HFCL_NEW_EX(Bitmap, ()))) {
         if (NULL != info) {
             const char * externs_name = NULL;
 
             externs_name = strrchr(filename, '.');
             if (!externs_name) {
-                NGUX_DELETE(pbmp);
+                HFCL_DELETE(pbmp);
                 return NULL;
             }
 
@@ -259,14 +259,14 @@ Bitmap* ResLoader::getBitmap(const char* filename)
 
             if (GraphicsContext::screenGraphics()->loadBitmap(&pbmp, info->data, info->size, externs_name)) {
                 _DBG_PRINTF ("ResLoader::getBitmap: Failed to load image from memory: %s", filename);
-                NGUX_DELETE(pbmp);
+                HFCL_DELETE(pbmp);
                 return NULL;
             }
         }
         else {
             if (GraphicsContext::screenGraphics()->loadBitmap(pbmp, filename)) {
                 _DBG_PRINTF ("ResLoader::getBitmap: Failed to load image: %s", filename);
-                NGUX_DELETE(pbmp);
+                HFCL_DELETE(pbmp);
                 return NULL;
             }
         }
@@ -284,7 +284,7 @@ bool ResLoader::releaseBitmap(const char* filepath)
     }
 
     GraphicsContext::screenGraphics()->unloadBitmap(it->second);
-    NGUX_DELETE(it->second);
+    HFCL_DELETE(it->second);
     m_bitmapRes.erase(it);
 
     return true;
@@ -296,7 +296,7 @@ bool ResLoader::releaseBitmap(Bitmap* pbmp)
     while (it != m_bitmapRes.end()) {
         if (it->second == pbmp){
             GraphicsContext::screenGraphics()->unloadBitmap(it->second);
-            NGUX_DELETE(it->second);
+            HFCL_DELETE(it->second);
             m_bitmapRes.erase(it);
             return true;
         }
@@ -541,5 +541,5 @@ unsigned int GetAudioResBuffer(unsigned char audioId , unsigned int** pBuffer ,u
     }
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

@@ -19,13 +19,13 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_ThreePatchImage_h
-#define _NGUX_ThreePatchImage_h
+#ifndef _HFCL_ThreePatchImage_h
+#define _HFCL_ThreePatchImage_h
 
 #include "image.h"
 
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define THREEH_PATCH_COUNT  3
 
@@ -77,6 +77,6 @@ private:
     bool m_typeHoriz;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* _NGUX_ThreePatchImage_h */
+#endif /* _HFCL_ThreePatchImage_h */

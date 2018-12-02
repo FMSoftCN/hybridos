@@ -25,7 +25,7 @@
 #include "resloader.h"
 
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 ImageRes::ImageRes(const char* imagefile)
     : m_imagefile(imagefile)
@@ -88,5 +88,5 @@ Image* ImageRes::get(const char* resPath)
     return m_image;
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

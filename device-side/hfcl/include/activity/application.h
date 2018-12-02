@@ -20,14 +20,14 @@
 */
 
 
-#ifndef __NGUX_APPLICATION_H__
-#define __NGUX_APPLICATION_H__
+#ifndef __HFCL_APPLICATION_H__
+#define __HFCL_APPLICATION_H__
 
 #include "nguxwindow.h"
 #include "baseapp.h"
 #include "nguxmenu.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class GraphicsContext;
 class IntRect;
@@ -77,7 +77,7 @@ class FullScreenApp : public Application {
         virtual void onCreate(ContextStream* contextStream, Intent* intent); 
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* __NGUX_APPLICATION_H__ */
+#endif /* __HFCL_APPLICATION_H__ */
 

@@ -19,15 +19,15 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_FONT_H_
-#define _NGUX_FONT_H_
+#ifndef _HFCL_FONT_H_
+#define _HFCL_FONT_H_
 
 #include "log.h"
 #include "nguxobject.h"
 #include "intrect.h"
 #include "graphicscontext.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class Font : public Object, public RefCount{
 public:
@@ -48,6 +48,6 @@ protected:
     Logfont* m_logfont;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /*_NGUX_FONT_H_*/
+#endif /*_HFCL_FONT_H_*/

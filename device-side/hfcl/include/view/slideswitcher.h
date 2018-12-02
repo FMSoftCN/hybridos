@@ -25,7 +25,7 @@
 
 #include "panelview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class SlideSwitcher : public PanelView  
 {
@@ -128,6 +128,6 @@ class SlideSwitcher : public PanelView
         DECLARE_CLASS_NAME(SlideSwitcher)
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif

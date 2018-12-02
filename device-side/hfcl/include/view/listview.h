@@ -20,13 +20,13 @@
 */
 
 
-#ifndef _NGUX_ListView_h
-#define _NGUX_ListView_h
+#ifndef _HFCL_ListView_h
+#define _HFCL_ListView_h
 
 #include "scrollview.h"
 #include "itemview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class Drawable;
 class ScrollView;
@@ -297,6 +297,6 @@ class ListView : public ScrollView
 		virtual bool prevFocus();
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* _NGUX_ListView_h */
+#endif /* _HFCL_ListView_h */

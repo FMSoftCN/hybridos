@@ -20,12 +20,12 @@
 */
 
 
-#ifndef __NGUX_WINDOW_H__
-#define __NGUX_WINDOW_H__
+#ifndef __HFCL_WINDOW_H__
+#define __HFCL_WINDOW_H__
 
 #include "panelview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class KeyEvent;
 
@@ -33,7 +33,7 @@ class Window : public PanelView
 {
     public:
         enum{
-            NGUX_WS_EX_TRANSPARENT = WS_EX_TRANSPARENT,
+            HFCL_WS_EX_TRANSPARENT = WS_EX_TRANSPARENT,
         };
         Window();
         virtual ~Window();
@@ -112,7 +112,7 @@ class Window : public PanelView
         virtual void inner_updateView(int x, int y, int w, int h, bool upBackGnd = true);
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* __NGUX_WINDOW_H__ */
+#endif /* __HFCL_WINDOW_H__ */
 

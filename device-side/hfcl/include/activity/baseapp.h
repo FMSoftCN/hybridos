@@ -26,7 +26,7 @@
 #include "common/nguxcommon.h"
 #include "activity/controller.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ContextStream;
 class Intent;
@@ -83,6 +83,6 @@ class BaseApp : public Controller {
 		View* getViewParent(int view_id) { return NULL; }
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* NGUX_BaseApp_h */
+#endif /* HFCL_BaseApp_h */

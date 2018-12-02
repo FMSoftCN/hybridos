@@ -24,7 +24,7 @@
 #include "imeinterface.h"
 #include "imebase.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define DEFAULT_H_MARGIN    1
 #define DEFAULT_V_MARGIN    1
@@ -386,4 +386,4 @@ string EditView::apply_comma_multiple_value_in_calculator(char *str, int *cursor
 
 	
 }
-NAMESPACE_END
+} // namespace hfcl {

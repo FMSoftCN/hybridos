@@ -20,13 +20,13 @@
 */
 
 
-#ifndef _NGUX_ScrollView_h
-#define _NGUX_ScrollView_h
+#ifndef _HFCL_ScrollView_h
+#define _HFCL_ScrollView_h
 
 #include "panelview.h"
 #include "timerservice.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ScrollView : public PanelView, public TimerEventListener
 {
@@ -136,6 +136,6 @@ class ScrollView : public PanelView, public TimerEventListener
 	DECLARE_CLASS_NAME(ScrollView)
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* _NGUX_ScrollView_h */
+#endif /* _HFCL_ScrollView_h */

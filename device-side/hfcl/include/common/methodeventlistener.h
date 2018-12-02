@@ -19,13 +19,13 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_MethodEventListener_h
-#define _NGUX_MethodEventListener_h
+#ifndef _HFCL_MethodEventListener_h
+#define _HFCL_MethodEventListener_h
 
 #include "nguxcommon.h"
 #include "nguxevent.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class Event;
 class EventListener;
@@ -49,12 +49,12 @@ private:
 };
 
 #define METHOD_EVENT_HANDLE_EX(owner, Class, eventHandle, event_type) \
-	(NGUX_NEW_EX(MethodEventListener, ((void*)(owner), (MethodEventListener::EventHandle)(&Class::eventHandle), event_type)))
+	(HFCL_NEW_EX(MethodEventListener, ((void*)(owner), (MethodEventListener::EventHandle)(&Class::eventHandle), event_type)))
 
 #define METHOD_EVENT_HANDLE(Class, eventHandle) \
 	METHOD_EVENT_HANDLE_EX(this, Class, eventHandle, 0)
 
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* _NGUX_MethodEventListener_h */
+#endif /* _HFCL_MethodEventListener_h */

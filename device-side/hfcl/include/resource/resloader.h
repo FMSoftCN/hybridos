@@ -29,7 +29,7 @@
 #include "animateimageview.h"
 #include "restypes.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ResLoader {
 	// Operations
@@ -85,7 +85,7 @@ class ResLoader {
 INNER_RES_INFO* GetImageResInfo(const char *filepath);
 
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif
 

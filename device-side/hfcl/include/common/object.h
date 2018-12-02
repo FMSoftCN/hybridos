@@ -19,13 +19,13 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __NGUX_OBJECT_H__
-#define __NGUX_OBJECT_H__
+#ifndef HFCL_COMMON_OBJECT_H_
+#define HFCL_COMMON_OBJECT_H_
 
-#include "nguxcommon.h"
-#include "log.h"
+#include "common/common.h"
+#include "common/log.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class Object {
     public:
@@ -98,7 +98,7 @@ class RefCount : Noncopyable {
         int unref() 
         {
 			if (refDec () == 0) {
-				NGUX_DELETE(this);
+				HFCL_DELETE(this);
 				return 0;
             }
             return m_refCount;
@@ -187,13 +187,7 @@ public:
             Base* operator->() { return ptr(); } \
     };
 
-NAMESPACE_END
+} // namespace hfcl {
 	
-// for easy use
-#define MM_BEGIN()
-#define MM_END()
-#define MM_ENTER(function)
-#define MM_EXIT()
-
-#endif /* __NGUX_OBJECT_H__ */
+#endif /* HFCL_COMMON_OBJECT_H_ */
 

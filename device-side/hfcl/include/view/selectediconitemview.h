@@ -20,13 +20,13 @@
 */
 
 
-#ifndef _NGUX_IconItemView_h
-#define _NGUX_IconItemView_h
+#ifndef _HFCL_IconItemView_h
+#define _HFCL_IconItemView_h
 
 #include "itemview.h"
 #include "image.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class SelectedIconItemView : public ItemView
 {
@@ -62,7 +62,7 @@ protected:
 };
 
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif
 

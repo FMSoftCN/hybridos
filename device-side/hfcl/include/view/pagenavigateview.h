@@ -19,12 +19,12 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_PageNavigateView_h
-#define _NGUX_PageNavigateView_h
+#ifndef _HFCL_PageNavigateView_h
+#define _HFCL_PageNavigateView_h
 
 #include "panelview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class Image;
 class ImageView;
@@ -157,6 +157,6 @@ class PageNavigateView : public PanelView
 
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* _NGUX_PageNavigateView_h */
+#endif /* _HFCL_PageNavigateView_h */

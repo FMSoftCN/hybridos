@@ -35,7 +35,7 @@
 #define D_PRT(x...) 
 //_DBG_PRINTF(x)
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 ////////////////////// Features /////////////////////////
 // 1. equal item height.
@@ -898,4 +898,4 @@ void DyncListView::drawScroll(GraphicsContext* context, IntRect &rc, int status)
 }
 
 
-NAMESPACE_END
+} // namespace hfcl {

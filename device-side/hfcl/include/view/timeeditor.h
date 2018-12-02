@@ -25,7 +25,7 @@
 
 #include "formateditview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class TimeEditor : public FormatEditView 
 {
@@ -98,6 +98,6 @@ class TimeEditor : public FormatEditView
 		DECLARE_CLASS_NAME(TimeEditor)
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif

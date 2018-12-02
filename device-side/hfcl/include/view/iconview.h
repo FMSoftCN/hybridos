@@ -20,13 +20,13 @@
 */
 
 
-#ifndef _NGUX_IconView_h
-#define _NGUX_IconView_h
+#ifndef _HFCL_IconView_h
+#define _HFCL_IconView_h
 
 #include "scrollview.h"
 #include "gridview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class Drawable;
 class ScrollView;
@@ -103,6 +103,6 @@ class IconView : public ScrollView
         GridView *m_gridView;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif //_NGUX_IconView_h
+#endif //_HFCL_IconView_h

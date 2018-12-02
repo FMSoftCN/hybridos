@@ -25,7 +25,7 @@
 #include "graphicscontext.h"
 #include "color.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 // we assume color to be ABGR from high byte to low byte.
 Color::Color(unsigned long l_color){
@@ -45,4 +45,4 @@ Color::Color(unsigned char c_r, unsigned char c_g, unsigned char c_b, unsigned c
 
 
 // END of namespace NGUX
-NAMESPACE_END
+} // namespace hfcl {

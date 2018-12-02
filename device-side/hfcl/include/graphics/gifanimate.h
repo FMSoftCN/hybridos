@@ -19,13 +19,13 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_GifAnimate_h
-#define _NGUX_GifAnimate_h
+#ifndef _HFCL_GifAnimate_h
+#define _HFCL_GifAnimate_h
 
 #include "nguxobject.h"
 #include "graphicscontext.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 // !!! same as gen_incore_bitmap.c : BitmapFrame
 typedef struct _tagGifAnimateFrame {
@@ -103,7 +103,7 @@ class GifAnimate : public RefCount
         unsigned int m_nextFrameIndex;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 
-#endif  /* NGUX_GifAnimate_h */
+#endif  /* HFCL_GifAnimate_h */

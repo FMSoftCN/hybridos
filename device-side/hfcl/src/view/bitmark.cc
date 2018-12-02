@@ -27,7 +27,7 @@
 #include "bitmark.h"
 #include "hal_misc.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 BitMark::BitMark()
 {
@@ -206,4 +206,4 @@ void PointerKeeper::move(int from, int to, int cnt)
 	}
 }
 
-NAMESPACE_END
+} // namespace hfcl {

@@ -27,7 +27,7 @@
 #include "respkgmanager.h"
 #include "themeres.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 ThemeRes::ThemeRes()
 {
@@ -62,5 +62,5 @@ DrawableSet* ThemeRes::getDrawableSet(int theme_drset_id)
 	return GetCommonDrawableSet();
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

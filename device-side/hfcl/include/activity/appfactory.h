@@ -22,7 +22,7 @@
 #ifndef HFCL_ACTIVITY_APPINFO_H_
 #define HFCL_ACTIVITY_APPINFO_H_
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #include "image.h"
 
@@ -77,12 +77,12 @@ class AppFactory {
     appClassName##Factory* appClassName##Factory::getInstance(void) { \
 		static appClassName##Factory* s_single = NULL;                       \
         if (!s_single) {                                              \
-            s_single = NGUX_NEW_EX(appClassName##Factory, ());        \
+            s_single = HFCL_NEW_EX(appClassName##Factory, ());        \
         }                                                             \
         return s_single;                                              \
     }                                                                 \
     BaseApp* appClassName##Factory::create(void) {                    \
-        return (NGUX_NEW_EX(appClassName, ()));                       \
+        return (HFCL_NEW_EX(appClassName, ()));                       \
     }
 
 #define BEGIN_DEFINE_APP(appClassName)             \
@@ -118,7 +118,7 @@ class AppFactory {
 #define REGISTER_APP_EX(appName, textResId, imageResId, appClassName) \
     AppManager::getInstance()->registerApp(appName, textResId, imageResId, GET_APP_FACTORY(appClassName))
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif /* HFCL_ACTIVITY_APPINFO_H_ */
 

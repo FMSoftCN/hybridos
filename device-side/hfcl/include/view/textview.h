@@ -20,14 +20,14 @@
 */
 
 
-#ifndef _NGUX_TextView_h
-#define _NGUX_TextView_h
+#ifndef _HFCL_TextView_h
+#define _HFCL_TextView_h
 
 #include "view.h"
 #include "color.h"
 #include "respkgmanager.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class TextView : public View
 {
@@ -110,6 +110,6 @@ protected:
 };
 
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* NGUX_TextView_h */
+#endif /* HFCL_TextView_h */

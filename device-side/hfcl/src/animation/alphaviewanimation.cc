@@ -22,7 +22,7 @@
 #include "alphaviewanimation.h"
 #include "view.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 AlphaViewAnimation::AlphaViewAnimation(View* view, int endAlpha)
 	:ViewAnimation(view, MGEFF_INT)
@@ -52,5 +52,5 @@ void AlphaViewAnimation::onStart()
 	}
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

@@ -21,12 +21,12 @@
 
 #ifdef __cplusplus
 
-#ifndef _NGUX_SIMPLESTL_H
-#define _NGUX_SIMPLESTL_H
+#ifndef _HFCL_SIMPLESTL_H
+#define _HFCL_SIMPLESTL_H
 
 typedef const char*  const_str_ptr;
 
-#ifdef _NGUX_DONT_SUPPORT_TEMPLATE
+#ifdef _HFCL_DONT_SUPPORT_TEMPLATE
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,38 +37,38 @@ extern unsigned int _null_buffer[];
 #define NULL_VALUE  ((void*)_null_buffer)
 
 // memory monitor
-// #define NGUX_MEM_MONITOR
+// #define HFCL_MEM_MONITOR
 
 // if memory leak print, macro difine
 #define LOGMEMORYLEAK  _DBG_PRINTF
 #ifndef	LOGMMC
-#ifdef  NGUX_MEM_MONITOR
+#ifdef  HFCL_MEM_MONITOR
 #define	LOGMMC(...)   LOGMEMORYLEAK(__VA_ARGS__);
 #else
 #define	LOGMMC(...)   ((void)0)
 #endif
 #endif
 
-//#define NGUX_LIST_TRACE 1
-#undef NGUX_LIST_TRACE
+//#define HFCL_LIST_TRACE 1
+#undef HFCL_LIST_TRACE
 
 #ifdef __CC_ARM
 
-#define NGUX_NEW(classname) new classname
-#define NGUX_NEW_EX(classname, param) new classname param
-#define NGUX_NEW_ARR(classname, param) new classname[param]
+#define HFCL_NEW(classname) new classname
+#define HFCL_NEW_EX(classname, param) new classname param
+#define HFCL_NEW_ARR(classname, param) new classname[param]
 
-#define NGUX_MALLOC(size)               malloc(size)
-#define NGUX_CALLOC(size, count)        calloc(size, count)
-#define NGUX_REALLOC(buf, size)         realloc(buf, size)
+#define HFCL_MALLOC(size)               malloc(size)
+#define HFCL_CALLOC(size, count)        calloc(size, count)
+#define HFCL_REALLOC(buf, size)         realloc(buf, size)
 
-#define NGUX_FREE(paddr)                free(paddr)
-#define NGUX_DELETE(addr)               delete (addr)
-#define NGUX_DELETE_ARR(addr)           delete[] (addr)
+#define HFCL_FREE(paddr)                free(paddr)
+#define HFCL_DELETE(addr)               delete (addr)
+#define HFCL_DELETE_ARR(addr)           delete[] (addr)
 
 #else /* __CC_ARM */
 
-#define NGUX_NEW(classname) (                       \
+#define HFCL_NEW(classname) (                       \
 {                                                   \
     UINT32 nCallerAdd = 0x00;                       \
     COS_GET_RA(&nCallerAdd);                        \
@@ -78,7 +78,7 @@ extern unsigned int _null_buffer[];
     paddr;                                          \
 })
 
-#define NGUX_NEW_EX(classname, param)	(           \
+#define HFCL_NEW_EX(classname, param)	(           \
 {                                                   \
     UINT32 nCallerAdd = 0x00;           	        \
     COS_GET_RA(&nCallerAdd);                        \
@@ -88,7 +88,7 @@ extern unsigned int _null_buffer[];
     paddr;                                          \
 })
 
-#define NGUX_NEW_ARR(classname, param) (		    \
+#define HFCL_NEW_ARR(classname, param) (		    \
 {                                                   \
     UINT32 nCallerAdd = 0x00;           	        \
     COS_GET_RA(&nCallerAdd);                        \
@@ -98,16 +98,16 @@ extern unsigned int _null_buffer[];
     paddr;                                          \
 })
 
-#define NGUX_MALLOC(size)               malloc(size)
-#define NGUX_CALLOC(size, count)        calloc(size, count)
-#define NGUX_REALLOC(buf, size)         realloc(buf, size)
-#define NGUX_FREE(paddr)                free(paddr)
-#define NGUX_DELETE(addr)               delete (addr)
-#define NGUX_DELETE_ARR(addr)           delete[] (addr)
+#define HFCL_MALLOC(size)               malloc(size)
+#define HFCL_CALLOC(size, count)        calloc(size, count)
+#define HFCL_REALLOC(buf, size)         realloc(buf, size)
+#define HFCL_FREE(paddr)                free(paddr)
+#define HFCL_DELETE(addr)               delete (addr)
+#define HFCL_DELETE_ARR(addr)           delete[] (addr)
 
 #endif /* !__CC_ARM */
 
-#ifdef _NGUX_SHOW_OPTIMIZE_INFO
+#ifdef _HFCL_SHOW_OPTIMIZE_INFO
 #define OPT_TRACE_PARAM   ,_trace_info_
 #define OPT_TRACE_INFO   ,const char* _trace_info_
 #define OPTIMIZE_WARNING  _DBG_PRINTF ("------ Object is copyed in %s, Please optimize it\n", _trace_info_)
@@ -171,7 +171,7 @@ class StrBuffer
     StrBuffer() { buf[0] = 0; }
 public:
     static StrBuffer* NewStrBuffer(int len) {
-        void *p = NGUX_MALLOC(len + sizeof(short));
+        void *p = HFCL_MALLOC(len + sizeof(short));
         StrBuffer *buff = (StrBuffer*)p;
         buff->buf[0] = 0;
         return buff;
@@ -197,7 +197,7 @@ public:
     const char* str() const { return buf; }
 
     void release() {
-		if(this != NULL) NGUX_FREE((void*)this);
+		if(this != NULL) HFCL_FREE((void*)this);
     }
 };
 
@@ -211,7 +211,7 @@ public:
 	
         if (n <= 0)
             n = strlen(str);
-        _str_buff =(char *)NGUX_MALLOC(n + 1);
+        _str_buff =(char *)HFCL_MALLOC(n + 1);
         if (_str_buff != NULL)
         {
             strncpy(_str_buff, str, n);
@@ -226,7 +226,7 @@ public:
          _str_buff = NULL;
          if(str.c_str() == NULL) return;	 
            n = strlen(str.c_str());
-         _str_buff = (char *)NGUX_MALLOC(n + 1);
+         _str_buff = (char *)HFCL_MALLOC(n + 1);
          if (_str_buff != NULL)
          {
              strncpy(_str_buff, str.c_str(), n);
@@ -237,7 +237,7 @@ public:
 
     ~string() {
         if (_str_buff != NULL)
-		NGUX_FREE(_str_buff);	
+		HFCL_FREE(_str_buff);	
         _str_buff = NULL;
     }
 
@@ -250,11 +250,11 @@ public:
         if (this == &str)     return *this;
 
         if(str.c_str() == NULL) return *this;	 
-        if (_str_buff != NULL)  NGUX_FREE(_str_buff);	
+        if (_str_buff != NULL)  HFCL_FREE(_str_buff);	
         _str_buff = NULL;	
 
         n = strlen(str.c_str());
-        _str_buff = (char *)NGUX_MALLOC(n + sizeof(short));
+        _str_buff = (char *)HFCL_MALLOC(n + sizeof(short));
 
         if (_str_buff != NULL)
         {
@@ -267,12 +267,12 @@ public:
 
     const string & operator=(const char* str) {
         int n;
-        if (_str_buff != NULL)  NGUX_FREE(_str_buff);	
+        if (_str_buff != NULL)  HFCL_FREE(_str_buff);	
         _str_buff = NULL;	
         if(str ==  NULL) return *this;
 	
         n = strlen(str);
-        _str_buff = (char *)NGUX_MALLOC(n + sizeof(short));
+        _str_buff = (char *)HFCL_MALLOC(n + sizeof(short));
 
         if (_str_buff != NULL)
         {
@@ -327,7 +327,7 @@ public:
 
         new_str = NULL;	
         n = strlen(str);
-        new_str = (char *)NGUX_MALLOC(length() + n+1);
+        new_str = (char *)HFCL_MALLOC(length() + n+1);
 
         if (new_str != NULL)
         {
@@ -335,7 +335,7 @@ public:
             strcat(new_str, str);
         }
 
-        if (_str_buff != NULL)  NGUX_FREE(_str_buff);	
+        if (_str_buff != NULL)  HFCL_FREE(_str_buff);	
         _str_buff = new_str;
 		CheckUtf8Strings(_str_buff, -1);
 
@@ -412,7 +412,7 @@ protected:
     vector_base(int isize, int count) {
         _size = isize;
         _count = count;
-        _buffer = (unsigned char*)NGUX_CALLOC(isize, count);
+        _buffer = (unsigned char*)HFCL_CALLOC(isize, count);
     }
 
     void *_get(int idx){
@@ -449,7 +449,7 @@ protected:
         OPTIMIZE_WARNING;
         _size = (int) v._size;
         _count = (int) v._count;
-        _buffer = (unsigned char*) NGUX_CALLOC(_size, _count);
+        _buffer = (unsigned char*) HFCL_CALLOC(_size, _count);
         unsigned char* buf = (unsigned char*)v._buffer;
         for (int i = 0; i < _count*_size; i += _size) {
             value_copy((void*)(_buffer+i), (const void*)(buf+i));
@@ -521,13 +521,13 @@ public:
         }
 
         if (sz == 0) {
-            NGUX_FREE(_buffer);
+            HFCL_FREE(_buffer);
             _buffer = NULL;
             _count = sz;
             return;
         }
 
-        _buffer = (unsigned char*)NGUX_REALLOC(_buffer, _size * sz);
+        _buffer = (unsigned char*)HFCL_REALLOC(_buffer, _size * sz);
         if (sz > _count) {
             memset(_get(_count), 0, (sz - _count)*_size);
         }
@@ -538,7 +538,7 @@ public:
         for (int i=0; i < _count; i ++)
             delete_sub_type(_buffer+ i * _size);
         if (_buffer) {
-            NGUX_FREE(_buffer);
+            HFCL_FREE(_buffer);
             _buffer = NULL;
         }
         _count = 0;
@@ -621,7 +621,7 @@ protected:
 
     entry_t * new_entry(void* key, void* value) {
         size_t e_size = sizeof(struct rb_node) + _key_size + _value_size;
-        entry_t * entry = (entry_t*)NGUX_CALLOC(1, e_size);
+        entry_t * entry = (entry_t*)HFCL_CALLOC(1, e_size);
         if (entry) {
             key_copy(entry->key(), key);
             entry->setValue(this, value);
@@ -636,7 +636,7 @@ protected:
             delete_value(entry->value(this));
             clear_node(node->rb_left);
             clear_node(node->rb_right);
-            NGUX_FREE(node); //NGUX_FREE the node
+            HFCL_FREE(node); //HFCL_FREE the node
         }
     }
     ///////////////////////////////////////////////////////
@@ -872,7 +872,7 @@ protected:
     }
 
     list_t* new_node() {
-        return (list_t*)NGUX_CALLOC(1, sizeof(list_t) + _size);
+        return (list_t*)HFCL_CALLOC(1, sizeof(list_t) + _size);
     }
 
     virtual void delete_node(void* data) { }
@@ -911,8 +911,8 @@ protected:
         value_copy(LIST_DATA(node), data);
         list_add(node, &_head);
         _count ++;
-#ifdef NGUX_LIST_TRACE
-		_DBG_PRINTF ("NGUX_LIST_TRACE : new and push node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+#ifdef HFCL_LIST_TRACE
+		_DBG_PRINTF ("HFCL_LIST_TRACE : new and push node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
                 node, sizeof(list_t) + _size, __func__, size());
 #endif
     }
@@ -924,8 +924,8 @@ protected:
         value_copy(LIST_DATA(node), data);
         list_add_tail(node, &_head);
         _count ++;
-#ifdef NGUX_LIST_TRACE
-		_DBG_PRINTF ("NGUX_LIST_TRACE : new and push node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+#ifdef HFCL_LIST_TRACE
+		_DBG_PRINTF ("HFCL_LIST_TRACE : new and push node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
             node, sizeof(list_t) + _size, __func__, size());
 #endif
     }
@@ -936,10 +936,10 @@ protected:
         list_t * node = _head.prev;
         delete_node(LIST_DATA(node));
         list_del(node);
-        NGUX_FREE(node);
+        HFCL_FREE(node);
         _count --;
-#ifdef NGUX_LIST_TRACE
-		_DBG_PRINTF ("NGUX_LIST_TRACE : pop and delete node (%p)  ---- in func [%s]	-- size = %d\n",
+#ifdef HFCL_LIST_TRACE
+		_DBG_PRINTF ("HFCL_LIST_TRACE : pop and delete node (%p)  ---- in func [%s]	-- size = %d\n",
                 node,  __func__, size());
 #endif
     }
@@ -960,8 +960,8 @@ protected:
             list_t *newnode = new_node();
             value_copy(LIST_DATA(newnode), node);
             __list_add(newnode, _head.prev, &_head);
-#ifdef NGUX_LIST_TRACE
-			_DBG_PRINTF ("NGUX_LIST_TRACE : new node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
+#ifdef HFCL_LIST_TRACE
+			_DBG_PRINTF ("HFCL_LIST_TRACE : new node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
                     newnode, sizeof(list_t) + _size, __func__, size());
 #endif
         }
@@ -1032,10 +1032,10 @@ protected:
             list_t *next = node->next;
             delete_node(LIST_DATA(node));
             list_del(node);			
-            NGUX_FREE(node);
+            HFCL_FREE(node);
             _count --;
-#ifdef NGUX_LIST_TRACE
-			_DBG_PRINTF ("NGUX_LIST_TRACE : delete node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
+#ifdef HFCL_LIST_TRACE
+			_DBG_PRINTF ("HFCL_LIST_TRACE : delete node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
                     node, sizeof(list_t) + _size, __func__, size());
 #endif
             return iterator_base(this, next);
@@ -1051,10 +1051,10 @@ protected:
             begin = begin->next;
             delete_node(LIST_DATA(tmp));
             list_del(tmp);			
-            NGUX_FREE(tmp);
+            HFCL_FREE(tmp);
             _count --;
-#ifdef NGUX_LIST_TRACE
-			_DBG_PRINTF ("NGUX_LIST_TRACE : delete node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
+#ifdef HFCL_LIST_TRACE
+			_DBG_PRINTF ("HFCL_LIST_TRACE : delete node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
                     tmp, sizeof(list_t) + _size, __func__, size());
 #endif
         }
@@ -1069,10 +1069,10 @@ protected:
                 node = node->next;
                 list_del(tmp);
                 delete_node(LIST_DATA(tmp));
-                NGUX_FREE(tmp);
+                HFCL_FREE(tmp);
                 _count --;
-#ifdef NGUX_LIST_TRACE
-				_DBG_PRINTF ("NGUX_LIST_TRACE : delete node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+#ifdef HFCL_LIST_TRACE
+				_DBG_PRINTF ("HFCL_LIST_TRACE : delete node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
                         tmp, sizeof(list_t) + _size, __func__, size());
 #endif
 				return;
@@ -1090,8 +1090,8 @@ protected:
         list_t * pos = (list_t*)it._current;
         list_add(node, pos);
         _count ++;
-#ifdef NGUX_LIST_TRACE
-		_DBG_PRINTF ("NGUX_LIST_TRACE : new and insert node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+#ifdef HFCL_LIST_TRACE
+		_DBG_PRINTF ("HFCL_LIST_TRACE : new and insert node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
                 node, sizeof(list_t) + _size, __func__, size());
 #endif
 
@@ -1109,10 +1109,10 @@ public:
             list_t *tmp = node;
             node = node->next;
 			delete_node(LIST_DATA(tmp));
-            NGUX_FREE(tmp);
+            HFCL_FREE(tmp);
 			_count--;
-#ifdef NGUX_LIST_TRACE
-			_DBG_PRINTF ("NGUX_LIST_TRACE : delete node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+#ifdef HFCL_LIST_TRACE
+			_DBG_PRINTF ("HFCL_LIST_TRACE : delete node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
                     tmp, sizeof(list_t) + _size, __func__, size());
 #endif
         }
@@ -1353,8 +1353,8 @@ void* operator new[](size_t size);
 void operator delete[](void *p);
 #endif
 
-#else   // not _NGUX_DONT_SUPPORT_TEMPLATE
-#   ifdef _NGUX_DONT_SUPPORT_STL
+#else   // not _HFCL_DONT_SUPPORT_TEMPLATE
+#   ifdef _HFCL_DONT_SUPPORT_STL
 #      include "mystl.h"
 #      define VECTOR(type, name) typedef my::vector<type> name;
 #   else
@@ -1374,8 +1374,8 @@ void operator delete[](void *p);
 #   endif
 #   define VECTOREX(type, name, delete_code) VECTOR(type, name)
 #   define VECTORCLASS(type, name) VECTOR(type, name)
-#endif   // _NGUX_DONT_SUPPORT_TEMPLATE
+#endif   // _HFCL_DONT_SUPPORT_TEMPLATE
 
-#endif /* _NGUX_SIMPLESTL_H */
+#endif /* _HFCL_SIMPLESTL_H */
 
 #endif /* __cplusplus */

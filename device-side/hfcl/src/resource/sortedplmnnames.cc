@@ -25,7 +25,7 @@
 #include "ngux.h"
 #include "ngux_string_ids.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 typedef struct _SORTED_PLMN_NAME {
     const char* plmn;
@@ -7092,4 +7092,4 @@ const char* GetPLMNDisplayName (const char* plmn)
     return NULL;
 }
 
-NAMESPACE_END
+} // namespace hfcl {

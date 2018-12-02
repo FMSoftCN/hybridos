@@ -19,8 +19,8 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_GraphicsContext_h
-#define _NGUX_GraphicsContext_h
+#ifndef _HFCL_GraphicsContext_h
+#define _HFCL_GraphicsContext_h
 
 #include "nguxcommon.h"
 #include "mgcl.h"
@@ -30,7 +30,7 @@
 
 typedef BITMAP 	Bitmap;
 
-#ifdef  USE_NGUX_FONT
+#ifdef  USE_HFCL_FONT
 typedef DEVFONT Devfont;
 #endif
 typedef POINT 	Point;
@@ -52,15 +52,15 @@ typedef struct _tagBitmapFrameArray
     BitmapFrame* frames;
 }BitmapFrameArray;
 
-#define NGUX_BMP_TYPE_NORMAL         0x00
-#define NGUX_BMP_TYPE_RLE            0x01
-#define NGUX_BMP_TYPE_ALPHA          0x02
-#define NGUX_BMP_TYPE_ALPHACHANNEL   0x04
-#define NGUX_BMP_TYPE_COLORKEY       0x10
-#define NGUX_BMP_TYPE_ALPHA_MASK     0x20
-#define NGUX_BMP_TYPE_PRIV_PIXEL     0x00
+#define HFCL_BMP_TYPE_NORMAL         0x00
+#define HFCL_BMP_TYPE_RLE            0x01
+#define HFCL_BMP_TYPE_ALPHA          0x02
+#define HFCL_BMP_TYPE_ALPHACHANNEL   0x04
+#define HFCL_BMP_TYPE_COLORKEY       0x10
+#define HFCL_BMP_TYPE_ALPHA_MASK     0x20
+#define HFCL_BMP_TYPE_PRIV_PIXEL     0x00
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 typedef LOGFONT Logfont;
 
@@ -211,6 +211,6 @@ U16 utf8_to_ucs2 (U8 *utf8);
 BOOL isNumberChar ( U16 inChar );
 BOOL isSymbolChar ( U16 inChar );
 BOOL isArabicSymbol ( U16 inChar );
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* _NGUX_GraphicsContext_h */
+#endif /* _HFCL_GraphicsContext_h */

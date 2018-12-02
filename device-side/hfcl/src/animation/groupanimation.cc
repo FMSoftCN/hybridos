@@ -21,7 +21,7 @@
 
 #include "groupanimation.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 GroupAnimation::GroupAnimation(enum EffAnimationType type, GroupAnimation* parent)
 	:Animation ()
@@ -47,7 +47,7 @@ GroupAnimation::~GroupAnimation()
         // the animation will be deleted by group.
         (*i)->setKeepLive (false);
 		// delete (*i);
-		NGUX_DELETE(*i);
+		HFCL_DELETE(*i);
 	}
 }
 
@@ -71,5 +71,5 @@ void GroupAnimation::onStart()
 	}
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

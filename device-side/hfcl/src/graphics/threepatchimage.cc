@@ -22,7 +22,7 @@
 #include "threepatchimage.h"
 #include "resloader.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 ThreePatchImage::ThreePatchImage(bool b_typeHoriz)
 	: Image(), m_typeHoriz(b_typeHoriz)
@@ -56,7 +56,7 @@ void ThreePatchImage::paint(GraphicsContext* context, const IntRect& rc, ImageFo
 	
 	if (m_bLoadOnPainting && NULL != m_pBitmap) {
 	    GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
-        NGUX_DELETE(m_pBitmap);
+        HFCL_DELETE(m_pBitmap);
         m_pBitmap = NULL;
     }
 
@@ -247,11 +247,11 @@ bool ThreePatchImage::setSubBmp()
 		pSubBmp->bmBits = m_pBitmap->bmBits + m_di[index].idx_line * m_pBitmap->bmPitch
 			+ m_di[index].idx_col * m_pBitmap->bmBytesPerPixel;
 
-		if (pSubBmp->bmType & NGUX_BMP_TYPE_ALPHA_MASK) {
+		if (pSubBmp->bmType & HFCL_BMP_TYPE_ALPHA_MASK) {
 			int alphaPitch = ((m_di[index].col_count + 3) & ~3);
             int size = m_di[index].line_count * alphaPitch;
 			
-			pSubBmp->bmAlphaMask = NGUX_NEW_ARR(Uint8, size);
+			pSubBmp->bmAlphaMask = HFCL_NEW_ARR(Uint8, size);
             memset(pSubBmp->bmAlphaMask, 0x00, size);
 			ams = m_pBitmap->bmAlphaMask + m_di[index].idx_line * m_pBitmap->bmAlphaPitch + m_di[index].idx_col;
 			
@@ -267,7 +267,7 @@ bool ThreePatchImage::setSubBmp()
 
 		pSubBmp->bmWidth = m_di[index].col_count;
 		pSubBmp->bmHeight = m_di[index].line_count;
-		pSubBmp->bmType |= NGUX_BMP_TYPE_ALPHACHANNEL | NGUX_BMP_TYPE_COLORKEY;
+		pSubBmp->bmType |= HFCL_BMP_TYPE_ALPHACHANNEL | HFCL_BMP_TYPE_COLORKEY;
 		pSubBmp->bmAlpha = 0xFF;
 	}
 
@@ -279,9 +279,9 @@ void ThreePatchImage::clean()
 	Bitmap *pSubBmp = NULL;
 	for (int index = 0; index < THREEH_PATCH_COUNT; index++) {
 		pSubBmp = &m_subBmp[index];
-		if (pSubBmp->bmType & NGUX_BMP_TYPE_ALPHA_MASK) {
+		if (pSubBmp->bmType & HFCL_BMP_TYPE_ALPHA_MASK) {
 			if (NULL != pSubBmp->bmAlphaMask) {
-                NGUX_DELETE_ARR(pSubBmp->bmAlphaMask);
+                HFCL_DELETE_ARR(pSubBmp->bmAlphaMask);
 				pSubBmp->bmAlphaMask = NULL;
 				pSubBmp->bmAlphaPitch = 0;
 			}
@@ -314,4 +314,4 @@ bool ThreePatchImage::setImage(const char* image_file)
 
 }
 
-NAMESPACE_END
+} // namespace hfcl {

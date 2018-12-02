@@ -32,7 +32,7 @@
 
 extern BOOL nguxActiveFlag;
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 bool Window::m_updateLocked = false;
 
@@ -360,7 +360,7 @@ int Window::defaultAppProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
         case MSG_DESTROY:
             if(window) {
                 SetWindowAdditionalData(hWnd, 0);
-                NGUX_DELETE(window);
+                HFCL_DELETE(window);
             }
             return 0;
 
@@ -370,7 +370,7 @@ int Window::defaultAppProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
             return 0;
 
         // change theme msg
-        case NGUX_MSG_CHANGE_THEME:
+        case HFCL_MSG_CHANGE_THEME:
             if(window) {
                 window->changeTheme();
                 // may crash here!!! FIXME
@@ -456,5 +456,5 @@ void Window::endDlg(int endCode)
     SendNotifyMessage(m_viewWindow, MGCL_MSG_MNWND_ENDDIALOG, 0, (LPARAM)endCode);
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

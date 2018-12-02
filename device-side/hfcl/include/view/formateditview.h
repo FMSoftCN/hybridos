@@ -25,7 +25,7 @@
 
 #include "view.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #if defined(FE_MAX_FIELD_NR)
 #undef FE_MAX_FIELD_NR
@@ -226,6 +226,6 @@ class FormatEditView : public View
 		DECLARE_CLASS_NAME(FormatEditView)
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif

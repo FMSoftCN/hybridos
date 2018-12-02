@@ -29,7 +29,7 @@
 //#include "custstrlist.c"
 //#include "CustLanguage.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 ResPkgManager* ResPkgManager::m_singleton = NULL;
 
@@ -40,7 +40,7 @@ ResPkgManager:: ~ResPkgManager()
     for(it = m_packageList.begin(); it !=m_packageList.end(); it++)
     {
         m_packageList.erase(it);
-        NGUX_DELETE(*it);
+        HFCL_DELETE(*it);
     }
 }
 
@@ -61,14 +61,14 @@ ResPackage* ResPkgManager::getPackage(int id)
 ResPkgManager* ResPkgManager::getResPkgManager()
 { 
     if (m_singleton == NULL) 
-        m_singleton = NGUX_NEW_EX(ResPkgManager, ()); 
+        m_singleton = HFCL_NEW_EX(ResPkgManager, ()); 
     return m_singleton; 
 }
 
 void ResPkgManager::delResPkgManager()
 { 
     if (NULL != m_singleton) 
-        NGUX_DELETE(m_singleton);
+        HFCL_DELETE(m_singleton);
     m_singleton = NULL; 
 }
 
@@ -93,7 +93,7 @@ bool ResPkgManager::unregisterPackage(int id){
 	{
 		if((*it)->getId() == id) {
 			m_packageList.erase(it);
-			// VincentWei > FIXME: memory leap? NGUX_DELETE(*it);
+			// VincentWei > FIXME: memory leap? HFCL_DELETE(*it);
 			return true;
 		}
 	}
@@ -108,7 +108,7 @@ bool ResPkgManager::unregisterPackage(const char * name)
 	{
 		if(strcmp((*it)->getName(), name) == 0) {
 			m_packageList.erase(it);
-			NGUX_DELETE(*it);
+			HFCL_DELETE(*it);
 			return true;
 		}
 	}
@@ -419,5 +419,5 @@ bool SetResourceLanguage (int lang)
     return GetResPkgManager()->setCurrentLang (lang);
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

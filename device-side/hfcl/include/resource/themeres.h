@@ -22,7 +22,7 @@
 #ifndef __THEMERES_H
 #define __THEMERES_H
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ThemeRes {
     public:
@@ -38,7 +38,7 @@ class ThemeRes {
         string m_theme_name;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif /* __THEMERES_H */
 

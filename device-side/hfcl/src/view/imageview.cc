@@ -23,7 +23,7 @@
 
 #include "imageview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 ImageView::ImageView(View* p_parent)
     : View(p_parent, NULL)
@@ -64,7 +64,7 @@ ImageView::ImageView(const char * filePath,
 ImageView::~ImageView()
 {
 	if(m_image) {
-		NGUX_DELETE(m_image);
+		HFCL_DELETE(m_image);
 	}
 }
 
@@ -88,12 +88,12 @@ void ImageView::drawContent(GraphicsContext* context, IntRect &rc, int status)
 bool ImageView::setImage(Image *pImg)
 {
 	if (pImg == m_image) {
-		NGUX_DELETE(pImg);
+		HFCL_DELETE(pImg);
 		return true;
 	}
 	
 	if(m_image != NULL) {
-		NGUX_DELETE(m_image);
+		HFCL_DELETE(m_image);
 	}
 	m_image = pImg;
 	 
@@ -150,5 +150,5 @@ int ImageView::getImageHeight(void)
 
 DEFINE_CLASS_NAME(ImageView)
 
-NAMESPACE_END
+} // namespace hfcl {
 

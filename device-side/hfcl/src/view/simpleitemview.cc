@@ -23,7 +23,7 @@
 #include "ngux.h"
 #include "simpleitemview.h"
 #include "respkgmanager.h"
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define SPACE 2         // 3
 #define SELECTED_WIDTH 20
@@ -78,13 +78,13 @@ SimpleItemView::SimpleItemView(View* p_parent, DrawableSet* drset)
 SimpleItemView::~SimpleItemView()
 {
 	if(m_img) {
-		NGUX_DELETE(m_img);
+		HFCL_DELETE(m_img);
 	}
 }
 
 void SimpleItemView::setImage(Image *img) {
 	if(m_img && img != m_img){
-		NGUX_DELETE(m_img);
+		HFCL_DELETE(m_img);
 	}
 	m_img = img;
 }
@@ -203,7 +203,7 @@ void SimpleItemView::drawContent(GraphicsContext* context, IntRect& rc, int stat
 void SimpleItemView::startRoll()
 {
     if (getRollProp() && isNeedRoll()) {
-        AddRollText(this, NGUX_NEW_EX(RollTextTransition, (this, ROLLOFFSET)));
+        AddRollText(this, HFCL_NEW_EX(RollTextTransition, (this, ROLLOFFSET)));
         setRolling(true);
     }
 }
@@ -241,5 +241,5 @@ bool SimpleItemView::isNeedRoll()
 
 
 
-NAMESPACE_END
+} // namespace hfcl {
 

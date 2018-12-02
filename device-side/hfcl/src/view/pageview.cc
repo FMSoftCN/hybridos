@@ -22,7 +22,7 @@
 
 #include "pageview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 View *PageView::nextPage(void)
 {
@@ -129,4 +129,4 @@ int PageView::getCurPageIndex(void)
 	return indexFromPage(getCurPage());
 }
 
-NAMESPACE_END
+} // namespace hfcl {

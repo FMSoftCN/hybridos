@@ -38,7 +38,7 @@
 #include "wrapperview.h"
 #include "graphicscontext.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define EM_ENABLECARET 0xF0D5 // same with minigui
 
@@ -331,10 +331,10 @@ string WrapperView::getText(){
 		return string(szbuf);
 	}
 	else {
-		char * text = NGUX_NEW_ARR(char, (len + 1));
+		char * text = HFCL_NEW_ARR(char, (len + 1));
 		::GetWindowText(m_wrapwnd, text, len);
 		string str = text;
-		NGUX_DELETE_ARR(text);
+		HFCL_DELETE_ARR(text);
 		return str;
 	}
 }
@@ -350,5 +350,5 @@ void WrapperView::showCaret(bool bShow)
 
 DEFINE_CLASS_NAME(WrapperView)
 
-NAMESPACE_END
+} // namespace hfcl {
 

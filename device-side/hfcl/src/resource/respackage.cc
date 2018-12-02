@@ -27,7 +27,7 @@
 #include "appmanager.h"
 
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 /*
  * ResEntry related
@@ -43,7 +43,7 @@ ResEntry::~ResEntry()
 	switch(type)
 	{
 		case R_TYPE_TEXT:
-			if (resouces) NGUX_DELETE((TextResMap *)resouces);
+			if (resouces) HFCL_DELETE((TextResMap *)resouces);
 			break;
 		case R_TYPE_IMAGE:
 			if (resouces) {
@@ -55,11 +55,11 @@ ResEntry::~ResEntry()
 					// it->clean();
 					(*it).clean();
 				}
-				NGUX_DELETE((ImageResVec *)resouces);
+				HFCL_DELETE((ImageResVec *)resouces);
 			}
 			break;
 		case R_TYPE_FONT:
-			if (resouces) NGUX_DELETE((FontResVec *)resouces);
+			if (resouces) HFCL_DELETE((FontResVec *)resouces);
 			break;
 		case R_TYPE_STYLE:
             if (resouces)
@@ -67,13 +67,13 @@ ResEntry::~ResEntry()
                 StyleResVec *v = (StyleResVec*)resouces;
 
                 for(StyleResVec::iterator it = v->begin(); it != v->end(); ++it)
-                    //NGUX_DELETE(*it);
+                    //HFCL_DELETE(*it);
 					(*it)->unref();
-                NGUX_DELETE(v);
+                HFCL_DELETE(v);
             }
             break;
 		case R_TYPE_UI:
-			if (resouces) NGUX_DELETE((UiResVec *)resouces);
+			if (resouces) HFCL_DELETE((UiResVec *)resouces);
 			break;
         case R_TYPE_DRAWABLE:
             if (resouces)
@@ -84,7 +84,7 @@ ResEntry::~ResEntry()
 					(*it)->unref();
 				}
 
-                NGUX_DELETE(v);
+                HFCL_DELETE(v);
             }
             break;
         case R_TYPE_DRAWABLESET:
@@ -93,11 +93,11 @@ ResEntry::~ResEntry()
                 DrawableSetResVec *v = (DrawableSetResVec *)resouces;
 
                 for(DrawableSetResVec::iterator it = v->begin(); it != v->end(); ++it) {
-                    //NGUX_DELETE(*it);
+                    //HFCL_DELETE(*it);
 					(*it)->unref();
 				}
 
-                NGUX_DELETE(v);
+                HFCL_DELETE(v);
             }
             break;
         case R_TYPE_DRSETGROUP:
@@ -106,10 +106,10 @@ ResEntry::~ResEntry()
                 DrawableSetGroupResVec *v = (DrawableSetGroupResVec *)resouces;
 
                 for(DrawableSetGroupResVec::iterator it = v->begin(); it != v->end(); ++it)
-                    //NGUX_DELETE(*it);
+                    //HFCL_DELETE(*it);
 					(*it)->unref();
 
-                NGUX_DELETE(v);
+                HFCL_DELETE(v);
             }
             break;
 
@@ -119,14 +119,14 @@ ResEntry::~ResEntry()
                 ThemeResVec *v = (ThemeResVec *)resouces;
 
                 for(ThemeResVec::iterator it = v->begin(); it != v->end(); ++it)
-                    NGUX_DELETE(*it);
+                    HFCL_DELETE(*it);
 
-                NGUX_DELETE(v);
+                HFCL_DELETE(v);
             }
             break;
 
 		case R_TYPE_MENU:
-			if (resouces) NGUX_DELETE((MenuResVec *)resouces);
+			if (resouces) HFCL_DELETE((MenuResVec *)resouces);
 			break;
 		default:
 			break;
@@ -137,7 +137,7 @@ TextResMap &ResEntry::textRes(void)
 {
 	if (NULL == resouces)
 	{
-		resouces = NGUX_NEW_EX(TextResMap, ());
+		resouces = HFCL_NEW_EX(TextResMap, ());
 	}
 
 	return ( *((TextResMap *)resouces) );
@@ -147,7 +147,7 @@ ImageResVec &ResEntry::imageRes(void)
 {
 	if (NULL == resouces)
 	{
-		resouces = NGUX_NEW_EX(ImageResVec, ());
+		resouces = HFCL_NEW_EX(ImageResVec, ());
 	}
 
 	return ( *((ImageResVec *)resouces) );
@@ -157,7 +157,7 @@ FontResVec &ResEntry::fontRes(void)
 {
 	if (NULL == resouces)
 	{
-		resouces = NGUX_NEW_EX(FontResVec, ());
+		resouces = HFCL_NEW_EX(FontResVec, ());
 	}
 
 	return ( *((FontResVec *)resouces) );
@@ -167,7 +167,7 @@ StyleResVec &ResEntry::styleRes(void)
 {
 	if (NULL == resouces)
 	{
-		resouces = NGUX_NEW_EX(StyleResVec, ());
+		resouces = HFCL_NEW_EX(StyleResVec, ());
 	}
 
 	return ( *((StyleResVec *)resouces) );
@@ -177,7 +177,7 @@ UiResVec &ResEntry::uiRes(void)
 {
 	if (NULL == resouces)
 	{
-		resouces = NGUX_NEW_EX(UiResVec, ());
+		resouces = HFCL_NEW_EX(UiResVec, ());
 	}
 
 	return ( *((UiResVec *)resouces) );
@@ -186,7 +186,7 @@ UiResVec &ResEntry::uiRes(void)
 MenuResVec& ResEntry::menuRes(void)
 {
 	if (NULL == resouces) {
-		resouces = NGUX_NEW_EX(MenuResVec, ());
+		resouces = HFCL_NEW_EX(MenuResVec, ());
 	}
 
 	return (*((MenuResVec*)resouces));
@@ -196,7 +196,7 @@ DrawableResVec &ResEntry::drawableRes(void)
 {
     if (NULL == resouces)
     {
-		resouces = NGUX_NEW_EX(DrawableResVec, ());
+		resouces = HFCL_NEW_EX(DrawableResVec, ());
     }
 
     return ( *((DrawableResVec *)resouces) );
@@ -206,7 +206,7 @@ DrawableSetResVec &ResEntry::drawableSetRes(void)
 {
 	if (NULL == resouces)
 	{
-		resouces = NGUX_NEW_EX(DrawableSetResVec, ());
+		resouces = HFCL_NEW_EX(DrawableSetResVec, ());
 	}
 	return ( *((DrawableSetResVec *)resouces) );
 }
@@ -215,7 +215,7 @@ ThemeResVec &ResEntry::themeRes(void)
 {
 	if (NULL == resouces)
 	{
-		resouces = NGUX_NEW_EX(ThemeResVec, ());
+		resouces = HFCL_NEW_EX(ThemeResVec, ());
 	}
 	return ( *((ThemeResVec *)resouces) );
 }
@@ -225,7 +225,7 @@ DrawableSetGroupResVec & ResEntry::drawableSetGroupRes(void)
 {
 	if(NULL == resouces) 
 	{
-		resouces = NGUX_NEW_EX(DrawableSetGroupResVec, ());
+		resouces = HFCL_NEW_EX(DrawableSetGroupResVec, ());
 	}
 	return (*((DrawableSetGroupResVec*)resouces));
 }
@@ -355,9 +355,9 @@ bool ResPackage::addStyleResource(HTResId id, HTResId superid, const TRStyleElem
 		return false;
 
 	if(count > 30) 
-		style = NGUX_NEW_EX(HashedStyle, (elements));
+		style = HFCL_NEW_EX(HashedStyle, (elements));
 	else
-		style = NGUX_NEW_EX(SimpleStyle, (elements));
+		style = HFCL_NEW_EX(SimpleStyle, (elements));
 
 	Style* super = GetStyleRes(superid);
 	if(!super)
@@ -415,7 +415,7 @@ static DrawableSet* create_drawable_set_from_res(HTResId drset_super_id,
 	if(!drset_super)
 		drset_super = GetCommonDrawableSet();
 
-	DrawableSet * drset = NGUX_NEW_EX(SimpleDrawableSet,(drset_super));
+	DrawableSet * drset = HFCL_NEW_EX(SimpleDrawableSet,(drset_super));
 
 	for(int i=0; items[i].dr_id != -1; i++)
 	{
@@ -436,7 +436,7 @@ static DrawableSetGroup* create_drawable_set_group_from_res(HTResId drsetgroup_s
 	if(!drsetgroup_super_id != 0)
 		drsetgroup_super = GetDrawableSetGroupRes(drsetgroup_super_id);
 	
-	DrawableSetGroup* drsetgroup = NGUX_NEW_EX(DrawableSetGroup, (drsetgroup_super));
+	DrawableSetGroup* drsetgroup = HFCL_NEW_EX(DrawableSetGroup, (drsetgroup_super));
 
 	if(drsetgroup) {
 		drsetgroup->setDrawableSetMapTable((TRDrawableSetGroupItem*)items);
@@ -470,7 +470,7 @@ void ResPackage::addDrawableSetGroupResource(HTResId drsetgroup_id,
 void ResPackage::addThemeResource(HTResId theme_id, const char* theme_name, 
 		const TRThemeItem* items)
 {
-	ThemeRes* themeR = NGUX_NEW_EX(ThemeRes,());
+	ThemeRes* themeR = HFCL_NEW_EX(ThemeRes,());
 	if (themeR != NULL)
 	{
 		themeR->setDrawableSetMapTable((TRThemeItem*)items);
@@ -699,8 +699,8 @@ bool ResPackage::setTheme(HTResId theme_res_id, bool update_system)
 	m_theme = themeR;
 	m_theme_id  = theme_res_id;
 	if (update_system) {
-		AppManager::getInstance()->broadcastMessage(NGUX_MSG_CHANGE_THEME, theme_res_id, 0);	
-		// do NOT need them here, we do this in mNguxWindow.cpp when broadcast message "NGUX_MSG_CHANGE_THEME"
+		AppManager::getInstance()->broadcastMessage(HFCL_MSG_CHANGE_THEME, theme_res_id, 0);	
+		// do NOT need them here, we do this in mNguxWindow.cpp when broadcast message "HFCL_MSG_CHANGE_THEME"
 		//AppManager::getInstance()->broadcastMessage(MSG_ERASEBKGND, 0, 0);
 		//AppManager::getInstance()->broadcastMessage(MSG_PAINT, 0, 0);
 	}
@@ -806,4 +806,4 @@ bool RegisterViewDrawableSetGroupFromRes(const char * view_name,
 	return true;
 }
 
-NAMESPACE_END
+} // namespace hfcl {

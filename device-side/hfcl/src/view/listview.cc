@@ -26,7 +26,7 @@
 #include "graphicscontext.h"
 #include "timerservice.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 void ListView::init(void)
 {
@@ -860,5 +860,5 @@ void ListView::animationScroll(int offy)
 
 DEFINE_CLASS_NAME(ListView)
 
-NAMESPACE_END
+} // namespace hfcl {
 

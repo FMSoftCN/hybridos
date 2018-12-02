@@ -23,12 +23,12 @@
 #include "iconview.h"
 #include "graphicscontext.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 IconView::IconView(View *_parent)
     : ScrollView(_parent), m_gridView(NULL)
 {
-    m_gridView = NGUX_NEW_EX(GridView, (this));
+    m_gridView = HFCL_NEW_EX(GridView, (this));
     setContent(m_gridView);
     // ref : this view is multi EventListers,
     // which be add to gridview (here) and TimerService (parent).
@@ -39,7 +39,7 @@ IconView::IconView(View *_parent)
 IconView::IconView(View *_parent, DrawableSet *drset)
     : ScrollView(_parent, drset), m_gridView(NULL)
 {
-    m_gridView = NGUX_NEW_EX(GridView, (this, NULL));
+    m_gridView = HFCL_NEW_EX(GridView, (this, NULL));
     setContent(m_gridView);
     // ref : this view is multi EventListers,
     // which be add to gridview (here) and TimerService (parent).
@@ -97,4 +97,4 @@ bool IconView::dispatchEvent(Event *e)
     return DISPATCH_CONTINUE_MSG;
 }
 
-NAMESPACE_END
+} // namespace hfcl {

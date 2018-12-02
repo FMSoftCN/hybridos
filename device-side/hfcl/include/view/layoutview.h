@@ -20,12 +20,12 @@
 */
 
 
-#ifndef __NGUX_LAYOUTVIEW_H__
-#define __NGUX_LAYOUTVIEW_H__
+#ifndef __HFCL_LAYOUTVIEW_H__
+#define __HFCL_LAYOUTVIEW_H__
 
 #include "containerview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class LayoutView : public ContainerView {
     public:
@@ -88,7 +88,7 @@ class LayoutView : public ContainerView {
         unsigned int m_direction;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif  /* __NGUX_LAYOUTVIEW_H__ */
+#endif  /* __HFCL_LAYOUTVIEW_H__ */
 

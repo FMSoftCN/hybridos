@@ -27,7 +27,7 @@
 #define SYSRESID(name) R_sys_##name
 #define begin_respkg(name, id) \
     bool FRRegister_##name##_resource(void) { \
-        ResPackage* resPkg = NGUX_NEW_EX(ResPackage, (#name, id)); \
+        ResPackage* resPkg = HFCL_NEW_EX(ResPackage, (#name, id)); \
 		if(!RegisterResPackage(resPkg)) return false;
 
 #define end_respkg return true; }

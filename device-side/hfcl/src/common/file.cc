@@ -21,7 +21,7 @@
 
 #include "file.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 File::File()
     : m_fileName(NULL)
@@ -188,5 +188,5 @@ char * File::openMode(FileModeType mode)
 
 //====================== end private function define ==========================
 
-NAMESPACE_END
+} // namespace hfcl {
 

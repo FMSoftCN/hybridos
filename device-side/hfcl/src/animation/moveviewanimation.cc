@@ -22,7 +22,7 @@
 #include "moveviewanimation.h"
 #include "view.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 /*
  * the param pt is target point in parent view.
@@ -65,4 +65,4 @@ void MoveViewAnimation::setProperty(int id, void *value)
 	getView()->setRect(rect);
 }
 
-NAMESPACE_END
+} // namespace hfcl {

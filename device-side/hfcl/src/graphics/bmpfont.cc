@@ -37,7 +37,7 @@
 #include "drawable.h"
 #include "image.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 BMPFont::GlyphMap::value_type BMPFont::m_initValue[] =
 {
@@ -92,5 +92,5 @@ BMPFont::~BMPFont()
 
 
 
-NAMESPACE_END
+} // namespace hfcl {
 #endif

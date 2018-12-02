@@ -18,12 +18,12 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef __NGUX_ALPHAVIEWANIMATION_H_
-#define __NGUX_ALPHAVIEWANIMATION_H_
+#ifndef __HFCL_ALPHAVIEWANIMATION_H_
+#define __HFCL_ALPHAVIEWANIMATION_H_
 
 #include "viewanimation.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class AlphaViewAnimation: public ViewAnimation
 {
@@ -39,6 +39,6 @@ private:
 
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* __NGUX_ALPHAVIEWANIMATION_H_ */
+#endif /* __HFCL_ALPHAVIEWANIMATION_H_ */

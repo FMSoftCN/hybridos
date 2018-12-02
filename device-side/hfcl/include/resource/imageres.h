@@ -25,7 +25,7 @@
 #include "image.h"
 #include "gifanimate.h"
 #include "animateimageview.h"
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ImageRes
 {
@@ -61,7 +61,7 @@ class ImageRes
         GifAnimate* m_gifAnimate;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif /* __IMAGERES_H */
 

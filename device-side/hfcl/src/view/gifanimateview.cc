@@ -35,7 +35,7 @@
 #include "timerservice.h"
 #include "tm.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 GifAnimateView::GifAnimateView()
 	:View() ,m_elapsed_10ms(0)
@@ -89,10 +89,10 @@ GifAnimateView::~GifAnimateView()
 	m_timer_id = 0;
 
     if (NULL != m_animate){
-	#ifdef _NGUX_INCORE_BMPDATA
+	#ifdef _HFCL_INCORE_BMPDATA
 		 m_animate->~GifAnimate();
     #else
-        NGUX_DELETE(m_animate);
+        HFCL_DELETE(m_animate);
 		m_animate = NULL;
     #endif
 	}
@@ -189,14 +189,14 @@ bool GifAnimateView::reset(void)
 void GifAnimateView::setGifFile(const char* animateFile)
 {
     if (NULL != m_animate) {
-        NGUX_DELETE(m_animate);
+        HFCL_DELETE(m_animate);
 		m_animate = NULL;
     }
 
     if (NULL == animateFile)
         return;
 
-    m_animate = NGUX_NEW_EX(GifAnimate, ());
+    m_animate = HFCL_NEW_EX(GifAnimate, ());
 
     if (NULL != m_animate) {
         m_animate->createGifAnimateFromFile(animateFile);
@@ -212,7 +212,7 @@ void GifAnimateView::setGifFile(const char* animateFile)
 void GifAnimateView::setGifAnimate(GifAnimate* animate)
 {
     if (NULL != m_animate && m_animate != animate) {
-        NGUX_DELETE(m_animate);
+        HFCL_DELETE(m_animate);
 		m_animate = NULL;
     }
 
@@ -262,7 +262,7 @@ bool GifAnimateView::handleEvent(Event* event)
 			{
 				if (!(m_animate->isLastFrame()) || Loop == m_loopType)
 				{
-#ifdef _NGUX_INCORE_BMPDATA
+#ifdef _HFCL_INCORE_BMPDATA
 	                if((Loop == m_loopType)&&(m_animate->isLastFrame()))
 					{
 					     m_animate->firstFrame();
@@ -296,4 +296,4 @@ bool GifAnimateView::dispatchEvent(Event* event)
     return View::dispatchEvent(event);
 }
 
-NAMESPACE_END
+} // namespace hfcl {

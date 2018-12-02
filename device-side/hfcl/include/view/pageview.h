@@ -20,12 +20,12 @@
 */
 
 
-#ifndef _NGUX_PageView_h
-#define _NGUX_PageView_h
+#ifndef _HFCL_PageView_h
+#define _HFCL_PageView_h
 
 #include "panelview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class PageView : public PanelView 
 {
@@ -78,6 +78,6 @@ class PageView : public PanelView
 		View *m_cur_page;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* NGUX_PageView_h */
+#endif /* HFCL_PageView_h */

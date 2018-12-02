@@ -22,7 +22,7 @@
 
 #include "statusbarview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 
 #define SBW_SPACE_SIZE      0//2
@@ -74,7 +74,7 @@ bool StatusBarView::setSBView(int loca, View* v)
     if (v_w > m_width)
         v_w = m_width;
 
-    SBViewNode *sbvn = NGUX_NEW_EX(SBViewNode, (v_id, loca, v, v_w, v_h));
+    SBViewNode *sbvn = HFCL_NEW_EX(SBViewNode, (v_id, loca, v, v_w, v_h));
     m_sbwList.push_back(sbvn);
 
     return true;
@@ -142,5 +142,5 @@ void StatusBarView::resetViewRect(SBViewNode* sbvn)
     }
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

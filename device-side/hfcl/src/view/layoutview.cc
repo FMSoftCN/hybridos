@@ -23,7 +23,7 @@
 #include "layoutview.h"
 
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 /**
  * @brief LayoutView container
@@ -78,5 +78,5 @@ LayoutView::~LayoutView()
 
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

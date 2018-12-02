@@ -25,7 +25,7 @@
 #include "timerservice.h"
 
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #ifdef __MMI_SAMSUNG_GT_FEATURE__
 #define DEF_SCROLL_MARGIN 	1
@@ -48,7 +48,7 @@ ScrollView::ScrollView(View *p_parent)
     ,m_content(NULL)
     ,m_timerId(0)
 {
-    setContent(NGUX_NEW_EX(ContainerView, ()));
+    setContent(HFCL_NEW_EX(ContainerView, ()));
 	setBarVisible(true);
 	setAutoShowBar(true);
 	setFocusValid(true);
@@ -74,7 +74,7 @@ ScrollView::ScrollView(View *p_parent, DrawableSet* drset)
 	,m_content(NULL)
     ,m_timerId(0)
 {
-    setContent(NGUX_NEW_EX(ContainerView, ()));
+    setContent(HFCL_NEW_EX(ContainerView, ()));
 	setBarVisible(true);
 	setAutoShowBar(true);
 	setFocusValid(true);
@@ -501,4 +501,4 @@ bool ScrollView::dispatchEvent(Event* event)
 
 DEFINE_CLASS_NAME(ScrollView)
 
-NAMESPACE_END
+} // namespace hfcl {

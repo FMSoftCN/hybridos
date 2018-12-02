@@ -28,7 +28,7 @@
 #define _LONGPRESS_ 3
 #endif
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 GridView::GridView(View * p_parent, DrawableSet* drset)
 	:PanelView(p_parent, drset)
@@ -507,5 +507,5 @@ bool GridView::handleEvent(Event* event)
 DEFINE_CLASS_NAME(GridView)
 
 
-NAMESPACE_END
+} // namespace hfcl {
 

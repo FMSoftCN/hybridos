@@ -23,7 +23,7 @@
 #ifndef  _BIT_MARK_H 
 #define  _BIT_MARK_H
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 ////////////////////// Features /////////////////////////
 class BitMark
@@ -69,6 +69,6 @@ class PointerKeeper
 		unsigned int* m_pointerbuf;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif

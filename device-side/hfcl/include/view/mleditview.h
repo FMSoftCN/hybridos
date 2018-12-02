@@ -20,14 +20,14 @@
 */
 
 
-#ifndef _NGUX_MLEDITVIEW_H_
-#define _NGUX_MLEDITVIEW_H_
+#ifndef _HFCL_MLEDITVIEW_H_
+#define _HFCL_MLEDITVIEW_H_
 
 #include "editview.h"
 #include "graphicscontext.h"
 #include "timerservice.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 LIST(int, IntList);
 
@@ -132,8 +132,8 @@ private:
 	bool      m_isWordBreak;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif // _NGUX_MLEDITVIEW_H_
+#endif // _HFCL_MLEDITVIEW_H_
 
 

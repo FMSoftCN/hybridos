@@ -23,7 +23,7 @@
 #include "nguxobject.h"
 
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 Object::Object()
 {
@@ -35,9 +35,9 @@ Object::~Object()
 
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#ifdef _NGUX_DONT_SUPPORT_TEMPLATE
+#ifdef _HFCL_DONT_SUPPORT_TEMPLATE
 
 //a Null buffer
 unsigned int _null_buffer[] = {0,0,0,0};

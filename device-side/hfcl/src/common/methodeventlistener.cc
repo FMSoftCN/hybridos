@@ -40,7 +40,7 @@
 #include "nguxevent.h"
 #include "methodeventlistener.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 MethodEventListener::MethodEventListener(void* ctx, EventHandle event_handle, int event_type)
 :EventListener(0)
@@ -64,4 +64,4 @@ bool MethodEventListener::handleEvent(Event* event)
 }
 
 
-NAMESPACE_END
+} // namespace hfcl {

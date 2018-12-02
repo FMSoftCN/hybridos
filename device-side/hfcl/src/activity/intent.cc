@@ -23,7 +23,7 @@
 #include "nguxcommon.h"
 #include "intent.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 Intent::Intent(int i_action, string s_data, int i_tag)
     :m_action(i_action)
     ,m_data(s_data)
@@ -51,4 +51,4 @@ void *Intent::getValue(string key)
 		return m_intentStore[key];
 	return (void*)0;
 }
-NAMESPACE_END
+} // namespace hfcl {

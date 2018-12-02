@@ -19,8 +19,8 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_STRING_IDS_H_
-#define _NGUX_STRING_IDS_H_
+#ifndef _HFCL_STRING_IDS_H_
+#define _HFCL_STRING_IDS_H_
 
 enum {
     /* 00000 */ ASTR_DEFAULT, // EMPTY; OK
@@ -3990,5 +3990,5 @@ enum {
     MAX_STRID, // Not a real STRID
 };
 
-#endif /* _NGUX_STRING_IDS_H_ */
+#endif /* _HFCL_STRING_IDS_H_ */
 

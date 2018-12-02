@@ -20,8 +20,8 @@
 */
 
 
-#ifndef _NGUX_View_h
-#define _NGUX_View_h
+#ifndef _HFCL_View_h
+#define _HFCL_View_h
 
 
 #include "drawable.h"
@@ -29,7 +29,7 @@
 #include "intrect.h"
 #include "viewcontext.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class GraphicsContext;
 class ContainerView;
@@ -299,6 +299,6 @@ public:
 		int layer () { return m_drawLayer; }
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* NGUX_View_h */
+#endif /* HFCL_View_h */

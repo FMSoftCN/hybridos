@@ -20,13 +20,13 @@
 */
 
 
-#ifndef _NGUX_SimpleItemView_h
-#define _NGUX_SimpleItemView_h
+#ifndef _HFCL_SimpleItemView_h
+#define _HFCL_SimpleItemView_h
 
 #include "itemview.h"
 #include "image.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class SimpleItemView : public ItemView
 {
@@ -101,6 +101,6 @@ protected:
 	bool  m_bRolling;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 #endif
 

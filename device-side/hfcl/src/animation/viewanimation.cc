@@ -21,7 +21,7 @@
 
 #include "viewanimation.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 ViewAnimation::ViewAnimation(View *view, enum EffVariantType varianttype)
     :Animation(varianttype)
@@ -34,4 +34,4 @@ ViewAnimation::~ViewAnimation()
 
 }
 
-NAMESPACE_END
+} // namespace hfcl {

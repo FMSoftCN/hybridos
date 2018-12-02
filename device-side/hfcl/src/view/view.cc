@@ -33,13 +33,13 @@
 #include "respackage.h"
 #include "nguxwindow.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 View::View()
     : m_rect(0, 0, 0, 0)
     , m_id(0)
     , m_drset(NULL)
-    , m_alpha(NGUX_DEFAULT_OPACITY)
+    , m_alpha(HFCL_DEFAULT_OPACITY)
     , m_flags(0)
     , m_prev(0)
     , m_next(0)
@@ -55,7 +55,7 @@ View::View(View* p_parent)
 	: m_rect(0, 0, 0, 0)
 	, m_id(0)
 	, m_drset(NULL)   
-    , m_alpha(NGUX_DEFAULT_OPACITY)
+    , m_alpha(HFCL_DEFAULT_OPACITY)
     , m_flags(0)
 	, m_prev(0)
     , m_next(0)
@@ -74,7 +74,7 @@ View::View(View* p_parent, DrawableSet* drset)
     : m_rect(0, 0, 0, 0)
     , m_id(0)
 	, m_drset(drset)
-    , m_alpha(NGUX_DEFAULT_OPACITY)
+    , m_alpha(HFCL_DEFAULT_OPACITY)
     , m_flags(0)
     , m_prev(0)
     , m_next(0)
@@ -93,7 +93,7 @@ View::View(int i_id, int x, int y, int w, int h)
 	: m_rect(x, y, x + w, y + h)
 	, m_id(i_id)
 	, m_drset(NULL)   
-    , m_alpha(NGUX_DEFAULT_OPACITY)
+    , m_alpha(HFCL_DEFAULT_OPACITY)
 	, m_flags(0)
 	, m_prev(0)
     , m_next(0)
@@ -110,7 +110,7 @@ View::~View()
 	//releaseEventListeners();
 
 	if(m_drset && !(m_drset->isCommon())) {
-		NGUX_DELETE(m_drset);
+		HFCL_DELETE(m_drset);
 	}
 }
 
@@ -129,11 +129,11 @@ void View::setDrawableSet(DrawableSet* drset)
 	if(m_drset != NULL) 
 	{
 		if (m_drset == drset && !(drset->isCommon())) {
-			NGUX_DELETE(drset);
+			HFCL_DELETE(drset);
 			return;
 		}
 		if (m_drset != drset && !(m_drset->isCommon())) {
-			NGUX_DELETE(m_drset);
+			HFCL_DELETE(m_drset);
 		}
 	}
 	m_drset = drset;
@@ -180,7 +180,7 @@ void View::onPaint(GraphicsContext* context, int status)
         if (!context->rectVisible(rc)) 
             return;
 
-        if (m_alpha != NGUX_DEFAULT_OPACITY) {
+        if (m_alpha != HFCL_DEFAULT_OPACITY) {
             context->beginTransparencyLayer(m_alpha);
         }
 
@@ -194,7 +194,7 @@ void View::onPaint(GraphicsContext* context, int status)
         paint(context, status);
         context->restore();
 
-        if (m_alpha != NGUX_DEFAULT_OPACITY) {
+        if (m_alpha != HFCL_DEFAULT_OPACITY) {
             context->endTransparencyLayer();
         }
     }
@@ -465,4 +465,4 @@ ContainerView* View::rootView(void)
 	return NULL;
 }
 
-NAMESPACE_END
+} // namespace hfcl {

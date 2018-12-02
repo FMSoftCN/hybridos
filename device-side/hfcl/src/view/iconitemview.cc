@@ -24,12 +24,12 @@
 #include "iconitemview.h"
 #include "respkgmanager.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 IconItemView:: ~IconItemView() 
 { 
 	if(m_image) {
-		NGUX_DELETE(m_image); 
+		HFCL_DELETE(m_image); 
 	}
 }
 
@@ -60,7 +60,7 @@ void IconItemView::setText(const char* str)
 void IconItemView::setImage(Image* img) 
 {
 	if(m_image && img != m_image) {
-		NGUX_DELETE(m_image);
+		HFCL_DELETE(m_image);
 		m_image = NULL;
 	}
 	m_image = img;
@@ -125,6 +125,6 @@ void IconItemView::drawContent(GraphicsContext* context, IntRect& rc, int status
 
 DEFINE_CLASS_NAME(IconItemView)
 
-NAMESPACE_END
+} // namespace hfcl {
 
 

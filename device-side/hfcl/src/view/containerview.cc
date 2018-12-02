@@ -25,7 +25,7 @@
 
 #include "hal_misc.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 ContainerView::ContainerView()
     : View()
@@ -198,7 +198,7 @@ int ContainerView::removeAll()
         view = view->nextSibling();
         //FIXED ME: should call the release method
         // delete tmp;
-        NGUX_DELETE(tmp);
+        HFCL_DELETE(tmp);
     }
 
     m_firstChild = NULL;
@@ -255,7 +255,7 @@ int ContainerView::removeChild(View * view, bool bRelease)
 {
     if(detachChild(view) == 0) {
         if (bRelease)
-            NGUX_DELETE(view);
+            HFCL_DELETE(view);
         return 0;
     }
     return -1;
@@ -512,4 +512,4 @@ void ContainerView::autoFitSize(bool auto_child_fit)
 }
 
 DEFINE_CLASS_NAME(ContainerView)
-NAMESPACE_END
+} // namespace hfcl {

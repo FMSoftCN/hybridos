@@ -32,7 +32,7 @@
 #define IMAGE_TYPE_3V_PATCH  3
 #define IMAGE_TYPE_JPEG      4
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 Image::Image()
     : RefCount(0)
@@ -48,7 +48,7 @@ Image::~Image()
     if (m_pBitmap != NULL)
     {
 	    GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
-	    NGUX_DELETE(m_pBitmap);
+	    HFCL_DELETE(m_pBitmap);
 	    m_pBitmap = NULL;
     }
 }
@@ -80,16 +80,16 @@ Image* Image::loadImage(const char * file_path)
 
 	switch (get_image_type(file_path)) {
         case IMAGE_TYPE_9_PATCH:
-            pImg = NGUX_NEW_EX(NinePatchImage, ());
+            pImg = HFCL_NEW_EX(NinePatchImage, ());
             break;
         case IMAGE_TYPE_3H_PATCH:
-            pImg = NGUX_NEW_EX(ThreePatchImage, ());
+            pImg = HFCL_NEW_EX(ThreePatchImage, ());
             break;
         case IMAGE_TYPE_3V_PATCH:
-            pImg = NGUX_NEW_EX(ThreePatchImage, (false));
+            pImg = HFCL_NEW_EX(ThreePatchImage, (false));
             break;
         case IMAGE_TYPE_NORMAL:
-            pImg = NGUX_NEW_EX(Image, ());
+            pImg = HFCL_NEW_EX(Image, ());
 			break;
     }
 
@@ -119,7 +119,7 @@ bool Image::setImageBitmap(Bitmap* pbmp)
     {
 	    if (m_pBitmap != NULL) {
 			GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
-			NGUX_DELETE(m_pBitmap);
+			HFCL_DELETE(m_pBitmap);
 		}
 	    m_pBitmap = pbmp;
     }
@@ -140,7 +140,7 @@ int Image::width(void)
 		if(m_pBitmap)
 		{
 		    GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
-	        NGUX_DELETE(m_pBitmap);
+	        HFCL_DELETE(m_pBitmap);
 	        m_pBitmap = NULL;
 		}
 	} 
@@ -162,7 +162,7 @@ int Image::height(void)
 		if(m_pBitmap)
 		{
 		    GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
-	        NGUX_DELETE(m_pBitmap);
+	        HFCL_DELETE(m_pBitmap);
 	        m_pBitmap = NULL;
 		}
 	} 
@@ -294,10 +294,10 @@ void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat forma
 
 	if (m_bLoadOnPainting) {
 	    GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
-        NGUX_DELETE(m_pBitmap);
+        HFCL_DELETE(m_pBitmap);
         m_pBitmap = NULL;
     }
 }
 
-NAMESPACE_END
+} // namespace hfcl {
 

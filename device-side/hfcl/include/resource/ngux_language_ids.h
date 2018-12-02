@@ -19,8 +19,8 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _NGUX_LANGUAGE_IDS_H_
-#define _NGUX_LANGUAGE_IDS_H_
+#ifndef _HFCL_LANGUAGE_IDS_H_
+#define _HFCL_LANGUAGE_IDS_H_
 
 enum {
     /* 000 */ LANGID_AFRIKAANS, /* Afrikaans */
@@ -139,5 +139,5 @@ extern const char* __ngux_non_l10n_raw_strings [];
 }
 #endif
 
-#endif /* _NGUX_LANGUAGE_IDS_H_ */
+#endif /* _HFCL_LANGUAGE_IDS_H_ */
 

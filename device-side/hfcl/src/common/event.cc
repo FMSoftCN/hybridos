@@ -19,19 +19,16 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "nguxcommon.h"
-#include "nguxevent.h"
-#include "intrect.h"
+#include "common/common.h"
+#include "common/object.h"
+#include "common/event.h"
 
-// VincentWei: redundant including #include "hal_host.h" 
+namespace hfcl {
 
-NAMESPACE_BEGIN
-
-bool EventBroadcaster::raiseEvent(Event* event)
+bool EventBroadcaster::raiseEvent (Event* event)
 {
     EventListenerList::iterator it, next;
 
-	
 	if(m_listeners.size() <= 0)
 		return true;
 
@@ -135,5 +132,5 @@ void EventBroadcaster::releaseEventListeners()
 	m_want_to_remove = NULL;
 }
 
-NAMESPACE_END
+} // namespace hfcl
 

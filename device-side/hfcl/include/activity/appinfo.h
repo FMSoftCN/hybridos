@@ -20,12 +20,12 @@
 */
 
 
-#ifndef _NGUX_AppInfo_h
-#define _NGUX_AppInfo_h
+#ifndef _HFCL_AppInfo_h
+#define _HFCL_AppInfo_h
 
 #include "nguxcommon.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ContextStream;
 class BaseApp;
@@ -51,7 +51,7 @@ class AppInfo {
 		//ContextStream* m_stream;
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif /* NGUX_AppManager_h */
+#endif /* HFCL_AppManager_h */
 

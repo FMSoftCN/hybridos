@@ -51,23 +51,22 @@
 #define TEXT_BUFFER_LEN_OF_DEFAULT 63
 
 /* HFCL types */
-typedef intptr_t            HTHandle;
-typedef intptr_t            HTResId; 
-typedef unsigned intptr_t   HTData;
-typedef float               HTReal;
+typedef intptr_t    HTHandle;
+typedef intptr_t    HTResId; 
+typedef intptr_t    HTData; typedef float       HTReal;
 
-#ifdef _NGUX_ASSERT
-#    define NGUX_ASSERT(n_assert)       \
+#ifdef _HFCL_ASSERT
+#    define HFCL_ASSERT(n_assert)       \
     if (!(n_assert)) {                  \
         DBG_ASSERT(0, "NGUX Assert in %s (Line: %d)", __FILE__, __LINE__); \
     }
 #else
-#    define NGUX_ASSERT(n_assert)
+#    define HFCL_ASSERT(n_assert)
 #endif
 
 //safe cast
-//#define _NGUX_SAFE_CAST // add the compile option to control it
-#ifdef _NGUX_SAFE_CAST
+//#define _HFCL_SAFE_CAST // add the compile option to control it
+#ifdef _HFCL_SAFE_CAST
 #define SAFE_CAST(DestType, srcobj) dynamic_cast<DestType>(srcobj)
 static void * _assert_safe_cast(void *obj, const char* file, int line, const char* assert_info) {
     if(!obj)

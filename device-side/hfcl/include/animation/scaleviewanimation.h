@@ -23,7 +23,7 @@
 
 #include "viewanimation.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class ScaleViewAnimation  : public ViewAnimation 
 {
@@ -42,5 +42,5 @@ class ScaleViewAnimation  : public ViewAnimation
 		void onStart();
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 #endif

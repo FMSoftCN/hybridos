@@ -20,12 +20,12 @@
 */
 
 
-#ifndef NGUX_CompositeView_h
-#define NGUX_CompositeView_h
+#ifndef HFCL_CompositeView_h
+#define HFCL_CompositeView_h
 
 #include "panelview.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 enum {
 	DRSET_SELF = 0,
@@ -67,7 +67,7 @@ private:
 
 
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif
 

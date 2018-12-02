@@ -25,7 +25,7 @@
 #include "restypes.h"
 #include "viewcontext.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class DrawableSet;
 class Drawable;
@@ -42,12 +42,12 @@ typedef struct  _TResouceEntry
 
 typedef Menu * (*CB_CREATE_MENU)(Menu* parent, EventListener* listener);
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #include "fontres.h"
 #include "imageres.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 typedef const TResourceEntry*  CONST_PTR_TResourceEntry;
 
@@ -211,7 +211,7 @@ bool RegisterViewDrawableSetFromRes(const char * view_name,HTResId super_drset, 
 bool RegisterViewDrawableSetGroupFromRes(const char * view_name, HTResId super_drsetgroup, const TRDrawableSetGroupItem *items);
 
 
-NAMESPACE_END
+} // namespace hfcl {
 
 #endif /* __RESPACKAGE_H */
 

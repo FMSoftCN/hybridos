@@ -20,14 +20,14 @@
 */
 
 
-#ifndef _NGUX_MenubarView_h
-#define _NGUX_MenubarView_h
+#ifndef _HFCL_MenubarView_h
+#define _HFCL_MenubarView_h
 
 #include "panelview.h"
 #include "graphicscontext.h"
 #include "image.h"
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 class MenuBarView : public PanelView
 {
@@ -158,7 +158,7 @@ protected:
     DECLARE_CLASS_NAME(MenuBarView)
 };
 
-NAMESPACE_END
+} // namespace hfcl {
 
-#endif  // _NGUX_MenubarView_h
+#endif  // _HFCL_MenubarView_h
 

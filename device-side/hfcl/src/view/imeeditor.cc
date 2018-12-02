@@ -24,7 +24,7 @@
 
 extern BOOL IsArabicSet(void);
 
-NAMESPACE_BEGIN
+namespace hfcl {
 
 #define FIELD0 0
 #define FIELD1 1
@@ -388,5 +388,5 @@ bool TimeEditor::checkContent(void)
 
 DEFINE_CLASS_NAME(TimeEditor)
 
-NAMESPACE_END
+} // namespace hfcl {
 
