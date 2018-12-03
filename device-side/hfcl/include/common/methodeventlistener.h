@@ -22,9 +22,9 @@
 #ifndef HFCL_COMMON_METHODEVENTLISTENER_H_
 #define HFCL_COMMON_METHODEVENTLISTENER_H_
 
-#include "common.h"
-#include "alternativestl.h"
-#include "event.h"
+#include "common/common.h"
+#include "common/alternativestl.h"
+#include "common/event.h"
 
 namespace hfcl {
 

@@ -16,7 +16,7 @@
 ** GNU General Public License for more details.
 **
 ** You should have received a copy of the GNU General Public License
-** along with this program. If not, see <https://www.gnu.org/licenses/>.
+** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #ifndef _SCALEVIEWANIMATION_H_
 #define _SCALEVIEWANIMATION_H_
@@ -42,5 +42,5 @@ class ScaleViewAnimation  : public ViewAnimation
 		void onStart();
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 #endif

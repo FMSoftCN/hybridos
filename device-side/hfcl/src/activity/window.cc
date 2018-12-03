@@ -403,7 +403,7 @@ HWND Window::createMainWindow (const char* caption, WNDPROC proc,
     CreateInfo.by = y + height;
     CreateInfo.iBkColor = COLOR_black;
     CreateInfo.dwAddData = addData;
-    CreateInfo.hHosting = AppManager::getInstance()->hosting();
+    CreateInfo.hHosting = ActivityManager::getInstance()->hosting();
 
     return CreateMainWindow(&CreateInfo);
 }

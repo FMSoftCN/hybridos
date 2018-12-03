@@ -52,5 +52,5 @@ void AlphaViewAnimation::onStart()
 	}
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

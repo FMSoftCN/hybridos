@@ -260,7 +260,7 @@ static int DoExtension (MG_RWops *area, int label, GIFSCREEN* GifScreen)
     case 0x01:                        /* Plain Text Extension */
         while (GetDataBlock (area, (unsigned char *) buf) != 0);
         break;
-    case 0xff:                        /* Application Extension */
+    case 0xff:                        /* Activity Extension */
         while (GetDataBlock (area, (unsigned char *) buf) != 0);
         break;
     case 0xfe:                        /* Comment Extension */

@@ -65,4 +65,4 @@ void MoveViewAnimation::setProperty(int id, void *value)
 	getView()->setRect(rect);
 }
 
-} // namespace hfcl {
+} // namespace hfcl

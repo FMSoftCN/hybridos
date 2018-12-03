@@ -41,7 +41,7 @@ Controller::~Controller() {
 	cleanAllClient();
 }
 
-unsigned int Controller::showView(int view_id, NGParam param1, NGParam param2) //show a view in the stack
+unsigned int Controller::showView(int view_id, HTData param1, HTData param2) //show a view in the stack
 {	
 	ControllerClient* client = createClient(view_id, param1, param2);
 	if(!client)
@@ -49,7 +49,7 @@ unsigned int Controller::showView(int view_id, NGParam param1, NGParam param2) /
 
 	client->setModal(false);
 	
-	if(!AppManager::getInstance()->appIsExist((BaseApp *)this)) // the current client or app maybe destory durning create client.
+	if(!ActivityManager::getInstance()->appIsExist((BaseActivity *)this)) // the current client or app maybe destory durning create client.
 		return 1;
 	
 	_DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- create client <%p>", client);
@@ -94,7 +94,7 @@ void Controller::animationSwitch(ControllerClient* prev, ControllerClient* cur)
 */
 }
 
-unsigned int Controller::switchView(int view_id, NGParam param1, NGParam param2) //switch a view with stack
+unsigned int Controller::switchView(int view_id, HTData param1, HTData param2) //switch a view with stack
 {
 	ControllerClient* client = createClient(view_id, param1, param2);
 	if(!client)
@@ -117,7 +117,7 @@ unsigned int Controller::switchView(int view_id, NGParam param1, NGParam param2)
 	return 0;
 }
 
-unsigned int Controller::showModalView(int view_id, NGParam param1, NGParam param2)
+unsigned int Controller::showModalView(int view_id, HTData param1, HTData param2)
 {
     int ret = -1;
 	if(( ret = showView(view_id, param1, param2)) == 0)
@@ -319,7 +319,7 @@ void Controller::cleanAllClient()
 	pop(m_list.size());
 }
 
-unsigned int Controller::passCommandToClient(int view_id, unsigned int cmd, NGParam param1, NGParam param2) 
+unsigned int Controller::passCommandToClient(int view_id, unsigned int cmd, HTData param1, HTData param2) 
 {
 	ControllerClient* client = find(view_id);
 	if(!client)

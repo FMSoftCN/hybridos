@@ -30,8 +30,8 @@
 namespace hfcl {
 
 class Intent;
-class BaseApp;
-class AppFactory;
+class BaseActivity;
+class ActivityFactory;
 
 /***
  * hook key msg from appManager
@@ -41,41 +41,41 @@ class AppFactory;
  */
 typedef bool (*KeyHookCallback)(MSG *msg);
 
-class AppManager 
+class ActivityManager 
 {
 public:
-    MAPCLASSKEY(string, AppFactory*, AppFactoryMap); 
-    PAIR(string, AppFactory*, AppFactoryPair); 
+    MAPCLASSKEY(string, ActivityFactory*, AppFactoryMap); 
+    PAIR(string, ActivityFactory*, AppFactoryPair); 
 
-	AppManager() : m_hostingWnd(HWND_INVALID) { init(); }
-	// AppManager() : m_hostingWnd(HWND_INVALID) { };
-	~AppManager();
+	ActivityManager() : m_hostingWnd(HWND_INVALID) { init(); }
+	// ActivityManager() : m_hostingWnd(HWND_INVALID) { };
+	~ActivityManager();
 
-	static AppManager* getInstance(void);
+	static ActivityManager* getInstance(void);
 	void run(void);
 	
-    BaseApp* getCurrentApp(void);
-	BaseApp* getTopApp(unsigned int top = 0);
-	BaseApp* getAppByName(const char * name);
-	BaseApp* getAppFromFactory(string name);
-	inline AppFactory* getAppFactory(string name) { return m_apps[name]; }
+    BaseActivity* getCurrentApp(void);
+	BaseActivity* getTopApp(unsigned int top = 0);
+	BaseActivity* getAppByName(const char * name);
+	BaseActivity* getAppFromFactory(string name);
+	inline ActivityFactory* getAppFactory(string name) { return m_apps[name]; }
     inline int appNumOnRun(void) { return m_appstack.size(); }
     const AppFactoryMap& applications() const { return m_apps; }
 
-	void registerApp(string name, AppFactory *appFactory);
+	void registerApp(string name, ActivityFactory *appFactory);
 
-	bool appIsExist(BaseApp *obj);
+	bool appIsExist(BaseActivity *obj);
 	bool appIsExist(const char * appName);
 	
     void onBoot();
-    BaseApp* startApp(string app_name, Intent *intent);
-    bool exit(BaseApp* app);
-	bool isExist(BaseApp *app) { return m_appstack.isExist(app); }
+    BaseActivity* startApp(string app_name, Intent *intent);
+    bool exit(BaseActivity* app);
+	bool isExist(BaseActivity *app) { return m_appstack.isExist(app); }
 	bool moveApp2Top(const char * name);
 	bool moveApp2Bottom(const char * name);
 	bool isAppRunningInBackground(const char * name);
 	bool pushAppRunningInBackground(const char * name);
-	BaseApp* popAppRunningToFrontdesk(const char * name);
+	BaseActivity* popAppRunningToFrontdesk(const char * name);
 
     void changeSysLanguage(int langId);
 	void addDisableLockFrameTick(void) { m_disableLockTick ++; }
@@ -83,7 +83,7 @@ public:
     int disableLockFrameTicks() { return m_disableLockTick; }
 	
     inline HWND hosting(void) { return m_hostingWnd; }
-	inline bool AppBeStarted(BaseApp* app) { return m_appstack.isExist(app); }
+	inline bool AppBeStarted(BaseActivity* app) { return m_appstack.isExist(app); }
 	int broadcastMessage(int msg, int wParam, int lParam);
     
     void registerKeyMsgHook(KeyHookCallback callback) {
@@ -115,7 +115,7 @@ private:
 
     HWND m_hostingWnd;
     AppStack m_appstack;
-    static AppManager* s_appManager;
+    static ActivityManager* s_appManager;
 
     AppFactoryMap m_apps;
     KeyHookCallback m_key_hook;

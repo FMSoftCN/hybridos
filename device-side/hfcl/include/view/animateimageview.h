@@ -23,8 +23,8 @@
 #ifndef _HFCL_AnimateImageView_h
 #define _HFCL_AnimateImageView_h
 
-#include "image.h"
-#include "view.h"
+#include "graphics/image.h"
+#include "view/view.h"
 #include "timerservice.h"
 
 namespace hfcl {
@@ -118,7 +118,7 @@ class AnimateImageView : public View, TimerEventListener
         DWORD 	m_replaceColor;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* HFCL_ImageView_h */
 

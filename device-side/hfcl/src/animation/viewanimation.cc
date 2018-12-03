@@ -34,4 +34,4 @@ ViewAnimation::~ViewAnimation()
 
 }
 
-} // namespace hfcl {
+} // namespace hfcl

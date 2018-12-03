@@ -71,5 +71,5 @@ void GroupAnimation::onStart()
 	}
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

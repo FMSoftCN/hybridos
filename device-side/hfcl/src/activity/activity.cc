@@ -19,38 +19,38 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "activity/activity.h"
 
-#include "log.h"
-#include "intrect.h"
-#include "nguxevent.h"
-#include "intent.h"
-#include "application.h"
+#include "common/intrect.h"
+#include "common/event.h"
+#include "activity/log.h"
+#include "activity/intent.h"
 
 namespace hfcl {
 
-Application::Application()
+Activity::Activity()
     : Window()
 {
 	m_menu = NULL;
 }
 
-Application::~Application()
+Activity::~Activity()
 {
 
 }
 
-void Application::onCreate(ContextStream* contextStream, Intent* intent)
+void Activity::onCreate(ContextStream* contextStream, Intent* intent)
 {
     createMainWindow(0, _ngux_phonebar_h, _ngux_screen_w, _ngux_screen_h - _ngux_phonebar_h);
 }
 
-void Application::onWakeup(void)
+void Activity::onWakeup(void)
 {
 	setActiveWindow (viewWindow());
 	show();
 };
 
-void Application::onMove2Top(void) 
+void Activity::onMove2Top(void) 
 {
     if (NULL != m_menu)
     {
@@ -62,12 +62,12 @@ void Application::onMove2Top(void)
     show();
 }
 
-HPlatformOwner Application::getPlatformOwner(void)
+HPlatformOwner Activity::getPlatformOwner(void)
 {
     return m_viewWindow;
 }
 
-bool Application::onKey(int keyCode, KeyEvent* event)
+bool Activity::onKey(int keyCode, KeyEvent* event)
 {
     View* _focus = NULL;
     bool ret = true;
@@ -82,7 +82,7 @@ bool Application::onKey(int keyCode, KeyEvent* event)
     return ret;
 }
 
-void Application::onClick(POINT pt, Event::EventType type)
+void Activity::onClick(POINT pt, Event::EventType type)
 {
     RECT rc;
     View* child = firstChild();
@@ -109,18 +109,18 @@ void Application::onClick(POINT pt, Event::EventType type)
     }
 }
 
-Application* Application::app(HWND hwnd)
+Activity* Activity::app(HWND hwnd)
 {
-    return reinterpret_cast<Application*>(window(hwnd));
+    return reinterpret_cast<Activity*>(window(hwnd));
 }
 
-void Application::updateAppNow(void)
+void Activity::updateAppNow(void)
 {
     updateWindow();
 }
 
 
-void Application::setFullScreen(bool isFullScreen)
+void Activity::setFullScreen(bool isFullScreen)
 {
     if (isFullScreen)
         setAppRect(IntRect(0, 0, _ngux_screen_w, _ngux_screen_h));
@@ -129,7 +129,7 @@ void Application::setFullScreen(bool isFullScreen)
 }
 
 
-void FullScreenApp::onCreate(ContextStream* contextStream, Intent* intent)
+void FullScreenActivity::onCreate(ContextStream* contextStream, Intent* intent)
 {
     createMainWindow();
 }

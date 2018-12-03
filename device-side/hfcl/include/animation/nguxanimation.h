@@ -16,7 +16,7 @@
 ** GNU General Public License for more details.
 **
 ** You should have received a copy of the GNU General Public License
-** along with this program. If not, see <https://www.gnu.org/licenses/>.
+** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #ifndef _HFCL_ANIMATION_H
 #define _HFCL_ANIMATION_H
@@ -93,6 +93,6 @@ class Animation : public Object
         bool m_stop_in_progress;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif

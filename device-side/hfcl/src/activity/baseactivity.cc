@@ -20,44 +20,47 @@
 */
 
 
-#ifndef _HFCL_AppStack_h
-#define _HFCL_AppStack_h
-
-#include "nguxcommon.h"
+#include "baseapp.h"
+#include "appmanager.h"
 
 namespace hfcl {
-class AppInfo;
 
-class BaseApp;
-
-class AppStack
+BaseActivity::~BaseActivity()
 {
-	private:
-		LIST(AppInfo*, AppInfoList);
-		AppInfoList m_apps;
-		AppInfoList m_apps_runbackground;
-	
-    public:
-		AppStack(){ }
-		virtual ~AppStack(){ }
-		
-        void push(AppInfo *app);
-		void pop();
-		bool isEmpty();
-		bool isExist(BaseApp *app);
-		bool remove(BaseApp *app);
-		bool move2Top(BaseApp *app);
-		bool move2Bottom(BaseApp *app);
-		bool pushBackgroundRunningApp(BaseApp *app);
-		bool popBackgroundRunningApp(BaseApp *app);
-		void clear();
-		int size();
-		AppInfo* top(int n = 0);
-		AppInfo* bottom(int n = 0);
-		BaseApp* getExistAppByName(const char * name);
-		BaseApp* getExistAppRunBackgroundByName(const char * name);
-};
+	if(m_name)
+	   free(m_name);
+}
+
+const char * BaseActivity::name(void)
+{
+	return m_name;
+}
+
+void BaseActivity::setName(const char * p_name)
+{
+	if (m_name != NULL)
+		free(m_name);
+	m_name = strdup(p_name);
+}
+
+BaseActivity::APP_STATE BaseActivity::state(void)
+{
+	return m_state;
+}
+
+void BaseActivity::setState(APP_STATE i_state)
+{
+	m_state = i_state;
+}
+
+void BaseActivity::close(void)
+{
+	ActivityManager::getInstance()->exit(this);
+}
+
+bool BaseActivity::isSuspendable(void)
+{
+	return true;
+}
 
 } // namespace hfcl {
-
-#endif /* _HFCL_AppStack_h */

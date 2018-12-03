@@ -20,21 +20,16 @@
 */
 
 
-#ifndef HFCL_CONTROLLER_H
-#define HFCL_CONTROLLER_H
+#ifndef HFCL_ACTIVITY_CONTROLLER_H_
+#define HFCL_ACTIVITY_CONTROLLER_H_
 
-#include "nguxcommon.h"
-#include "log.h"
-#include "viewcontext.h"
-#include "nguxevent.h"
-#include "appmanager.h"
+#include "common/common.h"
+#include "common/log.h"
+#include "common/event.h"
+#include "common/activitymanager.h"
+#include "view/viewcontext.h"
 
 namespace hfcl {
-
-typedef unsigned long NGParam;
-
-class ControllerClient;
-class View;
 
 class Controller
 {
@@ -42,14 +37,14 @@ public:
 	Controller();
 	virtual ~Controller();
 
-	virtual unsigned int showView(int view_id, NGParam param1, NGParam param2); //show a view in the stack
-	virtual unsigned int switchView(int view_id, NGParam param1, NGParam param2); //switch a view with stack
-	virtual	unsigned int showModalView(int view_id, NGParam param1, NGParam param2);
+	virtual unsigned int showView(int view_id, HTData param1, HTData param2); //show a view in the stack
+	virtual unsigned int switchView(int view_id, HTData param1, HTData param2); //switch a view with stack
+	virtual	unsigned int showModalView(int view_id, HTData param1, HTData param2);
 	virtual unsigned int backView(unsigned int endcode = 0);
 
 	virtual unsigned int setMode(ControllerModeList* modeList) { return 0; }
 
-	virtual unsigned int onClientCommand(int sender, unsigned int cmd_id, NGParam param1, NGParam param2) { return 0; }
+	virtual unsigned int onClientCommand(int sender, unsigned int cmd_id, HTData param1, HTData param2) { return 0; }
 
 	void cleanAllClient();
 
@@ -74,10 +69,10 @@ protected:
 	void push(ControllerClient* client);
 	void setTop(ControllerClient* client,  int index = 0);
 
-	unsigned int passCommandToClient(int client_id, unsigned int cmd_id, NGParam param1, NGParam param);
+	unsigned int passCommandToClient(int client_id, unsigned int cmd_id, HTData param1, HTData param);
 
 
-	virtual ControllerClient*  createClient(int view_id, NGParam param1, NGParam param2) { return NULL; }
+	virtual ControllerClient*  createClient(int view_id, HTData param1, HTData param2) { return NULL; }
 
 	virtual View * getViewParent(int view_id) = 0; 
 
@@ -85,10 +80,10 @@ protected:
 };
 
 #define DECLARE_CONTROLLER_CLIENTS \
-	protected: virtual ControllerClient* createClient(int view_id, NGParam param1, NGParam param2);
+	protected: virtual ControllerClient* createClient(int view_id, HTData param1, HTData param2);
 
 #define BEGIN_CONTROLLER_CLIENTS(clss) \
-	ControllerClient* clss::createClient(int view_id, NGParam param1, NGParam param2) { switch(view_id) { 
+	ControllerClient* clss::createClient(int view_id, HTData param1, HTData param2) { switch(view_id) { 
 
 #define END_CONTROLLER_CLIENTS \
 	} return NULL;}
@@ -110,11 +105,12 @@ class ControllerClient : public ViewContext
 protected:
 	Controller* m_owner; //the controller onwer
 	View*       m_baseView; //the view of ui
-	int       m_id;
-	int      m_inactiveTimes;
-	bool  m_bModal;
+	int         m_id;
+	int         m_inactiveTimes;
+	bool        m_bModal;
 	ControllerModeManager *m_modeManager;
 	ControllerModeList    *m_currentList;
+
 public:
 	ControllerClient(Controller* owner) 
         : m_owner(owner)
@@ -134,7 +130,7 @@ public:
           , m_currentList(NULL) 
     { }
 
-	ControllerClient(Controller* owner, int id, View * parent, NGParam param1, NGParam param2)
+	ControllerClient(Controller* owner, int id, View * parent, HTData param1, HTData param2)
         : m_owner(owner)
           , m_baseView(NULL)
           , m_id(id)
@@ -150,7 +146,7 @@ public:
 	int getInActiveTimes() { return m_inactiveTimes; }
 
 	bool isTop() {
-	    return ((m_owner->getTop() == this) && (AppManager::getInstance()->getCurrentApp() == (BaseApp *)m_owner));
+	    return ((m_owner->getTop() == this) && (ActivityManager::getInstance()->getCurrentApp() == (BaseActivity *)m_owner));
 	}
 	void setModal(bool bModal ) { m_bModal = bModal;}
 	bool isModal (void) {return m_bModal;}
@@ -158,7 +154,7 @@ public:
 	virtual void active();
 	virtual void inactive();
 
-	virtual unsigned int onControllerCommand(unsigned int cmd_id,NGParam param1, NGParam param2) {
+	virtual unsigned int onControllerCommand(unsigned int cmd_id,HTData param1, HTData param2) {
 		return 0;
 	}
 
@@ -191,20 +187,20 @@ public:
 		return m_currentList ? m_currentList->mode_id : 0;
 	}
 
-	unsigned int showView(int view_id, NGParam param1, NGParam param2){
+	unsigned int showView(int view_id, HTData param1, HTData param2){
 		if(m_owner)
 			return m_owner->showView(view_id, param1, param2);
 		return 0;
 	}
 
-	unsigned int switchView(int view_id, NGParam param1, NGParam param2) //switch a view with stack
+	unsigned int switchView(int view_id, HTData param1, HTData param2) //switch a view with stack
 	{
 		if(m_owner)
 			return m_owner->switchView(view_id, param1, param2);
 		return 0;
 	}
 
-	unsigned int showModalView(int view_id, NGParam param1, NGParam param2)
+	unsigned int showModalView(int view_id, HTData param1, HTData param2)
 	{
 		if(m_owner)
 			return m_owner->showModalView(view_id, param1, param2);
@@ -231,16 +227,15 @@ public:
 
 	void cleanBaseView();
 
-	unsigned int sendCommand(unsigned int cmd_id, NGParam param1, NGParam param2) {
+	unsigned int sendCommand(unsigned int cmd_id, HTData param1, HTData param2) {
 		if(m_owner)
 			return m_owner->onClientCommand(getId(), cmd_id, param1, param2);
 		return 0;
 	}
+
 protected:
 	//virtual View* createView() = 0;
 	//virtual void  onViewCreated() = 0;
-
-
 
 	virtual void setControllerModeManager(ControllerModeManager* mangers) 
 	{
@@ -254,11 +249,9 @@ protected:
 	void setView(int view_id, View* view) { }
 
 	EventListener* getHandle(int handle_id, int event_type) { return NULL; }
-};
+}
 
-
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif
-
 

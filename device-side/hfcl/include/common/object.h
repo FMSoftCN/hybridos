@@ -22,7 +22,7 @@
 #ifndef HFCL_COMMON_OBJECT_H_
 #define HFCL_COMMON_OBJECT_H_
 
-#include "common.h"
+#include "common/common.h"
 
 namespace hfcl {
 

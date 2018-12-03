@@ -27,21 +27,21 @@
 namespace hfcl {
 
 
-AppInfo::AppInfo()
+ActivityInfo::ActivityInfo()
     : m_appname("")
     , m_app(NULL)
     //, m_stream(NULL)
 {
 }
 
-AppInfo::AppInfo(string name, BaseApp* app, ContextStream* cs)
+ActivityInfo::ActivityInfo(string name, BaseActivity* app, ContextStream* cs)
     : m_appname(name)
     , m_app(app)
     //, m_stream(cs)
 {
 }
 
-AppInfo::~AppInfo()
+ActivityInfo::~ActivityInfo()
 {
     if (m_app)
         // delete m_app;
@@ -55,35 +55,35 @@ AppInfo::~AppInfo()
     */
 }
 
-BaseApp* AppInfo::getApp(void)
+BaseActivity* ActivityInfo::getApp(void)
 {
 	return m_app;
 }
 
-void AppInfo::setApp(BaseApp* app)
+void ActivityInfo::setApp(BaseActivity* app)
 {
 	m_app = app;
 }
 
-string AppInfo::getName(void)
+string ActivityInfo::getName(void)
 {
 	return m_appname;
 }
 
-void AppInfo::setName(string name)
+void ActivityInfo::setName(string name)
 {
 	m_appname = name;
 }
 /*
-ContextStream* AppInfo::getContextStream(void)
+ContextStream* ActivityInfo::getContextStream(void)
 {
 	return m_stream;
 }
 
-void AppInfo::setContextStream(ContextStream* cs)
+void ActivityInfo::setContextStream(ContextStream* cs)
 {
 	m_stream = cs;
 }
 */
-} // namespace hfcl {
+} // namespace hfcl
 

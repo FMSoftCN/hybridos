@@ -35,4 +35,4 @@ void ScaleViewAnimation::onStart(){
 	setStartValue((void *)&(view->getRect()));
 }
 
-} // namespace hfcl {
+} // namespace hfcl

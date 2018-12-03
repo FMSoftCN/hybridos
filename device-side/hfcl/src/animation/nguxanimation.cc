@@ -169,8 +169,8 @@ void Animation::resume(void)
 
 void Animation::wait(void)
 {
-    HWND hwnd = AppManager::getInstance()->hosting();
+    HWND hwnd = ActivityManager::getInstance()->hosting();
     mGEffAnimationWait((void*)&hwnd, m_animation);
 }
 
-} // namespace hfcl {
+} // namespace hfcl

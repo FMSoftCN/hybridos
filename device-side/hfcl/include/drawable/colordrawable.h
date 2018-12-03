@@ -18,25 +18,38 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef UTIL_H
-#define UTIL_H
 
-#if 0
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifndef _HFCL_ColorDrawable_h
+#define _HFCL_ColorDrawable_h
+
+#include "drawable.h"
+
+namespace hfcl {
+
+class ColorDrawable : public Drawable
+{
+public:
+	ColorDrawable() { init(); }
+	ColorDrawable(const TRStyleElement* style_res) : Drawable(style_res) { init(style_res); }
+	ColorDrawable(Style* s) : Drawable(s) { init(); }
+	ColorDrawable(ColorDrawable* dr);
+
+	CopyOnWriteable* clone() {
+		return HFCL_NEW_EX(ColorDrawable, (this));
+	}
+
+	void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE); 
+	bool setElement(int e_id, DWORD value);
+	DWORD getElement(int e_id) const;
+protected:
+	DWORD m_color;
+
+	void init(const TRStyleElement *elements = NULL);
+};
+
+DECLARE_DRFACTORY(ColorDrawable)
+
+} // namespace hfcl
+
 #endif
 
-int ngux_atoi(const char* str);
-double ngux_atof(const char* str);
-const char* ngux_itoa(char* str, int len, int n);
-const char* ngux_ftoa(char* str, int len, double f);
-long ngux_strtol(const char* str, const char **end, int base);
-char* ngux_strcat(char* str, int len, const char* first, ...);
-#if 0
-#ifdef __cplusplus
-}
-#endif
-#endif
-
-#endif

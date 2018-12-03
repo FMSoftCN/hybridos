@@ -20,38 +20,44 @@
 */
 
 
-#ifndef _HFCL_AppInfo_h
-#define _HFCL_AppInfo_h
+#ifndef _HFCL_AppStack_h
+#define _HFCL_AppStack_h
 
 #include "nguxcommon.h"
 
 namespace hfcl {
+class ActivityInfo;
 
-class ContextStream;
-class BaseApp;
+class BaseActivity;
 
-class AppInfo {
-	public:
-		AppInfo();
-		AppInfo(string name, BaseApp* app, ContextStream* cs);
-		virtual ~AppInfo();
-
-		BaseApp* getApp(void);
-		void setApp(BaseApp* app);
-
-		string getName(void);
-		void setName(string name);
-
-		//ContextStream* getContextStream(void);
-		//void setContextStream(ContextStream* cs);
-
+class AppStack
+{
 	private:
-		string         m_appname;
-		BaseApp*       m_app;
-		//ContextStream* m_stream;
+		LIST(ActivityInfo*, AppInfoList);
+		AppInfoList m_apps;
+		AppInfoList m_apps_runbackground;
+	
+    public:
+		AppStack(){ }
+		virtual ~AppStack(){ }
+		
+        void push(ActivityInfo *app);
+		void pop();
+		bool isEmpty();
+		bool isExist(BaseActivity *app);
+		bool remove(BaseActivity *app);
+		bool move2Top(BaseActivity *app);
+		bool move2Bottom(BaseActivity *app);
+		bool pushBackgroundRunningApp(BaseActivity *app);
+		bool popBackgroundRunningApp(BaseActivity *app);
+		void clear();
+		int size();
+		ActivityInfo* top(int n = 0);
+		ActivityInfo* bottom(int n = 0);
+		BaseActivity* getExistAppByName(const char * name);
+		BaseActivity* getExistAppRunBackgroundByName(const char * name);
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
-#endif /* HFCL_AppManager_h */
-
+#endif /* _HFCL_AppStack_h */

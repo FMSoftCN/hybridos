@@ -9,8 +9,6 @@ myinclude_HEADERS= \
     object.h \
     event.h \
     contextstream.h \
-    codeconvert.h \
-    file.h \
     imebase.h \
     imeinterface.h \
     list.h \
@@ -18,6 +16,4 @@ myinclude_HEADERS= \
     methodeventlistener.h \
     quicksort.h \
     rbtree.h \
-    selectsort.h \
-    urlparse.h \
-    util.h
+    selectsort.h

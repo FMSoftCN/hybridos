@@ -26,7 +26,7 @@
 #   error "alternativestl.h: C++ only."
 #endif
 
-#include "common.h"
+#include "common/common.h"
 
 // configure option: use STL or not
 #ifdef _HFCL_USE_STL

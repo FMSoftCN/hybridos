@@ -19,48 +19,32 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-#include "baseapp.h"
-#include "appmanager.h"
+#include "graphicscontext.h"
+#include "image.h"
+#include "stateimagedrawable.h"
 
 namespace hfcl {
 
-BaseApp::~BaseApp()
+void StateImageDrawable::draw(GraphicsContext* gc, int draw_state, const IntRect &rc, DWORD data/* = 0*/, DR_DATA_TYPE type/* = DRDT_NONE*/)
 {
-	if(m_name)
-	   free(m_name);
+	Image *img;
+	if(type == DRDT_IMAGE && data != 0)
+		img = (Image*)data;
+	else
+	{
+		img = (Image*)getElement(SYS_GET_STATE_IMAGE_ID(draw_state));	
+	}
+
+	if(!img)
+		return ;
+
+	ImageFormat format;
+	format.drawMode = getElement(SYS_SE_IMAGEDRAWMODE);
+	format.align = getElement(SYS_SE_IMAGEALIGN);
+	format.valign = getElement(SYS_SE_IMAGEVALIGN);
+	img->paint(gc, rc, format);
 }
 
-const char * BaseApp::name(void)
-{
-	return m_name;
-}
+} // namespace hfcl
 
-void BaseApp::setName(const char * p_name)
-{
-	if (m_name != NULL)
-		free(m_name);
-	m_name = strdup(p_name);
-}
 
-BaseApp::APP_STATE BaseApp::state(void)
-{
-	return m_state;
-}
-
-void BaseApp::setState(APP_STATE i_state)
-{
-	m_state = i_state;
-}
-
-void BaseApp::close(void)
-{
-	AppManager::getInstance()->exit(this);
-}
-
-bool BaseApp::isSuspendable(void)
-{
-	return true;
-}
-
-} // namespace hfcl {

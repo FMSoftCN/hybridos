@@ -16,7 +16,7 @@
 ** GNU General Public License for more details.
 **
 ** You should have received a copy of the GNU General Public License
-** along with this program. If not, see <https://www.gnu.org/licenses/>.
+** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #ifndef _NL10N_STRING_IDS_H_
@@ -677,13 +677,13 @@ enum {
     SS_APN, // RDA; APN
     SS_APN_ID, // RDA; APN ID
     SS_APOP_LOGIN_FAILED, // RDA; APOP login failed
-    SS_APPLICATION, // RDA; Application
+    SS_APPLICATION, // RDA; Activity
     SS_APPLICATIONS, // RDA; Applications
     SS_APPLICATIONS_SETTING, // RDA; Applications setting
-    SS_APPLICATION_EXIT, // RDA; Application exit
-    SS_APPLICATION_PAUSED_CONTINUE_Q, // RDA; Application paused. Continue?
-    SS_APPLICATION_PROFILE, // RDA; Application profiles
-    SS_APPLICATION_SETTINGS, // RDA; Application settings
+    SS_APPLICATION_EXIT, // RDA; Activity exit
+    SS_APPLICATION_PAUSED_CONTINUE_Q, // RDA; Activity paused. Continue?
+    SS_APPLICATION_PROFILE, // RDA; Activity profiles
+    SS_APPLICATION_SETTINGS, // RDA; Activity settings
     SS_APPLIED, // RDA; Applied
     SS_APPLY_DAYLIGHT_SAVING_TIME, // RDA; Apply daylight saving time
     SS_APPLY_DAYLIGHT_SAVING_TIME_Q, // RDA; Apply daylight saving time?
@@ -7200,7 +7200,7 @@ enum {
     TXT_LENGTH_ERROR, // RDA; Invalid length
     TXT_LOCAL, // RDA; Local
     TXT_MAINMENU_COMMUNICATION, // RDA; 1.Communication
-    TXT_MAINMENU_ICON_APPS, // RDA; Application
+    TXT_MAINMENU_ICON_APPS, // RDA; Activity
     TXT_MAINMENU_ICON_PASTIME, // RDA; Entertainment
     TXT_MAINMENU_ICON_SETTINGS, // RDA; Settings
     TXT_MAINMENU_ICON_TOOLS, // RDA; Tools
@@ -7490,8 +7490,8 @@ enum {
     TXT_SEND_MESSAGE, // RDA; Send message
     TXT_SEND_SMS, // RDA; SMS
     TXT_SEND_SUCCEED, // RDA; Send succeeded
-    TXT_SETTINGS_APP, // RDA; Application
-    TXT_SETTINGS_APPLICATION, // RDA; Application
+    TXT_SETTINGS_APP, // RDA; Activity
+    TXT_SETTINGS_APPLICATION, // RDA; Activity
     TXT_SETTINGS_CALL, // RDA; Call settings
     TXT_SETTINGS_CONTACT, // RDA; Contacts
     TXT_SETTINGS_DISPLAY, // RDA; Display settings

@@ -29,7 +29,7 @@
 
 namespace hfcl {
 
-void AppStack::push(AppInfo *app)
+void AppStack::push(ActivityInfo *app)
 {
 	m_apps.push_back(app);
 }
@@ -47,14 +47,14 @@ bool AppStack::isEmpty()
 void AppStack::clear()
 {
 	while(!isEmpty()) {
-		AppInfo *a = top();
+		ActivityInfo *a = top();
 		pop();
 		// delete a;
         HFCL_DELETE(a);
 	}
 }
 
-bool AppStack::isExist(BaseApp *app)
+bool AppStack::isExist(BaseActivity *app)
 {
 	AppInfoList::iterator item;
 	for(item = m_apps.begin(); item != m_apps.end(); item++)
@@ -65,13 +65,13 @@ bool AppStack::isExist(BaseApp *app)
 	return false;
 }
 
-BaseApp* AppStack::getExistAppByName(const char * name)
+BaseActivity* AppStack::getExistAppByName(const char * name)
 {
 	AppInfoList::iterator item = m_apps.begin();
 
 	for(int i = 0; i < size(); i++, item++)
 	{
-		BaseApp *rt = (*item)->getApp();
+		BaseActivity *rt = (*item)->getApp();
 		if (rt != NULL) {
 			const char* pname = rt->name();
 			if(pname != NULL && strcmp(name, pname) == 0) {
@@ -83,13 +83,13 @@ BaseApp* AppStack::getExistAppByName(const char * name)
 	return NULL;
 }
 
-BaseApp* AppStack::getExistAppRunBackgroundByName(const char * name)
+BaseActivity* AppStack::getExistAppRunBackgroundByName(const char * name)
 {
 	AppInfoList::iterator item;
 
 	for(item = m_apps_runbackground.begin(); item != m_apps_runbackground.end(); item++)
 	{
-		BaseApp *rt = (*item)->getApp();
+		BaseActivity *rt = (*item)->getApp();
 		if (rt != NULL) {
 			const char* pname = rt->name();
 			if(pname != NULL && strcmp(pname, name) == 0) {
@@ -101,12 +101,12 @@ BaseApp* AppStack::getExistAppRunBackgroundByName(const char * name)
 	return NULL;
 }
 
-bool AppStack::remove(BaseApp *app)
+bool AppStack::remove(BaseActivity *app)
 {
 	AppInfoList::iterator item;
 	for(item = m_apps.begin(); item != m_apps.end(); item++)
 	{
-		AppInfo *a = *item;
+		ActivityInfo *a = *item;
 		if(a != NULL && a->getApp() == app)
 		{
 			m_apps.remove(a);
@@ -117,7 +117,7 @@ bool AppStack::remove(BaseApp *app)
 	return false;
 }
 
-AppInfo* AppStack::top(int n)
+ActivityInfo* AppStack::top(int n)
 {
 	if (m_apps.size() > (unsigned int)n)
     {
@@ -138,7 +138,7 @@ AppInfo* AppStack::top(int n)
     return NULL;
 }
 
-AppInfo* AppStack::bottom(int n)
+ActivityInfo* AppStack::bottom(int n)
 {
     if (m_apps.size() > (unsigned int)n)
     {
@@ -162,15 +162,15 @@ int AppStack::size()
 	return m_apps.size();
 }
 
-bool AppStack::move2Top(BaseApp *app)
+bool AppStack::move2Top(BaseActivity *app)
 {
 	AppInfoList::iterator item;
 	for(item = m_apps.begin(); item != m_apps.end(); item++)
 	{
-		AppInfo *_old = *item;
+		ActivityInfo *_old = *item;
 		if(_old != NULL && _old->getApp() == app)
 		{
-    		AppInfo *app_info = HFCL_NEW_EX(AppInfo, (_old->getName(), app, NULL));
+    		ActivityInfo *app_info = HFCL_NEW_EX(ActivityInfo, (_old->getName(), app, NULL));
    			if(app_info)
    			{
    				m_apps.erase(item);	
@@ -186,16 +186,16 @@ bool AppStack::move2Top(BaseApp *app)
 	return false;
 }
 
-bool AppStack::move2Bottom(BaseApp *app)
+bool AppStack::move2Bottom(BaseActivity *app)
 {
 	AppInfoList::iterator item;
 	
 	for(item = m_apps.begin(); item != m_apps.end(); item++)
 	{
-		AppInfo *_old = *item;
+		ActivityInfo *_old = *item;
 		if(_old != NULL && _old->getApp() == app)
 		{
-    		AppInfo *app_info = HFCL_NEW_EX(AppInfo, (_old->getName(), app, NULL));
+    		ActivityInfo *app_info = HFCL_NEW_EX(ActivityInfo, (_old->getName(), app, NULL));
    			if(app_info)
    			{
    				m_apps.erase(item);	
@@ -210,14 +210,14 @@ bool AppStack::move2Bottom(BaseApp *app)
 	return false;
 }
 
-bool AppStack::pushBackgroundRunningApp(BaseApp *app)
+bool AppStack::pushBackgroundRunningApp(BaseActivity *app)
 {
 	AppInfoList::iterator item;
 	for(item = m_apps.begin(); item != m_apps.end(); item++)
 	{
 		if((*item)->getApp() == app)
 		{
-    		AppInfo *app_info = HFCL_NEW_EX(AppInfo, ((*item)->getName(), app, NULL));
+    		ActivityInfo *app_info = HFCL_NEW_EX(ActivityInfo, ((*item)->getName(), app, NULL));
    			if(app_info)
    			{
    				m_apps.pop_back();
@@ -229,14 +229,14 @@ bool AppStack::pushBackgroundRunningApp(BaseApp *app)
 	return false;
 }
 
-bool AppStack::popBackgroundRunningApp(BaseApp *app)
+bool AppStack::popBackgroundRunningApp(BaseActivity *app)
 {
 	AppInfoList::iterator item;
 	for(item = m_apps_runbackground.begin(); item != m_apps_runbackground.end(); item++)
 	{
 		if((*item)->getApp() == app)
 		{
-    		AppInfo *app_info = HFCL_NEW_EX(AppInfo, ((*item)->getName(), app, NULL));
+    		ActivityInfo *app_info = HFCL_NEW_EX(ActivityInfo, ((*item)->getName(), app, NULL));
    			if(app_info)
    			{
 				m_apps_runbackground.erase(item);

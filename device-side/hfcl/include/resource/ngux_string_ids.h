@@ -16,7 +16,7 @@
 ** GNU General Public License for more details.
 **
 ** You should have received a copy of the GNU General Public License
-** along with this program. If not, see <https://www.gnu.org/licenses/>.
+** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #ifndef _HFCL_STRING_IDS_H_
@@ -272,7 +272,7 @@ enum {
     /* 00246 */ STRID_APP_UMMS_MMS_STR_ID_MMS_VIEWER_OUT_OF_MEMORY, // APP; Not enough space
     /* 00247 */ STRID_APP_UMMS_MMS_STR_ID_MMS_VIEWER_SEND_RR_CONFIRM, // APP; Send read report?
     /* 00248 */ STRID_APP_UMMS_MMS_STR_ID_MMS_VIEWER_TEXT_STRIPPED, // APP; Can’t show entire message
-    /* 00249 */ STRID_APP_UMMS_MMS_STR_ID_UMMS_APPLICATION_ID, // APP; Application-ID:
+    /* 00249 */ STRID_APP_UMMS_MMS_STR_ID_UMMS_APPLICATION_ID, // APP; Activity-ID:
     /* 00250 */ STRID_APP_UMMS_MMS_STR_ID_UMMS_BGSR_RESULT_DOWNLOAD_FAIL, // APP; Can't download MMS
     /* 00251 */ STRID_APP_UMMS_MMS_STR_ID_UMMS_BGSR_RESULT_FAIL_COMM_CONNECT_ERROR, // APP; No connection
     /* 00252 */ STRID_APP_UMMS_MMS_STR_ID_UMMS_BGSR_RESULT_SEND_FAIL, // APP; Couldn't send MMS
