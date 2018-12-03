@@ -23,7 +23,7 @@
 #ifndef _HFCL_TEXTMODE_h
 #define _HFCL_TEXTMODE_h
 
-#include "nguxcommon.h"
+#include "common/common.h"
 #include "drawable-id.h"
 
 namespace hfcl {

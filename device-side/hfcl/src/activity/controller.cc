@@ -19,18 +19,20 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #undef _DEBUG
 
-#include "log.h"
-#include "controller.h"
+#include "activity/controller.h"
+
+#include "activity/activitymanager.h"
+#include "activity/window.h"
+
+#if 0
+#include "common/log.h"
 #include "view.h"
-#include "respkgmanager.h"
 #include "nguxwindow.h"
 #include "appmanager.h"
 #include "baseapp.h"
-
-#include "hal_misc.h"
+#endif
 
 namespace hfcl {
 
@@ -49,7 +51,7 @@ unsigned int Controller::showView(int view_id, HTData param1, HTData param2) //s
 
 	client->setModal(false);
 	
-	if(!ActivityManager::getInstance()->appIsExist((BaseActivity *)this)) // the current client or app maybe destory durning create client.
+	if(!ActivityManager::getInstance()->actIsExist((BaseActivity *)this)) // the current client or activity maybe destory durning create client.
 		return 1;
 	
 	_DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- create client <%p>", client);
@@ -68,10 +70,13 @@ unsigned int Controller::showView(int view_id, HTData param1, HTData param2) //s
         _DBG_PRINTF ("Controller::showView: inactive() called for %p", top);
     }
 	client->active();
-	//flag of lockframe, sync with enterLockFrame 0xffeabfed
+
+	//FIXME: flag of lockframe, sync with enterLockFrame 0xffeabfed
+#if 0
 	if (param2 == 0xffeabfed) {
 		nguxDeactive();
 	}
+#endif
 
 	return 0;
 }

@@ -20,15 +20,15 @@
 */
 
 #include "ngux.h"
-#include "nguxcommon.h"
-#include "mgcl.h"
+#include "common/common.h"
+#include "mgcl/mgcl.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
 #include "animateimageview.h"
-#include "timerservice.h"
+#include "services/timerservice.h"
 
 namespace hfcl {
 

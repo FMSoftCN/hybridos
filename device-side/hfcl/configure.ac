@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.60)
 AC_INIT(libhfcl, 0.1.0)
-AC_CONFIG_SRCDIR(src/activity/appinfo.cc)
+AC_CONFIG_SRCDIR(src/activity/activity.cc)
 
 dnl Set various version strings
 #
@@ -130,7 +130,7 @@ if test "x$devel_mode" = "xyes"; then
     fi
 
     if test "$ac_cv_prog_gcc" = "yes"; then
-        CPPFLAGS="$CPPFLAGS -Wall -Werror"
+        CPPFLAGS="$CPPFLAGS -Wall -Werror -fmax-errors=10"
     fi
 else
     CPPFLAGS="$CPPFLAGS -DNDEBUG"
@@ -140,9 +140,6 @@ if test "$ac_cv_prog_gcc" = "yes"; then
     CFLAGS="$CFLAGS -Wstrict-prototypes -pipe"
 fi
 
-CPPFLAGS="$CPPFLAGS $FT2_CFLAGS"
-DEP_LIBS="$DEP_LIBS $MINIGUI_LIBS $FT2_LIBS -lpthread -lstdc++"
-
 dnl ========================================================================
 dnl check the installation of MiniGUI
 dnl ========================================================================
@@ -151,7 +148,10 @@ PKG_CHECK_MODULES([MGPLUS], [mgplus >= 1.4.0])
 PKG_CHECK_MODULES([MGEFF], [mgeff >= 1.2.0])
 PKG_CHECK_MODULES([CHIPMUNK], [chipmunk >= 5.3.1])
 
+CPPFLAGS="$CPPFLAGS $FT2_CFLAGS"
+DEP_LIBS="$DEP_LIBS $MINIGUI_LIBS $MGEFF_LIBS -lpthread -lstdc++"
 APP_LIBS="$APP_LIBS -lhfcl$LIB_SUFFIX $DEP_LIBS"
+
 AC_SUBST(APP_LIBS)
 AC_SUBST(DEP_LIBS)
 

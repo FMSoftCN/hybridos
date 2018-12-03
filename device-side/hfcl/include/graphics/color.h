@@ -22,7 +22,7 @@
 #ifndef _HFCL_COLOR_H_
 #define _HFCL_COLOR_H_
 
-#include "nguxcommon.h"
+#include "common/common.h"
 
 namespace hfcl {
 

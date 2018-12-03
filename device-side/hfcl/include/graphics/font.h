@@ -22,7 +22,7 @@
 #ifndef _HFCL_FONT_H_
 #define _HFCL_FONT_H_
 
-#include "log.h"
+#include "common/log.h"
 #include "nguxobject.h"
 #include "intrect.h"
 #include "graphicscontext.h"

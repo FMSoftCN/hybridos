@@ -152,7 +152,7 @@ void EditView::onLoseFocus(void)
     setImeTarget((int)NULL, 1);	
 }
 
-void EditView::setInputMode(U16 mode)
+void EditView::setInputMode(Uint16 mode)
 {
     m_input_mode = mode;
     m_writing_language = imeGetLanguage();
@@ -224,8 +224,8 @@ void EditView::SwitchShiftToLower(string str , int caretpos, bool flag)
 
 void EditView::add_comma_in_calculator(char * str)
 {
-    U16 len=0;
-    U16  index_buf=0, index_str=0;
+    Uint16 len=0;
+    Uint16  index_buf=0, index_str=0;
     char buf[MAX_VALUES_IN_CALCULATOR_3COMMA];
     char *str_int;
     char *str_decimal;
@@ -283,7 +283,7 @@ void EditView::add_comma_in_calculator(char * str)
 
 void EditView::remove_comma_per3digit_in_calculator(char *str)
 {
-	U16  index_sou=0, index_des=0;
+	Uint16  index_sou=0, index_des=0;
 	char des[MAX_VALUES_IN_CALCULATOR_3COMMA];
 
 	memset(des, 0x00, MAX_VALUES_IN_CALCULATOR_3COMMA);
@@ -300,7 +300,7 @@ void EditView::remove_comma_per3digit_in_calculator(char *str)
 
 void EditView::remove_Repeative_Zerodigit_WhenClear_in_calculator(char *str_all_index_merge)
 {
-	U16 i =0;
+	Uint16 i =0;
 	for(i=0;str_all_index_merge[i] == '0' && str_all_index_merge[i+1] != 0 && str_all_index_merge[i+1] != '.'; i++)
 	{	
 		setCaretPosition(caretPosition()-1);
@@ -311,12 +311,12 @@ void EditView::remove_Repeative_Zerodigit_WhenClear_in_calculator(char *str_all_
 
 string EditView::apply_comma_multiple_value_in_calculator(char *str, int *cursor)
 {
-	U16 index_value=0,index_1_digit=0,index_merge=0,index_cursor=0;
+	Uint16 index_value=0,index_1_digit=0,index_merge=0,index_cursor=0;
 	char str_all[MAX_VALUES_IN_CALCULATOR_3COMMA][MAX_DIGIT_IN_CALCULATOR_3COMMA];
 	char str_merge[MAX_VALUES_IN_CALCULATOR_3COMMA]="";
     char *pStr = str;
-	U16 nbcursor_before=0, nbcursor_after=0;
-	U16 i=0;
+	Uint16 nbcursor_before=0, nbcursor_after=0;
+	Uint16 i=0;
 	
 	for(i=0;i<MAX_VALUES_IN_CALCULATOR_3COMMA;i++)
 	{

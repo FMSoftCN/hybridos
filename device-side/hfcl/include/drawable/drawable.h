@@ -22,16 +22,14 @@
 #ifndef _HFCL_Drawable_H
 #define _HFCL_Drawable_H
 
-
-#include "drawable-id.h"
-#include "mgcl.h"
-#include "nguxobject.h"
-#include "restypes.h"
+#include "drawable/drawable-id.h"
+#include "mgcl/mgcl.h"
+#include "common/object.h"
+#include "resource/restypes.h"
+#include "drawable/drawable-id-def.h"
+#include "drawable/common-drawable-ids.h"
 
 namespace hfcl {
-
-#include "drawable-id-def.h"
-#include "common-drawable-ids.h"
 
 class View;
 class GraphicsContext;

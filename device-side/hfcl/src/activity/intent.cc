@@ -19,18 +19,19 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "activity/intent.h"
 
-#include "nguxcommon.h"
-#include "intent.h"
+#include "common/common.h"
 
 namespace hfcl {
-Intent::Intent(int i_action, string s_data, int i_tag)
-    :m_action(i_action)
-    ,m_data(s_data)
-    ,m_tag(i_tag)
-{
 
+Intent::Intent(int i_action, string s_data, int i_tag)
+    : m_action(i_action)
+    , m_data(s_data)
+    , m_tag(i_tag)
+{
 }
+
 Intent::Intent(Intent *intent)
 	: m_action(intent->action())
 	, m_data(intent->data())
@@ -43,6 +44,7 @@ void Intent::putValue(string& key, void* value)
 {
 	m_intentStore[key] = value;
 }
+
 void *Intent::getValue(string key)
 {
 	IntentMap::iterator it;
@@ -51,4 +53,5 @@ void *Intent::getValue(string key)
 		return m_intentStore[key];
 	return (void*)0;
 }
-} // namespace hfcl {
+
+} // namespace hfcl

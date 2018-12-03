@@ -19,34 +19,31 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "common/log.h"
-#include "contextstream.h"
-#include "appinfo.h"
-#include "baseapp.h"
+#include "activity/activityinfo.h"
 
 namespace hfcl {
 
 
 ActivityInfo::ActivityInfo()
-    : m_appname("")
-    , m_app(NULL)
+    : m_actname("")
+    , m_act(NULL)
     //, m_stream(NULL)
 {
 }
 
-ActivityInfo::ActivityInfo(string name, BaseActivity* app, ContextStream* cs)
-    : m_appname(name)
-    , m_app(app)
+ActivityInfo::ActivityInfo(string name, BaseActivity* act, ContextStream* cs)
+    : m_actname(name)
+    , m_act(act)
     //, m_stream(cs)
 {
 }
 
 ActivityInfo::~ActivityInfo()
 {
-    if (m_app)
-        // delete m_app;
-        HFCL_DELETE(m_app);
-    m_app = NULL;
+    if (m_act)
+        // delete m_act;
+        HFCL_DELETE(m_act);
+    m_act = NULL;
 	/*
     if (m_stream)
         // delete m_stream;
@@ -55,24 +52,24 @@ ActivityInfo::~ActivityInfo()
     */
 }
 
-BaseActivity* ActivityInfo::getApp(void)
+BaseActivity* ActivityInfo::getActivity(void)
 {
-	return m_app;
+	return m_act;
 }
 
-void ActivityInfo::setApp(BaseActivity* app)
+void ActivityInfo::setActivity(BaseActivity* act)
 {
-	m_app = app;
+	m_act = act;
 }
 
 string ActivityInfo::getName(void)
 {
-	return m_appname;
+	return m_actname;
 }
 
 void ActivityInfo::setName(string name)
 {
-	m_appname = name;
+	m_actname = name;
 }
 /*
 ContextStream* ActivityInfo::getContextStream(void)

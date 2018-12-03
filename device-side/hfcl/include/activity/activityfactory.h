@@ -34,11 +34,13 @@ enum {
 
 typedef bool (*CB_ONBOOT) (void);
 
+class BaseActivity;
+
 class ActivityFactory {
 public:
     virtual BaseActivity* create(void) = 0;
 
-    struct AppData {
+    struct ActivityData {
         int 	    position;
         int 	    pos_row;
         int 	    pos_col;
@@ -51,71 +53,71 @@ public:
         CB_ONBOOT   onBoot;
     };
 
-    virtual const AppData * getAppData() { return NULL; }
-}
+    virtual const ActivityData * getActivityData() { return NULL; }
+};
 
 } // namespace hfcl
 
 /*
- *  declare a app-factory to create a app
+ *  declare a act-factory to create a act
  *  USAGE : DECLARE_ACTIVITY_FACTORY(Desktop);
  */
-#define DECLARE_ACTIVITY_FACTORY(appClassName)                     \
-    class appClassName##Factory: public ActivityFactory {          \
+#define DECLARE_ACTIVITY_FACTORY(actClassName)                     \
+    class actClassName##Factory: public ActivityFactory {          \
         public:                                               \
-            static appClassName##Factory* getInstance(void);  \
+            static actClassName##Factory* getInstance(void);  \
         	virtual BaseActivity* create(void);                    \
         private:                                              \
-		    ActivityFactory::AppData* getAppInfo();         \
+		    ActivityFactory::ActivityData* getActivityInfo();         \
     };
 
 /*
- *  define a app-factory to create a app
+ *  define a act-factory to create a act
  *  USAGE : DEFINE_ACTIVITY_FACOTORY(Desktop);
  */
-#define DEFINE_ACTIVITY_FACTORY(appClassName)                     \
-    appClassName##Factory* appClassName##Factory::getInstance(void) { \
-		static appClassName##Factory* s_single = NULL;                       \
+#define DEFINE_ACTIVITY_FACTORY(actClassName)                     \
+    actClassName##Factory* actClassName##Factory::getInstance(void) { \
+		static actClassName##Factory* s_single = NULL;                       \
         if (!s_single) {                                              \
-            s_single = HFCL_NEW_EX(appClassName##Factory, ());        \
+            s_single = HFCL_NEW_EX(actClassName##Factory, ());        \
         }                                                             \
         return s_single;                                              \
     }                                                                 \
-    BaseActivity* appClassName##Factory::create(void) {                    \
-        return (HFCL_NEW_EX(appClassName, ()));                       \
+    BaseActivity* actClassName##Factory::create(void) {                    \
+        return (HFCL_NEW_EX(actClassName, ()));                       \
     }
 
-#define BEGIN_DEFINE_ACTIVITY(appClassName)             \
-	DEFINE_ACTIVITY_FACTORY(appClassName)               \
-	ActivityFactory::AppData*                    \
-		appClassName##Factory::getAppInfo (){      \
-			static AppData _app_info = {0}; \
-			if(_app_info.name == NULL) { 
+#define BEGIN_DEFINE_ACTIVITY(actClassName)             \
+	DEFINE_ACTIVITY_FACTORY(actClassName)               \
+	ActivityFactory::ActivityData*                    \
+		actClassName##Factory::getActivityInfo (){      \
+			static ActivityData _act_info = {0}; \
+			if(_act_info.name == NULL) { 
 
-#define END_DEFINE_ACTIVITY  } return &_app_info; }
+#define END_DEFINE_ACTIVITY  } return &_act_info; }
 
-#define ACTIVITY_SET(name, value)    _app_info.name = value;
+#define ACTIVITY_SET(name, value)    _act_info.name = value;
 
 /*
- *  get app-factory from app-class-name 
+ *  get act-factory from act-class-name 
  *  USAGE : GET_ACTIVITY_FACTORY(Desktop);
  */
-#define GET_ACTIVITY_FACTORY(appClassName)    \
-    appClassName##Factory::getInstance()
+#define GET_ACTIVITY_FACTORY(actClassName)    \
+    actClassName##Factory::getInstance()
 
 /*
- *  register app to appmanager
+ *  register act to actmanager
  *  USAGE : REGISTER_ACTIVITY("desktop", Desktop);
  */
-#define REGISTER_ACTIVITY(appName, appClassName) \
-    ActivityManager::getInstance()->registerApp(appName, GET_ACTIVITY_FACTORY(appClassName))
+#define REGISTER_ACTIVITY(actName, actClassName) \
+    ActivityManager::getInstance()->registerActivity(actName, GET_ACTIVITY_FACTORY(actClassName))
 
 /*
- *  register app to appmanager with additional information
+ *  register act to actmanager with additional information
  *  USAGE : REGISTER_ACTIVITY_EX("desktop", textResId, iamgeResId, Desktop);
  */
-#define REGISTER_ACTIVITY_EX(appName, textResId, imageResId, appClassName) \
-    ActivityManager::getInstance()->registerApp(appName, textResId, imageResId, GET_ACTIVITY_FACTORY(appClassName))
+#define REGISTER_ACTIVITY_EX(actName, textResId, imageResId, actClassName) \
+    ActivityManager::getInstance()->registerActivity(actName, textResId, imageResId, GET_ACTIVITY_FACTORY(actClassName))
 
 #endif /* HFCL_ACTIVITY_ACTIVITYFACTORY_H_ */
 

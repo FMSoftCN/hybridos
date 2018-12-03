@@ -24,6 +24,7 @@
 #define HFCL_ACTIVITY_BASEACTIVITY_H_
 
 #include "common/common.h"
+#include "common/alternativestl.h"
 #include "common/contextstream.h"
 #include "activity/intent.h"
 #include "activity/controller.h"
@@ -32,22 +33,22 @@ namespace hfcl {
 
 class BaseActivity : public Controller {
 public:
-    typedef enum _tagAPP_STATE
+    typedef enum _ACT_STATE
     {
         ORIGIN = 0,
         INIT, 
         RUNNING, 
         SLEEP, 
         SUSPEND, 
-    }APP_STATE;
+    } ACT_STATE;
 
     BaseActivity():m_priority(PRIORITY_HIGH), m_name(NULL), m_state(INIT){};
     virtual ~BaseActivity();
 
     const char * name(void);
     void setName(const char * name);
-    APP_STATE state(void);
-    void setState(APP_STATE state);
+    ACT_STATE state(void);
+    void setState(ACT_STATE state);
     void close(void);
 
     virtual void onCreate(ContextStream *contextStream, Intent *intent){}
@@ -77,10 +78,10 @@ public:
 protected:
     int m_priority;
     char * m_name;
-    APP_STATE m_state;
+    ACT_STATE m_state;
 
     View* getViewParent(int view_id) { return NULL; }
-}
+};
 
 } // namespace hfcl
 

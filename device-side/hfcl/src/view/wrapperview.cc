@@ -20,8 +20,8 @@
 */
 
 
-#include "nguxcommon.h"
-#include "mgcl.h"
+#include "common/common.h"
+#include "mgcl/mgcl.h"
 
 #include <stdio.h>
 #include <stdlib.h>

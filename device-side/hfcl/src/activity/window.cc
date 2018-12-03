@@ -22,15 +22,22 @@
 
 #undef DEBUG
 
-#include "mgcl.h"
-#include "color.h"
-#include "nguxwindow.h"
+#include "activity/window.h"
+
+#include <minigui/minigui.h>
+#include <minigui/gdi.h>
+#include <minigui/window.h>
+
+#include "mgcl/mgcl.h"
+#include "activity/activitymanager.h"
+#include "graphics/color.h"
+
+#if 0
 #include "appmanager.h"
 #include "graphicscontext.h"
 #include "respackage.h"
 #include "respkgmanager.h"
-
-extern BOOL nguxActiveFlag;
+#endif
 
 namespace hfcl {
 
@@ -62,7 +69,7 @@ void Window::show(bool bUpdateBack)
     InvalidateRect(m_viewWindow, NULL, bUpdateBack);
 }
 
-void Window::getAppClientRect(IntRect& irc)
+void Window::getClientRect(IntRect& irc)
 {
     RECT rc;
 
@@ -70,9 +77,10 @@ void Window::getAppClientRect(IntRect& irc)
     irc.setRect(rc.left, rc.top, rc.right, rc.bottom);
 }
 
-void Window::setAppRect(const IntRect& irc)
+void Window::setWindowRect(const IntRect& irc)
 {
-    MoveWindow(m_viewWindow, irc.left(), irc.top(), irc.width(), irc.height(), true);
+    MoveWindow(m_viewWindow, irc.left(), irc.top(), irc.width(), irc.height(),
+               TRUE);
 }
 
 void Window::hide(void)
@@ -83,8 +91,7 @@ void Window::hide(void)
 // destroy view window and other resources
 void Window::destroy(void)
 {
-    if(GetWindowAdditionalData(m_viewWindow) == (DWORD(this)))
-    {
+    if(GetWindowAdditionalData(m_viewWindow) == (DWORD)this) {
         SetWindowAdditionalData(m_viewWindow, 0);
         DestroyMainWindow(m_viewWindow);
     }
@@ -118,11 +125,9 @@ void Window::asyncUpdateRect(int x, int y, int w, int h, bool upBackGnd)
         m_keyLocked = true;
     }
 
-    if(!nguxActiveFlag)
-        return;
-
     if (!m_updateLocked) {
-        _DBG_PRINTF ("Window::asyncUpdateRect called with (%d, %d, %d, %d)", rc.left, rc.top, rc.right, rc.bottom);
+        _DBG_PRINTF ("Window::asyncUpdateRect called with (%d, %d, %d, %d)",
+                     rc.left, rc.top, rc.right, rc.bottom);
         InvalidateRect(m_viewWindow, &rc, FALSE);
     }
 }
@@ -147,10 +152,11 @@ void Window::drawBackground(GraphicsContext* context, IntRect &rc, int status)
         for (int i = 0; i < context->getLayers(); i++) {
             context->setLayer(i);
             context->fillRect(rc, 
-                    GetRValue(Color::LAYER_COLOR_KEY),
-                    GetGValue(Color::LAYER_COLOR_KEY), 
-                    GetBValue(Color::LAYER_COLOR_KEY), m_alpha);
-                   //GetBValue(Color::LAYER_COLOR_KEY), 0xFF); //the default value is 255
+                              GetRValue(Color::LAYER_COLOR_KEY),
+                              GetGValue(Color::LAYER_COLOR_KEY), 
+                              GetBValue(Color::LAYER_COLOR_KEY), m_alpha);
+                              //the default value is 255
+                              //GetBValue(Color::LAYER_COLOR_KEY), 0xFF);
             if (i != 0){
                 context->setLayerColorKey(i, TRUE, 
                         GetRValue(Color::LAYER_COLOR_KEY),
@@ -165,7 +171,8 @@ void Window::drawBackground(GraphicsContext* context, IntRect &rc, int status)
                 GetRValue(Color::LAYER_COLOR_KEY),
                 GetGValue(Color::LAYER_COLOR_KEY), 
                 GetBValue(Color::LAYER_COLOR_KEY), m_alpha);
-                //GetBValue(Color::LAYER_COLOR_KEY), 0xFF);// the default value is 255
+                // the default value is 255
+                //GetBValue(Color::LAYER_COLOR_KEY), 0xFF);
         if (m_drawLayer != 0){
             context->setLayerColorKey(m_drawLayer, TRUE, 
                     GetRValue(Color::LAYER_COLOR_KEY),
@@ -176,7 +183,7 @@ void Window::drawBackground(GraphicsContext* context, IntRect &rc, int status)
     }
 }
 
-HPlatformOwner Window::getPlatformOwner(void)
+HWND Window::getSysWindow(void)
 {
     return m_viewWindow;
 }
@@ -191,17 +198,18 @@ Window* Window::window(HWND hwnd)
     return reinterpret_cast<Window*>(GetWindowAdditionalData(hwnd));
 }
 
-unsigned int Window::setActiveWindow(unsigned int hMainWnd)
+HWND Window::setActiveWindow(HWND hMainWnd)
 {
     return SetActiveWindow(hMainWnd);
 }
 
-unsigned int Window::getActiveWindow(void)
+HWND Window::getActiveWindow(void)
 {
     return GetActiveWindow();
 }
 
-int Window::sendKeyMessage(Event::EventType keytype, WPARAM wParam, LPARAM lParam)
+int Window::sendKeyMessage(Event::EventType keytype,
+        WPARAM wParam, LPARAM lParam)
 {
     if (!m_keyLocked) {
         KeyEvent event(keytype, wParam, lParam);
@@ -210,7 +218,8 @@ int Window::sendKeyMessage(Event::EventType keytype, WPARAM wParam, LPARAM lPara
     return 0;
 }
 
-int Window::sendMouseMessage(Event::EventType mouseType, WPARAM wParam, LPARAM lParam)
+int Window::sendMouseMessage(Event::EventType mouseType,
+        WPARAM wParam, LPARAM lParam)
 {    
     //DWORD key_flags = (DWORD)wParam;
     int x_pos = LOSWORD (lParam);
@@ -226,16 +235,16 @@ int Window::sendMouseMessage(Event::EventType mouseType, WPARAM wParam, LPARAM l
     f->dispatchEvent(&evt);
 
     //FIXME, haven't be tested.
-    if (mouseType == Event::MOTION_DOWN){
+    if (mouseType == Event::MOTION_DOWN) {
         m_mouseDownView = f;
-    } else if (mouseType == Event::MOTION_UP){
+    } else if (mouseType == Event::MOTION_UP) {
         if (m_mouseDownView == f){
             MouseEvent ev(Event::MOTION_CLICK, x_pos, y_pos);
             f->dispatchEvent(&ev);
         }
         m_mouseDownView = NULL;
-    } else if (mouseType == Event::MOTION_MOVE){
-        if (m_mouseMoveView == NULL){
+    } else if (mouseType == Event::MOTION_MOVE) {
+        if (m_mouseMoveView == NULL) {
             m_mouseMoveView = f;
         } else if (m_mouseMoveView != f) {
             MouseEvent e(Event::MOTION_MOVEOUT, x_pos, y_pos);
@@ -254,7 +263,7 @@ int Window::sendIdleMessage()
 	return 0;
 }
 
-int Window::defaultAppProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
+LRESULT Window::defaultAppProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     Window* window = Window::window(hWnd);
     switch (message) {
@@ -369,7 +378,8 @@ int Window::defaultAppProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
                 window->destroy();
             return 0;
 
-        // change theme msg
+        // TODO: change theme msg
+#if 0
         case HFCL_MSG_CHANGE_THEME:
             if(window) {
                 window->changeTheme();
@@ -377,6 +387,7 @@ int Window::defaultAppProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
                 window->updateView();
             }
             return 0;
+#endif
 
         default:
             break;
@@ -415,7 +426,8 @@ bool Window::createMainWindow(int x, int y, int w, int h, bool visible)
     if (m_viewWindow != HWND_INVALID)
         return false;
       
-    m_viewWindow = createMainWindow ("window", defaultAppProc, x, y, w, h, (DWORD)this, visible);
+    m_viewWindow = createMainWindow ("window", defaultAppProc,
+            x, y, w, h, (DWORD)this, visible);
 
     if (m_viewWindow == HWND_INVALID)
         return false;
@@ -431,13 +443,13 @@ bool Window::createMainWindow(int x, int y, int w, int h, bool visible)
 
 bool Window::createMainWindow(void)
 {
-    return createMainWindow(0, 0, _ngux_screen_w, _ngux_screen_h);
+    return createMainWindow(0, 0, 
+            GetGDCapability(HDC_SCREEN, GDCAP_HPIXEL),
+            GetGDCapability(HDC_SCREEN, GDCAP_VPIXEL));
 }
 
 void Window::updateWindow(bool isUpdateBkg)
 {
-    if(!nguxActiveFlag)
-        return;
     UpdateWindow(m_viewWindow, isUpdateBkg);
 }
 
@@ -453,8 +465,9 @@ unsigned int Window::doModalView()
 
 void Window::endDlg(int endCode)
 {
-    SendNotifyMessage(m_viewWindow, MGCL_MSG_MNWND_ENDDIALOG, 0, (LPARAM)endCode);
+    SendNotifyMessage(m_viewWindow, MGCL_MSG_MNWND_ENDDIALOG,
+            0, (LPARAM)endCode);
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

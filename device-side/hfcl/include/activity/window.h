@@ -40,8 +40,8 @@ public:
     Window();
     virtual ~Window();
 
-    void setAppRect(const IntRect& irc);
-    void getAppClientRect(IntRect& irc);
+    void setWindowRect(const IntRect& irc);
+    void getClientRect(IntRect& irc);
 
     void show(bool bUpdateBack = true);
     void hide(void);
@@ -62,8 +62,8 @@ public:
     HWND viewWindow(void) const;
     static Window* window(HWND hwnd);
 
-    unsigned int setActiveWindow(unsigned int hMainWnd);
-    unsigned int getActiveWindow(void);
+    HWND setActiveWindow(HWND hMainWnd);
+    HWND getActiveWindow(void);
 
     // Asynchronous
     void asyncUpdateRect(int x, int y, int w, int h, bool upBackGnd = true);
@@ -72,7 +72,7 @@ public:
 
     bool isTopView(void) { return true; }
 
-    virtual HPlatformOwner getPlatformOwner(void);
+    virtual HWND getSysWindow(void);
 
     void setBkgAlpha(unsigned char a){ m_bkg_alpha = a;}
     unsigned char bkgAlpha(){return m_bkg_alpha ;}
@@ -99,9 +99,10 @@ protected:
     HWND m_viewWindow;
     HDC m_context;
     
-    static int defaultAppProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam);
+    static LRESULT defaultAppProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     static HWND createMainWindow(const char* caption, WNDPROC proc,
             int x, int y, int width, int height, DWORD addData, bool visible = true);
+
 private:
     unsigned char m_bkg_alpha;   //default the value is 0, window is transparent
     bool m_keyLockable;
@@ -112,7 +113,7 @@ private:
     static bool m_updateLocked;
 
     virtual void inner_updateView(int x, int y, int w, int h, bool upBackGnd = true);
-}
+};
 
 } // namespace hfcl
 

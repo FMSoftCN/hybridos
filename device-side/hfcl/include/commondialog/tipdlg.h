@@ -23,9 +23,9 @@
 #define __HFCL_TipDlg_H__
 
 #include "nguxwindow.h"
-#include "nguxevent.h"
+#include "common/event.h"
 #include "viewcontext.h"
-#include "timerservice.h"
+#include "services/timerservice.h"
 
 namespace hfcl {
 class TextView;

@@ -20,44 +20,46 @@
 */
 
 
-#ifndef _HFCL_AppStack_h
-#define _HFCL_AppStack_h
+#ifndef HFCL_ACTIVITY_ACTIVITYSTACK_H_
+#define HFCL_ACTIVITY_ACTIVITYSTACK_H_
 
-#include "nguxcommon.h"
+#include "common/common.h"
+#include "common/alternativestl.h"
+#include "common/contextstream.h"
 
 namespace hfcl {
-class ActivityInfo;
 
+class ActivityInfo;
 class BaseActivity;
 
-class AppStack
+class ActivityStack
 {
-	private:
-		LIST(ActivityInfo*, AppInfoList);
-		AppInfoList m_apps;
-		AppInfoList m_apps_runbackground;
-	
-    public:
-		AppStack(){ }
-		virtual ~AppStack(){ }
-		
-        void push(ActivityInfo *app);
-		void pop();
-		bool isEmpty();
-		bool isExist(BaseActivity *app);
-		bool remove(BaseActivity *app);
-		bool move2Top(BaseActivity *app);
-		bool move2Bottom(BaseActivity *app);
-		bool pushBackgroundRunningApp(BaseActivity *app);
-		bool popBackgroundRunningApp(BaseActivity *app);
-		void clear();
-		int size();
-		ActivityInfo* top(int n = 0);
-		ActivityInfo* bottom(int n = 0);
-		BaseActivity* getExistAppByName(const char * name);
-		BaseActivity* getExistAppRunBackgroundByName(const char * name);
+private:
+    LIST(ActivityInfo*, ActivityInfoList);
+    ActivityInfoList m_acts;
+    ActivityInfoList m_acts_runbackground;
+
+public:
+    ActivityStack(){ }
+    virtual ~ActivityStack(){ }
+    
+    void push(ActivityInfo *act);
+    void pop();
+    bool isEmpty();
+    bool isExist(BaseActivity *act);
+    bool remove(BaseActivity *act);
+    bool move2Top(BaseActivity *act);
+    bool move2Bottom(BaseActivity *act);
+    bool pushBackgroundRunningActivity(BaseActivity *act);
+    bool popBackgroundRunningActivity(BaseActivity *act);
+    void clear();
+    int size();
+    ActivityInfo* top(int n = 0);
+    ActivityInfo* bottom(int n = 0);
+    BaseActivity* getExistActivityByName(const char * name);
+    BaseActivity* getExistActivityRunBackgroundByName(const char * name);
 };
 
 } // namespace hfcl
 
-#endif /* _HFCL_AppStack_h */
+#endif /* HFCL_ACTIVITY_ACTIVITYSTACK_H_ */

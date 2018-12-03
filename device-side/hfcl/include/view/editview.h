@@ -103,9 +103,9 @@ public:
 
 	void setAutoOmitted(bool bSet)    { m_bAutoOmitted = bSet; }
 	bool isAutoOmitted(void)    { return m_bAutoOmitted; }
-    void setInputMode(U16 mode);
-    void setDefaultInputMode(U16 mode) { m_default_input_mode = mode; }
-    U16 getDefaultInputMode(void)    { return m_default_input_mode; }
+    void setInputMode(Uint16 mode);
+    void setDefaultInputMode(Uint16 mode) { m_default_input_mode = mode; }
+    Uint16 getDefaultInputMode(void)    { return m_default_input_mode; }
    
     void setMargin(unsigned int horz, unsigned int vert) {
         m_hMargin = horz; m_vMargin = vert;
@@ -198,9 +198,9 @@ protected:
     bool  m_exchange;
     bool  m_IsCharCount;
     Logfont *m_font;
-    U16     m_input_mode;
-    U16     m_default_input_mode;
-    U16     m_writing_language;
+    Uint16     m_input_mode;
+    Uint16     m_default_input_mode;
+    Uint16     m_writing_language;
 };
 
 } // namespace hfcl {

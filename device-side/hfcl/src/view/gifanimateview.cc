@@ -21,8 +21,8 @@
 
 
 
-#include "nguxcommon.h"
-#include "mgcl.h"
+#include "common/common.h"
+#include "mgcl/mgcl.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,7 +32,7 @@
 #include "gifanimateview.h"
 #include "graphicscontext.h"
 #include "gifanimate.h"
-#include "timerservice.h"
+#include "services/timerservice.h"
 #include "tm.h"
 
 namespace hfcl {

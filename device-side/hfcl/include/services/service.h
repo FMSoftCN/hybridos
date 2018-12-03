@@ -19,46 +19,18 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "activity/baseactivity.h"
+#ifndef _HFCL_Service_h
+#define _HFCL_Service_h
+#include "common/common.h"
 
 namespace hfcl {
 
-BaseActivity::~BaseActivity()
-{
-	if(m_name)
-	   free(m_name);
-}
+class Service {
+	public:
+		virtual void start(void) = 0;
+		virtual void stop(void) = 0;
+};
 
-const char * BaseActivity::name(void)
-{
-	return m_name;
-}
+} // namespace hfcl
 
-void BaseActivity::setName(const char * p_name)
-{
-	if (m_name != NULL)
-		free(m_name);
-	m_name = strdup(p_name);
-}
-
-BaseActivity::ACT_STATE BaseActivity::state(void)
-{
-	return m_state;
-}
-
-void BaseActivity::setState(ACT_STATE i_state)
-{
-	m_state = i_state;
-}
-
-void BaseActivity::close(void)
-{
-	ActivityManager::getInstance()->exit(this);
-}
-
-bool BaseActivity::isSuspendable(void)
-{
-	return true;
-}
-
-} // namespace hfcl {
+#endif //_HFCL_Service_h

@@ -22,11 +22,11 @@
 #ifndef _HFCL_GraphicsContext_h
 #define _HFCL_GraphicsContext_h
 
-#include "nguxcommon.h"
-#include "mgcl.h"
-#include "log.h"
-#include "nguxobject.h"
-#include "intrect.h"
+#include "common/common.h"
+#include "common/log.h"
+#include "common/object.h"
+#include "common/intrect.h"
+#include "mgcl/mgcl.h"
 
 typedef BITMAP 	Bitmap;
 
@@ -207,10 +207,11 @@ int GetUTF8CharInfo(const char *mstr, int len, int *retPosChars);
 int GetUTF8CharCount(const char *mstr, int len);
 BOOL HasUCS2Char(const char *mstr, int len);
 int GetUTF8LenByCharCount(const char *mstr, int charcount);
-U16 utf8_to_ucs2 (U8 *utf8);
-BOOL isNumberChar ( U16 inChar );
-BOOL isSymbolChar ( U16 inChar );
-BOOL isArabicSymbol ( U16 inChar );
-} // namespace hfcl {
+Uint16 utf8_to_ucs2 (Uint8 *utf8);
+BOOL isNumberChar (Uint16 inChar);
+BOOL isSymbolChar (Uint16 inChar);
+BOOL isArabicSymbol (Uint16 inChar);
+
+} // namespace hfcl
 
 #endif /* _HFCL_GraphicsContext_h */

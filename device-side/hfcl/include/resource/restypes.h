@@ -21,7 +21,7 @@
 #ifndef HFCL_RESTYPE_H
 #define HFCL_RESTYPE_H
 
-#include "nguxcommon.h"
+#include "common/common.h"
 
 enum enumResType {
 	R_TYPE_VOID = 0,

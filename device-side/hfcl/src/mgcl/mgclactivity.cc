@@ -19,10 +19,10 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "nguxcommon.h"
-#include "log.h"
-#include "mgcl.h"
-#include "nguxevent.h"
+#include "common/common.h"
+#include "common/log.h"
+#include "mgcl/mgcl.h"
+#include "common/event.h"
 #include "appmanager.h"
 #include "hal_misc.h"
 

@@ -26,6 +26,8 @@
 #include "activity/window.h"
 #include "activity/intent.h"
 #include "activity/baseactivity.h"
+#include "activity/activitystack.h"
+#include "commondialog/menu.h"
 
 namespace hfcl {
 
@@ -42,11 +44,9 @@ public:
     virtual void onBack(void) { }
     virtual void onIdle(void) { }
     virtual void onMove2Top(void);
-#if 0
     virtual void bindMenu(Menu* menuInstance){m_menu = menuInstance;}
     virtual Menu* menu(void){ return m_menu ;}
-    virtual HPlatformOwner getPlatformOwner(void);
-#endif
+    virtual HWND getSysWindow(void);
 
     void updateNow(void);
     static Activity* activity(HWND hwnd);
@@ -60,7 +60,8 @@ protected:
 
 private:
     Menu * m_menu;
-}
+    IntRect m_old_rect;
+};
 
 class FullScreenActivity : public Activity {
 public:
@@ -68,7 +69,7 @@ public:
     virtual ~FullScreenActivity() { }
    
     virtual void onCreate(ContextStream* contextStream, Intent* intent); 
-}
+};
 
 } // namespace hfcl
 

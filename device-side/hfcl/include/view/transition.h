@@ -23,9 +23,9 @@
 #ifndef HFCL_RollableText_h
 #define HFCL_RollableText_h
 
-#include "nguxevent.h"
+#include "common/event.h"
 #include "view.h"
-#include "timerservice.h"
+#include "services/timerservice.h"
 
 namespace hfcl {
 

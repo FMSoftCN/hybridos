@@ -21,7 +21,7 @@
 #ifndef _HFCL_ANIMATION_H
 #define _HFCL_ANIMATION_H
 
-#include "mgcl.h"
+#include "mgcl/mgcl.h"
 #include "nguxobject.h"
 
 namespace hfcl {

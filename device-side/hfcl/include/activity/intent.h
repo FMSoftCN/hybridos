@@ -23,7 +23,8 @@
 #ifndef _HFCL_Intent_h
 #define _HFCL_Intent_h
 
-#include "nguxcommon.h"
+#include "common/common.h"
+#include "common/alternativestl.h"
 
 namespace hfcl {
 
@@ -32,52 +33,52 @@ namespace hfcl {
  * it is used to transfer data between applications.
  */
 class Intent {
-    public:
-        Intent(int action = 0, string data = "", int tag = 0);
-        Intent(Intent * intent);
+public:
+    Intent(int action = 0, string data = "", int tag = 0);
+    Intent(Intent * intent);
 
-        const int action() const {return m_action;}
-        const string data() const {return m_data;}
-        const void* dataEx() const {return m_dataEx;}
-        const int tag() const {return m_tag;}
+    const int action() const {return m_action;}
+    const string data() const {return m_data;}
+    const void* dataEx() const {return m_dataEx;}
+    const int tag() const {return m_tag;}
 
-        void setAction(int iaction) {m_action = iaction;}
-        void setData(string sdata) {m_data = sdata;}
-        void setDataEx(void* sdata) {m_dataEx = sdata;}
-        void settag(int itag) {m_tag = itag;}
-       /////////////////////////////////////////
-		void putValue(string& key, void* value);
-		void *getValue(string key);
+    void setAction(int iaction) {m_action = iaction;}
+    void setData(string sdata) {m_data = sdata;}
+    void setDataEx(void* sdata) {m_dataEx = sdata;}
+    void settag(int itag) {m_tag = itag;}
+   /////////////////////////////////////////
+    void putValue(string& key, void* value);
+    void *getValue(string key);
 #if 0
-		void putInt(string key, int value);
-		int getInt(string key);
-		void putString(string key, string& value);
-		string& getString(string key);
+    void putInt(string key, int value);
+    int getInt(string key);
+    void putString(string key, string& value);
+    string& getString(string key);
 #endif
 
-	protected:
-        /* 
-         * m_action is globally defined ACTION.
-         * e.g. ACTION_MOVE, ACTION_VIEW, ACTION_EDIT, ACTION_DIAL etc.
-         */
-        int m_action;
+protected:
+    /* 
+     * m_action is globally defined ACTION.
+     * e.g. ACTION_MOVE, ACTION_VIEW, ACTION_EDIT, ACTION_DIAL etc.
+     */
+    int m_action;
 
-        /* 
-         * m_date is transfer data.
-         * e.g. "13800138000" or "zhang san" etc.
-         */
-        string m_data;
-		void* m_dataEx;
+    /* 
+     * m_date is transfer data.
+     * e.g. "13800138000" or "zhang san" etc.
+     */
+    string m_data;
+    void* m_dataEx;
 
-        /*
-         * m_tag is tag of return by Which an application.
-         * e.g. App1 call App2 , App2 save m_tag value.
-         * when App2 exit, return a intent(..., ..., m_tagvalue).
-         */
-        int m_tag;
-	private:
-		MAPCLASSKEY(string, void*, IntentMap);
-		IntentMap m_intentStore;
+    /*
+     * m_tag is tag of return by Which an application.
+     * e.g. App1 call App2 , App2 save m_tag value.
+     * when App2 exit, return a intent(..., ..., m_tagvalue).
+     */
+    int m_tag;
+private:
+    MAPCLASSKEY(string, void*, IntentMap);
+    IntentMap m_intentStore;
 };
 
 } // namespace hfcl {

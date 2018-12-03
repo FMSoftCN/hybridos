@@ -1186,16 +1186,16 @@ int SlEditView::CalculateCursor(GraphicsContext *gc,IntRect rc, string tmpStr, i
 {
     int subw, subh;
    if (caretPos > 0) {
-        U16 *temp_unicode_str = NULL;
-        U16 *bidiStrOrder = NULL;
-        U16 visIndex, unicodeCaretPos;
-        U16 tmpChar[2] = {0,};
+        Uint16 *temp_unicode_str = NULL;
+        Uint16 *bidiStrOrder = NULL;
+        Uint16 visIndex, unicodeCaretPos;
+        Uint16 tmpChar[2] = {0,};
         int w;
         int visual_str_len = GetUTF8CharCount(tmpStr.c_str(), tmpStr.length());
         string tempStr = tmpStr;
 
-        temp_unicode_str = (U16*)malloc((visual_str_len+1) * sizeof(U16));
-        bidiStrOrder = (U16*)malloc((visual_str_len*2+1) * sizeof(U16));
+        temp_unicode_str = (Uint16*)malloc((visual_str_len+1) * sizeof(Uint16));
+        bidiStrOrder = (Uint16*)malloc((visual_str_len*2+1) * sizeof(Uint16));
 
         NGUtf8ToUnicode((unsigned char*)tempStr.c_str(), (unsigned char *)temp_unicode_str);
         ConvertToGlyphForm(temp_unicode_str, visual_str_len, 0);
@@ -1267,7 +1267,7 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
     {
         memcpy(tmpchar, str + info[i-1], info[i] - info[i-1]);
         tmpchar [info[i] - info[i-1]] = '\0';
-        if(isSymbolChar(utf8_to_ucs2((U8 *)tmpchar)) ||isNumberChar(utf8_to_ucs2((U8 *)tmpchar)))
+        if(isSymbolChar(utf8_to_ucs2((Uint8 *)tmpchar)) ||isNumberChar(utf8_to_ucs2((Uint8 *)tmpchar)))
         {
             i++;
         }
@@ -1277,7 +1277,7 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
         }			
     }
 
-    if(isTransformArabic(utf8_to_ucs2((U8 *)tmpchar))||isArabicSymbol(utf8_to_ucs2((U8 *)tmpchar)))
+    if(isTransformArabic(utf8_to_ucs2((Uint8 *)tmpchar))||isArabicSymbol(utf8_to_ucs2((Uint8 *)tmpchar)))
     {
         SetBiDiFlag(true);
         setExchangeFlag(true);

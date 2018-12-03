@@ -404,10 +404,10 @@ void GraphicsContext::getTextDrawSize (const char *text, Logfont *f, int *w, int
         if (f != NULL) {
             UI_font_type oldFont = UI_get_font();
             UI_set_font(f);
-            Get_StringWidthHeight((U8 *)tmpStr, w,h);    
+            Get_StringWidthHeight((Uint8 *)tmpStr, w,h);    
             UI_set_font(oldFont);
         } else {
-            Get_StringWidthHeight((U8 *)tmpStr, w,h);    
+            Get_StringWidthHeight((Uint8 *)tmpStr, w,h);    
         }
         free(tmpStr);	
     }
@@ -448,10 +448,10 @@ void GraphicsContext::getTextDrawSize (const unsigned short *text, Logfont *f, i
 		if (f != NULL) {
 	        UI_font_type oldFont = UI_get_font();
 	        UI_set_font(f);
-			Get_StringWidthHeight((U8 *)text, w,h);    
+			Get_StringWidthHeight((Uint8 *)text, w,h);    
 	        UI_set_font(oldFont);
         } else {
-        	Get_StringWidthHeight((U8 *)text, w,h);    
+        	Get_StringWidthHeight((Uint8 *)text, w,h);    
         }
     }
 #else
@@ -528,7 +528,7 @@ int GraphicsContext::drawTextToGetLenght(const string& text)
     {
         memset(pUcs2, 0x00, (nCount + 1) * 2);
         NGUtf8ToUnicode((unsigned char *)pUtf8,(unsigned char *)pUcs2);
-        Get_StringWidthHeight((U8 *)pUcs2, &w,&h);
+        Get_StringWidthHeight((Uint8 *)pUcs2, &w,&h);
         HFCL_FREE(pUcs2);
     }
 
@@ -1389,37 +1389,32 @@ BOOL HasUCS2Char(const char *mstr, int len)
     return isUcs2Char;
 }
 
-U16 utf8_to_ucs2 (U8 *utf8)
+Uint16 utf8_to_ucs2 (Uint8 *utf8)
 {
-       U16  ucs2;
+    Uint16  ucs2;
 	unsigned char c = utf8[0];
 
-	if (c < 0x80) 
-	{
+	if (c < 0x80) {
 		ucs2 = c;
-	} 
-	else if (c < 0xe0)
-	{
-		ucs2 = ((U16) (c & 0x1f) << 6) | (U16) (utf8[1] ^ 0x80);
-	} 
-	else
-	{
-	    ucs2 =	  ((U16) (c & 0x0f) << 12)
-				| ((U16) (utf8[1] ^ 0x80) << 6)
-				|  (U16) (utf8[2] ^ 0x80);
+	} else if (c < 0xe0) {
+		ucs2 = ((Uint16) (c & 0x1f) << 6) | (Uint16) (utf8[1] ^ 0x80);
+	} else {
+	    ucs2 =	  ((Uint16) (c & 0x0f) << 12)
+				| ((Uint16) (utf8[1] ^ 0x80) << 6)
+				|  (Uint16) (utf8[2] ^ 0x80);
 	}
 
 	return ucs2;
 }
 
-BOOL isNumberChar ( U16 inChar )
+BOOL isNumberChar ( Uint16 inChar )
 {
    if (inChar >= 0x0030  && inChar <= 0x0039) 
       return TRUE;
    else
       return FALSE;
 }
-BOOL isSymbolChar ( U16 inChar )
+BOOL isSymbolChar ( Uint16 inChar )
 {
    if ((inChar >= 0x0020  && inChar <= 0x002F) || (inChar >= 0x003A  && inChar <= 0x0040)
       ||(inChar >= 0x005B  && inChar <= 0x0060)|| (inChar >= 0x007B  && inChar <= 0x007E) 
@@ -1429,12 +1424,13 @@ BOOL isSymbolChar ( U16 inChar )
       return FALSE;
 }
 
-BOOL isArabicSymbol ( U16 inChar )
+BOOL isArabicSymbol ( Uint16 inChar )
 {
    if ((inChar == 0x061B )||(inChar == 0x061F ))
       return TRUE;
    else
       return FALSE;
 }
-} // namespace hfcl {
+
+} // namespace hfcl
 

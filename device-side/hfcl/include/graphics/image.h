@@ -22,11 +22,11 @@
 #ifndef _HFCL_Image_h
 #define _HFCL_Image_h
 
-#include "log.h"
-#include "nguxobject.h"
-#include "intrect.h"
-#include "graphicscontext.h"
-#include "drawable-id.h"
+#include "common/log.h"
+#include "common/object.h"
+#include "common/intrect.h"
+#include "graphics/graphicscontext.h"
+#include "drawable/drawable-id.h"
 
 namespace hfcl {
 

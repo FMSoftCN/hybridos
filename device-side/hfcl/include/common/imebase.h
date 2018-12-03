@@ -45,11 +45,11 @@ public:
 	virtual ~ImeBase() {};
 
     virtual void enable (bool b_enable) = 0;
-    virtual void setInputMode (U16 mode) = 0;
-    virtual void changeInputboxMode (U16 mode) = 0;
+    virtual void setInputMode (Uint16 mode) = 0;
+    virtual void changeInputboxMode (Uint16 mode) = 0;
     virtual int  getCurrentInputMode () = 0;
 	virtual int  getInputModeFlag () = 0;
-	virtual void setInputModeFlag (U8 flag) = 0;
+	virtual void setInputModeFlag (Uint8 flag) = 0;
 	virtual bool isArabic () = 0;
     virtual bool isSmartShiftInputMode () = 0;
     virtual int  getPreMultitapShiftMode () = 0;
@@ -65,8 +65,8 @@ public:
     virtual void smartCheckPunctuationCharacter (string& str, int caretpos, bool flag) = 0;
     virtual void refreshString () = 0;
 
-    virtual U16  getLanguage () = 0;
-    virtual void setLanguage (U16 lang, U16 mode = MULTITAP_SHIFT_ABC) = 0;
+    virtual Uint16  getLanguage () = 0;
+    virtual void setLanguage (Uint16 lang, Uint16 mode = MULTITAP_SHIFT_ABC) = 0;
 
 #ifdef __MMI_T9__    
 	virtual void IMESwitch() = 0;
@@ -105,13 +105,13 @@ static inline void imeEnable (bool act) {
     }
 }
 
-static inline void imeSetInputMode (U16 mode) {
+static inline void imeSetInputMode (Uint16 mode) {
     if (NULL != g_ime_window) {
         g_ime_window->setInputMode (mode);
     }
 }
 
-static inline void imeChangeInputboxMode (U16 mode) {
+static inline void imeChangeInputboxMode (Uint16 mode) {
     if (NULL != g_ime_window) {
         g_ime_window->changeInputboxMode (mode);
     }
@@ -133,7 +133,7 @@ static inline int imeGetInputModeFlag() {
     return INPUT_MODE_NUMBER;
 }
 
-static inline void imeSetInputModeFlag(U8 mode) {
+static inline void imeSetInputModeFlag(Uint8 mode) {
     if (NULL != g_ime_window) {
         g_ime_window->setInputModeFlag(mode);
     }
@@ -358,7 +358,7 @@ static inline void imeT9ResetMode () {
     }
 }
 
-static inline U16 imeGetLanguage () {
+static inline Uint16 imeGetLanguage () {
     if (NULL != g_ime_window) {
         return g_ime_window->getLanguage ();
     }
@@ -366,7 +366,7 @@ static inline U16 imeGetLanguage () {
     return 0;
 }
 
-static inline void imeSetLanguage (U16 lang, U16 mode = MULTITAP_SHIFT_ABC)
+static inline void imeSetLanguage (Uint16 lang, Uint16 mode = MULTITAP_SHIFT_ABC)
 {
     if (NULL != g_ime_window) {
         return g_ime_window->setLanguage (lang, mode);

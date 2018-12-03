@@ -95,7 +95,7 @@ unsigned char NGUnicodeToUCS2Encoding(unsigned short unicode,unsigned char  *cha
 		{
 			if(unicode == 0x80)
 			{
-				arrOut[index++] = 0xac ;//*((U8*)(&unicode));
+				arrOut[index++] = 0xac ;//*((Uint8*)(&unicode));
 				arrOut[index] = 0x20;
 			}
 			else

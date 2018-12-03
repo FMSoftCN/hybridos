@@ -24,7 +24,7 @@
 
 #include "graphicscontext.h"
 #include "transition.h"
-#include "timerservice.h"
+#include "services/timerservice.h"
 
 namespace hfcl {
 
@@ -122,7 +122,7 @@ Transition* GetTransition(unsigned int key)
 
 //////////////////////////////////////////////////////////////////////////////
 
-static int utf8_to_ucs2 (U16 *ucs2, U8 *utf8)
+static int utf8_to_ucs2 (Uint16 *ucs2, Uint8 *utf8)
 {
 	unsigned char c = utf8[0];
 
@@ -133,14 +133,14 @@ static int utf8_to_ucs2 (U16 *ucs2, U8 *utf8)
 	} 
 	else if (c < 0xe0)
 	{
-		*ucs2 = ((U16) (c & 0x1f) << 6) | (U16) (utf8[1] ^ 0x80);
+		*ucs2 = ((Uint16) (c & 0x1f) << 6) | (Uint16) (utf8[1] ^ 0x80);
 		return 2;
 	} 
 	else
 	{
-	    *ucs2 =	  ((U16) (c & 0x0f) << 12)
-				| ((U16) (utf8[1] ^ 0x80) << 6)
-				|  (U16) (utf8[2] ^ 0x80);
+	    *ucs2 =	  ((Uint16) (c & 0x0f) << 12)
+				| ((Uint16) (utf8[1] ^ 0x80) << 6)
+				|  (Uint16) (utf8[2] ^ 0x80);
 		return 3;
 	}
 }
@@ -149,7 +149,7 @@ static inline bool is_bidi_right(unsigned char *_str)
 {
 	int _clen;
 	Uint32 _dir;
-	U16 _unicode = 0;
+	Uint16 _unicode = 0;
 	
 	if (_str == NULL){
 		return false;

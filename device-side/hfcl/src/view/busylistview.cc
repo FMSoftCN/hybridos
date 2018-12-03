@@ -20,7 +20,7 @@
 */
 
 
-#include "nguxevent.h"
+#include "common/event.h"
 #include "graphicscontext.h"
 #include "drawable.h"
 #include "panelview.h"

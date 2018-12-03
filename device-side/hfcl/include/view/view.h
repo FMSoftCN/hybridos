@@ -295,7 +295,7 @@ public:
 
     int setLayer(int layerNo) { int old = m_drawLayer; m_drawLayer = layerNo; return old; }
     int layer () { return m_drawLayer; }
-}
+};
 
 } // namespace hfcl
 

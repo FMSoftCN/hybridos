@@ -30,7 +30,7 @@
 
 HFCL_BEGIN_EXTERN_C
 
-extern U8 isTransformArabic ( U16 inChar );
+extern Uint8 isTransformArabic ( Uint16 inChar );
 
 HFCL_END_EXTERN_C
 namespace hfcl {
@@ -205,7 +205,7 @@ void TextView::drawContent(GraphicsContext* context, IntRect &rc, int status)
         {
             memcpy(tmpchar, str + info[i-1], info[i] - info[i-1]);
             tmpchar [info[i] - info[i-1]] = '\0';
-            if(isSymbolChar(utf8_to_ucs2((U8 *)tmpchar)) ||isNumberChar(utf8_to_ucs2((U8 *)tmpchar)))
+            if(isSymbolChar(utf8_to_ucs2((Uint8 *)tmpchar)) ||isNumberChar(utf8_to_ucs2((Uint8 *)tmpchar)))
             {
                 i++;
             }
@@ -216,7 +216,7 @@ void TextView::drawContent(GraphicsContext* context, IntRect &rc, int status)
         }
         free(info);
         info=NULL;
-        if(isTransformArabic(utf8_to_ucs2((U8 *)tmpchar)) ||isArabicSymbol(utf8_to_ucs2((U8 *)tmpchar)))
+        if(isTransformArabic(utf8_to_ucs2((Uint8 *)tmpchar)) ||isArabicSymbol(utf8_to_ucs2((Uint8 *)tmpchar)))
         {	   	
             context->setBiDiFirstChType (BIDI_CHAR_TYPE_RTL);
         }

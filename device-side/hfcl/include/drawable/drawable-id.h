@@ -22,10 +22,7 @@
 #ifndef HFCL_DRAWABLE_ID_H
 #define HFCL_DRAWABLE_ID_H
 
-#include "nguxcommon.h"
-#ifdef HFCL_LOG_NDEBUG
-#include "log.h"
-#endif
+#include "common/common.h"
 
 #define MAKE_ELEMENT_ID(m, t, id) \
 	(((m) << 24) | ((t)<<16) | ((id) & 0xFFFF))

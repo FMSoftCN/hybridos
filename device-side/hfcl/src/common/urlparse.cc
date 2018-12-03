@@ -21,7 +21,7 @@
 
 ////////////////////////////////////////////
 
-#include "nguxcommon.h"
+#include "common/common.h"
 #include "urlparse.h"
 
 #define GUIURL_PHONE_NUMBER_LEN_MIN 3

@@ -22,10 +22,10 @@
 #ifndef __HFCL_MENU_H__
 #define __HFCL_MENU_H__
 
-#include "nguxwindow.h"
-#include "viewcontext.h"
-#include "simpleitemview.h"
-#include "listview.h"
+#include "activity/window.h"
+#include "view/viewcontext.h"
+#include "view/simpleitemview.h"
+#include "view/listview.h"
 
 namespace hfcl {
 
@@ -166,7 +166,7 @@ class Menu : public Window, ViewContext {
 
         bool setRect(const IntRect& irc)
         {
-            setAppRect(irc);
+            setWindowRect(irc);
             IntRect rc (0, 0, irc.width(), irc.height());
             Window::setRect(rc);
             updateSize();

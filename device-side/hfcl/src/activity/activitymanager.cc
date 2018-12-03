@@ -19,101 +19,99 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #undef _DEBUG
 
-#include "mgcl.h"
+#include "activity/activitymanager.h"
 
-#include "log.h"
+#include "activity/baseactivity.h"
+#include "activity/activity.h"
+#include "activity/activityinfo.h"
+#include "activity/activityfactory.h"
+#include "activity/activitystack.h"
+#include "commondialog/menu.h"
+
+#if 0
+#include "mgcl/mgcl.h"
+
+#include "common/log.h"
 #include "contextstream.h"
-#include "baseapp.h"
-#include "appinfo.h"
-#include "image.h"
-#include "appfactory.h"
-#include "appmanager.h"
-#include "timerservice.h"
+#include "services/timerservice.h"
 #include "lcdservice.h"
 #include "multimedia.h"
-#include "nguxmenu.h"
-#include "application.h"
-
-#include "hal_misc.h"
-
-#ifdef ENABLE_AUTOTEST
-extern void RecordCurrKeyHandler(S16 keyCode, S16 keyType);
+#include "actlication.h"
 #endif
 
 namespace hfcl {
 
-ActivityManager* ActivityManager::s_appManager = NULL;
+ActivityManager* ActivityManager::s_actManager = NULL;
 
 ActivityManager* ActivityManager::getInstance()
 {
-    if (s_appManager == NULL)
-        s_appManager = HFCL_NEW_EX(ActivityManager, ());
-    return s_appManager;
+    if (s_actManager == NULL)
+        s_actManager = HFCL_NEW_EX(ActivityManager, ());
+    return s_actManager;
 }
 
-BaseActivity* ActivityManager::getAppByName(const char * name)
+BaseActivity* ActivityManager::getActivityByName(const char * name)
 {
-	return m_appstack.getExistAppByName(name);
+	return m_actstack.getExistActivityByName(name);
 }
 
-BaseActivity* ActivityManager::getCurrentApp()
+BaseActivity* ActivityManager::getCurrentActivity()
 {
-    return getTopApp(0);
+    return getTopActivity(0);
 }
 
-BaseActivity* ActivityManager::getTopApp(unsigned int iTop)
+BaseActivity* ActivityManager::getTopActivity(unsigned int iTop)
 {
-	ActivityInfo *ai = m_appstack.top(iTop);
-    return (NULL != ai) ? ai->getApp() : NULL;
+	ActivityInfo *ai = m_actstack.top(iTop);
+    return (NULL != ai) ? ai->getActivity() : NULL;
 }
 
-bool ActivityManager::exit(BaseActivity *p_app)
+bool ActivityManager::exit(BaseActivity *p_act)
 {
     ActivityInfo *ai = NULL;
 	
-    // check the application is exist ?
-    if ( NULL == (ai = m_appstack.top())
-			|| ( ! m_appstack.isExist(p_app))
-			|| strcmp(p_app->name(), "launcher") == 0 )
+    // check the actlication is exist ?
+    if ( NULL == (ai = m_actstack.top())
+			|| ( ! m_actstack.isExist(p_act))
+			|| strcmp(p_act->name(), "launcher") == 0 )
     {   
         return false;
     }
-	_DBG_PRINTF ("Appmanager :: exit () ---- exit app [%s]", p_app->name());
-	// exit the application
-	p_app->onDestroy(NULL);	
-    m_appstack.remove(p_app);
+	_DBG_PRINTF ("Activitymanager :: exit () ---- exit act [%s]", p_act->name());
+	// exit the actlication
+	p_act->onDestroy(NULL);	
+    m_actstack.remove(p_act);
 
-    // restore another application
-    if (NULL != (ai = m_appstack.top()))
+    // restore another actlication
+    if (NULL != (ai = m_actstack.top()))
     {	
-    	_DBG_PRINTF ("Appmanager :: exit () ---- restore the pop app [%s] ", ai->getApp()->name());
-        switch (ai->getApp()->state()) {
+    	_DBG_PRINTF ("Activitymanager :: exit () ---- restore the pop act [%s] ", ai->getActivity()->name());
+        switch (ai->getActivity()->state()) {
             case BaseActivity::RUNNING:
                 // Do nothing
                 break;
             case BaseActivity::SLEEP:
 			{
 				Menu *m = NULL;
-				Activity* app = (Activity*)(ai->getApp());
-				app->setState(BaseActivity::RUNNING);
-                app->onWakeup();
+				Activity* act = (Activity*)(ai->getActivity());
+				act->setState(BaseActivity::RUNNING);
+                act->onWakeup();
 
-				if(strcmp(app->name(), "sudoku") != 0 && (m = app->menu()) != NULL && ! m->isProcessing()) {
-					m->showMenu(app);
+				if(strcmp(act->name(), "sudoku") != 0 && (m = act->menu()) != NULL && ! m->isProcessing()) {
+					m->showMenu(act);
 				}
             }		
                 break;
             case BaseActivity::SUSPEND: 
                 {
-                    BaseActivity *_app = getAppFromFactory(ai->getName());
-					if (_app != NULL){
-						ai->setApp(_app);
-						_app->setState(BaseActivity::RUNNING);
-                    	_app->onCreate(NULL, NULL);
-                    	_app->onStart();
+                    BaseActivity *_act = getActivityFromFactory(ai->getName());
+					if (_act != NULL){
+						ai->setActivity(_act);
+						_act->setState(BaseActivity::RUNNING);
+                    	_act->onCreate(NULL, NULL);
+                    	_act->onStart();
 					}
                     break;
                 }
@@ -125,44 +123,44 @@ bool ActivityManager::exit(BaseActivity *p_app)
     return true;
 }
 
-bool ActivityManager::appIsExist(BaseActivity *obj)
+bool ActivityManager::actIsExist(BaseActivity *obj)
 {
-    return m_appstack.isExist(obj);
+    return m_actstack.isExist(obj);
 }
 
-bool ActivityManager::appIsExist(const char * appName)
+bool ActivityManager::actIsExist(const char * actName)
 {
-	return getAppByName(appName) != NULL;
+	return getActivityByName(actName) != NULL;
 }
 
-bool ActivityManager::moveApp2Top(const char * name)
+bool ActivityManager::moveActivity2Top(const char * name)
 {
-	BaseActivity* app = NULL;
-	ActivityInfo* curApp = NULL;
+	BaseActivity* act = NULL;
+	ActivityInfo* curActivity = NULL;
 
-	if(NULL == (app = getAppByName(name))) {
+	if(NULL == (act = getActivityByName(name))) {
 		return false;
 	}
         
-	if(NULL != (curApp = m_appstack.top()) 
-            && curApp->getName() == name){
+	if(NULL != (curActivity = m_actstack.top()) 
+            && curActivity->getName() == name){
 		return true;
     }
 	
-    if (curApp->getApp()->state() == BaseActivity::RUNNING) 
+    if (curActivity->getActivity()->state() == BaseActivity::RUNNING) 
     {
-        curApp->getApp()->setState(BaseActivity::SLEEP);
-        curApp->getApp()->onSleep();
+        curActivity->getActivity()->setState(BaseActivity::SLEEP);
+        curActivity->getActivity()->onSleep();
     }
 
-    if(m_appstack.move2Top(app))
+    if(m_actstack.move2Top(act))
     {
-        app->onMove2Top();
+        act->onMove2Top();
         
-        if (app->state() == BaseActivity::SLEEP)
+        if (act->state() == BaseActivity::SLEEP)
         {
-            app->setState(BaseActivity::RUNNING);
-			app->onWakeup();
+            act->setState(BaseActivity::RUNNING);
+			act->onWakeup();
         }
         
         return true;
@@ -171,40 +169,40 @@ bool ActivityManager::moveApp2Top(const char * name)
 }
 
 
-bool ActivityManager::moveApp2Bottom(const char * name)
+bool ActivityManager::moveActivity2Bottom(const char * name)
 {
-	BaseActivity* app = NULL;
-	ActivityInfo* curApp = NULL;
+	BaseActivity* act = NULL;
+	ActivityInfo* curActivity = NULL;
 
-	if(NULL == (app = getAppByName(name))) {
+	if(NULL == (act = getActivityByName(name))) {
 		return false;
 	}
         
-	if(NULL != (curApp = m_appstack.bottom()) 
-            && curApp->getName() == name){
+	if(NULL != (curActivity = m_actstack.bottom()) 
+            && curActivity->getName() == name){
 		return true;
     }
 	
-    if (app->state() == BaseActivity::RUNNING) 
+    if (act->state() == BaseActivity::RUNNING) 
     {
-        app->setState(BaseActivity::SLEEP);
-        app->onSleep();
+        act->setState(BaseActivity::SLEEP);
+        act->onSleep();
     }
 
-    if(m_appstack.move2Bottom(app))
+    if(m_actstack.move2Bottom(act))
     {
-		if(NULL == (curApp = m_appstack.top())){
+		if(NULL == (curActivity = m_actstack.top())){
 			return false;
     	}
-	  	if(NULL == (app = curApp->getApp())) {
+	  	if(NULL == (act = curActivity->getActivity())) {
 			return false;
 		}
-        app->onMove2Top();
+        act->onMove2Top();
         
-        if (app->state() == BaseActivity::SLEEP)
+        if (act->state() == BaseActivity::SLEEP)
         {
-            app->setState(BaseActivity::RUNNING);
-	      	app->onWakeup();
+            act->setState(BaseActivity::RUNNING);
+	      	act->onWakeup();
         }
         
         return true;
@@ -212,40 +210,40 @@ bool ActivityManager::moveApp2Bottom(const char * name)
     return false;
 }
 
-bool ActivityManager::pushAppRunningInBackground(const char * name)
+bool ActivityManager::pushActivityRunningInBackground(const char * name)
 {
-	BaseActivity* app = NULL;
-	ActivityInfo* curApp = NULL;
+	BaseActivity* act = NULL;
+	ActivityInfo* curActivity = NULL;
 
-	if(NULL == (app = getAppByName(name))) {
+	if(NULL == (act = getActivityByName(name))) {
 		return false;
 	}
         
-	if(NULL != (curApp = m_appstack.bottom()) 
-            && curApp->getName() == name){
+	if(NULL != (curActivity = m_actstack.bottom()) 
+            && curActivity->getName() == name){
 		return true;
     }
 	
-    if (app->state() == BaseActivity::RUNNING) 
+    if (act->state() == BaseActivity::RUNNING) 
     {
-        app->setState(BaseActivity::SLEEP);
-        app->onSleep();
+        act->setState(BaseActivity::SLEEP);
+        act->onSleep();
     }
 
-    if(m_appstack.pushBackgroundRunningApp(app))
+    if(m_actstack.pushBackgroundRunningActivity(act))
     {
-	  	if(NULL == (curApp = m_appstack.top()) ){
+	  	if(NULL == (curActivity = m_actstack.top()) ){
 			return false;
     	}
-	  	if(NULL == (app = curApp->getApp())) {
+	  	if(NULL == (act = curActivity->getActivity())) {
 			return false;
 		}
-        app->onMove2Top();
+        act->onMove2Top();
         
-        if (app->state() == BaseActivity::SLEEP)
+        if (act->state() == BaseActivity::SLEEP)
         {
-            app->setState(BaseActivity::RUNNING);
-	      	app->onWakeup();
+            act->setState(BaseActivity::RUNNING);
+	      	act->onWakeup();
         }
         
         return true;
@@ -254,122 +252,120 @@ bool ActivityManager::pushAppRunningInBackground(const char * name)
 }
 
 
-BaseActivity* ActivityManager::popAppRunningToFrontdesk(const char * name)
+BaseActivity* ActivityManager::popActivityRunningToFrontdesk(const char * name)
 {
-	BaseActivity* app = NULL;
-	ActivityInfo* curApp = NULL;
+	BaseActivity* act = NULL;
+	ActivityInfo* curActivity = NULL;
 
-	if(NULL == (curApp = m_appstack.top())){
+	if(NULL == (curActivity = m_actstack.top())){
 		return NULL;
     }
-	if(NULL == (app = curApp->getApp())) {
+	if(NULL == (act = curActivity->getActivity())) {
 		return NULL;
 	}
-    if (app->state() == BaseActivity::RUNNING) 
+    if (act->state() == BaseActivity::RUNNING) 
     {
-        app->setState(BaseActivity::SLEEP);
-        app->onSleep();
+        act->setState(BaseActivity::SLEEP);
+        act->onSleep();
     }
 
-    if(m_appstack.popBackgroundRunningApp(m_appstack.getExistAppRunBackgroundByName(name)))
+    if(m_actstack.popBackgroundRunningActivity(m_actstack.getExistActivityRunBackgroundByName(name)))
     {
-	  	if(NULL == (curApp = m_appstack.top()) ){
+	  	if(NULL == (curActivity = m_actstack.top()) ){
 			return NULL;
     	}
-	  	if(NULL == (app = curApp->getApp())) {
+	  	if(NULL == (act = curActivity->getActivity())) {
 			return NULL;
 		}
-        app->onMove2Top();
+        act->onMove2Top();
         
-        if (app->state() == BaseActivity::SLEEP)
+        if (act->state() == BaseActivity::SLEEP)
         {
-            app->setState(BaseActivity::RUNNING);
-	      	app->onWakeup();
+            act->setState(BaseActivity::RUNNING);
+	      	act->onWakeup();
         }
         
-        return app;
+        return act;
     }
     return NULL;
 }
 
-bool ActivityManager::isAppRunningInBackground(const char * name)
+bool ActivityManager::isActivityRunningInBackground(const char * name)
 {
-	return m_appstack.getExistAppRunBackgroundByName(name) != NULL;
+	return m_actstack.getExistActivityRunBackgroundByName(name) != NULL;
 }
 
 void ActivityManager::onBoot()
 {
-    AppFactoryMap::iterator it;
-    for (it = m_apps.begin(); it != m_apps.end(); ++it) {
-        _DBG_PRINTF ("ActivityManager::onBoot: calling onBoot of app %s", (*it).first.c_str());
-        const ActivityFactory::AppData* app_info = (*it).second->getAppInfo ();
-        if (app_info && app_info->onBoot) {
-            app_info->onBoot ();
+    ActivityFactoryMap::iterator it;
+    for (it = m_acts.begin(); it != m_acts.end(); ++it) {
+        _DBG_PRINTF ("ActivityManager::onBoot: calling onBoot of act %s", (*it).first.c_str());
+        const ActivityFactory::ActivityData* act_info = (*it).second->getActivityData ();
+        if (act_info && act_info->onBoot) {
+            act_info->onBoot ();
         }
     }
 }
 
-BaseActivity* ActivityManager::startApp(string app_name, Intent *intent)
+BaseActivity* ActivityManager::startActivity(string act_name, Intent *intent)
 {
 	ActivityInfo* _top = NULL;
-	ActivityInfo* _curTopAppInfo = NULL;
-	BaseActivity* _newApp = NULL;
+	ActivityInfo* _curTopActivityInfo = NULL;
+	BaseActivity* _newActivity = NULL;
 
-	_DBG_PRINTF ("Appmanager :: startApp () ----  app [%s]", app_name.c_str());
-    _newApp = getAppFromFactory(app_name);
-    _curTopAppInfo = m_appstack.top();
+	_DBG_PRINTF ("Activitymanager :: startActivity () ----  act [%s]", act_name.c_str());
+    _newActivity = getActivityFromFactory(act_name);
+    _curTopActivityInfo = m_actstack.top();
 
-	if(_curTopAppInfo != NULL) 
+	if(_curTopActivityInfo != NULL) 
     {
-		BaseActivity* _tapp = _curTopAppInfo->getApp();
+		BaseActivity* _tact = _curTopActivityInfo->getActivity();
 		
-	    if (_newApp == NULL /*|| _newApp->priority() < _tapp->priority()*/)
+	    if (_newActivity == NULL /*|| _newActivity->priority() < _tact->priority()*/)
 	        return NULL;
 
-	    if (_tapp->state() == BaseActivity::RUNNING) {
-	        _tapp->setState(BaseActivity::SLEEP);
-	        _tapp->onSleep();
+	    if (_tact->state() == BaseActivity::RUNNING) {
+	        _tact->setState(BaseActivity::SLEEP);
+	        _tact->onSleep();
 	    }
 	}
 
-	if(_newApp != NULL)
+	if(_newActivity != NULL)
     {
         //ContextStream *cs = HFCL_NEW_EX(ContextStream, ());
-		ActivityInfo *app_info = HFCL_NEW_EX(ActivityInfo, (app_name, _newApp, NULL));
+		ActivityInfo *act_info = HFCL_NEW_EX(ActivityInfo, (act_name, _newActivity, NULL));
 
-		_newApp->setState(BaseActivity::RUNNING);
-        _newApp->setName(app_name.c_str());
-        m_appstack.push(app_info);
+		_newActivity->setState(BaseActivity::RUNNING);
+        _newActivity->setName(act_name.c_str());
+        m_actstack.push(act_info);
 		
-		_newApp->onCreate(NULL, intent);
+		_newActivity->onCreate(NULL, intent);
                
-        if(NULL != (_top = m_appstack.top()) && _top->getApp() == _newApp)
+        if(NULL != (_top = m_actstack.top()) && _top->getActivity() == _newActivity)
         {
-            _newApp->onStart();
+            _newActivity->onStart();
         }
     }
-    return _newApp;
+    return _newActivity;
 }
 
-void ActivityManager::registerApp(string name, ActivityFactory *appfactory)
+void ActivityManager::registerActivity(string name, ActivityFactory *actfactory)
 {
-    m_apps[name] = appfactory;
+    m_acts[name] = actfactory;
 }
 
-BaseActivity* ActivityManager::getAppFromFactory(string name)
+BaseActivity* ActivityManager::getActivityFromFactory(string name)
 {
-    AppFactoryMap::iterator it;
-    for (it = m_apps.begin(); it != m_apps.end(); ++it) {
+    ActivityFactoryMap::iterator it;
+    for (it = m_acts.begin(); it != m_acts.end(); ++it) {
         if ((*it).first == name) {
-            BaseActivity *app = (*it).second->create();
-            app->setState(BaseActivity::ORIGIN);
-            return app;
+            BaseActivity *act = (*it).second->create();
+            act->setState(BaseActivity::ORIGIN);
+            return act;
         }
     }
     return NULL;
 }
-
-extern "C" void CoolSand_DispatchMMIEvent(COS_EVENT* event);
 
 typedef struct 
 {
@@ -381,27 +377,12 @@ typedef struct
     void	*wPeerBuffPtr;
 } MYQUEUE;
 
-extern "C" void CoolSand_ExecuteProtocolEvent(unsigned int eventID, 
-        void* MsgStruct, int mod_src, void *peerBuf);
-
-int ActivityManager::defaultHostingProc(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
+LRESULT ActivityManager::defaultHostingProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message) {
         case MSG_CLOSE:
             DestroyMainWindow(hWnd);
             break;
-        case HFCL_MSG_ADP_EVENT:
-            CoolSand_DispatchMMIEvent((COS_EVENT *)wParam);
-            break;
-		case HFCL_MSG_SEND_NETWORK_EVENT:
-			{
-				MYQUEUE *msg = (MYQUEUE *)wParam;
-				CoolSand_ExecuteProtocolEvent((U16)msg->wMsgId, 
-                        (void*)msg->wDataPtr, 
-                        (int)msg->wSrcId, 
-                        (void*) msg->wPeerBuffPtr);
-			}
-			break;
         default:
             break;
     }
@@ -453,10 +434,6 @@ bool ActivityManager::init()
 
 bool ActivityManager::processKeyHook(MSG* msg)
 {
-#ifdef ENABLE_AUTOTEST
-    RecordCurrKeyHandler(msg->wParam,msg->message);
-#endif
-
     if (NULL != m_key_hook) {
         return m_key_hook(msg);
     }
@@ -467,9 +444,7 @@ bool ActivityManager::processKeyHook(MSG* msg)
 void ActivityManager::run(void)
 {
     MSG Msg;
-#if 1
     while (TRUE) {
-        GetCosEvent(m_hostingWnd);
         if (GetMessage(&Msg, m_hostingWnd)) {
             // update lcd service and key tone FIXME
             if (Msg.hwnd == HWND_DESKTOP
@@ -489,25 +464,6 @@ void ActivityManager::run(void)
         else
             break;
     }
-#else
-    while (GetMessage(&Msg, m_hostingWnd)) {
-		// update lcd service and key tone FIXME
-		if (Msg.hwnd == HWND_DESKTOP
-			&& ( Msg.message == MSG_KEYDOWN 
-			   || Msg.message == MSG_KEYUP 
-			   || Msg.message == MSG_KEYLONGPRESS 
-			   || Msg.message == MSG_KEYALWAYSPRESS))
-        {
-            // stop process
-            if(DISPATCH_STOP_MSG == processKeyHook(&Msg))
-                continue;
-        }
-		
-        if (!m_charFreezon)
-            TranslateMessage(&Msg);
-        DispatchMessage(&Msg);
-    }
-#endif
 }
 
 void ActivityManager::startTimerService(void)
@@ -520,10 +476,5 @@ void ActivityManager::stopTimerService(void)
     TimerService::getInstance()->stop();
 }
 
-} // namespace hfcl {
-
-extern "C" void nguxDispatchAdpEvent(COS_EVENT* ev, unsigned int handle, int event)
-{
-    SendMessage (NGUX::ActivityManager::getInstance()->hosting(), HFCL_MSG_ADP_EVENT, (WPARAM)ev, 0); 
-}
+} // namespace hfcl
 

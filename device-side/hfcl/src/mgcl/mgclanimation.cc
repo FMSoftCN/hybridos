@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "nguxcommon.h"
-#include "mgcl.h"
+#include "common/common.h"
+#include "mgcl/mgcl.h"
 
 
 namespace hfcl {

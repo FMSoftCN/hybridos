@@ -20,21 +20,23 @@
 */
 
 
-#ifndef _HFCL_AppManager_h
-#define _HFCL_AppManager_h
+#ifndef HFCL_ACTIVITY_ACTIVITYMANAGER_H_
+#define HFCL_ACTIVITY_ACTIVITYMANAGER_H_
 
-#include "mgcl.h"
-#include "nguxcommon.h"
-#include "appstack.h"
+#include "mgcl/mgcl.h"
+#include "common/common.h"
+#include "common/event.h"
+#include "common/alternativestl.h"
+#include "activity/intent.h"
+#include "activity/activitystack.h"
 
 namespace hfcl {
 
-class Intent;
 class BaseActivity;
 class ActivityFactory;
 
 /***
- * hook key msg from appManager
+ * hook key msg from actManager
  *
  * @param MSG *msg - msg we get from msg queue
  * @return bool - DISPATCH_CONTINUE_MSG continue message loop, DISPATCH_STOP_MSG stop for process this msg.
@@ -44,38 +46,37 @@ typedef bool (*KeyHookCallback)(MSG *msg);
 class ActivityManager 
 {
 public:
-    MAPCLASSKEY(string, ActivityFactory*, AppFactoryMap); 
-    PAIR(string, ActivityFactory*, AppFactoryPair); 
+    MAPCLASSKEY(string, ActivityFactory*, ActivityFactoryMap); 
+    PAIR(string, ActivityFactory*, ActivityFactoryPair); 
 
 	ActivityManager() : m_hostingWnd(HWND_INVALID) { init(); }
-	// ActivityManager() : m_hostingWnd(HWND_INVALID) { };
 	~ActivityManager();
 
 	static ActivityManager* getInstance(void);
 	void run(void);
 	
-    BaseActivity* getCurrentApp(void);
-	BaseActivity* getTopApp(unsigned int top = 0);
-	BaseActivity* getAppByName(const char * name);
-	BaseActivity* getAppFromFactory(string name);
-	inline ActivityFactory* getAppFactory(string name) { return m_apps[name]; }
-    inline int appNumOnRun(void) { return m_appstack.size(); }
-    const AppFactoryMap& applications() const { return m_apps; }
+    BaseActivity* getCurrentActivity(void);
+	BaseActivity* getTopActivity(unsigned int top = 0);
+	BaseActivity* getActivityByName(const char * name);
+	BaseActivity* getActivityFromFactory(string name);
+	inline ActivityFactory* getActivityFactory(string name) { return m_acts[name]; }
+    inline int actNumOnRun(void) { return m_actstack.size(); }
+    const ActivityFactoryMap& actlications() const { return m_acts; }
 
-	void registerApp(string name, ActivityFactory *appFactory);
+	void registerActivity(string name, ActivityFactory *actFactory);
 
-	bool appIsExist(BaseActivity *obj);
-	bool appIsExist(const char * appName);
+	bool actIsExist(BaseActivity *obj);
+	bool actIsExist(const char * actName);
 	
     void onBoot();
-    BaseActivity* startApp(string app_name, Intent *intent);
-    bool exit(BaseActivity* app);
-	bool isExist(BaseActivity *app) { return m_appstack.isExist(app); }
-	bool moveApp2Top(const char * name);
-	bool moveApp2Bottom(const char * name);
-	bool isAppRunningInBackground(const char * name);
-	bool pushAppRunningInBackground(const char * name);
-	BaseActivity* popAppRunningToFrontdesk(const char * name);
+    BaseActivity* startActivity(string act_name, Intent *intent);
+    bool exit(BaseActivity* act);
+	bool isExist(BaseActivity *act) { return m_actstack.isExist(act); }
+	bool moveActivity2Top(const char * name);
+	bool moveActivity2Bottom(const char * name);
+	bool isActivityRunningInBackground(const char * name);
+	bool pushActivityRunningInBackground(const char * name);
+	BaseActivity* popActivityRunningToFrontdesk(const char * name);
 
     void changeSysLanguage(int langId);
 	void addDisableLockFrameTick(void) { m_disableLockTick ++; }
@@ -83,7 +84,7 @@ public:
     int disableLockFrameTicks() { return m_disableLockTick; }
 	
     inline HWND hosting(void) { return m_hostingWnd; }
-	inline bool AppBeStarted(BaseActivity* app) { return m_appstack.isExist(app); }
+	inline bool ActivityBeStarted(BaseActivity* act) { return m_actstack.isExist(act); }
 	int broadcastMessage(int msg, int wParam, int lParam);
     
     void registerKeyMsgHook(KeyHookCallback callback) {
@@ -110,19 +111,19 @@ public:
 
 private:
 	bool init(void);
-    static int defaultHostingProc(HWND hWnd, 
-            int message, WPARAM wParam, LPARAM lParam);
+    static LRESULT defaultHostingProc(HWND hWnd, UINT message,
+            WPARAM wParam, LPARAM lParam);
 
     HWND m_hostingWnd;
-    AppStack m_appstack;
-    static ActivityManager* s_appManager;
+    ActivityStack m_actstack;
+    static ActivityManager* s_actManager;
 
-    AppFactoryMap m_apps;
+    ActivityFactoryMap m_acts;
     KeyHookCallback m_key_hook;
     bool m_charFreezon;
 	int  m_disableLockTick;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
-#endif /* HFCL_AppManager_h */
+#endif /* HFCL_ACTIVITY_ACTIVITYMANAGER_H_ */

@@ -22,29 +22,21 @@
 #ifndef __HFCL_MGCL_H__
 #define __HFCL_MGCL_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#include <minigui/common.h>
+#include <minigui/minigui.h>
+#include <minigui/gdi.h>
+#include <minigui/window.h>
 
-#include "common.h"
-#include "minigui.h"
-#include "gdi.h"
-#include "window.h"
+#include <mgeff/mgeff.h>
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+#include "common/intrect.h"
 
-#include "intrect.h"
-
-#include "mgclactivity.h"
+#include "mgcl/mgclactivity.h"
 //#include "mgclanimation.h"
-#include "mgclcommon.h"
+#include "mgcl/mgclcommon.h"
 //#include "mgclgraphics.h"
 //#include "mgclservices.h"
-#include "mgcltransparent.h"
-
-#include <mgeff.h>
+#include "mgcl/mgcltransparent.h"
 
 
 #define HFCL_STR2KEY(str)   ((Uint32)Str2Key(str))

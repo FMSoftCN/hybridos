@@ -23,8 +23,7 @@
 #define HFCL_ACTIVITY_ACTIVITYINFO_H_
 
 #include "common/common.h"
-#include "common/alternativestl.h"
-#include "common/contextstream.h"
+//#include "common/contextstream.h"
 #include "activity/baseactivity.h"
 
 namespace hfcl {
@@ -32,11 +31,11 @@ namespace hfcl {
 class ActivityInfo {
 public:
     ActivityInfo();
-    ActivityInfo(string name, BaseActivity* app, ContextStream* cs);
+    ActivityInfo(string name, BaseActivity* act, ContextStream* cs);
     virtual ~ActivityInfo();
 
-    BaseActivity* getApp(void);
-    void setApp(BaseActivity* app);
+    BaseActivity* getActivity(void);
+    void setActivity(BaseActivity* act);
 
     string getName(void);
     void setName(string name);
@@ -45,10 +44,10 @@ public:
     //void setContextStream(ContextStream* cs);
 
 private:
-    string          m_appname;
-    BaseActivity*   m_app;
+    string          m_actname;
+    BaseActivity*   m_act;
     //ContextStream* m_stream;
-}
+};
 
 } // namespace hfcl
 

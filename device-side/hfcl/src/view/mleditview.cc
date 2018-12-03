@@ -43,7 +43,7 @@ extern BOOL IsArabicSet(void);
 
 char m_edit_tempstr1[EDITOR_MAX_LEN];
 char m_edit_tempstr2[EDITOR_MAX_LEN];
-U16 bidiStrOrder[EDITOR_MAX_LEN];
+Uint16 bidiStrOrder[EDITOR_MAX_LEN];
 
 namespace hfcl {
 
@@ -361,7 +361,7 @@ void MlEditView::layoutStringsByWord(void)
     unsigned char *sub;
     char buf[256];
     int utfLen = 0;
-    U16 tmpChar;
+    Uint16 tmpChar;
     int thisLineW = 0;
                                 
     char * ptr = (char *)(m_strings.c_str());
@@ -394,12 +394,12 @@ void MlEditView::layoutStringsByWord(void)
     sub = (unsigned char *)m_edit_tempstr2;
 
     NGUtf8ToUnicode((unsigned char *)ptr, (unsigned char *)tmpStr);
-    ConvertToGlyphForm((U16*)tmpStr, cCount, 0);
+    ConvertToGlyphForm((Uint16*)tmpStr, cCount, 0);
 
     while(i < cCount)
     {
-        tmpChar = ((U16*)sub)[j + 0] = *((U16*)tmpStr + i);
-        ((U16*)sub)[j + 1] = '\0';
+        tmpChar = ((Uint16*)sub)[j + 0] = *((Uint16*)tmpStr + i);
+        ((Uint16*)sub)[j + 1] = '\0';
         
 
 #if 0 /* VincentWei: Do not use RDA font API */
@@ -414,14 +414,14 @@ void MlEditView::layoutStringsByWord(void)
         thisLineW += sW;
         
         if (thisLineW > rcW 
-                || ((U16*)sub)[j] == '\n') 
+                || ((Uint16*)sub)[j] == '\n') 
         {
             memset(buf, 0x0, sizeof(buf));
             if(DT_WORDBREAK)
             {
-                if(((U16*)sub)[j] == '\n' && thisLineW <= rcW)
+                if(((Uint16*)sub)[j] == '\n' && thisLineW <= rcW)
                 {
-                    utfLen = idxUnicodeGlyphToUTF8((U16 *)sub, j+1);
+                    utfLen = idxUnicodeGlyphToUTF8((Uint16 *)sub, j+1);
                     m_lineCharList.push_back(utfLen);
                     thisLineW = 0;
                     m_lineCout++;
@@ -429,12 +429,12 @@ void MlEditView::layoutStringsByWord(void)
                 }
                 else if(thisLineW > rcW)
                 {
-                    if(((U16*)sub)[j] == ' ' || ((U16*)sub)[j] == '\n' )
+                    if(((Uint16*)sub)[j] == ' ' || ((Uint16*)sub)[j] == '\n' )
                     {
-                        ((U16*)sub)[j + 0] = '\0';
+                        ((Uint16*)sub)[j + 0] = '\0';
                         //i-= 2;
                         //j-= 2;
-                        utfLen = idxUnicodeGlyphToUTF8((U16 *)sub, j+1);
+                        utfLen = idxUnicodeGlyphToUTF8((Uint16 *)sub, j+1);
                         m_lineCharList.push_back(utfLen);
                         thisLineW = 0;
                         m_lineCout++;                            
@@ -446,11 +446,11 @@ void MlEditView::layoutStringsByWord(void)
                         counttmp = i;
                         while(j>0)
                         {
-                            if(((U16*)sub)[j]  == ' ')
+                            if(((Uint16*)sub)[j]  == ' ')
                             {    
-                                memset(&((U16*)sub)[j+1], 0x0, lineend- j);        
+                                memset(&((Uint16*)sub)[j+1], 0x0, lineend- j);        
                                 findflag = TRUE;
-                                utfLen = idxUnicodeGlyphToUTF8((U16 *)sub, j+1);
+                                utfLen = idxUnicodeGlyphToUTF8((Uint16 *)sub, j+1);
                                 m_lineCharList.push_back(utfLen);
                                 thisLineW = 0;
                                 m_lineCout++;
@@ -464,8 +464,8 @@ void MlEditView::layoutStringsByWord(void)
                         {
                             j = lineend;
                             i = counttmp;
-                            ((U16*)sub)[j] = '\0';
-                            utfLen = idxUnicodeGlyphToUTF8((U16 *)sub, j+1);
+                            ((Uint16*)sub)[j] = '\0';
+                            utfLen = idxUnicodeGlyphToUTF8((Uint16 *)sub, j+1);
                             m_lineCharList.push_back(utfLen);
                             thisLineW = 0;
                             m_lineCout++;
@@ -476,7 +476,7 @@ void MlEditView::layoutStringsByWord(void)
             }
             else
             {    
-                ((U16*)sub)[j] = '\0';
+                ((Uint16*)sub)[j] = '\0';
             }
             j = 0;
         }
@@ -488,7 +488,7 @@ void MlEditView::layoutStringsByWord(void)
     }
     if(i >= cCount && j > 0)
     {
-        utfLen = idxUnicodeGlyphToUTF8((U16 *)sub, j);
+        utfLen = idxUnicodeGlyphToUTF8((Uint16 *)sub, j);
         m_lineCharList.push_back(utfLen);
         m_lineCout++;
     }
@@ -566,8 +566,8 @@ void MlEditView::layoutStrings(int fromLine)
             info[realCount] = _len; //add the last char info
 
             for (i = 0; i < realCount; ) {
-                ((U16*)m_edit_tempstr2)[i-count] = ((U16*)m_edit_tempstr1)[i-offset];
-                ((U16*)m_edit_tempstr2)[i-count+1] = '\0';
+                ((Uint16*)m_edit_tempstr2)[i-count] = ((Uint16*)m_edit_tempstr1)[i-offset];
+                ((Uint16*)m_edit_tempstr2)[i-count+1] = '\0';
                 
                 gc->getTextDrawSize((unsigned short *)m_edit_tempstr2, m_font, &w, &h);
                 thisLineW = w;
@@ -578,7 +578,7 @@ void MlEditView::layoutStrings(int fromLine)
                     if(m_isWordBreak == TRUE) {
                         int counttmp = i;
                         while(counttmp>count) {
-                            if(((U16*)m_edit_tempstr1)[counttmp]  == ' ') {    
+                            if(((Uint16*)m_edit_tempstr1)[counttmp]  == ' ') {    
                                 findflag = TRUE;
                                 lineLen = info[++counttmp] - lineEnd;
                                 m_lineCharList.push_back(lineLen);
@@ -2138,7 +2138,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
 
             memcpy(tmpchar, str + info[i-1], info[i] - info[i-1]);
             tmpchar [info[i] - info[i-1]] = '\0';
-            if(isSymbolChar(utf8_to_ucs2((U8 *)tmpchar)) ||isNumberChar(utf8_to_ucs2((U8 *)tmpchar))) {
+            if(isSymbolChar(utf8_to_ucs2((Uint8 *)tmpchar)) ||isNumberChar(utf8_to_ucs2((Uint8 *)tmpchar))) {
                 i++;
             }
             else {  
@@ -2149,7 +2149,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
         free(info);
         info=NULL;
 
-        if(isTransformArabic(utf8_to_ucs2((U8 *)tmpchar)) ||isArabicSymbol(utf8_to_ucs2((U8 *)tmpchar))) {
+        if(isTransformArabic(utf8_to_ucs2((Uint8 *)tmpchar)) ||isArabicSymbol(utf8_to_ucs2((Uint8 *)tmpchar))) {
             SetBiDiFlag(true);
             setExchangeFlag(true);        
         }
@@ -2210,9 +2210,9 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
                         int activeWordCount = imeT9GetActiveWordCount();
                         int i;
                         int total = 0;
-                        U16 visIndex = 0xffff;
-                        U16 visual_str_len, charDir;
-                        U16 tmpChar[2] = {0,};
+                        Uint16 visIndex = 0xffff;
+                        Uint16 visual_str_len, charDir;
+                        Uint16 tmpChar[2] = {0,};
                         int unicodeStartPosX, unicodeCaretPosX;
                         
                         memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
@@ -2259,10 +2259,10 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
 
                                 visual_str_len = UCS2Strlen(m_edit_tempstr2);
 
-                                ConvertToGlyphForm((U16*)m_edit_tempstr2, visual_str_len, 0);
+                                ConvertToGlyphForm((Uint16*)m_edit_tempstr2, visual_str_len, 0);
 
                                 memset(bidiStrOrder, 0x00, sizeof(bidiStrOrder));
-                                getBidiString((U16*)m_edit_tempstr2, bidiStrOrder, visual_str_len, gc->getBiDiFlag(), TRUE);
+                                getBidiString((Uint16*)m_edit_tempstr2, bidiStrOrder, visual_str_len, gc->getBiDiFlag(), TRUE);
 
                                 if(gc->getBiDiFlag()) {
                                     gc->getTextDrawSize((unsigned short*)m_edit_tempstr2, m_font, &w, &h);
@@ -2346,8 +2346,8 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
                         if (lineNo == (unsigned int)m_caretPosY)
                         {
                             //FIXME , last is '\n' ?
-                            U16 visIndex = 0xffff;
-                            U16 visual_str_len;
+                            Uint16 visIndex = 0xffff;
+                            Uint16 visual_str_len;
                             int index =0;
                             int utf8len =0;
 
@@ -2363,11 +2363,11 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
 
                                 visual_str_len = UCS2Strlen(m_edit_tempstr2);
 
-                                ConvertToGlyphForm((U16*)m_edit_tempstr2, visual_str_len, 0);
+                                ConvertToGlyphForm((Uint16*)m_edit_tempstr2, visual_str_len, 0);
 
-                                memset(bidiStrOrder, 0x00, sizeof(U16) * EDITOR_MAX_LEN);
-                                getBidiString((U16*)m_edit_tempstr2, bidiStrOrder, visual_str_len, gc->getBiDiFlag(), TRUE);
-                                visIndex = getBidiVisualIndex((U16*)m_edit_tempstr2, bidiStrOrder, visual_str_len, index, gc->getBiDiFlag(), (MMI_active_multitap<0)?2:0);
+                                memset(bidiStrOrder, 0x00, sizeof(Uint16) * EDITOR_MAX_LEN);
+                                getBidiString((Uint16*)m_edit_tempstr2, bidiStrOrder, visual_str_len, gc->getBiDiFlag(), TRUE);
+                                visIndex = getBidiVisualIndex((Uint16*)m_edit_tempstr2, bidiStrOrder, visual_str_len, index, gc->getBiDiFlag(), (MMI_active_multitap<0)?2:0);
                             }
 
                             if (visIndex == 0xffff) {
@@ -2379,7 +2379,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
                             }
                             else {
                                 int w = 0, h;
-                                U16 tmpChar[2] = {0, };
+                                Uint16 tmpChar[2] = {0, };
 
                                 caretPos.x += irc.left();
                                 caretPos.y = y;                                    

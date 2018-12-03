@@ -26,10 +26,12 @@
 #include "common/common.h"
 #include "common/log.h"
 #include "common/event.h"
-#include "common/activitymanager.h"
 #include "view/viewcontext.h"
+#include "activity/activitymanager.h"
 
 namespace hfcl {
+
+class ControllerClient;
 
 class Controller
 {
@@ -146,7 +148,7 @@ public:
 	int getInActiveTimes() { return m_inactiveTimes; }
 
 	bool isTop() {
-	    return ((m_owner->getTop() == this) && (ActivityManager::getInstance()->getCurrentApp() == (BaseActivity *)m_owner));
+	    return ((m_owner->getTop() == this) &&(ActivityManager::getInstance()->getCurrentActivity() == (BaseActivity *)m_owner));
 	}
 	void setModal(bool bModal ) { m_bModal = bModal;}
 	bool isModal (void) {return m_bModal;}
@@ -249,7 +251,7 @@ protected:
 	void setView(int view_id, View* view) { }
 
 	EventListener* getHandle(int handle_id, int event_type) { return NULL; }
-}
+};
 
 } // namespace hfcl
 

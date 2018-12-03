@@ -20,8 +20,8 @@
 */
 
 #if 0
-#include "nguxcommon.h"
-#include "log.h"
+#include "common/common.h"
+#include "common/log.h"
 #include "nguxobject.h"
 #include "intrect.h"
 #include "graphicscontext.h"

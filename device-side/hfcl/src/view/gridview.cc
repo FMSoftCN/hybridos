@@ -22,7 +22,7 @@
 
 #include "gridview.h"
 #if 0	// GT_jyseo rollback
-#include "timerservice.h"
+#include "services/timerservice.h"
 
 #define _LOOP_RATE_ 12
 #define _LONGPRESS_ 3

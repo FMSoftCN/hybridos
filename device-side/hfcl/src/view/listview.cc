@@ -24,7 +24,7 @@
 
 #include "listview.h"
 #include "graphicscontext.h"
-#include "timerservice.h"
+#include "services/timerservice.h"
 
 namespace hfcl {
 

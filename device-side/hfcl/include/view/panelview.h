@@ -25,8 +25,8 @@
 
 #define FILE_NAME_LEN 256
 
-#include "containerview.h"
-#include "graphicscontext.h"
+#include "view/containerview.h"
+#include "graphics/graphicscontext.h"
 
 namespace hfcl {
 class Image;

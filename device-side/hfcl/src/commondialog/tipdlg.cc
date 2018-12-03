@@ -23,7 +23,7 @@
 #include "tipdlg.h"
 #include "respkgmanager.h"
 #include "nguxmenu.h"
-#include "timerservice.h"
+#include "services/timerservice.h"
 #include "application.h"
 #include "appmanager.h"
 

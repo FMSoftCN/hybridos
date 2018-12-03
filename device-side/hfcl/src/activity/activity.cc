@@ -21,15 +21,9 @@
 
 #include "activity/activity.h"
 
-#include "common/intrect.h"
-#include "common/event.h"
-#include "activity/log.h"
-#include "activity/intent.h"
-
 namespace hfcl {
 
-Activity::Activity()
-    : Window()
+Activity::Activity() : Window()
 {
 	m_menu = NULL;
 }
@@ -41,7 +35,10 @@ Activity::~Activity()
 
 void Activity::onCreate(ContextStream* contextStream, Intent* intent)
 {
-    createMainWindow(0, _ngux_phonebar_h, _ngux_screen_w, _ngux_screen_h - _ngux_phonebar_h);
+    // TODO: create main window according to POS property
+    createMainWindow(0, 0,
+            GetGDCapability(HDC_SCREEN, GDCAP_HPIXEL),
+            GetGDCapability(HDC_SCREEN, GDCAP_VPIXEL));
 }
 
 void Activity::onWakeup(void)
@@ -52,8 +49,7 @@ void Activity::onWakeup(void)
 
 void Activity::onMove2Top(void) 
 {
-    if (NULL != m_menu)
-    {
+    if (NULL != m_menu) {
         //m_menu->closeMenu(m_menu);
         m_menu->closeAllMenu();
         m_menu = NULL;
@@ -62,7 +58,7 @@ void Activity::onMove2Top(void)
     show();
 }
 
-HPlatformOwner Activity::getPlatformOwner(void)
+HWND Activity::getSysWindow(void)
 {
     return m_viewWindow;
 }
@@ -74,9 +70,7 @@ bool Activity::onKey(int keyCode, KeyEvent* event)
 
     if ((View *)0 != (_focus = focusView())) {
         ret = _focus->dispatchEvent(event);
-#ifdef __SUPPORT_MANUAL_KEYPAD_LOCK_IN_ALLSCREEN__
         return ret;
-#endif
     }
 
     return ret;
@@ -109,30 +103,32 @@ void Activity::onClick(POINT pt, Event::EventType type)
     }
 }
 
-Activity* Activity::app(HWND hwnd)
+Activity* Activity::activity(HWND hwnd)
 {
     return reinterpret_cast<Activity*>(window(hwnd));
 }
 
-void Activity::updateAppNow(void)
+void Activity::updateNow(void)
 {
     updateWindow();
 }
 
-
 void Activity::setFullScreen(bool isFullScreen)
 {
-    if (isFullScreen)
-        setAppRect(IntRect(0, 0, _ngux_screen_w, _ngux_screen_h));
-    else
-		setAppRect(IntRect(0, _ngux_phonebar_h, _ngux_screen_w, _ngux_screen_h));
+    if (isFullScreen) {
+        setWindowRect(IntRect(0, 0, GetGDCapability(HDC_SCREEN, GDCAP_HPIXEL),
+                GetGDCapability(HDC_SCREEN, GDCAP_VPIXEL)));
+    }
+    else {
+        // TODO: Restore old rectangle
+		setWindowRect(m_old_rect);
+    }
 }
-
 
 void FullScreenActivity::onCreate(ContextStream* contextStream, Intent* intent)
 {
     createMainWindow();
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

@@ -25,7 +25,7 @@
 
 #include "graphics/image.h"
 #include "view/view.h"
-#include "timerservice.h"
+#include "services/timerservice.h"
 
 namespace hfcl {
 
