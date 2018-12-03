@@ -143,7 +143,7 @@ fi
 dnl ========================================================================
 dnl check the installation of MiniGUI
 dnl ========================================================================
-PKG_CHECK_MODULES([MINIGUI], [minigui >= 3.2.0])
+PKG_CHECK_MODULES([MINIGUI], [minigui >= 3.2.1])
 PKG_CHECK_MODULES([MGPLUS], [mgplus >= 1.4.0])
 PKG_CHECK_MODULES([MGEFF], [mgeff >= 1.2.0])
 PKG_CHECK_MODULES([CHIPMUNK], [chipmunk >= 5.3.1])
