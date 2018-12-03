@@ -19,78 +19,17 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "nguxcommon.h"
-#include "nguxobject.h"
-
+#include "common/object.h"
 
 namespace hfcl {
 
 Object::Object()
 {
-
 }
 
 Object::~Object()
 {
-
 }
 
-} // namespace hfcl {
-
-#ifdef _HFCL_DONT_SUPPORT_TEMPLATE
-
-//a Null buffer
-unsigned int _null_buffer[] = {0,0,0,0};
-
-size_t string::npos = (size_t)-1;
-
-
-void* operator new(unsigned int size)
-{
-    void * pointer = 0x00;
-    //Uint32 nCallerAdd = 0x00;
-    //COS_GET_RA(&nCallerAdd);
-
-    if (size == 0)
-        size = 1;
-
-    pointer = calloc(1, size);
-    if(pointer != NULL) 
-    {
-        //COS_UpdateMemCallAdd(pointer, nCallerAdd);
-    }
-    return pointer;
-}
-
-void operator delete(void *p)
-{
-    if (p != NULL)
-        free(p);
-}
-
-
-void* operator new[](unsigned int size)
-{
-    void * pointer = 0x00;
-    //Uint32 nCallerAdd = 0x00;
-    //COS_GET_RA(&nCallerAdd);
-
-    if (size == 0)
-        size = 1;
-    pointer = calloc(1, size);
-    if(pointer != NULL) 
-    {
-        //	 COS_UpdateMemCallAdd(pointer, nCallerAdd);
-    }
-    return pointer;
-}
-
-void operator delete[](void *p)
-{
-    if (p != NULL)
-        free(p);
-}
-
-
-#endif
+} // namespace hfcl
 

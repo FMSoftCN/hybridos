@@ -20,9 +20,12 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
-#include "nguxconfig.h"
-#ifdef _HFCL_DONT_SUPPORT_TEMPLATE
-#include "rbtree.h"
+
+#include "common/common.h"
+
+#ifndef _HFCL_USE_STL
+
+#include "common/rbtree.h"
 
 static void __rb_rotate_left(struct rb_node *node, struct rb_root *root)
 {
@@ -458,5 +461,6 @@ void rb_replace_node(struct rb_node *victim, struct rb_node *newnode,
 	/* Copy the pointers/colour from the victim to the replacement */
 	*newnode = *victim;
 }
-#endif
+
+#endif /* _HFCL_USE_STL */
 

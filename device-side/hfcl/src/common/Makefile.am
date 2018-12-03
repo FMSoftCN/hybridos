@@ -9,11 +9,8 @@ libhfcl_common_la_SOURCES = \
     event.cc \
     object.cc \
     contextstream.cc \
-    datetime.cc \
     log.cc \
-    file.cc \
     methodeventlistener.cc \
-    codeconvert.cc \
     rbtree.cc \
     quicksort.cc \
     selectsort.cc

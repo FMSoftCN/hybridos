@@ -26,7 +26,9 @@
 #define EVENT_HANDLED      1
 #define EVENT_NOT_HANDLED  0
 
-#include "common/object.h"
+#include "common.h"
+#include "alternativestl.h"
+#include "object.h"
 
 #define DISPATCH_CONTINUE_MSG  false
 #define DISPATCH_STOP_MSG      true

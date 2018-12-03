@@ -23,7 +23,11 @@
 #define HFCL_COMMON_LOG_H_
 
 #include "common/common.h"
+#include "common/alternativestl.h"
 #include "common/intrect.h"
+
+// TUNNING CONDITION: 
+#define HFCL_LOG_FILE   "/dev/null"
 
 namespace hfcl {
 
@@ -40,7 +44,6 @@ public:
     int logPrintf(const char* head, const char* file, const int line, const char* func,
             const char* format, va_list args);
 
-#ifndef __CC_ARM
     void logDebug(const char* format, ...);
     void logInfo(const char* format, ...);
     void logError(const char* format, ...);
@@ -48,7 +51,6 @@ public:
     void logHFLF(const char* head, const char* file, const int line, const char* func,
             const char* format, ...);
     void dumpRect(const IntRect& rc);
-#endif
 
 private:
     Log(const char* logFile, bool benable);
@@ -87,7 +89,7 @@ private:
 // debug  print, macro difine
 #ifndef	LOGD
 #if	HFCL_LOG_NDEBUG
-#define	LOGD(...)   LOGHFLF("NGUX DEBUG >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
+#define	LOGD(...)   LOGHFLF("HFCL DEBUG >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
 #else
 #define	LOGD(...)   ((void)0)
 #endif
@@ -96,7 +98,7 @@ private:
 // info print, macro difine
 #ifndef	LOGI
 #if	HFCL_LOG_NDEBUG
-#define	LOGI(...)   LOGHFLF("NGUX INFO >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
+#define	LOGI(...)   LOGHFLF("HFCL INFO >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
 #else
 #define	LOGI(...)   ((void)0)
 #endif
@@ -105,7 +107,7 @@ private:
 // error  print, macro difine
 #ifndef	LOGE
 #if	HFCL_LOG_NDEBUG
-#define	LOGE(...)   LOGHFLF("NGUX Error >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
+#define	LOGE(...)   LOGHFLF("HFCL Error >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
 #else
 #define	LOGE(...)   ((void)0)
 #endif

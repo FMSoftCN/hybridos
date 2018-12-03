@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __HFCL_SELECTSORT_H__
-#define __HFCL_SELECTSORT_H__
+#ifndef HFCL_COMMON_SELECTSORT_H_
+#define HFCL_COMMON_SELECTSORT_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,5 +35,5 @@ void selectSort(void* base, unsigned num, unsigned width, Compare comp, bool inc
 }
 #endif  /* __cplusplus */
 
-#endif  // __HFCL_SELECTSORT_H__
+#endif  // HFCL_COMMON_SELECTSORT_H_
 

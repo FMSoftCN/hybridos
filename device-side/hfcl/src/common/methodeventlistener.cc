@@ -18,32 +18,13 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
- /*
-  ** $Id: MethodEventListener.cpp 1829 2011-10-24 00:59:47Z dongjunjie $
-  **
-  ** MethodEventListener.cpp:
-  **
-  ** Copyright (C) 2003 ~ 2011 Beijing FMSoft Technologies Co., Ltd.
-  **
-  ** All rights reserved by FMSoft.
-  **
-  ** Current maintainer: shidazhi
-  **
-  ** Create date: 2011-06-08
-  */
 
-#include "nguxcommon.h"
-#include "log.h"
-#include "nguxobject.h"
-#include "intrect.h"
-#include "graphicscontext.h"
-#include "nguxevent.h"
-#include "methodeventlistener.h"
+#include "common/methodeventlistener.h"
 
 namespace hfcl {
 
-MethodEventListener::MethodEventListener(void* ctx, EventHandle event_handle, int event_type)
-:EventListener(0)
+MethodEventListener::MethodEventListener (void* ctx, EventHandle event_handle, int event_type)
+    :EventListener(0)
 {
 	m_ctx = ctx;
 	m_eventHandle = event_handle;
@@ -63,5 +44,4 @@ bool MethodEventListener::handleEvent(Event* event)
 	return EVENT_NOT_HANDLED;
 }
 
-
-} // namespace hfcl {
+} // namespace hfcl

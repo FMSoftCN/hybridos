@@ -19,12 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __HFCL_DATETIME_H__
-#define __HFCL_DATETIME_H__
-
-#include "nguxcommon.h"
-#include "log.h"
-#include "tm.h"
+#ifndef HFCL_COMMON_DATETIME_H_
+#define HFCL_COMMON_DATETIME_H_
 
 namespace hfcl {
 
@@ -355,5 +351,5 @@ string FormatDateTimeString (const NguxTime *pTime,
 
 } // namespace hfcl {
 
-#endif  /* __HFCL_DATETIME_H__ */
+#endif  /* HFCL_COMMON_DATETIME_H_ */
 

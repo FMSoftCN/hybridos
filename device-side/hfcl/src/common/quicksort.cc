@@ -19,18 +19,11 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "nguxcommon.h"
-#include "log.h"
-#include "intrect.h"
-
-#include "nguxobject.h"
-
-#include "quicksort.h"
-
+#include "common/common.h"
+#include "common/quicksort.h"
 
 static void shortSort(char* lo, char* hi, unsigned width, Compare comp);
 static void swap(char* p, char* q, unsigned int width);
-
 
 const unsigned int CUTOFF = /*8*/100; /* testing shows that this is good value */
 //Memo app: Max 10, Calendar app:Max 100

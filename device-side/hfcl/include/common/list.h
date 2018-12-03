@@ -19,16 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-/**
- * $Id: list.h 1361 2011-08-12 03:53:56Z dongjunjie $
- *
- *      Copyright (C) 2009 FMSoft.
- */
-
-
-#ifndef _LIST_H
-#define _LIST_H
+#ifndef HFCL_COMMON_LIST_H_
+#define HFCL_COMMON_LIST_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -291,4 +283,4 @@ static inline int list_add_by_index(struct list_head *_new, struct list_head *he
 }
 #endif
 
-#endif /* _NCS_DBLIST_H */
+#endif /* HFCL_COMMON_LIST_H_ */

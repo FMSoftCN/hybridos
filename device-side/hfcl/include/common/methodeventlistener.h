@@ -19,11 +19,12 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _HFCL_MethodEventListener_h
-#define _HFCL_MethodEventListener_h
+#ifndef HFCL_COMMON_METHODEVENTLISTENER_H_
+#define HFCL_COMMON_METHODEVENTLISTENER_H_
 
-#include "nguxcommon.h"
-#include "nguxevent.h"
+#include "common.h"
+#include "alternativestl.h"
+#include "event.h"
 
 namespace hfcl {
 
@@ -34,9 +35,6 @@ class MethodEventListener : public EventListener
 {
 public:
 	typedef bool (MethodEventListener::*EventHandle)(Event* event);
-#ifdef WIN32
-	MethodEventListener() {}
-#endif
 	MethodEventListener(void* ctx, EventHandle event_handle, int event_type);
 	virtual ~MethodEventListener();
 
@@ -55,6 +53,6 @@ private:
 	METHOD_EVENT_HANDLE_EX(this, Class, eventHandle, 0)
 
 
-} // namespace hfcl {
+} // namespace hfcl
 
-#endif /* _HFCL_MethodEventListener_h */
+#endif /* HFCL_COMMON_METHODEVENTLISTENER_H_ */

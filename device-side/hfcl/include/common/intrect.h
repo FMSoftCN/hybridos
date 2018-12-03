@@ -28,72 +28,71 @@ namespace hfcl {
 
 class IntRect {
     public:
-        IntRect()
-            : m_left(0)
-            , m_top(0)
-            , m_right(0)
-            , m_bottom(0)
-        {
-
-        }
-
-        IntRect(int ileft, int itop = 0, int iright = 0, int ibottom = 0)
-            : m_left(ileft)
-            , m_top(itop)
-            , m_right(iright)
-            , m_bottom(ibottom)
-        {
-
-        }
-
-        IntRect(const IntRect& irc)
-            : m_left(irc.m_left)
-            , m_top(irc.m_top)
-            , m_right(irc.m_right)
-            , m_bottom(irc.m_bottom)
+        IntRect ()
+            : m_left (0)
+            , m_top (0)
+            , m_right (0)
+            , m_bottom (0)
         {
         }
 
-        IntRect(const RECT& rc)
-            : m_left(rc.left)
-            , m_top(rc.top)
-            , m_right(rc.right)
-            , m_bottom(rc.bottom)
+        IntRect (int left, int top = 0, int right = 0, int bottom = 0)
+            : m_left (left)
+            , m_top (top)
+            , m_right (right)
+            , m_bottom (bottom)
         {
         }
+
+        IntRect (const IntRect& rc)
+            : m_left (rc.m_left)
+            , m_top (rc.m_top)
+            , m_right (rc.m_right)
+            , m_bottom (rc.m_bottom)
+        {
+        }
+
+        IntRect (const RECT& rc)
+            : m_left (rc.left)
+            , m_top (rc.top)
+            , m_right (rc.right)
+            , m_bottom (rc.bottom)
+        {
+        }
+
         operator RECT() const 
         {
             RECT rect = {left(), top(), right(), bottom()};
             return rect;
         }
 
-        int left(void)   const { return m_left;   }
-        int top(void)    const { return m_top;    }
-        int right(void)  const { return m_right;  }
-        int bottom(void) const { return m_bottom; }
+        int left (void)     const { return m_left;   }
+        int top (void)      const { return m_top;    }
+        int right (void)    const { return m_right;  }
+        int bottom (void)   const { return m_bottom; }
 
-        int width(void)  const { return m_right - m_left; }
-        int height(void) const { return m_bottom - m_top; }
+        int width (void)    const { return m_right - m_left; }
+        int height (void)   const { return m_bottom - m_top; }
 
-        bool isEmpty(void) const
+        bool isEmpty (void) const
         {
             return m_left >= m_right || m_top >= m_bottom;
         }
 
-        void setEmpty(void)
+        void setEmpty (void)
         {
             m_left = m_right = m_top = m_bottom = 0;
         }
 
-        void setRect(int ileft, int itop, int iright, int ibottom)
+        void setRect (int left, int top, int right, int bottom)
         {
-            m_left   = ileft;
-            m_top    = itop;
-            m_right  = iright;
-            m_bottom = ibottom;
+            m_left   = left;
+            m_top    = top;
+            m_right  = right;
+            m_bottom = bottom;
         }
 
-        void setRect(const IntRect& irc)
+        void setRect (const IntRect& irc)
         {
             m_left   = irc.m_left;
             m_top    = irc.m_top;
@@ -101,33 +100,37 @@ class IntRect {
             m_bottom = irc.m_bottom;
         }
 
-        void getRect(int* pleft, int* ptop, int* pright, int* pbottom)
+        void getRect (int* left, int* top, int* right, int* bottom)
         {
-            *pleft   = m_left;
-            *ptop    = m_top;
-            *pright  = m_right;
-            *pbottom = m_bottom;
+            if (left)
+                *left   = m_left;
+            if (top)
+                *top    = m_top;
+            if (right)
+                *right  = m_right;
+            if (bottom)
+                *bottom = m_bottom;
         }
 
-		void setWidth(int iwidth) {
-			m_right = m_left + iwidth;
+		void setWidth (int width) {
+			m_right = m_left + width;
 		}
 
-		void setHeight(int iheight) {
-			m_bottom = m_top + iheight;
+		void setHeight (int height) {
+			m_bottom = m_top + height;
 		}
 
-		void setSize(int iwidth, int iheight) {
-			m_right = m_left + iwidth;
-			m_bottom = m_top + iheight;
+		void setSize (int width, int height) {
+			m_right = m_left + width;
+			m_bottom = m_top + height;
 		}
 
-        const IntRect& getRect(void) const
+        const IntRect& getRect (void) const
         {
             return *this;
         }
 
-        IntRect& operator=(const IntRect& irc)
+        IntRect& operator = (const IntRect& irc)
         {
             if (&irc == this)
                 return *this;
@@ -140,42 +143,42 @@ class IntRect {
             return *this;
         }
 
-        IntRect& operator=(const IntRect* pirc)
+        IntRect& operator = (const IntRect* irc)
         {
-            if (pirc == this)
+            if (irc == this)
                 return *this;
 
-            m_left   = pirc->m_left;
-            m_top    = pirc->m_top;
-            m_right  = pirc->m_right;
-            m_bottom = pirc->m_bottom;
+            m_left   = irc->m_left;
+            m_top    = irc->m_top;
+            m_right  = irc->m_right;
+            m_bottom = irc->m_bottom;
 
             return *this;
         }
 
-        bool operator==(const IntRect& irc) const
+        bool operator == (const IntRect& irc) const
         {
             if (&irc == this)
                 return true;
 
             if (m_left   != irc.m_left  ||
-                m_top    != irc.m_top   ||
-                m_right  != irc.m_right ||
-                m_bottom != irc.m_bottom)
+                    m_top    != irc.m_top   ||
+                    m_right  != irc.m_right ||
+                    m_bottom != irc.m_bottom)
                 return false;
 
             return true;
         }
 
-        bool operator!=(const IntRect& irc) const
+        bool operator != (const IntRect& irc) const
         {
             if (&irc == this)
                 return false;
 
             if (m_left   != irc.m_left  ||
-                m_top    != irc.m_top   ||
-                m_right  != irc.m_right ||
-                m_bottom != irc.m_bottom)
+                    m_top    != irc.m_top   ||
+                    m_right  != irc.m_right ||
+                    m_bottom != irc.m_bottom)
                 return true;
 
             return false;
@@ -185,7 +188,7 @@ class IntRect {
          * Offset set the rectangle by adding x to its left and right,
          * and adding y to its top and bottom.
          */
-        void offset(int x, int y)
+        void offset (int x, int y)
         {
             m_left   += x;
             m_top    += y;
@@ -198,7 +201,7 @@ class IntRect {
          * making the rectangle narrower. If x is negative, then the sides are moved outwards,
          * making the rectangle wider. The same hods true for y and the top and bottom.
          */
-        void inset(int x, int y)
+        void inset (int x, int y)
         {
             m_left   += x;
             m_top    += y;
@@ -206,43 +209,44 @@ class IntRect {
             m_bottom -= y;
         }
 
-		void inset(int ileft, int itop, int iright, int ibottom) {
-			m_left += ileft;
-			m_top  += itop;
-			m_right -= iright;
-			m_bottom -= ibottom;
+		void inset (int left, int top, int right, int bottom) {
+			m_left += left;
+			m_top  += top;
+			m_right -= right;
+			m_bottom -= bottom;
 		}
 
-        bool contains(int x, int y) const
+        bool contains (int x, int y) const
         {
-            return  (unsigned)(x - m_left) <= (unsigned)(m_right - m_left) &&
-                    (unsigned)(y - m_top) <= (unsigned)(m_bottom - m_top);
+            return (unsigned)(x - m_left) <= (unsigned)(m_right - m_left) &&
+                   (unsigned)(y - m_top) <= (unsigned)(m_bottom - m_top);
         }
 
-        bool contains(int ileft, int itop, int iright, int ibottom) const
+        bool contains (int left, int top, int right, int bottom) const
         {
-            return  ileft < iright && itop < ibottom && !this->isEmpty() && // check for empties
-                    m_left <= ileft && m_top <= itop &&
-                    m_right >= iright && m_bottom >= ibottom;
+            return left < right && top < bottom && !isEmpty() &&
+                   m_left <= left && m_top <= top &&
+                   m_right >= right && m_bottom >= bottom;
         }
 
-        bool contains(const IntRect& irc) const
+        bool contains (const IntRect& irc) const
         {
-            return  !irc.isEmpty() && !this->isEmpty() &&     // check for empties
+            return !irc.isEmpty() && !isEmpty() &&
                     m_left <= irc.m_left && m_top <= irc.m_top &&
                     m_right >= irc.m_right && m_bottom >= irc.m_bottom;
         }
 
-        bool intersect(const IntRect& irc)
+        bool intersect (const IntRect& irc)
         {
-            return this->intersect(irc.m_left, irc.m_top, irc.m_right, irc.m_bottom);
+            return intersect(irc.m_left, irc.m_top, irc.m_right, irc.m_bottom);
         }
 
-        bool intersect(const IntRect& a, const IntRect& b)
+        bool intersect (const IntRect& a, const IntRect& b)
         {
             if (!a.isEmpty() && !b.isEmpty() &&
                     a.m_left < b.m_right && b.m_left < a.m_right &&
                     a.m_top < b.m_bottom && b.m_top < a.m_bottom) {
+
                 m_left   = (a.m_left   > b.m_left  ) ? a.m_left   : b.m_left;
                 m_top    = (a.m_top    > b.m_top   ) ? a.m_top    : b.m_top;
                 m_right  = (a.m_right  < b.m_right ) ? a.m_right  : b.m_right;
@@ -252,14 +256,15 @@ class IntRect {
             return false;
         }
         
-        bool intersect(int ileft, int itop, int iright, int ibottom)
+        bool intersect (int left, int top, int right, int bottom)
         {
-            if (ileft < iright && itop < ibottom && !this->isEmpty() &&
-                    m_left < iright && ileft < m_right && m_top < ibottom && itop < m_bottom) {
-                if (m_left < ileft) m_left = ileft;
-                if (m_top < itop) m_top = itop;
-                if (m_right > iright) m_right = iright;
-                if (m_bottom > ibottom) m_bottom = ibottom;
+            if (left < right && top < bottom && !this->isEmpty() &&
+                    m_left < right && left < m_right && m_top < bottom && top < m_bottom) {
+
+                if (m_left < left) m_left = left;
+                if (m_top < top) m_top = top;
+                if (m_right > right) m_right = right;
+                if (m_bottom > bottom) m_bottom = bottom;
                 return true;
             }
             return false;
@@ -270,16 +275,16 @@ class IntRect {
          * If this rectangle is empty, just set it to the specified rectangle. If the specified
          * rectangle is empty, do nothing.
          */
-        void join(int ileft, int itop, int iright, int ibottom);
+        void join (int left, int top, int right, int bottom);
 
         /**
          * Update this rectangle to enclose itself and the specified rectangle.
          * If this rectangle is empty, just set it to the specified rectangle. If the specified
          * rectangle is empty, do nothing.
          */
-        void join(const IntRect& irc)
+        void join (const IntRect& irc)
         {
-            join(irc.m_left, irc.m_top, irc.m_right, irc.m_bottom);
+            join (irc.m_left, irc.m_top, irc.m_right, irc.m_bottom);
         }
 
         /**
@@ -290,8 +295,8 @@ class IntRect {
          */
         void sort();
 
-
-		bool isIn(int x, int y) const {
+		bool isIn (int x, int y) const
+        {
 			return (x >= m_left && x < m_right
 					&& y >= m_top && y < m_bottom);
 		}

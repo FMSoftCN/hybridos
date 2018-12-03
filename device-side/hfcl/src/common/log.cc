@@ -19,21 +19,13 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
-
-#include "nguxcommon.h"
-#include "nguxobject.h"
-#include "intrect.h"
-#include "log.h"
+#include "common/log.h"
 
 namespace hfcl {
 
 Log *Log::m_log = NULL;
 
-Log::Log(const char* logFile = NULL, bool benable = true)
+Log::Log (const char* logFile = NULL, bool benable = true)
     :m_enable(benable)
 {
     m_fpLog = NULL;
@@ -55,9 +47,7 @@ Log::~Log()
 Log* Log::getLog(void) 
 {
     if (Log::m_log == NULL){
-        //Log::m_log = new Log (NGUXLOG, true);
-		Log::m_log = HFCL_NEW_EX(Log, (NGUXLOG, true));      
-        // Log::m_log = HFCL_NEW_EX(Log, (NGUXLOG, true));  // not use
+		Log::m_log = HFCL_NEW_EX (Log, (HFCL_LOG_FILE, true));      
 	}
     return Log::m_log;
 }
@@ -65,8 +55,7 @@ Log* Log::getLog(void)
 void Log::releaseLog(void)
 {
     if (NULL != Log::m_log)
-        delete (Log::m_log);
-        // HFCL_DELETE(Log::m_log);
+        HFCL_DELETE (Log::m_log);
     Log::m_log = NULL;
 }
 
@@ -81,8 +70,8 @@ int Log::logPrintf(const char* head, const char* format, va_list args)
     }
 }
 
-int Log::logPrintf(const char* head, const char* file, const int line, const char* func,
-        const char* format, va_list args)
+int Log::logPrintf(const char* head, const char* file, const int line,
+        const char* func, const char* format, va_list args)
 {
     if (m_enable) {
         _MG_PRINTF("%s%s %d %s() :  ", head, file, line, func);
@@ -93,7 +82,6 @@ int Log::logPrintf(const char* head, const char* file, const int line, const cha
     }
 }
 
-#ifndef __CC_ARM
 void Log::logDebug(const char* format, ...)
 {
     if (format == NULL)
@@ -101,7 +89,7 @@ void Log::logDebug(const char* format, ...)
 
     va_list ap;
     va_start(ap, format);
-    Log::getLog()->logPrintf("NGUX DEBUG >> ", format, ap);
+    Log::getLog()->logPrintf("HFCL DEBUG >> ", format, ap);
     va_end(ap);
 }
 
@@ -112,7 +100,7 @@ void Log::logInfo(const char* format, ...)
 
     va_list args;
     va_start(args, format);
-    Log::getLog()->logPrintf("NGUX INFO >> ", format, args);
+    Log::getLog()->logPrintf("HFCL INFO >> ", format, args);
     va_end(args);
 }
 
@@ -123,7 +111,7 @@ void Log::logError(const char* format, ...)
 
     va_list args;
     va_start(args, format);
-    Log::getLog()->logPrintf("NGUX Error >> ", format, args);
+    Log::getLog()->logPrintf("HFCL ERROR >> ", format, args);
     va_end(args);
 }
 
@@ -134,17 +122,16 @@ void Log::logMemory(const char* format, ...)
 
     va_list args;
     va_start(args, format);
-    Log::getLog()->logPrintf("MEMORY", format, args);
+    Log::getLog()->logPrintf("HFCL MEMORY >>", format, args);
     va_end(args);
 }
+
 typedef enum
 {
     /// No error occured
     DBG_ERR_NO,
-
     /// Unsupported operation or parameter
     DBG_ERR_UNSUPPORTED,
-
     DBG_ERR_QTY
 } DBG_ERR_T;
 
@@ -162,10 +149,9 @@ void Log::logHFLF(const char* head, const char* file, const int line, const char
 
 void Log::dumpRect(const IntRect& rc)
 {
-    logDebug("rc.left is %d, rc.top is %d, rc.right is %d, rc.bottom is %d...\n", rc.left(), rc.top(), rc.right(), rc.bottom());
+    logDebug("rc.left is %d, rc.top is %d, rc.right is %d, rc.bottom is %d...\n",
+             rc.left(), rc.top(), rc.right(), rc.bottom());
 }
 
-#endif /* __CC_ARM */
-
-} // namespace hfcl {
+} // namespace hfcl
 

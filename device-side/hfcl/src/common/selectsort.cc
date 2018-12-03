@@ -19,14 +19,9 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "nguxcommon.h"
-#include "log.h"
-#include "intrect.h"
+#include "common/common.h"
 
-#include "nguxobject.h"
-
-#include "selectsort.h"
-
+#include "common/selectsort.h"
 
 static void swap(char* p, char* q, unsigned int width);
 

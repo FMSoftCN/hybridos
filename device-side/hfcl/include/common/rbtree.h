@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef	_LINUX_RBTREE_H
-#define	_LINUX_RBTREE_H
+#ifndef	HFCL_COMMON_RBTREE_H_
+#define	HFCL_COMMON_RBTREE_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -113,4 +113,4 @@ static inline void rb_link_node(struct rb_node * node, struct rb_node * parent,
 }
 #endif
 
-#endif	/* _LINUX_RBTREE_H */
+#endif	/* HFCL_COMMON_RBTREE_H_ */

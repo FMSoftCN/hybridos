@@ -19,112 +19,58 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifdef __cplusplus
+#ifndef HFCL_COMMON_ALTERNATIVESTL_H_
+#define HFCL_COMMON_ALTERNATIVESTL_H_
 
-#ifndef _HFCL_SIMPLESTL_H
-#define _HFCL_SIMPLESTL_H
+#ifndef __cplusplus
+#   error "alternativestl.h: C++ only."
+#endif
 
-typedef const char*  const_str_ptr;
+#include "common.h"
 
-#ifdef _HFCL_DONT_SUPPORT_TEMPLATE
+// configure option: use STL or not
+#ifdef _HFCL_USE_STL
+
+#include <string>
+#include <list>
+#include <map>
+#include <vector>
+
+#define string std::string
+
+#define LIST(type, name) typedef std::list<type> name;
+
+#define MAP(type1, type2, name) typedef std::map<type1, type2> name;
+#define MAPCLASS(type1, type2, name) MAP(type1, type2,name)
+#define MAPCLASSVALUE(type1, type2, name) MAP(type1, type2,name)
+#define MAPCLASSKEY(type1, type2, name) MAP(type1, type2,name)
+#define MAPEX(TKey, TValue, ClassName,  cmp_key, del_key, del_value) \
+        MAP(TKey, TValue, ClassName)
+
+#define PAIR(type1, type2, name) typedef std::pair<type1, type2> name;
+
+#define VECTOR(type, name) typedef std::vector<type> name;
+#define VECTOREX(type, name, delete_code) VECTOR(type, name)
+#define VECTORCLASS(type, name) VECTOR(type, name)
+
+#else /* _HFCL_USE_STL */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "hal_misc.h"
 
-extern unsigned int _null_buffer[];
-#define NULL_VALUE  ((void*)_null_buffer)
+#include <minigui/common.h>
 
-// memory monitor
-// #define HFCL_MEM_MONITOR
+#undef _HFCL_TRACE_LIST
 
-// if memory leak print, macro difine
-#define LOGMEMORYLEAK  _DBG_PRINTF
-#ifndef	LOGMMC
-#ifdef  HFCL_MEM_MONITOR
-#define	LOGMMC(...)   LOGMEMORYLEAK(__VA_ARGS__);
-#else
-#define	LOGMMC(...)   ((void)0)
-#endif
-#endif
-
-//#define HFCL_LIST_TRACE 1
-#undef HFCL_LIST_TRACE
-
-#ifdef __CC_ARM
-
-#define HFCL_NEW(classname) new classname
-#define HFCL_NEW_EX(classname, param) new classname param
-#define HFCL_NEW_ARR(classname, param) new classname[param]
-
-#define HFCL_MALLOC(size)               malloc(size)
-#define HFCL_CALLOC(size, count)        calloc(size, count)
-#define HFCL_REALLOC(buf, size)         realloc(buf, size)
-
-#define HFCL_FREE(paddr)                free(paddr)
-#define HFCL_DELETE(addr)               delete (addr)
-#define HFCL_DELETE_ARR(addr)           delete[] (addr)
-
-#else /* __CC_ARM */
-
-#define HFCL_NEW(classname) (                       \
-{                                                   \
-    UINT32 nCallerAdd = 0x00;                       \
-    COS_GET_RA(&nCallerAdd);                        \
-    classname *paddr = new classname;               \
-    if(paddr != NULL)                               \
-        COS_UpdateMemCallAdd(paddr, nCallerAdd);    \
-    paddr;                                          \
-})
-
-#define HFCL_NEW_EX(classname, param)	(           \
-{                                                   \
-    UINT32 nCallerAdd = 0x00;           	        \
-    COS_GET_RA(&nCallerAdd);                        \
-    classname *paddr = new classname param ;        \
-    if(paddr != NULL)                               \
-        COS_UpdateMemCallAdd(paddr, nCallerAdd);    \
-    paddr;                                          \
-})
-
-#define HFCL_NEW_ARR(classname, param) (		    \
-{                                                   \
-    UINT32 nCallerAdd = 0x00;           	        \
-    COS_GET_RA(&nCallerAdd);                        \
-    classname *paddr = new classname[param] ;       \
-    if(paddr != NULL)                               \
-        COS_UpdateMemCallAdd(paddr, nCallerAdd);    \
-    paddr;                                          \
-})
-
-#define HFCL_MALLOC(size)               malloc(size)
-#define HFCL_CALLOC(size, count)        calloc(size, count)
-#define HFCL_REALLOC(buf, size)         realloc(buf, size)
-#define HFCL_FREE(paddr)                free(paddr)
-#define HFCL_DELETE(addr)               delete (addr)
-#define HFCL_DELETE_ARR(addr)           delete[] (addr)
-
-#endif /* !__CC_ARM */
-
-#ifdef _HFCL_SHOW_OPTIMIZE_INFO
-#define OPT_TRACE_PARAM   ,_trace_info_
-#define OPT_TRACE_INFO   ,const char* _trace_info_
-#define OPTIMIZE_WARNING  _DBG_PRINTF ("------ Object is copyed in %s, Please optimize it\n", _trace_info_)
-#define OPT_CLASSNAME(clss)  ,#clss
-#else
-#define OPT_TRACE_INFO
-#define OPT_TRACE_PARAM
-#define OPTIMIZE_WARNING
-#define OPT_CLASSNAME(clss)
-#endif
+namespace hfcl {
 
 /*
 ** check a utf8 string
 ** check the tail characters correct or not.
 ** if incorrect, cut the tail.
 **/
-inline int CheckUtf8Strings(char *_buff, int _len)
+inline int check_utf8_str(char *_buff, int _len)
 {		
 	int _tail_utf8_len = 1;
 	int _tail_real_len = 1;
@@ -216,7 +162,7 @@ public:
         {
             strncpy(_str_buff, str, n);
             _str_buff[n] = 0;
-			CheckUtf8Strings(_str_buff, n);
+			check_utf8_str(_str_buff, n);
         }
 	
     }
@@ -231,7 +177,7 @@ public:
          {
              strncpy(_str_buff, str.c_str(), n);
              _str_buff[n] = 0;
-			 CheckUtf8Strings(_str_buff, n);
+			 check_utf8_str(_str_buff, n);
          }
     }
 
@@ -260,7 +206,7 @@ public:
         {
             strncpy(_str_buff, str.c_str(), n);
             _str_buff[n] = 0;
-			CheckUtf8Strings(_str_buff, n);
+			check_utf8_str(_str_buff, n);
         }
         return *this;
     }
@@ -278,7 +224,7 @@ public:
         {
             strncpy(_str_buff, str, n);
             _str_buff[n] = 0;
-			CheckUtf8Strings(_str_buff, n);
+			check_utf8_str(_str_buff, n);
         }
         return *this;
     }
@@ -337,7 +283,7 @@ public:
 
         if (_str_buff != NULL)  HFCL_FREE(_str_buff);	
         _str_buff = new_str;
-		CheckUtf8Strings(_str_buff, -1);
+		check_utf8_str(_str_buff, -1);
 
         return *this;
     }
@@ -583,11 +529,9 @@ public:
     }
 };
 
-////////////////////////////////
-//map, use rbtree
-extern "C" {
+// use rbtree for map
 #include "rbtree.h"
-}
+
 class map_base {
 protected:
     struct entry_t {
@@ -859,6 +803,7 @@ public:
 };
 
 #include "list.h"
+
 #define LIST_DATA(l)  ((void*)((unsigned char*)(l) + sizeof(list_t)))
 class list_base {
 protected:
@@ -911,8 +856,8 @@ protected:
         value_copy(LIST_DATA(node), data);
         list_add(node, &_head);
         _count ++;
-#ifdef HFCL_LIST_TRACE
-		_DBG_PRINTF ("HFCL_LIST_TRACE : new and push node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+#ifdef _HFCL_TRACE_LIST
+		_DBG_PRINTF ("_HFCL_TRACE_LIST : new and push node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
                 node, sizeof(list_t) + _size, __func__, size());
 #endif
     }
@@ -924,8 +869,8 @@ protected:
         value_copy(LIST_DATA(node), data);
         list_add_tail(node, &_head);
         _count ++;
-#ifdef HFCL_LIST_TRACE
-		_DBG_PRINTF ("HFCL_LIST_TRACE : new and push node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+#ifdef _HFCL_TRACE_LIST
+		_DBG_PRINTF ("_HFCL_TRACE_LIST : new and push node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
             node, sizeof(list_t) + _size, __func__, size());
 #endif
     }
@@ -938,8 +883,8 @@ protected:
         list_del(node);
         HFCL_FREE(node);
         _count --;
-#ifdef HFCL_LIST_TRACE
-		_DBG_PRINTF ("HFCL_LIST_TRACE : pop and delete node (%p)  ---- in func [%s]	-- size = %d\n",
+#ifdef _HFCL_TRACE_LIST
+		_DBG_PRINTF ("_HFCL_TRACE_LIST : pop and delete node (%p)  ---- in func [%s]	-- size = %d\n",
                 node,  __func__, size());
 #endif
     }
@@ -960,8 +905,8 @@ protected:
             list_t *newnode = new_node();
             value_copy(LIST_DATA(newnode), node);
             __list_add(newnode, _head.prev, &_head);
-#ifdef HFCL_LIST_TRACE
-			_DBG_PRINTF ("HFCL_LIST_TRACE : new node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
+#ifdef _HFCL_TRACE_LIST
+			_DBG_PRINTF ("_HFCL_TRACE_LIST : new node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
                     newnode, sizeof(list_t) + _size, __func__, size());
 #endif
         }
@@ -1034,8 +979,8 @@ protected:
             list_del(node);			
             HFCL_FREE(node);
             _count --;
-#ifdef HFCL_LIST_TRACE
-			_DBG_PRINTF ("HFCL_LIST_TRACE : delete node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
+#ifdef _HFCL_TRACE_LIST
+			_DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
                     node, sizeof(list_t) + _size, __func__, size());
 #endif
             return iterator_base(this, next);
@@ -1053,8 +998,8 @@ protected:
             list_del(tmp);			
             HFCL_FREE(tmp);
             _count --;
-#ifdef HFCL_LIST_TRACE
-			_DBG_PRINTF ("HFCL_LIST_TRACE : delete node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
+#ifdef _HFCL_TRACE_LIST
+			_DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
                     tmp, sizeof(list_t) + _size, __func__, size());
 #endif
         }
@@ -1071,8 +1016,8 @@ protected:
                 delete_node(LIST_DATA(tmp));
                 HFCL_FREE(tmp);
                 _count --;
-#ifdef HFCL_LIST_TRACE
-				_DBG_PRINTF ("HFCL_LIST_TRACE : delete node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+#ifdef _HFCL_TRACE_LIST
+				_DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
                         tmp, sizeof(list_t) + _size, __func__, size());
 #endif
 				return;
@@ -1090,8 +1035,8 @@ protected:
         list_t * pos = (list_t*)it._current;
         list_add(node, pos);
         _count ++;
-#ifdef HFCL_LIST_TRACE
-		_DBG_PRINTF ("HFCL_LIST_TRACE : new and insert node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+#ifdef _HFCL_TRACE_LIST
+		_DBG_PRINTF ("_HFCL_TRACE_LIST : new and insert node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
                 node, sizeof(list_t) + _size, __func__, size());
 #endif
 
@@ -1111,8 +1056,8 @@ public:
 			delete_node(LIST_DATA(tmp));
             HFCL_FREE(tmp);
 			_count--;
-#ifdef HFCL_LIST_TRACE
-			_DBG_PRINTF ("HFCL_LIST_TRACE : delete node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+#ifdef _HFCL_TRACE_LIST
+			_DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
                     tmp, sizeof(list_t) + _size, __func__, size());
 #endif
         }
@@ -1346,36 +1291,9 @@ protected: \
 #define MAP(TKey, TValue, ClassName) \
     MAPEX(TKey, TValue, ClassName, do { return (*k1)-(*k2); } while (0), do { } while (0), do { } while (0))
 
-#if 0 /* VicentWei > FIXME: def __NOUNIX__ */
-void* operator new(size_t size);
-void operator delete(void *p);
-void* operator new[](size_t size);
-void operator delete[](void *p);
-#endif
+} // namespace hfcl
 
-#else   // not _HFCL_DONT_SUPPORT_TEMPLATE
-#   ifdef _HFCL_DONT_SUPPORT_STL
-#      include "mystl.h"
-#      define VECTOR(type, name) typedef my::vector<type> name;
-#   else
-#       include <list>
-#       include <map>
-#       include <vector>
-#       include <string>
-#       define string std::string
-#       define VECTOR(type, name) typedef std::vector<type> name;
-#       define MAP(type1, type2, name) typedef std::map<type1, type2> name;
-#       define MAPCLASS(type1, type2, name) MAP(type1, type2,name)
-#       define MAPCLASSVALUE(type1, type2, name) MAP(type1, type2,name)
-#       define MAPCLASSKEY(type1, type2, name) MAP(type1, type2,name)
-#       define MAPEX(TKey, TValue, ClassName,  cmp_key, del_key, del_value)  MAP(TKey, TValue, ClassName)
-#       define LIST(type, name) typedef std::list<type> name;
-#       define PAIR(type1, type2, name) typedef std::pair<type1, type2> name;
-#   endif
-#   define VECTOREX(type, name, delete_code) VECTOR(type, name)
-#   define VECTORCLASS(type, name) VECTOR(type, name)
-#endif   // _HFCL_DONT_SUPPORT_TEMPLATE
+#endif /* !_HFCL_USE_STL */
 
-#endif /* _HFCL_SIMPLESTL_H */
+#endif /* HFCL_COMMON_ALTERNATIVESTL_H_ */
 
-#endif /* __cplusplus */

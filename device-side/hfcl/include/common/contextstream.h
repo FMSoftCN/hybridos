@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _HFCL_ContextStream_h
-#define _HFCL_ContextStream_h
+#ifndef HFCL_COMMON_CONTEXTSTREAM_H_
+#define HFCL_COMMON_CONTEXTSTREAM_H_
 
 namespace hfcl {
 
@@ -70,8 +70,7 @@ private:
     unsigned short m_total;
 };
 
+} // namespace hfcl
 
-} // namespace hfcl {
-
-#endif /* _HFCL_ContextStream_h */
+#endif /* HFCL_COMMON_CONTEXTSTREAM_H_ */
 

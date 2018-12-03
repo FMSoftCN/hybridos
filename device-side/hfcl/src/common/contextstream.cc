@@ -18,24 +18,12 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
- /*
-  ** $Id: ContextStream.cpp 2365 2012-01-17 09:30:08Z wangxin $
-  **
-  ** ContextStream.cpp:
-  **
-  ** Copyright (C) 2003 ~ 2011 Beijing FMSoft Technologies Co., Ltd.
-  **
-  ** All rights reserved by FMSoft.
-  **
-  ** Current maintainer: shidazhi
-  **
-  ** Create date: 2011-06-22
-  */
 
-#include "nguxcommon.h"
-#include "log.h"
-#include <string.h>
-#include "contextstream.h"
+#include "common/contextstream.h"
+
+#include "common/common.h"
+#include "common/alternativestl.h"
+#include "common/log.h"
 
 namespace hfcl {
 
@@ -258,5 +246,5 @@ inline void ContextStream::extendBuffer()
     m_buf = tmp_buf;
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 
