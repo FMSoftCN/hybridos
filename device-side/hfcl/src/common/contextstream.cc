@@ -22,7 +22,7 @@
 #include "common/contextstream.h"
 
 #include "common/common.h"
-#include "common/alternativestl.h"
+#include "common/stlalternative.h"
 #include "common/log.h"
 
 namespace hfcl {

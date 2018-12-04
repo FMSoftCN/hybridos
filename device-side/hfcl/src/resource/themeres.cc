@@ -22,8 +22,8 @@
 #include <string.h>
 
 #include "graphics/graphicscontext.h"
-#include "drawable.h"
-#include "resloader.h"
+#include "drawable/drawable.h"
+#include "resource/resloader.h"
 #include "resource/respkgmanager.h"
 #include "themeres.h"
 

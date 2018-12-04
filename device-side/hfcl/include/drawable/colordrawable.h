@@ -22,7 +22,8 @@
 #ifndef _HFCL_ColorDrawable_h
 #define _HFCL_ColorDrawable_h
 
-#include "drawable.h"
+#include "common/stlalternative.h"
+#include "drawable/drawable.h"
 
 namespace hfcl {
 
@@ -38,12 +39,12 @@ public:
 		return HFCL_NEW_EX(ColorDrawable, (this));
 	}
 
-	void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE); 
-	bool setElement(int e_id, DWORD value);
-	DWORD getElement(int e_id) const;
+	void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE); 
+	bool setElement(int e_id, HTData value);
+	HTData getElement(int e_id) const;
+
 protected:
 	DWORD m_color;
-
 	void init(const TRStyleElement *elements = NULL);
 };
 

@@ -24,7 +24,7 @@
 #define _HFCL_Intent_h
 
 #include "common/common.h"
-#include "common/alternativestl.h"
+#include "common/stlalternative.h"
 
 namespace hfcl {
 

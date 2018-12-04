@@ -19,14 +19,14 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "statecolordrawable.h"
+#include "drawable/statecolordrawable.h"
 #include "graphics/graphicscontext.h"
 
 namespace hfcl {
 
-void StateColorDrawable::draw(GraphicsContext* gc, int draw_state, const IntRect &rc, DWORD data/* = 0*/, DR_DATA_TYPE type/* = DRDT_NONE*/)
+void StateColorDrawable::draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data/* = 0*/, DR_DATA_TYPE type/* = DRDT_NONE*/)
 {
-	DWORD color = getElement(SYS_GET_STATE_COLOR_ID(draw_state));
+	HTData color = getElement(SYS_GET_STATE_COLOR_ID(draw_state));
 
 	gc->fillRect(rc, GetRValue(color), GetGValue(color), GetBValue(color), GetAValue(color));
 }

@@ -4,7 +4,7 @@ myincludedir=$(includedir)/hfcl/common
 # Which header files to install
 myinclude_HEADERS= \
     common.h \
-    alternativestl.h \
+    stlalternative.h \
     intrect.h \
     object.h \
     event.h \

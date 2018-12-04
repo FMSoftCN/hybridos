@@ -1,10 +1,10 @@
 AUTOMAKE_OPTIONS=subdir-objects
 
 SUBDIRS=
-noinst_LTLIBRARIES=libhfcl_graf.la
+noinst_LTLIBRARIES=libhfcl_graphics.la
 
 AM_CPPFLAGS=-D__HFCL_LIB__ -I../../include
-libhfcl_graf_la_SOURCES = \
+libhfcl_graphics_la_SOURCES = \
     color.cc \
     font.cc \
     gifanimate.cc \

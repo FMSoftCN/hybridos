@@ -25,7 +25,7 @@
 
 #include "resource/respkgmanager.h"
 #include "resource/respackage.h"
-#include "drawable.h"
+#include "drawable/drawable.h"
 //#include "custstrlist.c"
 //#include "CustLanguage.h"
 

@@ -20,7 +20,7 @@
 */
 
 #include "resource/respkgmanager.h"
-#include "resloader.h"
+#include "resource/resloader.h"
 #include "restypes.h"
 
 //#include "mci.h"

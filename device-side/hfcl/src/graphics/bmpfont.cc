@@ -33,8 +33,8 @@
 #include "view/viewcontext.h"
 #include "resource/respkgmanager.h"
 #include "resource/respackage.h"
-#include "resloader.h"
-#include "drawable.h"
+#include "resource/resloader.h"
+#include "drawable/drawable.h"
 #include "graphics/image.h"
 
 namespace hfcl {

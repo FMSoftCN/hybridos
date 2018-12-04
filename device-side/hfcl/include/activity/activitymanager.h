@@ -26,7 +26,7 @@
 #include "mgcl/mgcl.h"
 #include "common/common.h"
 #include "common/event.h"
-#include "common/alternativestl.h"
+#include "common/stlalternative.h"
 #include "activity/intent.h"
 #include "activity/activitystack.h"
 

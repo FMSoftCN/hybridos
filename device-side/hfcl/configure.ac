@@ -164,6 +164,7 @@ AC_OUTPUT([
     include/common/Makefile
     include/activity/Makefile
     include/graphics/Makefile
+    include/drawable/Makefile
     include/view/Makefile
     include/animation/Makefile
     include/services/Makefile
@@ -171,6 +172,7 @@ AC_OUTPUT([
     src/common/Makefile
     src/activity/Makefile
     src/graphics/Makefile
+    src/drawable/Makefile
     src/view/Makefile
     src/animation/Makefile
     src/services/Makefile

@@ -27,7 +27,7 @@
 #define EVENT_NOT_HANDLED  0
 
 #include "common/common.h"
-#include "common/alternativestl.h"
+#include "common/stlalternative.h"
 #include "common/object.h"
 
 #define DISPATCH_CONTINUE_MSG  false

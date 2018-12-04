@@ -22,7 +22,8 @@
 #ifndef _HFCL_StateTextDrawable_H
 #define _HFCL_StateTextDrawable_H
 
-#include "drawable.h"
+#include "common/stlalternative.h"
+#include "drawable/drawable.h"
 
 namespace hfcl {
 

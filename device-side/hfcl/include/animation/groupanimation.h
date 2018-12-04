@@ -23,7 +23,7 @@
 #define __HFCL_ANIMATIONGROUP_H__
 
 #include "common/common.h"
-#include "common/alternativestl.h"
+#include "common/stlalternative.h"
 #include "animation/animation.h"
 
 namespace hfcl {

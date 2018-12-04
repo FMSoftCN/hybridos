@@ -19,9 +19,9 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "drawable.h"
+#include "drawable/drawable.h"
 #include "resource/respackage.h"
-#include "resloader.h"
+#include "resource/resloader.h"
 #include "resource/respkgmanager.h"
 #include "themeres.h"
 #include "appmanager.h"

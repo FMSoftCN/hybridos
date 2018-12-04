@@ -22,7 +22,7 @@
 
 #include "common/event.h"
 #include "graphics/graphicscontext.h"
-#include "drawable.h"
+#include "drawable/drawable.h"
 #include "panelview.h"
 #include "itemview.h"
 #include "resource/respkgmanager.h"

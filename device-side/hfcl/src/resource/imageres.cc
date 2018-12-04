@@ -22,7 +22,7 @@
 #include <string.h>
 
 #include "imageres.h"
-#include "resloader.h"
+#include "resource/resloader.h"
 
 
 namespace hfcl {

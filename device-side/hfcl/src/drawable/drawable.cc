@@ -21,8 +21,8 @@
 
 
 #include "graphics/graphicscontext.h"
-#include "drawable.h"
-#include "resloader.h"
+#include "drawable/drawable.h"
+#include "resource/resloader.h"
 #include "resource/respkgmanager.h"
 
 namespace hfcl {
@@ -177,12 +177,12 @@ SimpleDrawable::~SimpleDrawable()
 	// TODO release elements
 }
 
-bool SimpleDrawable::setElement(int id, DWORD value) 
+bool SimpleDrawable::setElement(int id, HTData value) 
 { 
 	return m_elist.setElement(id, value); 
 }
 
-DWORD SimpleDrawable::getElement(int id) const 
+HTData SimpleDrawable::getElement(int id) const 
 { 
 	StyleElementList::StyleElement* e = m_elist.find(id);
 	return e ? e->value : (m_super?m_super->getElement(id):(unsigned int)NULL);
@@ -241,7 +241,7 @@ Drawable* SimpleDrawableSet::getDrawable(int dr_id) const {
 	return node ? node->dr : (m_super?m_super->getDrawable(dr_id):NULL);
 }
 
-bool SimpleDrawableSet::setDrawableElement(int dr_id, int se_id, DWORD value) {
+bool SimpleDrawableSet::setDrawableElement(int dr_id, int se_id, HTData value) {
 	DrawableNode* node = find(dr_id);
 	Drawable* dr = NULL;
 	if(node) {
@@ -375,8 +375,8 @@ Style* GetCommonStyle() {
 	return _common_styles;
 }
 
-#include "drawable-id-namemap.h"
-#include "common-drawable-ids.h"
+#include "drawable/drawable-id-namemap.h"
+#include "drawable/common-drawable-ids.h"
 StyleElementIDNameTable* _id_name_table = &STYLE_ELEMENT_TABLE(SYS_SE); //TODO this is the common style defines
 
 StyleElementIDNameTable* _dr_id_name_table = &STYLE_DRAWABLE_TABLE(DR);
@@ -844,7 +844,7 @@ Drawable* HashedDrawableSet::getDrawable(int dr_id) const {
 	return it != it_end ? it->second : (m_super?m_super->getDrawable(dr_id):NULL);
 }
 
-bool HashedDrawableSet::setDrawableElement(int dr_id, int se_id, DWORD value) {
+bool HashedDrawableSet::setDrawableElement(int dr_id, int se_id, HTData value) {
 	DrawableSetMap::iterator it = m_drawables.find(dr_id);
 	Drawable* dr = NULL;
 	if(it != m_drawables.end())
@@ -1207,7 +1207,8 @@ using namespace hfcl;
 
 static GHANDLE find_default_etc_file()
 {
-#ifndef __NOUNIX__
+// VW: REMOVEME
+#if 0 // ndef __NOUNIX__
 	GHANDLE hetc = (GHANDLE)0;
 	const char* cfg_file = getenv(HFCL_CFG_ENV);
 	if (cfg_file && (hetc = LoadEtcFile(cfg_file)))
@@ -1224,8 +1225,8 @@ static GHANDLE find_default_etc_file()
 	sprintf(szbuf, "/usr/local/etc/%s", HFCL_CFG);
 	if ((hetc = LoadEtcFile(szbuf)))
 		return hetc;
-
 #endif
+
 	return (GHANDLE)0;
 }
 

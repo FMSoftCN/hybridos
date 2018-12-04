@@ -19,11 +19,11 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "textmode.h"
-#include "statetextdrawable.h"
-#include "graphics/graphicscontext.h"
-#include "graphics/font.h"
+#include "drawable/statetextdrawable.h"
 
+#include "graphics/graphicscontext.h"
+#include "graphics/textmode.h"
+#include "graphics/font.h"
 
 namespace hfcl {
 

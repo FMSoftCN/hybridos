@@ -19,13 +19,14 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "drawable/stateimagedrawable.h"
+
 #include "graphics/graphicscontext.h"
 #include "graphics/image.h"
-#include "stateimagedrawable.h"
 
 namespace hfcl {
 
-void StateImageDrawable::draw(GraphicsContext* gc, int draw_state, const IntRect &rc, DWORD data/* = 0*/, DR_DATA_TYPE type/* = DRDT_NONE*/)
+void StateImageDrawable::draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data/* = 0*/, DR_DATA_TYPE type/* = DRDT_NONE*/)
 {
 	Image *img;
 	if(type == DRDT_IMAGE && data != 0)

@@ -49,7 +49,7 @@ public:
 //style
 
 //Value ascces
-DWORD ResValueToElement(int id, DWORD value);
+HTData ResValueToElement(int id, HTData value);
 
 class Style : public CopyOnWriteable
 {
@@ -70,8 +70,8 @@ public:
 
 	bool isCommon(void) { return m_is_common; }
 	void setCommon(bool common) { m_is_common = common; }
-	virtual bool setElement(int id, DWORD value) = 0;
-	virtual DWORD getElement(int id) const = 0;
+	virtual bool setElement(int id, HTData value) = 0;
+	virtual HTData getElement(int id) const = 0;
 	virtual void clean() {}
 
 	void init(const TRStyleElement *elements)
@@ -94,7 +94,7 @@ public:
 class HashedStyle : public Style
 {
 protected:
-	MAP(int, DWORD, StyleElementMap)
+	MAP(int, HTData, StyleElementMap)
 	StyleElementMap m_elements;
 
 public:
@@ -103,8 +103,8 @@ public:
 	HashedStyle(Style* s) : Style(s) { }
 	virtual ~HashedStyle();
 
-	bool setElement(int id, DWORD value);
-	DWORD getElement(int id) const;
+	bool setElement(int id, HTData value);
+	HTData getElement(int id) const;
 };
 
 class StyleElementList
@@ -114,10 +114,10 @@ public:
 	struct StyleElement
 	{
 		int id;
-		DWORD value;
+		HTData value;
 
-		StyleElement(int id, DWORD value);
-		void setValue(DWORD value);
+		StyleElement(int id, HTData value);
+		void setValue(HTData value);
 		~StyleElement();
 	};
 
@@ -132,7 +132,7 @@ public:
 	StyleElementList(const TRStyleElement* style_res);
 	virtual	~StyleElementList();
 	StyleElement* find(int id) const;
-	bool setElement(int id, DWORD value);
+	bool setElement(int id, HTData value);
 	void clear() { m_elements.clear(); }
 	friend bool operator==(StyleElement& se1, StyleElement& se2) {
         if ((se1.id == se2.id) && (se1.value == se2.value))
@@ -151,8 +151,8 @@ public:
 	SimpleStyle(Style * s) : Style(s) { }
 	virtual ~SimpleStyle() { m_elist.clear(); }
 
-	bool setElement(int id, DWORD value) { return m_elist.setElement(id, value); }
-	DWORD getElement(int id) const { 
+	bool setElement(int id, HTData value) { return m_elist.setElement(id, value); }
+	HTData getElement(int id) const { 
 		StyleElementList::StyleElement* e = m_elist.find(id);
 		return e ? e->value : (m_super?m_super->getElement(id):(unsigned int)NULL);
 	}
@@ -170,9 +170,9 @@ public:
 	Drawable(Style* s) : Style(s) { }
 
 	virtual void draw(GraphicsContext* gc, int draw_state, 
-			const IntRect &rc, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE) = 0; //do nothing
+			const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE) = 0; //do nothing
 	virtual bool calcDrawableSize(int draw_state, 
-			int& w, int& h, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE) {
+			int& w, int& h, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE) {
 		w = h = 0;
 		return false;
 	}
@@ -190,8 +190,8 @@ public:
 	SimpleDrawable(Style * s) : Drawable(s) { }
 	virtual ~SimpleDrawable();
 
-	bool setElement(int id, DWORD value);
-	DWORD getElement(int id) const;
+	bool setElement(int id, HTData value);
+	HTData getElement(int id) const;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -211,7 +211,7 @@ public:
 			m_super = NULL;
 		}
 	}
-	inline void draw(GraphicsContext *gc, int dr_id, int draw_state, const IntRect& rc, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE) 
+	inline void draw(GraphicsContext *gc, int dr_id, int draw_state, const IntRect& rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE) 
 	{
 		Drawable* dr = getDrawable(dr_id);
 		if(dr)
@@ -228,13 +228,13 @@ public:
 	virtual bool setDrawable(int id, Drawable* dr) = 0;
 	virtual Drawable* getDrawable(int id) const = 0;
 
-	virtual bool setDrawableElement(int dr_id, int se_id, DWORD value) = 0;
-	DWORD getDrawableElement(int dr_id, int se_id) const {
+	virtual bool setDrawableElement(int dr_id, int se_id, HTData value) = 0;
+	HTData getDrawableElement(int dr_id, int se_id) const {
 		const Drawable* dr = getDrawable(dr_id);
 		return dr ? dr->getElement(se_id) : 0;
 	}
 
-	inline bool calcDrawableSize(int dr_id, int draw_state, int& w, int &h, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE)
+	inline bool calcDrawableSize(int dr_id, int draw_state, int& w, int &h, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE)
 	{
 		Drawable* dr = getDrawable(dr_id);
 		if(dr)
@@ -278,7 +278,7 @@ public:
 	virtual bool setDrawable(int dr_id, Drawable* dr);
 
 	virtual Drawable* getDrawable(int dr_id) const;
-	virtual bool setDrawableElement(int dr_id, int se_id, DWORD value);
+	virtual bool setDrawableElement(int dr_id, int se_id, HTData value);
 
 	CopyOnWriteable* clone(){ return (CopyOnWriteable*)(HFCL_NEW_EX(SimpleDrawableSet, (this))); }
 
@@ -298,7 +298,7 @@ public:
 	virtual bool setDrawable(int dr_id, Drawable* dr);
 	virtual Drawable* getDrawable(int dr_id) const;
 
-	virtual bool setDrawableElement(int dr_id, int se_id, DWORD value);
+	virtual bool setDrawableElement(int dr_id, int se_id, HTData value);
 
 	CopyOnWriteable * clone() { return (CopyOnWriteable*) (HFCL_NEW_EX(SimpleDrawableSet, ((DrawableSet*)(this)))); }
 };

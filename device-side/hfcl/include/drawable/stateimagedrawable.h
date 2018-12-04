@@ -22,7 +22,8 @@
 #ifndef _HFCL_StateImageDrawable_H
 #define _HFCL_StateImageDrawable_H
 
-#include "drawable.h"
+#include "common/stlalternative.h"
+#include "drawable/drawable.h"
 
 namespace hfcl {
 
@@ -39,7 +40,7 @@ public:
 	}
 
 	
-	void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE); 
+	void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE); 
 };
 
 

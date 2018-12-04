@@ -24,7 +24,7 @@
 #define HFCL_ACTIVITY_BASEACTIVITY_H_
 
 #include "common/common.h"
-#include "common/alternativestl.h"
+#include "common/stlalternative.h"
 #include "common/contextstream.h"
 #include "activity/intent.h"
 #include "activity/controller.h"

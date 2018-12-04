@@ -19,7 +19,7 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "imagedrawable.h"
+#include "drawable/imagedrawable.h"
 
 namespace hfcl {
 
@@ -61,7 +61,7 @@ void ImageDrawable::init(const TRStyleElement* style_res)
 	}
 }
 
-bool ImageDrawable::setElement(int e_id, DWORD value)
+bool ImageDrawable::setElement(int e_id, HTData value)
 {
 	switch(e_id){
 		case SYS_SE_IMAGE:
@@ -82,10 +82,10 @@ bool ImageDrawable::setElement(int e_id, DWORD value)
 	return true;
 }
 
-DWORD ImageDrawable::getElement(int e_id) const
+HTData ImageDrawable::getElement(int e_id) const
 {
 	switch(e_id){
-		case SYS_SE_IMAGE:          return (DWORD)m_image;
+		case SYS_SE_IMAGE:          return (HTData)m_image;
 		case SYS_SE_IMAGEDRAWMODE:  return m_format.drawMode;
 		case SYS_SE_IMAGEALIGN:     return m_format.align;
 		case SYS_SE_IMAGEVALIGN:    return m_format.valign;
@@ -93,7 +93,7 @@ DWORD ImageDrawable::getElement(int e_id) const
 	return (m_super ? m_super->getElement(e_id) : 0);
 }
 
-void ImageDrawable::draw(GraphicsContext* gc, int draw_id, const IntRect &rc, DWORD data/* = 0*/, DR_DATA_TYPE type/* = DRDT_NONE*/)
+void ImageDrawable::draw(GraphicsContext* gc, int draw_id, const IntRect &rc, HTData data/* = 0*/, DR_DATA_TYPE type/* = DRDT_NONE*/)
 {
 	Image *img = NULL;
 	
