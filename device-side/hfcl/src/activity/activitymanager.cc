@@ -28,7 +28,7 @@
 #include "activity/activityinfo.h"
 #include "activity/activityfactory.h"
 #include "activity/activitystack.h"
-#include "commondialog/menu.h"
+#include "components/menu.h"
 
 #if 0
 #include "mgcl/mgcl.h"

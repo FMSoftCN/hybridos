@@ -19,13 +19,12 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <string.h>
+#include "resource/themeres.h"
 
 #include "graphics/graphicscontext.h"
 #include "drawable/drawable.h"
 #include "resource/resloader.h"
 #include "resource/respkgmanager.h"
-#include "themeres.h"
 
 namespace hfcl {
 

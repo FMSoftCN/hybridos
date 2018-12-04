@@ -19,50 +19,36 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __IMAGERES_H
-#define __IMAGERES_H
-
-#include "graphics/image.h"
-#include "graphics/gifanimate.h"
-#include "view/animateimageview.h"
+#include "common/stlalternative.h"
 
 namespace hfcl {
 
-class ImageRes
+void vector_base::resize(int sz)
 {
-    public:
-        ImageRes();
+    if (sz < 0)
+        return;
+    if (sz == _count)
+        return;
 
-        ImageRes(const char* imagefile);
+    if (sz < _count) {
+        unsigned char* buff = (unsigned char*) _get(sz);
+        for (int i = sz; i < _count; i++, buff += _size)
+            delete_sub_type(buff);
+    }
 
-        ~ImageRes() {
-			if (NULL != m_image)
-				m_image->unref();
-			else if (NULL != m_gifAnimate)
-				m_gifAnimate->unref();
-            m_image = NULL;
-            m_gifAnimate = NULL;
-		}
+    if (sz == 0) {
+        HFCL_FREE(_buffer);
+        _buffer = NULL;
+        _count = sz;
+        return;
+    }
 
-        /*
-         * load real image
-         */
-        Image* get(const char* resPath);
-
-        /* 
-         * load real gifanimate 
-         */
-        GifAnimate* getGifAnimate(const char* resPath);
-
-		void clean();
-
-    private:
-        const char* m_imagefile;
-        Image* m_image;
-        GifAnimate* m_gifAnimate;
-};
+    _buffer = (unsigned char*)HFCL_REALLOC(_buffer, _size * sz);
+    if (sz > _count) {
+        memset(_get(_count), 0, (sz - _count)*_size);
+    }
+    _count = sz;
+}
 
 } // namespace hfcl
-
-#endif /* __IMAGERES_H */
 

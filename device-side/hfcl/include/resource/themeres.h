@@ -19,26 +19,31 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __THEMERES_H
-#define __THEMERES_H
+#ifndef HFCL_RESOURCE_THEMERES_H_
+#define HFCL_RESOURCE_THEMERES_H_
+
+#include "common/common.h"
+#include "common/stlalternative.h"
+#include "resource/restypes.h"
+#include "drawable/drawable.h"
 
 namespace hfcl {
 
 class ThemeRes {
-    public:
-        ThemeRes();
-        ~ThemeRes();
+public:
+    ThemeRes();
+    ~ThemeRes();
 
-		void setDrawableSetMapTable(TRThemeItem* items);
-		DrawableSet* getDrawableSet(int theme_drset_id);
+    void setDrawableSetMapTable(TRThemeItem* items);
+    DrawableSet* getDrawableSet(int theme_drset_id);
 
-	
-    private:
-		TRThemeItem* m_maptable;
-        string m_theme_name;
+
+private:
+    TRThemeItem* m_maptable;
+    string m_theme_name;
 };
 
 } // namespace hfcl
 
-#endif /* __THEMERES_H */
+#endif /* HFCL_RESOURCE_THEMERES_H_ */
 

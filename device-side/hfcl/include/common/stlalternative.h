@@ -205,10 +205,10 @@ public:
         return c_str() ? 1 : (str ? -1 : 0);
     }
 
-    int compare(size_t pos1, size_t n1, const char* s) const {
+    int compare(unsigned int pos1, unsigned int n1, const char* s) const {
         if (s && c_str()) {
             const char* str  = c_str();
-            size_t len = strlen(str);
+            unsigned int len = strlen(str);
             if (len <= pos1)
                 return -1;
             return strncmp(str + pos1, s, n1);
@@ -255,14 +255,14 @@ public:
         return append(s.c_str());
     }
 
-    size_t length() const {
+    unsigned int length() const {
         if (c_str())
             return strlen(c_str());
         else
             return 0;
     }
 
-    size_t size() const { return length(); }
+    unsigned int size() const { return length(); }
 
     friend bool operator==(const string &s1, const char* s2) {
         return s1.compare(s2) == 0;
@@ -282,8 +282,8 @@ public:
         return news;
     }
 
-    static size_t npos;
-    size_t find(int c, size_t pos = 0) const {
+    static unsigned int npos;
+    unsigned int find(int c, unsigned int pos = 0) const {
         const char *s = c_str();
         if (!s || pos >= length())
             return npos;
@@ -291,9 +291,9 @@ public:
         return fd ? fd - s : npos;
     }
 
-    string substr(size_t pos = 0, size_t n = npos) const {
+    string substr(unsigned int pos = 0, unsigned int n = npos) const {
         const char* s = c_str();
-        size_t len = length();
+        unsigned int len = length();
         if (!s || pos >= len)
             return string();
 
@@ -334,7 +334,6 @@ protected:
     virtual void delete_sub_type(void *subtype)  {}
     virtual void value_copy(void *dest, const void* src) { memcpy(dest, src, _size); }
 
-
     void* _push_back() {
         resize(_count + 1);
         return _get(_count - 1);
@@ -353,6 +352,7 @@ protected:
             return true;
         return false;
     }
+
     void _init_by(const vector_base& v OPT_TRACE_INFO) {
         OPTIMIZE_WARNING;
         _size = (int) v._size;
@@ -363,7 +363,6 @@ protected:
             value_copy((void*)(_buffer+i), (const void*)(buf+i));
         }
     }
-
 
 public:
     class iterator_base {
@@ -416,31 +415,9 @@ public:
     int size() const {
         return _count;
     }
-    void resize(int sz) {
-        if (sz < 0)
-            return;
-        if (sz == _count)
-            return;
 
-        if (sz < _count) {
-            unsigned char* buff = (unsigned char*) _get(sz);
-            for (int i = sz; i < _count; i++, buff += _size)
-                delete_sub_type(buff);
-        }
+    void resize(int sz);
 
-        if (sz == 0) {
-            HFCL_FREE(_buffer);
-            _buffer = NULL;
-            _count = sz;
-            return;
-        }
-
-        _buffer = (unsigned char*)HFCL_REALLOC(_buffer, _size * sz);
-        if (sz > _count) {
-            memset(_get(_count), 0, (sz - _count)*_size);
-        }
-        _count = sz;
-    }
     void clear()
     {
         for (int i=0; i < _count; i ++)
@@ -509,9 +486,9 @@ protected:
         }
     };
 
-    size_t _key_size; //the size of key object
-    size_t _value_size; //the size of value object
-    size_t _count;
+    unsigned int _key_size; //the size of key object
+    unsigned int _value_size; //the size of value object
+    unsigned int _count;
     struct rb_root _root;
 
     virtual int delete_key(void* key) 
@@ -526,7 +503,7 @@ protected:
     virtual void key_copy(void* dest, const void* src) { memcpy(dest, src,_key_size); }
 
     entry_t * new_entry(void* key, void* value) {
-        size_t e_size = sizeof(struct rb_node) + _key_size + _value_size;
+        unsigned int e_size = sizeof(struct rb_node) + _key_size + _value_size;
         entry_t * entry = (entry_t*)HFCL_CALLOC(1, e_size);
         if (entry) {
             key_copy(entry->key(), key);
@@ -603,7 +580,7 @@ protected:
 
     protected:
     ////////////////////////////////////////////////////////
-    map_base(size_t key_size, size_t value_size)
+    map_base(unsigned int key_size, unsigned int value_size)
         : _key_size(key_size), _value_size(value_size), _count(0) {
 			_root.rb_node = NULL;
 	}
@@ -740,9 +717,9 @@ protected:
 
     void _init_by(const map_base& m OPT_TRACE_INFO) {
         OPTIMIZE_WARNING;
-        _value_size = (size_t)m._value_size;
-        _key_size = (size_t)m._key_size;
-        _count = (size_t)m._count;
+        _value_size = (unsigned int)m._value_size;
+        _key_size = (unsigned int)m._key_size;
+        _count = (unsigned int)m._count;
         struct rb_root * proot = (struct rb_root*)&m._root;
         _root.rb_node = (struct rb_node*)_copy_tree((entry_t*)proot->rb_node, NULL);
     }
@@ -755,7 +732,7 @@ public:
         _count = 0;
     }
 
-    size_t size() const {
+    unsigned int size() const {
         return _count ;
     }
     virtual ~map_base() {
@@ -771,10 +748,10 @@ class list_base {
 protected:
     list_t _head;
 
-    size_t _size;
+    unsigned int _size;
     int _count;
 
-    list_base(size_t isize) : _size(isize), _count(0) {
+    list_base(unsigned int isize) : _size(isize), _count(0) {
         INIT_LIST_HEAD(&_head);
     }
 
@@ -855,8 +832,8 @@ protected:
     {
         OPTIMIZE_WARNING;
 
-        _size = (size_t)l._size;
-        _count = (size_t)l._count;
+        _size = (unsigned int)l._size;
+        _count = (unsigned int)l._count;
 
         INIT_LIST_HEAD(&_head);
 
@@ -1006,7 +983,7 @@ protected:
     }
 
 public:
-    size_t size() const {
+    unsigned int size() const {
         return _count;
     }
 

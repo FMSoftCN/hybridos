@@ -19,24 +19,20 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "mgcl/mgcl.h"
+
+#include "activity/activitymanager.h"
 #include "common/common.h"
 #include "common/log.h"
-#include "mgcl/mgcl.h"
 #include "common/event.h"
-#include "appmanager.h"
-#include "hal_misc.h"
-
 
 namespace hfcl {
 
-
-BOOL HFCL_GetMessage(MSG* pmsg, HWND hwnd)
+bool mgclGetMessage(PMSG pmsg, HWND hwnd)
 {
-    GetCosEvent(hwnd);
     return GetMessage(pmsg, hwnd);
 }
 
-#ifdef  USE_HFCL_FONT
 int mgclGetTextMCharInfo(HWND hWnd, const char* mstr, int len, int* pos_chars)
 {
 	if (!IsWindow(hWnd))
@@ -44,7 +40,7 @@ int mgclGetTextMCharInfo(HWND hWnd, const char* mstr, int len, int* pos_chars)
 	
 	return GetTextMCharInfo(GetWindowFont(hWnd), mstr, len, pos_chars);
 }
-#endif
+
 DWORD mgclDoModal(HWND hWnd, BOOL bAutoDestroy)
 {
     MSG Msg;
@@ -82,7 +78,7 @@ DWORD mgclDoModal(HWND hWnd, BOOL bAutoDestroy)
         avoid the hWnd changed
     */
 
-    while (HFCL_GetMessage(&Msg, hwnd)) {
+    while (mgclGetMessage(&Msg, hwnd)) {
         // hook key
         // update lcd service and key tone FIXME
         if (Msg.hwnd == HWND_DESKTOP
@@ -174,7 +170,7 @@ DWORD mgclDoModalView(HWND hwnd)
 	
     SetActiveWindow(hwnd);
 
-    while (HFCL_GetMessage(&Msg, hwnd)) {
+    while (mgclGetMessage(&Msg, hwnd)) {
         // hook key
         // update lcd service and key tone FIXME
         if (Msg.hwnd == HWND_DESKTOP
@@ -236,6 +232,7 @@ void mgclEndDialog(HWND hwnd, int endcode)
     SendNotifyMessage(hwnd, MGCL_MSG_MNWND_ENDDIALOG, 0, (LPARAM)endcode);
 }
 
+#if 0
 HWND mgclCreateMainWindow(PMAINWINCREATE pCreateInfo)
 {
     return CreateMainWindow(pCreateInfo);
@@ -398,6 +395,7 @@ unsigned long mgclGetWindowExStyle(HWND hwnd)
 {
     return GetWindowExStyle(hwnd);
 }
+#endif
 
 } // namespace hfcl
 

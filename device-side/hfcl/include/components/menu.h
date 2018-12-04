@@ -22,7 +22,10 @@
 #ifndef __HFCL_MENU_H__
 #define __HFCL_MENU_H__
 
+#include "common/common.h"
+#include "common/contextstream.h"
 #include "activity/window.h"
+#include "activity/intent.h"
 #include "view/viewcontext.h"
 #include "view/simpleitemview.h"
 #include "view/listview.h"
@@ -186,11 +189,11 @@ class Menu : public Window, ViewContext {
 		void onClick(POINT pt, Event::EventType type);
         void setMenuLeftButtonText(const char * text);
 	 	void setMenuLeftButtonText(int strid);
-        //const char * getMenuLeftButtonText(void) const;
+        const char * getMenuLeftButtonText(void) const;
 
         void setMenuRightButtonText(const char * text);
 	 	void setMenuRightButtonText(int strid);
-       //const char * getMenuRightButtonText(void) const;
+        const char * getMenuRightButtonText(void) const;
 
         static Menu* getCurrentMenu(void);
         void showMenu(Activity *app = NULL);
@@ -457,7 +460,7 @@ class Menu : public Window, ViewContext {
 		IntRect getMenuRect() {return m_menuItemList->getRect(); }
 		void setProcessIng(bool isProcessing){ m_isProcessing = isProcessing;}
 		bool isProcessing() { return m_isProcessing; }
-		Activity* ownApp(void){return m_ownApp;}
+		Activity* ownActivity(void){return m_ownActivity;}
 	 protected:	
 	 	void updateParentMenu(Menu * menu);
 		
@@ -472,7 +475,7 @@ class Menu : public Window, ViewContext {
 
         PanelView*		m_separator_top;        
         PanelView*		m_separator_bottom;        
-        Activity*    m_ownApp;
+        Activity*    m_ownActivity;
 
 		int          m_list_themedrset_id;
 		int		   m_item_themedrset_id;

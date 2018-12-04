@@ -19,13 +19,14 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "drawable/drawable.h"
 #include "resource/respackage.h"
+
+#include "common/stlalternative.h"
+#include "drawable/drawable.h"
 #include "resource/resloader.h"
 #include "resource/respkgmanager.h"
-#include "themeres.h"
-#include "appmanager.h"
-
+#include "resource/themeres.h"
+#include "activity/activitymanager.h"
 
 namespace hfcl {
 
@@ -697,13 +698,12 @@ bool ResPackage::setTheme(HTResId theme_res_id, bool update_system)
 
 	//FIXME we need update all views in the system
 	m_theme = themeR;
-	m_theme_id  = theme_res_id;
+	m_theme_id = theme_res_id;
 	if (update_system) {
-		ActivityManager::getInstance()->broadcastMessage(HFCL_MSG_CHANGE_THEME, theme_res_id, 0);	
-		// do NOT need them here, we do this in mNguxWindow.cpp when broadcast message "HFCL_MSG_CHANGE_THEME"
-		//ActivityManager::getInstance()->broadcastMessage(MSG_ERASEBKGND, 0, 0);
-		//ActivityManager::getInstance()->broadcastMessage(MSG_PAINT, 0, 0);
+        _DBG_PRINTF ("ResPackage::setTheme: NOT IMPLEMENTED\n");
+		// ActivityManager::getInstance()->broadcastMessage(HFCL_MSG_CHANGE_THEME, theme_res_id, 0);	
 	}
+
 	return true;
 }
 

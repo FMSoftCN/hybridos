@@ -18,6 +18,7 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+
 #ifndef HFCL_RESTYPE_H
 #define HFCL_RESTYPE_H
 
@@ -151,9 +152,9 @@ enum ResEncoding
 };
 
 #ifdef __cplusplus
+
 namespace hfcl {
-/////////////////////////////////////////////////
-//the inner resource support
+
 typedef struct INNER_RES_INFO {
 	const char* res_name;
 	unsigned char* data;
@@ -165,7 +166,7 @@ typedef struct INNER_RES_ARRAY
     enumResType type;
     INNER_RES_INFO *pInner_res_info;
     unsigned int  number;
-}INNER_RES_ARRAY;
+} INNER_RES_ARRAY;
 
 typedef struct MENU_RES_ARRAY
 {
@@ -229,9 +230,6 @@ typedef struct TRDrawableSetGroupArrayItem {
 	HTResId    drsetgroup_super_id;
 	TRDrawableSetGroupItem drawablesets[DR_DRSET_DRSETGROUP_ARRAY_SIZE];
 }TRDrawableSetGroupArrayItem;
-
-
-
 
 } // namespace hfcl
 

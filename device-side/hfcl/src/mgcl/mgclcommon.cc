@@ -18,26 +18,12 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include "common/common.h"
-#include "codeconvert.h"
+
 #include "mgcl/mgcl.h"
+#include "common/common.h"
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include "hal_fs.h"
-
-#ifdef __cplusplus
-}
-#endif
-
-
+#if 0
 namespace hfcl {
-
-
-typedef unsigned char UINT8;
 
 HTHandle mgclFopen(const char* path, const int mode)
 {
@@ -46,7 +32,7 @@ HTHandle mgclFopen(const char* path, const int mode)
     //strcpy(unicodeFileName,path);
     //NGUtf8ToUnicode((unsigned char*)path, (unsigned char*)unicodeFileName);
 
-    return  MMI_FS_Open((const UINT8*)path, (INT32)mode);
+    return  MMI_FS_Open((const Uint8*)path, (INT32)mode);
 }
 
 int mgclFclose(HTHandle fPointer)
@@ -125,12 +111,12 @@ int mgclRemove(const char* pathname)
     //memset(unicodeFileName, 0, sizeof(unicodeFileName));
     
     //NGUtf8ToUnicode((unsigned char*)pathname, (unsigned char*)unicodeFileName);
-    return MMI_FS_Delete((const UINT8 *)pathname);
+    return MMI_FS_Delete((const Uint8 *)pathname);
 }
 
 int mgclRename(const char* oldpath, const char* newpath)
 {
-    return MMI_FS_Rename((const UINT8 *)oldpath, (const UINT8 *)newpath);
+    return MMI_FS_Rename((const Uint8 *)oldpath, (const Uint8 *)newpath);
 }
 
 int mgclTruncate(HTHandle stream, unsigned int nFileSize)
@@ -138,6 +124,7 @@ int mgclTruncate(HTHandle stream, unsigned int nFileSize)
     return MMI_FS_Truncate(stream, nFileSize);
 }
 
-
 } // namespace hfcl
+
+#endif
 

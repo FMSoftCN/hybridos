@@ -19,9 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <string.h>
+#include "resource/fontres.h"
 
-#include "fontres.h"
 #include "resource/resloader.h"
 
 namespace hfcl {

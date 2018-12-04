@@ -19,20 +19,25 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "textview.h"
-#include "tipdlg.h"
+#include "components/tipdlg.h"
+#include "components/menu.h"
+
+#include "view/textview.h"
 #include "resource/respkgmanager.h"
-#include "nguxmenu.h"
 #include "services/timerservice.h"
-#include "application.h"
-#include "appmanager.h"
+#include "activity/activity.h"
+#include "activity/activitymanager.h"
+
+// FIXME
+#define SCREEN_WIDTH        240
+#define SCREEN_HEIGHT       320
 
 using namespace hfcl;
 
 TipDlg::TipDlg(HTResId resid)
 {
     m_textView = NULL;
-    m_rect = IntRect(10, 20, _ngux_screen_w - 10, _ngux_screen_h - 20);
+    m_rect = IntRect(10, 20, SCREEN_WIDTH - 10, SCREEN_HEIGHT - 20);
 
     m_timerId = 0;
     m_autoCloseTime = 0;
@@ -61,14 +66,14 @@ Intent* TipDlg::onDestroy(ContextStream* contextstream)
 
 void TipDlg::showDlg(void)
 {
-    CustomEvent event(Event::CUSTOM_NOTIFY, CustomEvent::CUS_DLG_SHOW, int(this));
+    CustomEvent event(Event::CUSTOM_NOTIFY, CustomEvent::CUS_DLG_SHOW, (HTData)this);
     raiseEvent(&event);
-    setActiveWindow((unsigned int)viewWindow());
+    setActiveWindow(viewWindow());
 }
 
 void TipDlg::hideDlg(void)
 {
-    CustomEvent event(Event::CUSTOM_NOTIFY, CustomEvent::CUS_DLG_HIDE, int(this));
+    CustomEvent event(Event::CUSTOM_NOTIFY, CustomEvent::CUS_DLG_HIDE, (HTData)this);
     raiseEvent(&event);
     hide();
 }
@@ -78,13 +83,13 @@ int TipDlg::closeDlg(int endCode)
     Menu *menu = Menu::getCurrentMenu();
 
     if (menu) {
-        setActiveWindow((unsigned int)(menu->viewWindow()));
+        setActiveWindow(menu->viewWindow());
     } else {
-        Activity* app = (Activity*)(ActivityManager::getInstance()->getCurrentApp());
-        setActiveWindow((unsigned int)(app->viewWindow()));
+        Activity* act = (Activity*)(ActivityManager::getInstance()->getCurrentActivity());
+        setActiveWindow(act->viewWindow());
     }
 
-    CustomEvent event(Event::CUSTOM_NOTIFY, CustomEvent::CUS_DLG_HIDE, int(this));
+    CustomEvent event(Event::CUSTOM_NOTIFY, CustomEvent::CUS_DLG_HIDE, (HTData)this);
     raiseEvent(&event);
 
     if(m_timerId)
@@ -99,7 +104,7 @@ void TipDlg::resetRect(int left, int top, int right, int bottom)
 {
     setRect(left, top, right, bottom);
     IntRect rc(left, top, right, bottom);
-    setAppRect(rc);
+    setWindowRect(rc);
 }
 
 bool TipDlg::onKey(int keyCode, KeyEvent* event)

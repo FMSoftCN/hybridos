@@ -27,7 +27,7 @@
 #include "activity/intent.h"
 #include "activity/baseactivity.h"
 #include "activity/activitystack.h"
-#include "commondialog/menu.h"
+#include "components/menu.h"
 
 namespace hfcl {
 

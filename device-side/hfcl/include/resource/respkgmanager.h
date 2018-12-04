@@ -26,11 +26,9 @@
 
 //enum { RPKG_sys = 0 };
 
-#include "restypes.h"
+#include "resource/restypes.h"
 #include "graphics/graphicscontext.h"
-#include "ngux_language_ids.h"
-#include "ngux_string_ids.h"
-#include "ngux_nl10n_string_ids.h"
+#include "resource/language_ids.h"
 
 namespace hfcl {
 

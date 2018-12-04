@@ -21,19 +21,25 @@
 
 #undef _DEBUG
 
-#include "application.h"
-#include "appmanager.h"
-#include "nguxmenu.h"
+#include "components/menu.h"
+
+#include "activity/activity.h"
+#include "activity/activitymanager.h"
 #include "resource/respkgmanager.h"
-#include "menubarview.h"
+#include "view/menubarview.h"
 #include "graphics/color.h"
 
 #define MAX_MENUITEM_NUM    5
 #define OUT_WIDTH           10
 
-#ifdef __SUPPORT_MANUAL_KEYPAD_LOCK_IN_ALLSCREEN__
-extern void enterLockFrame(bool bManual /* = false */, bool bAllScreens);
-#endif
+#define MENU_SL_ITEM_H1     20
+#define MENU_SL_ITEM_H2     30
+#define MENU_ITEM_H         40
+#define MENUBAR_H           40
+
+/* FIXME */
+#define SCREEN_WIDTH        240
+#define SCREEN_HEIGHT       320
 
 namespace hfcl {
 
@@ -103,9 +109,9 @@ void MenuItem::calcRect(const IntRect& rc, IntRect& txtRc, IntRect& imgRc)
 #if 0
     if (m_idxText[0] != '\0') {
         if(IsAllItemViewNeedConvert()){
-            simpleItemRc.setRect(rc.left(), rc.top(), rc.right() - _ngux_sl_item_h2, rc.bottom());
+            simpleItemRc.setRect(rc.left(), rc.top(), rc.right() - MENU_SL_ITEM_H2, rc.bottom());
         } else {
-            simpleItemRc.setRect(rc.left() + _ngux_sl_item_h2, rc.top(), rc.right(), rc.bottom());
+            simpleItemRc.setRect(rc.left() + MENU_SL_ITEM_H2, rc.top(), rc.right(), rc.bottom());
         }
     }
 #endif
@@ -127,11 +133,11 @@ void MenuItem::drawContent(GraphicsContext* context, IntRect &rc, int status /*=
         _DBG_PRINTF("MenuItem::drawContent>>>%d,%d,%d,%d\n",rc.left(),rc.top(),rc.right(),rc.bottom());
         if(IsAllItemViewNeedConvert())
         {
-            idxItemRc.setRect(rc.right() - _ngux_sl_item_h2, rc.top(), rc.right(), rc.bottom());
+            idxItemRc.setRect(rc.right() - MENU_SL_ITEM_H2, rc.top(), rc.right(), rc.bottom());
         } 
         else 
         {
-            idxItemRc.setRect(rc.left(), rc.top(), rc.left() + _ngux_sl_item_h2, rc.bottom());
+            idxItemRc.setRect(rc.left(), rc.top(), rc.left() + MENU_SL_ITEM_H2, rc.bottom());
         }
         
         m_drset->draw(context, DR_CONTENT2, status, idxItemRc,(DWORD)m_idxText, DRDT_TEXT);
@@ -143,9 +149,9 @@ void MenuItem::drawContent(GraphicsContext* context, IntRect &rc, int status /*=
 
 void MenuItem::onMenuEnter(Menu* owner)
 {
-    Activity *ap = (Activity *)(ActivityManager::getInstance()->getCurrentApp());
-    if(ap != NULL) {
-        ap->bindMenu(NULL); 
+    Activity *act = (Activity *)(ActivityManager::getInstance()->getCurrentActivity());
+    if(act != NULL) {
+        act->bindMenu(NULL); 
     }
 
     if (NULL != owner) {
@@ -242,9 +248,9 @@ SubMenuItem::SubMenuItem(int strId, Image *img, int i_id, Menu* submenu, bool b_
 void SubMenuItem::onMenuEnter(Menu* owner)
 {
     if (m_subMenu) {
-        Activity *ap = (Activity *)(ActivityManager::getInstance()->getCurrentApp());
-        if (ap != NULL) {
-            ap->bindMenu(m_subMenu);
+        Activity *act = (Activity *)(ActivityManager::getInstance()->getCurrentActivity());
+        if (act != NULL) {
+            act->bindMenu(m_subMenu);
         }
         stopRoll();
         m_subMenu->setMenuParent(owner);
@@ -259,9 +265,9 @@ void SubMenuItem::onMenuRight(Menu * owner)
     }
 
     if (m_subMenu) {
-        Activity *ap = (Activity *)(ActivityManager::getInstance()->getCurrentApp());
-        if (ap != NULL) {
-            ap->bindMenu(m_subMenu);
+        Activity *act = (Activity *)(ActivityManager::getInstance()->getCurrentActivity());
+        if (act != NULL) {
+            act->bindMenu(m_subMenu);
         }
         stopRoll();
         m_subMenu->setMenuParent(owner);
@@ -285,11 +291,11 @@ void SubMenuItem::drawContent(GraphicsContext* context, IntRect &rc, int status)
         status = DRAWSTATE_DISABLED;
 
     if(IsAllItemViewNeedConvert()) {
-        rc.setRect(rc.left()+3, rc.top()+1, rc.left() + _ngux_sl_item_h1/2, rc.bottom());
+        rc.setRect(rc.left()+3, rc.top()+1, rc.left() + MENU_SL_ITEM_H1/2, rc.bottom());
         m_drset->draw(context, DR_LEFTARROW, status, rc);
     }
     else {
-        rc.setRect(rc.right() - _ngux_sl_item_h1+10, rc.top()+1, rc.right(), rc.bottom());
+        rc.setRect(rc.right() - MENU_SL_ITEM_H1+10, rc.top()+1, rc.right(), rc.bottom());
         m_drset->draw(context, DR_RIGHTARROW, status, rc);
     }
 }
@@ -299,8 +305,8 @@ Menu* Menu::m_currentMenu = NULL;
 
 Menu::Menu(HTResId resid)
     : m_menuItemList(NULL)
-    , m_menuItemHeight(_ngux_menuitem_h)
-    , m_maxHeight(_ngux_menuitem_h*MAX_MENUITEM_NUM)
+    , m_menuItemHeight(MENU_ITEM_H)
+    , m_maxHeight(MENU_ITEM_H*MAX_MENUITEM_NUM)
     , m_menuParent(NULL)
     , m_menuBar(NULL)
     , m_separator_top(NULL)
@@ -318,8 +324,8 @@ Menu::Menu(HTResId resid)
 
 Menu::Menu(int list_theme_drset_id, int item_theme_drset_id, int menubar_theme_drset_id, HTResId resid)
     : m_menuItemList(NULL)
-    , m_menuItemHeight(_ngux_menuitem_h)
-    , m_maxHeight(_ngux_menuitem_h*MAX_MENUITEM_NUM)
+    , m_menuItemHeight(MENU_ITEM_H)
+    , m_maxHeight(MENU_ITEM_H*MAX_MENUITEM_NUM)
     , m_menuParent(NULL)
     , m_menuBar(NULL)
     , m_separator_top(NULL)
@@ -338,8 +344,8 @@ Menu::Menu(int list_theme_drset_id, int item_theme_drset_id, int menubar_theme_d
 
 Menu::~Menu()
 {
-    if (m_ownApp != NULL && ActivityManager::getInstance()->isExist(m_ownApp))
-        m_ownApp->setLayer(-1);
+    if (m_ownActivity != NULL && ActivityManager::getInstance()->isExist(m_ownActivity))
+        m_ownActivity->setLayer(-1);
     // removeAll();
 
     _DBG_PRINTF ("MENU TRACE :: delete menu [%p],", this);
@@ -351,9 +357,9 @@ void Menu::create(HTResId resid)
     hideMenu();
 
     // create an invisible main window for this menu.
-    int h = MAX_MENUITEM_NUM * _ngux_menuitem_h + _ngux_menubar_h;
-    int y = _ngux_screen_h - h;
-    createMainWindow (0, y, _ngux_screen_w, h, false);
+    int h = MAX_MENUITEM_NUM * MENU_ITEM_H + MENUBAR_H;
+    int y = SCREEN_HEIGHT - h;
+    createMainWindow (0, y, SCREEN_WIDTH, h, false);
 
     CreateViewFromRes (resid == 0 ? UI_TEMPL : resid, this, this, NULL);
     // theme listview
@@ -396,9 +402,9 @@ void Menu::drawContent(GraphicsContext* context, IntRect &rc, int status)
 
 void Menu::drawBackground(GraphicsContext* context, IntRect &rc, int status)
 {
-    Activity* app = (Activity*)(ActivityManager::getInstance()->getCurrentApp());
+    Activity* act = (Activity*)(ActivityManager::getInstance()->getCurrentActivity());
 
-    if (app->menu() != m_currentMenu) {
+    if (act->menu() != m_currentMenu) {
         return;
     }
 
@@ -408,13 +414,13 @@ void Menu::drawBackground(GraphicsContext* context, IntRect &rc, int status)
 
         Menu *_prt = getMenuParent();
 
-        if (app != NULL) {
-            int old = app->setLayer(0);
+        if (act != NULL) {
+            int old = act->setLayer(0);
 
-            //IncludeWindowStyle((unsigned int)app->viewWindow(), WS_VISIBLE);
-            ShowWindow((unsigned int)app->viewWindow(), SW_SHOWNORMAL);
-            app->updateWindow();// draw cur app to layer 0.
-            app->setLayer(old);
+            //IncludeWindowStyle((unsigned int)act->viewWindow(), WS_VISIBLE);
+            ShowWindow(act->viewWindow(), SW_SHOWNORMAL);
+            act->updateWindow();// draw cur act to layer 0.
+            act->setLayer(old);
         }
 
         if ( _prt != NULL) {
@@ -432,12 +438,12 @@ void Menu::drawBackground(GraphicsContext* context, IntRect &rc, int status)
         else if(itemnum < 2)
             itemnum = 2;
 
-        h = itemnum * _ngux_menuitem_h + _ngux_menubar_h;
-        y = _ngux_screen_h - h;
+        h = itemnum * MENU_ITEM_H + MENUBAR_H;
+        y = SCREEN_HEIGHT - h;
 
-        IntRect rc(0, y, m_rect.width(), _ngux_screen_h);
+        IntRect rc(0, y, m_rect.width(), SCREEN_HEIGHT);
 
-        //getAppClientRect(rc);
+        //getActivityClientRect(rc);
         // fill transparent color to layer 0.
         GraphicsContext::screenGraphics()->fillRect(rc, 0x00, 0x00, 0x00, 0x80);
         GraphicsContext::screenGraphics()->setLayer(1);
@@ -446,7 +452,7 @@ void Menu::drawBackground(GraphicsContext* context, IntRect &rc, int status)
 
         //IncludeWindowStyle((unsigned int)this->viewWindow(), WS_VISIBLE); // reset the menu clip rect for draw menu context
 #endif
-        ShowWindow((unsigned int)this->viewWindow(), SW_SHOWNORMAL);
+        ShowWindow(this->viewWindow(), SW_SHOWNORMAL);
     }
 }
 
@@ -456,43 +462,38 @@ bool Menu::onKey(int keyCode, KeyEvent* event)
         m_menuBar->dispatchEvent(event);
 
     if(keyCode == KeyEvent::KEYCODE_CURSOR_UP
-            || keyCode == KeyEvent::KEYCODE_CURSOR_DOWN) 
-    {
+            || keyCode == KeyEvent::KEYCODE_CURSOR_DOWN) {
         m_menuItemList->dispatchEvent(event);
         return DISPATCH_STOP_MSG;
     }
 
-    if (event->eventType() == Event::KEY_UP) 
-    {
-        switch (keyCode) 
-        {
-            case KeyEvent::KEYCODE_0:
-                keyCode = KeyEvent::KEYCODE_9+1;
-            case KeyEvent::KEYCODE_1:
-            case KeyEvent::KEYCODE_2:
-            case KeyEvent::KEYCODE_3:
-            case KeyEvent::KEYCODE_4:
-            case KeyEvent::KEYCODE_5:
-            case KeyEvent::KEYCODE_6:
-            case KeyEvent::KEYCODE_7:
-            case KeyEvent::KEYCODE_8:
-            case KeyEvent::KEYCODE_9:
-            //case KeyEvent::KEYCODE_0:
-            case KeyEvent::KEYCODE_STAR:
-                if ( (keyCode - KeyEvent::KEYCODE_1) < m_menuItemList->itemCount()  && !m_isProcessing) 
-                {
-                    setMenuHilightIndex(keyCode - KeyEvent::KEYCODE_1);
-                    updateWindow();
-                    onMenuEnter();
-                }
-                break;
-            case KeyEvent::KEYCODE_ENTER: 
+    if (event->eventType() == Event::KEY_UP) {
+        switch (keyCode) {
+        case KeyEvent::KEYCODE_0:
+        case KeyEvent::KEYCODE_1:
+        case KeyEvent::KEYCODE_2:
+        case KeyEvent::KEYCODE_3:
+        case KeyEvent::KEYCODE_4:
+        case KeyEvent::KEYCODE_5:
+        case KeyEvent::KEYCODE_6:
+        case KeyEvent::KEYCODE_7:
+        case KeyEvent::KEYCODE_8:
+        case KeyEvent::KEYCODE_9:
+            if ((keyCode - KeyEvent::KEYCODE_0) < m_menuItemList->itemCount()  && !m_isProcessing) {
+                setMenuHilightIndex(keyCode - KeyEvent::KEYCODE_1);
+                updateWindow();
+                onMenuEnter();
+            }
+            break;
+
+        case KeyEvent::KEYCODE_ENTER: 
             if (!m_isProcessing) {
                    onMenuEnter();
             }
             return DISPATCH_STOP_MSG;
-            case KeyEvent::KEYCODE_SOFTKEY_LEFT:
-            case KeyEvent::KEYCODE_CURSOR_LEFT:
+
+        case KeyEvent::KEYCODE_SOFTKEY_LEFT:
+        case KeyEvent::KEYCODE_CURSOR_LEFT:
 #if 0
             if (!m_isProcessing && ItemView::IsAllItemViewNeedConvert()) 
             {
@@ -503,43 +504,35 @@ bool Menu::onKey(int keyCode, KeyEvent* event)
             }
                 break;
 #endif
-            case KeyEvent::KEYCODE_CURSOR_RIGHT:
-            if (!m_isProcessing && !ItemView::IsAllItemViewNeedConvert()) 
-            {
+        case KeyEvent::KEYCODE_CURSOR_RIGHT:
+            if (!m_isProcessing && !ItemView::IsAllItemViewNeedConvert()) {
                     MenuItem* mi = getCurMenuItem();
                     if (mi->isDisabled())
                         break;
                     mi->onMenuRight(this);
             }
-                break;
-            case KeyEvent::KEYCODE_SOFTKEY_RIGHT: 
-                {
-                    hide();
-                    //FIXME: cancel or leave from menu
-                    notifyToParent(CUSTOM_MENU_KEY_SR, getCurMenuItemID());
-                    closeMenu();
-                }
-                break;
-            case KeyEvent::KEYCODE_STOP: 
-                {
-                    Activity* app = (Activity*)(ActivityManager::getInstance()->getCurrentApp());
-                    hideMenu();
-                    event->setSource((Object*)getCurMenuItemID()); // indicate key event come from menu
-                    closeAllMenu();
-                    app->onKey(keyCode, event);
-                }
             break;
-            default:
-                break;
+
+        case KeyEvent::KEYCODE_SOFTKEY_RIGHT: {
+            hide();
+            notifyToParent(CUSTOM_MENU_KEY_SR, getCurMenuItemID());
+            closeMenu();
+            break;
+        }
+
+        case KeyEvent::KEYCODE_STOP: {
+            Activity* act = (Activity*)(ActivityManager::getInstance()->getCurrentActivity());
+            hideMenu();
+            event->setSource((HTData)getCurMenuItemID()); // indicate key event come from menu
+            closeAllMenu();
+            act->onKey(keyCode, event);
+            break;
+        }
+
+        default:
+            break;
         }
     }
-#ifdef __SUPPORT_MANUAL_KEYPAD_LOCK_IN_ALLSCREEN__   
-    else if(event->eventType() == Event::KEY_LONGPRESSED && keyCode == KeyEvent::KEYCODE_STAR)
-    {
-        enterLockFrame(true, true);
-        return DISPATCH_STOP_MSG;
-    }
-#endif
 
     return DISPATCH_CONTINUE_MSG;
 }
@@ -547,22 +540,20 @@ bool Menu::onKey(int keyCode, KeyEvent* event)
 void Menu::onMenuEnter(void)
 {
     MenuItem* mi = getCurMenuItem();
-   int miId = mi->id();
-   bool hasSub = mi->getSubMenu() != NULL;
-   
+    int miId = mi->id();
+    bool hasSub = mi->getSubMenu() != NULL;
+
     if (mi->isDisabled())
         return;
 
-   m_isProcessing = true;
-   
+    m_isProcessing = true;
+
     mi->onMenuEnter(this);
-   notifyToParent(Menu::CUSTOM_MENU_KEY_SL, miId);
-   
-   if(m_currentMenu != NULL && !hasSub && !m_isClose)
-   {
-      closeAllMenu();
-   }
-   
+    notifyToParent(Menu::CUSTOM_MENU_KEY_SL, miId);
+
+    if(m_currentMenu != NULL && !hasSub && !m_isClose) {
+        closeAllMenu();
+    }
 }
 
 void Menu::onClick(POINT pt, Event::EventType type)
@@ -584,12 +575,11 @@ void Menu::setMenuLeftButtonText(int strid)
     }
 }
 
-#if 0
 const char * Menu::getMenuLeftButtonText(void) const
 {
     return m_menuBar ? m_menuBar->leftText().c_str() : NULL;
 }
-#endif
+
 void Menu::setMenuRightButtonText(const char * text)
 {
     if (NULL != m_menuBar) {
@@ -603,12 +593,12 @@ void Menu::setMenuRightButtonText(int strid)
         m_menuBar->setRightText(strid);
     }
 }
-#if 0
+
 const char * Menu::getMenuRightButtonText(void) const
 {
     return m_menuBar ? m_menuBar->rightText().c_str() : NULL;
 }
-#endif
+
 Menu* Menu::getCurrentMenu(void)
 {
     return m_currentMenu;
@@ -621,7 +611,7 @@ void Menu::updateParentMenu(Menu * menuP)
 
    menuP->setLayer(0);
    //IncludeWindowStyle((unsigned int)menuP->viewWindow(), WS_VISIBLE);
-   ShowWindow((unsigned int)menuP->viewWindow(), SW_SHOWNORMAL);
+   ShowWindow(menuP->viewWindow(), SW_SHOWNORMAL);
    menuP->updateWindow(false);   
 
    Menu* parent = menuP->getMenuParent();
@@ -630,7 +620,7 @@ void Menu::updateParentMenu(Menu * menuP)
    }
 }
 
-void Menu::showMenu(Activity *app)
+void Menu::showMenu(Activity *act)
 {
     int barWidth;
 
@@ -642,10 +632,10 @@ void Menu::showMenu(Activity *app)
         if(m_currentMenu != getMenuParent()) {
             // if the current menu is not my parent
             // close it
-            Activity *_app = m_currentMenu->ownApp();
+            Activity *_act = m_currentMenu->ownActivity();
             m_currentMenu->closeMenu(m_currentMenu);
-            if (_app != NULL) {
-                _app->bindMenu(NULL);
+            if (_act != NULL) {
+                _act->bindMenu(NULL);
             }
         }
         else {
@@ -653,28 +643,28 @@ void Menu::showMenu(Activity *app)
         }
     }
   
-    if (app) {
-        m_ownApp = app;
-        app->bindMenu(this);
+    if (act) {
+        m_ownActivity = act;
+        act->bindMenu(this);
     }
     else {
-        Activity *ap = (Activity *)(ActivityManager::getInstance()->getCurrentApp());   
-        ap->bindMenu(this);
-        m_ownApp = ap;
+        Activity *act = (Activity *)(ActivityManager::getInstance()->getCurrentActivity());   
+        act->bindMenu(this);
+        m_ownActivity = act;
     }
 
-    if (m_ownApp) {
-        HWND owner = m_ownApp->viewWindow();
+    if (m_ownActivity) {
+        HWND owner = m_ownActivity->viewWindow();
         if (IsWindowEnabled (owner)) {
             EnableWindow (owner, FALSE);
             InvalidateRect (owner, NULL, TRUE);
-            _DBG_PRINTF ("Disable and update app window here: 0x%x", owner);
+            _DBG_PRINTF ("Disable and update act window here: 0x%x", owner);
         }
     }
 
     g_needUpdateBkg = TRUE;
     setLayer(1);
-    setActiveWindow((unsigned int)viewWindow());
+    setActiveWindow(viewWindow());
 
     m_currentMenu = this;
     m_isProcessing = false;
@@ -713,8 +703,8 @@ void Menu::hideMenu(void)
         _prt->hideMenu();
     }
 
-    if (m_ownApp != NULL)
-        m_ownApp->setLayer(-1);
+    if (m_ownActivity != NULL)
+        m_ownActivity->setLayer(-1);
 
     hide();
 
@@ -723,19 +713,19 @@ void Menu::hideMenu(void)
 
 void Menu::closeAllMenu(void)
 {
-    Activity *ap = (Activity *)(ActivityManager::getInstance()->getCurrentApp());
+    Activity *act = (Activity *)(ActivityManager::getInstance()->getCurrentActivity());
    
-    _DBG_PRINTF ("MENU TRACE :: closeAllMenu menu is : [%s] \n", ap->name());
+    _DBG_PRINTF ("MENU TRACE :: closeAllMenu menu is : [%s] \n", act->name());
 
-    if (ap != NULL && ap == m_ownApp) {
-        HWND owner = ap->viewWindow();
+    if (act != NULL && act == m_ownActivity) {
+        HWND owner = act->viewWindow();
         EnableWindow (owner, TRUE);
         InvalidateRect (owner, NULL, TRUE);
-        _DBG_PRINTF ("Enable app window here: 0x%x", owner);
+        _DBG_PRINTF ("Enable act window here: 0x%x", owner);
 
-        ap->setLayer(-1);
-        setActiveWindow((unsigned int)ap->viewWindow());
-        ap->bindMenu(NULL);
+        act->setLayer(-1);
+        setActiveWindow(act->viewWindow());
+        act->bindMenu(NULL);
     }
    
     if (NULL != m_currentMenu) {
@@ -763,11 +753,11 @@ void Menu::closeMenu(Menu *menu)
 
 void Menu::closeMenu(void)
 {
-    Activity *ap = (Activity *)(ActivityManager::getInstance()->getCurrentApp());
+    Activity *act = (Activity *)(ActivityManager::getInstance()->getCurrentActivity());
 
     _DBG_PRINTF ("MENU TRACE :: after Menu closeMenu m_currentMenu is:%p\n", m_currentMenu);
     if (NULL == m_currentMenu) {
-        m_currentMenu = ap->menu();
+        m_currentMenu = act->menu();
     }
 
     if (NULL != m_currentMenu) {
@@ -782,21 +772,21 @@ void Menu::closeMenu(void)
             m_currentMenu = NULL;
         }
 
-        if (NULL != p && p->ownApp() == ap) {
+        if (NULL != p && p->ownActivity() == act) {
             _DBG_PRINTF ("MENU TRACE :: after Menu closeMenu p is:%p\n", p);
             m_currentMenu = p;
             p->showMenu();
         } 
         else {
-            _DBG_PRINTF ("MENU TRACE :: after Menu closeMenu app is:%p  app name is:(%s)\n", ap, ap == NULL ? "null":ap->name() );
-            if (NULL != ap) {
-                HWND owner = ap->viewWindow();
+            _DBG_PRINTF ("MENU TRACE :: after Menu closeMenu act is:%p  act name is:(%s)\n", act, act == NULL ? "null":act->name() );
+            if (NULL != act) {
+                HWND owner = act->viewWindow();
                 EnableWindow (owner, TRUE);
                 InvalidateRect (owner, NULL, TRUE);
-                _DBG_PRINTF ("Enable app window here: 0x%x", owner);
-                setActiveWindow((unsigned int)ap->viewWindow());
+                _DBG_PRINTF ("Enable act window here: 0x%x", owner);
+                setActiveWindow(act->viewWindow());
             }
-            ap->bindMenu(NULL);
+            act->bindMenu(NULL);
         }
     }
 }
@@ -819,7 +809,7 @@ bool Menu::addMenuItem(MenuItem* mi)
 
     mi->setRect(0, 0, m_menuItemList->getRect().width(), m_menuItemHeight);
     if(mi->getSubMenu())
-        mi->setTextRightGap(_ngux_sl_item_h2);
+        mi->setTextRightGap(MENU_SL_ITEM_H2);
     else
         mi->setTextRightGap(0);
 
@@ -845,7 +835,7 @@ bool Menu::addMenuItemByIndex(MenuItem* mi,int index)
     mi->setRect(0, 0, m_menuItemList->getRect().width(), m_menuItemHeight);
 
     if(mi->getSubMenu())
-        mi->setTextRightGap(_ngux_sl_item_h2);
+        mi->setTextRightGap(MENU_SL_ITEM_H2);
     else
         mi->setTextRightGap(0);
 
@@ -916,7 +906,7 @@ void Menu::updateSize()
         else if(itemnum < 2)
             itemnum = 2;
 
-        h = itemnum * _ngux_menuitem_h;
+        h = itemnum * MENU_ITEM_H;
         IntRect rc(0, 0, m_rect.width(), h);
         m_menuItemList->setRect(rc);
     }
@@ -947,27 +937,27 @@ void Menu::autoFit()
     else if(itemnum < 1)
         itemnum = 1;
       
-    h = itemnum * _ngux_menuitem_h + _ngux_menubar_h;
+    h = itemnum * MENU_ITEM_H + MENUBAR_H;
 
-    int y = _ngux_screen_h - h;
-    MoveWindow (m_viewWindow, 0, y, _ngux_screen_w, h, FALSE);  
+    int y = SCREEN_HEIGHT - h;
+    MoveWindow (m_viewWindow, 0, y, SCREEN_WIDTH, h, FALSE);  
     ShowWindow (m_viewWindow, SW_SHOWNORMAL);
 
     // top seperator line 
-    m_separator_top->setRect(0, 0, _ngux_screen_w, 1);
+    m_separator_top->setRect(0, 0, SCREEN_WIDTH, 1);
 
     // menu list rect
     if (m_menuItemList && itemnum > 0) {
-        m_menuItemList->setRect(0, 0, _ngux_screen_w, h - _ngux_menubar_h);
+        m_menuItemList->setRect(0, 0, SCREEN_WIDTH, h - MENUBAR_H);
         m_menuItemList->updateView();
     }
 
     // bottom seperator line
-    m_separator_bottom->setRect(0, h-1, _ngux_screen_w, 1);
+    m_separator_bottom->setRect(0, h-1, SCREEN_WIDTH, 1);
     
     // menubar rect
     if (m_menuBar) {
-        m_menuBar->setRect(0, h - _ngux_menubar_h, m_rect.width(), h);
+        m_menuBar->setRect(0, h - MENUBAR_H, m_rect.width(), h);
     }
 }
 
@@ -983,7 +973,7 @@ bool Menu::queryItemState(int i_id, int tag, bool *pdisable, bool *pcheck)
         pcheck ? *pcheck : false
     };
 
-    CustomEvent event(Event::CUSTOM_NOTIFY, CUSTOM_MENU_QUERY_ITEM, (int)(&mqi));
+    CustomEvent event(Event::CUSTOM_NOTIFY, CUSTOM_MENU_QUERY_ITEM, (HTData)(&mqi));
 
     raiseEvent(&event);
 

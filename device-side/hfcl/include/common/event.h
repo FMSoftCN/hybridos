@@ -53,7 +53,7 @@ public:
         CUSTOM_NOTIFY,
     };
 
-    Event (EventType type, Object* eventSource = NULL)
+    Event (EventType type, HTData eventSource = 0)
         : m_eventType (type)
         , m_eventSource (eventSource) {
     }
@@ -61,8 +61,12 @@ public:
     virtual ~Event() {
     }
 
-    inline Object* getSource() const {
+    inline HTData getSource() const {
         return m_eventSource;
+    }
+
+    inline void setSource (HTData eventSource) {
+        m_eventSource = eventSource;
     }
 
     EventType eventType() {
@@ -71,7 +75,7 @@ public:
 
 private:
     EventType m_eventType;
-    Object* m_eventSource;
+    HTData m_eventSource;
 };
 
 class CustomEvent : public Event {

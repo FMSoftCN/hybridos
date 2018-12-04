@@ -19,11 +19,9 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <string.h>
+#include "resource/imageres.h"
 
-#include "imageres.h"
 #include "resource/resloader.h"
-
 
 namespace hfcl {
 

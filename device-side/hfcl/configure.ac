@@ -162,19 +162,25 @@ AC_OUTPUT([
     m4/Makefile
     include/Makefile
     include/common/Makefile
+    include/mgcl/Makefile
     include/activity/Makefile
     include/graphics/Makefile
     include/drawable/Makefile
     include/view/Makefile
     include/animation/Makefile
+    include/components/Makefile
+    include/resource/Makefile
     include/services/Makefile
     src/Makefile
     src/common/Makefile
+    src/mgcl/Makefile
     src/activity/Makefile
     src/graphics/Makefile
     src/drawable/Makefile
     src/view/Makefile
     src/animation/Makefile
+    src/components/Makefile
+    src/resource/Makefile
     src/services/Makefile
 ])
 

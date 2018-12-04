@@ -19,20 +19,15 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "resource/respkgmanager.h"
 #include "resource/resloader.h"
-#include "restypes.h"
 
-//#include "mci.h"
-#include "resource_audio.h"
+#include "resource/respkgmanager.h"
+#include "resource/restypes.h"
+
+namespace hfcl {
 
 extern INNER_RES_ARRAY g_ResArray[];
 extern int g_ResCount; 
-#ifdef ENABLE_MCI
-extern void InitRingRes();
-#endif  // ENABLE_MCI
-
-namespace hfcl {
 
 INNER_RES_INFO* GetImageResInfo(const char *filepath)
 {
@@ -67,51 +62,6 @@ ResLoader* ResLoader::getInstance()
     return ResLoader::m_singleton;
 }
 
-#ifdef USE_RDA_FONT
-extern "C" Logfont        MMI_DEFAULT_FONT;
-extern "C" Logfont        MMI_SMALL_FONT;
-extern "C" Logfont        MMI_MEDIUM_FONT;
-extern "C" Logfont        MMI_MEDIUM_BOLD_FONT;
-extern "C" Logfont      MMI_LARGE_FONT;
-extern "C" Logfont      MMI_DIALER_FONT1;
-extern "C" Logfont      MMI_DIALER_FONT2;
-extern "C" Logfont      MMI_DIALER_FONT3;
-extern "C" Logfont        MMI_SUBLCD_FONT;
-extern "C" Logfont        MMI_VIRTUAL_KEYBOARD_FONT;
-extern "C" Logfont        MMI_IDLETIME_FONT;
-
-Logfont* ResLoader::getFont(const char* fontname/*, Style* style = NULL*/)
-{
-    if (fontname != NULL)
-    {
-        if (strcmp(fontname, "small font") == 0){
-            return (&MMI_SMALL_FONT);
-        } else if (strcmp(fontname, "medium font") == 0){
-            return (&MMI_VIRTUAL_KEYBOARD_FONT);
-        } else if (strcmp(fontname, "medium bold font") == 0){
-            return (&MMI_MEDIUM_FONT);
-        } else if (strcmp(fontname, "large font") == 0){
-            return (&MMI_LARGE_FONT);
-        } else if (strcmp(fontname, "dial font 1") == 0){
-            return (&MMI_DIALER_FONT1);
-        } else if (strcmp(fontname, "dial font 2") == 0){
-            return (&MMI_DIALER_FONT2);
-        } else if (strcmp(fontname, "time font") == 0){
-            return (&MMI_SUBLCD_FONT);
-        } else if (strcmp(fontname, "idletime font") == 0){
-            return (&MMI_IDLETIME_FONT);
-        }         
-    }
-    return (&MMI_DEFAULT_FONT);
-}
-
-bool ResLoader::releaseFont(const char* fontname)
-{
-    return true;
-}
-
-#else
-
 Logfont* ResLoader::getFont(const char* fontname/*, Style* style = NULL*/)
 {
     string fontName(fontname);
@@ -144,8 +94,6 @@ bool ResLoader::releaseFont(const char* fontname)
 
     return true;
 }
-
-#endif
 
 void ResLoader::registerInnerRes(int res_type, INNER_RES_INFO * resources, int count)
 {
@@ -337,208 +285,6 @@ INNER_RES_INFO* ResLoader::InnerImage::getResInfo(void)
 void RegisterInnerResource(int type, INNER_RES_INFO *resource, int count)
 {
     ResLoader::getInstance()->registerInnerRes(type, resource, count);
-}
-
-extern "C"
-{
-    device_tones_struct **resource_tones = NULL;
-    audio_resource_struct *resource_midis = NULL;
-    audio_resource_struct *resource_sounds = NULL;
-    audio_resource_struct *resource_ems_sounds = NULL;
-    audio_resource_struct *resource_imelodys = NULL;
-    audio_resource_struct *resource_ems_imelodys = NULL;
-    audio_resource_struct *resource_message_sounds = NULL;
-    audio_resource_struct* resource_poweronoff_sounds = NULL;
-    audio_resource_struct* resource_mms_sounds = NULL;
-    audio_resource_struct* resource_fng_sounds = NULL;   //Added by jinzh:20070724
-    audio_resource_struct* resource_alarm_sounds = NULL;
-    audio_resource_struct* resource_camera_sounds = NULL;   
-
-#ifdef DIGIT_TONE_SUPPORT
-    audio_resource_struct *resource_human_voice_tones = NULL;
-#endif 
-#ifdef SIMPLE_TTS
-    audio_resource_struct *resource_tts_sounds = NULL;
-    start_end_t *TTS_UCS2_MSB_index = NULL;
-    unsigned char *TTS_UCS2_LSB = NULL;
-    unsigned short *TTS_index_table = NULL;
-#endif /* SIMPLE_TTS */ 
-#ifdef CUST_KEYPAD_TONE_SUPPORT
-    audio_resource_struct *resource_keypad_tones = NULL;
-#endif
-    audio_resource_struct* resource_answering_machine_greeting_voice = NULL;  
-}
-
-extern "C"
-{
-    extern const audio_resource_struct CSD_resource_midis[];
-    extern const audio_resource_struct CSD_resource_sounds[];
-    extern const audio_resource_struct CSD_resource_poweronoff_sounds[];
-    extern const audio_resource_struct CSD_resource_imelodys[];
-    extern const audio_resource_struct CSD_resource_message_sounds[];
-#if defined(__MMI_GAME__)
-    extern const audio_resource_struct CSD_resource_fng_sounds[];   
-#endif
-    extern const audio_resource_struct CSD_resource_alarm_sounds[];
-    extern const audio_resource_struct CSD_resource_camera_sounds[];
-#ifdef DIGIT_TONE_SUPPORT
-    extern const audio_resource_struct CSD_resource_human_voice_tones[];
-#endif
-#ifdef SIMPLE_TTS
-    extern const audio_resource_struct CSD_resource_tts_sounds[];
-    extern const start_end_t CSD_TTS_UCS2_MSB_index[];
-    extern const unsigned char CSD_TTS_UCS2_LSB[];
-    extern const unsigned short CSD_TTS_index_table[];
-#endif
-#ifdef CUST_KEYPAD_TONE_SUPPORT
-    extern const audio_resource_struct CSD_resource_keypad_tones[];
-#endif
-    extern const audio_resource_struct CSD_resource_answering_machine_greeting_voice[];
-}
-
-void RegisterAudiorResource()
-{
-#ifdef ENABLE_MCI
-      InitRingRes();
-      resource_sounds = (audio_resource_struct*) CSD_resource_sounds;
-      resource_poweronoff_sounds = (audio_resource_struct*) CSD_resource_poweronoff_sounds;
-      resource_imelodys = (audio_resource_struct*) CSD_resource_imelodys;
-      resource_message_sounds = (audio_resource_struct*) CSD_resource_message_sounds;
-#if defined(__MMI_GAME__)
-      resource_fng_sounds = (audio_resource_struct*) CSD_resource_fng_sounds;
-#endif
-      resource_alarm_sounds = (audio_resource_struct*) CSD_resource_alarm_sounds;
-#ifdef CAMERA_MODULE
-     resource_camera_sounds = (audio_resource_struct*) CSD_resource_camera_sounds;
-#endif
-#ifdef DIGIT_TONE_SUPPORT
-      resource_human_voice_tones = (audio_resource_struct*) CSD_resource_human_voice_tones;
-#endif
-#ifdef SIMPLE_TTS
-      resource_tts_sounds = (audio_resource_struct*) CSD_resource_tts_sounds;
-      TTS_UCS2_MSB_index = (start_end_t*) CSD_TTS_UCS2_MSB_index;
-      TTS_UCS2_LSB = (unsigned char*) CSD_TTS_UCS2_LSB;
-      TTS_index_table = (unsigned short*) CSD_TTS_index_table;
-#endif
-#ifdef CUST_KEYPAD_TONE_SUPPORT
-      resource_keypad_tones = (audio_resource_struct*) CSD_resource_keypad_tones;
-#endif
-     resource_answering_machine_greeting_voice = (audio_resource_struct*) CSD_resource_answering_machine_greeting_voice;
-#endif // ENABLE_MCI
-}
-
-
-unsigned int GetAudioResBuffer(unsigned char audioId , unsigned int** pBuffer ,unsigned int* codec)
-{
-    unsigned int length = 0;
-     
-    //sms
-    if ((MIN_MSG_SND_ID <= audioId) && (MAX_MSG_SND_ID >= audioId))
-    {
-
-        *pBuffer =  (unsigned int*)resource_message_sounds[audioId - MIN_MSG_SND_ID].data;
-        length = resource_message_sounds[audioId - MIN_MSG_SND_ID].len;
-        length /= 4;
-        *codec = resource_message_sounds[audioId - MIN_MSG_SND_ID].format;;
-        return  length;
-    }
-       //alarm
-    else if ((MIN_ALARM_SND_ID <= audioId) && (MAX_ALARM_SND_ID >= audioId))
-    {
-
-        *pBuffer =  (unsigned int*)resource_alarm_sounds[audioId - MIN_ALARM_SND_ID].data;
-        length = resource_alarm_sounds[audioId - MIN_ALARM_SND_ID].len;
-        length /= 4;
-        *codec = resource_alarm_sounds[audioId - MIN_ALARM_SND_ID].format;;
-        return  length;
-    }
-    //call
-    else if ((MIN_RING_TONE_ID <= audioId) && (MAX_RING_TONE_ID >= audioId))
-    {    
-
-        *pBuffer =  (unsigned int*)resource_imelodys[audioId - MIN_RING_TONE_ID].data;
-        length = resource_imelodys[audioId - MIN_RING_TONE_ID].len;
-        length /= 4;
-        *codec =  resource_imelodys[audioId - MIN_RING_TONE_ID].format;
-        return  length;
-    }
-    //CALL
-    else if ((MIN_MIDI_ID <= audioId) && (MAX_MIDI_ID >= audioId))
-    {
-
-        *pBuffer =  (unsigned int*)resource_sounds[audioId - MIN_MIDI_ID].data;
-        length = resource_sounds[audioId - MIN_MIDI_ID].len;
-        length /= 4;
-        *codec = resource_sounds[audioId - MIN_MIDI_ID].format;;
-        return  length;
-    }
-#if defined(__MMI_GAME__)
-    // Fun and Game
-    else if ((MIN_FNG_SND_ID <= audioId) && (MAX_FNG_SND_ID >= audioId))
-    {
-        
-
-        *pBuffer =  (unsigned int*)resource_fng_sounds[audioId - MIN_FNG_SND_ID].data;
-        length = resource_fng_sounds[audioId - MIN_FNG_SND_ID].len;
-        length /= 4;
-        *codec = resource_fng_sounds[audioId - MIN_FNG_SND_ID].format;
-        return  length;
-    }                        
-#endif    
-    //camera
-    else if ((MIN_CAMERA_SND_ID <= audioId) && (MAX_CAMERA_SND_ID >= audioId)) 
-    {
-        
-
-        *pBuffer =  (unsigned int*)resource_camera_sounds[audioId - MIN_CAMERA_SND_ID].data;
-        length = resource_camera_sounds[audioId - MIN_CAMERA_SND_ID].len;
-        length /= 4;
-
-        *codec = resource_camera_sounds[audioId - MIN_CAMERA_SND_ID].format;
-        return  length;
-    }    
-    //power on / off
-    else if ((MIN_SND_ID <= audioId) && (MAX_SND_ID >= audioId))
-    {
-        
-        *pBuffer =  (unsigned int*)resource_poweronoff_sounds[audioId - MIN_SND_ID].data;
-        length = resource_poweronoff_sounds[audioId - MIN_SND_ID].len;
-        *codec = resource_poweronoff_sounds[audioId - MIN_SND_ID].format;
-
-
-        length /= 4;
-        return  length;
-    }
-    //answering machine greeting voice
-    else if ((MIN_GREETING_VOICE_ID <= audioId) && (MAX_GREETING_VOICE_ID >= audioId))
-    {
-        *pBuffer =  (unsigned int*)resource_answering_machine_greeting_voice[audioId - MIN_GREETING_VOICE_ID].data;
-        length = resource_answering_machine_greeting_voice[audioId - MIN_GREETING_VOICE_ID].len;
-        *codec = resource_answering_machine_greeting_voice[audioId - MIN_GREETING_VOICE_ID].format;
-        length /= 4;
-        return  length;
-    }
-#ifdef DIGIT_TONE_SUPPORT
-    else if ((MIN_HUMAN_VOICE_ID <= audioId) && (MAX_HUMAN_VOICE_ID >= audioId))
-    {
-        
-        *pBuffer =  (unsigned int*)resource_human_voice_tones[audioId - MIN_HUMAN_VOICE_ID].data;
-        length = resource_human_voice_tones[audioId - MIN_HUMAN_VOICE_ID].len;
-        *codec = resource_human_voice_tones[audioId - MIN_HUMAN_VOICE_ID].format;
-
-        length /= 4;
-        return  length;
-    }    
-#endif    
-        else //used for setting volume to play the music
-    {
-        *pBuffer =  (unsigned int*)resource_imelodys[0].data;
-        length = resource_imelodys[0].len;
-        length /= 4;
-        *codec = resource_imelodys[0].format;
-
-        return  length;
-    }
 }
 
 } // namespace hfcl
