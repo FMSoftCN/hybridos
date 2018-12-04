@@ -7,7 +7,7 @@ lib_LTLIBRARIES=libhfcl@LIB_SUFFIX@.la
 AM_CPPFLAGS=-I../include
 COMMON_LIBADD=  \
 	common/libhfcl_common.la \
-	activity/libhfcl_activiy.la \
+	activity/libhfcl_activity.la \
 	view/libhfcl_view.la
 
 MYSOURCES= 

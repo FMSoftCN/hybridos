@@ -20,8 +20,9 @@
 */
 
 
-#include "buttonview.h"
+#include "view/buttonview.h"
 #include "resource/respkgmanager.h"
+
 namespace hfcl {
 
 #define BTN_DEFAULT_WIDTH    40

@@ -19,8 +19,13 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "view/gifanimateview.h"
 
+#include "graphics/graphicscontext.h"
+#include "graphics/gifanimate.h"
+#include "services/timerservice.h"
 
+#if 0
 #include "common/common.h"
 #include "mgcl/mgcl.h"
 
@@ -28,12 +33,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
-
-#include "gifanimateview.h"
-#include "graphics/graphicscontext.h"
-#include "graphics/gifanimate.h"
-#include "services/timerservice.h"
-#include "tm.h"
+#endif
 
 namespace hfcl {
 
@@ -166,7 +166,7 @@ bool GifAnimateView::stop(void)
 	if(m_animate== NULL) return false;
 	m_animate->firstFrame();
     // stop notity event
-	CustomEvent event(Event::CUSTOM_NOTIFY, (int)NOTIFY_GIFANIMATE_STOP, (int)this);
+	CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_GIFANIMATE_STOP, (HTData)this);
 	raiseEvent(&event);
 
     return true;

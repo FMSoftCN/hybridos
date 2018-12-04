@@ -16,5 +16,4 @@ libhfcl_view_la_SOURCES = \
     imageview.cc \
     gifanimateview.cc \
     animateimageview.cc \
-    transition.cc \
-    wrapperview.cc
+    transition.cc

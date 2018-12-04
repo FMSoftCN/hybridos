@@ -19,9 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-#ifndef HFCL_RollableText_h
-#define HFCL_RollableText_h
+#ifndef HFCL_VIEW_TRANSITION_H_
+#define HFCL_VIEW_TRANSITION_H_
 
 #include "common/event.h"
 #include "view/view.h"
@@ -29,99 +28,97 @@
 
 namespace hfcl {
 
-
 class Transition;
 
-class TransitionManager : TimerEventListener
-{	
-	public:
-		MAP(unsigned int, Transition*, TransitionMap)
+class TransitionManager : TimerEventListener {	
+public:
+    MAP(unsigned int, Transition*, TransitionMap)
 
-		TransitionMap m_trMaps;
+    TransitionMap m_trMaps;
 
-		int m_timerId;
-		int m_interval;
+    int m_timerId;
+    int m_interval;
 
-	public:
-		TransitionManager() { 
-			m_timerId = 0; 
-			m_interval = 300;
-		}
+public:
+    TransitionManager() { 
+        m_timerId = 0; 
+        m_interval = 300;
+    }
 
-		~TransitionManager();
+    ~TransitionManager();
 
-		void addTransition(unsigned int key, Transition* t);
-		void removeTransition(unsigned int key);
-		Transition* getTranition(unsigned int key);
+    void addTransition(HTData key, Transition* t);
+    void removeTransition(HTData key);
+    Transition* getTranition(HTData key);
 
-		int setInterval(int interval);
-		int interval() { return m_interval; }
+    int setInterval(int interval);
+    int interval() { return m_interval; }
 
-	private:
-		bool handleEvent(Event *event);
+private:
+    bool handleEvent(Event *event);
 };
 
 class Transition 
 {
-	public:
-		virtual bool isEnd() = 0;
-		virtual void update() = 0;
-		virtual ~Transition() { }
+public:
+    virtual bool isEnd() = 0;
+    virtual void update() = 0;
+    virtual ~Transition() { }
 
-		//use for mem manager
-		virtual void release() { HFCL_DELETE(this); }
+    //use for mem manager
+    virtual void release() { HFCL_DELETE(this); }
 };
 
 class RollTextTransition : public Transition 
 {
-	protected:
-		View * m_owner;
-		int  m_offset:20;
-		unsigned int  m_offsetStep:12;
-	    int m_countdown;
-	public:	
-		RollTextTransition(View *owner, int step) : m_owner(owner) {
-			m_offsetStep = step;
-			m_offset = 0;
-			m_countdown = 5;
-		}
-		~RollTextTransition() { }
+protected:
+    View * m_owner;
+    int  m_offset:20;
+    unsigned int  m_offsetStep:12;
+    int m_countdown;
+public:	
+    RollTextTransition(View *owner, int step) : m_owner(owner) {
+        m_offsetStep = step;
+        m_offset = 0;
+        m_countdown = 5;
+    }
+    ~RollTextTransition() { }
 
-		int getOffset() { return m_offset; }
+    int getOffset() { return m_offset; }
 
-		void update() { 
-			if(--m_countdown > 0) 
-				return; 
+    void update() { 
+        if(--m_countdown > 0) 
+            return; 
 
-			nextOffset(); 
+        nextOffset(); 
 
-			if(m_owner) 
-				m_owner->updateView(); 
-		}
+        if(m_owner) 
+            m_owner->updateView(); 
+    }
 
-		bool isEnd() { return m_owner == NULL; }
+    bool isEnd() { return m_owner == NULL; }
 
-		void reset() {
-			m_offset = 0;
-			m_countdown = 5;
-		}
+    void reset() {
+        m_offset = 0;
+        m_countdown = 5;
+    }
 
-		void nextOffset()  { m_offset += m_offsetStep; }
+    void nextOffset()  { m_offset += m_offsetStep; }
 
 
-		static bool DrawRollText(View* view, GraphicsContext* context,DrawableSet *drset, int draw_id, int draw_state, const IntRect& rc, HTData data, DR_DATA_TYPE type);
+    static bool DrawRollText(View* view, GraphicsContext* context,DrawableSet *drset, int draw_id, int draw_state, const IntRect& rc, HTData data, DR_DATA_TYPE type);
 
-		static bool NeedRollText(DrawableSet *drset, int draw_id, int draw_state, const IntRect& rc, HTData data, DR_DATA_TYPE type);
+    static bool NeedRollText(DrawableSet *drset, int draw_id, int draw_state, const IntRect& rc, HTData data, DR_DATA_TYPE type);
 };
 
 ///the common functions
 TransitionManager* GetCommonTransitionManager();
-Transition* GetTransition(unsigned int key);	
+Transition* GetTransition(HTData key);	
 void AddRollText(View *view, Transition* t);
 void RemoveRollText(View* view);
 void ResetRollText(View *view);
 
-} // namespace hfcl {
+} // namespace hfcl
 
-#endif
+#endif // HFCL_VIEW_TRANSITION_H_
 

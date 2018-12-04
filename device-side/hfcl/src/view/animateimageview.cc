@@ -19,16 +19,10 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "ngux.h"
-#include "common/common.h"
-#include "mgcl/mgcl.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
 #include "view/animateimageview.h"
+
 #include "services/timerservice.h"
+#include "resource/respkgmanager.h"
 
 namespace hfcl {
 

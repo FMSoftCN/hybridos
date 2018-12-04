@@ -19,16 +19,14 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-#include <ctype.h>
+#include "view/transition.h"
 
 #include "graphics/graphicscontext.h"
-#include "transition.h"
 #include "services/timerservice.h"
 
 namespace hfcl {
 
-void TransitionManager::addTransition(unsigned int key, Transition* t)
+void TransitionManager::addTransition(HTData key, Transition* t)
 {
     if (!t)
         return;
@@ -47,7 +45,7 @@ void TransitionManager::addTransition(unsigned int key, Transition* t)
         m_timerId = registerTimer(m_interval, "TransitionManager");
 }
 
-void TransitionManager::removeTransition(unsigned int key)
+void TransitionManager::removeTransition(HTData key)
 {
     TransitionMap::iterator it = m_trMaps.find(key);
     if (it == m_trMaps.end())
@@ -83,7 +81,7 @@ bool TransitionManager::handleEvent(Event* event)
 }
 
 
-Transition* TransitionManager::getTranition(unsigned int key)
+Transition* TransitionManager::getTranition(HTData key)
 {
     TransitionMap::iterator it = m_trMaps.find(key);
 
@@ -113,7 +111,7 @@ TransitionManager* GetCommonTransitionManager()
     return _commonTransitionManager;
 }
 
-Transition* GetTransition(unsigned int key)
+Transition* GetTransition(HTData key)
 {
     TransitionManager* tm = GetCommonTransitionManager();
     return tm ? tm->getTranition(key) : NULL;
@@ -195,7 +193,7 @@ bool RollTextTransition::DrawRollText(View *view, GraphicsContext* context,
 	if (!context  || !drset || data == 0)
         return false;
 
-    RollTextTransition* t = (RollTextTransition*)GetTransition((unsigned int)view);
+    RollTextTransition* t = (RollTextTransition*)GetTransition((HTData)view);
     if (t == NULL)
         return false;
 
@@ -258,7 +256,7 @@ void AddRollText(View* view, Transition* t)
         return;
 
     TransitionManager* tm = GetCommonTransitionManager();
-    tm->addTransition((unsigned int)view, t);
+    tm->addTransition((HTData)view, t);
 }
 
 void RemoveRollText(View* view)
@@ -267,7 +265,7 @@ void RemoveRollText(View* view)
         return;
 	
     TransitionManager* tm = GetCommonTransitionManager();
-    tm->removeTransition((unsigned int)view);
+    tm->removeTransition((HTData)view);
 }
 
 void ResetRollText(View *view)
@@ -276,7 +274,7 @@ void ResetRollText(View *view)
         return;
 
     TransitionManager* tm = GetCommonTransitionManager();
-    RollTextTransition* t = (RollTextTransition*)tm->getTranition((unsigned int)view);
+    RollTextTransition* t = (RollTextTransition*)tm->getTranition((HTData)view);
     if (t)
         t->reset();
 }

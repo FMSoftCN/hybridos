@@ -19,8 +19,11 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "view/textview.h"
+
+#include "view/containerview.h"
+#include "view/textmode.h"
+#include "view/transition.h"
 
 extern "C" Uint8 isTransformArabic ( Uint16 inChar );
 
@@ -209,11 +212,11 @@ void TextView::drawContent(GraphicsContext* context, IntRect &rc, int status)
         info=NULL;
         if(isTransformArabic(utf8_to_ucs2((Uint8 *)tmpchar)) ||isArabicSymbol(utf8_to_ucs2((Uint8 *)tmpchar)))
         {	   	
-            context->setBiDiFirstChType (BIDI_CHAR_TYPE_RTL);
+            context->setBiDiFirstChType (BIDI_TYPE_RTL);
         }
         else
         {
-            context->setBiDiFirstChType (BIDI_CHAR_TYPE_LTR);
+            context->setBiDiFirstChType (BIDI_TYPE_LTR);
         }
     }
 
@@ -235,7 +238,7 @@ void TextView::drawContent(GraphicsContext* context, IntRect &rc, int status)
         m_drset->draw(context, DR_CONTENT, status, rc, (DWORD)buf, DRDT_TEXT);
 	}
 
-    context->setBiDiFirstChType (BIDI_CHAR_TYPE_INIT);
+    context->setBiDiFirstChType (BIDI_TYPE_LTR);
 }
 
 void TextView::setTextOutMode(unsigned int mode)

@@ -2,13 +2,13 @@
 myincludedir=$(includedir)/hfcl/activity
 
 # Which header files to install
-myinclude_HEADERS=
-    appfactory.h \
-    appinfo.h \
-    application.h \
-    appmanager.h \
-    appstack.h \
-    baseapp.h \
+myinclude_HEADERS= \
+    baseactivity.h \
+    activity.h \
+    activityfactory.h \
+    activityinfo.h \
+    activitymanager.h \
+    activitystack.h \
     controller.h \
     intent.h \
-    nguxwindow.h
+    window.h

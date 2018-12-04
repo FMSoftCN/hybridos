@@ -24,7 +24,7 @@
 #define _HFCL_TEXTMODE_h
 
 #include "common/common.h"
-#include "drawable-id.h"
+#include "drawable/drawable-id.h"
 
 namespace hfcl {
 
