@@ -19,7 +19,7 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "alphaviewanimation.h"
+#include "animation/alphaviewanimation.h"
 #include "view/view.h"
 
 namespace hfcl {

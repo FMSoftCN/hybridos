@@ -22,7 +22,9 @@
 #ifndef __HFCL_ANIMATIONGROUP_H__
 #define __HFCL_ANIMATIONGROUP_H__
 
-#include "nguxanimation.h"
+#include "common/common.h"
+#include "common/alternativestl.h"
+#include "animation/animation.h"
 
 namespace hfcl {
 

@@ -21,7 +21,7 @@
 #ifndef __HFCL_ALPHAVIEWANIMATION_H_
 #define __HFCL_ALPHAVIEWANIMATION_H_
 
-#include "viewanimation.h"
+#include "animation/viewanimation.h"
 
 namespace hfcl {
 

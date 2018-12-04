@@ -19,7 +19,7 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "viewanimation.h"
+#include "animation/viewanimation.h"
 
 namespace hfcl {
 

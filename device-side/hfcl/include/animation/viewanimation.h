@@ -21,7 +21,7 @@
 #ifndef __HFCL_VIEWANIMATION_H_
 #define __HFCL_VIEWANIMATION_H_
 
-#include "nguxanimation.h"
+#include "animation/animation.h"
 
 namespace hfcl {
 

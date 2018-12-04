@@ -19,7 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "scaleviewanimation.h"
+#include "animation/scaleviewanimation.h"
+
 #include "view/view.h"
 
 namespace hfcl {

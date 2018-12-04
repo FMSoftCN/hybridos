@@ -1,4 +1,4 @@
-SUBDIRS=common activity view services
+SUBDIRS=common activity view animation services
 lib_LTLIBRARIES=libhfcl@LIB_SUFFIX@.la
 
 AM_CPPFLAGS=-I../include
@@ -6,6 +6,7 @@ COMMON_LIBADD=  \
 	common/libhfcl_common.la \
 	activity/libhfcl_activity.la \
 	view/libhfcl_view.la \
+	animation/libhfcl_animation.la \
 	services/libhfcl_services.la
 
 MYSOURCES= 

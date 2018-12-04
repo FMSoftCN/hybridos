@@ -1,4 +1,4 @@
-SUBDIRS=common activity view services
+SUBDIRS=common activity view animation services 
 
 # The directory where the include files will be installed
 myincludedir=$(includedir)/hfcl

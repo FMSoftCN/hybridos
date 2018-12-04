@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "nguxanimation.h"
-#include "appmanager.h"
+#include "animation/animation.h"
+#include "activity/activitymanager.h"
 
 namespace hfcl {
 
