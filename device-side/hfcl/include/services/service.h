@@ -19,18 +19,19 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _HFCL_Service_h
-#define _HFCL_Service_h
+#ifndef HFCL_SERVICES_SERVICE_H_
+#define HFCL_SERVICES_SERVICE_H_
+
 #include "common/common.h"
 
 namespace hfcl {
 
 class Service {
-	public:
-		virtual void start(void) = 0;
-		virtual void stop(void) = 0;
+public:
+    virtual void start(void) = 0;
+    virtual void stop(void) = 0;
 };
 
 } // namespace hfcl
 
-#endif //_HFCL_Service_h
+#endif //HFCL_SERVICES_SERVICE_H_
