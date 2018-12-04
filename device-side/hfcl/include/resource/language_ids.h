@@ -127,17 +127,5 @@ typedef struct _LANGUAGE_ZIPPED_STRINGS {
     unsigned int    origin_size;
 } LANGUAGE_ZIPPED_STRINGS;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-extern LANGUAGE_RAW_STRINGS __ngux_map_language_to_raw_strings [];
-extern LANGUAGE_ZIPPED_STRINGS __ngux_map_language_to_zipped_bytes [];
-extern const char* __ngux_non_l10n_raw_strings [];
-
-#ifdef __cplusplus
-}
-#endif
-
 #endif /* _HFCL_LANGUAGE_IDS_H_ */
 

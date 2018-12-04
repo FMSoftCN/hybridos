@@ -22,10 +22,6 @@
 #ifndef __RESPKGMANAGER_H
 #define __RESPKGMANAGER_H
 
-//typedef unsigned int HTResId; 
-
-//enum { RPKG_sys = 0 };
-
 #include "resource/restypes.h"
 #include "graphics/graphicscontext.h"
 #include "resource/language_ids.h"
@@ -48,31 +44,53 @@ class ThemeRes;
 
 class ResPkgManager
 {
-    private:
-		LIST(ResPackage*, ResPkgList);
-		
-		static ResPkgManager* m_singleton;
-		ResPkgList m_packageList;
-		int m_lang;
+public:
+    static ResPkgManager * getResPkgManager(); 
+    void delResPkgManager(); 
+    
+    bool registerPackage(ResPackage *pkg);
+    bool unregisterPackage(int id);
+    bool unregisterPackage(const char *name);
+    ResPackage *getPackage(int id); 
+    ResPackage *getPackage(const char *name);
+    
+    inline int count(void) {
+        return m_packageList.size();
+    }
+    
+    void registerRawStringTable (LANGUAGE_RAW_STRINGS* table, HTResId maxId);
+    void registerZippedStringTable (LANGUAGE_ZIPPED_STRINGS* table,
+            HTResId maxId);
+    const char* getTextRes (HTResId id);
 
-    private:
-		~ResPkgManager();
-		ResPkgManager():m_lang (-1) { }
+    bool setCurrentLang (int langId);
+    int getCurrentLang (void) {
+        return m_lang_id;
+    }
 
-    public:
-		static ResPkgManager * getResPkgManager(); 
-		void delResPkgManager(); 
-		
-		bool registerPackage(ResPackage *pkg);
-		bool unregisterPackage(int id);
-		bool unregisterPackage(const char *name);
-		ResPackage *getPackage(int id); 
-		ResPackage *getPackage(const char *name);
-		
-		inline int count(void) {return m_packageList.size();}
-		
-		bool setCurrentLang (int langId);
-		int getCurrentLang (void) { return m_lang; }
+private:
+    ~ResPkgManager();
+    ResPkgManager()
+        : m_lang_id (-1)
+        , m_max_text_id (0)
+        , m_l10n_raw_str_table (NULL)
+        , m_l10n_zipped_str_table (NULL)
+    {
+    }
+
+    LIST(ResPackage*, ResPkgList);
+    
+    static ResPkgManager* m_singleton;
+
+    ResPkgList m_packageList;
+
+    int m_lang_id;
+    HTResId m_max_text_id;
+    LANGUAGE_RAW_STRINGS* m_l10n_raw_str_table;
+    LANGUAGE_ZIPPED_STRINGS* m_l10n_zipped_str_table;
+
+    char* m_string_bucket;
+    const char** m_raw_strings;
 };
 
 

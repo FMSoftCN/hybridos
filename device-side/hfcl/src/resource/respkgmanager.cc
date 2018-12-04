@@ -129,23 +129,67 @@ ResPackage* ResPkgManager::getPackage(const char * name)
    return NULL;
 }
 
-static char* resPkgStringsBucket = NULL;
-static const char* resPkgStrings [MAX_STRID];
+void ResPkgManager::registerRawStringTable (LANGUAGE_RAW_STRINGS* table,
+        HTResId maxId)
+{
+    m_l10n_raw_str_table = table;
+    m_max_text_id = maxId;
+
+    if (m_raw_strings) {
+        free (m_raw_strings);
+        m_raw_strings = NULL;
+    }
+}
+
+void ResPkgManager::registerZippedStringTable (LANGUAGE_ZIPPED_STRINGS* table,
+        HTResId maxId)
+{
+    m_l10n_zipped_str_table = table;
+    m_max_text_id = maxId;
+
+    if (m_raw_strings) {
+        free (m_raw_strings);
+        m_raw_strings = NULL;
+    }
+}
+
+const char* ResPkgManager::getTextRes (HTResId id)
+{
+    if (id >= m_max_text_id || m_raw_strings == NULL) {
+        _DBG_PRINTF ("ResPkgManager::getTextRes: invalid text id or not initialized\n");
+        return NULL;
+    }
+
+    const char* text = m_raw_strings [id];
+    if (text == NULL) {
+        return "";
+    }
+
+    return text;
+}
 
 bool ResPkgManager::setCurrentLang (int langId)
 {
     if (langId < 0 || langId >= MAX_LANGID)
         return false;
 
-    if (__ngux_map_language_to_zipped_bytes [langId].zipped_bytes == NULL) {
+    if (m_l10n_raw_str_table &&
+            m_l10n_raw_str_table [langId].raw_strings) {
+        m_raw_strings = m_l10n_raw_str_table [langId].raw_strings;
+        m_lang_id = langId;
+        return true;
+    }
+
+    if (m_l10n_zipped_str_table == NULL ||
+            m_l10n_zipped_str_table [langId].zipped_bytes == NULL) {
         _ERR_PRINTF ("ResPkgManager::setCurrentLang: no strings for language: %d.\n", langId);
         return false;
     }
 
-    if (resPkgStringsBucket == NULL) {
+    if (m_string_bucket == NULL) {
         size_t max_bucket_size = 0;
         for (int i = 0; i < MAX_LANGID; i++) {
-            size_t current_size = __ngux_map_language_to_zipped_bytes [i].origin_size;
+            size_t current_size = m_l10n_zipped_str_table [i].origin_size;
             if (current_size > max_bucket_size) {
                 max_bucket_size = current_size;
             }
@@ -156,33 +200,40 @@ bool ResPkgManager::setCurrentLang (int langId)
             return false;
         }
 
-        resPkgStringsBucket = (char*)malloc (max_bucket_size);
-        if (resPkgStringsBucket == NULL) {
+        m_string_bucket = (char*)malloc (max_bucket_size);
+        if (m_string_bucket == NULL) {
+            _ERR_PRINTF ("ResPkgManager::setCurrentLang: failed to allocate memory for bucket.\n");
+            return false;
+        }
+
+        m_raw_strings = (const char**)malloc (sizeof (char*) * (m_max_text_id + 1));
+        if (m_string_bucket == NULL) {
+            _ERR_PRINTF ("ResPkgManager::setCurrentLang: failed to allocate memory for string table.\n");
             return false;
         }
     }
 
-    uLongf len_uncompressed = __ngux_map_language_to_zipped_bytes [langId].origin_size;
-    int ret = uncompress ((Bytef*)resPkgStringsBucket, &len_uncompressed, 
-            (Bytef*)__ngux_map_language_to_zipped_bytes [langId].zipped_bytes,
-            __ngux_map_language_to_zipped_bytes [langId].zipped_size);
+    uLongf len_uncompressed = m_l10n_zipped_str_table [langId].origin_size;
+    int ret = uncompress ((Bytef*)m_string_bucket, &len_uncompressed, 
+            (Bytef*)m_l10n_zipped_str_table [langId].zipped_bytes,
+            m_l10n_zipped_str_table [langId].zipped_size);
     if (ret != Z_OK) {
         _ERR_PRINTF ("ResPkgManager::setCurrentLang: failed when calling uncompress: %d.\n", ret);
         return false;
     }
 
 #ifdef _DEBUG
-    if (len_uncompressed != __ngux_map_language_to_zipped_bytes [langId].origin_size) {
+    if (len_uncompressed != m_l10n_zipped_str_table [langId].origin_size) {
         _DBG_PRINTF ("ResPkgManager::setCurrentLang: length not matched: %lu, %u.\n",
-            len_uncompressed, __ngux_map_language_to_zipped_bytes [langId].origin_size);
+            len_uncompressed, m_l10n_zipped_str_table [langId].origin_size);
         return false;
     }
 #endif
 
     size_t offset = 0;
-    for (int i = 0; i < MAX_STRID; i++) {
-        resPkgStrings [i] = resPkgStringsBucket + offset;
-        offset += strlen (resPkgStrings [i]);
+    for (HTResId i = 0; i < m_max_text_id; i++) {
+        m_raw_strings [i] = m_string_bucket + offset;
+        offset += strlen (m_raw_strings [i]);
         offset += 1;
     }
 
@@ -193,7 +244,7 @@ bool ResPkgManager::setCurrentLang (int langId)
         return false;
     }
 #endif
-    m_lang = langId;
+    m_lang_id = langId;
     return true;
 }
 
@@ -203,7 +254,7 @@ bool ResPkgManager::setCurrentLang (int langId)
 
 ResPkgManager * GetResPkgManager(void)
 {
-    return  ResPkgManager::getResPkgManager();
+    return ResPkgManager::getResPkgManager();
 } 
 
 void ReleaseResPkgManager(void)
@@ -212,6 +263,16 @@ void ReleaseResPkgManager(void)
 
     if(NULL != manager ) 
         manager->delResPkgManager();
+}
+
+const char * GetTextRes(HTResId id)
+{
+    ResPkgManager *manager = ResPkgManager::getResPkgManager();
+
+    if (manager)
+        return manager->getTextRes (id);
+
+    return NULL;
 }
 
 bool RegisterResPackage(ResPackage *resPkg)  
@@ -300,30 +361,11 @@ Bitmap * GetBitmapRes(HTResId id)
 	return NULL;
 }
 
-const char * GetTextRes(HTResId id)
-{
-    if (id >= MAX_NL10N_STRID) {
-        _DBG_PRINTF ("GetTextRes: bad STRID: %d", id);
-        return "BadID";
-    }
-    else if (id >= MAX_STRID) {
-        _DBG_PRINTF ("GetTextRes: A non L10N string retruned: %d", id);
-        return __ngux_non_l10n_raw_strings [id - MAX_STRID];
-    }
-
-    const char* text = resPkgStrings [id];
-    if (text == NULL) {
-        return "";
-    }
-
-    return text;
-}
-
 Drawable* GetDrawableRes(HTResId id)
 {
 	ResPackage *resPkg = GetResPackage(RPKGID(id));
 
-	if(resPkg && (RESTYPE(id) & R_TYPE_DRAWABLE))
+	if (resPkg && (RESTYPE(id) & R_TYPE_DRAWABLE))
 		return resPkg->getDrawable(id);
 
 	return NULL;
@@ -338,6 +380,7 @@ DrawableSet* GetDrawableSetRes(HTResId id)
 
 	if(resPkg)
 		return resPkg->getDrawableSet(id);
+
 	return NULL;
 }
 
