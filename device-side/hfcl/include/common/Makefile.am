@@ -14,6 +14,7 @@ myinclude_HEADERS= \
     list.h \
     log.h \
     methodeventlistener.h \
+    helpers.h \
     quicksort.h \
     rbtree.h \
     selectsort.h

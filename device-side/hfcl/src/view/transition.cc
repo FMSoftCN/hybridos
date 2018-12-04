@@ -120,7 +120,7 @@ Transition* GetTransition(HTData key)
 
 //////////////////////////////////////////////////////////////////////////////
 
-static int utf8_to_ucs2 (Uint16 *ucs2, Uint8 *utf8)
+static int UTF8ToUCS2 (Uint16 *ucs2, Uint8 *utf8)
 {
 	unsigned char c = utf8[0];
 
@@ -153,7 +153,7 @@ static inline bool is_bidi_right(unsigned char *_str)
 		return false;
 	}
 
-	while (*_str != '\0' && (_clen = utf8_to_ucs2(&_unicode, _str)) == 1) {
+	while (*_str != '\0' && (_clen = UTF8ToUCS2(&_unicode, _str)) == 1) {
 		if (isalpha(*_str)) {
 			return false;
 		}

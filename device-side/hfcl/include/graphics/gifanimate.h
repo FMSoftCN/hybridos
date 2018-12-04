@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _HFCL_GifAnimate_h
-#define _HFCL_GifAnimate_h
+#ifndef HFCL_GRAPHICS_GITANIMATION_H_
+#define HFCL_GRAPHICS_GITANIMATION_H_
 
 #include "common/object.h"
 #include "graphics/graphicscontext.h"
@@ -55,55 +55,55 @@ typedef struct tagGIFSCREEN {
 
 class GifAnimate : public RefCount 
 {
-    public:
-        GifAnimate();
-        GifAnimate(int ops);
-        virtual ~GifAnimate();
+public:
+    GifAnimate();
+    // VW: remove this constructor:
+    // GifAnimate(int ops);
+    virtual ~GifAnimate();
 
-        void drawFrame(void);
+    void drawFrame(void);
 
-        void firstFrame(void);
+    void firstFrame(void);
 
-        void nextFrame(void);
+    void nextFrame(void);
 
-        // create from file system : file path
-        void createGifAnimateFromFile (const char* file);
+    // create from file system : file path
+    void createGifAnimateFromFile (const char* file);
 
-        // create from innner res : BitmapFrameArray *
-        void createGifAnimateFromRes(BitmapFrameArray* bitmap_frame_array);
-        void createGifAnimateFromMem(const char * data,unsigned int size);
-        void loadGifAnimateNextFrameFromMem(void);
-        void drawOneFrame(GraphicsContext* graphics, const IntRect &rect, GifAnimateFrame* frame = NULL);
+    // create from innner res : BitmapFrameArray *
+    void createGifAnimateFromRes(BitmapFrameArray* bitmap_frame_array);
+    void createGifAnimateFromMem(const char * data,unsigned int size);
+    void loadGifAnimateNextFrameFromMem(void);
+    void drawOneFrame(GraphicsContext* graphics, const IntRect &rect, GifAnimateFrame* frame = NULL);
 
-        inline int currentFrameDelay(void) { return m_current_frame ? m_current_frame->delay_time : -1; }
+    inline int currentFrameDelay(void) { return m_current_frame ? m_current_frame->delay_time : -1; }
 
-        int frameCount(void) {return m_nr_frames;}
+    int frameCount(void) {return m_nr_frames;}
 
-        bool isLastFrame(void) { return (m_last_frame == m_current_frame);}
-	  unsigned int getNextFrameIndex(void){return m_nextFrameIndex;}
+    bool isLastFrame(void) { return (m_last_frame == m_current_frame);}
+    unsigned int getNextFrameIndex(void){return m_next_frame_idx;}
 
-    protected:
-        void restorePrevFrame(const IntRect &rect, GifAnimateFrame* frame);
-        void restoreBkgColor(const IntRect &rect, GifAnimateFrame* frame);
-        void drawFrameOnMem(const IntRect &rect, GifAnimateFrame* frame);
+protected:
+    void restorePrevFrame(const IntRect &rect, GifAnimateFrame* frame);
+    void restoreBkgColor(const IntRect &rect, GifAnimateFrame* frame);
+    void drawFrameOnMem(const IntRect &rect, GifAnimateFrame* frame);
 
-    private:
-        GifAnimateFrame* m_frames;
-        GifAnimateFrame* m_current_frame;
-        GifAnimateFrame* m_last_frame;
-        unsigned int m_nr_frames;
-        unsigned int m_max_width;
-        unsigned int m_max_height;
-        bool m_is_scale;
-        GraphicsContext* m_mem_gc;
+private:
+    GifAnimateFrame* m_frames;
+    GifAnimateFrame* m_current_frame;
+    GifAnimateFrame* m_last_frame;
+    unsigned int m_nr_frames;
+    unsigned int m_max_width;
+    unsigned int m_max_height;
+    bool m_is_scale;
+    GraphicsContext* m_mem_gc;
 
-        unsigned char m_c;
-        MG_RWops* m_area;
-        GIFSCREEN m_GifScreen;
-        unsigned int m_nextFrameIndex;
+    unsigned char m_c;
+    MG_RWops* m_area;
+    GIFSCREEN m_gif_screen;
+    unsigned int m_next_frame_idx;
 };
 
 } // namespace hfcl
 
-
-#endif  /* HFCL_GifAnimate_h */
+#endif  /* HFCL_GRAPHICS_GITANIMATION_H_ */

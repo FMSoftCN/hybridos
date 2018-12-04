@@ -19,23 +19,25 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "graphics/color.h"
+#ifndef HFCL_COMMON_HELPERS_H_
+#define HFCL_COMMON_HELPERS_H_
+
+#include <minigui/common.h>
 
 namespace hfcl {
 
-// we assume color to be ABGR from high byte to low byte.
-Color::Color(unsigned long l_color) {
-    m_a = l_color >> 24;
-    m_b = (l_color & 0x00FF0000) >> 16;
-    m_g = (l_color & 0x0000FF00) >> 8;
-    m_r = (l_color & 0x000000FF);
-}
-
-Color::Color(unsigned char c_r, unsigned char c_g, unsigned char c_b, unsigned char c_a){
-    m_r = c_r;
-    m_g = c_g;
-    m_b = c_b;
-    m_a = c_a;
-}
+int GetFirstUTF8CharLen (const char *str, int len);
+int GetLastUTF8CharLen (const char *str, int len);
+int GetUTF8CharInfo (const char *mstr, int len, int *retPosChars);
+int GetUTF8CharCount (const char *mstr, int len);
+BOOL HasUCS2Char (const char *mstr, int len);
+int GetUTF8LenByCharCount (const char *mstr, int charCount);
+Uint16 UTF8ToUCS2 (Uint8 *utf8);
+BOOL IsNumberUCS2Char (Uint16 inChar);
+BOOL IsSymbolUCS2Char (Uint16 inChar);
+BOOL IsArabicSymbolUCS2Char (Uint16 inChar);
 
 } // namespace hfcl
+
+#endif // HFCL_COMMON_HELPERS_H_
+

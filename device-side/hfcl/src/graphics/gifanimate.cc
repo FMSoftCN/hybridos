@@ -19,12 +19,11 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <string.h>
+//#undef _DEBUG
 
 #include "graphics/gifanimate.h"
 
-//#define _HFCL_GIF_TRACE_ 1
-
+#include <string.h>
 
 namespace hfcl {
 
@@ -528,13 +527,13 @@ void GifAnimate::createGifAnimateFromRes(BitmapFrameArray* bitmap_frame_array)
     m_max_height = max_height;
 
     if(m_mem_gc ) {
-        DeleteMemGc(m_mem_gc);
+        DeleteMemGC(m_mem_gc);
     }
 
-    m_mem_gc = CreateMemGc(m_max_width, m_max_height);
-#ifdef _HFCL_GIF_TRACE_ 
-    if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
-		_DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromRes CreateMemGc Error. 1\n");
+    m_mem_gc = CreateMemGC(m_max_width, m_max_height);
+#ifdef _DEBUG 
+    if (NULL == m_mem_gc) {
+		_ERR_PRINTF ("Error -- GifAnimate::createGifAnimateFromRes CreateMemGC Error. 1\n");
     }
 #endif
 }
@@ -551,21 +550,21 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
 	GifAnimateFrame *current = NULL;
 
     if (!(m_area = MGUI_RWFromMem ((void*)data, size))) {
-#ifdef _HFCL_GIF_TRACE_ 
+#ifdef _DEBUG 
         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (m_area == NULL).\n");
 #endif
         return;
     }
 
-    if (ReadGIFGlobal (m_area, &m_GifScreen) < 0) {
-#ifdef _HFCL_GIF_TRACE_ 
+    if (ReadGIFGlobal (m_area, &m_gif_screen) < 0) {
+#ifdef _DEBUG 
         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ReadGIFGlobal < 0).\n");
 #endif
         return;
     }
 
     if ((ok = ReadOK (m_area, &c, 1)) == 0) {
-#ifdef _HFCL_GIF_TRACE_ 
+#ifdef _DEBUG 
         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ReadOK == 0).\n");
 #endif
         return;
@@ -575,24 +574,24 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
         switch (c) {
             case '!':
                 if ( (ok = ReadOK (m_area, &c, 1)) == 0) {
-#ifdef _HFCL_GIF_TRACE_ 
+#ifdef _DEBUG 
                     _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (case '!' ReadOK == 0).\n");
 #endif
                     return;
                 }
-                DoExtension (m_area, c, &m_GifScreen);
+                DoExtension (m_area, c, &m_gif_screen);
                 break;
 
             case ',':
-                if (ReadImageDesc (m_area, &ImageDesc, &m_GifScreen) < 0) {
-#ifdef _HFCL_GIF_TRACE_ 
+                if (ReadImageDesc (m_area, &ImageDesc, &m_gif_screen) < 0) {
+#ifdef _DEBUG 
                     _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ReadImageDesc < 0).\n");
 #endif
                     return;
                 }
                 else {
-                    if (ReadImage (m_area, &mybmp, &ImageDesc, &m_GifScreen, 0) < 0) {
-#ifdef _HFCL_GIF_TRACE_ 
+                    if (ReadImage (m_area, &mybmp, &ImageDesc, &m_gif_screen, 0) < 0) {
+#ifdef _DEBUG 
                         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ReadImage < 0).\n");
 #endif
                         return;
@@ -602,7 +601,7 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
                 frame = HFCL_NEW(GifAnimateFrame);
 
                 if(!frame) {
-#ifdef _HFCL_GIF_TRACE_ 
+#ifdef _DEBUG 
                     _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (new frame).\n");
 #endif
                     return;
@@ -610,9 +609,9 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
                 frame->next = NULL;
                 frame->off_y = ImageDesc.Left;
                 frame->off_x = ImageDesc.Top;
-                frame->disposal = m_GifScreen.disposal;
+                frame->disposal = m_gif_screen.disposal;
 
-                frame->delay_time = (m_GifScreen.delayTime>10)?m_GifScreen.delayTime*10:10;
+                frame->delay_time = (m_gif_screen.delayTime>10)?m_gif_screen.delayTime*10:10;
 
                 if(ExpandMyBitmap(HDC_SCREEN, &frame->bmp, &mybmp, ImageDesc.ColorMap, 0) != 0)
                 {
@@ -622,7 +621,7 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
                     if(mybmp.bits)
                         HFCL_DELETE_ARR(mybmp.bits);
                     mybmp.bits = NULL;
-#ifdef _HFCL_GIF_TRACE_ 
+#ifdef _DEBUG 
                     _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ExpandMyBitmap).\n");
 #endif
                     return;
@@ -650,8 +649,8 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
                 {
                     ok = ReadOK (m_area, &c, 1);
                     m_current_frame = m_frames;
-                    m_max_width = m_GifScreen.Width;
-                    m_max_height = m_GifScreen.Height;
+                    m_max_width = m_gif_screen.Width;
+                    m_max_height = m_gif_screen.Height;
                     m_c = c;
                     if(!(c != ';' && ok > 0))
                     {
@@ -669,19 +668,19 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
  
     m_current_frame = m_frames;
     m_last_frame = m_current_frame;
-    m_max_width = m_GifScreen.Width;
-    m_max_height = m_GifScreen.Height;
+    m_max_width = m_gif_screen.Width;
+    m_max_height = m_gif_screen.Height;
 
 ret_tag_0:
-    if(m_mem_gc ) {
-        DeleteMemGc(m_mem_gc);
+    if (m_mem_gc) {
+        DeleteMemGC (m_mem_gc);
     }
 
-    m_mem_gc = CreateMemGc(m_max_width, m_max_height);
+    m_mem_gc = CreateMemGC(m_max_width, m_max_height);
 
-#ifdef _HFCL_GIF_TRACE_ 
-    if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
-        _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem CreateMemGc Error. 0\n");
+#ifdef _DEBUG 
+    if(NULL == m_mem_gc) {
+        _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem CreateMemGC Error. 0\n");
     }
 #endif
 }
@@ -712,15 +711,15 @@ void GifAnimate::loadGifAnimateNextFrameFromMem()
                 if ( (ok = ReadOK (m_area, &c, 1)) == 0) {
                     return;
                 }
-                DoExtension (m_area, c, &m_GifScreen);
+                DoExtension (m_area, c, &m_gif_screen);
                 break;
 
             case ',':
-                if (ReadImageDesc (m_area, &ImageDesc, &m_GifScreen) < 0) {
+                if (ReadImageDesc (m_area, &ImageDesc, &m_gif_screen) < 0) {
                     return;
                 }
                 else {
-                    if (ReadImage (m_area, &mybmp, &ImageDesc, &m_GifScreen, 0) < 0)
+                    if (ReadImage (m_area, &mybmp, &ImageDesc, &m_gif_screen, 0) < 0)
                         return;
                 }
 
@@ -733,9 +732,9 @@ void GifAnimate::loadGifAnimateNextFrameFromMem()
                 frame->next = NULL;
                 frame->off_y = ImageDesc.Left;
                 frame->off_x = ImageDesc.Top;
-                frame->disposal = m_GifScreen.disposal;
+                frame->disposal = m_gif_screen.disposal;
 
-                frame->delay_time = (m_GifScreen.delayTime>10)?m_GifScreen.delayTime*10:10;
+                frame->delay_time = (m_gif_screen.delayTime>10)?m_gif_screen.delayTime*10:10;
 
                 if(ExpandMyBitmap(HDC_SCREEN, &frame->bmp, &mybmp, ImageDesc.ColorMap, 0) != 0)
                 {
@@ -770,8 +769,8 @@ void GifAnimate::loadGifAnimateNextFrameFromMem()
                 {
                     ok = ReadOK (m_area, &c, 1);
                     m_current_frame = frame;
-                    m_max_width = m_GifScreen.Width;
-                    m_max_height = m_GifScreen.Height;
+                    m_max_width = m_gif_screen.Width;
+                    m_max_height = m_gif_screen.Height;
                     m_c = c;
                     if(!(c != ';' && ok > 0))
                     {
@@ -788,19 +787,18 @@ void GifAnimate::loadGifAnimateNextFrameFromMem()
 	m_last_frame = m_current_frame;
 
 ret_tag:
-    if (m_max_width != m_GifScreen.Width || m_max_height != m_GifScreen.Height)
-    {
-        m_max_width = m_GifScreen.Width;
-        m_max_height = m_GifScreen.Height;
+    if (m_max_width != m_gif_screen.Width || m_max_height != m_gif_screen.Height) {
+        m_max_width = m_gif_screen.Width;
+        m_max_height = m_gif_screen.Height;
 
-        if(m_mem_gc ) {
-            DeleteMemGc(m_mem_gc);
+        if (m_mem_gc) {
+            DeleteMemGC(m_mem_gc);
         }
 
-        m_mem_gc = CreateMemGc(m_max_width, m_max_height);
-#ifdef _HFCL_GIF_TRACE_
-        if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
-            _DBG_PRINTF ("GifAnimate::createGifAnimateFromMem CreateMemGc Error. 0\n");
+        m_mem_gc = CreateMemGC(m_max_width, m_max_height);
+#ifdef _DEBUG
+        if(NULL == m_mem_gc) {
+            _DBG_PRINTF ("GifAnimate::createGifAnimateFromMem CreateMemGC Error. 0\n");
         }
 #endif
     }
@@ -826,7 +824,7 @@ void GifAnimate::createGifAnimateFromFile (const char* file)
     }
 #endif
 
-    if (ReadGIFGlobal (m_area, &m_GifScreen) < 0)
+    if (ReadGIFGlobal (m_area, &m_gif_screen) < 0)
         return;
 
     if ((ok = ReadOK (m_area, &c, 1)) == 0) {
@@ -839,15 +837,15 @@ void GifAnimate::createGifAnimateFromFile (const char* file)
                 if ( (ok = ReadOK (m_area, &c, 1)) == 0) {
                     return;
                 }
-                DoExtension (m_area, c, &m_GifScreen);
+                DoExtension (m_area, c, &m_gif_screen);
                 break;
 
             case ',':
-                if (ReadImageDesc (m_area, &ImageDesc, &m_GifScreen) < 0) {
+                if (ReadImageDesc (m_area, &ImageDesc, &m_gif_screen) < 0) {
                     return;
                 }
                 else {
-                    if (ReadImage (m_area, &mybmp, &ImageDesc, &m_GifScreen, 0) < 0)
+                    if (ReadImage (m_area, &mybmp, &ImageDesc, &m_gif_screen, 0) < 0)
                         return;
                 }
 
@@ -859,9 +857,9 @@ void GifAnimate::createGifAnimateFromFile (const char* file)
                 frame->next = NULL;
                 frame->off_y = ImageDesc.Left;
                 frame->off_x = ImageDesc.Top;
-                frame->disposal = m_GifScreen.disposal;
+                frame->disposal = m_gif_screen.disposal;
 
-                frame->delay_time = (m_GifScreen.delayTime>10)?m_GifScreen.delayTime*10:10;
+                frame->delay_time = (m_gif_screen.delayTime>10)?m_gif_screen.delayTime*10:10;
 
                 if(ExpandMyBitmap(HDC_SCREEN, &frame->bmp, &mybmp, ImageDesc.ColorMap, 0) != 0)
                 {
@@ -894,8 +892,8 @@ void GifAnimate::createGifAnimateFromFile (const char* file)
                 {
                     ok = ReadOK (m_area, &c, 1);
                     m_current_frame = m_frames;
-                    m_max_width = m_GifScreen.Width;
-                    m_max_height = m_GifScreen.Height;
+                    m_max_width = m_gif_screen.Width;
+                    m_max_height = m_gif_screen.Height;
                     m_c = c;
                     if(!(c != ';' && ok > 0))
                     {
@@ -913,18 +911,18 @@ void GifAnimate::createGifAnimateFromFile (const char* file)
  
     m_current_frame = m_frames;
     m_last_frame = m_current_frame;
-    m_max_width = m_GifScreen.Width;
-    m_max_height = m_GifScreen.Height;
+    m_max_width = m_gif_screen.Width;
+    m_max_height = m_gif_screen.Height;
 
 ret_tag_0:
-    if(m_mem_gc ) {
-        DeleteMemGc(m_mem_gc);
+    if (m_mem_gc) {
+        DeleteMemGC(m_mem_gc);
     }
 
-    m_mem_gc = CreateMemGc(m_max_width, m_max_height);
-#ifdef _HFCL_GIF_TRACE_
-    if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
-        _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem CreateMemGc Error. 0\n");
+    m_mem_gc = CreateMemGC(m_max_width, m_max_height);
+#ifdef _DEBUG
+    if(NULL == m_mem_gc) {
+        _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem CreateMemGC Error. 0\n");
     }
 #endif
 }
@@ -1021,14 +1019,14 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
         m_max_height = GifScreen.Height;
 
         if(m_mem_gc ) {
-            DeleteMemGc(m_mem_gc);
+            DeleteMemGC(m_mem_gc);
         }
 
-        m_mem_gc = CreateMemGc(m_max_width, m_max_height);
+        m_mem_gc = CreateMemGC(m_max_width, m_max_height);
 
-#ifdef _HFCL_GIF_TRACE_
-        if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
-            _DBG_PRINTF ("GifAnimate::createGifAnimateFromMem CreateMemGc Error. 0\n");
+#ifdef _DEBUG
+        if(NULL == m_mem_gc) {
+            _DBG_PRINTF ("GifAnimate::createGifAnimateFromMem CreateMemGC Error. 0\n");
         }
 #endif
     }
@@ -1131,9 +1129,8 @@ void GifAnimate::createGifAnimateFromFile (const char* file)
 void GifAnimate::nextFrame(void)
 {
 #ifdef _HFCL_INCORE_BMPDATA
-    m_nextFrameIndex++;
-    if(m_nextFrameIndex >= 2)
-    {
+    m_next_frame_idx++;
+    if(m_next_frame_idx >= 2) {
         loadGifAnimateNextFrameFromMem();
         if(m_last_frame == m_current_frame)
         {
@@ -1159,13 +1156,13 @@ void GifAnimate::firstFrame(void)
     int ok = 0;
     m_area->seek(m_area,0,SEEK_SET);
     
-    if (ReadGIFGlobal (m_area, &m_GifScreen) < 0)
+    if (ReadGIFGlobal (m_area, &m_gif_screen) < 0)
         return;
 
     if ((ok = ReadOK (m_area, &m_c, 1)) == 0) {
         return;
     }
-    m_nextFrameIndex = 0;
+    m_next_frame_idx = 0;
     m_nr_frames = 0;
     loadGifAnimateNextFrameFromMem();
     m_current_frame = m_frames;
@@ -1175,7 +1172,7 @@ void GifAnimate::firstFrame(void)
 #endif
 }
 
-GifAnimate::GifAnimate() :RefCount(0)
+GifAnimate::GifAnimate() : RefCount (0)
 {
     m_current_frame = NULL;
     m_frames = NULL;
@@ -1183,23 +1180,12 @@ GifAnimate::GifAnimate() :RefCount(0)
     m_max_width = 0;
     m_max_height = 0;
     m_is_scale = false;
-    m_nextFrameIndex = 0;
-
-#if 0
-  if(m_mem_gc )
-    {
-        _ERR_PRINTF("GifAnimate::GifAnimate some where not free");
-    }
-    m_mem_gc = CreateMemGc(_ngux_screen_w, _ngux_screen_h);
-	if(! m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc)
-	{
-//		_ERR_PRINTF("GifAnimate::GifAnimate malloc fail");
-	}
-#endif	
-
+    m_next_frame_idx = 0;
+    m_mem_gc = NULL;
 }
 
-GifAnimate::GifAnimate(int ops) :RefCount(0)
+#if 0 // VW: remove this constructor
+GifAnimate::GifAnimate(int ops) : RefCount(0)
 {
     m_current_frame = NULL;
     m_frames = NULL;
@@ -1207,20 +1193,21 @@ GifAnimate::GifAnimate(int ops) :RefCount(0)
     m_max_width = 0;
     m_max_height = 0;
     m_is_scale = false;
-    m_nextFrameIndex = 0;
+    m_next_frame_idx = 0;
     
-    if(m_mem_gc ) {
+    if (m_mem_gc) {
         _DBG_PRINTF ("GifAnimate::GifAnimate some where not free\n");
     }
     
-    m_mem_gc = CreateMemGc(_ngux_screen_w, _ngux_screen_h);
+    m_mem_gc = CreateMemGC(_ngux_screen_w, _ngux_screen_h);
 
-#ifdef _HFCL_GIF_TRACE_
-	if(NULL == m_mem_gc || HDC_INVALID == (unsigned int) m_mem_gc) {
-		_DBG_PRINTF ("GifAnimate::GifAnimate CreateMemGc Error. 2\n");
+#ifdef _DEBUG
+	if (NULL == m_mem_gc) {
+		_DBG_PRINTF ("GifAnimate::GifAnimate CreateMemGC Error. 2\n");
 	}
 #endif
 }
+#endif
 
 GifAnimate::~GifAnimate()
 {
@@ -1232,7 +1219,7 @@ GifAnimate::~GifAnimate()
 		UnloadBitmap(&f->bmp);
 #endif
 		HFCL_DELETE(f);
-#ifdef _HFCL_GIF_TRACE_
+#ifdef _DEBUG
 		_DBG_PRINTF ("GifAnimate::GifAnimate delete f=%x", f);
 #endif
 	}
@@ -1241,7 +1228,7 @@ GifAnimate::~GifAnimate()
 #endif
 
     if (NULL != m_mem_gc) {
-        DeleteMemGc(m_mem_gc);
+        DeleteMemGC(m_mem_gc);
         m_mem_gc = NULL;
     }
 }
@@ -1291,13 +1278,13 @@ void GifAnimate::restorePrevFrame(const IntRect &rect, GifAnimateFrame* frame)
 void GifAnimate::drawFrameOnMem(const IntRect &rect, GifAnimateFrame* frame)
 {
     if (NULL == frame) {
-#ifdef _HFCL_GIF_TRACE_
+#ifdef _DEBUG
         _DBG_PRINTF ("Error :: GifAnimate::drawFrameOnMem ... frame == NULL \n");
 #endif
         return;
     }
     if (NULL == m_mem_gc) {
-#ifdef _HFCL_GIF_TRACE_
+#ifdef _DEBUG
         _DBG_PRINTF ("Error :: GifAnimate::drawFrameOnMem ... m_mem_gc == NULL \n");
 #endif
         return;
@@ -1319,21 +1306,21 @@ void GifAnimate::drawOneFrame(GraphicsContext* graphics,
 		const IntRect &rect, GifAnimateFrame* frame)
 { 
     if (NULL == graphics) {
-#ifdef _HFCL_GIF_TRACE_
+#ifdef _DEBUG
         _DBG_PRINTF ("Error :: GifAnimate::drawOneFrame ... graphics == NULL \n");
 #endif
         return;
     }
     
     if (NULL == m_current_frame) {
-#ifdef _HFCL_GIF_TRACE_
+#ifdef _DEBUG
         _DBG_PRINTF ("Error :: GifAnimate::drawOneFrame ... m_current_frame == NULL \n");
 #endif
         return;
     }
 
     if (NULL == m_mem_gc) {
-#ifdef _HFCL_GIF_TRACE_
+#ifdef _DEBUG
         _DBG_PRINTF ("Error :: GifAnimate::drawOneFrame ... m_mem_gc == NULL \n");
 #endif
         return;

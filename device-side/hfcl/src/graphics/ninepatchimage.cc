@@ -19,9 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "ninepatchimage.h"
-#include "resloader.h"
-
+#include "graphics/ninepatchimage.h"
+#include "resource/resloader.h"
 
 namespace hfcl {
 

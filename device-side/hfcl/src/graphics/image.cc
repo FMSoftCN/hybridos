@@ -19,12 +19,13 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "graphics/image.h"
+
 #include <string.h>
 
-#include "graphics/image.h"
-#include "ninepatchimage.h"
-#include "threepatchimage.h"
-#include "resloader.h"
+#include "graphics/ninepatchimage.h"
+#include "graphics/threepatchimage.h"
+#include "resource/resloader.h"
 
 #define IMAGE_TYPE_NORMAL    0
 #define IMAGE_TYPE_9_PATCH   1

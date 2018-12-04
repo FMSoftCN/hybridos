@@ -26,7 +26,7 @@
 #include "common/intrect.h"
 #include "graphics/graphicscontext.h"
 #include "style.h"
-#include "color.h"
+#include "graphics/color.h"
 #include "graphics/font.h"
 #include "bmpfont.h"
 #include "view/view.h"

@@ -28,6 +28,8 @@
 #include "common/intrect.h"
 #include "mgcl/mgcl.h"
 
+namespace hfcl {
+
 typedef BITMAP 	Bitmap;
 
 #ifdef  USE_HFCL_FONT
@@ -59,8 +61,6 @@ typedef struct _tagBitmapFrameArray
 #define HFCL_BMP_TYPE_COLORKEY       0x10
 #define HFCL_BMP_TYPE_ALPHA_MASK     0x20
 #define HFCL_BMP_TYPE_PRIV_PIXEL     0x00
-
-namespace hfcl {
 
 typedef LOGFONT Logfont;
 
@@ -112,7 +112,6 @@ class GraphicsContext : public Object {
 
         void getTextDrawSize (const string text, Logfont *f, int *w, int *h);
         void getTextDrawSize (const char *text, Logfont *f, int *w, int *h);
-        void getTextDrawSize (const unsigned short *text, Logfont *f, int *w, int *h);
 
         bool getBiDiFlag (void);
         void setBiDiFlag (bool bidi);
@@ -196,21 +195,10 @@ class GraphicsContext : public Object {
         static GraphicsContext *screen_graphics_context;
 };
 
-GraphicsContext* CreateMemGc(int w, int h);
-void DeleteMemGc(GraphicsContext *memGc);
+GraphicsContext* CreateMemGC(int w, int h);
+void DeleteMemGC(GraphicsContext *memGc);
 
 bool SaveScreenToFile (const char * bmpFile);
-
-int GetFirstUTF8CharLen(const char *str, int len);
-int GetLastUTF8CharLen(const char *str, int len);
-int GetUTF8CharInfo(const char *mstr, int len, int *retPosChars);
-int GetUTF8CharCount(const char *mstr, int len);
-BOOL HasUCS2Char(const char *mstr, int len);
-int GetUTF8LenByCharCount(const char *mstr, int charcount);
-Uint16 utf8_to_ucs2 (Uint8 *utf8);
-BOOL isNumberChar (Uint16 inChar);
-BOOL isSymbolChar (Uint16 inChar);
-BOOL isArabicSymbol (Uint16 inChar);
 
 } // namespace hfcl
 

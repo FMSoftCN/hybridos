@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "threepatchimage.h"
-#include "resloader.h"
+#include "graphics/threepatchimage.h"
+#include "resource/resloader.h"
 
 namespace hfcl {
 

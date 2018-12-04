@@ -1,4 +1,4 @@
-SUBDIRS=common activity view animation services
+SUBDIRS=common activity graphics view animation services
 lib_LTLIBRARIES=libhfcl@LIB_SUFFIX@.la
 
 AM_CPPFLAGS=-I../include

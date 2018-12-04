@@ -66,53 +66,14 @@
 namespace hfcl {
 
 /*
-** check a utf8 string
-** check the tail characters correct or not.
-** if incorrect, cut the tail.
+** VW: no need to check UTF8 validation for string.
 **/
-inline int check_utf8_str(char *_buff, int _len)
-{		
-	int _tail_utf8_len = 1;
-	int _tail_real_len = 1;
-
-	if (_buff == NULL)
-		return 0;
-
-	if (_len <= 0) {
-		_len = strlen(_buff);
-	}
-	char *_tail = _buff + _len - 1;
-
-	if (!((*_tail) & 0x80)) {
-		// tail is assic charater
-		return _len;
-	}
-
-	while(((*_tail) & 0x80) && !((*_tail) & 0x40)) {
-		_tail_real_len++;
-		_tail--;
-	}
-
-	if (!((*_tail) & 0x80)) {
-		*(_tail + 1) = '\0';
-		return _len - (_tail_real_len - 1);
-	}
-	
-	while ((*_tail)  & (0x80 >> _tail_utf8_len)) {
-    	_tail_utf8_len++;
-	}
-	
-	if (_tail_utf8_len != _tail_real_len) {
-		// cut the error tail
-		*_tail = '\0';
-		return _len - _tail_real_len;
-	}
-	
-	return _len;
+inline int check_utf8_str (char *_buff, int _len)
+{
+    return _len;
 }
 
-class StrBuffer
-{
+class StrBuffer {
     char  buf[1];
     StrBuffer() { buf[0] = 0; }
 public:
@@ -148,7 +109,6 @@ public:
 };
 
 class string {
-    char * _str_buff;
 public:
     string() { _str_buff = NULL; }
     string(const char* str, int n = -1) {
@@ -164,7 +124,6 @@ public:
             _str_buff[n] = 0;
 			check_utf8_str(_str_buff, n);
         }
-	
     }
 
     string(const string& str) {
@@ -342,6 +301,9 @@ public:
             n = len - pos;
         return string(s + pos, n);
     }
+
+private:
+    char * _str_buff;
 };
 
 class vector_base

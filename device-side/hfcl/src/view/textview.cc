@@ -21,8 +21,9 @@
 
 #include "view/textview.h"
 
+#include "common/helpers.h"
+#include "graphics/textmode.h"
 #include "view/containerview.h"
-#include "view/textmode.h"
 #include "view/transition.h"
 
 // TODO
@@ -200,7 +201,7 @@ void TextView::drawContent(GraphicsContext* context, IntRect &rc, int status)
         {
             memcpy(tmpchar, str + info[i-1], info[i] - info[i-1]);
             tmpchar [info[i] - info[i-1]] = '\0';
-            if(isSymbolChar(utf8_to_ucs2((Uint8 *)tmpchar)) ||isNumberChar(utf8_to_ucs2((Uint8 *)tmpchar)))
+            if(IsSymbolUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar)) ||IsNumberUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar)))
             {
                 i++;
             }
@@ -211,7 +212,7 @@ void TextView::drawContent(GraphicsContext* context, IntRect &rc, int status)
         }
         free(info);
         info=NULL;
-        if(isTransformArabic(utf8_to_ucs2((Uint8 *)tmpchar)) ||isArabicSymbol(utf8_to_ucs2((Uint8 *)tmpchar)))
+        if(isTransformArabic(UTF8ToUCS2((Uint8 *)tmpchar)) ||IsArabicSymbolUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar)))
         {	   	
             context->setBiDiFirstChType (BIDI_TYPE_RTL);
         }

@@ -19,15 +19,14 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "graphics/graphicscontext.h"
+
 #include "graphics/font.h"
-#include "color.h"
+#include "graphics/color.h"
 #include "graphics/image.h"
-#include "textmode.h"
+#include "graphics/textmode.h"
 
 #include "view/view.h"
-
-
-#include "codeconvert.h"
 
 namespace hfcl {
 
@@ -326,12 +325,13 @@ void GraphicsContext::setBiDiFlag (bool bidi)
 
 int GraphicsContext::getBiDiFirstChType (void)
 {
-    return GetBIDIFirstCharType (m_data->m_context);
+    _DBG_PRINTF ("GraphicsContext::getBiDiFirstChType: NOT IMPLEMENTED\n");
+    return BIDI_TYPE_LTR;
 }
 
 void GraphicsContext::setBiDiFirstChType (int type)
 {
-    SetBIDIFirstCharType (m_data->m_context, type);
+    _DBG_PRINTF ("GraphicsContext::setBiDiFirstChType: NOT IMPLEMENTED\n");
 }
 
 void GraphicsContext::textOutOmitted(int x, int y, const char * text, int len, int max_extent)
@@ -355,34 +355,31 @@ void GraphicsContext::textOutOmitted(int x, int y, const char * text,
     if (!text)
         return;
 
-    Color clr(color);
-    unsigned int oldColor;
-    unsigned int oldBkMode;
-
     int outx, outy;
     HDC hdc = m_data->m_context;
     map(x, y, outx, outy);
 
-    oldBkMode = SetBkMode(hdc, BM_TRANSPARENT);
-    oldColor = SetTextColor(hdc, RGB2Pixel(hdc, clr.r(), clr.g(), clr.b()));
-
-    TextOutOmitted(hdc, outx, outy, text, len, max_extent);
-
-    SetTextColor(hdc, oldColor);
-    SetBkMode(hdc, oldBkMode);
+    SelectFont (m_data->m_context, logfont);
+    SetBkMode (hdc, BM_TRANSPARENT);
+    SetTextColor (hdc, DWORD2Pixel (hdc, color));
+    TextOutOmitted (hdc, outx, outy, text, len, max_extent);
 }
 
 void GraphicsContext::textOut(int x, int y, const char * text, int len,
         unsigned int color, Logfont * logfont)
 {
-	IntRect rc (x, y, _ngux_screen_w, _ngux_screen_h);
-    
 	if (!text)
         return;
 
-	drawText(text, rc, color, logfont, DT_LEFT | DT_TOP);
-}
+    int outx, outy;
+    HDC hdc = m_data->m_context;
+    map(x, y, outx, outy);
 
+    SelectFont (m_data->m_context, logfont);
+    SetBkMode (hdc, BM_TRANSPARENT);
+    SetTextColor (hdc, DWORD2Pixel (hdc, color));
+    TextOutLen (hdc, outx, outy, text, len);
+}
 
 void GraphicsContext::getTextDrawSize (const string text, Logfont *f, int *w, int *h)
 {
@@ -391,27 +388,6 @@ void GraphicsContext::getTextDrawSize (const string text, Logfont *f, int *w, in
 
 void GraphicsContext::getTextDrawSize (const char *text, Logfont *f, int *w, int *h)
 {
-#ifdef USE_RDA_FONT
-    unsigned int cCount;
-    char *tmpStr;
-
-    cCount = GetUtf8StringWidthHeight(text, w, h);
-    tmpStr = (char *)malloc ((cCount + 2) * 2 * sizeof (char));
-
-    if(tmpStr != NULL)
-    {	
-        NGUtf8ToUnicode((unsigned char *)text,(unsigned char *)tmpStr);
-        if (f != NULL) {
-            UI_font_type oldFont = UI_get_font();
-            UI_set_font(f);
-            Get_StringWidthHeight((Uint8 *)tmpStr, w,h);    
-            UI_set_font(oldFont);
-        } else {
-            Get_StringWidthHeight((Uint8 *)tmpStr, w,h);    
-        }
-        free(tmpStr);	
-    }
-#else
     SIZE cz = {0, 0};
     int text_len = strlen (text);
     Glyph32* glyphs = NULL;
@@ -437,59 +413,15 @@ END:
 
     *w = cz.cx;
     *h = cz.cy;
-#endif
-}
-
-void GraphicsContext::getTextDrawSize (const unsigned short *text, Logfont *f, int *w, int *h)
-{
-#ifdef USE_RDA_FONT
-    if(text != NULL)
-    {	
-		if (f != NULL) {
-	        UI_font_type oldFont = UI_get_font();
-	        UI_set_font(f);
-			Get_StringWidthHeight((Uint8 *)text, w,h);    
-	        UI_set_font(oldFont);
-        } else {
-        	Get_StringWidthHeight((Uint8 *)text, w,h);    
-        }
-    }
-#else
-    SIZE cz = {0, 0};
-    int nr_glyphs;
-    Glyph32* glyphs = NGUCS2ConvertToGlyph32 (text, &nr_glyphs);
-
-    if (glyphs == NULL || nr_glyphs <= 0) {
-        goto END;
-    }
-
-    if (getBiDiFlag ()) {
-        BIDILogGlyphs2VisGlyphs (f, glyphs, nr_glyphs, NULL);
-    }
-
-    SelectFont (m_data->m_context, f);
-    GetGlyphsExtent (m_data->m_context, glyphs, nr_glyphs, &cz);
-
-END:
-    if (glyphs)
-        free (glyphs);
-
-    *w = cz.cx;
-    *h = cz.cy;
-#endif
 }
 
 int GraphicsContext::drawTextToCalcRect(const string& text, IntRect& rect, unsigned int format, Logfont *font)
 {
     RECT rc = { rect.left(), rect.top(), rect.right(), rect.bottom() };
 
-#if 0 /* VincentWei: Do not use DrawTextEx3 */
-    DrawTextEx3(m_data->m_context, text.c_str(), -1, &rc, format | DT_CALCRECT, NULL);
-#else
     PLOGFONT old_font = SelectFont (m_data->m_context, font);
     DrawText (m_data->m_context, text.c_str(), -1, &rc, format | DT_CALCRECT);
     SelectFont (m_data->m_context, old_font);
-#endif
     
     rect.setRect( rc.left, rc.top, rc.right, rc.bottom);
     
@@ -502,59 +434,26 @@ int GraphicsContext::calcTextRectOnDrawing(const char *text,
     if (rect == NULL)
         return -1;
 
-    RECT rc = { rect->left(), rect->top(), rect->right(), rect->bottom()};
+    RECT rc = {rect->left(), rect->top(), rect->right(), rect->bottom()};
 
-#if 0 /* VincentWei: Do not use DrawTextEx3 */
-    DrawTextEx3(m_data->m_context, text, -1, &rc, format | DT_CALCRECT, NULL, txtPos);
-#else
     DrawTextEx2(m_data->m_context, text, -1, &rc, 0, format | DT_CALCRECT, firstline);
-#endif
-    
-    rect->setRect( rc.left, rc.top, rc.right, rc.bottom);
+ 
+    rect->setRect(rc.left, rc.top, rc.right, rc.bottom);
     
     return RECTH(rc);
 }
 
 int GraphicsContext::drawTextToGetLenght(const string& text)
 {
-#ifdef USE_RDA_FONT
-    int w = 0, h = 0;
-    char *pUcs2 = NULL;
-    const char *pUtf8 = text.c_str();
-    unsigned int nCount = text.size();
-
-    pUcs2 = (char *)HFCL_MALLOC((nCount + 1) * 2);
-    if(pUcs2 != NULL)
-    {
-        memset(pUcs2, 0x00, (nCount + 1) * 2);
-        NGUtf8ToUnicode((unsigned char *)pUtf8,(unsigned char *)pUcs2);
-        Get_StringWidthHeight((Uint8 *)pUcs2, &w,&h);
-        HFCL_FREE(pUcs2);
-    }
-
-    return w;
-#else
     RECT rc = {0, 0, 100, 30};
 
     DrawText(m_data->m_context, text.c_str(), -1, &rc, DT_SINGLELINE | DT_CALCRECT);
 
     return rc.right - rc.left;
-#endif
 }
 
 int GraphicsContext::getFontHeight(Logfont *f) 
 {
-#ifdef USE_RDA_FONT
-    if (f != NULL) {
-        int ret = 0;
-        UI_font_type oldFont = UI_get_font();
-        UI_set_font(f);
-        ret = Get_CharHeight();
-        UI_set_font(oldFont);
-        return ret;
-    }
-    return Get_CharHeight();
-#else
     if (f) {
         return f->size;
     }
@@ -562,22 +461,10 @@ int GraphicsContext::getFontHeight(Logfont *f)
     Logfont font;
     GetLogFontInfo(m_data->m_context, &font);
     return font.size;
-#endif
 }
 
 int GraphicsContext::getFontWidth(Logfont *f)
 {
-#ifdef USE_RDA_FONT
-    if (f != NULL) {
-        int ret = 0;
-        UI_font_type oldFont = UI_get_font();
-        UI_set_font(f);
-        ret = Get_FontWidth();
-        UI_set_font(oldFont);
-        return ret;
-    }
-	return  Get_FontWidth();
-#else
     FONTMETRICS m;
     if (f) {
         GetFontMetrics (f, &m);
@@ -588,7 +475,6 @@ int GraphicsContext::getFontWidth(Logfont *f)
         GetFontMetrics (&font, &m);
     }
     return m.ave_width;
-#endif
 }
 
 void GraphicsContext::drawText(const string& text, const IntRect& rect)
@@ -601,103 +487,9 @@ void GraphicsContext::drawText(const string& text, const IntRect& rect)
     DrawText(hdc, text.c_str(), -1, &rc, DT_SINGLELINE | DT_CENTER  | DT_VCENTER);
 }
 
-static int utf8_len_first_char (unsigned char* mstr, int len)
-{
-    int t, c = *((unsigned char *)(mstr++));
-
-    if (c & 0x80) {
-        int n = 1, ch_len = 0;
-        while (c & (0x80 >> n))
-            n++;
-
-        if (n > len)
-            return 0;
-
-        ch_len = n;
-        while (--n > 0) {
-            t = *((unsigned char *)(mstr++));
-
-            if ((!(t & 0x80)) || (t & 0x40))
-                return 0;
-        }
-
-        return ch_len;
-    }
-
-    /* for ascii character */
-    return 1;
-}
-
-
 void GraphicsContext::drawText(const char * text, const IntRect& rect,
         unsigned int color, Logfont * logfont, unsigned int format)
 {
-#ifdef USE_RDA_FONT
-    RECT rc = RECT(rect);
-	Color clr(color);
-    HDC hdc = m_data->m_context;
-
-    mapRect(rc);
-
-	if (text == NULL) {
-		return;
-	}
-
-	CheckUtf8Strings((char *)text, -1);
-
-	SetTextColor(hdc, RGB2Pixel(hdc, clr.r(), clr.g(), clr.b()));
-
-    if (format & TextMode::TextOutOmitted) {
-		int _tw, _th;
-		getTextDrawSize(text, logfont, &_tw, &_th);
-        if (_tw > RECTW(rc)) { //need text ommit
-            //calc the size
-            int dotW, dotH;
-			int _len;
-			unsigned char *p = NULL;
-			const char *dotS = "...";
-			char *tmp = (char *)malloc(strlen (text) + 4);
-
-			format &= ~(TextMode::WordBreak | TextMode::CharBreak);
-	        format &= ~(TextMode::TextOutOmitted);
-			format &= ~(TextMode::AlignCenter|TextMode::AlignRight);
-			format &= format | TextMode::SingleLine;
-
-			getTextDrawSize(dotS, logfont, &dotW, &dotH);
-			
-			p = (unsigned char *)text;
-			*tmp = '\0';
-			_len = 0;
-			while (p != NULL){
-				int _w, _h;
-				int charLen = GetFirstUTF8CharLen((const char *)p, strlen((char *)p));
-				if (charLen > 0) {
-					strncat(tmp, (char *)p, charLen);
-					getTextDrawSize(tmp, logfont, &_w, &_h);
-					if (_w + dotW > RECTW(rc)) {
-						*(tmp + _len) = '\0';
-						strncat(tmp, dotS, 3);
-						break;
-					}
-				}
-				else
-				{
-					mmi_trace(0,"  GraphicsContext::drawText buff 0");
-					break;
-				}
-				p += charLen;
-				_len += charLen;
-			}
-
-			DrawTextEx3(hdc, tmp, -1, &rc, format, logfont, NULL);
-			free(tmp);
-            return;
-        }
-
-    }
-
-    DrawTextEx3(hdc, text, -1, &rc, format, logfont, NULL);
-#else
     RECT rc = RECT(rect);
     Color clr(color);
     Logfont* oldFont = NULL;
@@ -751,7 +543,6 @@ void GraphicsContext::drawText(const char * text, const IntRect& rect,
 END:
     if (NULL != logfont)
         SelectFont(hdc, oldFont);
-#endif
 }
 
 void GraphicsContext::clip(const IntRect& rect)
@@ -1057,7 +848,10 @@ bool GraphicsContext::initBitmap(int w, int h, Bitmap* pbmp)
 
 bool GraphicsContext::captureScreen2Bitmap(Bitmap* pbmp)
 {
-    return GetBitmapFromDC(m_data->m_context, 0, 0, _ngux_screen_w, _ngux_screen_h, pbmp);
+    return GetBitmapFromDC (m_data->m_context, 0, 0,
+            GetGDCapability (m_data->m_context, GDCAP_HPIXEL),
+            GetGDCapability (m_data->m_context, GDCAP_VPIXEL),
+            pbmp);
 }
 
 bool GraphicsContext::getBitmapSize(Bitmap* pBitmap, int* w, int* h)
@@ -1075,27 +869,17 @@ bool GraphicsContext::getBitmapSize(Bitmap* pBitmap, int* w, int* h)
 
 Logfont* GraphicsContext::getCurFont(void) 
 { 
-#ifdef USE_RDA_FONT
-    return NULL;
-#else
 	return GetCurFont(m_data->m_context); 
-#endif
 }
 
 Logfont* GraphicsContext::createLogFontByName(const char * fontname)
 {
-#ifdef USE_RDA_FONT
-    return NULL;
-#else
     return CreateLogFontByName(fontname);
-#endif
 }
 
 void GraphicsContext::deleteLogFont(Logfont* logfont)
 {
-#ifndef USE_RDA_FONT
     DestroyLogFont(logfont);
-#endif
 }
 
 void GraphicsContext::rotateBitmap(const Bitmap *pBitmap, int lx, int ty, int angle)
@@ -1167,7 +951,7 @@ void GraphicsContext::setLayerColorKey(int layer, BOOL enable,
 
 /////////////////////////////////////////////////////////
 
-GraphicsContext* CreateMemGc(int w, int h)
+GraphicsContext* CreateMemGC(int w, int h)
 {
 	GraphicsContext* gc = NULL;
 	gc = GraphicsContext::screenGraphics();
@@ -1177,7 +961,7 @@ GraphicsContext* CreateMemGc(int w, int h)
 	return NULL;
 }
 
-void DeleteMemGc(GraphicsContext *memGc)
+void DeleteMemGC(GraphicsContext *memGc)
 {
     if (NULL != memGc) {
         DeleteMemDC(memGc->context());
@@ -1188,248 +972,12 @@ void DeleteMemGc(GraphicsContext *memGc)
 bool SaveScreenToFile(const char * bmpFile)
 {
 #if defined (_MGMISC_SAVESCREEN)
-    RECT rc = {0, 0, _ngux_screen_w, _ngux_screen_h};
+    RECT rc = {0, 0, 
+            (int)GetGDCapability (HDC_SCREEN, GDCAP_HPIXEL),
+            (int)GetGDCapability (HDC_SCREEN, GDCAP_VPIXEL)};
     return SaveScreenRectContent(&rc, bmpFile);
 #endif
     return false;
-}
-
-int GetUTF8CharInfo(const char *mstr, int len, int *retPosChars)
-{
-    int count = 0;
-    int left_bytes = len;
-    int len_cur_char;
-    unsigned char *str_temp = NULL , *_p_str = NULL;
-
-    if(mstr == NULL || len <= 0)
-    {
-        return 0;
-    }
-
-	if ((_p_str = (unsigned char *)HFCL_MALLOC(len + 1)) == NULL)
-	{
-		return 0;
-	}
-	
-	memcpy(_p_str, mstr, len + 1);
-	_p_str[len] = '\0';
-	
-    str_temp = (unsigned char *)_p_str;
-
-	len = CheckUtf8Strings((char *)str_temp, len);
-
-    while (left_bytes > 0) {
-        if (retPosChars)
-            retPosChars [count] = len - left_bytes;
-
-        len_cur_char = utf8_len_first_char(str_temp, left_bytes);
-        if (len_cur_char > 0) {
-            count ++;
-            left_bytes -= len_cur_char;
-            str_temp += len_cur_char;
-            continue;
-        }
-        else if(len_cur_char == 0) 
-        {
-		    int   c = *((unsigned char *)(str_temp));
-	        int n = 1;
-		    if (c & 0x80) {
-		        while (c & (0x80 >> n))
-	            n++;
-		    }
-				
-			if(left_bytes < n)
-			{
-				break;
-			}
-			else //skip to next 
-			{
-	            count ++;
-	            left_bytes -= n;
-	            str_temp += n;
-			}
-				
-		 }
-		 else
-        {
-        	break;
-        }
-    }
-
-	HFCL_FREE(_p_str);
-	
-    return count;
-}
-    
-int GetLastUTF8CharLen(const char *str, int len)
-{
-    int left_bytes = len;
-    int len_cur_char;
-    int lastlen = 0;
-    unsigned char *str_temp = NULL;
-
-    if(str == NULL || len <= 0)
-    {
-        return 0;
-    }
-	
-    str_temp = (unsigned char *)str;
-
-	len = CheckUtf8Strings((char *)str_temp, len);
-		
-    while (left_bytes > 0) {
-        len_cur_char = utf8_len_first_char(str_temp, left_bytes);
-        if (len_cur_char > 0) {
-            left_bytes -= len_cur_char;
-            str_temp += len_cur_char;
-            lastlen = len_cur_char;
-            continue;
-        } else {
-        	break;
-        }
-    }
-    return lastlen;
-}
-
-int GetFirstUTF8CharLen(const char *str, int len)
-{
-    if(str == NULL || len <= 0)
-    {
-        return 0;
-    }
-
-	len = CheckUtf8Strings((char*)str, len);
-
-	return utf8_len_first_char((unsigned char*)str, len);
-}
-
-int GetUTF8CharCount(const char *mstr, int len)
-{
-    int count = 0;
-    int left_bytes = len;
-    int len_cur_char;
-    unsigned char *str_temp = (unsigned char *)mstr;
-
-    if(mstr == NULL || len <= 0)
-    {
-        return 0;
-    }
-	
-	//len = CheckUtf8Strings((char *)str_temp, len);
-	
-    while (left_bytes > 0) {
-        len_cur_char = utf8_len_first_char(str_temp, left_bytes);
-        if (len_cur_char > 0) {
-            count ++;
-            left_bytes -= len_cur_char;
-            str_temp += len_cur_char;
-            continue;
-        } else {
-        	break;
-        }
-    }
-    return count;
-}
-
-
-int GetUTF8LenByCharCount(const char *mstr, int charcount)
-{
-   char *str_temp = NULL;
-   int charLen, tLen = 0;
-   
-    if(mstr == NULL || charcount <= 0)
-    {
-        return 0;
-    }
-	str_temp = (char *)mstr;
-	while (charcount){
-		charLen = GetFirstUTF8CharLen(str_temp, strlen(str_temp));
-		tLen += charLen;
-		str_temp += charLen;
-		charcount --;		
-	}		 
-    return  tLen;
-}
-
-BOOL HasUCS2Char(const char *mstr, int len)
-{
-    BOOL isUcs2Char = FALSE;
-    char *str =(char *)mstr;
-
-	if(mstr == NULL || len <= 0)
-    {
-        return isUcs2Char;
-    }
-	
-	len = CheckUtf8Strings(str, len);
-
-	while (len > 0 && str != NULL){
-		int charLen = GetFirstUTF8CharLen((const char *)str, strlen((char *)str));
-
-		//If it is GSM defined char,then do not use SMSAL_UCS2_DCS
-		if(charLen == 2)
-		{
-			unsigned char c;
-			c = ((str[0]<<6)|(str[1]&0x3f));
-			
-		    if(!UI_TEST_8895_1_CHAR_IN_GSM_DEF_CHAR(c))
-              isUcs2Char = TRUE;
-		}
-		if(charLen > 2)
-		{
-			isUcs2Char = TRUE;
-		}
-		str = str + charLen;
-
-	    if(isUcs2Char)
-            break;
-		if(*str == 0)
-		    break;
-	}	
-    return isUcs2Char;
-}
-
-Uint16 utf8_to_ucs2 (Uint8 *utf8)
-{
-    Uint16  ucs2;
-	unsigned char c = utf8[0];
-
-	if (c < 0x80) {
-		ucs2 = c;
-	} else if (c < 0xe0) {
-		ucs2 = ((Uint16) (c & 0x1f) << 6) | (Uint16) (utf8[1] ^ 0x80);
-	} else {
-	    ucs2 =	  ((Uint16) (c & 0x0f) << 12)
-				| ((Uint16) (utf8[1] ^ 0x80) << 6)
-				|  (Uint16) (utf8[2] ^ 0x80);
-	}
-
-	return ucs2;
-}
-
-BOOL isNumberChar ( Uint16 inChar )
-{
-   if (inChar >= 0x0030  && inChar <= 0x0039) 
-      return TRUE;
-   else
-      return FALSE;
-}
-BOOL isSymbolChar ( Uint16 inChar )
-{
-   if ((inChar >= 0x0020  && inChar <= 0x002F) || (inChar >= 0x003A  && inChar <= 0x0040)
-      ||(inChar >= 0x005B  && inChar <= 0x0060)|| (inChar >= 0x007B  && inChar <= 0x007E) 
-      || (inChar >= 0x00A1 && inChar <= 0x00BF)||(inChar == 0x20AC)||(inChar == 0x060C))
-      return TRUE;
-   else
-      return FALSE;
-}
-
-BOOL isArabicSymbol ( Uint16 inChar )
-{
-   if ((inChar == 0x061B )||(inChar == 0x061F ))
-      return TRUE;
-   else
-      return FALSE;
 }
 
 } // namespace hfcl

@@ -26,7 +26,7 @@
 #include "nguxmenu.h"
 #include "resource/respkgmanager.h"
 #include "menubarview.h"
-#include "color.h"
+#include "graphics/color.h"
 
 #define MAX_MENUITEM_NUM    5
 #define OUT_WIDTH           10

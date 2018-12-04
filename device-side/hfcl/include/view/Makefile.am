@@ -37,7 +37,6 @@ myinclude_HEADERS= \
     slideswitcher.h \
     statusbarview.h \
     tablebarview.h \
-    textmode.h \
     textview.h \
     timeeditor.h \
     titemview.h \

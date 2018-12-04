@@ -11,6 +11,7 @@ libhfcl_common_la_SOURCES = \
     contextstream.cc \
     log.cc \
     methodeventlistener.cc \
+    helpers.cc \
     rbtree.cc \
     quicksort.cc \
     selectsort.cc
