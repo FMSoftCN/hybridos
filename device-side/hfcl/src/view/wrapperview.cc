@@ -350,5 +350,5 @@ void WrapperView::showCaret(bool bShow)
 
 DEFINE_CLASS_NAME(WrapperView)
 
-} // namespace hfcl {
+} // namespace hfcl
 

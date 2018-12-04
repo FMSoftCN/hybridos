@@ -78,5 +78,5 @@ LayoutView::~LayoutView()
 
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

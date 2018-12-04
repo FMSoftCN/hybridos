@@ -186,7 +186,7 @@ public:
             Base* operator->() { return ptr(); } \
     };
 
-} // namespace hfcl {
+} // namespace hfcl
 	
 #endif /* HFCL_COMMON_OBJECT_H_ */
 

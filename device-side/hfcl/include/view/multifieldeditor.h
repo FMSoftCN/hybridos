@@ -102,6 +102,6 @@ class MultiFieldEditor : public FormatEditView
 		DECLARE_CLASS_NAME(MultiFieldEditor)
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif //_MULTIFIELDEDITOR_H

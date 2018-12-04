@@ -175,6 +175,6 @@ class BusyListView : public PanelView
         DECLARE_CLASS_NAME(BusyListView)
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif

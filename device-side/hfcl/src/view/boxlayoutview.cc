@@ -346,5 +346,5 @@ void BoxLayoutView::deleteCells(void)
 
 //====================== end private function define ==========================
 
-} // namespace hfcl {
+} // namespace hfcl
 

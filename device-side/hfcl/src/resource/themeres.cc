@@ -62,5 +62,5 @@ DrawableSet* ThemeRes::getDrawableSet(int theme_drset_id)
 	return GetCommonDrawableSet();
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

@@ -103,7 +103,7 @@ class GifAnimate : public RefCount
         unsigned int m_nextFrameIndex;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 
 #endif  /* HFCL_GifAnimate_h */

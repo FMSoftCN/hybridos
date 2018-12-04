@@ -226,6 +226,6 @@ class FormatEditView : public View
 		DECLARE_CLASS_NAME(FormatEditView)
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif

@@ -32,8 +32,6 @@ namespace hfcl {
 class GraphicsContext;
 class ContainerView;
 
-typedef unsigned int HPlatformOwner;
-
 enum {
 	PAINT_STATUS_SHIFT = 24,
 	PAINT_STATUS_MASK  = ((1 << PAINT_STATUS_SHIFT) - 1),
@@ -186,8 +184,8 @@ public:
     void setAlpha(unsigned char trans);
     unsigned char alpha();
 
-    virtual HPlatformOwner getPlatformOwner() { 
-        return m_parent ? ((View*)m_parent)->getPlatformOwner() : 0;
+    virtual HWND getSysWindow() { 
+        return m_parent ? ((View*)m_parent)->getSysWindow() : 0;
     }
 
     virtual void viewToWindow(int *x, int *y);
@@ -220,6 +218,34 @@ public:
     };
 
     virtual void autoFitSize(bool auto_child_fit = false) {  }
+
+    void freezeUpdate () {
+        setFlag (true, FROZEN);
+    }
+    void unfreezeUpdate (bool update = true) {
+        setFlag (false, FROZEN);
+        if (update) {
+            updateView ();
+        }
+    }
+    bool shouldUpdate () {
+        return (m_flags & FROZEN) != FROZEN;
+    }
+
+    void setVisible(bool b) { setFlag(b, VISIBLE); }
+    bool visible() { return (m_flags & VISIBLE) == VISIBLE; }
+
+    void setFocusValid(bool b) { setFlag(b, FOCUSVALID); }
+    bool focusValid() { return (m_flags & FOCUSVALID) == FOCUSVALID; }
+
+    inline bool focusable() { return (isVisible() && !isDisabled()); }
+
+    void setFocusStop(bool b) { setFlag(b, FOCUSSTOP); }
+    bool isFocusStop() { return m_flags & FOCUSSTOP; }
+    bool focusStopable() { return focusable() && isFocusStop(); }
+
+    int setLayer(int layerNo) { int old = m_drawLayer; m_drawLayer = layerNo; return old; }
+    int layer () { return m_drawLayer; }
 
 protected:
     bool performClick();
@@ -266,35 +292,6 @@ protected:
 
     virtual void inner_updateView(int x, int y, int w, int h, bool upBackGnd = true);
     void inner_updateViewRect(int x, int y, int w, int h);
-
-public:
-    void freezeUpdate () {
-        setFlag (true, FROZEN);
-    }
-    void unfreezeUpdate (bool update = true) {
-        setFlag (false, FROZEN);
-        if (update) {
-            updateView ();
-        }
-    }
-    bool shouldUpdate () {
-        return (m_flags & FROZEN) != FROZEN;
-    }
-
-    void setVisible(bool b) { setFlag(b, VISIBLE); }
-    bool visible() { return (m_flags & VISIBLE) == VISIBLE; }
-
-    void setFocusValid(bool b) { setFlag(b, FOCUSVALID); }
-    bool focusValid() { return (m_flags & FOCUSVALID) == FOCUSVALID; }
-
-    inline bool focusable() { return (isVisible() && !isDisabled()); }
-
-    void setFocusStop(bool b) { setFlag(b, FOCUSSTOP); }
-    bool isFocusStop() { return m_flags & FOCUSSTOP; }
-    bool focusStopable() { return focusable() && isFocusStop(); }
-
-    int setLayer(int layerNo) { int old = m_drawLayer; m_drawLayer = layerNo; return old; }
-    int layer () { return m_drawLayer; }
 };
 
 } // namespace hfcl

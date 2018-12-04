@@ -109,7 +109,7 @@ private:
     bool  m_highlight;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif // _HFCL_SLEDITVIEW_H_
 

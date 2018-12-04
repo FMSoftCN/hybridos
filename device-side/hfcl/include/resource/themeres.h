@@ -38,7 +38,7 @@ class ThemeRes {
         string m_theme_name;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* __THEMERES_H */
 

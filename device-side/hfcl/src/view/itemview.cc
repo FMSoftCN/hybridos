@@ -68,7 +68,6 @@ void ItemView::drawContent(GraphicsContext* context, IntRect& rc, int status)
 	return PanelView::drawContent(context, rc, status);
 }
 
-
 void ItemView::draw_select(GraphicsContext* context, IntRect &rc, int status)
 {
     IntRect rect(rc);
@@ -148,8 +147,6 @@ int ItemView::getHilightDrawState() {
 	return -1;
 }
 
-
-
 void ItemView::setItemHeight(int h)
 {
 	IntRect rect = (IntRect)getRect();
@@ -161,4 +158,4 @@ void ItemView::setItemHeight(int h)
 
 DEFINE_CLASS_NAME(ItemView)
 
-} // namespace hfcl {
+} // namespace hfcl

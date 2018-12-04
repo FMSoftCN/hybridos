@@ -206,4 +206,4 @@ void PointerKeeper::move(int from, int to, int cnt)
 	}
 }
 
-} // namespace hfcl {
+} // namespace hfcl

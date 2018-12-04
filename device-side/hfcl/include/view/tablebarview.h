@@ -180,6 +180,6 @@ public:
 	}
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif 

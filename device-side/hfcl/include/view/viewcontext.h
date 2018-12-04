@@ -148,6 +148,6 @@ public:
 };
 
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* _HFCL_ViewContext_h */

@@ -299,5 +299,5 @@ void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat forma
     }
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

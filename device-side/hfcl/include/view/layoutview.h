@@ -88,7 +88,7 @@ class LayoutView : public ContainerView {
         unsigned int m_direction;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif  /* __HFCL_LAYOUTVIEW_H__ */
 

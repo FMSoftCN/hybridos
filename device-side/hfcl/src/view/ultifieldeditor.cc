@@ -312,5 +312,5 @@ bool MultiFieldEditor::checkContent(void)
 
 DEFINE_CLASS_NAME(MultiFieldEditor)
 
-} // namespace hfcl {
+} // namespace hfcl
 

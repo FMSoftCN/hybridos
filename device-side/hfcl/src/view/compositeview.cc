@@ -71,4 +71,4 @@ void CompositeView::updateDrawableSets(int i_id)
 
 DEFINE_CLASS_NAME(CompositeView)
 
-} // namespace hfcl {
+} // namespace hfcl

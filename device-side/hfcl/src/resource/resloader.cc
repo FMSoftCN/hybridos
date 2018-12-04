@@ -541,5 +541,5 @@ unsigned int GetAudioResBuffer(unsigned char audioId , unsigned int** pBuffer ,u
     }
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

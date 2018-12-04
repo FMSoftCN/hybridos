@@ -386,4 +386,4 @@ string EditView::apply_comma_multiple_value_in_calculator(char *str, int *cursor
 
 	
 }
-} // namespace hfcl {
+} // namespace hfcl

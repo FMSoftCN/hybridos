@@ -45,4 +45,4 @@ Color::Color(unsigned char c_r, unsigned char c_g, unsigned char c_b, unsigned c
 
 
 // END of namespace NGUX
-} // namespace hfcl {
+} // namespace hfcl

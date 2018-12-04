@@ -2554,4 +2554,4 @@ void MlEditView::drawScroll (GraphicsContext* gc, IntRect &rc, int status)
 //    gc->fillRect(_rc,0x80,0x80,0x80,0xFF);
 }
 
-} // namespace hfcl {
+} // namespace hfcl

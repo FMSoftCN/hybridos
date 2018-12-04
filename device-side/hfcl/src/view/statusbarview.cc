@@ -142,5 +142,5 @@ void StatusBarView::resetViewRect(SBViewNode* sbvn)
     }
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

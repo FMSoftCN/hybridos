@@ -134,4 +134,4 @@ void PanelView::drawBackground(GraphicsContext* context, IntRect &rc, int status
 
 DEFINE_CLASS_NAME(PanelView)
 
-} // namespace hfcl {
+} // namespace hfcl

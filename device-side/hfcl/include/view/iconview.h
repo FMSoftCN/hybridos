@@ -103,6 +103,6 @@ class IconView : public ScrollView
         GridView *m_gridView;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif //_HFCL_IconView_h

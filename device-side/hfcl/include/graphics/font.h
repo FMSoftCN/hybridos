@@ -48,6 +48,6 @@ protected:
     Logfont* m_logfont;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /*_HFCL_FONT_H_*/

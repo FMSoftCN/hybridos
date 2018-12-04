@@ -132,7 +132,7 @@ private:
 	bool      m_isWordBreak;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif // _HFCL_MLEDITVIEW_H_
 

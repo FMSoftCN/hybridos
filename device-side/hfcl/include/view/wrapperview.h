@@ -122,7 +122,7 @@ protected:
 };
 
 
-} // namespace hfcl {
+} // namespace hfcl
 
 
 #endif

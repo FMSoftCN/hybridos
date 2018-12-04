@@ -88,5 +88,5 @@ Image* ImageRes::get(const char* resPath)
     return m_image;
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

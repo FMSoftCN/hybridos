@@ -69,6 +69,6 @@ class PointerKeeper
 		unsigned int* m_pointerbuf;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif

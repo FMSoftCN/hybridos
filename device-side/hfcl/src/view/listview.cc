@@ -862,5 +862,5 @@ void ListView::animationScroll(int offy)
 
 DEFINE_CLASS_NAME(ListView)
 
-} // namespace hfcl {
+} // namespace hfcl
 

@@ -517,5 +517,5 @@ void LineLayoutView::remainingClearedNodeRect(LineLayoutNode* node)
 
 //====================== end private function define ==========================
 
-} // namespace hfcl {
+} // namespace hfcl
 

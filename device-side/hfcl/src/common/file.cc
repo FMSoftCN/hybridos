@@ -188,5 +188,5 @@ char * File::openMode(FileModeType mode)
 
 //====================== end private function define ==========================
 
-} // namespace hfcl {
+} // namespace hfcl
 

@@ -65,7 +65,7 @@ class Image : public RefCount {
 
 AUTOPTR(Image)
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif  /* HFCL_Image_h */
 

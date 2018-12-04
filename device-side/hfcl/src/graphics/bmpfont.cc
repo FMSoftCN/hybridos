@@ -92,5 +92,5 @@ BMPFont::~BMPFont()
 
 
 
-} // namespace hfcl {
+} // namespace hfcl
 #endif

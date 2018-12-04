@@ -20,8 +20,8 @@
 */
 
 
-#ifndef _HFCL_AnimateImageView_h
-#define _HFCL_AnimateImageView_h
+#ifndef HFCL_VIEW_ANIMATEIMAGEVIEW_H_
+#define HFCL_VIEW_ANIMATEIMAGEVIEW_H_
 
 #include "graphics/image.h"
 #include "view/view.h"
@@ -29,96 +29,94 @@
 
 namespace hfcl {
 
-class AnimateImageView : public View, TimerEventListener
-{
-    public:
-		typedef enum _tagPlayState
-        {
-            Play = 0,
-            Pause,
-            Stop
-        }PlayState;
-		
-        AnimateImageView(View* parent);
-        AnimateImageView(View* parent, DrawableSet* drset);
-        AnimateImageView(Image* pImage, int id, int x, int y, int w, int h);
-        AnimateImageView(const char * filePath, int id, int x, int y, int w, int h,
-                int mode = DRAWMODE_NORMAL,
-                int align = ALIGN_CENTER,
-                int valign = VALIGN_MIDDLE);
+class AnimateImageView : public View, TimerEventListener {
+public:
+    typedef enum _tagPlayState {
+        Play = 0,
+        Pause,
+        Stop
+    }PlayState;
+    
+    AnimateImageView(View* parent);
+    AnimateImageView(View* parent, DrawableSet* drset);
+    AnimateImageView(Image* pImage, int id, int x, int y, int w, int h);
+    AnimateImageView(const char * filePath, int id, int x, int y, int w, int h,
+            int mode = DRAWMODE_NORMAL,
+            int align = ALIGN_CENTER,
+            int valign = VALIGN_MIDDLE);
 
-        virtual ~AnimateImageView();
+    virtual ~AnimateImageView();
 
-        bool setImage(Image* pImg);
-		Image *getImage(void) { return m_image; }
-		
-        void setImageDrawMode(int  mode) {
-            m_format.drawMode = mode;
-        }
-        void setImageAlign(int halign) {
-            m_format.align = halign;
-        }
-        void setImageVAlign(int valign) {
-            m_format.valign = valign;
-        }
-	 	void setImageRotationAngle(int RotationAngle) {
-            m_format.rotationAngle = RotationAngle;
-        }
+    bool setImage(Image* pImg);
+    Image *getImage(void) { return m_image; }
+    
+    void setImageDrawMode(int  mode) {
+        m_format.drawMode = mode;
+    }
+    void setImageAlign(int halign) {
+        m_format.align = halign;
+    }
+    void setImageVAlign(int valign) {
+        m_format.valign = valign;
+    }
+    void setImageRotationAngle(int RotationAngle) {
+        m_format.rotationAngle = RotationAngle;
+    }
 
-        virtual void drawContent(GraphicsContext* context,
-                IntRect &rc, int status/*= Style::NORMAL*/);
+    virtual void drawContent(GraphicsContext* context,
+            IntRect &rc, int status/*= Style::NORMAL*/);
 
-        virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
+    virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 
-        void setPartBoxXoYo(int xo = 0, int yo = 0);
-        void getPartBoxXoYo(int& xo, int& yo);
+    void setPartBoxXoYo(int xo = 0, int yo = 0);
+    void getPartBoxXoYo(int& xo, int& yo);
 
-        void setFromImgRect(bool bSet = false);
-        int getImageWidth(void);
-        int getImageHeight(void);
-		bool setReplaceColor(const DWORD color);
-		bool start(void);
-        bool stop(void); 
-		bool setImageIdArray(unsigned int * array, unsigned int num, int timeDuration,const DWORD color);
-		bool handleEvent(Event* event);
-		
-    protected:
-        Image*    		m_image;
-        ImageFormat 	m_format;
-		unsigned int  * m_imageId_array;
-		unsigned int    m_imageId_array_num;
-		unsigned int    m_imageId_array_index;
-		int		        m_timeDuration;
-		int         	m_elapsed_10ms;
+    void setFromImgRect(bool bSet = false);
+    int getImageWidth(void);
+    int getImageHeight(void);
+    bool setReplaceColor(const DWORD color);
+    bool start(void);
+    bool stop(void); 
+    bool setImageIdArray(unsigned int * array, unsigned int num, int timeDuration,const DWORD color);
+    bool handleEvent(Event* event);
+    
+protected:
+    Image*    		m_image;
+    ImageFormat 	m_format;
+    unsigned int  * m_imageId_array;
+    unsigned int    m_imageId_array_num;
+    unsigned int    m_imageId_array_index;
+    int		        m_timeDuration;
+    int         	m_elapsed_10ms;
 
-	protected:
-        void init() {
-            m_format.drawMode = DRAWMODE_NORMAL;
-            m_format.align    = ALIGN_CENTER;
-            m_format.valign   = VALIGN_MIDDLE;
-	     	m_format.rotationAngle   = 0;
+    void init() {
+        m_format.drawMode = DRAWMODE_NORMAL;
+        m_format.align    = ALIGN_CENTER;
+        m_format.valign   = VALIGN_MIDDLE;
+        m_format.rotationAngle   = 0;
 
-            m_xo = 0;
-            m_yo = 0;
-			m_imageId_array_num = 0;
-			m_imageId_array_index = 0;
-			m_timeDuration = 0;
-			m_elapsed_10ms = 0;
-			m_image = NULL;
-			m_state = Stop;
-			m_replaceColor = 0;
-        }
+        m_xo = 0;
+        m_yo = 0;
+        m_imageId_array_num = 0;
+        m_imageId_array_index = 0;
+        m_timeDuration = 0;
+        m_elapsed_10ms = 0;
+        m_image = NULL;
+        m_state = Stop;
+        m_replaceColor = 0;
+    }
 
-        DECLARE_CLASS_NAME(AnimateImageView)
-    private:
-        int m_xo;
-        int m_yo;
-        int         m_timer_id;
-        PlayState   m_state;
-        DWORD 	m_replaceColor;
+    DECLARE_CLASS_NAME(AnimateImageView)
+
+private:
+    int         m_xo;
+    int         m_yo;
+    int         m_timer_id;
+    PlayState   m_state;
+    DWORD 	    m_replaceColor;
 };
 
 } // namespace hfcl
 
-#endif /* HFCL_ImageView_h */
+#endif /* HFCL_VIEW_ANIMATEIMAGEVIEW_H_ */
 

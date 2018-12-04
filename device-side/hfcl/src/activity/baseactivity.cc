@@ -61,4 +61,4 @@ bool BaseActivity::isSuspendable(void)
 	return true;
 }
 
-} // namespace hfcl {
+} // namespace hfcl

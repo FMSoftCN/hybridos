@@ -158,7 +158,7 @@ protected:
     DECLARE_CLASS_NAME(MenuBarView)
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif  // _HFCL_MenubarView_h
 

@@ -398,5 +398,5 @@ bool SlideSwitcher::onKeyPressed(int keyCode)
 
 DEFINE_CLASS_NAME(SlideSwitcher)
 
-} // namespace hfcl {
+} // namespace hfcl
 

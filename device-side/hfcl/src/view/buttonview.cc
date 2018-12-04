@@ -193,5 +193,5 @@ void ButtonView::onLoseFocus()
 
 DEFINE_CLASS_NAME(ButtonView)
 
-} // namespace hfcl {
+} // namespace hfcl
 

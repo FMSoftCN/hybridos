@@ -122,7 +122,7 @@ int GetResourceLanguage (void);
 const char * GetTextRes (HTResId id);
 const char* GetPLMNDisplayName (const char* plmn);
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* __RESPKGMANAGER_H */
 

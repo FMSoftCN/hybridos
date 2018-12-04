@@ -129,4 +129,4 @@ int PageView::getCurPageIndex(void)
 	return indexFromPage(getCurPage());
 }
 
-} // namespace hfcl {
+} // namespace hfcl

@@ -419,5 +419,5 @@ bool SetResourceLanguage (int lang)
     return GetResPkgManager()->setCurrentLang (lang);
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

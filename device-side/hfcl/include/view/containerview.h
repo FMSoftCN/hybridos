@@ -20,87 +20,85 @@
 */
 
 
-#ifndef _HFCL_ContainerView_h
-#define _HFCL_ContainerView_h
+#ifndef _HFCL_VIEW_CONTAINERVIEW_H_
+#define _HFCL_VIEW_CONTAINERVIEW_H_
 
 #include "view/view.h"
 
 namespace hfcl {
 
 class ContainerView : public View {
-    public:
-		ContainerView();
-        ContainerView(View* parent);
-        ContainerView(View* parent, DrawableSet* dr);
-		ContainerView(int id, int x, int y, int w, int h);
-		virtual ~ContainerView();
+public:
+    ContainerView();
+    ContainerView(View* parent);
+    ContainerView(View* parent, DrawableSet* dr);
+    ContainerView(int id, int x, int y, int w, int h);
+    virtual ~ContainerView();
 
-		bool isChild(View* view) const;
-		bool insertBefore(View *view, View *child);
-		bool insertAfter(View *view, View *child);
-		bool insertBefore(int idx, View* child);
-		bool insertAfter(int idx, View* child) { return (child) ? insertAfter(getChildByIndex(idx), child) : false; }
+    bool isChild(View* view) const;
+    bool insertBefore(View *view, View *child);
+    bool insertAfter(View *view, View *child);
+    bool insertBefore(int idx, View* child);
+    bool insertAfter(int idx, View* child) { return (child) ? insertAfter(getChildByIndex(idx), child) : false; }
 
-		bool addChild(View* child) { return insertAfter(m_lastChild, child); }
-		bool addChildHead(View* child) { return insertBefore(m_firstChild, child); }
-        // by default , we delete the child, but NOT when bRelease = false
-		int  removeChild(View* child, bool bRelease = true);
-        // by default , we delete the child, but NOT when bRelease = false
-		int  removeChild(int index, bool bRelease = true);
-		int  removeAll();
-		int  detachChild(View* child);
-		int  detachChild(int child);
-		void clean();
+    bool addChild(View* child) { return insertAfter(m_lastChild, child); }
+    bool addChildHead(View* child) { return insertBefore(m_firstChild, child); }
+    // by default , we delete the child, but NOT when bRelease = false
+    int  removeChild(View* child, bool bRelease = true);
+    // by default , we delete the child, but NOT when bRelease = false
+    int  removeChild(int index, bool bRelease = true);
+    int  removeAll();
+    int  detachChild(View* child);
+    int  detachChild(int child);
+    void clean();
 
-		View* getChild(int id) const;
-		View* getChildByIndex(int idx) const;
-		View* getView (int id) const;
-		int   getChildIndex(View *view) const;
-		View *getChildByPosition(int x_pos, int y_pos) const;
+    View* getChild(int id) const;
+    View* getChildByIndex(int idx) const;
+    View* getView (int id) const;
+    int   getChildIndex(View *view) const;
+    View *getChildByPosition(int x_pos, int y_pos) const;
 
-		View* firstChild(void) const { return m_firstChild;}
-        View* firstEnableChild(void);
-		View* lastChild(void) const { return m_lastChild;}
-		int  viewCount(void) const { return m_childCount;}
+    View* firstChild(void) const { return m_firstChild;}
+    View* firstEnableChild(void);
+    View* lastChild(void) const { return m_lastChild;}
+    int  viewCount(void) const { return m_childCount;}
 
-		virtual void changeTheme(void);
-		bool isContainerView(void) { return true; }
-		void setFocusView(View* view);
-		void releaseFocusView(void);
-		View* focusView(void) const { return m_focusView;}
-		virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
-		virtual void drawContent(GraphicsContext *context, IntRect &rc, int status/* = Style::NORMAL*/);
-		virtual bool dispatchEvent(Event* event);
+    virtual void changeTheme(void);
+    bool isContainerView(void) { return true; }
+    void setFocusView(View* view);
+    void releaseFocusView(void);
+    View* focusView(void) const { return m_focusView;}
+    virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
+    virtual void drawContent(GraphicsContext *context, IntRect &rc, int status/* = Style::NORMAL*/);
+    virtual bool dispatchEvent(Event* event);
 
-		virtual void autoFitSize(bool auto_child_fit = false);
+    virtual void autoFitSize(bool auto_child_fit = false);
 
-		virtual void onChildSizeChanged(View* child) { 
-			if(isAutoSize()) {
-				autoFitSize();
-				if(parent())
-					parent()->onChildSizeChanged(this);
-			}
-		}
+    virtual void onChildSizeChanged(View* child) { 
+        if(isAutoSize()) {
+            autoFitSize();
+            if(parent())
+                parent()->onChildSizeChanged(this);
+        }
+    }
 
-    protected:
-		View *m_focusView;
-		View *m_firstChild;
-		View *m_lastChild;
-		int   m_childCount;
+    void setAutoSize(bool b) { setFlag(b, AUTOSIZE); }
+    bool isAutoSize(void) { return m_flags & AUTOSIZE; }
 
-		enum {
-			AUTOSIZE = (1 << View::FLAG_SHIFT),
-			FLAG_SHIFT = (View::FLAG_SHIFT + 1)
-		};
+protected:
+    View *m_focusView;
+    View *m_firstChild;
+    View *m_lastChild;
+    int   m_childCount;
 
-	DECLARE_CLASS_NAME(ContainerView)
+    enum {
+        AUTOSIZE = (1 << View::FLAG_SHIFT),
+        FLAG_SHIFT = (View::FLAG_SHIFT + 1)
+    };
 
-	public:
-
-		void setAutoSize(bool b) { setFlag(b, AUTOSIZE); }
-		bool isAutoSize(void) { return m_flags & AUTOSIZE; }
+    DECLARE_CLASS_NAME(ContainerView)
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
-#endif /* HFCL_ContainerView_h */
+#endif /* _HFCL_VIEW_CONTAINERVIEW_H_ */

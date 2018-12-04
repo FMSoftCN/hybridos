@@ -93,7 +93,7 @@ class StatusBarView : public PanelView {
         int    m_sbvRight;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif  // __HFCL_STATUSBARVIEW_H__
 

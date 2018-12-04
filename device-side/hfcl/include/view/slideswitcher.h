@@ -128,6 +128,6 @@ class SlideSwitcher : public PanelView
         DECLARE_CLASS_NAME(SlideSwitcher)
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif

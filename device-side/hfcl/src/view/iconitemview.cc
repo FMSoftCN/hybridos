@@ -125,6 +125,6 @@ void IconItemView::drawContent(GraphicsContext* context, IntRect& rc, int status
 
 DEFINE_CLASS_NAME(IconItemView)
 
-} // namespace hfcl {
+} // namespace hfcl
 
 

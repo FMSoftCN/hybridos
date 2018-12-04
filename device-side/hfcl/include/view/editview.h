@@ -203,7 +203,7 @@ protected:
     Uint16     m_writing_language;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif
 

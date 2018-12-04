@@ -184,6 +184,6 @@ class DyncListView : public PanelView
         DECLARE_CLASS_NAME(DyncListView)
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif

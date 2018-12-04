@@ -148,5 +148,5 @@ int ImageView::getImageHeight(void)
 
 DEFINE_CLASS_NAME(ImageView)
 
-} // namespace hfcl {
+} // namespace hfcl
 

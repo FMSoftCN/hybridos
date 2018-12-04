@@ -447,7 +447,7 @@ int ControllerClient::GetValueFromCurrentMode(int mode_id, int sub_id)
     return -1;
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 
 
 

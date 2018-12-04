@@ -241,5 +241,5 @@ bool SimpleItemView::isNeedRoll()
 
 
 
-} // namespace hfcl {
+} // namespace hfcl
 

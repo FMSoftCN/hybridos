@@ -20,8 +20,8 @@
 */
 
 
-#ifndef _HFCL_TextView_h
-#define _HFCL_TextView_h
+#ifndef HFCL_VIEW_TEXTVIEW_H_
+#define HFCL_VIEW_TEXTVIEW_H_
 
 #include "view/view.h"
 #include "graphics/color.h"
@@ -88,8 +88,6 @@ public:
 	void setRolling(bool b) { setFlag(b, ROLLING); }
 	bool isRolling() { return m_flags & ROLLING; }
 
-DECLARE_CLASS_NAME(TextView)
-
 protected:
 	//define the flags of TextView
 	enum {
@@ -107,9 +105,11 @@ protected:
 	int   m_lineBellowH;
     int   m_margin;
 	bool  m_bidicheck;
+
+    DECLARE_CLASS_NAME(TextView)
 };
 
 
-} // namespace hfcl {
+} // namespace hfcl
 
-#endif /* HFCL_TextView_h */
+#endif /* HFCL_VIEW_TEXTVIEW_H_ */

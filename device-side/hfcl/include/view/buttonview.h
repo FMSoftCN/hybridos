@@ -19,9 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-#ifndef _HFCL_ButtonView_h
-#define _HFCL_ButtonView_h
+#ifndef HFCL_VIEW_BUTTONVIEW_H_
+#define HFCL_VIEW_BUTTONVIEW_H_
 
 #include "view/view.h"
 
@@ -45,7 +44,6 @@ public:
 	const char* getText();
 
 protected:
-	
 	enum {
 		NORMAL = 0,
 		PUSHED,
@@ -98,7 +96,6 @@ private:
     void lButtonUp(Event* event);
     void lButtonClick(Event* event);
 	
-private:
 	bool m_isLong;
 	int m_stringId;
 	string m_buttonString;
@@ -106,6 +103,6 @@ private:
 	DECLARE_CLASS_NAME(ButtonView)
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
-#endif /* HFCL_ButtonView_h */
+#endif /* HFCL_VIEW_BUTTONVIEW_H_ */

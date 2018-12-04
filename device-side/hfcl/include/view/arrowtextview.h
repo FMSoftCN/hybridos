@@ -128,6 +128,6 @@ class ArrowTextView : public View
 };
 
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* _HFCL_ArrowTextView_h */

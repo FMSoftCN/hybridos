@@ -314,4 +314,4 @@ bool ThreePatchImage::setImage(const char* image_file)
 
 }
 
-} // namespace hfcl {
+} // namespace hfcl

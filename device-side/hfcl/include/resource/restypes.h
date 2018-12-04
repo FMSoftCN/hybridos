@@ -233,7 +233,7 @@ typedef struct TRDrawableSetGroupArrayItem {
 
 
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif
 #endif

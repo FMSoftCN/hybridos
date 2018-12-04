@@ -93,7 +93,7 @@ class LineLayoutView : public LayoutView {
         int             m_lineHeight;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif  /* __HFCL_LINELAYOUTVIEW_H__ */
 

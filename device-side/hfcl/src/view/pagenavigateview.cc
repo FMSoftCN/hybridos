@@ -345,4 +345,4 @@ bool PageNavigateView::dispatchEvent(Event *event)
 }
 
 
-} // namespace hfcl {
+} // namespace hfcl

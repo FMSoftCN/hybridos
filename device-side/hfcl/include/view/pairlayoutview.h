@@ -90,7 +90,7 @@ class PairLayoutView : public LayoutView {
         int   m_firstSize;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif  /* __HFCL_PAIRLAYOUTVIEW_H__ */
 

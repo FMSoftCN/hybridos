@@ -28,7 +28,16 @@
 
 namespace hfcl {
 
-class Transition;
+class Transition 
+{
+public:
+    virtual bool isEnd() = 0;
+    virtual void update() = 0;
+    virtual ~Transition() { }
+
+    //use for mem manager
+    virtual void release() { HFCL_DELETE(this); }
+};
 
 class TransitionManager : TimerEventListener {	
 public:
@@ -58,24 +67,13 @@ private:
     bool handleEvent(Event *event);
 };
 
-class Transition 
-{
-public:
-    virtual bool isEnd() = 0;
-    virtual void update() = 0;
-    virtual ~Transition() { }
-
-    //use for mem manager
-    virtual void release() { HFCL_DELETE(this); }
-};
-
-class RollTextTransition : public Transition 
-{
+class RollTextTransition : public Transition {
 protected:
     View * m_owner;
     int  m_offset:20;
     unsigned int  m_offsetStep:12;
     int m_countdown;
+
 public:	
     RollTextTransition(View *owner, int step) : m_owner(owner) {
         m_offsetStep = step;
@@ -106,9 +104,12 @@ public:
     void nextOffset()  { m_offset += m_offsetStep; }
 
 
-    static bool DrawRollText(View* view, GraphicsContext* context,DrawableSet *drset, int draw_id, int draw_state, const IntRect& rc, HTData data, DR_DATA_TYPE type);
+    static bool DrawRollText(View* view, GraphicsContext* context,
+            DrawableSet *drset, int draw_id, int draw_state,
+            const IntRect& rc, HTData data, DR_DATA_TYPE type);
 
-    static bool NeedRollText(DrawableSet *drset, int draw_id, int draw_state, const IntRect& rc, HTData data, DR_DATA_TYPE type);
+    static bool NeedRollText(DrawableSet *drset, int draw_id, int draw_state,
+            const IntRect& rc, HTData data, DR_DATA_TYPE type);
 };
 
 ///the common functions

@@ -52,5 +52,5 @@ Logfont* FontRes::get(/*Style* style = NULL*/)
     return m_font;
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

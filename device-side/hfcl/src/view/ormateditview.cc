@@ -544,5 +544,5 @@ void FormatEditView::setTextFont(unsigned int font)
 
 DEFINE_CLASS_NAME(FormatEditView)
 
-} // namespace hfcl {
+} // namespace hfcl
 

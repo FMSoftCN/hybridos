@@ -356,6 +356,6 @@ private:
     Uint8 m_a;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /*_HFCL_COLOR_H_*/

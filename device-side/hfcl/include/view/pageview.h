@@ -78,6 +78,6 @@ class PageView : public PanelView
 		View *m_cur_page;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* HFCL_PageView_h */

@@ -216,5 +216,5 @@ bool AnimateImageView::handleEvent(Event* event)
 
 DEFINE_CLASS_NAME(AnimateImageView)
 
-} // namespace hfcl {
+} // namespace hfcl
 

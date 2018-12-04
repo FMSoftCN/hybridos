@@ -97,4 +97,4 @@ bool IconView::dispatchEvent(Event *e)
     return DISPATCH_CONTINUE_MSG;
 }
 
-} // namespace hfcl {
+} // namespace hfcl

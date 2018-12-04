@@ -81,6 +81,6 @@ private:
     IntentMap m_intentStore;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* HFCL_Intent_h */

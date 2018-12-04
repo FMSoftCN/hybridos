@@ -7092,4 +7092,4 @@ const char* GetPLMNDisplayName (const char* plmn)
     return NULL;
 }
 
-} // namespace hfcl {
+} // namespace hfcl

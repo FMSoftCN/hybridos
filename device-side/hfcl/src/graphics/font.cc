@@ -180,6 +180,6 @@ int Font::getFontRotation()
     return m_logfont->rotation;
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif

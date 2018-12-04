@@ -510,4 +510,4 @@ void ContainerView::autoFitSize(bool auto_child_fit)
 }
 
 DEFINE_CLASS_NAME(ContainerView)
-} // namespace hfcl {
+} // namespace hfcl

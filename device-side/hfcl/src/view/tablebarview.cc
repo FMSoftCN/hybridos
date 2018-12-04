@@ -567,4 +567,4 @@ void TableItemView:: paint(GraphicsContext * context, int status)
 #endif
 #endif
 
-} // namespace hfcl {
+} // namespace hfcl

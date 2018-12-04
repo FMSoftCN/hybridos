@@ -273,5 +273,5 @@ void PairLayoutView::calcHorzFirstSecondSize(const IntRect& pirc, IntRect& fIrc,
 
 //====================== end private function define ==========================
 
-} // namespace hfcl {
+} // namespace hfcl
 

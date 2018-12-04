@@ -61,7 +61,7 @@ class ImageRes
         GifAnimate* m_gifAnimate;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* __IMAGERES_H */
 

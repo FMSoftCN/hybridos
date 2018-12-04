@@ -25,6 +25,7 @@
 #include "view/textmode.h"
 #include "view/transition.h"
 
+// TODO
 extern "C" Uint8 isTransformArabic ( Uint16 inChar );
 
 namespace hfcl {
@@ -363,5 +364,5 @@ bool TextView::isNeedRoll()
 		DRDT_TEXT);
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

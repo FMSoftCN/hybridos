@@ -244,4 +244,4 @@ int Date::DayOfYear(int y, int m, int d)
     return c;
 }
 
-} // namespace hfcl {
+} // namespace hfcl

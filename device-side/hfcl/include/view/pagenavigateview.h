@@ -157,6 +157,6 @@ class PageNavigateView : public PanelView
 
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* _HFCL_PageNavigateView_h */

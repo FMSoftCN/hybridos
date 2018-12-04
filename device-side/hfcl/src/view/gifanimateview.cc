@@ -296,4 +296,4 @@ bool GifAnimateView::dispatchEvent(Event* event)
     return View::dispatchEvent(event);
 }
 
-} // namespace hfcl {
+} // namespace hfcl

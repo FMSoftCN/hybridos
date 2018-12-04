@@ -81,7 +81,7 @@ class BoxLayoutView : public LayoutView {
         BoxLayoutNode* m_cells;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 
 #endif  /* __HFCL_BOXLAYOUTVIEW_H__ */

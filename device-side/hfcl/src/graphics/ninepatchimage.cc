@@ -270,4 +270,4 @@ bool NinePatchImage::setImage(const char *image_file)
 	return true;
 }
 
-} // namespace hfcl {
+} // namespace hfcl

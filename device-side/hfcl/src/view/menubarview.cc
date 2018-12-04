@@ -457,5 +457,5 @@ void MenuBarView::pressItem(int item, bool bpress)
 
 DEFINE_CLASS_NAME(MenuBarView)
 
-} // namespace hfcl {
+} // namespace hfcl
 

@@ -42,7 +42,7 @@ class FontRes {
         Logfont* m_font;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* __FONTRES_H */
 

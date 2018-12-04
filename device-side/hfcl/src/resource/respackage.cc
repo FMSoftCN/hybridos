@@ -806,4 +806,4 @@ bool RegisterViewDrawableSetGroupFromRes(const char * view_name,
 	return true;
 }
 
-} // namespace hfcl {
+} // namespace hfcl

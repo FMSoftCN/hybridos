@@ -38,7 +38,7 @@ class DrawableRes {
         Drawable* m_drawable;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* DRAWABLERES_H_ */
 

@@ -104,6 +104,6 @@ class TextMode{
 };
 
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* HFCL_TextMode_h */

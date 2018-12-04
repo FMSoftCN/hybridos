@@ -20,8 +20,8 @@
 */
 
 
-#ifndef _HFCL_PanelView_h
-#define _HFCL_PanelView_h
+#ifndef _HFCL_VIEW_PANELVIEW_H_
+#define _HFCL_VIEW_PANELVIEW_H_
 
 #define FILE_NAME_LEN 256
 
@@ -54,7 +54,6 @@ public:
     void setImageDrawMode(int mode);
 
 protected:
-
 	enum {
 		FLAG_SHIFT = ContainerView::FLAG_SHIFT
 	};
@@ -66,10 +65,9 @@ private:
 	bool 	m_bkColorBeSet;
 	DWORD 	m_bkColor;
 
-DECLARE_CLASS_NAME(PanelView)
+    DECLARE_CLASS_NAME(PanelView)
+};
 
-}; //end of PanelView
+} // namespace hfcl
 
-} // namespace hfcl {
-
-#endif /* HFCL_PanelView_h */
+#endif /* HFCL_VIEW_PANELVIEW_H_ */

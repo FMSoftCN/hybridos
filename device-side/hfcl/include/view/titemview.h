@@ -87,5 +87,5 @@ protected:
 
 }; //end of ItemViewName
 
-} // namespace hfcl {
+} // namespace hfcl
 

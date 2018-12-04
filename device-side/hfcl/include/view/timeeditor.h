@@ -98,6 +98,6 @@ class TimeEditor : public FormatEditView
 		DECLARE_CLASS_NAME(TimeEditor)
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif

@@ -42,7 +42,7 @@ typedef struct  _TResouceEntry
 
 typedef Menu * (*CB_CREATE_MENU)(Menu* parent, EventListener* listener);
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #include "fontres.h"
 #include "imageres.h"
@@ -211,7 +211,7 @@ bool RegisterViewDrawableSetFromRes(const char * view_name,HTResId super_drset, 
 bool RegisterViewDrawableSetGroupFromRes(const char * view_name, HTResId super_drsetgroup, const TRDrawableSetGroupItem *items);
 
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* __RESPACKAGE_H */
 

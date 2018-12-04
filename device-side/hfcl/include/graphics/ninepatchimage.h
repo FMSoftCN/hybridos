@@ -72,6 +72,6 @@ private:
     Bitmap m_subBmp[PATCH_COUNT];
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* _HFCL_NinePatchImage_h */

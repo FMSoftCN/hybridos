@@ -122,6 +122,6 @@ class GridView : public PanelView
         friend class TableBarView;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif

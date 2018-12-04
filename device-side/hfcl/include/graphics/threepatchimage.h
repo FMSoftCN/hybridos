@@ -77,6 +77,6 @@ private:
     bool m_typeHoriz;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif /* _HFCL_ThreePatchImage_h */

@@ -101,6 +101,6 @@ protected:
 	bool  m_bRolling;
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 #endif
 

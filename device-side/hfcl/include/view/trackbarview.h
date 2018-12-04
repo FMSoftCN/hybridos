@@ -91,5 +91,5 @@ class TrackBarView : public View
 	DECLARE_CLASS_NAME(TrackBarView)
 };
 
-} // namespace hfcl {
+} // namespace hfcl
 #endif /*_HFCL_TrackBarView_h*/

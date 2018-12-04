@@ -1345,6 +1345,6 @@ void GifAnimate::drawOneFrame(GraphicsContext* graphics,
 			m_max_width, m_max_height, rect.left(), rect.top(), 0);
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 
 

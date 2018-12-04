@@ -220,4 +220,4 @@ void ArrowTextView::setTextFont(unsigned int font)
         updateView();
 }    
 
-} // namespace hfcl {
+} // namespace hfcl

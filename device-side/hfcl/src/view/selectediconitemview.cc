@@ -73,6 +73,6 @@ void SelectedIconItemView::drawContent(GraphicsContext* context, IntRect &rc, in
 }
 
 
-} // namespace hfcl {
+} // namespace hfcl
 
 

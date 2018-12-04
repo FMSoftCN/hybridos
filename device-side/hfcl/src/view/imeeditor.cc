@@ -388,5 +388,5 @@ bool TimeEditor::checkContent(void)
 
 DEFINE_CLASS_NAME(TimeEditor)
 
-} // namespace hfcl {
+} // namespace hfcl
 

@@ -279,5 +279,5 @@ void ResetRollText(View *view)
         t->reset();
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

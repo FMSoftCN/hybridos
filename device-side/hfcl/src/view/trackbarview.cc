@@ -175,4 +175,4 @@ void TrackBarView::drawContent(GraphicsContext* context, IntRect &rc, int status
         }
     }
 }
-} // namespace hfcl {
+} // namespace hfcl

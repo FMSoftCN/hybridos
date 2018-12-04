@@ -1682,5 +1682,5 @@ bool SlEditView::handleEvent(Event* event)
 	return true;
 }
 
-} // namespace hfcl {
+} // namespace hfcl
 

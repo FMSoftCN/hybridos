@@ -26,8 +26,6 @@
 #include "graphics/graphicscontext.h"
 #include "services/timerservice.h"
 
-namespace hfcl {
-
 #ifdef __MMI_SAMSUNG_GT_FEATURE__
 #define DEF_SCROLL_MARGIN 	1
 #define DEF_SCROLL_WIDTH	4
@@ -35,6 +33,8 @@ namespace hfcl {
 #define DEF_SCROLL_MARGIN 	0
 #define DEF_SCROLL_WIDTH	2
 #endif
+
+namespace hfcl {
 
 bool ScrollView::g_is_all_scrollbar_on_left = false;
 
@@ -95,7 +95,6 @@ ScrollView::~ScrollView(void)
     if(m_timerId)
         removeTimer(m_timerId);
 }
-
 
 void ScrollView::setBarWidth(int barwidth)
 {
@@ -500,4 +499,4 @@ bool ScrollView::dispatchEvent(Event* event)
 
 DEFINE_CLASS_NAME(ScrollView)
 
-} // namespace hfcl {
+} // namespace hfcl

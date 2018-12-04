@@ -85,7 +85,7 @@ class ResLoader {
 INNER_RES_INFO* GetImageResInfo(const char *filepath);
 
 
-} // namespace hfcl {
+} // namespace hfcl
 
 #endif
 

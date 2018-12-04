@@ -507,5 +507,5 @@ bool GridView::handleEvent(Event* event)
 DEFINE_CLASS_NAME(GridView)
 
 
-} // namespace hfcl {
+} // namespace hfcl
 
