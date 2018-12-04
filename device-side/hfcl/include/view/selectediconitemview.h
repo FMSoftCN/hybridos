@@ -24,7 +24,7 @@
 #define _HFCL_IconItemView_h
 
 #include "itemview.h"
-#include "image.h"
+#include "graphics/image.h"
 
 namespace hfcl {
 

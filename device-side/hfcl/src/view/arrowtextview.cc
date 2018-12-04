@@ -22,7 +22,7 @@
 
 #include "arrowtextview.h"
 #include "transition.h"
-#include "respkgmanager.h"
+#include "resource/respkgmanager.h"
 namespace hfcl {
 
 #define SPACE 2

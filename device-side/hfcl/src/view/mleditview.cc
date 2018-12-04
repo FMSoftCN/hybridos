@@ -1078,10 +1078,10 @@ bool MlEditView::dispatchEvent(Event *event)
 
     if(getExchangeFlag())
     { 
-        if(code == KeyEvent::KEYCODE_LEFT)
-            code = KeyEvent::KEYCODE_RIGHT;
-        else if(code == KeyEvent::KEYCODE_RIGHT)
-            code = KeyEvent::KEYCODE_LEFT;
+        if(code == KeyEvent::KEYCODE_CURSOR_LEFT)
+            code = KeyEvent::KEYCODE_CURSOR_RIGHT;
+        else if(code == KeyEvent::KEYCODE_CURSOR_RIGHT)
+            code = KeyEvent::KEYCODE_CURSOR_LEFT;
     }
    
     if(event->eventType() == Event::KEY_DOWN)
@@ -1140,16 +1140,16 @@ bool MlEditView::dispatchEvent(Event *event)
             imeDisableActiveMultitapWithoutDraw();
             m_multapTimerId = 0;
             blinkCaret();
-            if(code == KeyEvent::KEYCODE_RIGHT)
+            if(code == KeyEvent::KEYCODE_CURSOR_RIGHT)
                 return DISPATCH_STOP_MSG;
         }
 
         switch(code)
         {
-            case KeyEvent::KEYCODE_SL :
+            case KeyEvent::KEYCODE_SOFTKEY_LEFT :
                 // Left Soft Key .. Do Nothings ??
                 break;
-            case KeyEvent::KEYCODE_SR :
+            case KeyEvent::KEYCODE_SOFTKEY_RIGHT :
                 if (m_strings.size() > 0) {
 #ifdef __MMI_T9__
                     if(imeGetInputModeFlag() == INPUT_MODE_SMART)    
@@ -1173,7 +1173,7 @@ bool MlEditView::dispatchEvent(Event *event)
                 }
                 return DISPATCH_CONTINUE_MSG;
 //#if 0                
-            case KeyEvent::KEYCODE_LEFT :
+            case KeyEvent::KEYCODE_CURSOR_LEFT :
 #ifdef __MMI_T9__
                 if(imeGetInputModeFlag() == INPUT_MODE_SMART)
                 {
@@ -1207,7 +1207,7 @@ bool MlEditView::dispatchEvent(Event *event)
                     return DISPATCH_STOP_MSG;
                    }    
                 return DISPATCH_CONTINUE_MSG;
-            case KeyEvent::KEYCODE_RIGHT :
+            case KeyEvent::KEYCODE_CURSOR_RIGHT :
 #ifdef __MMI_T9__
                    if(imeGetInputModeFlag() == INPUT_MODE_SMART)
                    {
@@ -1263,10 +1263,10 @@ bool MlEditView::dispatchEvent(Event *event)
                 }
         
                 return DISPATCH_CONTINUE_MSG;
-            case KeyEvent::KEYCODE_UP :
+            case KeyEvent::KEYCODE_CURSOR_UP :
                 if(m_urlNumberParseEnable)
                 { 
-                    updateHilightNumber(KeyEvent::KEYCODE_UP);
+                    updateHilightNumber(KeyEvent::KEYCODE_CURSOR_UP);
                     return TRUE;                    
                 }
                 else
@@ -1299,10 +1299,10 @@ bool MlEditView::dispatchEvent(Event *event)
                     }
                     break;
                 }
-            case KeyEvent::KEYCODE_DOWN :
+            case KeyEvent::KEYCODE_CURSOR_DOWN :
                 if(m_urlNumberParseEnable)
                 { 
-                    updateHilightNumber(KeyEvent::KEYCODE_DOWN);
+                    updateHilightNumber(KeyEvent::KEYCODE_CURSOR_DOWN);
                     return TRUE;                    
                 }
                 else
@@ -1463,9 +1463,9 @@ bool MlEditView::dispatchEvent(Event *event)
         }
 
         if (((code >=  KeyEvent::KEYCODE_0) && (code<= KeyEvent::KEYCODE_9))
-            || code == KeyEvent::KEYCODE_LEFT
-            || code == KeyEvent::KEYCODE_RIGHT
-            || code == KeyEvent::KEYCODE_SR)
+            || code == KeyEvent::KEYCODE_CURSOR_LEFT
+            || code == KeyEvent::KEYCODE_CURSOR_RIGHT
+            || code == KeyEvent::KEYCODE_SOFTKEY_RIGHT)
         {
 #ifdef __MMI_T9__
             if(imeGetInputModeFlag() == INPUT_MODE_MULTITAP)
@@ -1485,7 +1485,7 @@ bool MlEditView::dispatchEvent(Event *event)
         } else if (code == KeyEvent::KEYCODE_STAR && m_bAutoTrans) {
             replacePrevChar("P");
             return DISPATCH_STOP_MSG;
-        } else if (code == KeyEvent::KEYCODE_LEFT) {
+        } else if (code == KeyEvent::KEYCODE_CURSOR_LEFT) {
             setCaretPosition(0);
             showCaret(true);
 #ifdef __MMI_T9__
@@ -1497,7 +1497,7 @@ bool MlEditView::dispatchEvent(Event *event)
 #endif    
             updateView();
             return DISPATCH_STOP_MSG;
-        } else if (code == KeyEvent::KEYCODE_RIGHT) {
+        } else if (code == KeyEvent::KEYCODE_CURSOR_RIGHT) {
             setCaretPosition(getTextLength());
             showCaret(true);
 #ifdef __MMI_T9__
@@ -1509,7 +1509,7 @@ bool MlEditView::dispatchEvent(Event *event)
 #endif    
             updateView();
             return DISPATCH_STOP_MSG;
-        }else if(code == KeyEvent::KEYCODE_SR && m_strings.size() > 0){
+        }else if(code == KeyEvent::KEYCODE_SOFTKEY_RIGHT && m_strings.size() > 0){
             if(imeGetInputModeFlag() == INPUT_MODE_SMART){ 
                 if(m_caretPos <0)
                     m_caretPos = 0;
@@ -1551,7 +1551,7 @@ bool MlEditView::dispatchEvent(Event *event)
         return DISPATCH_CONTINUE_MSG;
     }
     else if (event->eventType() == Event::KEY_ALWAYSPRESS) {
-        if (code == KeyEvent::KEYCODE_SR && m_strings.size() > 0) {
+        if (code == KeyEvent::KEYCODE_SOFTKEY_RIGHT && m_strings.size() > 0) {
             if(imeGetInputModeFlag() == INPUT_MODE_SMART){  
                 if(m_caretPos <0)
                     m_caretPos = 0;
@@ -1567,10 +1567,10 @@ bool MlEditView::dispatchEvent(Event *event)
            
             return DISPATCH_STOP_MSG;
         }
-        else if (code == KeyEvent::KEYCODE_DOWN) {
+        else if (code == KeyEvent::KEYCODE_CURSOR_DOWN) {
             return switchLine(false);
         }
-        else if (code == KeyEvent::KEYCODE_UP) {
+        else if (code == KeyEvent::KEYCODE_CURSOR_UP) {
             return switchLine(true);
         }
         return DISPATCH_CONTINUE_MSG;
@@ -1767,7 +1767,7 @@ int MlEditView::updateHilightNumber(int keyCode)
             it ++;
         }
 
-        if(keyCode == KeyEvent::KEYCODE_UP) {
+        if(keyCode == KeyEvent::KEYCODE_CURSOR_UP) {
             if(!m_hilightValid) {
                 if(m_hilightNumberIndex >= numberCnt) {
                     m_hilightNumberIndex = numberCnt -1;
@@ -1831,7 +1831,7 @@ int MlEditView::updateHilightNumber(int keyCode)
                 }
             }
         }
-        else if(keyCode == KeyEvent::KEYCODE_DOWN) {
+        else if(keyCode == KeyEvent::KEYCODE_CURSOR_DOWN) {
 
             if(!m_hilightValid) {
                 curHilightIdx = m_hilightNumberIndex;
@@ -1897,7 +1897,7 @@ int MlEditView::updateHilightNumber(int keyCode)
         }
     }
 
-    if(keyCode == KeyEvent::KEYCODE_UP) {        
+    if(keyCode == KeyEvent::KEYCODE_CURSOR_UP) {        
         m_startShowLine = m_startShowLine -(cnt-1);
         _DBG_PRINTF ("MlEditView::updateHilightNumber_9 > m_startShowLine: %d", m_startShowLine);
         if (m_startShowLine < 0) {
@@ -1916,7 +1916,7 @@ int MlEditView::updateHilightNumber(int keyCode)
     }
 
     if(m_hilightValid) {
-        if(keyCode == KeyEvent::KEYCODE_UP && m_hilightNumberIndex >= 0)
+        if(keyCode == KeyEvent::KEYCODE_CURSOR_UP && m_hilightNumberIndex >= 0)
             m_hilightNumberIndex --;
         else
             m_hilightNumberIndex ++;

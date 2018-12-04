@@ -366,25 +366,25 @@ bool SlideSwitcher::onKeyPressed(int keyCode)
 {
     switch(keyCode)
     {
-        case KeyEvent::KEYCODE_UP :
+        case KeyEvent::KEYCODE_CURSOR_UP :
             {
                 if (Vertical == m_style)
                     focusPrevItem();
                 break;
             }
-        case KeyEvent::KEYCODE_DOWN :
+        case KeyEvent::KEYCODE_CURSOR_DOWN :
             {
                 if (Vertical == m_style)
                     focusNextItem();
                 break;
             }
-        case KeyEvent::KEYCODE_LEFT :
+        case KeyEvent::KEYCODE_CURSOR_LEFT :
             {
                 if (Horizontal == m_style)
                     focusPrevItem();
                 break;
             }
-        case KeyEvent::KEYCODE_RIGHT :
+        case KeyEvent::KEYCODE_CURSOR_RIGHT :
             {
                 if (Horizontal == m_style)
                     focusNextItem();

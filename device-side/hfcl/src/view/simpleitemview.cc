@@ -22,7 +22,7 @@
 
 #include "ngux.h"
 #include "simpleitemview.h"
-#include "respkgmanager.h"
+#include "resource/respkgmanager.h"
 namespace hfcl {
 
 #define SPACE 2         // 3

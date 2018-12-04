@@ -28,8 +28,8 @@
 
 #if 0
 #include "common/log.h"
-#include "view.h"
-#include "nguxwindow.h"
+#include "view/view.h"
+#include "activity/window.h"
 #include "appmanager.h"
 #include "baseapp.h"
 #endif

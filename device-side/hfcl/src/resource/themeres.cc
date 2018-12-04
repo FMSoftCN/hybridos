@@ -21,10 +21,10 @@
 
 #include <string.h>
 
-#include "graphicscontext.h"
+#include "graphics/graphicscontext.h"
 #include "drawable.h"
 #include "resloader.h"
-#include "respkgmanager.h"
+#include "resource/respkgmanager.h"
 #include "themeres.h"
 
 namespace hfcl {

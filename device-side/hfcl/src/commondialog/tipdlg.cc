@@ -21,7 +21,7 @@
 
 #include "textview.h"
 #include "tipdlg.h"
-#include "respkgmanager.h"
+#include "resource/respkgmanager.h"
 #include "nguxmenu.h"
 #include "services/timerservice.h"
 #include "application.h"
@@ -109,13 +109,13 @@ bool TipDlg::onKey(int keyCode, KeyEvent* event)
 
     switch (keyCode) {
         case KeyEvent::KEYCODE_ENTER:
-        case KeyEvent::KEYCODE_SL:
+        case KeyEvent::KEYCODE_SOFTKEY_LEFT:
         {
             onRespondCodeSL();
             break;
         }
 
-        case KeyEvent::KEYCODE_SR:
+        case KeyEvent::KEYCODE_SOFTKEY_RIGHT:
         {
             onRespondCodeSR();
             break;

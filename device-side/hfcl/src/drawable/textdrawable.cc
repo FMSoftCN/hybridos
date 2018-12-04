@@ -21,8 +21,8 @@
 
 #include "textmode.h"
 #include "textdrawable.h"
-#include "graphicscontext.h"
-#include "font.h"
+#include "graphics/graphicscontext.h"
+#include "graphics/font.h"
 
 
 namespace hfcl {

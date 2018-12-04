@@ -19,12 +19,12 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "font.h"
+#include "graphics/font.h"
 #include "color.h"
-#include "image.h"
+#include "graphics/image.h"
 #include "textmode.h"
 
-#include "view.h"
+#include "view/view.h"
 
 
 #include "codeconvert.h"

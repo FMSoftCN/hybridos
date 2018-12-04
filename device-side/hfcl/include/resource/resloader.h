@@ -22,11 +22,11 @@
 #ifndef __RESLOADER_H
 #define __RESLOADER_H
 
-#include "graphicscontext.h"
-#include "font.h"
-#include "image.h"
-#include "gifanimate.h"
-#include "animateimageview.h"
+#include "graphics/graphicscontext.h"
+#include "graphics/font.h"
+#include "graphics/image.h"
+#include "graphics/gifanimate.h"
+#include "view/animateimageview.h"
 #include "restypes.h"
 
 namespace hfcl {

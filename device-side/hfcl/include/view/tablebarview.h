@@ -42,7 +42,7 @@
 #include "pageview.h"
 #include "gridview.h"
 #include "itemview.h"
-#include "image.h"
+#include "graphics/image.h"
 
 
 namespace hfcl {

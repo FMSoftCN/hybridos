@@ -23,7 +23,7 @@
 #define __RESPACKAGE_H
 
 #include "restypes.h"
-#include "viewcontext.h"
+#include "view/viewcontext.h"
 
 namespace hfcl {
 

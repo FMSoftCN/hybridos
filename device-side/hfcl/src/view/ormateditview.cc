@@ -21,7 +21,7 @@
 
 
 #include "formateditview.h"
-#include "respkgmanager.h"
+#include "resource/respkgmanager.h"
 
 extern BOOL IsArabicSet(void);
 
@@ -325,20 +325,20 @@ bool FormatEditView::dispatchEvent(Event* event)
             {
                 switch(((KeyEvent *)event)->keyCode())
                 {
-                    case KeyEvent::KEYCODE_UP:
+                    case KeyEvent::KEYCODE_CURSOR_UP:
                         {
                         }
                         break;
-                    case KeyEvent::KEYCODE_DOWN:
+                    case KeyEvent::KEYCODE_CURSOR_DOWN:
                         {
                         }
                         break;
-                    case KeyEvent::KEYCODE_LEFT:
+                    case KeyEvent::KEYCODE_CURSOR_LEFT:
                         {
                             prevFiled();
                         }
                         break;
-                    case KeyEvent::KEYCODE_RIGHT:
+                    case KeyEvent::KEYCODE_CURSOR_RIGHT:
                         {
                             nextFiled();
                         }

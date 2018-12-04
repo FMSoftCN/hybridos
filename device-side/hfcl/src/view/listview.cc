@@ -19,11 +19,13 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #undef _DEBUG
 
-#include "listview.h"
-#include "graphicscontext.h"
+#include "view/listview.h"
+
+#include <minigui/fixedmath.h>
+
+#include "graphics/graphicscontext.h"
 #include "services/timerservice.h"
 
 namespace hfcl {
@@ -155,7 +157,7 @@ bool ListView::hilight(ItemView* view)
 
     makeHilightVisible();
 
-    CustomEvent event(Event::CUSTOM_NOTIFY, (int)NOTIFY_SELCHANGED, (int)this);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_SELCHANGED, (HTData)this);
     raiseEvent(&event);
     return true;
 }
@@ -777,7 +779,7 @@ bool ListView::onKeyPressed(int keyCode)
         return DISPATCH_CONTINUE_MSG;
     }
     
-    if (keyCode ==  KeyEvent::KEYCODE_UP) {
+    if (keyCode ==  KeyEvent::KEYCODE_CURSOR_UP) {
         if (operationMode() == OPM_EDIT) {
             prevFocus();
         }
@@ -787,7 +789,7 @@ bool ListView::onKeyPressed(int keyCode)
             }
         }
     }
-    else if (keyCode == KeyEvent::KEYCODE_DOWN) {
+    else if (keyCode == KeyEvent::KEYCODE_CURSOR_DOWN) {
         if (operationMode() == OPM_EDIT) {
             nextFocus();
         }
@@ -811,7 +813,7 @@ bool ListView::onKeyPressed(int keyCode)
 
 ////////////////////////////////////////////////////////////////////
 
-#include <mgeff.h>
+#include <mgeff/mgeff.h>
 
 void ListView::_set_y_offset(unsigned int handle, ListView* _this, int id, int *value)
 {

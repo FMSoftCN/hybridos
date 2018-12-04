@@ -313,8 +313,8 @@ bool TimeEditor::dispatchEvent(Event* event)
     // 2 means am/pm field
     if (m_current_index == m_field_ap
             && event->eventType() == Event::KEY_UP 
-            && ((KeyEvent*)event)->keyCode() != KeyEvent::KEYCODE_LEFT
-            && ((KeyEvent*)event)->keyCode() != KeyEvent::KEYCODE_RIGHT) {
+            && ((KeyEvent*)event)->keyCode() != KeyEvent::KEYCODE_CURSOR_LEFT
+            && ((KeyEvent*)event)->keyCode() != KeyEvent::KEYCODE_CURSOR_RIGHT) {
 
         if (m_field_content[m_current_index].c_str()[0] == 'A') {
             m_field_content[m_current_index] = "PM";

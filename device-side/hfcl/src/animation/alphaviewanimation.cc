@@ -20,7 +20,7 @@
 */
 
 #include "alphaviewanimation.h"
-#include "view.h"
+#include "view/view.h"
 
 namespace hfcl {
 

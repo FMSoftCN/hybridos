@@ -21,7 +21,7 @@
 
 
 #include "textmode.h"
-#include "respkgmanager.h"
+#include "resource/respkgmanager.h"
 #include "menubarview.h"
 namespace hfcl {
 
@@ -419,10 +419,10 @@ bool MenuBarView::dispatchEvent(Event* event)
     if (t == Event::KEY_DOWN || t == Event::KEY_UP) {
         int item = SEL_NONE;
         switch(((KeyEvent*)event)->keyCode()) {
-        case KeyEvent::KEYCODE_SL:
+        case KeyEvent::KEYCODE_SOFTKEY_LEFT:
             item = SEL_LEFT;
             break;
-        case KeyEvent::KEYCODE_SR:
+        case KeyEvent::KEYCODE_SOFTKEY_RIGHT:
             item = SEL_RIGHT;
             break;
         case KeyEvent::KEYCODE_ENTER:

@@ -19,9 +19,9 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "panelview.h"
-#include "image.h"
-#include "imagedrawable.h"
+#include "view/panelview.h"
+#include "graphics/image.h"
+#include "drawable/imagedrawable.h"
 
 namespace hfcl {
 

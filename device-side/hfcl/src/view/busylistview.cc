@@ -21,11 +21,11 @@
 
 
 #include "common/event.h"
-#include "graphicscontext.h"
+#include "graphics/graphicscontext.h"
 #include "drawable.h"
 #include "panelview.h"
 #include "itemview.h"
-#include "respkgmanager.h"
+#include "resource/respkgmanager.h"
 #include "scrollview.h"
 #include "bitmark.h"
 #include "busylistview.h"
@@ -1049,20 +1049,20 @@ bool BusyListView::dispatchEvent(Event* event)
 
 bool BusyListView::onKeyPressed(int keyCode)
 {
-	if((!m_focus)&&(keyCode!=KeyEvent::KEYCODE_DOWN))
+	if((!m_focus)&&(keyCode!=KeyEvent::KEYCODE_CURSOR_DOWN))
 	{
 		return false;
 	}
-	else if((!m_focus)&&(keyCode==KeyEvent::KEYCODE_DOWN))
+	else if((!m_focus)&&(keyCode==KeyEvent::KEYCODE_CURSOR_DOWN))
 	{
 		hilight(m_hi_index);
 		return true;
 	}
-    if(keyCode == KeyEvent::KEYCODE_UP) {
+    if(keyCode == KeyEvent::KEYCODE_CURSOR_UP) {
         hilight( m_hi_index-1 >= 0 ? m_hi_index-1 : m_item_count-1 );
 		return true;
     }
-    else if(keyCode == KeyEvent::KEYCODE_DOWN) {
+    else if(keyCode == KeyEvent::KEYCODE_CURSOR_DOWN) {
         hilight(m_hi_index+1 <= m_item_count-1 ? m_hi_index+1 : 0 );
 		return true;
 	}

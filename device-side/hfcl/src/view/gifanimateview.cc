@@ -30,8 +30,8 @@
 #include <stdarg.h>
 
 #include "gifanimateview.h"
-#include "graphicscontext.h"
-#include "gifanimate.h"
+#include "graphics/graphicscontext.h"
+#include "graphics/gifanimate.h"
 #include "services/timerservice.h"
 #include "tm.h"
 

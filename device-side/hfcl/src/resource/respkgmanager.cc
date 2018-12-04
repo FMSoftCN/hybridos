@@ -23,8 +23,8 @@
 
 #include "zlib.h"
 
-#include "respkgmanager.h"
-#include "respackage.h"
+#include "resource/respkgmanager.h"
+#include "resource/respackage.h"
 #include "drawable.h"
 //#include "custstrlist.c"
 //#include "CustLanguage.h"

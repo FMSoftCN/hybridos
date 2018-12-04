@@ -20,9 +20,9 @@
 */
 #include "common/common.h"
 #include "common/log.h"
-#include "nguxobject.h"
-#include "intrect.h"
-#include "graphicscontext.h"
+#include "common/object.h"
+#include "common/intrect.h"
+#include "graphics/graphicscontext.h"
 #include "color.h"
 
 namespace hfcl {

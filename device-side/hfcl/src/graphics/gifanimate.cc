@@ -21,7 +21,7 @@
 
 #include <string.h>
 
-#include "gifanimate.h"
+#include "graphics/gifanimate.h"
 
 //#define _HFCL_GIF_TRACE_ 1
 

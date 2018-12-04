@@ -24,7 +24,7 @@
 #include "application.h"
 #include "appmanager.h"
 #include "nguxmenu.h"
-#include "respkgmanager.h"
+#include "resource/respkgmanager.h"
 #include "menubarview.h"
 #include "color.h"
 
@@ -455,8 +455,8 @@ bool Menu::onKey(int keyCode, KeyEvent* event)
     if(m_menuBar)
         m_menuBar->dispatchEvent(event);
 
-    if(keyCode == KeyEvent::KEYCODE_UP
-            || keyCode == KeyEvent::KEYCODE_DOWN) 
+    if(keyCode == KeyEvent::KEYCODE_CURSOR_UP
+            || keyCode == KeyEvent::KEYCODE_CURSOR_DOWN) 
     {
         m_menuItemList->dispatchEvent(event);
         return DISPATCH_STOP_MSG;
@@ -491,8 +491,8 @@ bool Menu::onKey(int keyCode, KeyEvent* event)
                    onMenuEnter();
             }
             return DISPATCH_STOP_MSG;
-            case KeyEvent::KEYCODE_SL:
-            case KeyEvent::KEYCODE_LEFT:
+            case KeyEvent::KEYCODE_SOFTKEY_LEFT:
+            case KeyEvent::KEYCODE_CURSOR_LEFT:
 #if 0
             if (!m_isProcessing && ItemView::IsAllItemViewNeedConvert()) 
             {
@@ -503,7 +503,7 @@ bool Menu::onKey(int keyCode, KeyEvent* event)
             }
                 break;
 #endif
-            case KeyEvent::KEYCODE_RIGHT:
+            case KeyEvent::KEYCODE_CURSOR_RIGHT:
             if (!m_isProcessing && !ItemView::IsAllItemViewNeedConvert()) 
             {
                     MenuItem* mi = getCurMenuItem();
@@ -512,7 +512,7 @@ bool Menu::onKey(int keyCode, KeyEvent* event)
                     mi->onMenuRight(this);
             }
                 break;
-            case KeyEvent::KEYCODE_SR: 
+            case KeyEvent::KEYCODE_SOFTKEY_RIGHT: 
                 {
                     hide();
                     //FIXME: cancel or leave from menu

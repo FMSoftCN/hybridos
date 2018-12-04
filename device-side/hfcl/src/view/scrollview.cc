@@ -19,11 +19,12 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "view/scrollview.h"
 
-#include "scrollview.h"
-#include "graphicscontext.h"
+#include <minigui/fixedmath.h>
+
+#include "graphics/graphicscontext.h"
 #include "services/timerservice.h"
-
 
 namespace hfcl {
 
@@ -468,32 +469,30 @@ bool ScrollView::dispatchEvent(Event* event)
     if (DISPATCH_STOP_MSG == PanelView::dispatchEvent(event))
         return DISPATCH_STOP_MSG;
 
-    switch(event->eventType())
-    {
-        case Event::KEY_DOWN:
-        case Event::KEY_LONGPRESSED:
-        case Event::KEY_ALWAYSPRESS:
-            switch(((KeyEvent *)event)->keyCode())
-            {
-                case KeyEvent::KEYCODE_UP :
-                    moveOffsetV(-m_vStep);
-                    break;
-                case KeyEvent::KEYCODE_DOWN :
-                    moveOffsetV(m_vStep);
-                    break;
-                case KeyEvent::KEYCODE_LEFT :
-                    moveOffsetH(-m_hStep);
-                    break;
-                case KeyEvent::KEYCODE_RIGHT :
-                    moveOffsetH(m_hStep);
-                    break;
-                default:
-                    return DISPATCH_CONTINUE_MSG;
-            }
-            return DISPATCH_STOP_MSG;
-
+    switch(event->eventType()) {
+    case Event::KEY_DOWN:
+    case Event::KEY_LONGPRESSED:
+    case Event::KEY_ALWAYSPRESS:
+        switch(((KeyEvent *)event)->keyCode()) {
+        case KeyEvent::KEYCODE_CURSOR_UP :
+            moveOffsetV(-m_vStep);
+            break;
+        case KeyEvent::KEYCODE_CURSOR_DOWN :
+            moveOffsetV(m_vStep);
+            break;
+        case KeyEvent::KEYCODE_CURSOR_LEFT :
+            moveOffsetH(-m_hStep);
+            break;
+        case KeyEvent::KEYCODE_CURSOR_RIGHT :
+            moveOffsetH(m_hStep);
+            break;
         default:
             return DISPATCH_CONTINUE_MSG;
+        }
+        return DISPATCH_STOP_MSG;
+
+    default:
+        return DISPATCH_CONTINUE_MSG;
     }
 
     return DISPATCH_CONTINUE_MSG;

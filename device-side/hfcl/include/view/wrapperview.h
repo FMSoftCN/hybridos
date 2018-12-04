@@ -24,8 +24,8 @@
 #define _HFCL_WrapperView_h
 
 #include "control.h"
-#include "view.h"
-#include "font.h"
+#include "view/view.h"
+#include "graphics/font.h"
 
 namespace hfcl {
 

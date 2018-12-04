@@ -23,9 +23,9 @@
 #define _HFCL_FONT_H_
 
 #include "common/log.h"
-#include "nguxobject.h"
-#include "intrect.h"
-#include "graphicscontext.h"
+#include "common/object.h"
+#include "common/intrect.h"
+#include "graphics/graphicscontext.h"
 
 namespace hfcl {
 

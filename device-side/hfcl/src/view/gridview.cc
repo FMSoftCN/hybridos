@@ -472,16 +472,16 @@ bool GridView::onKeyPressed(int keyCode)
 {
     switch(keyCode)
     {
-        case KeyEvent::KEYCODE_UP :
+        case KeyEvent::KEYCODE_CURSOR_UP :
             changeFocusIndex(GRIDVIEW_KEY_UP);
             break;
-        case KeyEvent::KEYCODE_DOWN :
+        case KeyEvent::KEYCODE_CURSOR_DOWN :
             changeFocusIndex(GRIDVIEW_KEY_DOWN);
             break;
-        case KeyEvent::KEYCODE_LEFT :
+        case KeyEvent::KEYCODE_CURSOR_LEFT :
             changeFocusIndex(GRIDVIEW_KEY_LEFT);
             break;
-        case KeyEvent::KEYCODE_RIGHT :
+        case KeyEvent::KEYCODE_CURSOR_RIGHT :
             changeFocusIndex(GRIDVIEW_KEY_RIGHT);
             break;
         default: 

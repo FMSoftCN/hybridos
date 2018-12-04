@@ -19,19 +19,12 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "view/view.h"
 
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
-
-#include "view.h"
-#include "containerview.h"
-#include "graphicscontext.h"
-#include "respkgmanager.h"
-#include "respackage.h"
-#include "nguxwindow.h"
+#include "activity/window.h"
+#include "graphics/graphicscontext.h"
+#include "resource/respackage.h"
+#include "resource/respkgmanager.h"
 
 namespace hfcl {
 
@@ -278,19 +271,15 @@ void View::releaseEventListeners()
 
 void View::onGetFocus()
 {
-    // FIXME ylwang changed at 2012-04-06
-	CustomEvent event(Event::CUSTOM_NOTIFY, (int)NOTIFY_GET_FOCUS, (int)this);
+	CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_GET_FOCUS, (HTData)this);
 	raiseEvent(&event);
-    
 	updateView();
 }
 
 void View::onLoseFocus()
 {
-    // FIXME ylwang changed at 2012-04-06
-	CustomEvent event(Event::CUSTOM_NOTIFY, (int)NOTIFY_LOSE_FOCUS, (int)this);
+	CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_LOSE_FOCUS, (HTData)this);
 	raiseEvent(&event);
-
 	updateView();
 }
 
@@ -367,7 +356,7 @@ bool View::dispatchEvent(Event* event)
 		s.view = this;
 		s.x = ((MouseEvent *)event)->x();
 		s.y = ((MouseEvent *)event)->y();
-		CustomEvent e(Event::CUSTOM_NOTIFY, (int)NOTIFY_ON_CLICK, (int)&s);
+		CustomEvent e(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_ON_CLICK, (HTData)&s);
 		return raiseEvent(&e);
 	}
 
@@ -430,10 +419,9 @@ void View::focusMe(void)
     }
 
     /*
-     * FIXME ylwang changed at 2012-04-06
-	CustomEvent event(Event::CUSTOM_NOTIFY, (int)NOTIFY_GET_FOCUS, (int)this);
-	raiseEvent(&event);
-     */
+    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_GET_FOCUS, (HTData)this);
+    raiseEvent(&event);
+    */
 }
 
 bool View::isFocus(void)
@@ -465,4 +453,4 @@ ContainerView* View::rootView(void)
 	return NULL;
 }
 
-} // namespace hfcl {
+} // namespace hfcl

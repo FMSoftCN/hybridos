@@ -36,318 +36,268 @@
 namespace hfcl {
 
 class Event {
-    public:
-        enum EventType {
-            KEY_DOWN, 
-            KEY_UP, 
-            KEY_LONGPRESSED, 
-            KEY_ALWAYSPRESS,
-            KEY_CHAR,
-            MOTION_DOWN,
-            MOTION_UP,
-            MOTION_MOVE,
-            MOTION_MOVEIN,
-            MOTION_MOVEOUT,
-            MOTION_CLICK,
-            TIMER,
-            MEDIA,
-            CUSTOM_NOTIFY,
-            PROTOCOL_EVENT,
-            CHARGEEARPHONE_EVENT,
-        };
+public:
+    enum EventType {
+        KEY_DOWN, 
+        KEY_UP, 
+        KEY_LONGPRESSED, 
+        KEY_ALWAYSPRESS,
+        KEY_CHAR,
+        MOTION_DOWN,
+        MOTION_UP,
+        MOTION_MOVE,
+        MOTION_MOVEIN,
+        MOTION_MOVEOUT,
+        MOTION_CLICK,
+        TIMER,
+        CUSTOM_NOTIFY,
+    };
 
-        Event(EventType type)
-        :m_eventType(type)
-        ,m_eventSource(NULL)
-        {
-        }
-        virtual ~Event() { }
-        Object* getSource(){return m_eventSource;}
-        void setSource(Object *source){m_eventSource = source;}
-        EventType eventType() { return m_eventType; }
+    Event (EventType type, Object* eventSource = NULL)
+        : m_eventType (type)
+        , m_eventSource (eventSource) {
+    }
 
-    private:
-        EventType m_eventType;
-        Object* m_eventSource;
+    virtual ~Event() {
+    }
+
+    inline Object* getSource() const {
+        return m_eventSource;
+    }
+
+    EventType eventType() {
+        return m_eventType;
+    }
+
+private:
+    EventType m_eventType;
+    Object* m_eventSource;
 };
 
-class CustomEvent : public Event{
+class CustomEvent : public Event {
+public:
+    enum CustomParam{
+        CUS_BOUNDARY_LEFT,
+        CUS_BOUNDARY_RIGHT,
+        CUS_BOUNDARY_UP,
+        CUS_BOUNDARY_DOWN,
+        CUS_DLG_KEY_SL,
+        CUS_DLG_KEY_SR,
+        CUS_DLG_SHOW,
+        CUS_DLG_HIDE,
+        CUS_SELCHANGED,
+        CUS_GIFANIMATE_STOP,
+        CUS_PAGECHANGED,
+        CUS_FREQCHANGED,
+        // BusyListView use for load data from user.
+        CUS_LOAD_DATA,
+        CUS_MAX,
+    };
 
-    public:
-        enum CustomParam{
-            CUS_BOUNDARY_LEFT,
-            CUS_BOUNDARY_RIGHT,
-            CUS_BOUNDARY_UP,
-            CUS_BOUNDARY_DOWN,
-            CUS_DLG_KEY_SL,
-            CUS_DLG_KEY_SR,
-            CUS_DLG_SHOW,
-            CUS_DLG_HIDE,
-            CUS_SELCHANGED,
-            CUS_GIFANIMATE_STOP,
-            CUS_PAGECHANGED,
-            CUS_FREQCHANGED,
-            // BusyListView use for load data from user.
-            CUS_LOAD_DATA,
-            CUS_MAX,
-        };
-        CustomEvent(EventType type, int wparam, int lparam)
-        :Event(type)
-        ,m_customWparam(wparam)
-        ,m_customLparam(lparam)
-        {}
-        virtual ~CustomEvent() { }
-        int customWparam(){return m_customWparam;}
-        int customLparam(){return m_customLparam;}
-        int customExParam1(){return m_customExParam1;}
-        int customExParam2(){return m_customExParam2;}
-        void setExParam(int param1, int param2){m_customExParam1=param1;m_customExParam2=param2;}
-    private:
-        int m_customWparam;
-        int m_customLparam;
-        int m_customExParam1;
-        int m_customExParam2;
+    CustomEvent (EventType type, HTData wparam, HTData lparam,
+            HTData exParam1 = 0, HTData exParam2 = 0)
+        : Event (type)
+        , m_wParam (wparam)
+        , m_lParam (lparam)
+        , m_exParam1 (exParam1)
+        , m_exParam2 (exParam2) {
+    }
 
+    virtual ~CustomEvent () {
+    }
+
+    void setExParam (HTData exParam1, HTData exParam2) {
+        m_exParam1 = exParam1;
+        m_exParam2 = exParam2;
+    }
+
+    inline HTData customWparam () const {
+        return m_wParam;
+    }
+
+    inline HTData customLparam () const {
+        return m_lParam;
+    }
+
+    inline HTData customExParam1 () const {
+        return m_exParam1;
+    }
+
+    inline HTData customExParam2 () const {
+        return m_exParam2;
+    }
+
+private:
+    HTData m_wParam;
+    HTData m_lParam;
+    HTData m_exParam1;
+    HTData m_exParam2;
 };
 
 class KeyEvent : public Event {
-    public:
-        enum KeyCode {
-            KEYCODE_0 = 0,  // SCANCODE_1
-            KEYCODE_1,      // SCANCODE_2
-            KEYCODE_2,      // SCANCODE_3
-            KEYCODE_3,      // SCANCODE_4
-            KEYCODE_4,      // SCANCODE_5
-            KEYCODE_5,      // SCANCODE_6
-            KEYCODE_6,      // SCANCODE_7
-            KEYCODE_7,      // SCANCODE_8
-            KEYCODE_8,      // SCANCODE_9
-            KEYCODE_9,      // SCANCODE_0
+public:
+    enum KeyCode {
+        KEYCODE_0 = 0,
+        KEYCODE_1,
+        KEYCODE_2,
+        KEYCODE_3,
+        KEYCODE_4,
+        KEYCODE_5,
+        KEYCODE_6,
+        KEYCODE_7,
+        KEYCODE_8,
+        KEYCODE_9,
 
-            KEYCODE_STAR,   // SCANCODE_F1: "*" 
-            KEYCODE_POUND,  // SCANCODE_F2: "#"
-            KEYCODE_SL,     // SCANCODE_F3: left soft key
-            KEYCODE_SR,     // SCANCODE_F4: right soft key
-            KEYCODE_CALL,   // SCANCODE_F5:
-            KEYCODE_STOP,   // SCANCODE_F6:
-            KEYCODE_CALL2,  // SCANCODE_F7:
-            KEYCODE_CAMERA, // SCANCODE_F8:
-            KEYCODE_FM,     // SCANCODE_F9:
-            KEYCODE_SMS,    // SCANCODE_F10:
-            KEYCODE_MUSIC,  // SCANCODE_F11:
+        KEYCODE_SPACE,
 
-            KEYCODE_HOME,   // SCANCODE_HOME
-            KEYCODE_UP,     // SCANCODE_CURSORBLOCKUP
-            KEYCODE_VOL_UP, // SCANCODE_PAGEUP
-            KEYCODE_LEFT,   // SCANCODE_CURSORBLOCKLEFT
-            KEYCODE_RIGHT,  // SCANCODE_CURSORBLOCKRIGHT
-            KEYCODE_END,    // SCANCODE_END
-            KEYCODE_DOWN,   // SCANCODE_CURSORBLOCKDOWN
-            KEYCODE_VOL_DOWN,   // SCANCODE_PAGEDOWN
+        KEYCODE_F1,
+        KEYCODE_F2,
+        KEYCODE_F3,
+        KEYCODE_F4,
+        KEYCODE_F5,
+        KEYCODE_F6,
+        KEYCODE_F7,
+        KEYCODE_F8,
+        KEYCODE_F9,
 
-            KEYCODE_ENTER,  // SCANCODE_ENTER
-            KEYCODE_POWER,  // SCANCODE_POWER
+        KEYCODE_ESCAPE,
 
-            MAX_KEYCODE,
-            KEYCODE_INVALID = 0xFE
-        };
+        KEYCODE_SOFTKEY_LEFT,
+        KEYCODE_SOFTKEY_CENTER,
+        KEYCODE_SOFTKEY_RIGHT,
+        KEYCODE_START,
+        KEYCODE_PAUSE,
+        KEYCODE_STOP,
 
-        KeyEvent(EventType type, int scancode, unsigned int keystatus)
-        :Event(type)
-        ,m_keyStatus(keystatus)
-        {
-            if (scancode >= SCANCODE_1 && scancode <= SCANCODE_9) {
-                m_keyCode = KEYCODE_1 + (scancode - SCANCODE_1);
-            }
-            else if (scancode >= SCANCODE_F1 && scancode <= SCANCODE_F10) {
-                m_keyCode = KEYCODE_STAR + (scancode - SCANCODE_F1);
-            }
-            else if (scancode >= SCANCODE_HOME && scancode <= SCANCODE_PAGEDOWN) {
-                m_keyCode = KEYCODE_HOME + (scancode - SCANCODE_HOME);
-            }
-            else {
-                switch (scancode) {
-                case SCANCODE_0:
-                    m_keyCode = KEYCODE_0;
-                    break;
+        KEYCODE_CURSOR_LEFT,
+        KEYCODE_CURSOR_UP,
+        KEYCODE_CURSOR_RIGHT,
+        KEYCODE_CURSOR_DOWN,
 
-                case SCANCODE_F11:
-                    m_keyCode = KEYCODE_MUSIC;
-                    break;
+        KEYCODE_HOME,
+        KEYCODE_END,
+        KEYCODE_PAGE_UP,
+        KEYCODE_PAGE_DOWN,
 
-                case SCANCODE_ENTER:
-                    m_keyCode = KEYCODE_ENTER;
-                    break;
+        KEYCODE_VOL_UP,
+        KEYCODE_VOL_DOWN,
 
-                case SCANCODE_POWER:
-                    m_keyCode = KEYCODE_POWER;
-                    break;
+        KEYCODE_ENTER,
+        KEYCODE_POWER,
 
-                default:
-                    m_keyCode = KEYCODE_INVALID;
-                    break;
-                }
-            }
-        }
+        KEYCODE_BACKSPACE,
+        KEYCODE_DELETE,
 
-        int keyCode() {return m_keyCode;}
-        virtual ~KeyEvent() { }
-        inline int keyCode() const { return m_keyCode; }
-        inline unsigned int keyStatus() const { return m_keyStatus; }
-        inline void  setKeyStatus(unsigned int st){ m_keyStatus = st; }
+        MAX_SYS_KEYCODE = 255,
+    };
 
-    private:
-        int m_keyCode;
-        unsigned int m_keyStatus;
+    KeyEvent (EventType type, int keyCode, unsigned int keyStatus)
+        : Event (type)
+        , m_keyCode (keyCode)
+        , m_keyStatus (keyStatus) {
+    }
 
+    virtual ~KeyEvent() {
+    }
+
+    inline int keyCode() const {
+        return m_keyCode;
+    }
+
+    inline unsigned int keyStatus() const {
+        return m_keyStatus;
+    }
+
+    inline void setKeyStatus (unsigned int keyStatus) {
+        m_keyStatus = keyStatus;
+    }
+
+private:
+    int m_keyCode;
+    unsigned int m_keyStatus;
 };
 
 class MouseEvent : public Event {
-    public:
-        MouseEvent(EventType type, int ix, int iy)
-        :Event(type)
-         ,m_x(ix), m_y(iy)
-        {
+public:
+    MouseEvent (EventType type, int x, int y, unsigned int keyStatus = 0)
+        : Event(type)
+        , m_x(x)
+        , m_y(y)
+        , m_keyStatus(keyStatus) {
+    }
 
-        }
-        virtual ~MouseEvent() {}
+    virtual ~MouseEvent() {
+    }
 
-        inline int x() const { return m_x; }
-        inline int y() const { return m_y; }
+    inline int x() const {
+        return m_x;
+    }
+    inline int y() const {
+        return m_y;
+    }
 
-    private:
-        int m_x;
-        int m_y;
+private:
+    int m_x;
+    int m_y;
+    unsigned int m_keyStatus;
 };
 
 class TimerEvent : public Event {
-    public:
-        TimerEvent(EventType type, int timerId)
-        :Event(type)
-         ,m_timerId(timerId)
-        {
-        }
+public:
+    TimerEvent (EventType type, int timerId)
+        : Event(type)
+        , m_timerId(timerId) {
+    }
 
-        virtual ~TimerEvent() {}
+    virtual ~TimerEvent() {
+    }
 
-        inline int timerID() const { return m_timerId; }
+    inline int timerID() const {
+        return m_timerId;
+    }
 
-    private:
-        int m_timerId;
+private:
+    int m_timerId;
 };
 
-class ChargeEarPhoneEvent : public Event {
-    public:
-        ChargeEarPhoneEvent(EventType type, int evevtId, int info)
-        :Event(type)
-         ,m_eventID(evevtId)
-         ,m_info(info)
-        {
-        }
+class EventListener : public RefCount {
+public:
+    EventListener() : RefCount (0) {
+    }
 
-        virtual ~ChargeEarPhoneEvent() {}
+    virtual bool handleEvent(Event* event) = 0;
 
-        inline int eventID() const { return m_eventID; }
-        inline int Info()const{return m_info;}
-
-    private:
-        int m_eventID;
-        int m_info;
+protected:
+    EventListener(int start_ref) : RefCount(start_ref) {
+    }
 };
 
+class EventBroadcaster {
+public:
+    EventBroadcaster() {
+        m_current_raise = NULL;
+        m_want_to_remove = NULL;
+    }
+    virtual ~EventBroadcaster() {
+        releaseEventListeners();
+    }
 
-class MediaEvent : public Event {
-    public:
-        MediaEvent(EventType type, int istate, int idata)
-        :Event(type)
-        , m_state(istate)
-        , m_data(idata)
-        {
-        }
+public:
+    virtual bool raiseEvent(Event* event);
+    void addEventListener(EventListener* listener);
+    void removeEventListener(EventListener* listener);
 
-        enum MediaState{
-            OPEN,       // media device open.
-            CLOSE,      // media device close.
-            FINISHED,   // play finished.
-            PAUSED,     // paused play.
-            RESUME,     // resume play.
-            PLAY,       // start play
-            STOP,       // stop play
-            BREAKED,
-            PROGRESS,   // progress.
-            TIME,
-            RELOATION,  // seek
-            OPENFAILED,
-            OPENSUCCEED,
-            DEVHOLD,   // dev hold state.
-            DEVRESUME  // dev resume state.
-        };
+protected:
+    void releaseEventListeners();
 
-        virtual ~MediaEvent() {}
-        inline int state() const {return m_state;}
-        inline int data() const {return m_data;}
+    // notice : dont unref for these event listeners
+    // becuase the add interface haven't add the reference
+    // 
+    LIST(EventListener *, EventListenerList);
+    EventListenerList m_listeners;
 
-    private:
-        int m_state;
-        int m_data;
-};
-
-class ProtocolEvent : public Event {
-    public: 
-        ProtocolEvent()
-             :Event(PROTOCOL_EVENT),
-             eventId(-1),
-             buffer(NULL),
-             param1(NULL),
-             param2(NULL),
-             simId(0)
-        {
-        }
-
-        virtual ~ProtocolEvent(){}
-
-        // datas
-        int eventId;
-        void* buffer;
-        void* param1;
-        void* param2;
-        int simId;
-};
-
-class EventListener : public RefCount 
-{
-    public:
-        EventListener(): RefCount(0) { }
-        virtual bool handleEvent(Event* event) = 0; 
-    protected:
-        EventListener(int start_ref) : RefCount(start_ref) { }
-};
-
-class EventBroadcaster
-{
-    public:
-        EventBroadcaster() { m_current_raise = NULL; m_want_to_remove = NULL; }
-        virtual ~EventBroadcaster() { releaseEventListeners(); }
-
-    public:
-        // apis
-        virtual bool raiseEvent(Event* event);
-        void addEventListener(EventListener* listener);
-        void removeEventListener(EventListener* listener);
-
-    protected:
-
-        void releaseEventListeners();
-
-        // notice : dont unref for these event listeners
-        // becuase the add interface haven't add the reference
-        // 
-        LIST(EventListener *, EventListenerList);
-        //LISTEX(EventListener *, EventListenerList, do{return *v1 == *v2;}while (0), do{(*n)->unref();} while (0));
-        EventListenerList m_listeners;
-
-        EventListener* m_current_raise;
-        EventListener* m_want_to_remove;        
+    EventListener* m_current_raise;
+    EventListener* m_want_to_remove;        
 };
 
 } // namespace hfcl

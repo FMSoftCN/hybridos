@@ -34,9 +34,9 @@
 
 #if 0
 #include "appmanager.h"
-#include "graphicscontext.h"
-#include "respackage.h"
-#include "respkgmanager.h"
+#include "graphics/graphicscontext.h"
+#include "resource/respackage.h"
+#include "resource/respkgmanager.h"
 #endif
 
 namespace hfcl {

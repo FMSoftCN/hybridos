@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "graphicscontext.h"
-#include "image.h"
+#include "graphics/graphicscontext.h"
+#include "graphics/image.h"
 #include "stateimagedrawable.h"
 
 namespace hfcl {

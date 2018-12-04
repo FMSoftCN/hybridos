@@ -22,9 +22,9 @@
 #ifndef __IMAGERES_H
 #define __IMAGERES_H
 
-#include "image.h"
-#include "gifanimate.h"
-#include "animateimageview.h"
+#include "graphics/image.h"
+#include "graphics/gifanimate.h"
+#include "view/animateimageview.h"
 namespace hfcl {
 
 class ImageRes

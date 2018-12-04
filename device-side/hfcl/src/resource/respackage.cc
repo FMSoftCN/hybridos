@@ -20,9 +20,9 @@
 */
 
 #include "drawable.h"
-#include "respackage.h"
+#include "resource/respackage.h"
 #include "resloader.h"
-#include "respkgmanager.h"
+#include "resource/respkgmanager.h"
 #include "themeres.h"
 #include "appmanager.h"
 

@@ -20,7 +20,7 @@
 */
 
 
-#include "graphicscontext.h"
+#include "graphics/graphicscontext.h"
 #include "tablebarview.h"
 
 namespace hfcl {
@@ -414,8 +414,8 @@ bool TableBarView::dispatchEvent(Event * event)
 			{
 				switch(((KeyEvent *)event)->keyCode())
 				{
-					case KeyEvent::KEYCODE_UP :
-					case KeyEvent::KEYCODE_DOWN :
+					case KeyEvent::KEYCODE_CURSOR_UP :
+					case KeyEvent::KEYCODE_CURSOR_DOWN :
                         if(!m_pages->getCurPage()->isFocus())
                             m_pages->setFocus(m_pages->getCurPage());
                         m_pages->dispatchEvent(event);
@@ -430,8 +430,8 @@ bool TableBarView::dispatchEvent(Event * event)
                         item = (ItemView*)m_tablesGrid->focusView();
                         item->setSelected(true);
 						break;
-					case KeyEvent::KEYCODE_LEFT :
-					case KeyEvent::KEYCODE_RIGHT :
+					case KeyEvent::KEYCODE_CURSOR_LEFT :
+					case KeyEvent::KEYCODE_CURSOR_RIGHT :
                         {
                             int code = ((KeyEvent *)event)->keyCode();
                             if(!m_tablesGrid->isFocus())
@@ -442,7 +442,7 @@ bool TableBarView::dispatchEvent(Event * event)
                             m_tablesGrid->onKeyPressed(code);
                             item = (ItemView*)m_tablesGrid->focusView();
                             item->setSelected(true);
-                            if(((KeyEvent*)event)->keyCode() == KeyEvent::KEYCODE_LEFT)
+                            if(((KeyEvent*)event)->keyCode() == KeyEvent::KEYCODE_CURSOR_LEFT)
                                 m_pages->prevPage();
                             else
                                 m_pages->nextPage();

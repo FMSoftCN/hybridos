@@ -22,7 +22,7 @@
 #ifndef _HFCL_ThreePatchImage_h
 #define _HFCL_ThreePatchImage_h
 
-#include "image.h"
+#include "graphics/image.h"
 
 
 namespace hfcl {

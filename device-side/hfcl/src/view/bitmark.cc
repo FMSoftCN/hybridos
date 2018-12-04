@@ -21,7 +21,7 @@
 
 
 #include "common/event.h"
-#include "graphicscontext.h"
+#include "graphics/graphicscontext.h"
 #include "drawable.h"
 
 #include "bitmark.h"

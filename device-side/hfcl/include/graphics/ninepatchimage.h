@@ -22,7 +22,7 @@
 #ifndef _HFCL_NinePatchImage_h
 #define _HFCL_NinePatchImage_h
 
-#include "image.h"
+#include "graphics/image.h"
 
 namespace hfcl {
 

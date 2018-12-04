@@ -22,9 +22,9 @@
 #ifndef __HFCL_TipDlg_H__
 #define __HFCL_TipDlg_H__
 
-#include "nguxwindow.h"
+#include "activity/window.h"
 #include "common/event.h"
-#include "viewcontext.h"
+#include "view/viewcontext.h"
 #include "services/timerservice.h"
 
 namespace hfcl {

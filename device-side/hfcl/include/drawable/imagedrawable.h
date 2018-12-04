@@ -23,7 +23,7 @@
 #define _HFCL_ImageDrawable_h
 
 #include "drawable.h"
-#include "image.h"
+#include "graphics/image.h"
 
 namespace hfcl {
 

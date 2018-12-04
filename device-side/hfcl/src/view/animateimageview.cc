@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
-#include "animateimageview.h"
+#include "view/animateimageview.h"
 #include "services/timerservice.h"
 
 namespace hfcl {

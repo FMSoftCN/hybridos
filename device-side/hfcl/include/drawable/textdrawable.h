@@ -23,7 +23,7 @@
 #define _HFCL_TextDrawable_h
 
 #include "drawable.h"
-#include "graphicscontext.h"
+#include "graphics/graphicscontext.h"
 
 namespace hfcl {
 

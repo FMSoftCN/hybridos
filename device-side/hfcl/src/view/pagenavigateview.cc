@@ -326,12 +326,12 @@ bool PageNavigateView::dispatchEvent(Event *event)
     {
         switch(((KeyEvent*)event)->keyCode())
         {
-            case KeyEvent::KEYCODE_LEFT:
+            case KeyEvent::KEYCODE_CURSOR_LEFT:
                 if(prev())
                     if(m_pageView)
                         m_pageView->prevPage();
                 break;
-            case KeyEvent::KEYCODE_RIGHT:
+            case KeyEvent::KEYCODE_CURSOR_RIGHT:
                 if(next())
                     if(m_pageView)
                         m_pageView->nextPage();

@@ -51,7 +51,10 @@
 #undef _HFCL_SAFE_CAST
 
 // TUNNING CONDITION: default text buffer length for text view
-#define TEXT_BUFFER_LEN_OF_DEFAULT 63
+#define TEXT_BUFFER_LEN_OF_DEFAULT  63
+
+// FIXME: this will be removed
+#define LAYER_MAXNUM                2
 
 /* HFCL types */
 typedef intptr_t    HTHandle;

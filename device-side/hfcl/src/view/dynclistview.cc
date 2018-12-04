@@ -21,11 +21,11 @@
 
 
 #include "common/event.h"
-#include "graphicscontext.h"
+#include "graphics/graphicscontext.h"
 #include "drawable.h"
 #include "panelview.h"
 #include "itemview.h"
-#include "respkgmanager.h"
+#include "resource/respkgmanager.h"
 #include "scrollview.h"
 #include "bitmark.h"
 #include "dynclistview.h"
@@ -809,16 +809,16 @@ bool DyncListView::dispatchEvent(Event* event)
 
 bool DyncListView::onKeyPressed(int keyCode)
 {
-	if((!m_focus)&&(keyCode!=KeyEvent::KEYCODE_DOWN))
+	if((!m_focus)&&(keyCode!=KeyEvent::KEYCODE_CURSOR_DOWN))
 	{
 		return false;
 	}
-	else if((!m_focus)&&(keyCode==KeyEvent::KEYCODE_DOWN))
+	else if((!m_focus)&&(keyCode==KeyEvent::KEYCODE_CURSOR_DOWN))
 	{
 		hilight(m_hi_index);
 		return true;
 	}
-    if(keyCode == KeyEvent::KEYCODE_UP) {
+    if(keyCode == KeyEvent::KEYCODE_CURSOR_UP) {
         int index = m_hi_index-1 >= 0 ? m_hi_index-1 : m_item_count-1;
         if(index == m_item_count-1)
             m_dock_top = false;
@@ -826,7 +826,7 @@ bool DyncListView::onKeyPressed(int keyCode)
         hilight(index);
 		return true;
     }
-    else if(keyCode == KeyEvent::KEYCODE_DOWN) {
+    else if(keyCode == KeyEvent::KEYCODE_CURSOR_DOWN) {
         int index = m_hi_index+1 <= m_item_count-1 ? m_hi_index+1 : 0;
         if(index == 0)
             m_dock_top = true;

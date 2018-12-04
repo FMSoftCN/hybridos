@@ -19,11 +19,9 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "view/containerview.h"
 
-#include "graphicscontext.h"
-#include "containerview.h"
-
-#include "hal_misc.h"
+#include "graphics/graphicscontext.h"
 
 namespace hfcl {
 

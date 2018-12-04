@@ -20,7 +20,7 @@
 */
 
 
-#include "graphicscontext.h"
+#include "graphics/graphicscontext.h"
 #include "trackbarview.h"
 
 namespace hfcl {

@@ -20,19 +20,10 @@
 */
 
 
-#include "textview.h"
-#include "textmode.h"
-#include "containerview.h"
-#include "transition.h"
-#include "codeconvert.h"
+#include "view/textview.h"
 
-#include "hal_misc.h"
+extern "C" Uint8 isTransformArabic ( Uint16 inChar );
 
-HFCL_BEGIN_EXTERN_C
-
-extern Uint8 isTransformArabic ( Uint16 inChar );
-
-HFCL_END_EXTERN_C
 namespace hfcl {
 
 //define for roll text

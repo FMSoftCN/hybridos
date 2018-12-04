@@ -20,7 +20,7 @@
 */
 
 #include "colordrawable.h"
-#include "graphicscontext.h"
+#include "graphics/graphicscontext.h"
 
 namespace hfcl {
 

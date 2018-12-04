@@ -22,8 +22,8 @@
 #ifndef _HFCL_GifAnimate_h
 #define _HFCL_GifAnimate_h
 
-#include "nguxobject.h"
-#include "graphicscontext.h"
+#include "common/object.h"
+#include "graphics/graphicscontext.h"
 
 namespace hfcl {
 

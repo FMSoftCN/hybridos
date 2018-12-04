@@ -36,7 +36,7 @@
 
 #include "containerview.h"
 #include "wrapperview.h"
-#include "graphicscontext.h"
+#include "graphics/graphicscontext.h"
 
 namespace hfcl {
 
@@ -202,13 +202,13 @@ bool WrapperView::onKeyPressed(int keyCode)
     //_DBG_PRINTF("\n wrapperviewonKeyPressed   !!!!  the m_pressedKey is:%x  keyCode is %x\n",m_pressedKey, keyCode);
     switch(keyCode)
     {
-	case KeyEvent::KEYCODE_UP :
-	case KeyEvent::KEYCODE_DOWN :
-	case KeyEvent::KEYCODE_LEFT :
-	case KeyEvent::KEYCODE_RIGHT :
+	case KeyEvent::KEYCODE_CURSOR_UP :
+	case KeyEvent::KEYCODE_CURSOR_DOWN :
+	case KeyEvent::KEYCODE_CURSOR_LEFT :
+	case KeyEvent::KEYCODE_CURSOR_RIGHT :
 	     SendMessage(m_wrapwnd, MSG_KEYDOWN, m_pressedKey == 0?keyCode:m_pressedKey, m_keyStatus);
             break;
-	case KeyEvent::KEYCODE_SR:
+	case KeyEvent::KEYCODE_SOFTKEY_RIGHT:
 		SendMessage(m_wrapwnd, MSG_CHAR, (WPARAM)127, 0);
         default: 
             return false;

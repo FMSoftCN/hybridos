@@ -22,7 +22,7 @@
 
 #include <ctype.h>
 
-#include "graphicscontext.h"
+#include "graphics/graphicscontext.h"
 #include "transition.h"
 #include "services/timerservice.h"
 

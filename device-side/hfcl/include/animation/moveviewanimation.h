@@ -23,7 +23,7 @@
 #define _HFCL_MoveViewAnimation_h
 
 #include "viewanimation.h"
-#include "graphicscontext.h"//for Point
+#include "graphics/graphicscontext.h"//for Point
 
 namespace hfcl {
 

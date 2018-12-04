@@ -22,7 +22,7 @@
 
 
 #include "iconitemview.h"
-#include "respkgmanager.h"
+#include "resource/respkgmanager.h"
 
 namespace hfcl {
 

@@ -23,8 +23,8 @@
 #ifndef _HFCL_ImageView_h
 #define _HFCL_ImageView_h
 
-#include "image.h"
-#include "view.h"
+#include "graphics/image.h"
+#include "view/view.h"
 
 namespace hfcl {
 

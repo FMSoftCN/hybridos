@@ -21,7 +21,7 @@
 
 #include <string.h>
 
-#include "image.h"
+#include "graphics/image.h"
 #include "ninepatchimage.h"
 #include "threepatchimage.h"
 #include "resloader.h"

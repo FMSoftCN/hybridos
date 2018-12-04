@@ -695,10 +695,10 @@ bool SlEditView::dispatchEvent(Event *event)
 
     if(getExchangeFlag())
     { 
-        if(code == KeyEvent::KEYCODE_LEFT)
-            code = KeyEvent::KEYCODE_RIGHT;
-        else if(code == KeyEvent::KEYCODE_RIGHT)
-            code = KeyEvent::KEYCODE_LEFT;
+        if(code == KeyEvent::KEYCODE_CURSOR_LEFT)
+            code = KeyEvent::KEYCODE_CURSOR_RIGHT;
+        else if(code == KeyEvent::KEYCODE_CURSOR_RIGHT)
+            code = KeyEvent::KEYCODE_CURSOR_LEFT;
     }
 
     if(event->eventType() == Event::KEY_DOWN)
@@ -757,18 +757,18 @@ bool SlEditView::dispatchEvent(Event *event)
             imeDisableActiveMultitapWithoutDraw();
             m_SlTimerId = 0;
             blinkCaret();
-            if(code == KeyEvent::KEYCODE_RIGHT)
+            if(code == KeyEvent::KEYCODE_CURSOR_RIGHT)
                 return DISPATCH_STOP_MSG;
         } 
 
         switch(code)
         {
-            case KeyEvent::KEYCODE_SL :
+            case KeyEvent::KEYCODE_SOFTKEY_LEFT :
                 // Left Soft Key .. Do Nothings ??
                 if(getTextHighlight())
                     setTextHighlight(false); 
                 break;
-            case KeyEvent::KEYCODE_SR :
+            case KeyEvent::KEYCODE_SOFTKEY_RIGHT :
                 if (m_strings.size() > 0) {
                     if(getTextHighlight())
                     {  
@@ -802,7 +802,7 @@ bool SlEditView::dispatchEvent(Event *event)
                     }
                 }
                 return DISPATCH_CONTINUE_MSG;
-            case KeyEvent::KEYCODE_LEFT :
+            case KeyEvent::KEYCODE_CURSOR_LEFT :
                 if(getTextHighlight())
                 {
                     setTextHighlight(false);
@@ -842,7 +842,7 @@ bool SlEditView::dispatchEvent(Event *event)
                     return DISPATCH_STOP_MSG;
                 }
                 return DISPATCH_CONTINUE_MSG;
-            case KeyEvent::KEYCODE_RIGHT :
+            case KeyEvent::KEYCODE_CURSOR_RIGHT :
                 if(getTextHighlight())
                 {
                     setTextHighlight(false);
@@ -903,7 +903,7 @@ bool SlEditView::dispatchEvent(Event *event)
                     return DISPATCH_STOP_MSG;
                 }
                 return DISPATCH_CONTINUE_MSG;
-            case KeyEvent::KEYCODE_UP :
+            case KeyEvent::KEYCODE_CURSOR_UP :
 #ifdef __MMI_T9__
                 if(imeGetInputModeFlag() == INPUT_MODE_SMART)
                 {
@@ -917,7 +917,7 @@ bool SlEditView::dispatchEvent(Event *event)
                 }
 #endif	//__MMI_T9__		
 
-            case KeyEvent::KEYCODE_DOWN :
+            case KeyEvent::KEYCODE_CURSOR_DOWN :
 #ifdef __MMI_T9__ 
                 if(imeGetInputModeFlag() == INPUT_MODE_SMART)
                 {
@@ -1071,9 +1071,9 @@ bool SlEditView::dispatchEvent(Event *event)
 		}
 
         if(((code >=  KeyEvent::KEYCODE_0) && (code<= KeyEvent::KEYCODE_9))
-            || code == KeyEvent::KEYCODE_LEFT
-            || code == KeyEvent::KEYCODE_RIGHT
-            || code == KeyEvent::KEYCODE_SR )
+            || code == KeyEvent::KEYCODE_CURSOR_LEFT
+            || code == KeyEvent::KEYCODE_CURSOR_RIGHT
+            || code == KeyEvent::KEYCODE_SOFTKEY_RIGHT )
         {
 #ifdef __MMI_T9__
             if(imeGetInputModeFlag() == INPUT_MODE_MULTITAP)
@@ -1095,7 +1095,7 @@ bool SlEditView::dispatchEvent(Event *event)
         } else if (code == KeyEvent::KEYCODE_STAR && m_bAutoTrans) {
             replacePrevChar("P");
             return DISPATCH_STOP_MSG;
-        } else if (code == KeyEvent::KEYCODE_LEFT) {
+        } else if (code == KeyEvent::KEYCODE_CURSOR_LEFT) {
             setCaretPosition(0);
             showCaret(true);
 #ifdef __MMI_T9__
@@ -1106,7 +1106,7 @@ bool SlEditView::dispatchEvent(Event *event)
 #endif	//__MMI_T9__
             updateView();
             return DISPATCH_STOP_MSG;
-        } else if (code == KeyEvent::KEYCODE_RIGHT) {
+        } else if (code == KeyEvent::KEYCODE_CURSOR_RIGHT) {
             if(getTextHighlight())
                 setTextHighlight(false);
             setCaretPosition(getTextLength());
@@ -1152,7 +1152,7 @@ bool SlEditView::dispatchEvent(Event *event)
     }
     else if(event->eventType() == Event::KEY_ALWAYSPRESS)
     {
-        if (((KeyEvent *)event)->keyCode() == KeyEvent::KEYCODE_SR
+        if (((KeyEvent *)event)->keyCode() == KeyEvent::KEYCODE_SOFTKEY_RIGHT
                 && m_strings.size() > 0) {
             if(imeGetInputModeFlag() == INPUT_MODE_SMART){
                 if(m_caretPos < 0)

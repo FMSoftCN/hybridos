@@ -23,7 +23,7 @@
 #ifndef _HFCL_GifAnimateView_h
 #define _HFCL_GifAnimateView_h
 
-#include "view.h"
+#include "view/view.h"
 #include "services/timerservice.h"
 
 namespace hfcl {
