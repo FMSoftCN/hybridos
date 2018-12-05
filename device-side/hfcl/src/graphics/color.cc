@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -22,20 +22,5 @@
 #include "graphics/color.h"
 
 namespace hfcl {
-
-// we assume color to be ABGR from high byte to low byte.
-Color::Color(unsigned long l_color) {
-    m_a = l_color >> 24;
-    m_b = (l_color & 0x00FF0000) >> 16;
-    m_g = (l_color & 0x0000FF00) >> 8;
-    m_r = (l_color & 0x000000FF);
-}
-
-Color::Color(unsigned char c_r, unsigned char c_g, unsigned char c_b, unsigned char c_a){
-    m_r = c_r;
-    m_g = c_g;
-    m_b = c_b;
-    m_a = c_a;
-}
 
 } // namespace hfcl

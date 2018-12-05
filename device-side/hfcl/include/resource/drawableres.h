@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -19,26 +19,25 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __DRAWABLERES_H_
-#define __DRAWABLERES_H_
-
+#ifndef HFCL_RESOURCE_DRAWABLERES_H_
+#define HFCL_RESOURCE_DRAWABLERES_H_
 
 namespace hfcl {
 
 class DrawableRes {
-    public:
-        DrawableRes();
-        DrawableRes(const TRDrawable* dr_res);
-        ~DrawableRes();
+public:
+    DrawableRes();
+    DrawableRes(const TRDrawable* dr_res);
+    ~DrawableRes();
 
-        Drawable* get();
+    Drawable* get();
 
-    private:
-        const TRDrawable* m_drRes;
-        Drawable* m_drawable;
+private:
+    const TRDrawable* m_drRes;
+    Drawable* m_drawable;
 };
 
 } // namespace hfcl
 
-#endif /* DRAWABLERES_H_ */
+#endif /* HFCL_RESOURCE_DRAWABLERES_H_ */
 

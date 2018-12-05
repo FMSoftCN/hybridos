@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -35,11 +35,12 @@ INNER_RES_INFO* GetImageResInfo(const char *filepath)
     int cont;
     INNER_RES_INFO* info = NULL;
 
-    for(i = 0; i < g_ResCount; i++) {
+    for (i = 0; i < g_ResCount; i++) {
         info = g_ResArray[i].pInner_res_info;
         cont = g_ResArray[i].number;
-        for(j = 0; j < cont; j++) {
-            if(info[j].res_name != NULL && strcmp(filepath, info[j].res_name) == 0) {
+        for (j = 0; j < cont; j++) {
+            if (info[j].res_name != NULL &&
+                    strcmp(filepath, info[j].res_name) == 0) {
                 return &info[j];
             }
         }
@@ -95,13 +96,15 @@ bool ResLoader::releaseFont(const char* fontname)
     return true;
 }
 
-void ResLoader::registerInnerRes(int res_type, INNER_RES_INFO * resources, int count)
+void ResLoader::registerInnerRes(int res_type, INNER_RES_INFO * resources,
+        int count)
 {
     if (res_type != R_TYPE_IMAGE || resources == NULL || count <= 0)
         return;
 
     for (int i=0; i < count; i++) {
-        if (resources[i].res_name != NULL && resources[i].data != NULL && resources[i].size >= 0) {
+        if (resources[i].res_name != NULL &&
+                resources[i].data != NULL && resources[i].size >= 0) {
             InnerImage & inner = m_innerImageRes[resources[i].res_name];
             inner.resInfo = &resources[i];
         }
@@ -140,14 +143,13 @@ Image* ResLoader::getImage(const char* filepath)
     INNER_RES_INFO* info = NULL;
 
     info = GetImageResInfo(filepath);
-    if(info != NULL)
-       {
-            image = Image::loadImage(info->res_name, (const char*)info->data, info->size);
-          if(image != NULL) 
-          {
+    if (info != NULL) {
+        image = Image::loadImage(info->res_name, (const char*)info->data,
+                info->size);
+        if (image != NULL) {
             image->safeRef();
             return image;
-          }
+        }
     }
 
     ImageResMap::iterator it = m_imageRes.find(filepath);
@@ -205,7 +207,8 @@ Bitmap* ResLoader::getBitmap(const char* filename)
 
             externs_name ++;
 
-            if (GraphicsContext::screenGraphics()->loadBitmap(&pbmp, info->data, info->size, externs_name)) {
+            if (GraphicsContext::screenGraphics()->loadBitmap(&pbmp,
+                    info->data, info->size, externs_name)) {
                 _DBG_PRINTF ("ResLoader::getBitmap: Failed to load image from memory: %s", filename);
                 HFCL_DELETE(pbmp);
                 return NULL;

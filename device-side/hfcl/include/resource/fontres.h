@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -19,30 +19,30 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __FONTRES_H
-#define __FONTRES_H
+#ifndef HFCL_RESOURCE_FONTRES_H_
+#define HFCL_RESOURCE_FONTRES_H_
 
 #include "graphics/font.h"
 
 namespace hfcl {
 
 class FontRes {
-    public:
-        FontRes();
-        FontRes(const char *fontname);
-        ~FontRes();
+public:
+    FontRes();
+    FontRes(const char *fontname);
+    ~FontRes();
 
-        /*
-         * load real font
-         */
-        Logfont *get(/*Style* style*/);
+    /*
+     * load real font
+     */
+    Logfont *get(/*Style* style*/);
 
-    private:
-        const char* m_fontname;
-        Logfont* m_font;
+private:
+    const char* m_fontname;
+    Logfont* m_font;
 };
 
 } // namespace hfcl
 
-#endif /* __FONTRES_H */
+#endif /* HFCL_RESOURCE_FONTRES_H_ */
 

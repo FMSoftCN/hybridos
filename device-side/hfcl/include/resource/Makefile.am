@@ -9,7 +9,6 @@ myinclude_HEADERS= \
     imageres.h \
     themeres.h \
     language_ids.h \
-    ime_language_ids.h \
     resdefines.head.h \
     resdefines.init.h \
     resdefines.name.h \

@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -19,17 +19,15 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _HFCL_FONT_H_
-#define _HFCL_FONT_H_
+#ifndef HFCL_GRAPHICS_FONT_H_
+#define HFCL_GRAPHICS_FONT_H_
 
-#include "common/log.h"
 #include "common/object.h"
-#include "common/intrect.h"
 #include "graphics/graphicscontext.h"
 
 namespace hfcl {
 
-class Font : public Object, public RefCount{
+class Font : public Object, public RefCount {
 public:
     Font(){};
     virtual ~Font();
@@ -43,6 +41,7 @@ public:
     Logfont* getLogfont();
     
 	static Font* createFont(const char* fontname);
+
 protected:
 	Font(Logfont* logfont) : m_logfont(logfont) { }
     Logfont* m_logfont;
@@ -50,4 +49,4 @@ protected:
 
 } // namespace hfcl
 
-#endif /*_HFCL_FONT_H_*/
+#endif /*HFCL_GRAPHICS_FONT_H_*/

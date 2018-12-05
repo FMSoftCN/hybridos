@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -79,8 +79,7 @@ private:
 
 #define LISTENER_TIMER_MAX 16
 
-class TimerEventListener : public EventListener 
-{
+class TimerEventListener : public EventListener {
 public:
     TimerEventListener() : EventListener() {
         memset(m_timerIdArray, 0, LISTENER_TIMER_MAX * sizeof(int));

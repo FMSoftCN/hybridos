@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -22,8 +22,6 @@
 #include "services/timerservice.h"
 
 namespace hfcl {
-
-///////////////////////////////////////////////////////////////////////
 
 TimerService::TimerService()
 {
@@ -56,17 +54,20 @@ BOOL TimerService::OneShotTimerProc (HWND listener, LINT id, DWORD data)
     return FALSE;
 }
 
-int TimerService::addTimerListener (int interval, TimerEventListener* listener, TimerPriority priority, const char *listenername)
+int TimerService::addTimerListener (int interval, TimerEventListener* listener,
+        TimerPriority priority, const char *listenername)
 {
     if (interval <= 0)
         return 0;
 
     if (NULL != listener) {
 #ifdef __TIMER_DEBUG__
-        _DBG_PRINTF ("TimerService::addTimerListener: %p, %p, %s\n", this, listener, listenername);
+        _DBG_PRINTF ("TimerService::addTimerListener: %p, %p, %s\n",
+                this, listener, listenername);
 #endif
         LINT id = (LINT)listenername;
-	    if (SetTimerEx ((HWND)listener, id, interval/10, TimerService::TimerProc)) {
+	    if (SetTimerEx ((HWND)listener, id, interval/10,
+                TimerService::TimerProc)) {
             return id;
         }
         else {
@@ -77,17 +78,21 @@ int TimerService::addTimerListener (int interval, TimerEventListener* listener, 
     return 0;
 }
 
-int TimerService::addTimerListenerSingle(int interval, TimerEventListener* listener, TimerPriority priority, const char *listenername)
+int TimerService::addTimerListenerSingle(int interval,
+        TimerEventListener* listener,
+        TimerPriority priority, const char *listenername)
 {
     if (interval <= 0)
         return 0;
 
     if (NULL != listener) {
 #ifdef __TIMER_DEBUG__
-        _DBG_PRINTF ("TimerService::addTimerListener: %p, %p, %s\n", this, listener, listenername);
+        _DBG_PRINTF ("TimerService::addTimerListener: %p, %p, %s\n",
+                this, listener, listenername);
 #endif
         LINT id = (LINT)listenername;
-	    if (SetTimerEx ((HWND)listener, id, interval/10, TimerService::OneShotTimerProc))
+	    if (SetTimerEx ((HWND)listener, id, interval/10,
+                TimerService::OneShotTimerProc))
             return id;
         else {
             _ERR_PRINTF ("TimerService::addTimerListenerSingle: Failed to call SetTimerEx SOS\n");
@@ -129,3 +134,4 @@ bool TimerService::canStop(void)
 }
 
 } // namespace hfcl
+

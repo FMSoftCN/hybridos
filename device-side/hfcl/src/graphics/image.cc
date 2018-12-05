@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -39,7 +39,7 @@ Image::Image()
     : RefCount(0)
     , m_bLoadOnPainting(true)
     , m_pBitmap(NULL)
-    ,m_replaceColor(0)
+    , m_replaceColor(0)
 {
 	//TODO
 }
@@ -171,13 +171,13 @@ int Image::height(void)
 	return h;
 }
 
-bool Image::setReplaceColor(const DWORD color)
+bool Image::setReplaceColor(Uint32 color)
 {
     m_replaceColor = color;
     return true;
 }
 
-void Image::calc_pos_align(int *px, int *py,
+void Image::calcPosAlign(int *px, int *py,
         const IntRect *rc, int imgw, int imgh, ImageFormat format)
 {
     if (format.align == ALIGN_CENTER)
@@ -207,7 +207,7 @@ void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat forma
         return;	
     }
 	context->setReplaceColor(0);
-    if(m_replaceColor){
+    if (m_replaceColor) {
 		context->setReplaceColor(m_replaceColor);
     }
    
@@ -276,7 +276,7 @@ void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat forma
 		case DRAWMODE_ROTATIONANGLE:
 		{
 		if (context->getBitmapSize(m_pBitmap, &w, &h)) {
-			calc_pos_align(&x, &y, &rc, w, h, format);
+			calcPosAlign(&x, &y, &rc, w, h, format);
             		context->drawRotateBitmap(m_pBitmap,x,y, format.rotationAngle*64);
 			}
             break;
@@ -285,7 +285,7 @@ void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat forma
 		default: 
 		{
             if (context->getBitmapSize(m_pBitmap, &w, &h)) {
-                calc_pos_align(&x, &y, &rc, w, h, format);
+                calcPosAlign(&x, &y, &rc, w, h, format);
                 context->fillBoxWithBitmap(x, y,
                         w > rc.width() ? rc.width() : w, h > rc.height() ? rc.height() : h, m_pBitmap);
             }

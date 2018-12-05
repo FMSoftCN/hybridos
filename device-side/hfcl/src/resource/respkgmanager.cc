@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -19,15 +19,13 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <string.h>
-
-#include "zlib.h"
-
 #include "resource/respkgmanager.h"
+
+#include <string.h>
+#include <zlib.h>
+
 #include "resource/respackage.h"
 #include "drawable/drawable.h"
-//#include "custstrlist.c"
-//#include "CustLanguage.h"
 
 namespace hfcl {
 

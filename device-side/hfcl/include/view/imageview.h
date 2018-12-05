@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -67,7 +67,7 @@ public:
     void setFromImgRect(bool bSet = false);
     int getImageWidth(void);
     int getImageHeight(void);
-    bool setReplaceColor(const DWORD color);
+    bool setReplaceColor(Uint32 color);
 
 protected:
     Image*    m_image;

@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -39,9 +39,9 @@ ImageRes::ImageRes()
 {
 }
 
-//ImageResVec's size method would cause a disconstruct called for this,
-//I don't want it call this, so, we don't release any resource, or call 
-//method clean
+// ImageResVec's size method would cause a disconstruct called for this,
+// I don't want it call this, so, we don't release any resource, or call 
+// method clean
 void ImageRes::clean()
 {
     if (m_gifAnimate) {
@@ -60,9 +60,7 @@ void ImageRes::clean()
 GifAnimate* ImageRes::getGifAnimate(const char* resPath)
 {
     if (NULL == m_gifAnimate) {
-        m_gifAnimate = ResLoader::getInstance()->getGifAnimate(m_imagefile/*GetResRealPath(resPath, m_imagefile).c_str()*/);
-        //if (m_gifAnimate)
-        //    m_gifAnimate->safeRef();
+        m_gifAnimate = ResLoader::getInstance()->getGifAnimate(m_imagefile);
         if (!m_gifAnimate) {
             _DBG_PRINTF ("ImageRes::getGifAnimate: Failed to load GIF animation: %s", resPath);
         }

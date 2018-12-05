@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -18,10 +18,6 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
-//#ifndef RES_DEFINE_NAME_H
-//#define RES_DEFINE_NAME_H
-
 
 //internal package resource
 #define SYSRESID(name) R_sys_##name
@@ -248,7 +244,6 @@
 #define setMode(id, value,cmd)
 #define add_mode(name)
 
-
 #define set(Name, value)
 #define addTablePage(value1, value2, value3)
 #define setRect(left, top, right, bottom)
@@ -272,5 +267,4 @@
 #define end_resid  
 #define my_imageid(name) 
 #define my_textid(name)    
-//#endif  /* RES_DEFINE_NAME_H */
 

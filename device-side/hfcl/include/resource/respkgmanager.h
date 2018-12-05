@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __RESPKGMANAGER_H
-#define __RESPKGMANAGER_H
+#ifndef HFCL_RESOURCE_RESPKGMANAGER_H_
+#define HFCL_RESOURCE_RESPKGMANAGER_H_
 
 #include "resource/restypes.h"
 #include "graphics/graphicscontext.h"
@@ -140,5 +140,5 @@ const char* GetPLMNDisplayName (const char* plmn);
 
 } // namespace hfcl
 
-#endif /* __RESPKGMANAGER_H */
+#endif /* HFCL_RESOURCE_RESPKGMANAGER_H_ */
 

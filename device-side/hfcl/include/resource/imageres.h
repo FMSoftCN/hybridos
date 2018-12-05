@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __IMAGERES_H
-#define __IMAGERES_H
+#ifndef HFCL_RESOURCE_IMAGERES_H_
+#define HFCL_RESOURCE_IMAGERES_H_
 
 #include "graphics/image.h"
 #include "graphics/gifanimate.h"
@@ -30,39 +30,40 @@ namespace hfcl {
 
 class ImageRes
 {
-    public:
-        ImageRes();
+public:
+    ImageRes();
+    ImageRes(const char* imagefile);
 
-        ImageRes(const char* imagefile);
+    ~ImageRes() {
+        if (NULL != m_image) {
+            m_image->unref();
+        }
+        else if (NULL != m_gifAnimate) {
+            m_gifAnimate->unref();
+        }
+        m_image = NULL;
+        m_gifAnimate = NULL;
+    }
 
-        ~ImageRes() {
-			if (NULL != m_image)
-				m_image->unref();
-			else if (NULL != m_gifAnimate)
-				m_gifAnimate->unref();
-            m_image = NULL;
-            m_gifAnimate = NULL;
-		}
+    /*
+     * load real image
+     */
+    Image* get(const char* resPath);
 
-        /*
-         * load real image
-         */
-        Image* get(const char* resPath);
+    /* 
+     * load real gifanimate 
+     */
+    GifAnimate* getGifAnimate(const char* resPath);
 
-        /* 
-         * load real gifanimate 
-         */
-        GifAnimate* getGifAnimate(const char* resPath);
+    void clean();
 
-		void clean();
-
-    private:
-        const char* m_imagefile;
-        Image* m_image;
-        GifAnimate* m_gifAnimate;
+private:
+    const char* m_imagefile;
+    Image* m_image;
+    GifAnimate* m_gifAnimate;
 };
 
 } // namespace hfcl
 
-#endif /* __IMAGERES_H */
+#endif /* HFCL_RESOURCE_IMAGERES_H_ */
 

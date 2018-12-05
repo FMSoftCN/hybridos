@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -18,10 +18,6 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
-//#ifndef RES_DEFINE_SOURCE_H
-//#define RES_DEFINE_SOURCE_H
-
 
 //package resource
 #define SYSRESID(name) R_sys_##name
@@ -475,5 +471,4 @@
 #define end_resid  };
 #define my_imageid(name) RESID(img_##name),
 #define my_textid(name)    name,
-//#endif  /* RES_DEFINE_SOURCE_H */
 

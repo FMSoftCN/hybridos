@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -19,73 +19,70 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef __RESLOADER_H
-#define __RESLOADER_H
+#ifndef HFCL_RESOURCE_RESLOADER_H_
+#define HFCL_RESOURCE_RESLOADER_H_
 
 #include "graphics/graphicscontext.h"
 #include "graphics/font.h"
 #include "graphics/image.h"
 #include "graphics/gifanimate.h"
 #include "view/animateimageview.h"
-#include "restypes.h"
+#include "resource/restypes.h"
 
 namespace hfcl {
 
 class ResLoader {
-	// Operations
-	public:
+public:
+    Logfont* getFont(const char* fontname/*, Style* style*/);
+    bool releaseFont(const char* fontname);
 
-		Logfont* getFont(const char* fontname/*, Style* style*/);
-		bool releaseFont(const char* fontname);
+    Image* getImage(const char* filepath);
+    GifAnimate* getGifAnimate(const char* filepath);
+    bool releaseImage(const char* filepath);
 
-		Image* getImage(const char* filepath);
-        GifAnimate* getGifAnimate(const char* filepath);
-		bool releaseImage(const char* filepath);
+    Bitmap* getBitmap(const char* filepath);
+    bool releaseBitmap(const char* filepath);
+    bool releaseBitmap(Bitmap* pbmp);
 
-		Bitmap* getBitmap(const char* filepath);
-		bool releaseBitmap(const char* filepath);
-        bool releaseBitmap(Bitmap* pbmp);
+    void registerInnerRes(int res_type, INNER_RES_INFO * resources, int count);
+    
+    static ResLoader* getInstance(void);
 
-		void registerInnerRes(int res_type, INNER_RES_INFO * resources, int count);
-		
-		static ResLoader* getInstance(void);
+    ~ResLoader() { }
 
-		~ResLoader() { }
+private:
+    ResLoader();
 
-	private:
-		ResLoader();
+    struct InnerImage {
+        INNER_RES_INFO * resInfo;
+        Image * image;
+        InnerImage() : resInfo(NULL), image(NULL) { }
+        Image * get();
+        BitmapFrameArray* getBitmapFrame();
+        const char ** getBitmapdata();
+        unsigned int getBitmapdatasize();
+        INNER_RES_INFO* getResInfo(void);
+    };
 
-		struct InnerImage {
-			INNER_RES_INFO * resInfo;
-			Image * image;
-			InnerImage() : resInfo(NULL), image(NULL) { }
-			Image * get();
-			BitmapFrameArray* getBitmapFrame();
-			const char ** getBitmapdata();
-			unsigned int getBitmapdatasize();
-			INNER_RES_INFO* getResInfo(void);
-		};
+    MAPCLASSKEY(string, Font*, FontResMap);
+    MAPCLASSKEY(string, Image*, ImageResMap);
+    MAPCLASSKEY(string, Bitmap*, BitmapResMap);
+    MAPCLASS(string, InnerImage, InnerImageResMap);
+    PAIR(string, Font*, FontResPair);
+    PAIR(string, Image*, ImageResPair);
+    PAIR(string, Bitmap*, BitmapResPair);
 
-		MAPCLASSKEY(string, Font*, FontResMap);
-		MAPCLASSKEY(string, Image*, ImageResMap);
-		MAPCLASSKEY(string, Bitmap*, BitmapResMap);
-		MAPCLASS(string, InnerImage, InnerImageResMap);
-		PAIR(string, Font*, FontResPair);
-		PAIR(string, Image*, ImageResPair);
-        PAIR(string, Bitmap*, BitmapResPair);
+    FontResMap   m_fontRes;
+    ImageResMap  m_imageRes;
+    InnerImageResMap m_innerImageRes;
+    BitmapResMap m_bitmapRes;
 
-		FontResMap   m_fontRes;
-		ImageResMap  m_imageRes;
-		InnerImageResMap m_innerImageRes;
-		BitmapResMap m_bitmapRes;
-
-		static ResLoader* m_singleton;
+    static ResLoader* m_singleton;
 };
 
 INNER_RES_INFO* GetImageResInfo(const char *filepath);
 
-
 } // namespace hfcl
 
-#endif
+#endif /* HFCL_RESOURCE_RESLOADER_H_ */
 
