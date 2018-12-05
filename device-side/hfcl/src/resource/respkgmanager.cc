@@ -84,8 +84,8 @@ bool ResPkgManager::registerPackage(ResPackage *pkg)
 bool ResPkgManager::unregisterPackage(int id)
 {
     ResPkgList::iterator it;
-    for(it = m_packageList.begin(); it !=m_packageList.end(); it++) {
-        if((*it)->getId() == id) {
+    for (it = m_packageList.begin(); it !=m_packageList.end(); it++) {
+        if ((*it)->getId() == id) {
             m_packageList.erase(it);
             // VincentWei > FIXME: memory leap? HFCL_DELETE(*it);
             return true;
@@ -98,9 +98,8 @@ bool ResPkgManager::unregisterPackage(const char * name)
 {
     ResPkgList::iterator it;
 
-    for(it = m_packageList.begin(); it !=m_packageList.end(); it++)
-    {
-        if(strcmp((*it)->getName(), name) == 0) {
+    for (it = m_packageList.begin(); it !=m_packageList.end(); it++) {
+        if (strcmp((*it)->getName(), name) == 0) {
             m_packageList.erase(it);
             HFCL_DELETE(*it);
             return true;
@@ -291,7 +290,6 @@ DrawableSetGroup* GetDrawableSetGroupRes(HTResId id)
     if(resPkg)
         return resPkg->getDrawableSetGroup(id);
     return NULL;
-
 }
 
 View* CreateViewFromRes(HTResId id, View *parent, ViewContext *viewContext, ContentProvider* provider /*= NULL*/)

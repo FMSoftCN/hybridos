@@ -664,7 +664,7 @@ CB_CREATE_MENU ResPackage::getMenu(HTResId id)
 {
     unsigned int idx = RESINDEX(id) - 1;
     if (R_TYPE_MENU != RESTYPE(id) || idx < 0
-            || idx >=m_MenuArrayCount ) //
+            || idx >= m_MenuArrayCount)
         return NULL;
 
     return(CB_CREATE_MENU) m_pMenuResArray[idx].Menufunction;
