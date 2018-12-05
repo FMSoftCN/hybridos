@@ -41,70 +41,70 @@ View::View()
     , m_theme_drset_id(-1)
     , m_drawLayer(LAYER_MAXNUM - 1)
 {
-	setVisible(true);
+    setVisible(true);
 }
 
 View::View(View* p_parent)
-	: m_rect(0, 0, 0, 0)
-	, m_id(0)
-	, m_drset(NULL)   
-    , m_alpha(HFCL_DEFAULT_OPACITY)
-    , m_flags(0)
-	, m_prev(0)
-    , m_next(0)
-    , m_parent(0)
-    , m_addData(0)
-    , m_theme_drset_id(-1)
-    , m_drawLayer(LAYER_MAXNUM - 1)
-{
-	setVisible(true);
-	if (p_parent)
-		((ContainerView *)p_parent)->addChild(this);
-	m_parent = (ContainerView*)p_parent;
-}
-
-View::View(View* p_parent, DrawableSet* drset)
     : m_rect(0, 0, 0, 0)
     , m_id(0)
-	, m_drset(drset)
+    , m_drset(NULL)
     , m_alpha(HFCL_DEFAULT_OPACITY)
     , m_flags(0)
     , m_prev(0)
     , m_next(0)
     , m_parent(0)
     , m_addData(0)
-    , m_theme_drset_id(-1)    
+    , m_theme_drset_id(-1)
     , m_drawLayer(LAYER_MAXNUM - 1)
 {
-	setVisible(true);
+    setVisible(true);
     if (p_parent)
         ((ContainerView *)p_parent)->addChild(this);
-	m_parent = (ContainerView*)p_parent;
+    m_parent = (ContainerView*)p_parent;
 }
 
-View::View(int i_id, int x, int y, int w, int h)
-	: m_rect(x, y, x + w, y + h)
-	, m_id(i_id)
-	, m_drset(NULL)   
+View::View(View* p_parent, DrawableSet* drset)
+    : m_rect(0, 0, 0, 0)
+    , m_id(0)
+    , m_drset(drset)
     , m_alpha(HFCL_DEFAULT_OPACITY)
-	, m_flags(0)
-	, m_prev(0)
+    , m_flags(0)
+    , m_prev(0)
     , m_next(0)
-	, m_parent(0)
+    , m_parent(0)
     , m_addData(0)
     , m_theme_drset_id(-1)
     , m_drawLayer(LAYER_MAXNUM - 1)
 {
-	setVisible(true);
+    setVisible(true);
+    if (p_parent)
+        ((ContainerView *)p_parent)->addChild(this);
+    m_parent = (ContainerView*)p_parent;
+}
+
+View::View(int i_id, int x, int y, int w, int h)
+    : m_rect(x, y, x + w, y + h)
+    , m_id(i_id)
+    , m_drset(NULL)
+    , m_alpha(HFCL_DEFAULT_OPACITY)
+    , m_flags(0)
+    , m_prev(0)
+    , m_next(0)
+    , m_parent(0)
+    , m_addData(0)
+    , m_theme_drset_id(-1)
+    , m_drawLayer(LAYER_MAXNUM - 1)
+{
+    setVisible(true);
 }
 
 View::~View()
 {
-	//releaseEventListeners();
+    //releaseEventListeners();
 
-	if(m_drset && !(m_drset->isCommon())) {
-		HFCL_DELETE(m_drset);
-	}
+    if(m_drset && !(m_drset->isCommon())) {
+        HFCL_DELETE(m_drset);
+    }
 }
 
 /*void View::initDrawable(DrawableSelector* selector)
@@ -112,35 +112,35 @@ View::~View()
     if (NULL == selector) {
         return;
     }
-	m_drBkgnd = selector->getDrawable(DR_BACKGND);
-	if (NULL != m_drBkgnd)
-		m_drBkgnd->safeRef();
+    m_drBkgnd = selector->getDrawable(DR_BACKGND);
+    if (NULL != m_drBkgnd)
+        m_drBkgnd->safeRef();
 }*/
 
 void View::setDrawableSet(DrawableSet* drset)
 {
-	if(m_drset != NULL) 
-	{
-		if (m_drset == drset && !(drset->isCommon())) {
-			HFCL_DELETE(drset);
-			return;
-		}
-		if (m_drset != drset && !(m_drset->isCommon())) {
-			HFCL_DELETE(m_drset);
-		}
-	}
-	m_drset = drset;
+    if(m_drset != NULL)
+    {
+        if (m_drset == drset && !(drset->isCommon())) {
+            HFCL_DELETE(drset);
+            return;
+        }
+        if (m_drset != drset && !(m_drset->isCommon())) {
+            HFCL_DELETE(m_drset);
+        }
+    }
+    m_drset = drset;
 }
 
 DrawableSet* View::getDrawableSet(void) const
-{ 
-	return m_drset; 
+{
+    return m_drset;
 }
 
 void View::drawBackground(GraphicsContext* context, IntRect &rc, int status)
 {
     if (m_drset) {
-		m_drset->draw(context, DR_BKGND, DRAWSTATE_NORMAL, rc);
+        m_drset->draw(context, DR_BKGND, DRAWSTATE_NORMAL, rc);
     }
 }
 
@@ -170,7 +170,7 @@ void View::onPaint(GraphicsContext* context, int status)
             return;
 
         context->setMapView(this);
-        if (!context->rectVisible(rc)) 
+        if (!context->rectVisible(rc))
             return;
 
         if (m_alpha != HFCL_DEFAULT_OPACITY) {
@@ -181,7 +181,7 @@ void View::onPaint(GraphicsContext* context, int status)
         if (_win != NULL && _win->layer() == -1) {
             context->setLayer(m_drawLayer);
         }
-    
+
         context->save();
         context->clip(rc);
         paint(context, status);
@@ -195,17 +195,17 @@ void View::onPaint(GraphicsContext* context, int status)
 
 void View::changeTheme(void)
 {
-	if (isThemeAble() && -1 != m_theme_drset_id) {
-		//FIXME we need system package here
-		/*
-		ResPackage* package = ResPkgManager::getResPkgManager()->getPackage(0);
-		*/
-		DrawableSet* drset = NULL;
-		drset = GetSystemPackage()->getThemeDrawableSet(m_theme_drset_id);
-		if (drset) {
-			setDrawableSet(drset);
-		}
-	}
+    if (isThemeAble() && -1 != m_theme_drset_id) {
+        //FIXME we need system package here
+        /*
+        ResPackage* package = ResPkgManager::getResPkgManager()->getPackage(0);
+        */
+        DrawableSet* drset = NULL;
+        drset = GetSystemPackage()->getThemeDrawableSet(m_theme_drset_id);
+        if (drset) {
+            setDrawableSet(drset);
+        }
+    }
 }
 
 void View::setAlpha(unsigned char trans)
@@ -227,154 +227,154 @@ unsigned char View::alpha()
 
 void View::addEventListener(EventListener* listener)
 {
-	if (NULL == listener) {
-		return;
-	}
-	listener->ref();
-	m_listeners.push_front(listener);
+    if (NULL == listener) {
+        return;
+    }
+    listener->ref();
+    m_listeners.push_front(listener);
 }
 
 void View::removeEventListener(EventListener* listener)
 {
-	if (NULL == listener) {
-		return;
-	}
-	m_listeners.remove(listener);	
-	listener->unref();
+    if (NULL == listener) {
+        return;
+    }
+    m_listeners.remove(listener);
+    listener->unref();
 }
 
 void View::releaseEventListeners()
 {
-	EventListenerList::iterator _listener;
-	EventListenerList::iterator _temp;
+    EventListenerList::iterator _listener;
+    EventListenerList::iterator _temp;
 
-	if (m_listeners.size() <= 0) {
-		return;
-	}
+    if (m_listeners.size() <= 0) {
+        return;
+    }
 
-	_listener = m_listeners.begin();
-	_temp = _listener;
-	do {
-		++_listener;
-		EventListener* child = *_temp;
-      	if (child != NULL) {			
-      		child->unref();
-      		m_listeners.erase(_temp);
-      	}
-		_temp = _listener;
-		if (m_listeners.size() == 0) {
-			break;
-		}
-	}
-	while (true);
+    _listener = m_listeners.begin();
+    _temp = _listener;
+    do {
+        ++_listener;
+        EventListener* child = *_temp;
+          if (child != NULL) {
+              child->unref();
+              m_listeners.erase(_temp);
+          }
+        _temp = _listener;
+        if (m_listeners.size() == 0) {
+            break;
+        }
+    }
+    while (true);
 }
 
 void View::onGetFocus()
 {
-	CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_GET_FOCUS, (HTData)this);
-	raiseEvent(&event);
-	updateView();
+    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_GET_FOCUS, (HTData)this);
+    raiseEvent(&event);
+    updateView();
 }
 
 void View::onLoseFocus()
 {
-	CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_LOSE_FOCUS, (HTData)this);
-	raiseEvent(&event);
-	updateView();
+    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_LOSE_FOCUS, (HTData)this);
+    raiseEvent(&event);
+    updateView();
 }
 
 bool View::setFocus(View * view)
 {
     if(view == NULL)
         return false;
-	
+
     view->focusMe();
-	return true;
+    return true;
 }
 
 void View::inner_updateView(int x, int y, int w, int h, bool upBackGnd)
 {
-	ContainerView *p = parent();
-	if (p == NULL) 
-		return;
+    ContainerView *p = parent();
+    if (p == NULL)
+        return;
 
     /* VincentWei: disable the invalid update request */
     IntRect rc_invalid (x + m_rect.left(), y + m_rect.top(), x + m_rect.left() + w, y + m_rect.top() + h);
     if (rc_invalid.intersect (m_rect)) {
-	    p->onChildUpdateView (this, rc_invalid.left(), rc_invalid.top(), rc_invalid.width(), rc_invalid.height());
+        p->onChildUpdateView (this, rc_invalid.left(), rc_invalid.top(), rc_invalid.width(), rc_invalid.height());
     }
 }
 
 void View::inner_updateViewRect(int x, int y, int w, int h)
 {
-	ContainerView *p = parent();
-	if (p == NULL)
-		return;
+    ContainerView *p = parent();
+    if (p == NULL)
+        return;
 
     /* VincentWei: disable the invalid update request */
     IntRect rc_invalid (x + m_rect.left(), y + m_rect.top(), x + m_rect.left() + w, y + m_rect.top() + h);
     if (rc_invalid.intersect (m_rect)) {
-	    p->onChildUpdateView (this, rc_invalid.left(), rc_invalid.top(), rc_invalid.width(), rc_invalid.height());
+        p->onChildUpdateView (this, rc_invalid.left(), rc_invalid.top(), rc_invalid.width(), rc_invalid.height());
     }
 }
 
-void View::updateView(int x, int y, int w, int h) 
+void View::updateView(int x, int y, int w, int h)
 {
-	inner_updateView(x, y, w, h);
+    inner_updateView(x, y, w, h);
 }
 
 void View::updateView(const IntRect &rc)
 {
-	inner_updateView(rc.left(), rc.top(), rc.width(), rc.height());
+    inner_updateView(rc.left(), rc.top(), rc.width(), rc.height());
 }
 
-void View::onChildUpdateView(View *child, int x, int y, int w, int h, bool upBackGnd) 
+void View::onChildUpdateView(View *child, int x, int y, int w, int h, bool upBackGnd)
 {
-	inner_updateView(x, y, w, h, upBackGnd);
+    inner_updateView(x, y, w, h, upBackGnd);
 }
 
 void View::updateViewRect(const IntRect &rc)
 {
-	inner_updateViewRect(rc.left(), rc.top(), rc.width(), rc.height());
+    inner_updateViewRect(rc.left(), rc.top(), rc.width(), rc.height());
 }
 
 void View::updateViewRect(void)
 {
-	inner_updateViewRect(0, 0, m_rect.width(), m_rect.height());
+    inner_updateViewRect(0, 0, m_rect.width(), m_rect.height());
 }
 
 void View::updateView(bool upBackGnd)
 {
-	inner_updateView(0, 0, m_rect.width(), m_rect.height(), upBackGnd);
+    inner_updateView(0, 0, m_rect.width(), m_rect.height(), upBackGnd);
 }
-		
+
 //return True if the event was handled, false otherwise.
 bool View::dispatchEvent(Event* event)
 {
-	if (event->eventType() == Event::MOTION_CLICK) {
-		ViewClickEventStruct s;
-		s.view = this;
-		s.x = ((MouseEvent *)event)->x();
-		s.y = ((MouseEvent *)event)->y();
-		CustomEvent e(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_ON_CLICK, (HTData)&s);
-		return raiseEvent(&e);
-	}
+    if (event->eventType() == Event::MOTION_CLICK) {
+        ViewClickEventStruct s;
+        s.view = this;
+        s.x = ((MouseEvent *)event)->x();
+        s.y = ((MouseEvent *)event)->y();
+        CustomEvent e(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_ON_CLICK, (HTData)&s);
+        return raiseEvent(&e);
+    }
 
-	return raiseEvent(event);
+    return raiseEvent(event);
 }
 
 bool View::raiseEvent(Event *event)
 {
-	EventListenerList::iterator i;
+    EventListenerList::iterator i;
 
-	for (i = m_listeners.begin(); i != m_listeners.end(); ++i){
-		if((*i)->handleEvent(event))
-			return true;
-	}
-	return false;
+    for (i = m_listeners.begin(); i != m_listeners.end(); ++i){
+        if((*i)->handleEvent(event))
+            return true;
+    }
+    return false;
 }
 
-void View::viewToWindow(int *x, int *y) 
+void View::viewToWindow(int *x, int *y)
 {
     if (x)
         *x += m_rect.left();
@@ -385,7 +385,7 @@ void View::viewToWindow(int *x, int *y)
         return ((View*)m_parent)->viewToWindow(x, y);
 }
 
-void View::windowToView(int *x, int *y) 
+void View::windowToView(int *x, int *y)
 {
     if (m_parent) {
         int _tmpx, _tmpy;
@@ -398,14 +398,14 @@ void View::windowToView(int *x, int *y)
         return ((View*)m_parent)->windowToView(x, y);
     }
 }
-		
+
 void View::focusMe(void)
 {
-	ContainerView *p = NULL;
-	
+    ContainerView *p = NULL;
+
     if (rootView() == this) {
-		return;
-	}
+        return;
+    }
 
     if (NULL != (p = parent())) {
         if(p->isFocus()){
@@ -435,22 +435,22 @@ bool View::isFocus(void)
 //it can play click sound, call approciate click listener.
 bool View::performClick()
 {
-	focusMe();
-	updateView();
-	return true;
+    focusMe();
+    updateView();
+    return true;
 }
 
 ContainerView* View::rootView(void)
 {
-	View *p = this;
+    View *p = this;
 
-	while (p != NULL){
-		if (p->isTopView())
-			return (ContainerView *)p;
-		p = p->parent();
-	}
+    while (p != NULL){
+        if (p->isTopView())
+            return (ContainerView *)p;
+        p = p->parent();
+    }
 
-	return NULL;
+    return NULL;
 }
 
 } // namespace hfcl

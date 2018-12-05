@@ -33,15 +33,15 @@ class GraphicsContext;
 class ContainerView;
 
 enum {
-	PAINT_STATUS_SHIFT = 24,
-	PAINT_STATUS_MASK  = ((1 << PAINT_STATUS_SHIFT) - 1),
-	PAINT_NO_HILIGHT = 0x80000000
+    PAINT_STATUS_SHIFT = 24,
+    PAINT_STATUS_MASK  = ((1 << PAINT_STATUS_SHIFT) - 1),
+    PAINT_NO_HILIGHT = 0x80000000
 };
 
 typedef struct {
-	View *view;
-	int x;
-	int y;
+    View *view;
+    int x;
+    int y;
 } ViewClickEventStruct;
 
 class View : public Object {
@@ -70,7 +70,7 @@ public:
     bool setRectWH(int left, int top, int width, int height) {
         return setRect(IntRect(left, top, width + left, height + top));
     }
-    
+
     bool setRectNoUpdate(int left, int top, int right, int bottom) {
         IntRect irc = IntRect(left, top, right, bottom);
         if (irc == m_rect)
@@ -88,8 +88,8 @@ public:
         }
         return false;
     }
-    
-    virtual bool setRect(const IntRect& irc) { 
+
+    virtual bool setRect(const IntRect& irc) {
         if (irc == m_rect)
             return false;
 
@@ -156,7 +156,7 @@ public:
     // x,y coordiat from view, e.g (0,0) is same as m_rect.left, m_rect.top
     void updateView(int x, int y, int w, int h);
     void updateView(const IntRect &rc);
-    
+
     virtual void onChildUpdateView(View *child, int x, int y, int w, int h, bool upBackGnd = true);
     void updateViewRect(const IntRect &rc);
     void updateViewRect(void);
@@ -184,7 +184,7 @@ public:
     void setAlpha(unsigned char trans);
     unsigned char alpha();
 
-    virtual HWND getSysWindow() { 
+    virtual HWND getSysWindow() {
         return m_parent ? ((View*)m_parent)->getSysWindow() : 0;
     }
 
@@ -284,7 +284,7 @@ protected:
     };
 
     inline void setFlag(bool b, unsigned int flag) {
-        if(b) 
+        if(b)
             m_flags |= flag;
         else
             m_flags &= (~flag);

@@ -39,8 +39,8 @@ public:
         WordBreak   =   0x00000010,
         SingleLine  =   0x00000020,
         ExpandTabs  =   0x00000040,
-        TabStop     =   0x00000080,   
-        NoClip      =   0x00000100,   
+        TabStop     =   0x00000080,
+        NoClip      =   0x00000100,
         ExternallPading=0x00000200,
         CalcRect    =   0x00000400,
         NoPrefix    =   0x00000800,
@@ -87,7 +87,7 @@ public:
     }
 
     static unsigned int setTextOutMode(unsigned int format, int txtmod) {
-        return (txtmod == TEXTOUT_OMITTED || txtmod & TextOutOmitted)? 
+        return (txtmod == TEXTOUT_OMITTED || txtmod & TextOutOmitted)?
             format | TextOutOmitted : format & (~TextOutOmitted);
     }
 
@@ -99,7 +99,7 @@ public:
     static unsigned int getTextOutLineMode(unsigned int format)
     {
         return (format & OutLine);
-    }        
+    }
 };
 
 } // namespace hfcl

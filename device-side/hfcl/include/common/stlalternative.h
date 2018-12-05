@@ -104,45 +104,19 @@ public:
     const char* str() const { return buf; }
 
     void release() {
-		if(this != NULL) HFCL_FREE((void*)this);
+        if(this != NULL) HFCL_FREE((void*)this);
     }
 };
 
 class string {
 public:
     string() { _str_buff = NULL; }
-    string(const char* str, int n = -1) {
-        _str_buff = NULL;
-        if (str == NULL) return;
-	
-        if (n <= 0)
-            n = strlen(str);
-        _str_buff =(char *)HFCL_MALLOC(n + 1);
-        if (_str_buff != NULL)
-        {
-            strncpy(_str_buff, str, n);
-            _str_buff[n] = 0;
-			check_utf8_str(_str_buff, n);
-        }
-    }
-
-    string(const string& str) {
-         int n;
-         _str_buff = NULL;
-         if(str.c_str() == NULL) return;	 
-           n = strlen(str.c_str());
-         _str_buff = (char *)HFCL_MALLOC(n + 1);
-         if (_str_buff != NULL)
-         {
-             strncpy(_str_buff, str.c_str(), n);
-             _str_buff[n] = 0;
-			 check_utf8_str(_str_buff, n);
-         }
-    }
+    string(const char* str, int n = -1);
+    string(const string& str);
 
     ~string() {
         if (_str_buff != NULL)
-		HFCL_FREE(_str_buff);	
+            HFCL_FREE(_str_buff);
         _str_buff = NULL;
     }
 
@@ -150,44 +124,8 @@ public:
         return _str_buff ;
     }
 
-    const string & operator=(const string &str) {
-        int n;
-        if (this == &str)     return *this;
-
-        if(str.c_str() == NULL) return *this;	 
-        if (_str_buff != NULL)  HFCL_FREE(_str_buff);	
-        _str_buff = NULL;	
-
-        n = strlen(str.c_str());
-        _str_buff = (char *)HFCL_MALLOC(n + sizeof(short));
-
-        if (_str_buff != NULL)
-        {
-            strncpy(_str_buff, str.c_str(), n);
-            _str_buff[n] = 0;
-			check_utf8_str(_str_buff, n);
-        }
-        return *this;
-    }
-
-    const string & operator=(const char* str) {
-        int n;
-        if (_str_buff != NULL)  HFCL_FREE(_str_buff);	
-        _str_buff = NULL;	
-        if(str ==  NULL) return *this;
-	
-        n = strlen(str);
-        _str_buff = (char *)HFCL_MALLOC(n + sizeof(short));
-
-        if (_str_buff != NULL)
-        {
-            strncpy(_str_buff, str, n);
-            _str_buff[n] = 0;
-			check_utf8_str(_str_buff, n);
-        }
-        return *this;
-    }
-
+    const string & operator=(const string &str);
+    const string & operator=(const char* str);
     friend int operator-(const string &s1, const string &s2) {
         const char* str1 = s1.c_str();
         const char* str2 = s2.c_str();
@@ -219,33 +157,7 @@ public:
             return -1;
     }
 
-    string& append(const char* str) {
-        int n;
-        char * new_str;
-
-        if (str == NULL)           return *this;
-
-        if (_str_buff == NULL) {
-            this->operator=(str);
-            return *this;
-        }
-
-        new_str = NULL;	
-        n = strlen(str);
-        new_str = (char *)HFCL_MALLOC(length() + n+1);
-
-        if (new_str != NULL)
-        {
-            strcpy(new_str, _str_buff);
-            strcat(new_str, str);
-        }
-
-        if (_str_buff != NULL)  HFCL_FREE(_str_buff);	
-        _str_buff = new_str;
-		check_utf8_str(_str_buff, -1);
-
-        return *this;
-    }
+    string& append(const char* str);
 
     string& operator+=(const char* str) {
         return append(str);
@@ -491,10 +403,10 @@ protected:
     unsigned int _count;
     struct rb_root _root;
 
-    virtual int delete_key(void* key) 
-	{
-		return 0;
-	}
+    virtual int delete_key(void* key)
+    {
+        return 0;
+    }
     virtual void delete_value(void* value) { int i = 0; i = i; ++i; i = 1; }
     virtual int key_cmp(void *key1, void *key2) const {
         return key1 == key2 ? 0 : memcmp(key1, key2, _key_size);
@@ -582,8 +494,8 @@ protected:
     ////////////////////////////////////////////////////////
     map_base(unsigned int key_size, unsigned int value_size)
         : _key_size(key_size), _value_size(value_size), _count(0) {
-			_root.rb_node = NULL;
-	}
+            _root.rb_node = NULL;
+    }
 
     entry_t * _find(void *key) const {
         if (!key)
@@ -631,7 +543,7 @@ protected:
             return ;
         }
 
-		delete_key(entry->key());
+        delete_key(entry->key());
         delete_value(entry->value(this));
         entry->setValue(this, value);
     }
@@ -665,7 +577,7 @@ protected:
 
     void _erase(entry_t *entry) {
         rb_erase(&entry->node, &_root);
-		clear_node(&entry->node);
+        clear_node(&entry->node);
         _count --;
     }
 
@@ -796,7 +708,7 @@ protected:
         list_add(node, &_head);
         _count ++;
 #ifdef _HFCL_TRACE_LIST
-		_DBG_PRINTF ("_HFCL_TRACE_LIST : new and push node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+        _DBG_PRINTF ("_HFCL_TRACE_LIST : new and push node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
                 node, sizeof(list_t) + _size, __func__, size());
 #endif
     }
@@ -809,7 +721,7 @@ protected:
         list_add_tail(node, &_head);
         _count ++;
 #ifdef _HFCL_TRACE_LIST
-		_DBG_PRINTF ("_HFCL_TRACE_LIST : new and push node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+        _DBG_PRINTF ("_HFCL_TRACE_LIST : new and push node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
             node, sizeof(list_t) + _size, __func__, size());
 #endif
     }
@@ -823,7 +735,7 @@ protected:
         HFCL_FREE(node);
         _count --;
 #ifdef _HFCL_TRACE_LIST
-		_DBG_PRINTF ("_HFCL_TRACE_LIST : pop and delete node (%p)  ---- in func [%s]	-- size = %d\n",
+        _DBG_PRINTF ("_HFCL_TRACE_LIST : pop and delete node (%p)  ---- in func [%s]    -- size = %d\n",
                 node,  __func__, size());
 #endif
     }
@@ -845,7 +757,7 @@ protected:
             value_copy(LIST_DATA(newnode), node);
             __list_add(newnode, _head.prev, &_head);
 #ifdef _HFCL_TRACE_LIST
-			_DBG_PRINTF ("_HFCL_TRACE_LIST : new node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
+            _DBG_PRINTF ("_HFCL_TRACE_LIST : new node (%p) size = (%d) ---- in func [%s]    -- size = %d\n",
                     newnode, sizeof(list_t) + _size, __func__, size());
 #endif
         }
@@ -915,11 +827,11 @@ protected:
             list_t *node = (list_t*)it._current;
             list_t *next = node->next;
             delete_node(LIST_DATA(node));
-            list_del(node);			
+            list_del(node);
             HFCL_FREE(node);
             _count --;
 #ifdef _HFCL_TRACE_LIST
-			_DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
+            _DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]    -- size = %d\n",
                     node, sizeof(list_t) + _size, __func__, size());
 #endif
             return iterator_base(this, next);
@@ -934,11 +846,11 @@ protected:
             list_t *tmp = begin;
             begin = begin->next;
             delete_node(LIST_DATA(tmp));
-            list_del(tmp);			
+            list_del(tmp);
             HFCL_FREE(tmp);
             _count --;
 #ifdef _HFCL_TRACE_LIST
-			_DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]	-- size = %d\n",
+            _DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]    -- size = %d\n",
                     tmp, sizeof(list_t) + _size, __func__, size());
 #endif
         }
@@ -956,17 +868,17 @@ protected:
                 HFCL_FREE(tmp);
                 _count --;
 #ifdef _HFCL_TRACE_LIST
-				_DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+                _DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
                         tmp, sizeof(list_t) + _size, __func__, size());
 #endif
-				return;
+                return;
 
             } else {
                 node = node->next;
             }
         }
     }
-    
+
     iterator_base _insert(const iterator_base& it, void *data) {
         list_t * node = new_node();
 
@@ -975,7 +887,7 @@ protected:
         list_add(node, pos);
         _count ++;
 #ifdef _HFCL_TRACE_LIST
-		_DBG_PRINTF ("_HFCL_TRACE_LIST : new and insert node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+        _DBG_PRINTF ("_HFCL_TRACE_LIST : new and insert node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
                 node, sizeof(list_t) + _size, __func__, size());
 #endif
 
@@ -992,11 +904,11 @@ public:
         while (node != &_head) {
             list_t *tmp = node;
             node = node->next;
-			delete_node(LIST_DATA(tmp));
+            delete_node(LIST_DATA(tmp));
             HFCL_FREE(tmp);
-			_count--;
+            _count--;
 #ifdef _HFCL_TRACE_LIST
-			_DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
+            _DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
                     tmp, sizeof(list_t) + _size, __func__, size());
 #endif
         }
@@ -1047,12 +959,12 @@ public:
             iterator& operator=(const iterator& it) { _init_by((const vector_base::iterator_base&)it); return *this; } \
             Type& operator*() { return *(Type*)_value(); } \
             iterator& operator+(int idx) { _goto(idx); return *this; } \
-			bool operator!=(const iterator& it) {  \
-				return !iseq((const vector_base::iterator_base*)this, (const vector_base::iterator_base*)&it); \
-			} \
-			bool operator==(const iterator &it) { \
-				return iseq((const vector_base::iterator_base*)this, (const vector_base::iterator_base*)&it); \
-			} \
+            bool operator!=(const iterator& it) {  \
+                return !iseq((const vector_base::iterator_base*)this, (const vector_base::iterator_base*)&it); \
+            } \
+            bool operator==(const iterator &it) { \
+                return iseq((const vector_base::iterator_base*)this, (const vector_base::iterator_base*)&it); \
+            } \
         }; \
         iterator begin() { return vector_base::iterator_base(_begin()); } \
         iterator end() { return vector_base::iterator_base(_end()); } \
@@ -1076,17 +988,17 @@ public:
         Type& back() { return *(Type*)_back(); } \
         Type& front()const { return *(Type*)_front(); } \
         Type& back()const { return *(Type*)_back(); } \
-        void push_front(Type& t) { 	\
-        	_push_front((void*)&t); \
+        void push_front(Type& t) {     \
+            _push_front((void*)&t); \
         } \
-        void push_back(Type& t) { 	\
-        	_push_back((void*)&t);  \
+        void push_back(Type& t) {     \
+            _push_back((void*)&t);  \
         } \
-        void pop_back() {     		\
-        	_pop_back(); 			\
+        void pop_back() {             \
+            _pop_back();             \
         } \
-        void remove(Type& t) { 		\
-        	_remove((void*)&t); 	\
+        void remove(Type& t) {         \
+            _remove((void*)&t);     \
         } \
         ClassName& operator=(const ClassName& c) { _init_by((const list_base)c OPT_CLASSNAME(ClassName)); return *this; } \
         class iterator : public list_base::iterator_base { \
@@ -1102,7 +1014,7 @@ public:
             bool operator == (const iterator& it) { \
             return iseq((const list_base::iterator_base*)this, (const list_base::iterator_base*)&it); \
         } \
-		bool operator != (const iterator& it) { \
+        bool operator != (const iterator& it) { \
             return !iseq((const list_base::iterator_base*)this, (const list_base::iterator_base*)&it); \
         } \
         }; \
@@ -1116,13 +1028,13 @@ public:
             const_iterator& operator=(const iterator& it) { _init_by((const list_base::iterator_base&)it); return *this; } \
             Type* operator->() { return (Type*)_getdata(); } \
             Type& operator*() { return *(Type*)_getdata(); } \
-			bool operator == (const iterator& it) { \
-            	return iseq((const list_base::iterator_base*)this, (const list_base::iterator_base*)&it); \
-        	} \
-			bool operator != (const iterator& it) { \
-            	return !iseq((const list_base::iterator_base*)this, (const list_base::iterator_base*)&it); \
-        	} \
-		}; \
+            bool operator == (const iterator& it) { \
+                return iseq((const list_base::iterator_base*)this, (const list_base::iterator_base*)&it); \
+            } \
+            bool operator != (const iterator& it) { \
+                return !iseq((const list_base::iterator_base*)this, (const list_base::iterator_base*)&it); \
+            } \
+        }; \
         iterator begin() { return iterator(_begin()); } \
         iterator end() { return iterator(_end()); } \
         iterator begin() const { return iterator(_begin()); } \
@@ -1211,10 +1123,10 @@ public: \
     void erase(const TKey& key) { _erase((void*)&key); } \
     ClassName& operator=(const ClassName& c) { _init_by((const map_base)c OPT_CLASSNAME(ClassName)); return *this; } \
 protected: \
-	virtual int delete_key(void* key) { \
-		TKey *k = (TKey*)key; k = k; del_key; \
-		return 0; \
-	} \
+    virtual int delete_key(void* key) { \
+        TKey *k = (TKey*)key; k = k; del_key; \
+        return 0; \
+    } \
     void delete_value(void* value) { TValue *v = (TValue*)value; v = v; del_value; } \
     int key_cmp(void* key1, void *key2) const { TKey *k1 = (TKey*)key1; TKey* k2 = (TKey*)key2; cmp_key; } \
     void value_copy(void *dest, const void* src) {*((TValue*)dest) = *((TValue*)src); } \
