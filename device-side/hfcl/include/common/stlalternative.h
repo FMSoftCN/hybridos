@@ -330,8 +330,7 @@ public:
 
     void resize(int sz);
 
-    void clear()
-    {
+    void clear() {
         for (int i=0; i < _count; i ++)
             delete_sub_type(_buffer+ i * _size);
         if (_buffer) {
@@ -344,33 +343,8 @@ public:
     iterator_base _begin() { return iterator_base(this, 0); }
     iterator_base _end() { return iterator_base(this, size()); }
 
-    void* _insert(const iterator_base& it, void* data) {
-        int cur = it._cur;
-        resize(_count + 1);
-        if (cur >= _count)
-            cur = _count - 1;
-        else {
-            unsigned char* buf = _buffer + (_count - 1) * _size;
-            for (int i = _count-1; i >cur; -- i, buf -= _size) {
-                memcpy(buf, buf-_size, _size);
-            }
-        }
-        return memcpy(_buffer + cur * _size, data, _size);
-    }
-
-    void _erase(const iterator_base &it) {
-        int cur = it._cur;
-        if (cur < 0 || cur >= _count)
-            return ;
-        unsigned char* buf = _buffer + cur * _size;
-        delete_sub_type(buf);
-
-        int copies = _count - 1;
-        for (int i = cur; i < copies; i ++, buf += _size) {
-            memcpy(buf, buf + _size, _size);
-        }
-        resize(_count - 1);
-    }
+    void* _insert(const iterator_base& it, void* data);
+    void _erase(const iterator_base &it);
 
     vector_base(const vector_base& v OPT_TRACE_INFO) {
         _init_by(v OPT_TRACE_PARAM);
@@ -403,8 +377,7 @@ protected:
     unsigned int _count;
     struct rb_root _root;
 
-    virtual int delete_key(void* key)
-    {
+    virtual int delete_key(void* key) {
         return 0;
     }
     virtual void delete_value(void* value) { int i = 0; i = i; ++i; i = 1; }
@@ -434,6 +407,7 @@ protected:
             HFCL_FREE(node); //HFCL_FREE the node
         }
     }
+
     ///////////////////////////////////////////////////////
     //iterator_base
     public:
@@ -490,90 +464,16 @@ protected:
         }
     };
 
-    protected:
+protected:
     ////////////////////////////////////////////////////////
     map_base(unsigned int key_size, unsigned int value_size)
         : _key_size(key_size), _value_size(value_size), _count(0) {
             _root.rb_node = NULL;
     }
 
-    entry_t * _find(void *key) const {
-        if (!key)
-            return (entry_t*)NULL;
-        entry_t * entry = (entry_t*)(_root.rb_node);
-        while (entry) {
-            int ret = key_cmp(key, entry->key());
-            if (ret < 0)
-                entry = (entry_t*)(entry->node.rb_left);
-            else if (ret > 0)
-                entry = (entry_t*)(entry->node.rb_right);
-            else
-                return entry;
-        }
-        return (entry_t*)NULL;
-    }
-
-    void _insert(void *key, void *value)
-    {
-        if (!key)
-            return ;
-        entry_t ** pentry = (entry_t**)&(_root.rb_node);
-        entry_t * entry = NULL;
-        entry_t * parent = NULL;
-        while (*pentry) {
-            int ret = key_cmp(key, (*pentry)->key());
-
-            parent = *pentry;
-
-            if (ret < 0)
-                pentry = (entry_t**)&((*pentry)->node.rb_left);
-            else if (ret > 0)
-                pentry = (entry_t**)&((*pentry)->node.rb_right);
-            else{
-                entry = *pentry;
-                break;
-            }
-        }
-
-        if (!entry) { //new the entry
-            entry = new_entry(key, value);
-            rb_link_node(&entry->node, (struct rb_node*)parent,(struct rb_node**)pentry);
-            rb_insert_color(&entry->node, &_root);
-            _count ++;
-            return ;
-        }
-
-        delete_key(entry->key());
-        delete_value(entry->value(this));
-        entry->setValue(this, value);
-    }
-
-    void* _find_or_insert_value(void* key) {
-        if (!key)
-            return NULL;
-        entry_t ** pentry = (entry_t**)&(_root.rb_node);
-        entry_t * entry = NULL;
-        entry_t * parent = NULL;
-        while (*pentry) {
-            int ret = key_cmp(key, (*pentry)->key());
-
-            parent = *pentry;
-
-            if (ret < 0)
-                pentry = (entry_t**)&((*pentry)->node.rb_left);
-            else if (ret > 0)
-                pentry = (entry_t**)&((*pentry)->node.rb_right);
-            else{
-                return (*pentry)->value(this);
-            }
-        }
-
-        entry = new_entry(key, NULL);
-        rb_link_node(&entry->node, (struct rb_node*)parent,(struct rb_node**)pentry);
-        rb_insert_color(&entry->node, &_root);
-        _count ++;
-        return entry->value(this);
-    }
+    entry_t * _find(void *key) const;
+    void _insert(void *key, void *value);
+    void* _find_or_insert_value(void* key);
 
     void _erase(entry_t *entry) {
         rb_erase(&entry->node, &_root);
@@ -615,26 +515,10 @@ protected:
         return iterator_base((map_base*)this, _find(key));
     }
 
-    entry_t*  _copy_tree(entry_t *entry, struct rb_node* parent) {
-        if (!entry)
-            return NULL;
-        entry_t *newentry = new_entry(entry->key(), entry->value(this));
-        newentry->node.rb_color = entry->node.rb_color;
-        newentry->node.rb_parent = entry->node.rb_parent;
-        rb_set_parent(&newentry->node, parent);
-        newentry->node.rb_left = (struct rb_node*)_copy_tree((entry_t*)(entry->node.rb_left), &newentry->node);
-        newentry->node.rb_right = (struct rb_node*)_copy_tree((entry_t*)(entry->node.rb_right), &newentry->node);
-        return newentry;
-    }
+    entry_t* _copy_tree(entry_t *entry, struct rb_node* parent);
 
-    void _init_by(const map_base& m OPT_TRACE_INFO) {
-        OPTIMIZE_WARNING;
-        _value_size = (unsigned int)m._value_size;
-        _key_size = (unsigned int)m._key_size;
-        _count = (unsigned int)m._count;
-        struct rb_root * proot = (struct rb_root*)&m._root;
-        _root.rb_node = (struct rb_node*)_copy_tree((entry_t*)proot->rb_node, NULL);
-    }
+    void _init_by(const map_base& m OPT_TRACE_INFO);
+
 public:
     map_base(const map_base& m OPT_TRACE_INFO) {
         _init_by(m OPT_TRACE_PARAM);
@@ -650,7 +534,6 @@ public:
     virtual ~map_base() {
         //clear();
     }
-
 };
 
 #include "list.h"
@@ -699,69 +582,11 @@ protected:
         return LIST_DATA(_head.prev);
     }
 
-    void _push_front(void *data) {
-        list_t * node = new_node();
-        if (!node)
-            return ;
+    void _push_front(void *data);
+    void _push_back(void* data);
+    void _pop_back();
 
-        value_copy(LIST_DATA(node), data);
-        list_add(node, &_head);
-        _count ++;
-#ifdef _HFCL_TRACE_LIST
-        _DBG_PRINTF ("_HFCL_TRACE_LIST : new and push node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
-                node, sizeof(list_t) + _size, __func__, size());
-#endif
-    }
-
-    void _push_back(void* data) {
-        list_t *node = new_node();
-        if (!node)
-            return ;
-        value_copy(LIST_DATA(node), data);
-        list_add_tail(node, &_head);
-        _count ++;
-#ifdef _HFCL_TRACE_LIST
-        _DBG_PRINTF ("_HFCL_TRACE_LIST : new and push node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
-            node, sizeof(list_t) + _size, __func__, size());
-#endif
-    }
-
-    void _pop_back() {
-        if (_head.prev == &_head) //is empty
-            return;
-        list_t * node = _head.prev;
-        delete_node(LIST_DATA(node));
-        list_del(node);
-        HFCL_FREE(node);
-        _count --;
-#ifdef _HFCL_TRACE_LIST
-        _DBG_PRINTF ("_HFCL_TRACE_LIST : pop and delete node (%p)  ---- in func [%s]    -- size = %d\n",
-                node,  __func__, size());
-#endif
-    }
-
-    void _init_by(const list_base& l OPT_TRACE_INFO)
-    {
-        OPTIMIZE_WARNING;
-
-        _size = (unsigned int)l._size;
-        _count = (unsigned int)l._count;
-
-        INIT_LIST_HEAD(&_head);
-
-        list_t *node;
-
-        list_for_each(node, (list_t*)&l._head)
-        {
-            list_t *newnode = new_node();
-            value_copy(LIST_DATA(newnode), node);
-            __list_add(newnode, _head.prev, &_head);
-#ifdef _HFCL_TRACE_LIST
-            _DBG_PRINTF ("_HFCL_TRACE_LIST : new node (%p) size = (%d) ---- in func [%s]    -- size = %d\n",
-                    newnode, sizeof(list_t) + _size, __func__, size());
-#endif
-        }
-    }
+    void _init_by(const list_base& l OPT_TRACE_INFO);
 
 public:
     list_base(const list_base& l OPT_TRACE_INFO) {
@@ -822,101 +647,19 @@ protected:
         return iterator_base((list_base*)this, (list_t*)&_head);
     }
 
-    iterator_base _erase(const iterator_base & it) {
-        if (it._current != &_head) {
-            list_t *node = (list_t*)it._current;
-            list_t *next = node->next;
-            delete_node(LIST_DATA(node));
-            list_del(node);
-            HFCL_FREE(node);
-            _count --;
-#ifdef _HFCL_TRACE_LIST
-            _DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]    -- size = %d\n",
-                    node, sizeof(list_t) + _size, __func__, size());
-#endif
-            return iterator_base(this, next);
-        }
-        return iterator_base(this, (list_t*)it._current);
-    }
+    iterator_base _erase(const iterator_base & it);
+    iterator_base _erase(const iterator_base& itb, const iterator_base& ite);
 
-    iterator_base _erase(const iterator_base& itb, const iterator_base& ite) {
-        list_t * begin = (list_t*)itb._current;
-        list_t * end = (list_t*)ite._current;
-        while (begin && begin != end && begin != &_head) {
-            list_t *tmp = begin;
-            begin = begin->next;
-            delete_node(LIST_DATA(tmp));
-            list_del(tmp);
-            HFCL_FREE(tmp);
-            _count --;
-#ifdef _HFCL_TRACE_LIST
-            _DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]    -- size = %d\n",
-                    tmp, sizeof(list_t) + _size, __func__, size());
-#endif
-        }
-        return iterator_base(this, begin);
-    }
-
-    void _remove(void *data) {
-        list_t * node = _head.next;
-        while (node != &_head) {
-            if (value_equal(LIST_DATA(node), data)) {
-                list_t *tmp = node;
-                node = node->next;
-                list_del(tmp);
-                delete_node(LIST_DATA(tmp));
-                HFCL_FREE(tmp);
-                _count --;
-#ifdef _HFCL_TRACE_LIST
-                _DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
-                        tmp, sizeof(list_t) + _size, __func__, size());
-#endif
-                return;
-
-            } else {
-                node = node->next;
-            }
-        }
-    }
-
-    iterator_base _insert(const iterator_base& it, void *data) {
-        list_t * node = new_node();
-
-        value_copy(LIST_DATA(node), data);
-        list_t * pos = (list_t*)it._current;
-        list_add(node, pos);
-        _count ++;
-#ifdef _HFCL_TRACE_LIST
-        _DBG_PRINTF ("_HFCL_TRACE_LIST : new and insert node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
-                node, sizeof(list_t) + _size, __func__, size());
-#endif
-
-        return iterator_base(this, node);
-    }
+    void _remove(void *data);
+    iterator_base _insert(const iterator_base& it, void *data);
 
 public:
     unsigned int size() const {
         return _count;
     }
 
-    void clear(){
-        list_t *node = _head.next;
-        while (node != &_head) {
-            list_t *tmp = node;
-            node = node->next;
-            delete_node(LIST_DATA(tmp));
-            HFCL_FREE(tmp);
-            _count--;
-#ifdef _HFCL_TRACE_LIST
-            _DBG_PRINTF ("_HFCL_TRACE_LIST : delete node (%p) size = (%d) ---- in func [%s]  -- size = %d\n",
-                    tmp, sizeof(list_t) + _size, __func__, size());
-#endif
-        }
-        INIT_LIST_HEAD(&_head);
-        _count = 0;
-    }
-
-    bool empty()const {
+    void clear();
+    bool empty() const {
         return list_empty(&_head);
     }
 };
