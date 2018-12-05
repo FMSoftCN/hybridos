@@ -31,7 +31,7 @@ extern int g_ResCount;
 
 INNER_RES_INFO* GetImageResInfo(const char *filepath)
 {
-    int i,j;
+    int i, j;
     int cont;
     INNER_RES_INFO* info = NULL;
 

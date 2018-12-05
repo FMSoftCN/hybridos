@@ -5,10 +5,10 @@ myincludedir=$(includedir)/hfcl/resource
 myinclude_HEADERS= \
     restypes.h \
     drawableres.h \
+    textres.h \
     fontres.h \
     imageres.h \
     themeres.h \
-    language_ids.h \
     resdefines.head.h \
     resdefines.init.h \
     resdefines.name.h \

@@ -259,18 +259,20 @@ ResPackage::ResPackage(const char *name, int id,
     m_pUIResArray = NULL;
     m_UIArrayCount = 0;
 
-    m_incoreRes = incoreRes;
+    // m_incoreRes = incoreRes;
 
     m_languageId = R_LANG_na_NA;
     m_encodingId = R_ENCODING_unknown;
 
     m_textResType = R_TYPE_TEXT_RAW;
-    m_stringBucket = 0;
-    m_rawStrings = NULL;
+    m_textRes = NULL;
 }
 
 ResPackage::~ResPackage()
 {
+    if (m_textRes) {
+        HFCL_DELETE (m_textRes);
+    }
 }
 
 const string &ResPackage::getPackagePath(void)
@@ -514,32 +516,31 @@ void ResPackage::addTextResGnuMsg(HIDLanguage lang, HIDEncoding enc,
 
 bool ResPackage::setCurrentLang(HIDLanguage lang, HIDEncoding enc)
 {
+    if (m_textRes) {
+        HFCL_DELETE (m_textRes);
+        m_textRes = NULL;
+    }
+
     TextResMap &res = m_resBuckets[R_TYPE_TEXT_RAW].textRes();
     TextResMap::iterator it = res.find(MAKELONG(enc, lang));
     if (it != res.end() && it->second) {
-        const char** res_data = (const char**)it->second;
-        m_rawStrings = res_data;
-        m_textResType = R_TYPE_TEXT_RAW;
+        m_textRes = HFCL_NEW_EX (TextRes, (it->second));
         return true;
     }
 
     res = m_resBuckets[R_TYPE_TEXT_ZIPPED].textRes();
     it = res.find(MAKELONG(enc, lang));
     if (it != res.end() && it->second) {
-        const char* res_data = (const char*)it->second;
-        m_stringBucket =
-                ResLoader::getInstance()->getTextResZipped(res_data);
         m_textResType = R_TYPE_TEXT_ZIPPED;
+        m_textRes = HFCL_NEW_EX (TextResZipped, (it->second));
         return true;
     }
 
     res = m_resBuckets[R_TYPE_TEXT_GNUMSG].textRes();
     it = res.find(MAKELONG(enc, lang));
     if (it != res.end() && it->second) {
-        const char* res_data = (const char*)it->second;
-        m_stringBucket =
-                ResLoader::getInstance()->getTextResGnuMsg(res_data);
         m_textResType = R_TYPE_TEXT_GNUMSG;
+        m_textRes = HFCL_NEW_EX (TextResGnuMsg, (it->second));
         return true;
     }
 
@@ -548,34 +549,40 @@ bool ResPackage::setCurrentLang(HIDLanguage lang, HIDEncoding enc)
 
 const char* ResPackage::getText (HTStrId id)
 {
+    if (m_textRes) {
+        _DBG_PRINTF ("ResPackage::getText: NOT initialized text resource\n");
+        return NULL;
+    }
+
     switch (m_textResType) {
     case R_TYPE_TEXT_RAW:
     case R_TYPE_TEXT_ZIPPED:
-        if (m_rawStrings) {
-            const char* text = m_rawStrings [id];
-            if (text == NULL) {
-                return "";
-            }
-            return text;
-        }
         break;
 
     case R_TYPE_TEXT_GNUMSG:
+        _DBG_PRINTF ("ResPackage::getText (HTStrId): Type of text resource not matched\n");
+        return NULL;
+
     default:
         break;
     }
 
-    return NULL;
+    return m_textRes->getText (id);
 }
 
 const char* ResPackage::getText (const char* str)
 {
-    if (m_textResType != R_TYPE_TEXT_GNUMSG) {
-        _DBG_PRINTF ("ResPackage::getText: Not GNU message resource\n");
+    if (m_textRes) {
+        _DBG_PRINTF ("ResPackage::getText: NOT initialized text resource\n");
         return NULL;
     }
 
-    return "";
+    if (m_textResType != R_TYPE_TEXT_GNUMSG) {
+        _DBG_PRINTF ("ResPackage::getText (const char*): Type of text resource not matched\n");
+        return NULL;
+    }
+
+    return m_textRes->getText (str);
 }
 
 Style *ResPackage::getStyle(HTResId id)

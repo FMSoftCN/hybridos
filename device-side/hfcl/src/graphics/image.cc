@@ -41,16 +41,16 @@ Image::Image()
     , m_pBitmap(NULL)
     , m_replaceColor(0)
 {
-	//TODO
+    //TODO
 }
 
 Image::~Image()
 {
     if (m_pBitmap != NULL)
     {
-	    GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
-	    HFCL_DELETE(m_pBitmap);
-	    m_pBitmap = NULL;
+        GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
+        HFCL_DELETE(m_pBitmap);
+        m_pBitmap = NULL;
     }
 }
 
@@ -79,7 +79,7 @@ Image* Image::loadImage(const char * file_path)
         return NULL;
     }
 
-	switch (get_image_type(file_path)) {
+    switch (get_image_type(file_path)) {
         case IMAGE_TYPE_9_PATCH:
             pImg = HFCL_NEW_EX(NinePatchImage, ());
             break;
@@ -91,10 +91,10 @@ Image* Image::loadImage(const char * file_path)
             break;
         case IMAGE_TYPE_NORMAL:
             pImg = HFCL_NEW_EX(Image, ());
-			break;
+            break;
     }
 
-	pImg->setImage(file_path);
+    pImg->setImage(file_path);
 
     return pImg;
 }
@@ -102,12 +102,12 @@ Image* Image::loadImage(const char * file_path)
 bool Image::setImage(const char * file_path)
 {
     if (file_path) {
-		m_filePath = file_path;
-		if (m_bLoadOnPainting) {
-			setImageBitmap(NULL);
-		} else {
-			setImageBitmap(ResLoader::getInstance()->getBitmap(file_path));
-		}
+        m_filePath = file_path;
+        if (m_bLoadOnPainting) {
+            setImageBitmap(NULL);
+        } else {
+            setImageBitmap(ResLoader::getInstance()->getBitmap(file_path));
+        }
     } else {
         setImageBitmap(NULL);
     }
@@ -118,57 +118,57 @@ bool Image::setImageBitmap(Bitmap* pbmp)
 {
     if (m_pBitmap != pbmp)
     {
-	    if (m_pBitmap != NULL) {
-			GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
-			HFCL_DELETE(m_pBitmap);
-		}
-	    m_pBitmap = pbmp;
+        if (m_pBitmap != NULL) {
+            GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
+            HFCL_DELETE(m_pBitmap);
+        }
+        m_pBitmap = pbmp;
     }
     return true;
 }
 
 int Image::width(void) 
 { 
-	int w = 0;
-	
-	if (m_bLoadOnPainting) {
-		setImageBitmap(ResLoader::getInstance()->getBitmap(m_filePath.c_str()));
-	}
+    int w = 0;
+    
+    if (m_bLoadOnPainting) {
+        setImageBitmap(ResLoader::getInstance()->getBitmap(m_filePath.c_str()));
+    }
 
-	w = m_pBitmap ? m_pBitmap->bmWidth : 0;
-		
-	if (m_bLoadOnPainting) {
-		if(m_pBitmap)
-		{
-		    GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
-	        HFCL_DELETE(m_pBitmap);
-	        m_pBitmap = NULL;
-		}
-	} 
+    w = m_pBitmap ? m_pBitmap->bmWidth : 0;
+        
+    if (m_bLoadOnPainting) {
+        if(m_pBitmap)
+        {
+            GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
+            HFCL_DELETE(m_pBitmap);
+            m_pBitmap = NULL;
+        }
+    } 
 
-	return w;
+    return w;
 }
 
 int Image::height(void) 
 { 
-	int h = 0;
-	
-	if (m_bLoadOnPainting) {
-		setImageBitmap(ResLoader::getInstance()->getBitmap(m_filePath.c_str()));
-	}
+    int h = 0;
+    
+    if (m_bLoadOnPainting) {
+        setImageBitmap(ResLoader::getInstance()->getBitmap(m_filePath.c_str()));
+    }
 
-	h = m_pBitmap ? m_pBitmap->bmHeight : 0;
-		
-	if (m_bLoadOnPainting) {
-		if(m_pBitmap)
-		{
-		    GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
-	        HFCL_DELETE(m_pBitmap);
-	        m_pBitmap = NULL;
-		}
-	} 
+    h = m_pBitmap ? m_pBitmap->bmHeight : 0;
+        
+    if (m_bLoadOnPainting) {
+        if(m_pBitmap)
+        {
+            GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
+            HFCL_DELETE(m_pBitmap);
+            m_pBitmap = NULL;
+        }
+    } 
 
-	return h;
+    return h;
 }
 
 bool Image::setReplaceColor(Uint32 color)
@@ -199,28 +199,28 @@ void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat forma
 {
     int x = 0, y = 0, w = 0, h = 0;
     
-	if (m_bLoadOnPainting) {
-		setImageBitmap(ResLoader::getInstance()->getBitmap(m_filePath.c_str()));
-	}
-	
-    if (NULL == m_pBitmap) {
-        return;	
+    if (m_bLoadOnPainting) {
+        setImageBitmap(ResLoader::getInstance()->getBitmap(m_filePath.c_str()));
     }
-	context->setReplaceColor(0);
+    
+    if (NULL == m_pBitmap) {
+        return;    
+    }
+    context->setReplaceColor(0);
     if (m_replaceColor) {
-		context->setReplaceColor(m_replaceColor);
+        context->setReplaceColor(m_replaceColor);
     }
    
     switch (format.drawMode) {
         case DRAWMODE_SCALED: //IMAGE_DRAWMODE_SCALED :
-		{    
-			context->fillBoxWithBitmap(rc.left(), rc.top(),
+        {    
+            context->fillBoxWithBitmap(rc.left(), rc.top(),
                     rc.width(), rc.height(), m_pBitmap);
             break;
-		}
+        }
         case DRAWMODE_TILED: //IMAGE_DRAWMODE_TILED :
-		{
-			if (context->getBitmapSize(m_pBitmap, &w, &h)) {
+        {
+            if (context->getBitmapSize(m_pBitmap, &w, &h)) {
                 for (x = rc.left(); x < rc.right(); x += w) {
                     for (y = rc.top(); y < rc.bottom(); y += h)
                         context->fillBoxWithBitmap(x, y, w, h, m_pBitmap);
@@ -229,7 +229,7 @@ void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat forma
             break;
         }
         case DRAWMODE_ADAPTED: 
-		{
+        {
             if (context->getBitmapSize(m_pBitmap, &w, &h)) {
                 if (w == 0 || h == 0)
                     return;
@@ -248,42 +248,42 @@ void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat forma
         }
 
         case DRAWMODE_PARTBOX:
-		{
-			if(rc.width() > (int)m_pBitmap->bmWidth){
-				if (format.align == ALIGN_CENTER)
-        	x = (rc.left() + rc.right() - m_pBitmap->bmWidth)/2;
-		    else if (format.align == ALIGN_RIGHT)
-		      x = (rc.right() - m_pBitmap->bmWidth);
-		    else
-		      x = rc.left();
-				
-			}else x = rc.left();
-			
-			if(rc.height() > (int)m_pBitmap->bmHeight){
-			  if (format.valign == VALIGN_MIDDLE)
-        	y = (rc.top() + rc.bottom() - m_pBitmap->bmHeight)/2;
-		    else if (format.valign == VALIGN_BOTTOM)
-		        y = (rc.bottom() - m_pBitmap->bmHeight);
-		    else
-		       y = rc.top();
-		  }else y = rc.top();
-		  	
-			w = rc.width() > (int)m_pBitmap->bmWidth ? m_pBitmap->bmWidth : rc.width();
-			h = rc.height() > (int)m_pBitmap->bmHeight ? m_pBitmap->bmHeight : rc.height();
+        {
+            if(rc.width() > (int)m_pBitmap->bmWidth){
+                if (format.align == ALIGN_CENTER)
+            x = (rc.left() + rc.right() - m_pBitmap->bmWidth)/2;
+            else if (format.align == ALIGN_RIGHT)
+              x = (rc.right() - m_pBitmap->bmWidth);
+            else
+              x = rc.left();
+                
+            }else x = rc.left();
+            
+            if(rc.height() > (int)m_pBitmap->bmHeight){
+              if (format.valign == VALIGN_MIDDLE)
+            y = (rc.top() + rc.bottom() - m_pBitmap->bmHeight)/2;
+            else if (format.valign == VALIGN_BOTTOM)
+                y = (rc.bottom() - m_pBitmap->bmHeight);
+            else
+               y = rc.top();
+          }else y = rc.top();
+              
+            w = rc.width() > (int)m_pBitmap->bmWidth ? m_pBitmap->bmWidth : rc.width();
+            h = rc.height() > (int)m_pBitmap->bmHeight ? m_pBitmap->bmHeight : rc.height();
             context->fillBoxWithBitmapPart(x, y, w, h, m_pBitmap, xo, yo);
             break;
-		}
-		case DRAWMODE_ROTATIONANGLE:
-		{
-		if (context->getBitmapSize(m_pBitmap, &w, &h)) {
-			calcPosAlign(&x, &y, &rc, w, h, format);
-            		context->drawRotateBitmap(m_pBitmap,x,y, format.rotationAngle*64);
-			}
+        }
+        case DRAWMODE_ROTATIONANGLE:
+        {
+        if (context->getBitmapSize(m_pBitmap, &w, &h)) {
+            calcPosAlign(&x, &y, &rc, w, h, format);
+                    context->drawRotateBitmap(m_pBitmap,x,y, format.rotationAngle*64);
+            }
             break;
-		}
+        }
 
-		default: 
-		{
+        default: 
+        {
             if (context->getBitmapSize(m_pBitmap, &w, &h)) {
                 calcPosAlign(&x, &y, &rc, w, h, format);
                 context->fillBoxWithBitmap(x, y,
@@ -293,8 +293,8 @@ void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat forma
         }    //end of switch m_drawmode : case default.
     }    //end of switch m_drawmode.
 
-	if (m_bLoadOnPainting) {
-	    GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
+    if (m_bLoadOnPainting) {
+        GraphicsContext::screenGraphics()->unloadBitmap(m_pBitmap);
         HFCL_DELETE(m_pBitmap);
         m_pBitmap = NULL;
     }

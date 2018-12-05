@@ -23,6 +23,7 @@
 #define HFCL_RESOURCE_RESPACKAGE_H_H
 
 #include "resource/restypes.h"
+#include "resource/textres.h"
 #include "view/viewcontext.h"
 #include "resource/fontres.h"
 #include "resource/imageres.h"
@@ -191,14 +192,11 @@ protected:
     string m_name;
 
 private:
-    const HFCL_INCORE_RES* m_incoreRes;
-
     HIDLanguage m_languageId;
     HIDEncoding m_encodingId;
 
-    HIDResType m_textResType;
-    char* m_stringBucket;
-    const char** m_rawStrings;
+    HIDResType  m_textResType;
+    TextRes*    m_textRes;
 };
 
 string GetResRealPath(const char *packagePath, const char *resFilename);
