@@ -45,7 +45,7 @@ public:
     bool releaseBitmap(Bitmap* pbmp);
 
     void registerInnerRes(int res_type, INNER_RES_INFO * resources, int count);
-    
+
     static ResLoader* getInstance(void);
 
     ~ResLoader() { }

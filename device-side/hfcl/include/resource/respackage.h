@@ -34,11 +34,11 @@ class DrawableSetGroup;
 class GifAnimate;
 class ThemeRes;
 
-typedef struct  _TResouceEntry 
+typedef struct  _TResouceEntry
 {
-	HTResId id;
-	const char* value;  
-}TResourceEntry;
+    HTResId id;
+    const char* value;
+} TResourceEntry;
 
 typedef Menu * (*CB_CREATE_MENU)(Menu* parent, EventListener* listener);
 
@@ -118,8 +118,8 @@ public:
     bool addMenuResource(HTResId id, CB_CREATE_MENU createMenu);
     bool addMenuResource(MENU_RES_ARRAY *pMnuArray, int nMenuCount);
 
-    void addDrawableResource(TRDrawableArrayItem* all_elements, int size);		
-    void addDrawableSetResource(TRDrawableSetArrayItem *all_items, int size);		
+    void addDrawableResource(TRDrawableArrayItem* all_elements, int size);
+    void addDrawableSetResource(TRDrawableSetArrayItem *all_items, int size);
     void addThemeResource(HTResId theme_id, const char* theme_name,
             const TRThemeItem* items);
     void addDrawableSetGroupResource(HTResId drsetgroup_id,
@@ -147,7 +147,7 @@ public:
     Drawable* getDrawable(HTResId id);
     DrawableSet* getDrawableSet(HTResId);
     DrawableSetGroup* getDrawableSetGroup(HTResId);
-    ThemeRes* getThemeRes(HTResId);		
+    ThemeRes* getThemeRes(HTResId);
     DrawableSet* getThemeDrawableSet(int theme_drset_id);
 
     /*
@@ -168,12 +168,12 @@ private:
     const TResourceEntry *m_imageTResourceEntry;
     MENU_RES_ARRAY *m_pMenuResArray;
     unsigned int    m_MenuArrayCount;
-    
+
     UI_RES_ARRAY *m_pUIResArray;
     unsigned int    m_UIArrayCount;
-    
+
     // ---------------- \|/ -----------------
-    const TRDrawableArrayItem* m_drawableResource;		
+    const TRDrawableArrayItem* m_drawableResource;
     int m_drawableResourceSize;
     const TRDrawableSetArrayItem* m_drawablesetResource;
     int m_drawablesetResourceSize;

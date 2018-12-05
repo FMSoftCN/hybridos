@@ -27,7 +27,7 @@
 namespace hfcl {
 
 extern INNER_RES_ARRAY g_ResArray[];
-extern int g_ResCount; 
+extern int g_ResCount;
 
 INNER_RES_INFO* GetImageResInfo(const char *filepath)
 {
@@ -165,7 +165,7 @@ Image* ResLoader::getImage(const char* filepath)
     }
 
     return image;
-#else 
+#else
     return Image::loadImage(filepath);
 #endif
 }
@@ -193,7 +193,7 @@ Bitmap* ResLoader::getBitmap(const char* filename)
 {
     Bitmap *pbmp = NULL;
     INNER_RES_INFO* info = NULL;
-    
+
     info = GetImageResInfo(filename);
     if (NULL != (pbmp = HFCL_NEW_EX(Bitmap, ()))) {
         if (NULL != info) {
@@ -253,7 +253,7 @@ bool ResLoader::releaseBitmap(Bitmap* pbmp)
         }
         ++it;
     }
-    return false; 
+    return false;
 }
 
 BitmapFrameArray* ResLoader::InnerImage::getBitmapFrame()

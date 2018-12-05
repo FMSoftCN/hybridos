@@ -35,13 +35,13 @@ namespace hfcl {
  */
 ResEntry::ResEntry()
 {
-	resouces = NULL;
-	type = 0;
+    resouces = NULL;
+    type = 0;
 }
 
 ResEntry::~ResEntry()
 {
-	switch(type) {
+    switch(type) {
     case R_TYPE_TEXT:
         if (resouces)
             HFCL_DELETE((TextResMap *)resouces);
@@ -141,67 +141,67 @@ ResEntry::~ResEntry()
 
     default:
         break;
-	}
+    }
 }
 
 TextResMap &ResEntry::textRes(void)
 {
-	if (NULL == resouces) {
-		resouces = HFCL_NEW_EX(TextResMap, ());
-	}
+    if (NULL == resouces) {
+        resouces = HFCL_NEW_EX(TextResMap, ());
+    }
 
-	return ( *((TextResMap *)resouces) );
+    return ( *((TextResMap *)resouces) );
 }
 
 ImageResVec &ResEntry::imageRes(void)
 {
-	if (NULL == resouces) {
-		resouces = HFCL_NEW_EX(ImageResVec, ());
-	}
+    if (NULL == resouces) {
+        resouces = HFCL_NEW_EX(ImageResVec, ());
+    }
 
-	return ( *((ImageResVec *)resouces) );
+    return ( *((ImageResVec *)resouces) );
 }
 
 FontResVec &ResEntry::fontRes(void)
 {
-	if (NULL == resouces) {
-		resouces = HFCL_NEW_EX(FontResVec, ());
-	}
+    if (NULL == resouces) {
+        resouces = HFCL_NEW_EX(FontResVec, ());
+    }
 
-	return ( *((FontResVec *)resouces) );
+    return ( *((FontResVec *)resouces) );
 }
 
 StyleResVec &ResEntry::styleRes(void)
 {
-	if (NULL == resouces) {
-		resouces = HFCL_NEW_EX(StyleResVec, ());
-	}
+    if (NULL == resouces) {
+        resouces = HFCL_NEW_EX(StyleResVec, ());
+    }
 
-	return ( *((StyleResVec *)resouces) );
+    return ( *((StyleResVec *)resouces) );
 }
 
 UiResVec &ResEntry::uiRes(void)
 {
-	if (NULL == resouces) {
-		resouces = HFCL_NEW_EX(UiResVec, ());
-	}
+    if (NULL == resouces) {
+        resouces = HFCL_NEW_EX(UiResVec, ());
+    }
 
-	return ( *((UiResVec *)resouces) );
+    return ( *((UiResVec *)resouces) );
 }
 
 MenuResVec& ResEntry::menuRes(void)
 {
-	if (NULL == resouces) {
-		resouces = HFCL_NEW_EX(MenuResVec, ());
-	}
+    if (NULL == resouces) {
+        resouces = HFCL_NEW_EX(MenuResVec, ());
+    }
 
-	return (*((MenuResVec*)resouces));
+    return (*((MenuResVec*)resouces));
 }
 
 DrawableResVec &ResEntry::drawableRes(void)
 {
     if (NULL == resouces) {
-		resouces = HFCL_NEW_EX(DrawableResVec, ());
+        resouces = HFCL_NEW_EX(DrawableResVec, ());
     }
 
     return ( *((DrawableResVec *)resouces) );
@@ -209,26 +209,26 @@ DrawableResVec &ResEntry::drawableRes(void)
 
 DrawableSetResVec &ResEntry::drawableSetRes(void)
 {
-	if (NULL == resouces) {
-		resouces = HFCL_NEW_EX(DrawableSetResVec, ());
-	}
-	return ( *((DrawableSetResVec *)resouces) );
+    if (NULL == resouces) {
+        resouces = HFCL_NEW_EX(DrawableSetResVec, ());
+    }
+    return ( *((DrawableSetResVec *)resouces) );
 }
 
 ThemeResVec &ResEntry::themeRes(void)
 {
-	if (NULL == resouces) {
-		resouces = HFCL_NEW_EX(ThemeResVec, ());
-	}
-	return ( *((ThemeResVec *)resouces) );
+    if (NULL == resouces) {
+        resouces = HFCL_NEW_EX(ThemeResVec, ());
+    }
+    return ( *((ThemeResVec *)resouces) );
 }
 
-DrawableSetGroupResVec & ResEntry::drawableSetGroupRes(void) 
+DrawableSetGroupResVec & ResEntry::drawableSetGroupRes(void)
 {
-	if(NULL == resouces) {
-		resouces = HFCL_NEW_EX(DrawableSetGroupResVec, ());
-	}
-	return (*((DrawableSetGroupResVec*)resouces));
+    if(NULL == resouces) {
+        resouces = HFCL_NEW_EX(DrawableSetGroupResVec, ());
+    }
+    return (*((DrawableSetGroupResVec*)resouces));
 }
 
 /*
@@ -236,26 +236,26 @@ DrawableSetGroupResVec & ResEntry::drawableSetGroupRes(void)
  */
 ResPackage::ResPackage(const char *name, int id)
 {
-	int i = 0;
-	m_id = id;
-	m_name= string(name);
-	m_packagePath = "";
-	m_curLangTextRes = NULL;
+    int i = 0;
+    m_id = id;
+    m_name= string(name);
+    m_packagePath = "";
+    m_curLangTextRes = NULL;
 
-	/*
-	 * init res package entry
-	 */
-	for (i = 0; i < NR_RES_TYPE_MAX; ++i) {
-		m_resources[i].type = i;
-		m_resources[i].resouces = NULL;
-	}
+    /*
+     * init res package entry
+     */
+    for (i = 0; i < NR_RES_TYPE_MAX; ++i) {
+        m_resources[i].type = i;
+        m_resources[i].resouces = NULL;
+    }
 
-	m_imageTResourceEntry = NULL;
-	m_ImagReseSize = 0;
-	m_pMenuResArray= NULL;
-	m_MenuArrayCount = 0;
-	m_pUIResArray = NULL;
-	m_UIArrayCount = 0;
+    m_imageTResourceEntry = NULL;
+    m_ImagReseSize = 0;
+    m_pMenuResArray= NULL;
+    m_MenuArrayCount = 0;
+    m_pUIResArray = NULL;
+    m_UIArrayCount = 0;
 }
 
 ResPackage::~ResPackage()
@@ -264,207 +264,207 @@ ResPackage::~ResPackage()
 
 const string &ResPackage::getPackagePath(void)
 {
-	return m_packagePath;
+    return m_packagePath;
 }
 
 void ResPackage::setPackagePath(string &packagePath)
 {
-	m_packagePath = packagePath;
+    m_packagePath = packagePath;
 }
 
 int ResPackage::getId(void)
 {
-	return m_id;
+    return m_id;
 }
 
 const char *ResPackage::getName(void)
 {
-	return m_name.c_str();
+    return m_name.c_str();
 }
 
 bool ResPackage::addTextResource(enum HFCLResLang lang, enum HFCLResEncoding enc,
         const TResourceEntry *texts)
 {
-	if (NULL == m_curLangTextRes)
-		m_curLangTextRes = texts;
+    if (NULL == m_curLangTextRes)
+        m_curLangTextRes = texts;
 
-	m_resources[R_TYPE_TEXT].textRes()[MAKELONG(enc, lang)] = texts;
-	return true;
+    m_resources[R_TYPE_TEXT].textRes()[MAKELONG(enc, lang)] = texts;
+    return true;
 }
 
 bool ResPackage::addImageResource(const TResourceEntry *images)
 {
-	int count = 0;
+    int count = 0;
 
-	while (images[count].id != 0)
+    while (images[count].id != 0)
         ++count;
 
-	m_ImagReseSize  = count;
-	m_imageTResourceEntry = images;
-	return true;
+    m_ImagReseSize  = count;
+    m_imageTResourceEntry = images;
+    return true;
 }
 
 bool ResPackage::addFontResource(const TResourceEntry *fonts)
 {
-	int count = 0, _size = 0, index = 0;
-	FontResVec & fontResVec = m_resources[R_TYPE_FONT].fontRes();
+    int count = 0, _size = 0, index = 0;
+    FontResVec & fontResVec = m_resources[R_TYPE_FONT].fontRes();
 
-	while (fonts[count].id != 0)
+    while (fonts[count].id != 0)
         ++count;
-	
-    _size = fontResVec.size(); //cause FontRes desconstruct
-	fontResVec.resize(_size + count);
-	
-    for (index = 0; index < count; ++index) { 
-		FontRes fontRes(fonts[index].value);
-		fontResVec[_size + index] = fontRes;
-	}
 
-	return true;
+    _size = fontResVec.size(); //cause FontRes desconstruct
+    fontResVec.resize(_size + count);
+
+    for (index = 0; index < count; ++index) {
+        FontRes fontRes(fonts[index].value);
+        fontResVec[_size + index] = fontRes;
+    }
+
+    return true;
 }
 
 bool ResPackage::addStyleResource(HTResId id, HTResId superid,
         const TRStyleElement *elements, int count)
 {
     // add the common resource
-	if(id == 0) {
-		AddCommonStyleElementsFromRes(elements);
-		return true;
-	}
+    if(id == 0) {
+        AddCommonStyleElementsFromRes(elements);
+        return true;
+    }
 
-	if (!elements || !count)
-		return false;
+    if (!elements || !count)
+        return false;
 
-	Style* style = NULL;
-	if (count > 30) 
-		style = HFCL_NEW_EX (HashedStyle, (elements));
-	else
-		style = HFCL_NEW_EX (SimpleStyle, (elements));
+    Style* style = NULL;
+    if (count > 30)
+        style = HFCL_NEW_EX (HashedStyle, (elements));
+    else
+        style = HFCL_NEW_EX (SimpleStyle, (elements));
 
-	Style* super = GetStyleRes (superid);
-	if (!super)
-		super = GetCommonStyle();
+    Style* super = GetStyleRes (superid);
+    if (!super)
+        super = GetCommonStyle();
 
-	style->setSuper(super);
-	m_resources[R_TYPE_STYLE].styleRes().push_back(style);
+    style->setSuper(super);
+    m_resources[R_TYPE_STYLE].styleRes().push_back(style);
 
-	return true;
+    return true;
 }
 
 bool ResPackage::addUIResource(HTResId id, CB_CREATE_VIEW cb_createView)
 {
-	m_resources[R_TYPE_UI].uiRes().push_back(cb_createView);
+    m_resources[R_TYPE_UI].uiRes().push_back(cb_createView);
 
-	return true;
+    return true;
 }
 
 bool ResPackage::addUIResource(UI_RES_ARRAY *pUIArray, int nUICount)
 {
-	m_pUIResArray = pUIArray;
-	m_UIArrayCount = nUICount;
+    m_pUIResArray = pUIArray;
+    m_UIArrayCount = nUICount;
 
-	return true;
+    return true;
 }
 
 bool ResPackage::addMenuResource(MENU_RES_ARRAY *pMnuArray, int nMenuCount)
 {
-	m_pMenuResArray= pMnuArray;
-	m_MenuArrayCount = nMenuCount;
-	return true;
+    m_pMenuResArray= pMnuArray;
+    m_MenuArrayCount = nMenuCount;
+    return true;
 }
 
 bool ResPackage::addMenuResource(HTResId id, CB_CREATE_MENU cb_createMenu)
 {
-	m_resources[R_TYPE_MENU].menuRes().push_back(cb_createMenu);
+    m_resources[R_TYPE_MENU].menuRes().push_back(cb_createMenu);
 
-	return true;
+    return true;
 }
 
 void ResPackage::addDrawableResource(TRDrawableArrayItem* all_elements,
         int size)
 {
-	m_drawableResource = all_elements;
-	m_drawableResourceSize = size;
+    m_drawableResource = all_elements;
+    m_drawableResourceSize = size;
 }
 
-static DrawableSet* create_drawable_set_from_res(HTResId drset_super_id, 
-		const TRDrawableSetItem* items) 
+static DrawableSet* create_drawable_set_from_res(HTResId drset_super_id,
+        const TRDrawableSetItem* items)
 {
-	DrawableSet *drset_super = NULL;
-	if(drset_super_id != 0)
-		drset_super = GetDrawableSetRes(drset_super_id);
+    DrawableSet *drset_super = NULL;
+    if(drset_super_id != 0)
+        drset_super = GetDrawableSetRes(drset_super_id);
 
-	if(!drset_super)
-		drset_super = GetCommonDrawableSet();
+    if(!drset_super)
+        drset_super = GetCommonDrawableSet();
 
-	DrawableSet * drset = HFCL_NEW_EX(SimpleDrawableSet,(drset_super));
+    DrawableSet * drset = HFCL_NEW_EX(SimpleDrawableSet,(drset_super));
 
-	for(int i=0; items[i].dr_id != -1; i++)
-	{
-		Drawable *dr = NULL;
-		if(items[i].drres_id != 0)
-			dr = GetDrawableRes(items[i].drres_id);
-		drset->setDrawable(items[i].dr_id, dr);
-	}
+    for(int i=0; items[i].dr_id != -1; i++)
+    {
+        Drawable *dr = NULL;
+        if(items[i].drres_id != 0)
+            dr = GetDrawableRes(items[i].drres_id);
+        drset->setDrawable(items[i].dr_id, dr);
+    }
 
-	return drset;
+    return drset;
 }
 
 static DrawableSetGroup* create_drawable_set_group_from_res (
-        HTResId drsetgroup_super_id, 
-		const TRDrawableSetGroupItem* items) 
+        HTResId drsetgroup_super_id,
+        const TRDrawableSetGroupItem* items)
 {
-	DrawableSetGroup* super = NULL;
+    DrawableSetGroup* super = NULL;
 
-	if (!drsetgroup_super_id != 0)
-		super = GetDrawableSetGroupRes(drsetgroup_super_id);
-	
-	DrawableSetGroup* drsetgroup = HFCL_NEW_EX(DrawableSetGroup, (super));
+    if (!drsetgroup_super_id != 0)
+        super = GetDrawableSetGroupRes(drsetgroup_super_id);
 
-	if (drsetgroup) {
-		drsetgroup->setDrawableSetMapTable((TRDrawableSetGroupItem*)items);
-	}
+    DrawableSetGroup* drsetgroup = HFCL_NEW_EX(DrawableSetGroup, (super));
 
-	return drsetgroup;
+    if (drsetgroup) {
+        drsetgroup->setDrawableSetMapTable((TRDrawableSetGroupItem*)items);
+    }
+
+    return drsetgroup;
 }
 
 void ResPackage::addDrawableSetResource(TRDrawableSetArrayItem* all_items,
         int size)
 {
-	m_drawablesetResource = all_items;
-	m_drawablesetResourceSize = size;
+    m_drawablesetResource = all_items;
+    m_drawablesetResourceSize = size;
 }
 
 void ResPackage::addDrawableSetGroupResource(
         TRDrawableSetGroupArrayItem* all_groups, int size)
 {
-	m_drawablesetGroupResource = all_groups;
-	m_drawablesetGroupResourceSize = size;
+    m_drawablesetGroupResource = all_groups;
+    m_drawablesetGroupResourceSize = size;
 }
 
-void ResPackage::addDrawableSetGroupResource(HTResId drsetgroup_id, 
-		HTResId drsetgroup_super_id, const TRDrawableSetGroupItem * items)
+void ResPackage::addDrawableSetGroupResource(HTResId drsetgroup_id,
+        HTResId drsetgroup_super_id, const TRDrawableSetGroupItem * items)
 {
-	DrawableSetGroup* drsetgroup = 
-		create_drawable_set_group_from_res(drsetgroup_super_id, items);
-	if(!drsetgroup)
-		return ;
-	m_resources[R_TYPE_DRSETGROUP].drawableSetGroupRes().push_back(drsetgroup);
+    DrawableSetGroup* drsetgroup =
+        create_drawable_set_group_from_res(drsetgroup_super_id, items);
+    if(!drsetgroup)
+        return ;
+    m_resources[R_TYPE_DRSETGROUP].drawableSetGroupRes().push_back(drsetgroup);
 }
 
-void ResPackage::addThemeResource(HTResId theme_id, const char* theme_name, 
-		const TRThemeItem* items)
+void ResPackage::addThemeResource(HTResId theme_id, const char* theme_name,
+        const TRThemeItem* items)
 {
-	ThemeRes* themeR = HFCL_NEW_EX(ThemeRes,());
-	if (themeR != NULL) {
-		themeR->setDrawableSetMapTable((TRThemeItem*)items);
-		m_resources[R_TYPE_THEME].themeRes().push_back(themeR);
-	}
+    ThemeRes* themeR = HFCL_NEW_EX(ThemeRes,());
+    if (themeR != NULL) {
+        themeR->setDrawableSetMapTable((TRThemeItem*)items);
+        m_resources[R_TYPE_THEME].themeRes().push_back(themeR);
+    }
 }
 
 void *ResPackage::getRes(HTResId id)
 {
-	switch (RESTYPE(id)) {
+    switch (RESTYPE(id)) {
     case R_TYPE_TEXT:
         return (void *)getText(id);
     case R_TYPE_IMAGE:
@@ -483,177 +483,177 @@ void *ResPackage::getRes(HTResId id)
         return (void*)getDrawable(id);
     default:
         break;
-	}
+    }
 
-	return NULL;
+    return NULL;
 }
 
 const char *ResPackage::getText(HTResId id)
 {
-	if (R_TYPE_TEXT != RESTYPE(id))
-		return NULL;
+    if (R_TYPE_TEXT != RESTYPE(id))
+        return NULL;
 
-	return (const char*)(m_curLangTextRes[RESINDEX(id) - 1].value);
+    return (const char*)(m_curLangTextRes[RESINDEX(id) - 1].value);
 }
 
 Style *ResPackage::getStyle(HTResId id)
 {
-	unsigned int idx = RESINDEX(id) - 1;
-	if (id == 0)
-		return NULL;
+    unsigned int idx = RESINDEX(id) - 1;
+    if (id == 0)
+        return NULL;
 
-	if (R_TYPE_STYLE != RESTYPE(id) || idx < 0 
-			|| idx >= (unsigned int)m_resources[RESTYPE(id)].styleRes().size())
-		return NULL;
+    if (R_TYPE_STYLE != RESTYPE(id) || idx < 0
+            || idx >= (unsigned int)m_resources[RESTYPE(id)].styleRes().size())
+        return NULL;
 
-	return m_resources[RESTYPE(id)].styleRes()[idx];
+    return m_resources[RESTYPE(id)].styleRes()[idx];
 }
 
 GifAnimate *ResPackage::getGifAnimate(HTResId id)
 {
-	unsigned int idx = RESINDEX(id) - 1;
+    unsigned int idx = RESINDEX(id) - 1;
 
-	if (R_TYPE_IMAGE != RESTYPE(id) || idx < 0 
-			|| idx >= m_ImagReseSize)
-		return (GifAnimate *)NULL;
+    if (R_TYPE_IMAGE != RESTYPE(id) || idx < 0
+            || idx >= m_ImagReseSize)
+        return (GifAnimate *)NULL;
 
-	return ResLoader::getInstance()->getGifAnimate(m_imageTResourceEntry[idx].value);
+    return ResLoader::getInstance()->getGifAnimate(m_imageTResourceEntry[idx].value);
 }
 
 Image *ResPackage::getImage(HTResId id)
 {
-	unsigned int idx = RESINDEX(id) - 1;
+    unsigned int idx = RESINDEX(id) - 1;
 
-    if (R_TYPE_IMAGE != RESTYPE(id) || idx < 0 
-			|| idx >= m_ImagReseSize)
-		return (Image *)NULL;
-	
+    if (R_TYPE_IMAGE != RESTYPE(id) || idx < 0
+            || idx >= m_ImagReseSize)
+        return (Image *)NULL;
+
     return ResLoader::getInstance()->getImage(m_imageTResourceEntry[idx].value);
 }
 
 Bitmap *ResPackage::getBitmap(HTResId id)
 {
-	unsigned int idx = RESINDEX(id) - 1;
+    unsigned int idx = RESINDEX(id) - 1;
 
-    if (R_TYPE_IMAGE != RESTYPE(id) || idx < 0 
-			|| idx >= m_ImagReseSize)
-		return NULL;
-	
+    if (R_TYPE_IMAGE != RESTYPE(id) || idx < 0
+            || idx >= m_ImagReseSize)
+        return NULL;
+
     return ResLoader::getInstance()->getBitmap(m_imageTResourceEntry[idx].value);
 }
 
 Logfont *ResPackage::getFont(HTResId id)
 {
-	unsigned int idx = RESINDEX(id) - 1;
-	if (R_TYPE_FONT != RESTYPE(id) || idx < 0 
-			|| idx >= (unsigned int)m_resources[RESTYPE(id)].fontRes().size())
-		return (Logfont *)NULL;
+    unsigned int idx = RESINDEX(id) - 1;
+    if (R_TYPE_FONT != RESTYPE(id) || idx < 0
+            || idx >= (unsigned int)m_resources[RESTYPE(id)].fontRes().size())
+        return (Logfont *)NULL;
 
-	return m_resources[RESTYPE(id)].fontRes()[idx].get();
+    return m_resources[RESTYPE(id)].fontRes()[idx].get();
 }
 
 CB_CREATE_VIEW ResPackage::getUi(HTResId id)
 {
-	unsigned int idx = RESINDEX(id) - 1;
-	if (R_TYPE_UI != RESTYPE(id) || idx < 0 
-			|| idx >= m_UIArrayCount)
-		return (CB_CREATE_VIEW)NULL;
+    unsigned int idx = RESINDEX(id) - 1;
+    if (R_TYPE_UI != RESTYPE(id) || idx < 0
+            || idx >= m_UIArrayCount)
+        return (CB_CREATE_VIEW)NULL;
 
-	return (CB_CREATE_VIEW)m_pUIResArray[idx].UiFunction;
+    return (CB_CREATE_VIEW)m_pUIResArray[idx].UiFunction;
 }
 
-View *ResPackage::createView(HTResId id, 
-		View *parent, ViewContext *viewContext, ContentProvider* provider)
+View *ResPackage::createView(HTResId id,
+        View *parent, ViewContext *viewContext, ContentProvider* provider)
 {
-	CB_CREATE_VIEW cb = (CB_CREATE_VIEW)getRes(id);
-	if (NULL == cb)
-		return (View *)NULL;
-	return cb(parent, viewContext, provider);
+    CB_CREATE_VIEW cb = (CB_CREATE_VIEW)getRes(id);
+    if (NULL == cb)
+        return (View *)NULL;
+    return cb(parent, viewContext, provider);
 }
 
 CB_CREATE_MENU ResPackage::getMenu(HTResId id)
 {
-	unsigned int idx = RESINDEX(id) - 1;
-	if (R_TYPE_MENU != RESTYPE(id) || idx < 0 
-			|| idx >=m_MenuArrayCount ) //
-		return NULL;
+    unsigned int idx = RESINDEX(id) - 1;
+    if (R_TYPE_MENU != RESTYPE(id) || idx < 0
+            || idx >=m_MenuArrayCount ) //
+        return NULL;
 
-	return(CB_CREATE_MENU) m_pMenuResArray[idx].Menufunction;
+    return(CB_CREATE_MENU) m_pMenuResArray[idx].Menufunction;
 }
 
 Menu* ResPackage::createMenu(HTResId id, Menu *parent, EventListener* listener)
 {
-	CB_CREATE_MENU cbm = (CB_CREATE_MENU)getRes(id);
-	if (NULL == cbm)
-		return NULL;
+    CB_CREATE_MENU cbm = (CB_CREATE_MENU)getRes(id);
+    if (NULL == cbm)
+        return NULL;
 
-	return cbm(parent, listener);
+    return cbm(parent, listener);
 }
 
 Drawable* ResPackage::getDrawable(HTResId id)
 {
     int idx = RESINDEX(id) - 1;
 
-	if (R_TYPE_DRAWABLE != RESTYPE(id) || idx < 0 
-			|| idx >= m_drawableResourceSize)
+    if (R_TYPE_DRAWABLE != RESTYPE(id) || idx < 0
+            || idx >= m_drawableResourceSize)
         return NULL;
 
-	Drawable * dr = NULL;
-	TRStyleElement* elements = NULL;
-	const char* name = m_drawableResource[idx].base_name;
-	HTResId super_style_id = m_drawableResource[idx].super_style_id;
+    Drawable * dr = NULL;
+    TRStyleElement* elements = NULL;
+    const char* name = m_drawableResource[idx].base_name;
+    HTResId super_style_id = m_drawableResource[idx].super_style_id;
 
-	elements = (TRStyleElement*)m_drawableResource[idx].style_element;
+    elements = (TRStyleElement*)m_drawableResource[idx].style_element;
 
-	Style * s = NULL;
-	if(super_style_id != 0)
-		s = (Style*)GetRes(super_style_id);
+    Style * s = NULL;
+    if(super_style_id != 0)
+        s = (Style*)GetRes(super_style_id);
 
-	if(!s)
-		s = GetCommonStyle();
+    if(!s)
+        s = GetCommonStyle();
 
-	if (name == NULL) {
-		dr = SAFE_CAST(Drawable*, s->clone());
-		if(!dr)
-			return NULL;
-		if(elements)
-			dr->init(elements);
-	}
+    if (name == NULL) {
+        dr = SAFE_CAST(Drawable*, s->clone());
+        if(!dr)
+            return NULL;
+        if(elements)
+            dr->init(elements);
+    }
     else {
-		dr = CreateDrawable(name, elements);
-		if(!dr)
-			return NULL;
-	}
+        dr = CreateDrawable(name, elements);
+        if(!dr)
+            return NULL;
+    }
 
-	dr->setSuper(s);
+    dr->setSuper(s);
 
-	return dr;
+    return dr;
 }
 
 DrawableSet* ResPackage::getDrawableSet(HTResId id)
 {
     int idx = RESINDEX(id) - 1;
-	
-    if (R_TYPE_DRAWABLESET != RESTYPE(id) || idx < 0 
-			|| idx >= m_drawablesetResourceSize)
+
+    if (R_TYPE_DRAWABLESET != RESTYPE(id) || idx < 0
+            || idx >= m_drawablesetResourceSize)
         return (DrawableSet *)NULL;
 
-	int drset_super_id = m_drawablesetResource[idx].super_drset_id;
-	TRDrawableSetItem *items;
+    int drset_super_id = m_drawablesetResource[idx].super_drset_id;
+    TRDrawableSetItem *items;
     items = (TRDrawableSetItem *)m_drawablesetResource[idx].drawables;
 
-	return create_drawable_set_from_res(drset_super_id, items);
+    return create_drawable_set_from_res(drset_super_id, items);
 }
 
 DrawableSetGroup* ResPackage::getDrawableSetGroup(HTResId id)
 {
     int idx = RESINDEX(id) - 1;
-    if (R_TYPE_DRSETGROUP != RESTYPE(id) || idx < 0 
-			|| idx >= m_drawablesetGroupResourceSize)
+    if (R_TYPE_DRSETGROUP != RESTYPE(id) || idx < 0
+            || idx >= m_drawablesetGroupResourceSize)
         return (DrawableSetGroup *)NULL;
 
-	int drgroup_super_id = m_drawablesetGroupResource[idx].drsetgroup_super_id;
-	TRDrawableSetGroupItem* items;
+    int drgroup_super_id = m_drawablesetGroupResource[idx].drsetgroup_super_id;
+    TRDrawableSetGroupItem* items;
     items = (TRDrawableSetGroupItem *)m_drawablesetGroupResource[idx].drawablesets;
 
     return create_drawable_set_group_from_res(drgroup_super_id , items);
@@ -662,139 +662,139 @@ DrawableSetGroup* ResPackage::getDrawableSetGroup(HTResId id)
 ThemeRes* ResPackage::getThemeRes(HTResId id)
 {
     unsigned int idx = RESINDEX(id) - 1;
-    if (R_TYPE_THEME!= RESTYPE(id) || idx < 0 
-			|| idx >= (unsigned int)m_resources[RESTYPE(id)].themeRes().size())
+    if (R_TYPE_THEME!= RESTYPE(id) || idx < 0
+            || idx >= (unsigned int)m_resources[RESTYPE(id)].themeRes().size())
         return (ThemeRes *)NULL;
     return m_resources[RESTYPE(id)].themeRes()[idx];
 }
 
 DrawableSet* ResPackage::getThemeDrawableSet(int theme_drset_id)
 {
-	if (NULL != m_theme) {
-		return m_theme->getDrawableSet(theme_drset_id);
-	}
-	return NULL;
+    if (NULL != m_theme) {
+        return m_theme->getDrawableSet(theme_drset_id);
+    }
+    return NULL;
 }
 
 bool ResPackage::setTheme(HTResId theme_res_id, bool update_system)
 {
-	ThemeRes* themeR = getThemeRes(theme_res_id);
-	if (NULL == themeR)
-		return false;
+    ThemeRes* themeR = getThemeRes(theme_res_id);
+    if (NULL == themeR)
+        return false;
 
-	if (m_theme == themeR)
-		return false;
+    if (m_theme == themeR)
+        return false;
 
-	// FIXME we need update all views in the system
-	m_theme = themeR;
-	m_theme_id = theme_res_id;
-	if (update_system) {
+    // FIXME we need update all views in the system
+    m_theme = themeR;
+    m_theme_id = theme_res_id;
+    if (update_system) {
         _DBG_PRINTF ("ResPackage::setTheme: NOT IMPLEMENTED\n");
-		// ActivityManager::getInstance()->broadcastMessage(
-        //      HFCL_MSG_CHANGE_THEME, theme_res_id, 0);	
-	}
+        // ActivityManager::getInstance()->broadcastMessage(
+        //      HFCL_MSG_CHANGE_THEME, theme_res_id, 0);
+    }
 
-	return true;
+    return true;
 }
 
 ThemeRes* ResPackage::theme(void)
 {
-	return m_theme;
+    return m_theme;
 }
 
 HTResId ResPackage::themeId(void)
 {
-	return m_theme_id;
+    return m_theme_id;
 }
 
 void ResPackage::setCurrentLang(enum HFCLResLang lang, enum HFCLResEncoding enc)
 {
-	TextResMap &text = m_resources[R_TYPE_TEXT].textRes();
-	TextResMap::iterator it = text.find(MAKELONG(enc, lang));
-	if (it == text.end())
-		return;
-	m_curLangTextRes = (TResourceEntry*)it->second;
+    TextResMap &text = m_resources[R_TYPE_TEXT].textRes();
+    TextResMap::iterator it = text.find(MAKELONG(enc, lang));
+    if (it == text.end())
+        return;
+    m_curLangTextRes = (TResourceEntry*)it->second;
 }
 
 static inline bool is_special_dir(const char* str) {
-	if(!str)
-		return false;
-	return str[0] == '/'
-		|| (str[0] == '.' && 
-				(str[1] == '/' || (str[1] == '.' && str[2] == '/')));
+    if(!str)
+        return false;
+    return str[0] == '/'
+        || (str[0] == '.' &&
+                (str[1] == '/' || (str[1] == '.' && str[2] == '/')));
 }
 
 string GetResRealPath(const char *packagePath, const char *resFilename)
 {
-	int len;
-	if(NULL == resFilename)
-		return string("");
-	if(is_special_dir(resFilename))
-		return string(resFilename);
+    int len;
+    if(NULL == resFilename)
+        return string("");
+    if(is_special_dir(resFilename))
+        return string(resFilename);
 
-	if(packagePath == NULL)
-		return string(resFilename);
+    if(packagePath == NULL)
+        return string(resFilename);
 
-	len = strlen(packagePath);
-	if(len == 0)
-		return string(resFilename);
+    len = strlen(packagePath);
+    if(len == 0)
+        return string(resFilename);
 
-	string str = packagePath;
-	if(packagePath[len-1] == '/' || packagePath[len-1] =='\\')
-		str += "/";
-	return str + resFilename;
+    string str = packagePath;
+    if(packagePath[len-1] == '/' || packagePath[len-1] =='\\')
+        str += "/";
+    return str + resFilename;
 
 }
 
-bool RegisterCommonDrawableFromRes(int dr_id, 
-		const char* base_name, const TRStyleElement *elements, int super_id)
+bool RegisterCommonDrawableFromRes(int dr_id,
+        const char* base_name, const TRStyleElement *elements, int super_id)
 {
-	Drawable *dr = CreateDrawable(base_name, elements);	
-	if(!dr)
-		return false;
-	
-	Style* s = NULL;
-	if(super_id != 0)
-		s = (Style*) GetRes(super_id);
+    Drawable *dr = CreateDrawable(base_name, elements);
+    if(!dr)
+        return false;
 
-	if(!s)
-		s = GetCommonStyle();
-	
-	dr->setSuper(s);
+    Style* s = NULL;
+    if(super_id != 0)
+        s = (Style*) GetRes(super_id);
 
-	RegisterCommonDrawable(dr_id, dr);
-	return true;
+    if(!s)
+        s = GetCommonStyle();
+
+    dr->setSuper(s);
+
+    RegisterCommonDrawable(dr_id, dr);
+    return true;
 }
 
 bool RegisterViewDrawableSetFromRes(const char* view_name,
-		HTResId super_drset, const TRDrawableSetItem *items)
+        HTResId super_drset, const TRDrawableSetItem *items)
 {
-	if(!view_name)
-		return false;
+    if(!view_name)
+        return false;
 
-	DrawableSet *drset = create_drawable_set_from_res(super_drset, items);
-	if(!drset)
-		return false;
+    DrawableSet *drset = create_drawable_set_from_res(super_drset, items);
+    if(!drset)
+        return false;
 
-	drset->setCommon(true);
-	RegisterViewDrawableSet(view_name, drset);
-	return true;
+    drset->setCommon(true);
+    RegisterViewDrawableSet(view_name, drset);
+    return true;
 }
 
-bool RegisterViewDrawableSetGroupFromRes(const char * view_name, 
-		HTResId super_drsetgroup, const TRDrawableSetGroupItem *items)
+bool RegisterViewDrawableSetGroupFromRes(const char * view_name,
+        HTResId super_drsetgroup, const TRDrawableSetGroupItem *items)
 {
-	if(!view_name)
-		return false;
+    if(!view_name)
+        return false;
 
-	DrawableSetGroup* group;
+    DrawableSetGroup* group;
     group = create_drawable_set_group_from_res(super_drsetgroup, items);
-	if (!group)
-		return false;
+    if (!group)
+        return false;
 
-	group->setCommon(true);
-	RegisterViewDrawableSetGroup (view_name, group);
-	return true;
+    group->setCommon(true);
+    RegisterViewDrawableSetGroup (view_name, group);
+    return true;
 }
 
 } // namespace hfcl
