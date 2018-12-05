@@ -29,14 +29,14 @@ namespace hfcl {
 
 // !!! same as gen_incore_bitmap.c : BitmapFrame
 typedef struct _tagGifAnimateFrame {
-        int off_x;
-        int off_y;
-        int disposal;
-        unsigned int delay_time;
-        BITMAP bmp;
-        struct _tagGifAnimateFrame* next;
-        struct _tagGifAnimateFrame* prev;
-}GifAnimateFrame;
+    int off_x;
+    int off_y;
+    int disposal;
+    unsigned int delay_time;
+    BITMAP bmp;
+    struct _tagGifAnimateFrame* next;
+    struct _tagGifAnimateFrame* prev;
+} GifAnimateFrame;
 
 #define MAXCOLORMAPSIZE         256
 typedef struct tagGIFSCREEN {
@@ -53,8 +53,7 @@ typedef struct tagGIFSCREEN {
     int disposal;
 } GIFSCREEN;
 
-class GifAnimate : public RefCount 
-{
+class GifAnimate : public RefCount {
 public:
     GifAnimate();
     // VW: remove this constructor:

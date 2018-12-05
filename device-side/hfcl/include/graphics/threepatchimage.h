@@ -19,11 +19,10 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _HFCL_ThreePatchImage_h
-#define _HFCL_ThreePatchImage_h
+#ifndef HFCL_GRAPHICS_THREEPATCHIMAGE_H_
+#define HFCL_GRAPHICS_THREEPATCHIMAGE_H_
 
 #include "graphics/image.h"
-
 
 namespace hfcl {
 
@@ -32,8 +31,7 @@ namespace hfcl {
 class ThreePatchImage : public Image
 {
 public:
-    struct DRAWINFO
-    {
+    struct DRAWINFO {
         /* The index of line to current subbitmap. */
         unsigned int idx_line;
         /* The index of colume to current subbitmap. */
@@ -47,19 +45,19 @@ public:
     ThreePatchImage(bool typeHoriz = true);
     virtual ~ThreePatchImage();
 
-    virtual void paint(GraphicsContext* context, const IntRect& rc, 
-			ImageFormat format, int xo = 0, int yo = 0);
+    virtual void paint(GraphicsContext* context, const IntRect& rc,
+            ImageFormat format, int xo = 0, int yo = 0);
     bool setImage(const char *image_file);
 
     bool typeHoriz() const { return m_typeHoriz; }
     void setTypeHoriz(bool type) { m_typeHoriz = type; }
 
-	virtual bool setImageBitmap(Bitmap* pbmp) {
-		if(!Image::setImageBitmap(pbmp)) {
-			return false;
-		}
-		return setSubBmp();
-	}
+    virtual bool setImageBitmap(Bitmap* pbmp) {
+        if(!Image::setImageBitmap(pbmp)) {
+            return false;
+        }
+        return setSubBmp();
+    }
 
 private:
     bool makeSubDrawInfo();
@@ -79,4 +77,4 @@ private:
 
 } // namespace hfcl
 
-#endif /* _HFCL_ThreePatchImage_h */
+#endif /* HFCL_GRAPHICS_THREEPATCHIMAGE_H_ */

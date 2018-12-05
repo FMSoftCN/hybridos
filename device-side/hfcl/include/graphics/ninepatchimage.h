@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _HFCL_NinePatchImage_h
-#define _HFCL_NinePatchImage_h
+#ifndef HFCL_GRAPHICS_NINEPATCHIMAGE_H_
+#define HFCL_GRAPHICS_NINEPATCHIMAGE_H_
 
 #include "graphics/image.h"
 
@@ -31,8 +31,7 @@ namespace hfcl {
 class NinePatchImage : public Image
 {
 public:
-    struct DRAWINFO
-    {
+    struct DRAWINFO {
         /* The index of line to current subbitmap. */
         unsigned int idx_line;
         /* The index of colume to current subbitmap. */
@@ -47,16 +46,16 @@ public:
     virtual ~NinePatchImage();
 
     virtual void paint(GraphicsContext* context, const IntRect& rc,
-			ImageFormat format, int xo = 0, int yo = 0);
+            ImageFormat format, int xo = 0, int yo = 0);
     bool setImage(const char *image_file);
 
-	virtual bool setImageBitmap(Bitmap* pbmp) {
-		if(!Image::setImageBitmap(pbmp)) {
-			return false;
-		}
+    virtual bool setImageBitmap(Bitmap* pbmp) {
+        if(!Image::setImageBitmap(pbmp)) {
+            return false;
+        }
 
-		return setSubBmp();
-	}
+        return setSubBmp();
+    }
 
 private:
     bool makeSubDrawInfo();
@@ -64,7 +63,6 @@ private:
     bool setSubBmp();
     void clean();
     bool initSubRect(const IntRect* pRc);
-
 
 private:
     DRAWINFO m_di[PATCH_COUNT];
@@ -74,4 +72,4 @@ private:
 
 } // namespace hfcl
 
-#endif /* _HFCL_NinePatchImage_h */
+#endif /* HFCL_GRAPHICS_NINEPATCHIMAGE_H_ */
