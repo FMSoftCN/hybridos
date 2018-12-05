@@ -24,6 +24,8 @@
 
 #include "resource/restypes.h"
 #include "view/viewcontext.h"
+#include "resource/fontres.h"
+#include "resource/imageres.h"
 
 namespace hfcl {
 
@@ -34,25 +36,15 @@ class DrawableSetGroup;
 class GifAnimate;
 class ThemeRes;
 
-typedef struct  _TResouceEntry
-{
+typedef struct _ResourceEntry {
     HTResId id;
     const char* value;
-} TResourceEntry;
+} ResourceEntry;
 
 typedef Menu * (*CB_CREATE_MENU)(Menu* parent, EventListener* listener);
 
-} // namespace hfcl
-
-#include "resource/fontres.h"
-#include "resource/imageres.h"
-
-namespace hfcl {
-
-typedef const TResourceEntry*  CONST_PTR_TResourceEntry;
-
-PAIR(DWORD, CONST_PTR_TResourceEntry, TextResPair);
-MAP(DWORD, CONST_PTR_TResourceEntry, TextResMap);
+PAIR(DWORD, HTData, TextResPair);
+MAP(DWORD, HTData, TextResMap);
 VECTORCLASS(FontRes, FontResVec);
 VECTORCLASS(ImageRes, ImageResVec);
 //VECTORCLASS(DrawableRes, DrawableResVec);
@@ -66,10 +58,10 @@ VECTOR(CB_CREATE_VIEW, UiResVec);
 VECTOR(CB_CREATE_MENU, MenuResVec);
 //MAPCLASSKEY(string, DrawableSet *, DrawableSetMap);
 
-class ResEntry {
+class ResourceBucket {
 public:
-    ResEntry();
-    ~ResEntry();
+    ResourceBucket();
+    ~ResourceBucket();
 
     TextResMap &textRes(void);
     ImageResVec &imageRes(void);
@@ -89,7 +81,8 @@ public:
 
 class ResPackage {
 public:
-    ResPackage(const char *name, int id);
+    ResPackage(const char *name, int id,
+            const HFCL_INCORE_RES* incoreRes = NULL);
     ~ResPackage();
     /*
      * res path related
@@ -104,12 +97,10 @@ public:
     const char *getName(void);
 
     /*
-     * res add related
+     * adding resource
      */
-    bool addTextResource(enum HFCLResLang lang, enum HFCLResEncoding enc,
-            const TResourceEntry *texts);
-    bool addImageResource(const TResourceEntry *images);
-    bool addFontResource(const TResourceEntry *fonts);
+    bool addImageResource(const ResourceEntry *images);
+    bool addFontResource(const ResourceEntry *fonts);
     bool addStyleResource(HTResId id,  HTResId superid,
             const TRStyleElement *elements, int count);
     bool addUIResource(HTResId id, CB_CREATE_VIEW createView);
@@ -128,10 +119,9 @@ public:
             int size);
 
     /*
-     * res get related
+     * getting resource
      */
     void *getRes(HTResId id);
-    const char *getText(HTResId id);
     Style *getStyle(HTResId id);
     Image *getImage(HTResId id);
     Bitmap *getBitmap(HTResId id);
@@ -151,10 +141,20 @@ public:
     DrawableSet* getThemeDrawableSet(int theme_drset_id);
 
     /*
-     * text & lang & encoding related
+     * text related methods
      */
-    //TODO
-    void setCurrentLang(enum HFCLResLang lang, enum HFCLResEncoding enc);
+    void addTextResRaw(HIDLanguage lang, HIDEncoding enc,
+            const char** rawStrings);
+    void addTextResZipped(HIDLanguage lang, HIDEncoding enc,
+            const char* fileName);
+    void addTextResGnuMsg(HIDLanguage lang, HIDEncoding enc,
+            const char* fileName);
+    bool setCurrentLang(HIDLanguage lang, HIDEncoding enc);
+    HIDLanguage getCurrentLanguage() { return m_languageId; }
+    HIDEncoding getCurrentEncoding() { return m_encodingId; }
+
+    const char *getText(HTStrId id);
+    const char *getText(const char* str);
 
     /*
      * Theme apis
@@ -164,12 +164,12 @@ public:
     ThemeRes* theme(void);
 
 private:
-    ResEntry m_resources[NR_RES_TYPE_MAX];
-    const TResourceEntry *m_imageTResourceEntry;
+    ResourceBucket  m_resBuckets[NR_RES_TYPE];
+    const ResourceEntry *m_imageResourceEntry;
     MENU_RES_ARRAY *m_pMenuResArray;
     unsigned int    m_MenuArrayCount;
 
-    UI_RES_ARRAY *m_pUIResArray;
+    UI_RES_ARRAY *  m_pUIResArray;
     unsigned int    m_UIArrayCount;
 
     // ---------------- \|/ -----------------
@@ -189,7 +189,16 @@ private:
 protected:
     int m_id;
     string m_name;
-    const TResourceEntry *m_curLangTextRes;
+
+private:
+    const HFCL_INCORE_RES* m_incoreRes;
+
+    HIDLanguage m_languageId;
+    HIDEncoding m_encodingId;
+
+    HIDResType m_textResType;
+    char* m_stringBucket;
+    const char** m_rawStrings;
 };
 
 string GetResRealPath(const char *packagePath, const char *resFilename);
@@ -202,7 +211,6 @@ bool RegisterViewDrawableSetFromRes(const char * view_name,
 
 bool RegisterViewDrawableSetGroupFromRes(const char * view_name,
         HTResId super_drsetgroup, const TRDrawableSetGroupItem *items);
-
 
 } // namespace hfcl
 

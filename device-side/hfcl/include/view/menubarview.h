@@ -49,17 +49,17 @@ public:
 
     const string& leftText()  { 
         if (m_left_strid > 0) 
-            m_left = GetTextRes(m_left_strid);
+            m_left = GetText(m_left_strid);
         return m_left; 
     }
     const string& middleText()  { 
         if (m_middle_strid > 0) 
-            m_middle = GetTextRes(m_middle_strid);
+            m_middle = GetText(m_middle_strid);
         return m_middle; 
     }
     const string& rightText()  { 
         if (m_right_strid > 0) 
-            m_right = GetTextRes(m_right_strid);
+            m_right = GetText(m_right_strid);
         return m_right; 
     }
     

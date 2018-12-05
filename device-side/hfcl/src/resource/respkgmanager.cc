@@ -31,12 +31,11 @@ namespace hfcl {
 
 ResPkgManager* ResPkgManager::m_singleton = NULL;
 
-ResPkgManager:: ~ResPkgManager()
+ResPkgManager::~ResPkgManager()
 {
     ResPkgList::iterator it;
 
-    for(it = m_packageList.begin(); it !=m_packageList.end(); it++)
-    {
+    for(it = m_packageList.begin(); it !=m_packageList.end(); it++) {
         m_packageList.erase(it);
         HFCL_DELETE(*it);
     }
@@ -47,8 +46,7 @@ ResPackage* ResPkgManager::getPackage(int id)
     ResPkgList::iterator it;
     ResPackage* package = NULL;
 
-    for(it = m_packageList.begin(); it !=m_packageList.end(); it++)
-    {
+    for(it = m_packageList.begin(); it != m_packageList.end(); it++) {
         package = (*it);
         if(package && (package->getId() == id))
             return package;
@@ -74,21 +72,19 @@ bool ResPkgManager::registerPackage(ResPackage *pkg)
 {
     ResPkgList::iterator it;
 
-    for(it = m_packageList.begin(); it !=m_packageList.end(); it++)
-    {
-        if(*it == pkg)
+    for (it = m_packageList.begin(); it != m_packageList.end(); it++) {
+        if (*it == pkg)
             return true;
     }
 
     m_packageList.push_back(pkg);
-
     return true;
 }
 
-bool ResPkgManager::unregisterPackage(int id){
+bool ResPkgManager::unregisterPackage(int id)
+{
     ResPkgList::iterator it;
-    for(it = m_packageList.begin(); it !=m_packageList.end(); it++)
-    {
+    for(it = m_packageList.begin(); it !=m_packageList.end(); it++) {
         if((*it)->getId() == id) {
             m_packageList.erase(it);
             // VincentWei > FIXME: memory leap? HFCL_DELETE(*it);
@@ -127,6 +123,243 @@ ResPackage* ResPkgManager::getPackage(const char * name)
    return NULL;
 }
 
+/////////////////////////////////////////////////////////////////////
+/////////////////         Global Interface      /////////////////////
+/////////////////////////////////////////////////////////////////////
+
+ResPkgManager * GetResPkgManager(void)
+{
+    return ResPkgManager::getResPkgManager();
+}
+
+void ReleaseResPkgManager(void)
+{
+    ResPkgManager *manager = ResPkgManager::getResPkgManager();
+
+    if(NULL != manager )
+        manager->delResPkgManager();
+}
+
+bool RegisterResPackage(ResPackage *resPkg)
+{
+    return GetResPkgManager()->registerPackage(resPkg);
+}
+
+ResPackage * GetResPackageByName(const char* name)
+{
+    return GetResPkgManager()->getPackage(name);
+}
+
+ResPackage * GetResPackageById(int id)
+{
+    return GetResPkgManager()->getPackage(id);
+}
+
+bool UnregisterResPackageByName(const char* name)
+{
+    return GetResPkgManager()->unregisterPackage(name);
+}
+
+bool UnregisterResPackageById(int id)
+{
+    return GetResPkgManager()->unregisterPackage(id);
+}
+
+void* GetRes(HTResId id)
+{
+    ResPackage *resPkg = GetResPackage(RPKGID(id));
+    if (resPkg)
+        return resPkg->getRes(id);
+
+    return NULL;
+}
+
+Logfont* GetFontRes(HTResId id)
+{
+    ResPackage *resPkg = GetResPackage(RPKGID(id));
+    if (resPkg && (RESTYPE(id) & R_TYPE_FONT))
+        return resPkg->getFont(id);
+
+    return NULL;
+}
+
+Style* GetStyleRes(HTResId id)
+{
+    ResPackage * resPkg = NULL;
+    if (id == 0)
+        return GetCommonStyle();
+
+    resPkg = GetResPackage(RPKGID(id));
+    if(resPkg && (RESTYPE(id) & R_TYPE_STYLE))
+        return resPkg->getStyle(id);
+
+    return NULL;
+}
+
+GifAnimate* GetGifAnimateRes(HTResId id)
+{
+    ResPackage *resPkg = GetResPackage(RPKGID(id));
+
+    if(resPkg && (RESTYPE(id) & R_TYPE_IMAGE))
+        return resPkg->getGifAnimate(id);
+
+    return NULL;
+}
+
+Image * GetImageRes(HTResId id)
+{
+    ResPackage *resPkg = GetResPackage(RPKGID(id));
+
+    if(resPkg && (RESTYPE(id) & R_TYPE_IMAGE))
+        return resPkg->getImage(id);
+
+    return NULL;
+}
+
+Bitmap * GetBitmapRes(HTResId id)
+{
+    ResPackage *resPkg = GetResPackage(RPKGID(id));
+
+    if (resPkg && (RESTYPE(id) & R_TYPE_IMAGE))
+        return resPkg->getBitmap(id);
+
+    return NULL;
+}
+
+Drawable* GetDrawableRes(HTResId id)
+{
+    ResPackage *resPkg = GetResPackage(RPKGID(id));
+
+    if (resPkg && (RESTYPE(id) & R_TYPE_DRAWABLE))
+        return resPkg->getDrawable(id);
+
+    return NULL;
+}
+
+DrawableSet* GetDrawableSetRes(HTResId id)
+{
+    if(!(RESTYPE(id) & R_TYPE_DRAWABLESET))
+        return NULL;
+
+    ResPackage *resPkg = GetResPackage(RPKGID(id));
+
+    if(resPkg)
+        return resPkg->getDrawableSet(id);
+
+    return NULL;
+}
+
+ThemeRes* GetThemeRes(HTResId id)
+{
+    if(!(RESTYPE(id) & R_TYPE_THEME))
+        return NULL;
+
+    ResPackage *resPkg = GetResPackage(RPKGID(id));
+
+    if(resPkg)
+        return resPkg->getThemeRes(id);
+    return NULL;
+}
+
+ResPackage* GetSystemPackage(void)
+{
+    return ResPkgManager::getResPkgManager()->getPackage(0);
+}
+
+// we just get drawable set res from sysres.res.c package
+DrawableSet* GetDrawableSetResFromTheme(int theme_drset_id)
+{
+    if (theme_drset_id <= 0)
+        return NULL;
+
+    // FIXME just in sys package
+    ResPackage *resPkg = GetResPackage(0);
+
+    if(resPkg)
+        return resPkg->getThemeDrawableSet(theme_drset_id);
+
+    return NULL;
+}
+
+DrawableSetGroup* GetDrawableSetGroupRes(HTResId id)
+{
+    if(!(RESTYPE(id) & R_TYPE_DRSETGROUP))
+        return NULL;
+
+    ResPackage *resPkg = GetResPackage(RPKGID(id));
+
+    if(resPkg)
+        return resPkg->getDrawableSetGroup(id);
+    return NULL;
+
+}
+
+View* CreateViewFromRes(HTResId id, View *parent, ViewContext *viewContext, ContentProvider* provider /*= NULL*/)
+{
+    ResPackage * resPkg = GetResPackage(RPKGID(id));
+
+    if(resPkg && (RESTYPE(id) & R_TYPE_UI))
+        return resPkg->createView(id , parent, viewContext, provider);
+
+    return NULL;
+}
+
+Menu* CreateMenuFromRes(HTResId id, Menu* parent, EventListener* listener)
+{
+    ResPackage* resPkg = GetResPackage(RPKGID(id));
+
+    if(resPkg && (RESTYPE(id) & R_TYPE_MENU))
+        return resPkg->createMenu(id , parent, listener);
+
+    return NULL;
+}
+
+HIDLanguage GetResourceLanguage (void)
+{
+    ResPackage* package = GetResPackage(0);
+    if (package)
+        return package->getCurrentLanguage();
+
+    return R_LANG_na_NA;
+}
+
+HIDEncoding GetResourceEncoding (void)
+{
+    ResPackage* package = GetResPackage(0);
+    if (package)
+        return package->getCurrentEncoding();
+
+    return R_ENCODING_unknown;
+}
+
+bool SetResourceLanguage (HIDLanguage lang, HIDEncoding enc)
+{
+    ResPackage* package = GetResPackage(0);
+    if (package)
+        return package->setCurrentLang(lang, enc);
+
+    return false;
+}
+
+const char *GetText(HTStrId id)
+{
+    ResPackage *pkg = ResPkgManager::getResPkgManager()->getPackage(0);
+    if (pkg)
+        return pkg->getText (id);
+
+    return NULL;
+}
+
+const char *GetText(const char* txt)
+{
+    ResPackage *pkg = ResPkgManager::getResPkgManager()->getPackage(0);
+    if (pkg)
+        return pkg->getText (txt);
+
+    return NULL;
+}
+
+#if 0
 void ResPkgManager::registerRawStringTable (LANGUAGE_RAW_STRINGS* table,
         HTResId maxId)
 {
@@ -245,220 +478,7 @@ bool ResPkgManager::setCurrentLang (int langId)
     m_lang_id = langId;
     return true;
 }
-
-/////////////////////////////////////////////////////////////////////
-/////////////////         Global Interface      /////////////////////
-/////////////////////////////////////////////////////////////////////
-
-ResPkgManager * GetResPkgManager(void)
-{
-    return ResPkgManager::getResPkgManager();
-}
-
-void ReleaseResPkgManager(void)
-{
-    ResPkgManager *manager = ResPkgManager::getResPkgManager();
-
-    if(NULL != manager )
-        manager->delResPkgManager();
-}
-
-const char * GetTextRes(HTResId id)
-{
-    ResPkgManager *manager = ResPkgManager::getResPkgManager();
-
-    if (manager)
-        return manager->getTextRes (id);
-
-    return NULL;
-}
-
-bool RegisterResPackage(ResPackage *resPkg)
-{
-    return GetResPkgManager()->registerPackage(resPkg);
-}
-
-ResPackage * GetResPackageByName(const char* name)
-{
-    return GetResPkgManager()->getPackage(name);
-}
-
-ResPackage * GetResPackageById(int id)
-{
-    return GetResPkgManager()->getPackage(id);
-}
-
-bool UnregisterResPackageByName(const char* name)
-{
-    return GetResPkgManager()->unregisterPackage(name);
-}
-
-bool UnregisterResPackageById(int id)
-{
-    return GetResPkgManager()->unregisterPackage(id);
-}
-
-void* GetRes(HTResId id)
-{
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
-
-    if(resPkg)
-        return resPkg->getRes(id);
-
-    return NULL;
-}
-
-Logfont* GetFontRes(HTResId id/*, Style* style*/)
-{
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
-    if(resPkg && (RESTYPE(id)& R_TYPE_FONT))
-        return resPkg->getFont(id/*, style*/);
-
-    return NULL;
-}
-
-Style* GetStyleRes(HTResId id)
-{
-    ResPackage * resPkg = NULL;
-    if(id == 0)
-        return GetCommonStyle();
-    resPkg = GetResPackage(RPKGID(id));
-    if(resPkg && (RESTYPE(id) & R_TYPE_STYLE))
-        return resPkg->getStyle(id);
-
-    return NULL;
-}
-
-GifAnimate* GetGifAnimateRes(HTResId id)
-{
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
-
-    if(resPkg && (RESTYPE(id) & R_TYPE_IMAGE))
-        return resPkg->getGifAnimate(id);
-
-    return NULL;
-}
-
-Image * GetImageRes(HTResId id)
-{
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
-
-    if(resPkg && (RESTYPE(id) & R_TYPE_IMAGE))
-        return resPkg->getImage(id);
-
-    return NULL;
-}
-
-Bitmap * GetBitmapRes(HTResId id)
-{
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
-
-    if (resPkg && (RESTYPE(id) & R_TYPE_IMAGE))
-        return resPkg->getBitmap(id);
-
-    return NULL;
-}
-
-Drawable* GetDrawableRes(HTResId id)
-{
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
-
-    if (resPkg && (RESTYPE(id) & R_TYPE_DRAWABLE))
-        return resPkg->getDrawable(id);
-
-    return NULL;
-}
-
-DrawableSet* GetDrawableSetRes(HTResId id)
-{
-    if(!(RESTYPE(id) & R_TYPE_DRAWABLESET))
-        return NULL;
-
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
-
-    if(resPkg)
-        return resPkg->getDrawableSet(id);
-
-    return NULL;
-}
-
-ThemeRes* GetThemeRes(HTResId id)
-{
-    if(!(RESTYPE(id) & R_TYPE_THEME))
-        return NULL;
-
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
-
-    if(resPkg)
-        return resPkg->getThemeRes(id);
-    return NULL;
-}
-
-ResPackage* GetSystemPackage(void)
-{
-    ResPackage* package = NULL;
-    package = ResPkgManager::getResPkgManager()->getPackage(0);
-
-    return package;
-}
-
-// we just get drawable set res from sysres.res.c package
-DrawableSet* GetDrawableSetResFromTheme(int theme_drset_id)
-{
-    if (theme_drset_id <= 0)
-        return NULL;
-
-    // FIXME just in sys package
-    ResPackage *resPkg = GetResPackage(0);
-
-    if(resPkg)
-        return resPkg->getThemeDrawableSet(theme_drset_id);
-
-    return NULL;
-}
-
-DrawableSetGroup* GetDrawableSetGroupRes(HTResId id)
-{
-    if(!(RESTYPE(id) & R_TYPE_DRSETGROUP))
-        return NULL;
-
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
-
-    if(resPkg)
-        return resPkg->getDrawableSetGroup(id);
-    return NULL;
-
-}
-
-View* CreateViewFromRes(HTResId id, View *parent, ViewContext *viewContext, ContentProvider* provider /*= NULL*/)
-{
-    ResPackage * resPkg = GetResPackage(RPKGID(id));
-
-    if(resPkg && (RESTYPE(id) & R_TYPE_UI))
-        return resPkg->createView(id , parent, viewContext, provider);
-
-    return NULL;
-}
-
-Menu* CreateMenuFromRes(HTResId id, Menu* parent, EventListener* listener)
-{
-    ResPackage* resPkg = GetResPackage(RPKGID(id));
-
-    if(resPkg && (RESTYPE(id) & R_TYPE_MENU))
-        return resPkg->createMenu(id , parent, listener);
-
-    return NULL;
-}
-
-int GetResourceLanguage (void)
-{
-    return GetResPkgManager()->getCurrentLang();
-}
-
-bool SetResourceLanguage (int lang)
-{
-    return GetResPkgManager()->setCurrentLang (lang);
-}
+#endif
 
 } // namespace hfcl
 

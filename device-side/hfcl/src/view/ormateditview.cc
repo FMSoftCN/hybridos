@@ -94,7 +94,7 @@ void FormatEditView::drawContent(GraphicsContext* context, IntRect &rc, int stat
             // 1. field content
             // calc
             m_drset->calcDrawableSize(DR_CONTENT, status, length, height, 
-                    (DWORD)GetTextRes(resid), DRDT_TEXT);
+                    (DWORD)GetText(resid), DRDT_TEXT);
 
             // adjust rect
             rect.setRect(rc.left() + current_left, 
@@ -107,12 +107,12 @@ void FormatEditView::drawContent(GraphicsContext* context, IntRect &rc, int stat
                 m_drset->draw(context, DR_CONTENT2, status, rect);
                 // draw hilight text
                 m_drset->draw(context, DR_CONTENT, DRAWSTATE_SELECTED, rect, 
-                        (DWORD)GetTextRes(resid), DRDT_TEXT);
+                        (DWORD)GetText(resid), DRDT_TEXT);
             }
             else {
                 // draw normal
                 m_drset->draw(context, DR_CONTENT, status, rect, 
-                        (DWORD)GetTextRes(resid), DRDT_TEXT);
+                        (DWORD)GetText(resid), DRDT_TEXT);
             }
         }
         else
@@ -183,7 +183,7 @@ int FormatEditView::visibleWidth(void)
             // calc
             if (m_field_content[i].length() > 0) {
                 m_drset->calcDrawableSize(DR_CONTENT, 0, length, height, 
-                        (DWORD)GetTextRes(resid), DRDT_TEXT);
+                        (DWORD)GetText(resid), DRDT_TEXT);
 
                 len += length;
             }

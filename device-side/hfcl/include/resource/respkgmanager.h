@@ -45,52 +45,28 @@ class ThemeRes;
 class ResPkgManager
 {
 public:
-    static ResPkgManager * getResPkgManager(); 
-    void delResPkgManager(); 
-    
+    static ResPkgManager * getResPkgManager();
+    void delResPkgManager();
+
     bool registerPackage(ResPackage *pkg);
     bool unregisterPackage(int id);
     bool unregisterPackage(const char *name);
-    ResPackage *getPackage(int id); 
+    ResPackage *getPackage(int id);
     ResPackage *getPackage(const char *name);
-    
+
     inline int count(void) {
         return m_packageList.size();
-    }
-    
-    void registerRawStringTable (LANGUAGE_RAW_STRINGS* table, HTResId maxId);
-    void registerZippedStringTable (LANGUAGE_ZIPPED_STRINGS* table,
-            HTResId maxId);
-    const char* getTextRes (HTResId id);
-
-    bool setCurrentLang (int langId);
-    int getCurrentLang (void) {
-        return m_lang_id;
     }
 
 private:
     ~ResPkgManager();
-    ResPkgManager()
-        : m_lang_id (-1)
-        , m_max_text_id (0)
-        , m_l10n_raw_str_table (NULL)
-        , m_l10n_zipped_str_table (NULL)
-    {
-    }
+    ResPkgManager() { }
 
     LIST(ResPackage*, ResPkgList);
-    
+
     static ResPkgManager* m_singleton;
 
     ResPkgList m_packageList;
-
-    int m_lang_id;
-    HTResId m_max_text_id;
-    LANGUAGE_RAW_STRINGS* m_l10n_raw_str_table;
-    LANGUAGE_ZIPPED_STRINGS* m_l10n_zipped_str_table;
-
-    char* m_string_bucket;
-    const char** m_raw_strings;
 };
 
 
@@ -101,7 +77,7 @@ ResPackage* GetSystemPackage(void);
 ResPkgManager * GetResPkgManager(void);
 void ReleaseResPkgManager(void);
 
-bool RegisterResPackage(ResPackage *resPkg);  
+bool RegisterResPackage(ResPackage *resPkg);
 ResPackage * GetResPackageByName(const char* name);
 ResPackage * GetResPackageById(int id);
 bool UnregisterResPackageByName(const char* name);
@@ -133,10 +109,11 @@ void RegisterAudiorResource();
 
 #define REGISTER_RESPKG(name) FRRegister_##name##_resource()
 
-bool SetResourceLanguage (int lang);
-int GetResourceLanguage (void);
-const char * GetTextRes (HTResId id);
-const char* GetPLMNDisplayName (const char* plmn);
+bool SetResourceLanguage (HIDLanguage lang, HIDEncoding enc = R_ENCODING_unknown);
+HIDLanguage GetResourceLanguage (void);
+HIDEncoding GetResourceEncoding (void);
+const char * GetText (HTStrId id);
+const char * GetText (const char* str);
 
 } // namespace hfcl
 

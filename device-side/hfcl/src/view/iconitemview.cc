@@ -82,7 +82,7 @@ void IconItemView::setText(const int stringId)
 const char * IconItemView::getText() 
 {
 	if(m_textId > 0) {
-        return (char *)GetTextRes(m_textId);
+        return (char *)GetText(m_textId);
     } else if(m_isLong){
 		return (char *)(m_buttonString.c_str());
     } else {

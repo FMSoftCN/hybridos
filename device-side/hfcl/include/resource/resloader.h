@@ -44,6 +44,9 @@ public:
     bool releaseBitmap(const char* filepath);
     bool releaseBitmap(Bitmap* pbmp);
 
+    char* getTextResZipped (const char* filepath);
+    char* getTextResGnuMsg (const char* filepath);
+
     void registerInnerRes(int res_type, INNER_RES_INFO * resources, int count);
 
     static ResLoader* getInstance(void);

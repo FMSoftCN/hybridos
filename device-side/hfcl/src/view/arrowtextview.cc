@@ -70,7 +70,7 @@ void ArrowTextView::setText(const char* str)
 char* ArrowTextView::getText(void)
 {
 	if(m_stringId > 0) {
-        return (char *)GetTextRes(m_stringId);
+        return (char *)GetText(m_stringId);
     } else if(m_isLongText){
 		return (char *)(m_textstring.c_str());
     } else {

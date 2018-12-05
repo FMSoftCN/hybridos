@@ -24,10 +24,10 @@
 
 #include "common/common.h"
 
-enum HFCLResType {
-    R_TYPE_VOID = 0,
-    R_TYPE_STRING,
-    R_TYPE_TEXT,
+typedef enum {
+    R_TYPE_TEXT_RAW,
+    R_TYPE_TEXT_ZIPPED,
+    R_TYPE_TEXT_GNUMSG,
     R_TYPE_IMAGE,
     R_TYPE_FONT,
     R_TYPE_STYLE,
@@ -37,11 +37,11 @@ enum HFCLResType {
     R_TYPE_DRSETGROUP,
     R_TYPE_THEME,
     R_TYPE_MENU,
-    R_TYPE_MEDIA, 
-    R_TYPE_ANIMATION, 
+    R_TYPE_MEDIA,
+    R_TYPE_ANIMATION,
     R_TYPE_BINARY,
-    NR_RES_TYPE_MAX,
-};
+    NR_RES_TYPE,
+} HIDResType;
 
 #define DR_DRSET_DRSETGROUP_ARRAY_SIZE 10
 
@@ -61,96 +61,104 @@ enum HFCLResType {
 #define RESTYPE(resID)  ((resID & RES_TYPE_MASK) >> RES_TYPE_SHIFT)
 #define RESINDEX(resID) ((resID & RES_IDX_MASK) >> RES_IDX_SHIFT)
 
-enum HFCLResLang {
-    R_LANG_ZH_cn,
-    R_LANG_ZH_tw,
-    R_LANG_ZH_hk,
-    R_LANG_EN_hk,
-    R_LANG_EN_us,
-    R_LANG_EN_gb,
-    R_LANG_EN_ww,
-    R_LANG_EN_ca,
-    R_LANG_EN_au,
-    R_LANG_EN_ie,
-    R_LANG_EN_fi,
-    R_LANG_EN_dk,
-    R_LANG_EN_il,
-    R_LANG_EN_za,
-    R_LANG_EN_in,
-    R_LANG_EN_no,
-    R_LANG_EN_sg,
-    R_LANG_EN_nz,
-    R_LANG_EN_id,
-    R_LANG_EN_ph,
-    R_LANG_EN_th,
-    R_LANG_EN_my,
-    R_LANG_EN_xa,
-    R_LANG_KO_kr,
-    R_LANG_JA_jp,
-    R_LANG_NL_nl,
-    R_LANG_NL_be,
-    R_LANG_PT_pt,
-    R_LANG_PT_br,
-    R_LANG_FR_fr,
-    R_LANG_FR_lu,
-    R_LANG_FR_ch,
-    R_LANG_FR_be,
-    R_LANG_FR_ca,
-    R_LANG_ES_la,
-    R_LANG_ES_es,
-    R_LANG_ES_ar,
-    R_LANG_ES_us,
-    R_LANG_ES_mx,
-    R_LANG_ES_co,
-    R_LANG_ES_pr,
-    R_LANG_ES_cl,
-    R_LANG_DE_de,
-    R_LANG_DE_at,
-    R_LANG_DE_ch,
-    R_LANG_RU_ru,
-    R_LANG_IT_it,
-    R_LANG_EL_gr,
-    R_LANG_NO_no,
-    R_LANG_FI_fi,
-    R_LANG_DA_dk,
-    R_LANG_HE_il,
-    R_LANG_HU_hu,
-    R_LANG_TR_tr,
-    R_LANG_CS_cz,
-    R_LANG_SL_sl,
-    R_LANG_PL_pl,
-    R_LANG_SV_se,
-};
+typedef enum {
+    R_LANG_na_NA,
+    R_LANG_zh_CN,
+    R_LANG_zh_TW,
+    R_LANG_zh_HK,
+    R_LANG_en_HK,
+    R_LANG_en_US,
+    R_LANG_en_GB,
+    R_LANG_en_WW,
+    R_LANG_en_CA,
+    R_LANG_en_AU,
+    R_LANG_en_IE,
+    R_LANG_en_FI,
+    R_LANG_en_DK,
+    R_LANG_en_IL,
+    R_LANG_en_ZA,
+    R_LANG_en_IN,
+    R_LANG_en_NO,
+    R_LANG_en_SG,
+    R_LANG_en_NZ,
+    R_LANG_en_ID,
+    R_LANG_en_PH,
+    R_LANG_en_TH,
+    R_LANG_en_MY,
+    R_LANG_en_XA,
+    R_LANG_ko_KR,
+    R_LANG_ja_JP,
+    R_LANG_nl_NL,
+    R_LANG_nl_BE,
+    R_LANG_pt_PT,
+    R_LANG_pt_BR,
+    R_LANG_fr_FR,
+    R_LANG_fr_LU,
+    R_LANG_fr_CH,
+    R_LANG_fr_BE,
+    R_LANG_fr_CA,
+    R_LANG_es_LA,
+    R_LANG_es_ES,
+    R_LANG_es_AR,
+    R_LANG_es_US,
+    R_LANG_es_MX,
+    R_LANG_es_CO,
+    R_LANG_es_PR,
+    R_LANG_es_CL,
+    R_LANG_de_DE,
+    R_LANG_de_AT,
+    R_LANG_de_CH,
+    R_LANG_ru_RU,
+    R_LANG_it_IT,
+    R_LANG_el_GR,
+    R_LANG_no_NO,
+    R_LANG_fi_FI,
+    R_LANG_da_DK,
+    R_LANG_he_IL,
+    R_LANG_hu_HU,
+    R_LANG_tr_TR,
+    R_LANG_cs_CZ,
+    R_LANG_sl_SL,
+    R_LANG_pl_PL,
+    R_LANG_sv_SE,
+} HIDLanguage;
 
-enum HFCLResEncoding
-{
+typedef enum {
+    R_ENCODING_unknown,     // Unknown charset (default)
+    R_ENCODING_utf8,        // UTF-8 charset (default)
     R_ENCODING_ascii,       // ASCII charset
-    R_ENCODING_latin1,      // West European (ISO-8859-1, Latin 1) charset 
-    R_ENCODING_latin2,      // East European (ISO-8859-2, Latin 2) charset 
-    R_ENCODING_latin3,      // South European (ISO-8859-3, Latin 3) charset 
-    R_ENCODING_latin4,      // North European (ISO-8859-4, Latin 4) charset 
-    R_ENCODING_cyrillic,    // Cyrillic (ISO-8859-5) charset 
-    R_ENCODING_araic,       // Arabic (ISO-8859-6) charset 
-    R_ENCODING_greek,       // Greek (ISO-8859-7) charset 
-    R_ENCODING_hebrew,      // Hebrew (ISO-8859-8) charset 
-    R_ENCODING_latin5,      // Turkish (ISO-8859-9, Latin 5) charset 
-    R_ENCODING_latin6,      // Nordic (ISO-8859-10, Latin 6) charset 
-    R_ENCODING_thai,        // Thai (ISO-8859-11) charset 
-    R_ENCODING_latin7,      // ISO-8859-13 (Latin 7) charset 
-    R_ENCODING_latin8,      // ISO-8859-14 (Latin 8) charset 
-    R_ENCODING_latin9,      // ISO-8859-15 (Latin 9) charset 
-    R_ENCODING_latin10,     // ISO-8859-16 (Latin 10) charset 
+    R_ENCODING_latin1,      // West European (ISO-8859-1, Latin 1) charset
+    R_ENCODING_latin2,      // East European (ISO-8859-2, Latin 2) charset
+    R_ENCODING_latin3,      // South European (ISO-8859-3, Latin 3) charset
+    R_ENCODING_latin4,      // North European (ISO-8859-4, Latin 4) charset
+    R_ENCODING_cyrillic,    // Cyrillic (ISO-8859-5) charset
+    R_ENCODING_araic,       // Arabic (ISO-8859-6) charset
+    R_ENCODING_greek,       // Greek (ISO-8859-7) charset
+    R_ENCODING_hebrew,      // Hebrew (ISO-8859-8) charset
+    R_ENCODING_latin5,      // Turkish (ISO-8859-9, Latin 5) charset
+    R_ENCODING_latin6,      // Nordic (ISO-8859-10, Latin 6) charset
+    R_ENCODING_thai,        // Thai (ISO-8859-11) charset
+    R_ENCODING_latin7,      // ISO-8859-13 (Latin 7) charset
+    R_ENCODING_latin8,      // ISO-8859-14 (Latin 8) charset
+    R_ENCODING_latin9,      // ISO-8859-15 (Latin 9) charset
+    R_ENCODING_latin10,     // ISO-8859-16 (Latin 10) charset
     R_ENCODING_big5,        // Big5 charset
-    R_ENCODING_gb2312,      // GB2312 charset 
-    R_ENCODING_gbk,         // GBK charset 
-    R_ENCODING_gb18030,     // GB18030 charset 
-    R_ENCODING_eucjp,       // EUCJP charset 
-    R_ENCODING_euckr,       // EUCKR charset 
-    R_ENCODING_shiftjis,    // SHIFTJIS charset 
-    R_ENCODING_utf8,        // UTF-8 charset
+    R_ENCODING_gb2312,      // GB2312 charset
+    R_ENCODING_gbk,         // GBK charset
+    R_ENCODING_gb18030,     // GB18030 charset
+    R_ENCODING_eucjp,       // EUCJP charset
+    R_ENCODING_euckr,       // EUCKR charset
+    R_ENCODING_shiftjis,    // SHIFTJIS charset
     R_ENCODING_utf16le,     // UTF-16LE charset
     R_ENCODING_utf16be,     // UTF-16BE charset
-};
+} HIDEncoding;
+
+typedef struct _HFCL_INCORE_RES {
+    HIDResType type;
+    const char* res_name;
+    unsigned char* data;
+    unsigned int size;
+} HFCL_INCORE_RES;
 
 #ifdef __cplusplus
 
@@ -160,13 +168,13 @@ typedef struct INNER_RES_INFO {
     const char* res_name;
     unsigned char* data;
     unsigned int size;
-}INNER_RES_INFO;
+} INNER_RES_INFO;
 
 typedef struct INNER_RES_ARRAY
 {
-    HFCLResType type;
+    HIDResType type;
     INNER_RES_INFO *pInner_res_info;
-    unsigned int  number;
+    unsigned int number;
 } INNER_RES_ARRAY;
 
 typedef struct MENU_RES_ARRAY
@@ -220,7 +228,7 @@ typedef struct TRThemeItem {
     int   drset_id;
 }TRThemeItem;
 
-//DrawableSet Group 
+//DrawableSet Group
 typedef struct TRDrawableSetGroupItem {
     int    drset_id;
     int    drsetres_id;

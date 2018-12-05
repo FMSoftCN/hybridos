@@ -31,18 +31,20 @@
 namespace hfcl {
 
 /*
- * ResEntry related
+ * ResourceBucket related
  */
-ResEntry::ResEntry()
+ResourceBucket::ResourceBucket()
 {
     resouces = NULL;
     type = 0;
 }
 
-ResEntry::~ResEntry()
+ResourceBucket::~ResourceBucket()
 {
-    switch(type) {
-    case R_TYPE_TEXT:
+    switch (type) {
+    case R_TYPE_TEXT_RAW:
+    case R_TYPE_TEXT_ZIPPED:
+    case R_TYPE_TEXT_GNUMSG:
         if (resouces)
             HFCL_DELETE((TextResMap *)resouces);
         break;
@@ -144,7 +146,7 @@ ResEntry::~ResEntry()
     }
 }
 
-TextResMap &ResEntry::textRes(void)
+TextResMap &ResourceBucket::textRes(void)
 {
     if (NULL == resouces) {
         resouces = HFCL_NEW_EX(TextResMap, ());
@@ -153,7 +155,7 @@ TextResMap &ResEntry::textRes(void)
     return ( *((TextResMap *)resouces) );
 }
 
-ImageResVec &ResEntry::imageRes(void)
+ImageResVec &ResourceBucket::imageRes(void)
 {
     if (NULL == resouces) {
         resouces = HFCL_NEW_EX(ImageResVec, ());
@@ -162,7 +164,7 @@ ImageResVec &ResEntry::imageRes(void)
     return ( *((ImageResVec *)resouces) );
 }
 
-FontResVec &ResEntry::fontRes(void)
+FontResVec &ResourceBucket::fontRes(void)
 {
     if (NULL == resouces) {
         resouces = HFCL_NEW_EX(FontResVec, ());
@@ -171,7 +173,7 @@ FontResVec &ResEntry::fontRes(void)
     return ( *((FontResVec *)resouces) );
 }
 
-StyleResVec &ResEntry::styleRes(void)
+StyleResVec &ResourceBucket::styleRes(void)
 {
     if (NULL == resouces) {
         resouces = HFCL_NEW_EX(StyleResVec, ());
@@ -180,7 +182,7 @@ StyleResVec &ResEntry::styleRes(void)
     return ( *((StyleResVec *)resouces) );
 }
 
-UiResVec &ResEntry::uiRes(void)
+UiResVec &ResourceBucket::uiRes(void)
 {
     if (NULL == resouces) {
         resouces = HFCL_NEW_EX(UiResVec, ());
@@ -189,7 +191,7 @@ UiResVec &ResEntry::uiRes(void)
     return ( *((UiResVec *)resouces) );
 }
 
-MenuResVec& ResEntry::menuRes(void)
+MenuResVec& ResourceBucket::menuRes(void)
 {
     if (NULL == resouces) {
         resouces = HFCL_NEW_EX(MenuResVec, ());
@@ -198,7 +200,7 @@ MenuResVec& ResEntry::menuRes(void)
     return (*((MenuResVec*)resouces));
 }
 
-DrawableResVec &ResEntry::drawableRes(void)
+DrawableResVec &ResourceBucket::drawableRes(void)
 {
     if (NULL == resouces) {
         resouces = HFCL_NEW_EX(DrawableResVec, ());
@@ -207,7 +209,7 @@ DrawableResVec &ResEntry::drawableRes(void)
     return ( *((DrawableResVec *)resouces) );
 }
 
-DrawableSetResVec &ResEntry::drawableSetRes(void)
+DrawableSetResVec &ResourceBucket::drawableSetRes(void)
 {
     if (NULL == resouces) {
         resouces = HFCL_NEW_EX(DrawableSetResVec, ());
@@ -215,7 +217,7 @@ DrawableSetResVec &ResEntry::drawableSetRes(void)
     return ( *((DrawableSetResVec *)resouces) );
 }
 
-ThemeResVec &ResEntry::themeRes(void)
+ThemeResVec &ResourceBucket::themeRes(void)
 {
     if (NULL == resouces) {
         resouces = HFCL_NEW_EX(ThemeResVec, ());
@@ -223,7 +225,7 @@ ThemeResVec &ResEntry::themeRes(void)
     return ( *((ThemeResVec *)resouces) );
 }
 
-DrawableSetGroupResVec & ResEntry::drawableSetGroupRes(void)
+DrawableSetGroupResVec & ResourceBucket::drawableSetGroupRes(void)
 {
     if(NULL == resouces) {
         resouces = HFCL_NEW_EX(DrawableSetGroupResVec, ());
@@ -234,28 +236,37 @@ DrawableSetGroupResVec & ResEntry::drawableSetGroupRes(void)
 /*
  * ResPackage related
  */
-ResPackage::ResPackage(const char *name, int id)
+ResPackage::ResPackage(const char *name, int id,
+        const HFCL_INCORE_RES* incoreRes)
 {
     int i = 0;
     m_id = id;
     m_name= string(name);
     m_packagePath = "";
-    m_curLangTextRes = NULL;
 
     /*
      * init res package entry
      */
-    for (i = 0; i < NR_RES_TYPE_MAX; ++i) {
-        m_resources[i].type = i;
-        m_resources[i].resouces = NULL;
+    for (i = 0; i < NR_RES_TYPE; ++i) {
+        m_resBuckets[i].type = i;
+        m_resBuckets[i].resouces = NULL;
     }
 
-    m_imageTResourceEntry = NULL;
+    m_imageResourceEntry = NULL;
     m_ImagReseSize = 0;
     m_pMenuResArray= NULL;
     m_MenuArrayCount = 0;
     m_pUIResArray = NULL;
     m_UIArrayCount = 0;
+
+    m_incoreRes = incoreRes;
+
+    m_languageId = R_LANG_na_NA;
+    m_encodingId = R_ENCODING_unknown;
+
+    m_textResType = R_TYPE_TEXT_RAW;
+    m_stringBucket = 0;
+    m_rawStrings = NULL;
 }
 
 ResPackage::~ResPackage()
@@ -282,17 +293,7 @@ const char *ResPackage::getName(void)
     return m_name.c_str();
 }
 
-bool ResPackage::addTextResource(enum HFCLResLang lang, enum HFCLResEncoding enc,
-        const TResourceEntry *texts)
-{
-    if (NULL == m_curLangTextRes)
-        m_curLangTextRes = texts;
-
-    m_resources[R_TYPE_TEXT].textRes()[MAKELONG(enc, lang)] = texts;
-    return true;
-}
-
-bool ResPackage::addImageResource(const TResourceEntry *images)
+bool ResPackage::addImageResource(const ResourceEntry *images)
 {
     int count = 0;
 
@@ -300,14 +301,14 @@ bool ResPackage::addImageResource(const TResourceEntry *images)
         ++count;
 
     m_ImagReseSize  = count;
-    m_imageTResourceEntry = images;
+    m_imageResourceEntry = images;
     return true;
 }
 
-bool ResPackage::addFontResource(const TResourceEntry *fonts)
+bool ResPackage::addFontResource(const ResourceEntry *fonts)
 {
     int count = 0, _size = 0, index = 0;
-    FontResVec & fontResVec = m_resources[R_TYPE_FONT].fontRes();
+    FontResVec & fontResVec = m_resBuckets[R_TYPE_FONT].fontRes();
 
     while (fonts[count].id != 0)
         ++count;
@@ -346,14 +347,14 @@ bool ResPackage::addStyleResource(HTResId id, HTResId superid,
         super = GetCommonStyle();
 
     style->setSuper(super);
-    m_resources[R_TYPE_STYLE].styleRes().push_back(style);
+    m_resBuckets[R_TYPE_STYLE].styleRes().push_back(style);
 
     return true;
 }
 
 bool ResPackage::addUIResource(HTResId id, CB_CREATE_VIEW cb_createView)
 {
-    m_resources[R_TYPE_UI].uiRes().push_back(cb_createView);
+    m_resBuckets[R_TYPE_UI].uiRes().push_back(cb_createView);
 
     return true;
 }
@@ -375,7 +376,7 @@ bool ResPackage::addMenuResource(MENU_RES_ARRAY *pMnuArray, int nMenuCount)
 
 bool ResPackage::addMenuResource(HTResId id, CB_CREATE_MENU cb_createMenu)
 {
-    m_resources[R_TYPE_MENU].menuRes().push_back(cb_createMenu);
+    m_resBuckets[R_TYPE_MENU].menuRes().push_back(cb_createMenu);
 
     return true;
 }
@@ -449,7 +450,7 @@ void ResPackage::addDrawableSetGroupResource(HTResId drsetgroup_id,
         create_drawable_set_group_from_res(drsetgroup_super_id, items);
     if(!drsetgroup)
         return ;
-    m_resources[R_TYPE_DRSETGROUP].drawableSetGroupRes().push_back(drsetgroup);
+    m_resBuckets[R_TYPE_DRSETGROUP].drawableSetGroupRes().push_back(drsetgroup);
 }
 
 void ResPackage::addThemeResource(HTResId theme_id, const char* theme_name,
@@ -458,15 +459,13 @@ void ResPackage::addThemeResource(HTResId theme_id, const char* theme_name,
     ThemeRes* themeR = HFCL_NEW_EX(ThemeRes,());
     if (themeR != NULL) {
         themeR->setDrawableSetMapTable((TRThemeItem*)items);
-        m_resources[R_TYPE_THEME].themeRes().push_back(themeR);
+        m_resBuckets[R_TYPE_THEME].themeRes().push_back(themeR);
     }
 }
 
 void *ResPackage::getRes(HTResId id)
 {
     switch (RESTYPE(id)) {
-    case R_TYPE_TEXT:
-        return (void *)getText(id);
     case R_TYPE_IMAGE:
         return (void *)getImage(id);
 
@@ -475,12 +474,16 @@ void *ResPackage::getRes(HTResId id)
 
     case R_TYPE_STYLE:
         return (void *)getStyle(id);
+
     case R_TYPE_UI:
         return (void *)getUi(id);
+
     case R_TYPE_MENU:
         return (void *)getMenu(id);
+
     case R_TYPE_DRAWABLE:
         return (void*)getDrawable(id);
+
     default:
         break;
     }
@@ -488,12 +491,91 @@ void *ResPackage::getRes(HTResId id)
     return NULL;
 }
 
-const char *ResPackage::getText(HTResId id)
+void ResPackage::addTextResRaw(HIDLanguage lang, HIDEncoding enc,
+        const char** rawStrings)
 {
-    if (R_TYPE_TEXT != RESTYPE(id))
-        return NULL;
+    m_resBuckets[R_TYPE_TEXT_RAW].textRes()[MAKELONG(enc, lang)]
+        = (HTData)rawStrings;
+}
 
-    return (const char*)(m_curLangTextRes[RESINDEX(id) - 1].value);
+void ResPackage::addTextResZipped(HIDLanguage lang, HIDEncoding enc,
+            const char* fileName)
+{
+    m_resBuckets[R_TYPE_TEXT_ZIPPED].textRes()[MAKELONG(enc, lang)]
+        = (HTData)fileName;
+}
+
+void ResPackage::addTextResGnuMsg(HIDLanguage lang, HIDEncoding enc,
+            const char* fileName)
+{
+    m_resBuckets[R_TYPE_TEXT_GNUMSG].textRes()[MAKELONG(enc, lang)]
+        = (HTData)fileName;
+}
+
+bool ResPackage::setCurrentLang(HIDLanguage lang, HIDEncoding enc)
+{
+    TextResMap &res = m_resBuckets[R_TYPE_TEXT_RAW].textRes();
+    TextResMap::iterator it = res.find(MAKELONG(enc, lang));
+    if (it != res.end() && it->second) {
+        const char** res_data = (const char**)it->second;
+        m_rawStrings = res_data;
+        m_textResType = R_TYPE_TEXT_RAW;
+        return true;
+    }
+
+    res = m_resBuckets[R_TYPE_TEXT_ZIPPED].textRes();
+    it = res.find(MAKELONG(enc, lang));
+    if (it != res.end() && it->second) {
+        const char* res_data = (const char*)it->second;
+        m_stringBucket =
+                ResLoader::getInstance()->getTextResZipped(res_data);
+        m_textResType = R_TYPE_TEXT_ZIPPED;
+        return true;
+    }
+
+    res = m_resBuckets[R_TYPE_TEXT_GNUMSG].textRes();
+    it = res.find(MAKELONG(enc, lang));
+    if (it != res.end() && it->second) {
+        const char* res_data = (const char*)it->second;
+        m_stringBucket =
+                ResLoader::getInstance()->getTextResGnuMsg(res_data);
+        m_textResType = R_TYPE_TEXT_GNUMSG;
+        return true;
+    }
+
+    return false;
+}
+
+const char* ResPackage::getText (HTStrId id)
+{
+    switch (m_textResType) {
+    case R_TYPE_TEXT_RAW:
+    case R_TYPE_TEXT_ZIPPED:
+        if (m_rawStrings) {
+            const char* text = m_rawStrings [id];
+            if (text == NULL) {
+                return "";
+            }
+            return text;
+        }
+        break;
+
+    case R_TYPE_TEXT_GNUMSG:
+    default:
+        break;
+    }
+
+    return NULL;
+}
+
+const char* ResPackage::getText (const char* str)
+{
+    if (m_textResType != R_TYPE_TEXT_GNUMSG) {
+        _DBG_PRINTF ("ResPackage::getText: Not GNU message resource\n");
+        return NULL;
+    }
+
+    return "";
 }
 
 Style *ResPackage::getStyle(HTResId id)
@@ -503,10 +585,10 @@ Style *ResPackage::getStyle(HTResId id)
         return NULL;
 
     if (R_TYPE_STYLE != RESTYPE(id) || idx < 0
-            || idx >= (unsigned int)m_resources[RESTYPE(id)].styleRes().size())
+            || idx >= (unsigned int)m_resBuckets[RESTYPE(id)].styleRes().size())
         return NULL;
 
-    return m_resources[RESTYPE(id)].styleRes()[idx];
+    return m_resBuckets[RESTYPE(id)].styleRes()[idx];
 }
 
 GifAnimate *ResPackage::getGifAnimate(HTResId id)
@@ -517,7 +599,7 @@ GifAnimate *ResPackage::getGifAnimate(HTResId id)
             || idx >= m_ImagReseSize)
         return (GifAnimate *)NULL;
 
-    return ResLoader::getInstance()->getGifAnimate(m_imageTResourceEntry[idx].value);
+    return ResLoader::getInstance()->getGifAnimate(m_imageResourceEntry[idx].value);
 }
 
 Image *ResPackage::getImage(HTResId id)
@@ -528,7 +610,7 @@ Image *ResPackage::getImage(HTResId id)
             || idx >= m_ImagReseSize)
         return (Image *)NULL;
 
-    return ResLoader::getInstance()->getImage(m_imageTResourceEntry[idx].value);
+    return ResLoader::getInstance()->getImage(m_imageResourceEntry[idx].value);
 }
 
 Bitmap *ResPackage::getBitmap(HTResId id)
@@ -539,17 +621,17 @@ Bitmap *ResPackage::getBitmap(HTResId id)
             || idx >= m_ImagReseSize)
         return NULL;
 
-    return ResLoader::getInstance()->getBitmap(m_imageTResourceEntry[idx].value);
+    return ResLoader::getInstance()->getBitmap(m_imageResourceEntry[idx].value);
 }
 
 Logfont *ResPackage::getFont(HTResId id)
 {
     unsigned int idx = RESINDEX(id) - 1;
     if (R_TYPE_FONT != RESTYPE(id) || idx < 0
-            || idx >= (unsigned int)m_resources[RESTYPE(id)].fontRes().size())
+            || idx >= (unsigned int)m_resBuckets[RESTYPE(id)].fontRes().size())
         return (Logfont *)NULL;
 
-    return m_resources[RESTYPE(id)].fontRes()[idx].get();
+    return m_resBuckets[RESTYPE(id)].fontRes()[idx].get();
 }
 
 CB_CREATE_VIEW ResPackage::getUi(HTResId id)
@@ -663,9 +745,9 @@ ThemeRes* ResPackage::getThemeRes(HTResId id)
 {
     unsigned int idx = RESINDEX(id) - 1;
     if (R_TYPE_THEME!= RESTYPE(id) || idx < 0
-            || idx >= (unsigned int)m_resources[RESTYPE(id)].themeRes().size())
+            || idx >= (unsigned int)m_resBuckets[RESTYPE(id)].themeRes().size())
         return (ThemeRes *)NULL;
-    return m_resources[RESTYPE(id)].themeRes()[idx];
+    return m_resBuckets[RESTYPE(id)].themeRes()[idx];
 }
 
 DrawableSet* ResPackage::getThemeDrawableSet(int theme_drset_id)
@@ -705,15 +787,6 @@ ThemeRes* ResPackage::theme(void)
 HTResId ResPackage::themeId(void)
 {
     return m_theme_id;
-}
-
-void ResPackage::setCurrentLang(enum HFCLResLang lang, enum HFCLResEncoding enc)
-{
-    TextResMap &text = m_resources[R_TYPE_TEXT].textRes();
-    TextResMap::iterator it = text.find(MAKELONG(enc, lang));
-    if (it == text.end())
-        return;
-    m_curLangTextRes = (TResourceEntry*)it->second;
 }
 
 static inline bool is_special_dir(const char* str) {

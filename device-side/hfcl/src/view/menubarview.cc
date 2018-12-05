@@ -226,7 +226,7 @@ void MenuBarView::drawText(GraphicsContext* context, int strId, int item)
     }
 
     FormatText formatText = {
-        GetTextRes(strId),
+        GetText(strId),
         (item == SEL_LEFT ? TextMode::AlignLeft : (item == SEL_RIGHT ? TextMode::AlignRight : TextMode::AlignCenter)) 
         | TextMode::ValignMiddle | TextMode::SingleLine | TextMode::CharBreak 
         | m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTLINEMODE),
@@ -246,7 +246,7 @@ void MenuBarView::drawText(GraphicsContext* context, int strId, int item)
 			{
 				int w_tmp = 0;
 				FormatText formatText_r = {
-					GetTextRes(m_right_strid), 
+					GetText(m_right_strid), 
 					TextMode::AlignRight | TextMode::ValignMiddle | TextMode::SingleLine | m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTLINEMODE)
 				};
 
@@ -285,7 +285,7 @@ void MenuBarView::drawText(GraphicsContext* context, int strId, int item)
 			{
 				int w_tmp = 0;
 				FormatText formatText_r = {
-					GetTextRes(m_left_strid), 
+					GetText(m_left_strid), 
 					TextMode::AlignLeft | TextMode::ValignMiddle | TextMode::SingleLine | m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTLINEMODE)
 				};
 				

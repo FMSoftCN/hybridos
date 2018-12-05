@@ -87,7 +87,7 @@ void ButtonView::setText(const char* str)
 const char* ButtonView::getText(void)
 {
 	if (m_stringId > 0) {
-        return GetTextRes(m_stringId);
+        return GetText(m_stringId);
     }
     else if(m_isLong) {
 		return m_buttonString.c_str();

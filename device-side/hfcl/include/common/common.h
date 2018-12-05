@@ -57,7 +57,8 @@
 #define LAYER_MAXNUM                2
 
 /* HFCL types */
-typedef unsigned int    HTResId; 
+typedef unsigned int    HTResId;
+typedef unsigned int    HTStrId;
 typedef float           HTReal;
 typedef intptr_t        HTHandle;
 typedef intptr_t        HTData;

@@ -110,7 +110,7 @@ void SimpleItemView::setText(const string& str)
 
 char * SimpleItemView::getText(void)
 {
-	return (char *)(m_stringId > 0 ? GetTextRes(m_stringId) : (m_simpleString.c_str()));
+	return (char *)(m_stringId > 0 ? GetText(m_stringId) : (m_simpleString.c_str()));
 }
 
 void SimpleItemView::calcRect(const IntRect& rc, IntRect& txtRc, IntRect& imgRc)

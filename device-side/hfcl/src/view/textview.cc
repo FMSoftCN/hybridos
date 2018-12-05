@@ -160,7 +160,7 @@ void TextView::setTextColor(DWORD color)
 char* TextView::getText(void)
 {
 	if(m_stringId > 0) {
-        return (char *)GetTextRes(m_stringId);
+        return (char *)GetText(m_stringId);
     } else if(m_isLongText){
 		return (char *)(m_textString.c_str());
     } else {
@@ -171,7 +171,7 @@ char* TextView::getText(void)
 int TextView::getTextLength(void)
 {
 	if(m_stringId > 0) {
-		return strlen(GetTextRes(m_stringId));
+		return strlen(GetText(m_stringId));
     } else if(m_isLongText) {
 		return m_textString.length();
     } else {
@@ -184,7 +184,7 @@ void TextView::drawContent(GraphicsContext* context, IntRect &rc, int status)
 	char* buf = NULL;
 
 	if(m_stringId > 0)
-        buf = (char *)GetTextRes(m_stringId);
+        buf = (char *)GetText(m_stringId);
     else if(m_isLongText)
 		buf = (char *)(m_textString.c_str());
 	else
@@ -304,7 +304,7 @@ void TextView::autoFitSize(bool auto_child_fit)
     int h = m_rect.height();
 
 	if(m_stringId > 0)
-        buf = (char *)GetTextRes(m_stringId);
+        buf = (char *)GetText(m_stringId);
     else if(m_isLongText)
 		buf = (char *)(m_textString.c_str());
 	else
@@ -350,7 +350,7 @@ bool TextView::isNeedRoll()
     IntRect rc(0, 0, m_rect.width(), m_rect.height());
 
 	if(m_stringId > 0)
-        buf = (char *)GetTextRes(m_stringId);
+        buf = (char *)GetText(m_stringId);
     else if(m_isLongText)
 		buf = (char *)(m_textString.c_str());
 	else

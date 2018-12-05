@@ -35,7 +35,7 @@
 
 //text resource
 #define begin_text_res(lang, encoding) \
-    static const TResourceEntry text_##lang##encoding##res[] = {
+    static const ResourceEntry text_##lang##encoding##res[] = {
 
 #define end_text_res {0, NULL} };
 
@@ -45,7 +45,7 @@
 
 //image resource
 #define begin_image_res() \
-    static const TResourceEntry image_res[] = {
+    static const ResourceEntry image_res[] = {
 
 #define end_image_res {0, NULL} };
 
@@ -54,7 +54,7 @@
 
 //font resource
 #define begin_font_res() \
-    static const TResourceEntry font_res[] = {
+    static const ResourceEntry font_res[] = {
 
 #define end_font_res {0, ""} };
 
@@ -64,7 +64,7 @@
 #if 0
 //bmpfont resource
 #define begin_bmpfont_res() \
-    static const TResourceEntry bmpfont_res[] = {
+    static const ResourceEntry bmpfont_res[] = {
 
 #define end_bmpfont_res {0, ""} };
 

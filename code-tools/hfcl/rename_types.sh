@@ -1,5 +1,17 @@
 #!/bin/bash
 
+sed -i 's/\<HResTypeID\>/HIDResType/g' `grep HResTypeID src/ include/ -rl`
+sed -i 's/\<GetTextRes\>/GetText/g' `grep GetTextRes src/ include/ -rl`
+sed -i 's/\<HLangID\>/HIDLanguage/g' `grep HLangID src/ include/ -rl`
+sed -i 's/\<HEncodingID\>/HIDEncoding/g' `grep HEncodingID src/ include/ -rl`
+
+exit 0
+
+sed -i 's/\<CONST_PTR_TResourceEntry\>/CPTResourceEntry/g' `grep CONST_PTR_TResourceEntry src/ include/ -rl`
+sed -i 's/TResourceEntry/ResourceEntry/g' `grep TResourceEntry src/ include/ -rl`
+
+sed -i 's/\<ResEntry\>/ResourceBucket/g' `grep ResEntry src/ include/ -rl`
+
 sed -i 's/\<NGBool\>/bool/g' `grep NGBool -rl include/ src/`
 
 sed -i 's/\<NGChar\>/char/g' `grep NGChar -rl include/ src/`
