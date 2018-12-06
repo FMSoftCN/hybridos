@@ -33,7 +33,7 @@
 #undef DEF_DEF_STYLE_ELEMENT
 
 #define BEGIN_STYLE_ELEMENT \
-	enum { 
+    enum {
 
 #define END_STYLE_ELEMENT };
 
@@ -56,7 +56,7 @@
 #undef END_DRAWABLE_ID
 
 #define BEGIN_DRAWABLE_ID \
-	enum { MAKE_DRAWABLE_NAME(__drawable_id_begin) = MAKE_DR_ID(MODULE_ID, 0), 
+    enum { MAKE_DRAWABLE_NAME(__drawable_id_begin) = MAKE_DR_ID(MODULE_ID, 0),
 
 #define DEF_DRID(name, str_name)  MAKE_DRAWABLE_NAME(name),
 

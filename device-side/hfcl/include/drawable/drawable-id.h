@@ -25,7 +25,7 @@
 #include "common/common.h"
 
 #define MAKE_ELEMENT_ID(m, t, id) \
-	(((m) << 24) | ((t)<<16) | ((id) & 0xFFFF))
+    (((m) << 24) | ((t)<<16) | ((id) & 0xFFFF))
 
 #define GET_ELEMENT_TYPE(id) (((id)>>16)&0xFF)
 
@@ -57,24 +57,24 @@ namespace hfcl {
 //define the draw id
 #define DRAW_STATE_SHIFT  16
 enum {
-	DRAW_CONTENT = 0,
-	DRAW_BKGROUND,
-	DRAW_SELECTION, //draw the selection
-	DRAW_SCROLLBAR,
-	DRAW_HSCROLLBAR = DRAW_SCROLLBAR,
-	DRAW_VSCROLLBAR,
-	DRAW_SEPARATOR,
+    DRAW_CONTENT = 0,
+    DRAW_BKGROUND,
+    DRAW_SELECTION, //draw the selection
+    DRAW_SCROLLBAR,
+    DRAW_HSCROLLBAR = DRAW_SCROLLBAR,
+    DRAW_VSCROLLBAR,
+    DRAW_SEPARATOR,
 };
 
 typedef enum {
-	//the state of selection
-	DRAWSTATE_NORMAL = 0,
-	DRAWSTATE_SELECTED = 1 <<DRAW_STATE_SHIFT,
-	DRAWSTATE_HILIGHT = 2 <<DRAW_STATE_SHIFT,
-	DRAWSTATE_PUSHED = 3 <<DRAW_STATE_SHIFT,
-	DRAWSTATE_FOCUSED = 4 <<DRAW_STATE_SHIFT,
-	DRAWSTATE_DISABLED = 5 <<DRAW_STATE_SHIFT,
-	DRAWSTATE_HILIGHT_SEL = 6 <<DRAW_STATE_SHIFT,
+    //the state of selection
+    DRAWSTATE_NORMAL = 0,
+    DRAWSTATE_SELECTED = 1 <<DRAW_STATE_SHIFT,
+    DRAWSTATE_HILIGHT = 2 <<DRAW_STATE_SHIFT,
+    DRAWSTATE_PUSHED = 3 <<DRAW_STATE_SHIFT,
+    DRAWSTATE_FOCUSED = 4 <<DRAW_STATE_SHIFT,
+    DRAWSTATE_DISABLED = 5 <<DRAW_STATE_SHIFT,
+    DRAWSTATE_HILIGHT_SEL = 6 <<DRAW_STATE_SHIFT,
 }DrawableStatus;
 
 #define GET_DRAW_STATE(draw_id)  ((draw_id) & 0xFF0000)
@@ -82,35 +82,35 @@ typedef enum {
 
 //define the data type
 typedef enum {
-	DRDT_NONE = 0, // no data
-	DRDT_TEXT,
-	DRDT_FORMATTEXT,
-	DRDT_IMAGE,
-	DRDT_COLOR,
-	DRDT_INT,
-	DRDT_VIEW
+    DRDT_NONE = 0, // no data
+    DRDT_TEXT,
+    DRDT_FORMATTEXT,
+    DRDT_IMAGE,
+    DRDT_COLOR,
+    DRDT_INT,
+    DRDT_VIEW
 }DR_DATA_TYPE;
 
 typedef struct {
-	const char * text;
-	HTData textFormat; //the combine of TextMode, sucha TextMode::AlignRight | TextMode::ValignBottom | TextMode::SingleLine ...
+    const char * text;
+    HTData textFormat; //the combine of TextMode, sucha TextMode::AlignRight | TextMode::ValignBottom | TextMode::SingleLine ...
 }FormatText; //the type of DRDT_FORMATTEXT
 
 #ifdef HFCL_LOG_NDEBUG
 static inline HTData _drawable_check_data_type(HTData data, int except_type_id, int type_id, const char* file, int line) {
-	if(except_type_id != type_id) {
-		LOGERROR("Drawable Data Check Error (%s:%d): except %d, but get %d\n", file, line, except_type_id, type_id);
-		return 0;
-	}
-	return data;
+    if(except_type_id != type_id) {
+        LOGERROR("Drawable Data Check Error (%s:%d): except %d, but get %d\n", file, line, except_type_id, type_id);
+        return 0;
+    }
+    return data;
 }
 #define DR_ASSERT_GET_DATA(Type,except_type_id, type_id, data) \
-	(Type) _drawable_check_data_type(data, except_type_id, type_id, __FILE__, __LINE__)
+    (Type) _drawable_check_data_type(data, except_type_id, type_id, __FILE__, __LINE__)
 
 #else
-#define DR_ASSERT_GET_DATA(Type, except_type_id, type_id, data) (Type)(data) 
+#define DR_ASSERT_GET_DATA(Type, except_type_id, type_id, data) (Type)(data)
 #endif
-	
+
 #define DR_ASSERT_GET_TEXT(type_id, data)    DR_ASSERT_GET_DATA(const char*, DRDT_TEXT, type_id, data)
 #define DR_ASSERT_GET_IMAGE(type_id, data)   DR_ASSERT_GET_DATA(Image*, DRDT_IMAGE, type_id, data)
 #define DR_ASSERT_GET_COLOR(type_id, data)   DR_ASSERT_GET_DATA(HTData, DRDT_COLOR, type_id, data)
@@ -120,38 +120,38 @@ static inline HTData _drawable_check_data_type(HTData data, int except_type_id, 
 
 //The Metrics info
 enum {
-	ALIGN_LEFT = 0,
-	ALIGN_CENTER,
-	ALIGN_RIGHT,
+    ALIGN_LEFT = 0,
+    ALIGN_CENTER,
+    ALIGN_RIGHT,
 
-	VALIGN_TOP = 0,
-	VALIGN_MIDDLE,
-	VALIGN_BOTTOM,
+    VALIGN_TOP = 0,
+    VALIGN_MIDDLE,
+    VALIGN_BOTTOM,
 
-	TEXTBREAK_SINGLE = 0,
-	TEXTBREAK_WORD,
-	TEXTBREAK_CHAR,
+    TEXTBREAK_SINGLE = 0,
+    TEXTBREAK_WORD,
+    TEXTBREAK_CHAR,
 
-	TEXTOUT_NORMAL = 0,
-	TEXTOUT_OMITTED,
+    TEXTOUT_NORMAL = 0,
+    TEXTOUT_OMITTED,
 
-	DRAWMODE_NORMAL = 0,
-	DRAWMODE_SCALED,
-	DRAWMODE_TILED,
-	DRAWMODE_ADAPTED,
-	DRAWMODE_PARTBOX,
-	DRAWMODE_ROTATIONANGLE,
+    DRAWMODE_NORMAL = 0,
+    DRAWMODE_SCALED,
+    DRAWMODE_TILED,
+    DRAWMODE_ADAPTED,
+    DRAWMODE_PARTBOX,
+    DRAWMODE_ROTATIONANGLE,
 
-	UNCHECKED = 0,
-	CHECKED,
+    UNCHECKED = 0,
+    CHECKED,
 };
 
-//// the imag format 
+//// the imag format
 typedef struct {
-	unsigned int  drawMode:8;
-	unsigned int  align:8;
-	unsigned int  valign:8;
-	unsigned int  rotationAngle;
+    unsigned int  drawMode:8;
+    unsigned int  align:8;
+    unsigned int  valign:8;
+    unsigned int  rotationAngle;
 }ImageFormat;
 
 
@@ -161,12 +161,12 @@ typedef struct {
 
 //define the default font id
 enum {
-	SYSFONT_DEFAULT = 0,
-	SYSFONT_WCHAR,
-	SYSFONT_FIXED,
-	SYSFONT_CAPTION,
-	SYSFONT_MENU,
-	SYSFONT_CONTROL
+    SYSFONT_DEFAULT = 0,
+    SYSFONT_WCHAR,
+    SYSFONT_FIXED,
+    SYSFONT_CAPTION,
+    SYSFONT_MENU,
+    SYSFONT_CONTROL
 };
 
 

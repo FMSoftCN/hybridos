@@ -1,6 +1,6 @@
-/* 
+/*
 ** HFCL - HybridOS Foundation Class Library
-** 
+**
 ** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
@@ -19,10 +19,19 @@
 ** along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef HFCL_HFCL_H_
-#define HFCL_HFCL_H_
+#ifndef HFCL_DRAWABLE_H_
+#define HFCL_DRAWABLE_H_
 
-#include "common/common.h"
+#include "drawable/drawable.h"
+#include "drawable/drawable-id.h"
+#include "drawable/common-drawable-ids.h"
+#include "drawable/colordrawable.h"
+#include "drawable/imagedrawable.h"
+#include "drawable/statecolordrawable.h"
+#include "drawable/stateimagedrawable.h"
+#include "drawable/statetextdrawable.h"
+#include "drawable/textdrawable.h"
 
-#endif // HFCL_HFCL_H_
+
+#endif // HFCL_DRAWABLE_H_
 
