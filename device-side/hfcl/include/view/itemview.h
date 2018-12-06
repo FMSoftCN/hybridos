@@ -23,7 +23,7 @@
 #ifndef HFCL_VIEW_ITEMVIEW_H_
 #define HFCL_VIEW_ITEMVIEW_H_
 
-#include "view/panelview.h"
+#include "panelview.h"
 
 namespace hfcl {
 

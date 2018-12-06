@@ -23,8 +23,8 @@
 #ifndef _HFCL_Intent_h
 #define _HFCL_Intent_h
 
-#include "common/common.h"
-#include "common/stlalternative.h"
+#include "../common/common.h"
+#include "../common/stlalternative.h"
 
 namespace hfcl {
 
@@ -57,13 +57,13 @@ public:
 #endif
 
 protected:
-    /* 
+    /*
      * m_action is globally defined ACTION.
      * e.g. ACTION_MOVE, ACTION_VIEW, ACTION_EDIT, ACTION_DIAL etc.
      */
     int m_action;
 
-    /* 
+    /*
      * m_date is transfer data.
      * e.g. "13800138000" or "zhang san" etc.
      */

@@ -22,10 +22,10 @@
 #ifndef HFCL_GRAPHICS_IMAGE_H_
 #define HFCL_GRAPHICS_IMAGE_H_
 
-#include "common/object.h"
-#include "common/intrect.h"
-#include "graphics/graphicscontext.h"
-#include "drawable/drawable-id.h"
+#include "../common/object.h"
+#include "../common/intrect.h"
+#include "../graphics/graphicscontext.h"
+#include "../drawable/drawable-id.h"
 
 namespace hfcl {
 

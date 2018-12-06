@@ -22,9 +22,9 @@
 #ifndef HFCL_RESOURCE_IMAGERES_H_
 #define HFCL_RESOURCE_IMAGERES_H_
 
-#include "graphics/image.h"
-#include "graphics/gifanimate.h"
-#include "view/animateimageview.h"
+#include "../graphics/image.h"
+#include "../graphics/gifanimate.h"
+#include "../view/animateimageview.h"
 
 namespace hfcl {
 

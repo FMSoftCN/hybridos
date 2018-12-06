@@ -22,9 +22,9 @@
 #ifndef HFCL_VIEW_TRANSITION_H_
 #define HFCL_VIEW_TRANSITION_H_
 
-#include "common/event.h"
-#include "view/view.h"
-#include "services/timerservice.h"
+#include "view.h"
+#include "../common/event.h"
+#include "../services/timerservice.h"
 
 namespace hfcl {
 

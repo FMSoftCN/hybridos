@@ -24,8 +24,8 @@
 #define _HFCL_MenubarView_h
 
 #include "panelview.h"
-#include "graphics/graphicscontext.h"
-#include "graphics/image.h"
+#include "../graphics/graphicscontext.h"
+#include "../graphics/image.h"
 
 namespace hfcl {
 

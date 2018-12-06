@@ -24,7 +24,6 @@
 
 #include "drawable/drawable.h"
 #include "drawable/drawable-id.h"
-#include "drawable/common-drawable-ids.h"
 #include "drawable/colordrawable.h"
 #include "drawable/imagedrawable.h"
 #include "drawable/statecolordrawable.h"

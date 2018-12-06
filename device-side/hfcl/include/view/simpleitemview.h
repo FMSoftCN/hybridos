@@ -23,8 +23,8 @@
 #ifndef _HFCL_SimpleItemView_h
 #define _HFCL_SimpleItemView_h
 
-#include "view/itemview.h"
-#include "graphics/image.h"
+#include "itemview.h"
+#include "../graphics/image.h"
 
 namespace hfcl {
 

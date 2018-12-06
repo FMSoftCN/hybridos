@@ -24,7 +24,7 @@
 #define HFC_VIEW_SCROLLVIEW_H_
 
 #include "panelview.h"
-#include "services/timerservice.h"
+#include "../services/timerservice.h"
 
 namespace hfcl {
 

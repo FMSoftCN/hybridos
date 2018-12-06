@@ -23,12 +23,12 @@
 #ifndef HFCL_ACTIVITY_ACTIVITYMANAGER_H_
 #define HFCL_ACTIVITY_ACTIVITYMANAGER_H_
 
-#include "mgcl/mgcl.h"
-#include "common/common.h"
-#include "common/event.h"
-#include "common/stlalternative.h"
-#include "activity/intent.h"
-#include "activity/activitystack.h"
+#include "../mgcl/mgcl.h"
+#include "../common/common.h"
+#include "../common/event.h"
+#include "../common/stlalternative.h"
+#include "intent.h"
+#include "activitystack.h"
 
 namespace hfcl {
 
@@ -43,59 +43,59 @@ class ActivityFactory;
  */
 typedef bool (*KeyHookCallback)(MSG *msg);
 
-class ActivityManager 
+class ActivityManager
 {
 public:
-    MAPCLASSKEY(string, ActivityFactory*, ActivityFactoryMap); 
-    PAIR(string, ActivityFactory*, ActivityFactoryPair); 
+    MAPCLASSKEY(string, ActivityFactory*, ActivityFactoryMap);
+    PAIR(string, ActivityFactory*, ActivityFactoryPair);
 
-	ActivityManager() : m_hostingWnd(HWND_INVALID) { init(); }
-	~ActivityManager();
+    ActivityManager() : m_hostingWnd(HWND_INVALID) { init(); }
+    ~ActivityManager();
 
-	static ActivityManager* getInstance(void);
-	void run(void);
-	
+    static ActivityManager* getInstance(void);
+    void run(void);
+
     BaseActivity* getCurrentActivity(void);
-	BaseActivity* getTopActivity(unsigned int top = 0);
-	BaseActivity* getActivityByName(const char * name);
-	BaseActivity* getActivityFromFactory(string name);
-	inline ActivityFactory* getActivityFactory(string name) { return m_acts[name]; }
+    BaseActivity* getTopActivity(unsigned int top = 0);
+    BaseActivity* getActivityByName(const char * name);
+    BaseActivity* getActivityFromFactory(string name);
+    inline ActivityFactory* getActivityFactory(string name) { return m_acts[name]; }
     inline int actNumOnRun(void) { return m_actstack.size(); }
     const ActivityFactoryMap& actlications() const { return m_acts; }
 
-	void registerActivity(string name, ActivityFactory *actFactory);
+    void registerActivity(string name, ActivityFactory *actFactory);
 
-	bool actIsExist(BaseActivity *obj);
-	bool actIsExist(const char * actName);
-	
+    bool actIsExist(BaseActivity *obj);
+    bool actIsExist(const char * actName);
+
     void onBoot();
     BaseActivity* startActivity(string act_name, Intent *intent);
     bool exit(BaseActivity* act);
-	bool isExist(BaseActivity *act) { return m_actstack.isExist(act); }
-	bool moveActivity2Top(const char * name);
-	bool moveActivity2Bottom(const char * name);
-	bool isActivityRunningInBackground(const char * name);
-	bool pushActivityRunningInBackground(const char * name);
-	BaseActivity* popActivityRunningToFrontdesk(const char * name);
+    bool isExist(BaseActivity *act) { return m_actstack.isExist(act); }
+    bool moveActivity2Top(const char * name);
+    bool moveActivity2Bottom(const char * name);
+    bool isActivityRunningInBackground(const char * name);
+    bool pushActivityRunningInBackground(const char * name);
+    BaseActivity* popActivityRunningToFrontdesk(const char * name);
 
     void changeSysLanguage(int langId);
-	void addDisableLockFrameTick(void) { m_disableLockTick ++; }
-	void subDisableLockFrameTick(void) { m_disableLockTick --; if(m_disableLockTick<0) m_disableLockTick = 0;}
+    void addDisableLockFrameTick(void) { m_disableLockTick ++; }
+    void subDisableLockFrameTick(void) { m_disableLockTick --; if(m_disableLockTick<0) m_disableLockTick = 0;}
     int disableLockFrameTicks() { return m_disableLockTick; }
-	
+
     inline HWND hosting(void) { return m_hostingWnd; }
-	inline bool ActivityBeStarted(BaseActivity* act) { return m_actstack.isExist(act); }
-	int broadcastMessage(int msg, int wParam, int lParam);
-    
+    inline bool ActivityBeStarted(BaseActivity* act) { return m_actstack.isExist(act); }
+    int broadcastMessage(int msg, int wParam, int lParam);
+
     void registerKeyMsgHook(KeyHookCallback callback) {
-    	m_key_hook = callback;
+        m_key_hook = callback;
     }
     /***
      * hook key
      *
      * @param MSG *msg - msg we get from msg queue.
      *
-     * @return bool - DISPATCH_CONTINUE_MSG continue message loop, 
+     * @return bool - DISPATCH_CONTINUE_MSG continue message loop,
      *                - DISPATCH_STOP_MSG stop for process this msg.
      ***/
     bool processKeyHook(MSG* msg);
@@ -105,12 +105,12 @@ public:
 
     void freezeChar(bool f) { m_charFreezon = f; }
     bool isCharFreezon() {return m_charFreezon; }
-    
+
     int m_gValue;
     bool m_standby;
 
 private:
-	bool init(void);
+    bool init(void);
     static LRESULT defaultHostingProc(HWND hWnd, UINT message,
             WPARAM wParam, LPARAM lParam);
 
@@ -121,7 +121,7 @@ private:
     ActivityFactoryMap m_acts;
     KeyHookCallback m_key_hook;
     bool m_charFreezon;
-	int  m_disableLockTick;
+    int  m_disableLockTick;
 };
 
 } // namespace hfcl

@@ -4,5 +4,13 @@ SUBDIRS=common mgcl activity graphics drawable view animation components service
 myincludedir=$(includedir)/hfcl
 
 # Which header files to install
-myinclude_HEADERS=hfcl.h
-
+myinclude_HEADERS= \
+    common.h \
+    activity.h \
+    view.h \
+    graphics.h \
+    drawable.h \
+    animation.h \
+    resource.h \
+    components.h \
+    services.h

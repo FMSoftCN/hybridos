@@ -22,10 +22,10 @@
 #ifndef HFCL_VIEW_VIEW_H_
 #define HFCL_VIEW_VIEW_H_
 
-#include "common/event.h"
-#include "common/intrect.h"
-#include "drawable/drawable.h"
-#include "view/viewcontext.h"
+#include "viewcontext.h"
+#include "../common/event.h"
+#include "../common/intrect.h"
+#include "../drawable/drawable.h"
 
 namespace hfcl {
 

@@ -23,7 +23,7 @@
 #ifndef _HFCL_VIEW_CONTAINERVIEW_H_
 #define _HFCL_VIEW_CONTAINERVIEW_H_
 
-#include "view/view.h"
+#include "view.h"
 
 namespace hfcl {
 

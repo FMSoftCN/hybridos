@@ -22,36 +22,35 @@
 #ifndef _HFCL_TextDrawable_h
 #define _HFCL_TextDrawable_h
 
-#include "common/stlalternative.h"
-
-#include "drawable/drawable.h"
-#include "graphics/graphicscontext.h"
+#include "drawable.h"
+#include "../common/stlalternative.h"
+#include "../graphics/graphicscontext.h"
 
 namespace hfcl {
 
 class TextDrawable : public Drawable
 {
 public:
-	TextDrawable() { init(); }
-	TextDrawable(const TRStyleElement* elements):Drawable(elements) { init(elements); }
-	TextDrawable(Style* s) : Drawable(s) { init(); }
-	TextDrawable(TextDrawable* s) ;
+    TextDrawable() { init(); }
+    TextDrawable(const TRStyleElement* elements):Drawable(elements) { init(elements); }
+    TextDrawable(Style* s) : Drawable(s) { init(); }
+    TextDrawable(TextDrawable* s) ;
 
-	CopyOnWriteable* clone() {
-		return HFCL_NEW_EX(TextDrawable, (this));
-	}
+    CopyOnWriteable* clone() {
+        return HFCL_NEW_EX(TextDrawable, (this));
+    }
 
-	void draw(GraphicsContext* gc, int draw_id, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE); 
-	bool setElement(int e_id, HTData value);
-	HTData getElement(int e_id) const;
-	bool calcDrawableSize(int draw_state, int& w, int& h, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE);
+    void draw(GraphicsContext* gc, int draw_id, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE);
+    bool setElement(int e_id, HTData value);
+    HTData getElement(int e_id) const;
+    bool calcDrawableSize(int draw_state, int& w, int& h, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE);
 
 protected:
-	void init(const TRStyleElement *elements = NULL);
+    void init(const TRStyleElement *elements = NULL);
 
-	Logfont * m_font;
-	HTData  m_color;
-	HTData  m_format;
+    Logfont * m_font;
+    HTData  m_color;
+    HTData  m_format;
 };
 
 
@@ -62,31 +61,31 @@ DECLARE_DRFACTORY(TextDrawable)
 class PushableTextDrawable : public TextDrawable
 {
 public:
-	PushableTextDrawable() {}
-	PushableTextDrawable(const TRStyleElement* elements) : TextDrawable(elements) { }
-	PushableTextDrawable(Style* s) : TextDrawable(s) { }
-	PushableTextDrawable(PushableTextDrawable* s) :TextDrawable((TextDrawable*)s) { }
-	
-	CopyOnWriteable* clone() {
-		return HFCL_NEW_EX(PushableTextDrawable, (this));
-	}
-	
-	
-	void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE)
-	{
-		IntRect rcoff = rc;
-		if(draw_state == DRAWSTATE_PUSHED)
-			rcoff.offset(0, 2);
-		TextDrawable::draw(gc, draw_state, rcoff, data, type);
-	}
+    PushableTextDrawable() {}
+    PushableTextDrawable(const TRStyleElement* elements) : TextDrawable(elements) { }
+    PushableTextDrawable(Style* s) : TextDrawable(s) { }
+    PushableTextDrawable(PushableTextDrawable* s) :TextDrawable((TextDrawable*)s) { }
 
-	bool calcDrawableSize(int draw_state, int& w, int& h, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE)
-	{
-		bool bret = TextDrawable::calcDrawableSize(draw_state, w, h, data, type);
-		if(bret)
-			h += 2;
-		return bret;
-	}
+    CopyOnWriteable* clone() {
+        return HFCL_NEW_EX(PushableTextDrawable, (this));
+    }
+
+
+    void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE)
+    {
+        IntRect rcoff = rc;
+        if(draw_state == DRAWSTATE_PUSHED)
+            rcoff.offset(0, 2);
+        TextDrawable::draw(gc, draw_state, rcoff, data, type);
+    }
+
+    bool calcDrawableSize(int draw_state, int& w, int& h, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE)
+    {
+        bool bret = TextDrawable::calcDrawableSize(draw_state, w, h, data, type);
+        if(bret)
+            h += 2;
+        return bret;
+    }
 
 };
 

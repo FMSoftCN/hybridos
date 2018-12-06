@@ -23,9 +23,9 @@
 #ifndef HFCL_VIEW_ANIMATEIMAGEVIEW_H_
 #define HFCL_VIEW_ANIMATEIMAGEVIEW_H_
 
-#include "graphics/image.h"
-#include "view/view.h"
-#include "services/timerservice.h"
+#include "../graphics/image.h"
+#include "../view/view.h"
+#include "../services/timerservice.h"
 
 namespace hfcl {
 

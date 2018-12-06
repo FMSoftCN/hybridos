@@ -22,7 +22,7 @@
 #ifndef __HFCL_INTRECT_H__
 #define __HFCL_INTRECT_H__
 
-#include "common/common.h"
+#include "../common/common.h"
 
 namespace hfcl {
 

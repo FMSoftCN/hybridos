@@ -22,23 +22,23 @@
 #ifndef _HFCL_StateColorDrawable_h
 #define _HFCL_StateColorDrawable_h
 
-#include "common/stlalternative.h"
-#include "drawable/drawable.h"
+#include "../common/stlalternative.h"
+#include "../drawable/drawable.h"
 
 namespace hfcl {
 
 class StateColorDrawable : public SimpleDrawable {
 public:
-	StateColorDrawable() {}
-	StateColorDrawable(const TRStyleElement* style_res) : SimpleDrawable(style_res) { }
-	StateColorDrawable(Style *s) : SimpleDrawable(s) { }
-	StateColorDrawable(StateColorDrawable* s) : SimpleDrawable((Style*)s) { }
+    StateColorDrawable() {}
+    StateColorDrawable(const TRStyleElement* style_res) : SimpleDrawable(style_res) { }
+    StateColorDrawable(Style *s) : SimpleDrawable(s) { }
+    StateColorDrawable(StateColorDrawable* s) : SimpleDrawable((Style*)s) { }
 
-	CopyOnWriteable* clone() {
-		return HFCL_NEW_EX(StateColorDrawable, (this));
-	}
+    CopyOnWriteable* clone() {
+        return HFCL_NEW_EX(StateColorDrawable, (this));
+    }
 
-	void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE); 
+    void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE);
 };
 
 DECLARE_DRFACTORY(StateColorDrawable)

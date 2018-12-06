@@ -22,13 +22,13 @@
 #ifndef __HFCL_MENU_H__
 #define __HFCL_MENU_H__
 
-#include "common/common.h"
-#include "common/contextstream.h"
-#include "activity/window.h"
-#include "activity/intent.h"
-#include "view/viewcontext.h"
-#include "view/simpleitemview.h"
-#include "view/listview.h"
+#include "../common/common.h"
+#include "../common/contextstream.h"
+#include "../activity/window.h"
+#include "../activity/intent.h"
+#include "../view/viewcontext.h"
+#include "../view/simpleitemview.h"
+#include "../view/listview.h"
 
 namespace hfcl {
 
@@ -37,454 +37,454 @@ class MenuBarView;
 class Activity;
 
 // =========================== MenuItem =====================================
-class MenuItem : public SimpleItemView 
+class MenuItem : public SimpleItemView
 {
-    public:
-        MenuItem(const char * text, Image* img, int iid, 
-				bool disable=false, DrawableSet* drset = NULL);
-		MenuItem(int strId, Image* img, int iid, 
-				bool disable=false, DrawableSet* drset = NULL);	
-		virtual ~MenuItem();
+public:
+    MenuItem(const char * text, Image* img, int iid,
+            bool disable=false, DrawableSet* drset = NULL);
+    MenuItem(int strId, Image* img, int iid,
+            bool disable=false, DrawableSet* drset = NULL);
+    virtual ~MenuItem();
 
-		virtual void onGetFocus();
-		virtual void onLoseFocus();
+    virtual void onGetFocus();
+    virtual void onLoseFocus();
 
-        virtual Menu* getSubMenu() { return NULL; }
+    virtual Menu* getSubMenu() { return NULL; }
 
-        virtual void onMenuEnter(Menu * owner);
-        virtual void onMenuRight(Menu * owner) {}
+    virtual void onMenuEnter(Menu * owner);
+    virtual void onMenuRight(Menu * owner) {}
 
-        enum { INVALID_TAG = -1};
-        virtual int  getTag() { return INVALID_TAG; }
-        virtual void check(Menu* owner, bool bcheck) { }
-		virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
+    enum { INVALID_TAG = -1};
+    virtual int  getTag() { return INVALID_TAG; }
+    virtual void check(Menu* owner, bool bcheck) { }
+    virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 
-        inline void setOriginalText(const char* str) 	{ setText(str);  }
-	 	inline void setOriginalText(int strid)	   	{ setText(strid);}
-        inline void setOriginalText(const string& str)  { setText(str);  }
- 
-        char * originalText() { return getText(); }
+    inline void setOriginalText(const char* str)     { setText(str);  }
+     inline void setOriginalText(int strid)           { setText(strid);}
+    inline void setOriginalText(const string& str)  { setText(str);  }
 
-		virtual void setIndex(int i);
+    char * originalText() { return getText(); }
 
-	protected:	
-		virtual void calcRect(const IntRect& rc, IntRect& txtRc, IntRect& imgRc);
+    virtual void setIndex(int i);
 
-        DECLARE_CLASS_NAME(MenuItem)
-    
-    private:
-    	char  m_idxText[TEXT_BUFFER_LEN_OF_DEFAULT];
+protected:
+    virtual void calcRect(const IntRect& rc, IntRect& txtRc, IntRect& imgRc);
+
+    DECLARE_CLASS_NAME(MenuItem)
+
+private:
+    char  m_idxText[TEXT_BUFFER_LEN_OF_DEFAULT];
 };
 
 class CheckMenuItem : public MenuItem {
-    public:
-        CheckMenuItem(const char * text, Image* img, int iid,
-                bool disable = false, bool checked = false, DrawableSet* drset = NULL);
-		CheckMenuItem(int strId, Image* img, int iid,
-                bool disable = false, bool checked = false, DrawableSet* drset = NULL);
-        void onMenuEnter(Menu* owner);
-        virtual void onMenuRight(Menu * owner) {}
+public:
+    CheckMenuItem(const char * text, Image* img, int iid,
+            bool disable = false, bool checked = false, DrawableSet* drset = NULL);
+    CheckMenuItem(int strId, Image* img, int iid,
+            bool disable = false, bool checked = false, DrawableSet* drset = NULL);
+    void onMenuEnter(Menu* owner);
+    virtual void onMenuRight(Menu * owner) {}
 
-        virtual void check(Menu* owner, bool bcheck)
-        {
-            if (bcheck == getCheck())
-                return ;
+    virtual void check(Menu* owner, bool bcheck)
+    {
+        if (bcheck == getCheck())
+            return ;
 
-            setCheck(bcheck);
-            updateView();
-        }
+        setCheck(bcheck);
+        updateView();
+    }
 
-		virtual void setIndex(int i) { MenuItem::setIndex(0); }
+    virtual void setIndex(int i) { MenuItem::setIndex(0); }
 
-        DECLARE_CLASS_NAME(CheckMenuItem)
+    DECLARE_CLASS_NAME(CheckMenuItem)
 };
 
 class RadioMenuItem : public MenuItem {
-    public:
-        RadioMenuItem(const char * text, Image* img, int iid, int tag = 0,
-                bool disable = false, bool checked = false, DrawableSet* drset = NULL);
-		RadioMenuItem(int strId, Image* img, int iid, int tag = 0,
-                bool disable = false, bool checked = false, DrawableSet* drset = NULL);
-        void onMenuEnter(Menu* owner);
-        void onMenuRight(Menu * owner) {}
-        int getTag() { return m_tag;}
+public:
+    RadioMenuItem(const char * text, Image* img, int iid, int tag = 0,
+            bool disable = false, bool checked = false, DrawableSet* drset = NULL);
+    RadioMenuItem(int strId, Image* img, int iid, int tag = 0,
+            bool disable = false, bool checked = false, DrawableSet* drset = NULL);
+    void onMenuEnter(Menu* owner);
+    void onMenuRight(Menu * owner) {}
+    int getTag() { return m_tag;}
 
-        virtual void check(Menu* owner, bool bstate);
-		virtual void setIndex(int i) { MenuItem::setIndex(0); }
+    virtual void check(Menu* owner, bool bstate);
+    virtual void setIndex(int i) { MenuItem::setIndex(0); }
 
-    protected:
-        int m_tag;
+protected:
+    int m_tag;
 
-        DECLARE_CLASS_NAME(RadioMenuItem)
+    DECLARE_CLASS_NAME(RadioMenuItem)
 };
 
 class SubMenuItem : public MenuItem {
-    public:
-        SubMenuItem(const char * text, Image *img, int iid, Menu* submenu,
-                bool disable = false, DrawableSet* drset = NULL);
-		SubMenuItem(int strId, Image *img, int iid, Menu* submenu,
-                bool disable = false, DrawableSet* drset = NULL);	
-        void onMenuEnter(Menu* owner);
-        void onMenuRight(Menu * owner);
-		
-		virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
+public:
+    SubMenuItem(const char * text, Image *img, int iid, Menu* submenu,
+            bool disable = false, DrawableSet* drset = NULL);
+    SubMenuItem(int strId, Image *img, int iid, Menu* submenu,
+            bool disable = false, DrawableSet* drset = NULL);
+    void onMenuEnter(Menu* owner);
+    void onMenuRight(Menu * owner);
 
-        ~SubMenuItem();
+    virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 
-        Menu* getSubMenu() { return m_subMenu; }
+    ~SubMenuItem();
 
-        DECLARE_CLASS_NAME(SubMenuItem)
+    Menu* getSubMenu() { return m_subMenu; }
 
-    protected:
-        Menu* m_subMenu;
+    DECLARE_CLASS_NAME(SubMenuItem)
+
+protected:
+    Menu* m_subMenu;
 };
 
 
 // ============================= Menu =======================================
 typedef struct _MenuQueryItem {
-    int  menu_id;
-    int  menu_tag; //only for radio
-    char bdisable;
-    char checked;
+int  menu_id;
+int  menu_tag; //only for radio
+char bdisable;
+char checked;
 } MenuQueryItem;
 
 class Menu : public Window, ViewContext {
-    public:
-        typedef enum {
-            CUSTOM_MENU_KEY_SL,
-            CUSTOM_MENU_KEY_SR,
-            CUSTOM_MENU_QUERY_ITEM,
-        } MenuKeyCustomType;
+public:
+    typedef enum {
+        CUSTOM_MENU_KEY_SL,
+        CUSTOM_MENU_KEY_SR,
+        CUSTOM_MENU_QUERY_ITEM,
+    } MenuKeyCustomType;
 
-        enum {
-            MAINMENU_ID = -1, // the main menu id
-        };
+    enum {
+        MAINMENU_ID = -1, // the main menu id
+    };
 
-        Menu(HTResId resid = 0);
-		Menu(int list_theme_drset_id, int item_theme_drset_id, int menubar_theme_drset_id, HTResId resid = 0);
-        virtual ~Menu();
+    Menu(HTResId resid = 0);
+    Menu(int list_theme_drset_id, int item_theme_drset_id, int menubar_theme_drset_id, HTResId resid = 0);
+    virtual ~Menu();
 
-        void create(HTResId resid);
-        Intent* onDestroy(ContextStream* contextstream);
+    void create(HTResId resid);
+    Intent* onDestroy(ContextStream* contextstream);
 
-        bool setRect(const IntRect& irc)
-        {
-            setWindowRect(irc);
-            IntRect rc (0, 0, irc.width(), irc.height());
-            Window::setRect(rc);
-            updateSize();
+    bool setRect(const IntRect& irc)
+    {
+        setWindowRect(irc);
+        IntRect rc (0, 0, irc.width(), irc.height());
+        Window::setRect(rc);
+        updateSize();
 
-            return true;
+        return true;
+    }
+
+    bool setMenuRect(int left, int top, int right, int bottom)
+    {
+        return setRect(IntRect(left, top, right, bottom));
+    }
+
+    bool onKey(int keyCode, KeyEvent* event);
+    virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status);
+    virtual void drawContent(GraphicsContext* context, IntRect &rc, int status);
+
+    void onClick(POINT pt, Event::EventType type);
+    void setMenuLeftButtonText(const char * text);
+     void setMenuLeftButtonText(int strid);
+    const char * getMenuLeftButtonText(void) const;
+
+    void setMenuRightButtonText(const char * text);
+     void setMenuRightButtonText(int strid);
+    const char * getMenuRightButtonText(void) const;
+
+    static Menu* getCurrentMenu(void);
+    void showMenu(Activity *app = NULL);
+    void hideMenu(void);
+    void onMenuEnter(void);
+    void onMenuRight(void);
+    void closeMenu(void);
+    void closeAllMenu(void);
+
+    void closeMenu(Menu *menu);
+    void freeze(bool bFreeze) {
+        if (m_menuItemList){
+            m_menuItemList->freeze(bFreeze);
         }
-
-        bool setMenuRect(int left, int top, int right, int bottom)
-        {
-            return setRect(IntRect(left, top, right, bottom));
+        if (!bFreeze){
+            refreshItemIndex();
         }
+    }
 
-        bool onKey(int keyCode, KeyEvent* event);
-		virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status);
-        virtual void drawContent(GraphicsContext* context, IntRect &rc, int status);
+    bool addMenuItem(MenuItem* mi = NULL);
 
-		void onClick(POINT pt, Event::EventType type);
-        void setMenuLeftButtonText(const char * text);
-	 	void setMenuLeftButtonText(int strid);
-        const char * getMenuLeftButtonText(void) const;
+    bool addMenuItemByIndex(MenuItem* mi = NULL,int index = 0);
 
-        void setMenuRightButtonText(const char * text);
-	 	void setMenuRightButtonText(int strid);
-        const char * getMenuRightButtonText(void) const;
+    bool addCommandMenuItem(const char * text, Image *img, int iid,
+            bool bdisable=false, DrawableSet* drset = NULL)
+    {
+        queryItemState(iid, 0, &bdisable);
+        return addMenuItem(HFCL_NEW_EX(MenuItem, (text, img, iid, bdisable, drset)));
+    }
 
-        static Menu* getCurrentMenu(void);
-        void showMenu(Activity *app = NULL);
-        void hideMenu(void);
-		void onMenuEnter(void);
-		void onMenuRight(void);
-        void closeMenu(void);
-        void closeAllMenu(void);
-        
-		void closeMenu(Menu *menu);
-        void freeze(bool bFreeze) {
-            if (m_menuItemList){
-                m_menuItemList->freeze(bFreeze);
-            }
-            if (!bFreeze){
-                refreshItemIndex();
-            }
-        }
+    bool addCommandMenuItem(int strid, Image *img, int iid,
+            bool bdisable=false, DrawableSet* drset = NULL)
+    {
+        queryItemState(iid, 0, &bdisable);
+        return addMenuItem(HFCL_NEW_EX(MenuItem, (strid, img, iid, bdisable, drset)));
+    }
 
-        bool addMenuItem(MenuItem* mi = NULL);
+    bool addCheckMenuItem(const char * text, Image* img, int iid,
+            bool bdisable=false, bool checked = false, DrawableSet* drset = NULL)
+    {
+        queryItemState(iid, 0, &bdisable, &checked);
+        return addMenuItem(HFCL_NEW_EX(CheckMenuItem, (text, img, iid, bdisable, checked, drset)));
+    }
 
-        bool addMenuItemByIndex(MenuItem* mi = NULL,int index = 0);
-        
-        bool addCommandMenuItem(const char * text, Image *img, int iid,
-                bool bdisable=false, DrawableSet* drset = NULL)
-        {
-            queryItemState(iid, 0, &bdisable);
-            return addMenuItem(HFCL_NEW_EX(MenuItem, (text, img, iid, bdisable, drset)));
-        }
-                
-        bool addCommandMenuItem(int strid, Image *img, int iid,
-                bool bdisable=false, DrawableSet* drset = NULL)
-        {
-            queryItemState(iid, 0, &bdisable);
-            return addMenuItem(HFCL_NEW_EX(MenuItem, (strid, img, iid, bdisable, drset)));
-        }
-		
-        bool addCheckMenuItem(const char * text, Image* img, int iid,
-                bool bdisable=false, bool checked = false, DrawableSet* drset = NULL)
-        {
-            queryItemState(iid, 0, &bdisable, &checked);
-            return addMenuItem(HFCL_NEW_EX(CheckMenuItem, (text, img, iid, bdisable, checked, drset)));
-        }
+    bool addCheckMenuItem(int strid, Image* img, int iid,
+            bool bdisable=false, bool checked = false, DrawableSet* drset = NULL)
+    {
+        queryItemState(iid, 0, &bdisable, &checked);
+        return addMenuItem(HFCL_NEW_EX(CheckMenuItem, (strid, img, iid, bdisable, checked, drset)));
+    }
 
-        bool addCheckMenuItem(int strid, Image* img, int iid,
-                bool bdisable=false, bool checked = false, DrawableSet* drset = NULL)
-        {
-            queryItemState(iid, 0, &bdisable, &checked);
-            return addMenuItem(HFCL_NEW_EX(CheckMenuItem, (strid, img, iid, bdisable, checked, drset)));
-        }
-		
-        bool addRadioMenuItem(const char * text, Image* img, int iid, int tag = 0,
-                bool bdisable = false, bool checked = false, DrawableSet* drset = NULL)
-        {
-            queryItemState(iid, tag, &bdisable,&checked);
-            return addMenuItem(HFCL_NEW_EX(RadioMenuItem, (text, img, iid, tag, bdisable, checked, drset)));
-        }
+    bool addRadioMenuItem(const char * text, Image* img, int iid, int tag = 0,
+            bool bdisable = false, bool checked = false, DrawableSet* drset = NULL)
+    {
+        queryItemState(iid, tag, &bdisable,&checked);
+        return addMenuItem(HFCL_NEW_EX(RadioMenuItem, (text, img, iid, tag, bdisable, checked, drset)));
+    }
 
-        bool addRadioMenuItem(int strid, Image* img, int iid, int tag = 0,
-                bool bdisable = false, bool checked = false, DrawableSet* drset = NULL)
-        {
-            queryItemState(iid, tag, &bdisable,&checked);
-            return addMenuItem(HFCL_NEW_EX(RadioMenuItem, (strid, img, iid, tag, bdisable, checked, drset)));
-        }
-		
-        bool addSubMenuItem(const char * text, Image* img, int iid, Menu* submenu,
-                bool bdisable = false, DrawableSet* drset = NULL)
-        {
-            if (submenu)
-                submenu->setMenuParent(this);
-            queryItemState(iid, 0, &bdisable);
-            return addMenuItem(HFCL_NEW_EX(SubMenuItem, (text, img, iid, submenu, bdisable, drset)));
-        }
+    bool addRadioMenuItem(int strid, Image* img, int iid, int tag = 0,
+            bool bdisable = false, bool checked = false, DrawableSet* drset = NULL)
+    {
+        queryItemState(iid, tag, &bdisable,&checked);
+        return addMenuItem(HFCL_NEW_EX(RadioMenuItem, (strid, img, iid, tag, bdisable, checked, drset)));
+    }
 
-        bool addSubMenuItem(int strid, Image* img, int iid, Menu* submenu,
-                bool bdisable = false, DrawableSet* drset = NULL)
-        {
-            if (submenu)
-                submenu->setMenuParent(this);
-            queryItemState(iid, 0, &bdisable);
-            return addMenuItem(HFCL_NEW_EX(SubMenuItem, (strid, img, iid, submenu, bdisable, drset)));
-        }
-		
-        bool addSubMenuItemByIndex(const char * text, Image* img, int iid, Menu* submenu,
-                bool bdisable = false, DrawableSet* drset = NULL,int index = 0)
-        {
-            if (submenu)
-                submenu->setMenuParent(this);
-            queryItemState(iid, 0, &bdisable);
-            return addMenuItemByIndex(HFCL_NEW_EX(SubMenuItem, (text, img, iid, submenu, bdisable, drset)),index);
-        }
+    bool addSubMenuItem(const char * text, Image* img, int iid, Menu* submenu,
+            bool bdisable = false, DrawableSet* drset = NULL)
+    {
+        if (submenu)
+            submenu->setMenuParent(this);
+        queryItemState(iid, 0, &bdisable);
+        return addMenuItem(HFCL_NEW_EX(SubMenuItem, (text, img, iid, submenu, bdisable, drset)));
+    }
 
-	 	bool addSubMenuItemByIndex(int strid, Image* img, int iid, Menu* submenu,
-                bool bdisable = false, DrawableSet* drset = NULL,int index = 0)
-        {
-            if (submenu)
-                submenu->setMenuParent(this);
-            queryItemState(iid, 0, &bdisable);
-            return addMenuItemByIndex(HFCL_NEW_EX(SubMenuItem, (strid, img, iid, submenu, bdisable, drset)),index);
-        }
-				
-        Menu* getSubMenu(int iid = 0);
+    bool addSubMenuItem(int strid, Image* img, int iid, Menu* submenu,
+            bool bdisable = false, DrawableSet* drset = NULL)
+    {
+        if (submenu)
+            submenu->setMenuParent(this);
+        queryItemState(iid, 0, &bdisable);
+        return addMenuItem(HFCL_NEW_EX(SubMenuItem, (strid, img, iid, submenu, bdisable, drset)));
+    }
 
-        MenuItem* getMenuItem(int idx)
-        {
-            return (MenuItem*)(m_menuItemList ? m_menuItemList->itemFromIndex(idx) : NULL);
-        }
+    bool addSubMenuItemByIndex(const char * text, Image* img, int iid, Menu* submenu,
+            bool bdisable = false, DrawableSet* drset = NULL,int index = 0)
+    {
+        if (submenu)
+            submenu->setMenuParent(this);
+        queryItemState(iid, 0, &bdisable);
+        return addMenuItemByIndex(HFCL_NEW_EX(SubMenuItem, (text, img, iid, submenu, bdisable, drset)),index);
+    }
 
-        MenuItem* getMenuItemByID(int iid)
-        {
-            return (MenuItem*) ( m_menuItemList ? m_menuItemList->itemFromId(iid) : NULL);
-        }
+     bool addSubMenuItemByIndex(int strid, Image* img, int iid, Menu* submenu,
+            bool bdisable = false, DrawableSet* drset = NULL,int index = 0)
+    {
+        if (submenu)
+            submenu->setMenuParent(this);
+        queryItemState(iid, 0, &bdisable);
+        return addMenuItemByIndex(HFCL_NEW_EX(SubMenuItem, (strid, img, iid, submenu, bdisable, drset)),index);
+    }
 
-        MenuItem* getCurMenuItem(void)
-        {
-            return (MenuItem*) ( m_menuItemList ? m_menuItemList->hilightItem() : NULL);
-        }
+    Menu* getSubMenu(int iid = 0);
 
-        int getCurMenuItemID(void)
-        {
-            MenuItem* mi = getCurMenuItem();
-            return mi ? mi->id() : -1;
-        }
+    MenuItem* getMenuItem(int idx)
+    {
+        return (MenuItem*)(m_menuItemList ? m_menuItemList->itemFromIndex(idx) : NULL);
+    }
 
-        void hilightFirstEnable(void);
+    MenuItem* getMenuItemByID(int iid)
+    {
+        return (MenuItem*) ( m_menuItemList ? m_menuItemList->itemFromId(iid) : NULL);
+    }
 
-        bool setMenuHilightIndex(int index = -1)
-        {
-            int count = getItemCount();
+    MenuItem* getCurMenuItem(void)
+    {
+        return (MenuItem*) ( m_menuItemList ? m_menuItemList->hilightItem() : NULL);
+    }
 
-            if (index < 0 || index > count - 1)
-                return false;
-			
-			return m_menuItemList ? m_menuItemList->hilight(index) : false;
-#if 0
-            for (int i = 0; i < count; i++)
-            {
-                MenuItem *mi = getMenuItem(i);
-                if (NULL != mi && mi->isVisible()){
-                    //if (index-- == 0){
-                        return m_menuItemList ? m_menuItemList->hilight(index) : false;
-                    //}
-                }
-            }
+    int getCurMenuItemID(void)
+    {
+        MenuItem* mi = getCurMenuItem();
+        return mi ? mi->id() : -1;
+    }
+
+    void hilightFirstEnable(void);
+
+    bool setMenuHilightIndex(int index = -1)
+    {
+        int count = getItemCount();
+
+        if (index < 0 || index > count - 1)
             return false;
+
+        return m_menuItemList ? m_menuItemList->hilight(index) : false;
+#if 0
+        for (int i = 0; i < count; i++)
+        {
+            MenuItem *mi = getMenuItem(i);
+            if (NULL != mi && mi->isVisible()){
+                //if (index-- == 0){
+                    return m_menuItemList ? m_menuItemList->hilight(index) : false;
+                //}
+            }
+        }
+        return false;
 #endif
-        }
+    }
 
-        int getMenuHilightIndex(void)
-        {
-            return m_menuItemList ? m_menuItemList->hilightItemIndex() : -1;
-        }
+    int getMenuHilightIndex(void)
+    {
+        return m_menuItemList ? m_menuItemList->hilightItemIndex() : -1;
+    }
 
-        inline void setMenuParent(Menu* p_parent = NULL) { 
-			m_menuParent = p_parent; 
-		}
-        inline bool isExitMenuParent(void) const { 
-			return m_menuParent != NULL; 
-		}
-        inline Menu* getMenuParent(void) const { 
-			return m_menuParent; 
-		}
+    inline void setMenuParent(Menu* p_parent = NULL) {
+        m_menuParent = p_parent;
+    }
+    inline bool isExitMenuParent(void) const {
+        return m_menuParent != NULL;
+    }
+    inline Menu* getMenuParent(void) const {
+        return m_menuParent;
+    }
 
-        int getItemCount(void)
-        {
-            return m_menuItemList ?  m_menuItemList->itemCount() : 0;
-        }
+    int getItemCount(void)
+    {
+        return m_menuItemList ?  m_menuItemList->itemCount() : 0;
+    }
 
-        bool removeMenuItem(int idx)
-        {
-            return m_menuItemList && m_menuItemList->removeItemByIndex(idx);
-        }
+    bool removeMenuItem(int idx)
+    {
+        return m_menuItemList && m_menuItemList->removeItemByIndex(idx);
+    }
 /*
-        void removeAll(void)
-        {
-            // if (m_menuItemList)
-            //     m_menuItemList->clear();
-            m_menuItemList = NULL;
-        }
+    void removeAll(void)
+    {
+        // if (m_menuItemList)
+        //     m_menuItemList->clear();
+        m_menuItemList = NULL;
+    }
 */
-        void uncheckRadioItemExcept(RadioMenuItem *item);
+    void uncheckRadioItemExcept(RadioMenuItem *item);
 
-        void setMenuItemChecked(int index, bool bcheck)
-        {
-            MenuItem* mi = getMenuItem(index);
-            if (mi)
-                mi->check(this, bcheck);
+    void setMenuItemChecked(int index, bool bcheck)
+    {
+        MenuItem* mi = getMenuItem(index);
+        if (mi)
+            mi->check(this, bcheck);
+    }
+
+    bool isMenuItemChecked(int index)
+    {
+        MenuItem* mi = getMenuItem(index);
+        return mi && mi->getCheck();
+    }
+
+    void setMenuItemCheckedByID(int iid, bool bcheck)
+    {
+        MenuItem* mi = getMenuItemByID(iid);
+        if (mi) {
+            mi->check(this, bcheck);
         }
+    }
 
-        bool isMenuItemChecked(int index)
-        {
-            MenuItem* mi = getMenuItem(index);
-            return mi && mi->getCheck();
+    bool isMenuItemCheckedByID(int iid)
+    {
+        MenuItem* mi = getMenuItemByID(iid);
+        return mi && mi->getCheck();
+    }
+
+    void enableMenuItem(int iid, bool benable)
+    {
+        MenuItem* mi = getMenuItem(iid);
+        if (mi && mi->isDisabled() != benable) {
+            mi->disable(!benable);
+            updateView();
         }
+    }
 
-        void setMenuItemCheckedByID(int iid, bool bcheck)
-        {
-            MenuItem* mi = getMenuItemByID(iid);
-            if (mi) {
-                mi->check(this, bcheck);
-            }
+    bool isMenuItemEnabled(int idx)
+    {
+        MenuItem* mi = getMenuItem(idx);
+        return mi && !mi->isDisabled();
+    }
+
+    void enableMenuItemByID(int iid, bool benable)
+    {
+        MenuItem* mi = getMenuItemByID(iid);
+        if (mi && mi->isDisabled() != benable) {
+            mi->disable(!benable);
+            updateView();
         }
+    }
 
-        bool isMenuItemCheckedByID(int iid)
-        {
-            MenuItem* mi = getMenuItemByID(iid);
-            return mi && mi->getCheck();
-        }
+    bool isMenuItemEnabledByID(int idx)
+    {
+        MenuItem* mi = getMenuItemByID(idx);
+        return mi && !mi->isDisabled();
+    }
 
-        void enableMenuItem(int iid, bool benable)
-        {
-            MenuItem* mi = getMenuItem(iid);
-            if (mi && mi->isDisabled() != benable) {
-                mi->disable(!benable);
-                updateView();
-            }
-        }
+    bool notifyToParent(MenuKeyCustomType mkct, int menuId);
 
-        bool isMenuItemEnabled(int idx)
-        {
-            MenuItem* mi = getMenuItem(idx);
-            return mi && !mi->isDisabled();
-        }
+    void setMaxHeight(int max);
 
-        void enableMenuItemByID(int iid, bool benable)
-        {
-            MenuItem* mi = getMenuItemByID(iid);
-            if (mi && mi->isDisabled() != benable) {
-                mi->disable(!benable);
-                updateView();
-            }
-        }
+    void autoFit(); //auto change it's size
 
-        bool isMenuItemEnabledByID(int idx)
-        {
-            MenuItem* mi = getMenuItemByID(idx);
-            return mi && !mi->isDisabled();
-        }
+    void setMenuItemHeight(int height)
+    {
+        m_menuItemHeight = (Uint16) height;
+    }
 
-        bool notifyToParent(MenuKeyCustomType mkct, int menuId);
+    enum {
+        SEPARATOR_TOP,
+        ITEMLIST = 1,
+        SEPARATOR_BOTTOM,
+        MENUBAR
+    };
 
-        void setMaxHeight(int max);
+    void updateSize(void);
 
-        void autoFit(); //auto change it's size
+    bool queryItemState(int iid, int tag, bool *pdisable, bool *pcheck = NULL);
 
-        void setMenuItemHeight(int height)
-        {
-            m_menuItemHeight = (Uint16) height;
-        }
+    void refreshItemIndex();
 
-        enum {
-            SEPARATOR_TOP,            
-            ITEMLIST = 1,
-            SEPARATOR_BOTTOM,            
-            MENUBAR
-        };
+    IntRect getMenuRect() {return m_menuItemList->getRect(); }
+    void setProcessIng(bool isProcessing){ m_isProcessing = isProcessing;}
+    bool isProcessing() { return m_isProcessing; }
+    Activity* ownActivity(void){return m_ownActivity;}
+ protected:
+     void updateParentMenu(Menu * menu);
 
-        void updateSize(void);
+    static Menu*   m_currentMenu;
+    ListView*      m_menuItemList;
 
-        bool queryItemState(int iid, int tag, bool *pdisable, bool *pcheck = NULL);
-        
-        void refreshItemIndex();
+    Uint16       m_menuItemHeight;
+    Uint16       m_maxHeight;
 
-		IntRect getMenuRect() {return m_menuItemList->getRect(); }
-		void setProcessIng(bool isProcessing){ m_isProcessing = isProcessing;}
-		bool isProcessing() { return m_isProcessing; }
-		Activity* ownActivity(void){return m_ownActivity;}
-	 protected:	
-	 	void updateParentMenu(Menu * menu);
-		
-        static Menu*   m_currentMenu;
-		ListView*      m_menuItemList;
-        
-		Uint16       m_menuItemHeight;
-        Uint16       m_maxHeight;
+    Menu*          m_menuParent;
+    MenuBarView*   m_menuBar;
 
-        Menu*          m_menuParent;
-        MenuBarView*   m_menuBar;
+    PanelView*        m_separator_top;
+    PanelView*        m_separator_bottom;
+    Activity*    m_ownActivity;
 
-        PanelView*		m_separator_top;        
-        PanelView*		m_separator_bottom;        
-        Activity*    m_ownActivity;
+    int          m_list_themedrset_id;
+    int           m_item_themedrset_id;
+    int           m_menubar_themedrset_id;
+    bool           m_isClose;
+    bool            m_isProcessing;
 
-		int          m_list_themedrset_id;
-		int		   m_item_themedrset_id;
-		int		   m_menubar_themedrset_id;
-		bool		   m_isClose;
-		bool 		   m_isProcessing;
-
-        DECLARE_VIEWCONTEXT
-        DECLARE_UI_TEMPL
+    DECLARE_VIEWCONTEXT
+    DECLARE_UI_TEMPL
 };
 
 #define MENU_COMMAND_LISTENER(owner, clss, method) \

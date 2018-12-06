@@ -23,9 +23,9 @@
 #ifndef HFCL_ACTIVITY_ACTIVITYSTACK_H_
 #define HFCL_ACTIVITY_ACTIVITYSTACK_H_
 
-#include "common/common.h"
-#include "common/stlalternative.h"
-#include "common/contextstream.h"
+#include "../common/common.h"
+#include "../common/stlalternative.h"
+#include "../common/contextstream.h"
 
 namespace hfcl {
 

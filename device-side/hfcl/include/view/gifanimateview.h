@@ -23,8 +23,8 @@
 #ifndef HFCL_VIEW_GIFANIMATIONVIEW_H_
 #define HFCL_VIEW_GIFANIMATIONVIEW_H_
 
-#include "view/view.h"
-#include "services/timerservice.h"
+#include "view.h"
+#include "../services/timerservice.h"
 
 namespace hfcl {
 

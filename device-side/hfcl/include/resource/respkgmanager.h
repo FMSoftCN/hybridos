@@ -22,8 +22,8 @@
 #ifndef HFCL_RESOURCE_RESPKGMANAGER_H_
 #define HFCL_RESOURCE_RESPKGMANAGER_H_
 
-#include "resource/restypes.h"
-#include "graphics/graphicscontext.h"
+#include "../resource/restypes.h"
+#include "../graphics/graphicscontext.h"
 
 namespace hfcl {
 

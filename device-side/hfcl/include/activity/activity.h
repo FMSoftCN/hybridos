@@ -22,12 +22,12 @@
 #ifndef HFCL_ACTIVITY_ACTIVITY_H_
 #define HFCL_ACTIVITY_ACTIVITY_H_
 
-#include "common/event.h"
-#include "activity/window.h"
-#include "activity/intent.h"
-#include "activity/baseactivity.h"
-#include "activity/activitystack.h"
-#include "components/menu.h"
+#include "window.h"
+#include "intent.h"
+#include "baseactivity.h"
+#include "activitystack.h"
+#include "../common/event.h"
+#include "../components/menu.h"
 
 namespace hfcl {
 
@@ -40,7 +40,7 @@ public:
     virtual void onWakeup(void);
 
     virtual bool onKey(int keyCode, KeyEvent* event);
-    virtual void onClick(POINT pt, Event::EventType type);	
+    virtual void onClick(POINT pt, Event::EventType type);
     virtual void onBack(void) { }
     virtual void onIdle(void) { }
     virtual void onMove2Top(void);

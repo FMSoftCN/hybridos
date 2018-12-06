@@ -22,9 +22,9 @@
 #ifndef _HFCL_ArrowTextView_h
 #define _HFCL_ArrowTextView_h
 
-#include "view/view.h"
-#include "graphics/image.h"
-#include "textmode.h"
+#include "../view/view.h"
+#include "../graphics/image.h"
+#include "../textmode.h"
 
 namespace hfcl {
 

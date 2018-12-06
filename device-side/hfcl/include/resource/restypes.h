@@ -22,7 +22,7 @@
 #ifndef HFCL_RESOURCE_RESTYPE_H_
 #define HFCL_RESOURCE_RESTYPE_H_
 
-#include "common/common.h"
+#include "../common/common.h"
 
 typedef enum {
     R_TYPE_VOID,

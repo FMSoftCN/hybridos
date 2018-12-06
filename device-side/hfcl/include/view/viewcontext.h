@@ -23,7 +23,7 @@
 #ifndef _HFCL_ViewContext_h
 #define _HFCL_ViewContext_h
 
-#include "common/common.h"
+#include "../common/common.h"
 
 namespace hfcl {
 

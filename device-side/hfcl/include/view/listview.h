@@ -23,8 +23,8 @@
 #ifndef HFCL_VIEW_LISTVIEW_H_
 #define HFCL_VIEW_LISTVIEW_H_
 
-#include "view/scrollview.h"
-#include "view/itemview.h"
+#include "scrollview.h"
+#include "itemview.h"
 
 namespace hfcl {
 

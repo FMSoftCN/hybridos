@@ -24,8 +24,8 @@
 #define _HFCL_MLEDITVIEW_H_
 
 #include "editview.h"
-#include "graphics/graphicscontext.h"
-#include "services/timerservice.h"
+#include "../graphics/graphicscontext.h"
+#include "../services/timerservice.h"
 
 namespace hfcl {
 

@@ -22,7 +22,7 @@
 #ifndef HFCL_VIEW_BUTTONVIEW_H_
 #define HFCL_VIEW_BUTTONVIEW_H_
 
-#include "view/view.h"
+#include "view.h"
 
 namespace hfcl {
 

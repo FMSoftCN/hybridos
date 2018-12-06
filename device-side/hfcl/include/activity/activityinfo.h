@@ -22,9 +22,9 @@
 #ifndef HFCL_ACTIVITY_ACTIVITYINFO_H_
 #define HFCL_ACTIVITY_ACTIVITYINFO_H_
 
-#include "common/common.h"
-//#include "common/contextstream.h"
-#include "activity/baseactivity.h"
+#include "../common/common.h"
+//#include "../common/contextstream.h"
+#include "baseactivity.h"
 
 namespace hfcl {
 

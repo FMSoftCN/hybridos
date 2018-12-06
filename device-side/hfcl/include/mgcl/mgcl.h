@@ -29,14 +29,14 @@
 
 #include <mgeff/mgeff.h>
 
-#include "common/intrect.h"
+#include "../common/intrect.h"
 
-#include "mgcl/mgclactivity.h"
+#include "../mgcl/mgclactivity.h"
 //#include "mgclanimation.h"
-#include "mgcl/mgclcommon.h"
+#include "../mgcl/mgclcommon.h"
 //#include "mgclgraphics.h"
 //#include "mgclservices.h"
-#include "mgcl/mgcltransparent.h"
+#include "../mgcl/mgcltransparent.h"
 
 
 #define HFCL_STR2KEY(str)   ((Uint32)Str2Key(str))
@@ -46,9 +46,8 @@
 #define DECLARE_CLASS_NAME(clss)  public: static const Uint32 CLASS_NAME;
 #define DEFINE_CLASS_NAME(clss)   const Uint32 clss::CLASS_NAME = HFCL_STR2KEY(#clss);
 #define DEFAULT_VIEW_DRAWABLESET(clss) \
-		GetViewDrawableSet((clss::CLASS_NAME == 0) ? HFCL_STR2KEY(#clss) : clss::CLASS_NAME)
+        GetViewDrawableSet((clss::CLASS_NAME == 0) ? HFCL_STR2KEY(#clss) : clss::CLASS_NAME)
 #define DEFAULT_VIEW_DRAWABLESETGROUP(clss) GetViewDrawableSetGroup(clss::CLASS_NAME)
-
 
 #endif /* __HFCL_MGCL_H__ */
 

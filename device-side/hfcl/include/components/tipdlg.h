@@ -22,20 +22,19 @@
 #ifndef __HFCL_TipDlg_H__
 #define __HFCL_TipDlg_H__
 
-#include "activity/window.h"
-#include "common/event.h"
-#include "view/viewcontext.h"
-#include "services/timerservice.h"
+#include "../activity/window.h"
+#include "../common/event.h"
+#include "../view/viewcontext.h"
+#include "../services/timerservice.h"
 
 namespace hfcl {
+
 class TextView;
 class Intent;
 class ContextStream;
 
-class TipDlg : public Window, ViewContext, TimerEventListener
-{
+class TipDlg : public Window, ViewContext, TimerEventListener {
 public:
-
     typedef enum _TIP_DLG_RES_TYPE {
         TIP_DESTROY = -1,
         TIP_LIST_CANCEL = -2,
@@ -45,11 +44,11 @@ public:
         TIP_EXITTIP,
     }TIP_DLG_RES_TYPE;
 
-	TipDlg(HTResId id = 0);
+    TipDlg(HTResId id = 0);
 
     virtual ~TipDlg();
 
-	void resetRect(int left, int top, int right, int bottom);
+    void resetRect(int left, int top, int right, int bottom);
     void create(HTResId resid = 0);
     Intent* onDestroy(ContextStream* contextstream);
 
@@ -76,16 +75,16 @@ public:
     int autoCloseTime() {return m_autoCloseTime;}
     void setAutoCloseTime(int time);
 
-	//define the sub view id
-	enum {
-		INFO_TEXT = 1,	
-	};
+    //define the sub view id
+    enum {
+        INFO_TEXT = 1,
+    };
 
 protected:
     void onRespondCodeSL();
     void onRespondCodeSR();
 
-	DECLARE_VIEWCONTEXT
+    DECLARE_VIEWCONTEXT
 
 private:
     TextView* m_textView;
@@ -98,8 +97,8 @@ private:
      */
     int m_autoCloseTime;
 
-	DECLARE_UI_TEMPL
-}; 
+    DECLARE_UI_TEMPL
+};
 
 } // namespace hfcl
 

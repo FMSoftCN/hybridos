@@ -22,8 +22,8 @@
 #ifndef HFCL_RESOURCE_TEXTRES_H_
 #define HFCL_RESOURCE_TEXTRES_H_
 
-#include "graphics/gifanimate.h"
-#include "view/animateimageview.h"
+#include "../graphics/gifanimate.h"
+#include "../view/animateimageview.h"
 
 namespace hfcl {
 

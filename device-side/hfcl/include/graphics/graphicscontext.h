@@ -22,10 +22,10 @@
 #ifndef HFCL_GRAPHICS_GRAPHICSCONTEXT_H_
 #define HFCL_GRAPHICS_GRAPHICSCONTEXT_H_
 
-#include "common/stlalternative.h"
-#include "common/object.h"
-#include "common/intrect.h"
-#include "mgcl/mgcl.h"
+#include "../common/stlalternative.h"
+#include "../common/object.h"
+#include "../common/intrect.h"
+#include "../mgcl/mgcl.h"
 
 namespace hfcl {
 

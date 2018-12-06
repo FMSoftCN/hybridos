@@ -22,9 +22,9 @@
 #ifndef HFCL_COMMON_METHODEVENTLISTENER_H_
 #define HFCL_COMMON_METHODEVENTLISTENER_H_
 
-#include "common/common.h"
-#include "common/stlalternative.h"
-#include "common/event.h"
+#include "../common/common.h"
+#include "../common/stlalternative.h"
+#include "../common/event.h"
 
 namespace hfcl {
 
@@ -34,24 +34,23 @@ class EventListener;
 class MethodEventListener : public EventListener
 {
 public:
-	typedef bool (MethodEventListener::*EventHandle)(Event* event);
-	MethodEventListener(void* ctx, EventHandle event_handle, int event_type);
-	virtual ~MethodEventListener();
+    typedef bool (MethodEventListener::*EventHandle)(Event* event);
+    MethodEventListener(void* ctx, EventHandle event_handle, int event_type);
+    virtual ~MethodEventListener();
 
-	bool handleEvent(Event* event);
+    bool handleEvent(Event* event);
 
 private:
-	void* m_ctx;
-	EventHandle m_eventHandle;
-	int m_eventType;
+    void* m_ctx;
+    EventHandle m_eventHandle;
+    int m_eventType;
 };
 
 #define METHOD_EVENT_HANDLE_EX(owner, Class, eventHandle, event_type) \
-	(HFCL_NEW_EX(MethodEventListener, ((void*)(owner), (MethodEventListener::EventHandle)(&Class::eventHandle), event_type)))
+    (HFCL_NEW_EX(MethodEventListener, ((void*)(owner), (MethodEventListener::EventHandle)(&Class::eventHandle), event_type)))
 
 #define METHOD_EVENT_HANDLE(Class, eventHandle) \
-	METHOD_EVENT_HANDLE_EX(this, Class, eventHandle, 0)
-
+    METHOD_EVENT_HANDLE_EX(this, Class, eventHandle, 0)
 
 } // namespace hfcl
 

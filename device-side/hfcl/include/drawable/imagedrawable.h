@@ -22,33 +22,33 @@
 #ifndef _HFCL_ImageDrawable_h
 #define _HFCL_ImageDrawable_h
 
-#include "common/stlalternative.h"
-#include "drawable/drawable.h"
-#include "graphics/image.h"
+#include "../common/stlalternative.h"
+#include "drawable.h"
+#include "../graphics/image.h"
 
 namespace hfcl {
 
 class ImageDrawable : public Drawable {
 public:
-	ImageDrawable(void) { init(); }
-	ImageDrawable(const TRStyleElement *style_res) : Drawable(style_res) { init(style_res); }
-	ImageDrawable(Style* s) : Drawable((Style*)s) { init(); }
-	ImageDrawable(ImageDrawable* drimg);
-	virtual ~ImageDrawable();
+    ImageDrawable(void) { init(); }
+    ImageDrawable(const TRStyleElement *style_res) : Drawable(style_res) { init(style_res); }
+    ImageDrawable(Style* s) : Drawable((Style*)s) { init(); }
+    ImageDrawable(ImageDrawable* drimg);
+    virtual ~ImageDrawable();
 
-	CopyOnWriteable* clone() {
-		return HFCL_NEW_EX(ImageDrawable, (this));
-	}
+    CopyOnWriteable* clone() {
+        return HFCL_NEW_EX(ImageDrawable, (this));
+    }
 
-	void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE); 
-	bool setElement(int e_id, HTData value);
-	HTData getElement(int e_id) const;
+    void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE);
+    bool setElement(int e_id, HTData value);
+    HTData getElement(int e_id) const;
 
 protected:
-	void init(const TRStyleElement *style_res = NULL);
+    void init(const TRStyleElement *style_res = NULL);
 
-	Image*    m_image;
-	ImageFormat m_format;
+    Image*    m_image;
+    ImageFormat m_format;
 };
 
 DECLARE_DRFACTORY(ImageDrawable)

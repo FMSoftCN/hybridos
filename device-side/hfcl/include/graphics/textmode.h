@@ -22,8 +22,8 @@
 #ifndef HFCL_GRAPHICS_TEXTMODE_H_
 #define HFCL_GRAPHICS_TEXTMODE_H_
 
-#include "common/common.h"
-#include "drawable/drawable-id.h"
+#include "../common/common.h"
+#include "../drawable/drawable-id.h"
 
 namespace hfcl {
 

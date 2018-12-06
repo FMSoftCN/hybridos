@@ -22,12 +22,12 @@
 #ifndef HFCL_SERVICES_TIMERSERVICE_H_
 #define HFCL_SERVICES_TIMERSERVICE_H_
 
-#include "common/common.h"
-#include "common/log.h"
-#include "common/event.h"
-#include "mgcl/mgcl.h"
+#include "service.h"
 
-#include "services/service.h"
+#include "../common/common.h"
+#include "../common/log.h"
+#include "../common/event.h"
+#include "../mgcl/mgcl.h"
 
 namespace hfcl {
 

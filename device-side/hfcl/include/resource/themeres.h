@@ -22,10 +22,10 @@
 #ifndef HFCL_RESOURCE_THEMERES_H_
 #define HFCL_RESOURCE_THEMERES_H_
 
-#include "common/common.h"
-#include "common/stlalternative.h"
-#include "resource/restypes.h"
-#include "drawable/drawable.h"
+#include "../common/common.h"
+#include "../common/stlalternative.h"
+#include "../resource/restypes.h"
+#include "../drawable/drawable.h"
 
 namespace hfcl {
 

@@ -22,7 +22,7 @@
 #ifndef HFCL_RESOURCE_FONTRES_H_
 #define HFCL_RESOURCE_FONTRES_H_
 
-#include "graphics/font.h"
+#include "../graphics/font.h"
 
 namespace hfcl {
 

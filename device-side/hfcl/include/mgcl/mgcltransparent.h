@@ -22,28 +22,24 @@
 #ifndef _MGCL_TRANSPARENT_H
 #define _MGCL_TRANSPARENT_H
 
-
 namespace hfcl {
 
-
-///////////////////////////MgclTrans.cpp/////////////////////////
 void mgclUpdateWindowClips(HWND hWnd, const HDC hdc);
 
 void mgclUpdateTransparentWindow(HWND hWnd, const PCLIPRGN pclips, int xoff, int yoff);
 
 
 typedef struct {
-	HDC howner;
-	HDC hmemdc;
-	HDC htrans;
-	int bkg_alpha;
+    HDC howner;
+    HDC hmemdc;
+    HDC htrans;
+    int bkg_alpha;
 }TRANSPARENTINFO;
 
 HDC mgclBeginTransparentBkgnd(HWND hWnd, HDC hdc, int bkg_alpha, TRANSPARENTINFO *pinfo);
 
 void mgclEndTransparentBkgnd(TRANSPARENTINFO *pinfo);
 
-///////////////////////////MgclTrans.cpp/////////////////////////
 } // namespace hfcl
 
 #endif /* TRANSPARENT_H */

@@ -22,7 +22,7 @@
 #ifndef HFCL_GRAPHICS_COLOR_H_
 #define HFCL_GRAPHICS_COLOR_H_
 
-#include "common/common.h"
+#include "../common/common.h"
 
 namespace hfcl {
 

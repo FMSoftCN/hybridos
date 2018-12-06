@@ -23,9 +23,9 @@
 #ifndef HFCL_VIEW_TEXTVIEW_H_
 #define HFCL_VIEW_TEXTVIEW_H_
 
-#include "view/view.h"
-#include "graphics/color.h"
-#include "resource/respkgmanager.h"
+#include "view.h"
+#include "../graphics/color.h"
+#include "../resource/respkgmanager.h"
 
 namespace hfcl {
 

@@ -22,8 +22,8 @@
 #ifndef HFCL_GRAPHICS_GITANIMATION_H_
 #define HFCL_GRAPHICS_GITANIMATION_H_
 
-#include "common/object.h"
-#include "graphics/graphicscontext.h"
+#include "../common/object.h"
+#include "../graphics/graphicscontext.h"
 
 namespace hfcl {
 

@@ -1,5 +1,10 @@
 #include <cstdlib>
-#include <hfcl/hfcl.h>
+
+#include <hfcl/common.h>
+#include <hfcl/activity.h>
+#include <hfcl/view.h>
+#include <hfcl/drawable.h>
+#include <hfcl/resource.h>
 
 #include "bootup-act.h"
 

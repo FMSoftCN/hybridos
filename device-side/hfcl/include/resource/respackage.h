@@ -22,11 +22,11 @@
 #ifndef HFCL_RESOURCE_RESPACKAGE_H_H
 #define HFCL_RESOURCE_RESPACKAGE_H_H
 
-#include "resource/restypes.h"
-#include "resource/textres.h"
-#include "view/viewcontext.h"
-#include "resource/fontres.h"
-#include "resource/imageres.h"
+#include "../resource/restypes.h"
+#include "../resource/textres.h"
+#include "../view/viewcontext.h"
+#include "../resource/fontres.h"
+#include "../resource/imageres.h"
 
 namespace hfcl {
 

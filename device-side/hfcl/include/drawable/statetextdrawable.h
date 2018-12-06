@@ -22,26 +22,26 @@
 #ifndef _HFCL_StateTextDrawable_H
 #define _HFCL_StateTextDrawable_H
 
-#include "common/stlalternative.h"
-#include "drawable/drawable.h"
+#include "../common/stlalternative.h"
+#include "drawable.h"
 
 namespace hfcl {
 
 class StateTextDrawable : public SimpleDrawable
 {
 public:
-	StateTextDrawable() { }
-	StateTextDrawable(const TRStyleElement* style_res) : SimpleDrawable(style_res) { }
-	StateTextDrawable(Style* s) : SimpleDrawable(s) { }
-	StateTextDrawable(StateTextDrawable* s) : SimpleDrawable((Style*)s) { }
+    StateTextDrawable() { }
+    StateTextDrawable(const TRStyleElement* style_res) : SimpleDrawable(style_res) { }
+    StateTextDrawable(Style* s) : SimpleDrawable(s) { }
+    StateTextDrawable(StateTextDrawable* s) : SimpleDrawable((Style*)s) { }
 
-	CopyOnWriteable* clone() {
-		return HFCL_NEW_EX(StateTextDrawable, (this));
-	}
+    CopyOnWriteable* clone() {
+        return HFCL_NEW_EX(StateTextDrawable, (this));
+    }
 
-	void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE); 
+    void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE);
 
-	bool calcDrawableSize(int draw_state, int& w, int& h, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE);
+    bool calcDrawableSize(int draw_state, int& w, int& h, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE);
 };
 
 
@@ -51,30 +51,30 @@ DECLARE_DRFACTORY(StateTextDrawable)
 class PushableStateTextDrawable : public StateTextDrawable
 {
 public:
-	PushableStateTextDrawable() {}
-	PushableStateTextDrawable(const TRStyleElement* elements) : StateTextDrawable(elements) { }
-	PushableStateTextDrawable(Style* s) : StateTextDrawable(s) { }
-	PushableStateTextDrawable(PushableStateTextDrawable* s) :StateTextDrawable((StateTextDrawable*)s) { }
-	
-	CopyOnWriteable* clone() {
-		return HFCL_NEW_EX(PushableStateTextDrawable, (this));
-	}
-	
-	void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE)
-	{
-		IntRect rcoff = rc;
-		if(draw_state == DRAWSTATE_PUSHED)
-			rcoff.offset(0, 2);
-		StateTextDrawable::draw(gc, draw_state, rcoff, data, type);
-	}
+    PushableStateTextDrawable() {}
+    PushableStateTextDrawable(const TRStyleElement* elements) : StateTextDrawable(elements) { }
+    PushableStateTextDrawable(Style* s) : StateTextDrawable(s) { }
+    PushableStateTextDrawable(PushableStateTextDrawable* s) :StateTextDrawable((StateTextDrawable*)s) { }
 
-	bool calcDrawableSize(int draw_state, int& w, int& h, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE)
-	{
-		bool bret = StateTextDrawable::calcDrawableSize(draw_state, w, h, data, type);
-		if(bret)
-			h += 2;
-		return bret;
-	}
+    CopyOnWriteable* clone() {
+        return HFCL_NEW_EX(PushableStateTextDrawable, (this));
+    }
+
+    void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE)
+    {
+        IntRect rcoff = rc;
+        if(draw_state == DRAWSTATE_PUSHED)
+            rcoff.offset(0, 2);
+        StateTextDrawable::draw(gc, draw_state, rcoff, data, type);
+    }
+
+    bool calcDrawableSize(int draw_state, int& w, int& h, DWORD data = 0, DR_DATA_TYPE type = DRDT_NONE)
+    {
+        bool bret = StateTextDrawable::calcDrawableSize(draw_state, w, h, data, type);
+        if(bret)
+            h += 2;
+        return bret;
+    }
 
 };
 

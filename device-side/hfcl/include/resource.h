@@ -22,7 +22,6 @@
 #ifndef HFCL_RESOURCE_H_
 #define HFCL_RESOURCE_H_
 
-#include "resource/drawableres.h"
 #include "resource/fontres.h"
 #include "resource/imageres.h"
 #include "resource/resloader.h"

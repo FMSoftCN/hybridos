@@ -23,11 +23,11 @@
 #ifndef HFCL_ACTIVITY_BASEACTIVITY_H_
 #define HFCL_ACTIVITY_BASEACTIVITY_H_
 
-#include "common/common.h"
-#include "common/stlalternative.h"
-#include "common/contextstream.h"
-#include "activity/intent.h"
-#include "activity/controller.h"
+#include "../common/common.h"
+#include "../common/stlalternative.h"
+#include "../common/contextstream.h"
+#include "intent.h"
+#include "controller.h"
 
 namespace hfcl {
 

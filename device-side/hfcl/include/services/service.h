@@ -22,7 +22,7 @@
 #ifndef HFCL_SERVICES_SERVICE_H_
 #define HFCL_SERVICES_SERVICE_H_
 
-#include "common/common.h"
+#include "../common/common.h"
 
 namespace hfcl {
 

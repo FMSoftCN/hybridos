@@ -22,12 +22,12 @@
 #ifndef HFCL_RESOURCE_RESLOADER_H_
 #define HFCL_RESOURCE_RESLOADER_H_
 
-#include "graphics/graphicscontext.h"
-#include "graphics/font.h"
-#include "graphics/image.h"
-#include "graphics/gifanimate.h"
-#include "view/animateimageview.h"
-#include "resource/restypes.h"
+#include "../graphics/graphicscontext.h"
+#include "../graphics/font.h"
+#include "../graphics/image.h"
+#include "../graphics/gifanimate.h"
+#include "../view/animateimageview.h"
+#include "../resource/restypes.h"
 
 namespace hfcl {
 

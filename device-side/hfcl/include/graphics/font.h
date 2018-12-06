@@ -22,8 +22,8 @@
 #ifndef HFCL_GRAPHICS_FONT_H_
 #define HFCL_GRAPHICS_FONT_H_
 
-#include "common/object.h"
-#include "graphics/graphicscontext.h"
+#include "../common/object.h"
+#include "../graphics/graphicscontext.h"
 
 namespace hfcl {
 
@@ -39,11 +39,11 @@ public:
     int getFontSize();
     int getFontRotation();
     Logfont* getLogfont();
-    
-	static Font* createFont(const char* fontname);
+
+    static Font* createFont(const char* fontname);
 
 protected:
-	Font(Logfont* logfont) : m_logfont(logfont) { }
+    Font(Logfont* logfont) : m_logfont(logfont) { }
     Logfont* m_logfont;
 };
 

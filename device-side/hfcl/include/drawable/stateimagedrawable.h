@@ -22,25 +22,25 @@
 #ifndef _HFCL_StateImageDrawable_H
 #define _HFCL_StateImageDrawable_H
 
-#include "common/stlalternative.h"
-#include "drawable/drawable.h"
+#include "../common/stlalternative.h"
+#include "../drawable/drawable.h"
 
 namespace hfcl {
 
 class StateImageDrawable : public SimpleDrawable
 {
 public:
-	StateImageDrawable() {}
-	StateImageDrawable(const TRStyleElement* style_res) : SimpleDrawable(style_res) { }
-	StateImageDrawable(Style *s) : SimpleDrawable(s) { }
-	StateImageDrawable(StateImageDrawable* s) : SimpleDrawable((Style*)s) { }
+    StateImageDrawable() {}
+    StateImageDrawable(const TRStyleElement* style_res) : SimpleDrawable(style_res) { }
+    StateImageDrawable(Style *s) : SimpleDrawable(s) { }
+    StateImageDrawable(StateImageDrawable* s) : SimpleDrawable((Style*)s) { }
 
-	CopyOnWriteable* clone() {
-		return HFCL_NEW_EX(StateImageDrawable, (this));
-	}
+    CopyOnWriteable* clone() {
+        return HFCL_NEW_EX(StateImageDrawable, (this));
+    }
 
-	
-	void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE); 
+
+    void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE);
 };
 
 

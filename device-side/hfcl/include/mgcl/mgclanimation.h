@@ -22,7 +22,7 @@
 #ifndef __HFCL_MGCLANIMATION_H__
 #define __HFCL_MGCLANIMATION_H__
 
-#include <mgeff.h>
+#include <mgeff/mgeff.h>
 
 
 namespace hfcl {

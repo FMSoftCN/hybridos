@@ -27,8 +27,8 @@
 #include <minigui/gdi.h>
 #include <minigui/window.h>
 
-#include "common/event.h"
-#include "view/panelview.h"
+#include "../common/event.h"
+#include "../view/panelview.h"
 
 namespace hfcl {
 

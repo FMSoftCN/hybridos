@@ -22,14 +22,14 @@
 #ifndef HFCL_ACTIVITY_ACTIVITYFACTORY_H_
 #define HFCL_ACTIVITY_ACTIVITYFACTORY_H_
 
-#include "activity/baseactivity.h"
+#include "baseactivity.h"
 
 namespace hfcl {
 
 enum {
-	POS_HIDE = 0,
-	POS_STANDBY = 0x01,
-	POS_MAINFRAME = 0x02,
+    POS_HIDE = 0,
+    POS_STANDBY = 0x01,
+    POS_MAINFRAME = 0x02,
 };
 
 typedef bool (*CB_ONBOOT) (void);
@@ -41,9 +41,9 @@ public:
     virtual BaseActivity* create(void) = 0;
 
     struct ActivityData {
-        int 	    position;
-        int 	    pos_row;
-        int 	    pos_col;
+        int         position;
+        int         pos_row;
+        int         pos_col;
         const char *name;
         const char *description;
         int         captionId;
@@ -66,9 +66,9 @@ public:
     class actClassName##Factory: public ActivityFactory {          \
         public:                                               \
             static actClassName##Factory* getInstance(void);  \
-        	virtual BaseActivity* create(void);                    \
+            virtual BaseActivity* create(void);                    \
         private:                                              \
-		    ActivityFactory::ActivityData* getActivityInfo();         \
+            ActivityFactory::ActivityData* getActivityInfo();         \
     };
 
 /*
@@ -77,7 +77,7 @@ public:
  */
 #define DEFINE_ACTIVITY_FACTORY(actClassName)                     \
     actClassName##Factory* actClassName##Factory::getInstance(void) { \
-		static actClassName##Factory* s_single = NULL;                       \
+        static actClassName##Factory* s_single = NULL;                       \
         if (!s_single) {                                              \
             s_single = HFCL_NEW_EX(actClassName##Factory, ());        \
         }                                                             \
@@ -88,18 +88,18 @@ public:
     }
 
 #define BEGIN_DEFINE_ACTIVITY(actClassName)             \
-	DEFINE_ACTIVITY_FACTORY(actClassName)               \
-	ActivityFactory::ActivityData*                    \
-		actClassName##Factory::getActivityInfo (){      \
-			static ActivityData _act_info = {0}; \
-			if(_act_info.name == NULL) { 
+    DEFINE_ACTIVITY_FACTORY(actClassName)               \
+    ActivityFactory::ActivityData*                    \
+        actClassName##Factory::getActivityInfo (){      \
+            static ActivityData _act_info = {0}; \
+            if(_act_info.name == NULL) {
 
 #define END_DEFINE_ACTIVITY  } return &_act_info; }
 
 #define ACTIVITY_SET(name, value)    _act_info.name = value;
 
 /*
- *  get act-factory from act-class-name 
+ *  get act-factory from act-class-name
  *  USAGE : GET_ACTIVITY_FACTORY(Desktop);
  */
 #define GET_ACTIVITY_FACTORY(actClassName)    \

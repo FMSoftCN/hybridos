@@ -23,7 +23,7 @@
 #ifndef _HFCL_TrackBarView_h
 #define _HFCL_TrackBarView_h
 
-#include "view/view.h"
+#include "view.h"
 
 namespace hfcl {
 

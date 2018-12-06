@@ -23,7 +23,7 @@
 #ifndef  _FORMATEDITVIEW_H 
 #define  _FORMATEDITVIEW_H
 
-#include "view/view.h"
+#include "view.h"
 
 namespace hfcl {
 

@@ -22,6 +22,8 @@
 #ifndef HFCL_RESOURCE_DRAWABLERES_H_
 #define HFCL_RESOURCE_DRAWABLERES_H_
 
+#include "restypes.h"
+
 namespace hfcl {
 
 class DrawableRes {

@@ -22,9 +22,9 @@
 #ifndef HFCL_COMMON_LOG_H_
 #define HFCL_COMMON_LOG_H_
 
-#include "common/common.h"
-#include "common/stlalternative.h"
-#include "common/intrect.h"
+#include "../common/common.h"
+#include "../common/stlalternative.h"
+#include "../common/intrect.h"
 
 // TUNNING CONDITION: 
 #define HFCL_LOG_FILE   "/dev/null"

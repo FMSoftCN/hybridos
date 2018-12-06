@@ -22,30 +22,30 @@
 #ifndef _HFCL_ColorDrawable_h
 #define _HFCL_ColorDrawable_h
 
-#include "common/stlalternative.h"
-#include "drawable/drawable.h"
+#include "../common/stlalternative.h"
+#include "drawable.h"
 
 namespace hfcl {
 
 class ColorDrawable : public Drawable
 {
 public:
-	ColorDrawable() { init(); }
-	ColorDrawable(const TRStyleElement* style_res) : Drawable(style_res) { init(style_res); }
-	ColorDrawable(Style* s) : Drawable(s) { init(); }
-	ColorDrawable(ColorDrawable* dr);
+    ColorDrawable() { init(); }
+    ColorDrawable(const TRStyleElement* style_res) : Drawable(style_res) { init(style_res); }
+    ColorDrawable(Style* s) : Drawable(s) { init(); }
+    ColorDrawable(ColorDrawable* dr);
 
-	CopyOnWriteable* clone() {
-		return HFCL_NEW_EX(ColorDrawable, (this));
-	}
+    CopyOnWriteable* clone() {
+        return HFCL_NEW_EX(ColorDrawable, (this));
+    }
 
-	void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE); 
-	bool setElement(int e_id, HTData value);
-	HTData getElement(int e_id) const;
+    void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE); 
+    bool setElement(int e_id, HTData value);
+    HTData getElement(int e_id) const;
 
 protected:
-	DWORD m_color;
-	void init(const TRStyleElement *elements = NULL);
+    DWORD m_color;
+    void init(const TRStyleElement *elements = NULL);
 };
 
 DECLARE_DRFACTORY(ColorDrawable)

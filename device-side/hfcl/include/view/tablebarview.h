@@ -19,22 +19,6 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
- /*
- ** Copyright (C) 2002 ~ 2011 Beijing FMSoft Technology Co., Ltd.
- ** All rights reserved by FMSoft.
- **
- ** FileName        : TableBarView.h
- ** FileDescription : TODO
- **
- ** $ Current Version    : V.0001 $
- ** $ Current Maintainer : xulei-laptop $
- ** $ Completion Date    : 2011-09-07 09:33:05 $
- **
- ** History Version : V.0001
- ** Author          : xulei-laptop
- ** Create Date     : 星期三 九月 14, 2011
- */ 
-
 #ifndef _HFCL_TABLEBARVIEW_H
 #define _HFCL_TABLEBARVIEW_H
 
@@ -42,7 +26,7 @@
 #include "pageview.h"
 #include "gridview.h"
 #include "itemview.h"
-#include "graphics/image.h"
+#include "../graphics/image.h"
 
 
 namespace hfcl {

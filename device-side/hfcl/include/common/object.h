@@ -22,7 +22,7 @@
 #ifndef HFCL_COMMON_OBJECT_H_
 #define HFCL_COMMON_OBJECT_H_
 
-#include "common/common.h"
+#include "../common/common.h"
 
 namespace hfcl {
 
@@ -77,13 +77,13 @@ class RefCount : Noncopyable {
          */
         int getRefCnt() const { return m_refCount; }
 
-		inline int refInc() {return ++m_refCount;}
-		inline int refDec() {return --m_refCount;}
+        inline int refInc() {return ++m_refCount;}
+        inline int refDec() {return --m_refCount;}
 
         /**
          * Increment the reference count. Must be balanced by a call to unref().
          */
-        int ref() 
+        int ref()
         {
             return refInc();
         }
@@ -94,11 +94,11 @@ class RefCount : Noncopyable {
          * case, then the object needs to have been allocated via new, and not on
          * the stack.
          */
-        int unref() 
+        int unref()
         {
-			if (refDec () == 0) {
-				HFCL_DELETE(this);
-				return 0;
+            if (refDec () == 0) {
+                HFCL_DELETE(this);
+                return 0;
             }
             return m_refCount;
         }
@@ -107,7 +107,7 @@ class RefCount : Noncopyable {
          * Helper version of ref(), that first checks to see if this is not null.
          * If this is null, then do nothing.
          */
-        inline int safeRef() 
+        inline int safeRef()
         {
             return ref();
         }
@@ -116,7 +116,7 @@ class RefCount : Noncopyable {
          * Helper version of unref(), that first checks to see if this is not null.
          * If this is null, then do nothing.
          */
-        inline int safeUnref() 
+        inline int safeUnref()
         {
             return unref();
         }
@@ -132,7 +132,7 @@ protected:
     RefCount* _ptr;
 
 public:
-	AutoPtr() : _ptr(NULL) {}
+    AutoPtr() : _ptr(NULL) {}
 
     AutoPtr(RefCount* p_ptr) : _ptr(p_ptr)
     {
@@ -147,11 +147,11 @@ public:
             _ptr->ref();
     }
 
-	~AutoPtr() { 
-		if(_ptr){
-			_ptr->safeUnref(); 
-		}
-	}
+    ~AutoPtr() {
+        if(_ptr){
+            _ptr->safeUnref();
+        }
+    }
 
     void set(RefCount* p_ptr)
     {
@@ -187,6 +187,6 @@ public:
     };
 
 } // namespace hfcl
-	
+
 #endif /* HFCL_COMMON_OBJECT_H_ */
 
