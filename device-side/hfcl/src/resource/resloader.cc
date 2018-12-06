@@ -26,29 +26,6 @@
 
 namespace hfcl {
 
-extern INNER_RES_ARRAY g_ResArray[];
-extern int g_ResCount;
-
-INNER_RES_INFO* GetImageResInfo(const char *filepath)
-{
-    int i, j;
-    int cont;
-    INNER_RES_INFO* info = NULL;
-
-    for (i = 0; i < g_ResCount; i++) {
-        info = g_ResArray[i].pInner_res_info;
-        cont = g_ResArray[i].number;
-        for (j = 0; j < cont; j++) {
-            if (info[j].res_name != NULL &&
-                    strcmp(filepath, info[j].res_name) == 0) {
-                return &info[j];
-            }
-        }
-    }
-
-    return NULL;
-}
-
 ResLoader* ResLoader::m_singleton = NULL;
 
 ResLoader::ResLoader()
@@ -63,7 +40,7 @@ ResLoader* ResLoader::getInstance()
     return ResLoader::m_singleton;
 }
 
-Logfont* ResLoader::getFont(const char* fontname/*, Style* style = NULL*/)
+Logfont* ResLoader::getFont(const char* fontname)
 {
     string fontName(fontname);
     FontResMap::iterator it = m_fontRes.find(fontName);
@@ -96,29 +73,14 @@ bool ResLoader::releaseFont(const char* fontname)
     return true;
 }
 
-void ResLoader::registerInnerRes(int res_type, INNER_RES_INFO * resources,
-        int count)
-{
-    if (res_type != R_TYPE_IMAGE || resources == NULL || count <= 0)
-        return;
-
-    for (int i=0; i < count; i++) {
-        if (resources[i].res_name != NULL &&
-                resources[i].data != NULL && resources[i].size >= 0) {
-            InnerImage & inner = m_innerImageRes[resources[i].res_name];
-            inner.resInfo = &resources[i];
-        }
-    }
-}
-
 GifAnimate* ResLoader::getGifAnimate(const char* filepath)
 {
     GifAnimate* gif = NULL;
-    INNER_RES_INFO* info = NULL;
+    const HFCL_INCORE_RES* info = NULL;
 
     // GifAnimate : avoid mem leak TODO
     gif = HFCL_NEW_EX(GifAnimate, ());
-    info = GetImageResInfo(filepath);
+    info = getIncoreData (filepath);
 
     if (info != NULL) {
         gif->createGifAnimateFromMem((const char*)info->data, info->size);
@@ -134,47 +96,11 @@ GifAnimate* ResLoader::getGifAnimate(const char* filepath)
 
 Image* ResLoader::getImage(const char* filepath)
 {
-#if 0
-    Image* image = NULL;
-    INNER_RES_INFO* info = NULL;
-
-    info = GetImageResInfo(filepath);
-    if (info != NULL) {
-        image = Image::loadImage(info->res_name, (const char*)info->data,
-                info->size);
-        if (image != NULL) {
-            image->safeRef();
-            return image;
-        }
-    }
-
-    ImageResMap::iterator it = m_imageRes.find(filepath);
-    if (it != m_imageRes.end()) {
-        it->second->safeRef();
-        return it->second;
-    }
-
-    image = Image::loadImage(filepath);
-    if(NULL != image){
-        image->safeRef();
-        m_imageRes[filepath] = image;
-    }
-
-    return image;
-#else
     return Image::loadImage(filepath);
-#endif
 }
 
 bool ResLoader::releaseImage(const char* filepath)
 {
-    InnerImageResMap::iterator iit = m_innerImageRes.find(filepath);
-    if (iit != m_innerImageRes.end() && iit->second.image != NULL){
-        iit->second.image->safeUnref();
-        iit->second.image = NULL;
-        return true;
-    }
-
     ImageResMap::iterator it = m_imageRes.find(filepath);
     if (it != m_imageRes.end() && it->second != NULL){
         it->second->safeUnref();
@@ -188,9 +114,9 @@ bool ResLoader::releaseImage(const char* filepath)
 Bitmap* ResLoader::getBitmap(const char* filename)
 {
     Bitmap *pbmp = NULL;
-    INNER_RES_INFO* info = NULL;
+    const HFCL_INCORE_RES* info = NULL;
 
-    info = GetImageResInfo(filename);
+    info = getIncoreData (filename);
     if (NULL != (pbmp = HFCL_NEW_EX(Bitmap, ()))) {
         if (NULL != info) {
             const char * externs_name = NULL;
@@ -252,6 +178,128 @@ bool ResLoader::releaseBitmap(Bitmap* pbmp)
     return false;
 }
 
+void* ResLoader::loadData (const char* filepath, bool *isincore)
+{
+    NameIncoresMap::iterator it = m_nameIncores.find ((HTData)filepath);
+    if (it == m_nameIncores.end()) {
+        return NULL;
+    }
+
+    const HFCL_INCORE_RES* incores = (const HFCL_INCORE_RES*)it->second;
+    if (incores) {
+        *isincore = true;
+        return incores->data;
+    }
+
+    /* try to load from file */
+    *isincore = false;
+
+    MG_RWops* src;
+    src = MGUI_RWFromFile (filepath, "r");
+    if (src == NULL) {
+        _ERR_PRINTF ("ResLoader::loadData: failed to open res file: %s\n",
+                filepath);
+        return NULL;
+    }
+
+    char* data = NULL;
+    int nr_read;
+    int size = MGUI_RWseek (src, 0, SEEK_END);
+    if (size <= 0)
+        goto error;
+
+    data = (char*)malloc (size);
+    if (data == NULL)
+        goto error;
+
+    MGUI_RWseek (src, 0, SEEK_SET);
+    nr_read = MGUI_RWread (src, data, 1, size);
+    if (nr_read < size) {
+        free (data);
+        data = NULL;
+    }
+
+error:
+    MGUI_FreeRW (src);
+    return data;
+}
+
+const HFCL_INCORE_RES* ResLoader::getIncoreData (const char* resname)
+{
+    NameIncoresMap::iterator it = m_nameIncores.find ((HTData)resname);
+    if (it == m_nameIncores.end()) {
+        return NULL;
+    }
+
+    return (const HFCL_INCORE_RES*)it->second;
+}
+
+void ResLoader::registerIncoreRes (const char* resname,
+        const HFCL_INCORE_RES *incores, int count)
+{
+    for (int i = 0; i < count; i++) {
+        m_nameIncores [(HTData)resname] = (HTData)(incores + i);
+    }
+}
+
+#if 0 /* VM: deprecated code */
+extern INNER_RES_ARRAY g_ResArray[];
+extern int g_ResCount;
+
+INNER_RES_INFO* GetImageResInfo(const char *filepath)
+{
+    int i, j;
+    int cont;
+    INNER_RES_INFO* info = NULL;
+
+    for (i = 0; i < g_ResCount; i++) {
+        info = g_ResArray[i].pInner_res_info;
+        cont = g_ResArray[i].number;
+        for (j = 0; j < cont; j++) {
+            if (info[j].res_name != NULL &&
+                    strcmp(filepath, info[j].res_name) == 0) {
+                return &info[j];
+            }
+        }
+    }
+
+    return NULL;
+}
+
+void ResLoader::registerInnerRes(int res_type, INNER_RES_INFO * resources,
+        int count)
+{
+    if (res_type != R_TYPE_IMAGE || resources == NULL || count <= 0)
+        return;
+
+    for (int i=0; i < count; i++) {
+        if (resources[i].res_name != NULL &&
+                resources[i].data != NULL && resources[i].size >= 0) {
+            InnerImage & inner = m_innerImageRes[resources[i].res_name];
+            inner.resInfo = &resources[i];
+        }
+    }
+}
+
+bool ResLoader::releaseImage(const char* filepath)
+{
+    InnerImageResMap::iterator iit = m_innerImageRes.find(filepath);
+    if (iit != m_innerImageRes.end() && iit->second.image != NULL){
+        iit->second.image->safeUnref();
+        iit->second.image = NULL;
+        return true;
+    }
+
+    ImageResMap::iterator it = m_imageRes.find(filepath);
+    if (it != m_imageRes.end() && it->second != NULL){
+        it->second->safeUnref();
+        m_imageRes.erase(it);
+        return true;
+    }
+
+    return false;
+}
+
 BitmapFrameArray* ResLoader::InnerImage::getBitmapFrame()
 {
     // BitmapFrame * !!!
@@ -285,6 +333,8 @@ void RegisterInnerResource(int type, INNER_RES_INFO *resource, int count)
 {
     ResLoader::getInstance()->registerInnerRes(type, resource, count);
 }
+
+#endif /* VM: deprecated code */
 
 } // namespace hfcl
 

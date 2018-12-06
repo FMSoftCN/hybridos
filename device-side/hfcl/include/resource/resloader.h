@@ -33,7 +33,7 @@ namespace hfcl {
 
 class ResLoader {
 public:
-    Logfont* getFont(const char* fontname/*, Style* style*/);
+    Logfont* getFont(const char* fontname);
     bool releaseFont(const char* fontname);
 
     Image* getImage(const char* filepath);
@@ -45,17 +45,12 @@ public:
     bool releaseBitmap(Bitmap* pbmp);
 
     void* loadData (const char* filepath, bool *isincore);
-    void* getIncoreData (const char* filepath, size_t *datasize);
+    const HFCL_INCORE_RES *getIncoreData (const char* resname);
 
-    void registerInnerRes(int res_type, INNER_RES_INFO *resources, int count);
+    void registerIncoreRes (const char* resname,
+            const HFCL_INCORE_RES *incores, int count);
 
-    static ResLoader* getInstance(void);
-
-    ~ResLoader() { }
-
-private:
-    ResLoader();
-
+#if 0 /* VM: deprecated code */
     struct InnerImage {
         INNER_RES_INFO * resInfo;
         Image * image;
@@ -67,18 +62,33 @@ private:
         INNER_RES_INFO* getResInfo(void);
     };
 
+    void registerInnerRes(int res_type, INNER_RES_INFO *resources, int count);
+
+    MAPCLASS(string, InnerImage, InnerImageResMap);
+    InnerImageResMap m_innerImageRes;
+#endif /* VM: deprecated code */
+
+    static ResLoader* getInstance(void);
+
+    ~ResLoader() { }
+
+private:
+    ResLoader();
+
     MAPCLASSKEY(string, Font*, FontResMap);
     MAPCLASSKEY(string, Image*, ImageResMap);
     MAPCLASSKEY(string, Bitmap*, BitmapResMap);
-    MAPCLASS(string, InnerImage, InnerImageResMap);
+    MAPCLASSKEY(HTData, HTData, NameIncoresMap);
     PAIR(string, Font*, FontResPair);
     PAIR(string, Image*, ImageResPair);
     PAIR(string, Bitmap*, BitmapResPair);
+    PAIR(HTData, HTData, NameIncoresPair);
 
     FontResMap   m_fontRes;
     ImageResMap  m_imageRes;
-    InnerImageResMap m_innerImageRes;
     BitmapResMap m_bitmapRes;
+
+    NameIncoresMap m_nameIncores;
 
     static ResLoader* m_singleton;
 };

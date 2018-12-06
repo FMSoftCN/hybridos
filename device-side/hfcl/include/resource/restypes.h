@@ -155,7 +155,6 @@ typedef enum {
 
 typedef struct _HFCL_INCORE_RES {
     HIDResType type;
-    const char* res_name;
     unsigned char* data;
     unsigned int size;
 } HFCL_INCORE_RES;

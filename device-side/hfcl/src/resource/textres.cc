@@ -324,13 +324,12 @@ int TextResGnuMsg::doLoad (MG_RWops* src)
 bool TextResGnuMsg::load ()
 {
     MG_RWops* src;
-    size_t size;
     const char* mo_file = m_res_name;
-    char* res_data
-        = (char*)ResLoader::getInstance()->getIncoreData (mo_file, &size);
+    const HFCL_INCORE_RES* res_info
+        = ResLoader::getInstance()->getIncoreData (mo_file);
 
-    if (res_data) {
-        src = MGUI_RWFromMem (res_data, size);
+    if (res_info) {
+        src = MGUI_RWFromMem (res_info->data, res_info->size);
     }
     else {
         src = MGUI_RWFromFile (mo_file, "r");
