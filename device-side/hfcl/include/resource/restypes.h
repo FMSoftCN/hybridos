@@ -173,29 +173,17 @@ typedef struct _HFCL_ZIPPED_STRINGS {
 
 namespace hfcl {
 
-typedef struct INNER_RES_INFO {
-    const char* res_name;
-    unsigned char* data;
-    unsigned int size;
-} INNER_RES_INFO;
-
-typedef struct INNER_RES_ARRAY {
-    HIDResType type;
-    INNER_RES_INFO *pInner_res_info;
-    unsigned int number;
-} INNER_RES_ARRAY;
-
 typedef struct MENU_RES_ARRAY
 {
     unsigned int MenuID;
     void * Menufunction;
-}MENU_RES_ARRAY;
+} MENU_RES_ARRAY;
 
 typedef struct UI_RES_ARRAY
 {
     unsigned int UiID;
     void * UiFunction;
-}UI_RES_ARRAY;
+} UI_RES_ARRAY;
 
 ///// BMPFont information
 typedef struct TRBMPDevFontItemInfo {
@@ -203,50 +191,50 @@ typedef struct TRBMPDevFontItemInfo {
     unsigned int       num_char;
     unsigned int       glyph_width;
     HTResId        bmp_id;
-}TRBMPDevFontItemInfo;
+} TRBMPDevFontItemInfo;
 
 typedef struct TRStyleElement {
     int id;
     DWORD value;
-}TRStyleElement;
+} TRStyleElement;
 
 typedef struct TRDrawableArrayItem {
     int id;
     const char* base_name;
     int super_style_id;
     TRStyleElement style_element[DR_DRSET_DRSETGROUP_ARRAY_SIZE];
-}TRDrawableArrayItem;
+} TRDrawableArrayItem;
 
 //DrawableSet Data
 typedef struct TRDrawableSetItem {
     int  dr_id;
     int  drres_id;
-}TRDrawableSetItem;
+} TRDrawableSetItem;
 
 //DrawableSet Data
 typedef struct TRDrawableSetArrayItem {
     int    drset_id;
     int    super_drset_id;
     TRDrawableSetItem drawables[DR_DRSET_DRSETGROUP_ARRAY_SIZE];
-}TRDrawableSetArrayItem;
+} TRDrawableSetArrayItem;
 
 //Theme Data
 typedef struct TRThemeItem {
     int   theme_drset_id;
     int   drset_id;
-}TRThemeItem;
+} TRThemeItem;
 
 //DrawableSet Group
 typedef struct TRDrawableSetGroupItem {
     int    drset_id;
     int    drsetres_id;
-}TRDrawableSetGroupItem;
+} TRDrawableSetGroupItem;
 
 typedef struct TRDrawableSetGroupArrayItem {
     int    drsetgroup_id;
     HTResId    drsetgroup_super_id;
     TRDrawableSetGroupItem drawablesets[DR_DRSET_DRSETGROUP_ARRAY_SIZE];
-}TRDrawableSetGroupArrayItem;
+} TRDrawableSetGroupArrayItem;
 
 } // namespace hfcl
 

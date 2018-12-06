@@ -27,8 +27,8 @@
 
 #define end_respkg
 
-#define data_get(id, type)  
-#define data_get_any(id)   
+#define data_get(id, type)
+#define data_get_any(id)
 #define data_get_image(id)
 #define data_get_text(id)
 #define data_get_text_id(id)
@@ -38,7 +38,7 @@
 //package sys package
 #define begin_sys_respkg  begin_respkg(sys, 0)
 #define end_sys_respkg  end_respkg
-#define set_common_style(style_id) 
+#define set_common_style(style_id)
 
 
 //internal package resource
@@ -46,12 +46,14 @@
 
 
 //text resource
-#define begin_text_res(lang, encoding) \
-    enum { RESID(txt_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_TEXT, 0),
+#define begin_text_res() \
+    enum { RESID(txt_res_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_VOID, 0),
 
-#define end_text_res  RESID(txt_end_id) };
+#define text_res_raw(lang, encoding, txt_file)
+#define text_res_zipped(lang, encoding, txt_file)
+#define text_res_gnumsg(lang, encoding, txt_file)
 
-//#define text(name, text_value)  RESID(txt_##name),
+#define end_text_res  RESID(txt_res_end_id) };
 
 #undef extern_lang
 
@@ -81,9 +83,9 @@
 #define devbmpfont(s,n,g,i)
 
 //sys resource
-#define sys_style(name)    
-#define sys_image(name)    
-#define sys_font(name)         
+#define sys_style(name)
+#define sys_image(name)
+#define sys_font(name)
 
 //style resource
 #define self_style(name)
@@ -118,12 +120,12 @@
 #define style_font(id, font_id)
 
 //sys HTResId by name
-#define sysid_font(name)  
-#define sysid_image(name) 
-//#define sysid_text(name)  
-#define sysid_style(name) 
-#define sysid_dr(name)    
-#define sysid_drset(name)    
+#define sysid_font(name)
+#define sysid_image(name)
+//#define sysid_text(name)
+#define sysid_style(name)
+#define sysid_dr(name)
+#define sysid_drset(name)
 //get HTResId by name
 #define my_font(name)
 #define my_image(name)
@@ -167,9 +169,9 @@
 
 #define begin_drsetgroup(name, super_drsetgroup) RESID(drsetgroup_##name),
 
-#define end_drsetgroup 
+#define end_drsetgroup
 
-#define drset(id, drset_id) 
+#define drset(id, drset_id)
 
 #define begin_common_drsetgroup(view, super_group)
 #define end_common_drsetgroup end_drsetgroup
@@ -291,7 +293,7 @@
 #define set(Name, value)
 #define addTablePage(value1, value2, value3)
 #define setRect(left, top, right, bottom)
-#define setRectWH(left, top, width, height)	//JYSEO_0218_add macro
+#define setRectWH(left, top, width, height)
 #define setStyle(style_id)
 #define _m(Name, args)
 #define map(name)
@@ -307,8 +309,8 @@
 #define end_import_view
 #define begin_foreach(n)
 #define end_foreach
-#define begin_resid(name) 
-#define end_resid  
-#define my_imageid(name) 
-#define my_textid(name)    
+#define begin_resid(name)
+#define end_resid
+#define my_imageid(name)
+#define my_textid(name)
 

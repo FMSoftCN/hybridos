@@ -44,7 +44,7 @@ public:
     bool releaseBitmap(const char* filepath);
     bool releaseBitmap(Bitmap* pbmp);
 
-    void* loadData (const char* filepath, bool *isincore);
+    void* loadData (const char* filepath, bool *fromincore);
     const HFCL_INCORE_RES *getIncoreData (const char* resname);
 
     void registerIncoreRes (const char* resname,
@@ -87,13 +87,10 @@ private:
     FontResMap   m_fontRes;
     ImageResMap  m_imageRes;
     BitmapResMap m_bitmapRes;
-
     NameIncoresMap m_nameIncores;
 
     static ResLoader* m_singleton;
 };
-
-INNER_RES_INFO* GetImageResInfo(const char *filepath);
 
 } // namespace hfcl
 

@@ -28,20 +28,17 @@
 //package sys package
 #define begin_sys_respkg  begin_respkg(sys, 0)
 #define end_sys_respkg  end_respkg
-#define set_common_style(style_id) 
+#define set_common_style(style_id)
 
 //internal package resource
 #define def_name(name)
 
 //text resource
-#define begin_text_res(lang, encoding) \
-    static const ResourceEntry text_##lang##encoding##res[] = {
-
-#define end_text_res {0, NULL} };
-
-//#define text(name, text_value)  { RESID(txt_##name), text_value },
-
-#define extern_lang 1
+#define begin_text_res()
+#define text_res_raw(lang, encoding, txt_file)
+#define text_res_zipped(lang, encoding, txt_file)
+#define text_res_gnumsg(lang, encoding, txt_file)
+#define end_text_res
 
 //image resource
 #define begin_image_res() \
@@ -76,14 +73,14 @@
 #endif
 //devbmp font resource
 #define begin_devbmpfont(devfont_name, font_name) \
-	static const TRBMPDevFontItemInfo devbmpfont_##devfont_name##_item_infos[] = {
+    static const TRBMPDevFontItemInfo devbmpfont_##devfont_name##_item_infos[] = {
 
 #define end_devbmpfont  {NULL, 0, 0, 0 } };
 #define devbmpfont(start_mchar, num_char, glyph_width, img_id) { \
-	(const char*)(start_mchar),  \
-	(unsigned int)(num_char), \
-	(int)(glyph_width), \
-	(HTResId)(img_id) },
+    (const char*)(start_mchar),  \
+    (unsigned int)(num_char), \
+    (int)(glyph_width), \
+    (HTResId)(img_id) },
 
 //sys resource
 #define sys_style(name)    GetStyleRes(SYSRESID(style_##name))
@@ -109,10 +106,10 @@
 #define end_styles
 
 #define begin_style_res(name, super_id) \
-	const TRStyleElement style_##name##_elements_res[] = {
+    const TRStyleElement style_##name##_elements_res[] = {
 
 #define begin_common_style \
-	const TRStyleElement style_c_o_m_m_o_n_elements_res[] = {
+    const TRStyleElement style_c_o_m_m_o_n_elements_res[] = {
 
 
 #define end_style_res    {-1, 0 } };
@@ -149,15 +146,15 @@
 
 //drawable resource
 #define begin_dr_res \
-	static const TRDrawableArrayItem drawable_res[] = {
+    static const TRDrawableArrayItem drawable_res[] = {
 
 #define end_dr_res \
-	{-1} };
+    {-1} };
 
-#define drawable(name, basename, super_style_id) 
+#define drawable(name, basename, super_style_id)
 
 #define begin_drawable(name, basename, super_style_id) \
-	{ RESID(dr_##name), basename, super_style_id, {
+    { RESID(dr_##name), basename, super_style_id, {
 
 #define end_drawable {-1, 0} }, },
 
@@ -166,19 +163,19 @@
 
 
 #define begin_common_drawable(common_id, basename, super_style_id) \
-	static const struct TRStyleElement drawable_style_##common_id##_info[] = {
+    static const struct TRStyleElement drawable_style_##common_id##_info[] = {
 
 #define end_common_drawable \
-	{-1, 0} };
+    {-1, 0} };
 
 #define begin_drset_res \
-	static const TRDrawableSetArrayItem drawableset_res[] = {
+    static const TRDrawableSetArrayItem drawableset_res[] = {
 
 #define end_drset_res \
-	{-1} };
+    {-1} };
 
 #define begin_drset(name, super_drset) \
-	{ RESID(drset_##name), super_drset, {
+    { RESID(drset_##name), super_drset, {
 
 //#define end_drset  {-1, 0 } };
 #define end_drset  {-1, 0 } }, },
@@ -188,28 +185,28 @@
 #define begin_common_drset_res
 #define end_common_drset_res
 #define begin_common_drset(view, super_drset) \
-	static const TRDrawableSetItem drset_view_##view##_info[] = {
+    static const TRDrawableSetItem drset_view_##view##_info[] = {
 
 #define end_common_drset \
-	{-1, 0 } }; 
+    {-1, 0 } };
 
 /////////////////////////////////
 //drawable set group
 // #define begin_drsetgroup_res
 #define begin_drsetgroup_res \
-	static const TRDrawableSetGroupArrayItem drawablesetgroup_res[] = {
+    static const TRDrawableSetGroupArrayItem drawablesetgroup_res[] = {
 
 #define begin_drsetgroup(name, super_drsetgroup) \
-	{ RESID(drsetgroup_##name), super_drsetgroup, {
+    { RESID(drsetgroup_##name), super_drsetgroup, {
 
-		
+
 //#define end_drsetgroup {-1, 0} };
 #define end_drsetgroup {-1, 0} }, },
 
 #define drset(id, drset_id) { (int)(id), (HTResId)(drset_id) },
 
 #define begin_common_drsetgroup(view, super_group) \
-		static const TRDrawableSetGroupItem drsetgroup_common_view_##view##_info[] = {
+        static const TRDrawableSetGroupItem drsetgroup_common_view_##view##_info[] = {
 
 #define begin_common_drsetgroup_res
 
@@ -217,16 +214,16 @@
 
 //#define end_common_drsetgroup end_drsetgroup
 #define end_common_drsetgroup \
-	{-1, 0 } };
+    {-1, 0 } };
 
 //#define end_drsetgroup_res
 #define end_drsetgroup_res \
-	{-1} };
+    {-1} };
 
 //theme
 #define begin_theme_res
 #define begin_theme(name) \
-	static const TRThemeItem theme_res_declare_##name##_info[] = {
+    static const TRThemeItem theme_res_declare_##name##_info[] = {
 
 #define map_theme_drset(theme_drset_id, drset_id) {theme_drset_id, drset_id},
 
@@ -262,18 +259,18 @@
         _parent = __menu;
 
 #define begin_theme_menu(list_theme_drset_id, item_theme_drset_id, menubar_theme_drset_id) \
-	do { Menu* __menu = HFCL_NEW_EX(Menu, (list_theme_drset_id, item_theme_drset_id, menubar_theme_drset_id)); \
-		setMenu(Parent, _parent) \
-		_parent = __menu;
+    do { Menu* __menu = HFCL_NEW_EX(Menu, (list_theme_drset_id, item_theme_drset_id, menubar_theme_drset_id)); \
+        setMenu(Parent, _parent) \
+        _parent = __menu;
 
 #define end_menu ret_menu = __menu; \
     } while(0);
 
-#define setMenuRect(l, t, r, b) 	__menu->setMenuRect(l, t, r, b);
-#define setOnMenuListener()    		__menu->addEventListener(listener);
-#define setMenu(Name, value)    	__menu->setMenu##Name(value);
-#define menu_set(Name, value)   	__menu->set##Name(value);
-#define menuAutoFit()           	__menu->autoFit();
+#define setMenuRect(l, t, r, b)     __menu->setMenuRect(l, t, r, b);
+#define setOnMenuListener()         __menu->addEventListener(listener);
+#define setMenu(Name, value)        __menu->setMenu##Name(value);
+#define menu_set(Name, value)       __menu->set##Name(value);
+#define menuAutoFit()               __menu->autoFit();
 #define menuHilightFirstEnable()    __menu->hilightFirstEnable();
 
 #define addMenuItemEx(str, image, id, disable, drset)    __menu->addCommandMenuItem(str, image, (int)(id), disable, drset);
@@ -295,8 +292,8 @@
     static View* create_UI_##name(View* parent, ViewContext* viewContext, ContentProvider * __content_provider__) { \
         View *ret_view = NULL, *_parent = NULL, *__view = NULL; \
         __view = (View*) ((DWORD)__view ^ 0x00); /* VW */ \
-		_parent= parent; \
-		__view = parent;
+        _parent= parent; \
+        __view = parent;
 
 #define end_ui_res  return ret_view ; }
 
@@ -313,9 +310,9 @@
         _parent = _parent;
 
 #define begin_theme_view(view_class, theme_drset_id) \
-	    do { view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSetResFromTheme(theme_drset_id))); \
-		__view->themeAble(true); \
-		__view->setThemeDrsetId(theme_drset_id); \
+        do { view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSetResFromTheme(theme_drset_id))); \
+        __view->themeAble(true); \
+        __view->setThemeDrsetId(theme_drset_id); \
         View* _parent = (View*)__view; \
         _parent = _parent;
 
@@ -339,8 +336,8 @@
 
 #define begin_theme_scrollable_view(view_class, theme_drset_id) \
     do { view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSetResFromTheme(theme_drset_id))); \
-		__view->themeAble(true); \
-		__view->setThemeDrsetId(theme_drset_id); \
+        __view->themeAble(true); \
+        __view->setThemeDrsetId(theme_drset_id); \
         ContainerView* _parent = __view->content(); \
         _parent = _parent;
 
@@ -363,7 +360,7 @@
 #define begin_item(view_class) \
     do { view_class* __view = HFCL_NEW(view_class); \
         ((ListView*)_parent)->addItem((ItemView*)__view); \
-        View *_parent = (View*)__view; 
+        View *_parent = (View*)__view;
 
 #define begin_theme_item(view_class, theme_drset_id) \
     do { view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSetResFromTheme(theme_drset_id))); \
@@ -379,7 +376,7 @@
 
 #define begin_composite_view(view_class, drset_group_id) \
     do { view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSetGroupRes(drset_group_id))); \
-        View* _parent = (View*)__view; 
+        View* _parent = (View*)__view;
 
 #define end_item end_view
 
@@ -399,42 +396,42 @@
 
 //import the other view
 #define import_view(view_id) do { \
-	CB_CREATE_VIEW _create_view = (CB_CREATE_VIEW)GetRes(view_id); \
-	if(_create_view) \
-		ret_view = _create_view((View*)_parent, viewContext, __content_provider__); \
-	}while(0);
+    CB_CREATE_VIEW _create_view = (CB_CREATE_VIEW)GetRes(view_id); \
+    if(_create_view) \
+        ret_view = _create_view((View*)_parent, viewContext, __content_provider__); \
+    }while(0);
 
 #define begin_import_view(ViewClass, view_id) do { \
-	CB_CREATE_VIEW _create_view = (CB_CREATE_VIEW)GetRes(view_id); \
-	if(_create_view) { \
-		ViewClass* __view =  (ViewClass*)_create_view((View*)_parent, viewContext, __content_provider__); \
-		if(__view) { \
-			View* _parent = NULL; _parent = (View*)__view; 
+    CB_CREATE_VIEW _create_view = (CB_CREATE_VIEW)GetRes(view_id); \
+    if(_create_view) { \
+        ViewClass* __view =  (ViewClass*)_create_view((View*)_parent, viewContext, __content_provider__); \
+        if(__view) { \
+            View* _parent = NULL; _parent = (View*)__view;
 
 #define end_import_view ret_view = (View*)__view; } } } while(0);
-	
+
 //controller
 #define begin_mode(name)  \
-		static ControllerMode name##_mode[] = {
+        static ControllerMode name##_mode[] = {
 
 #define end_mode };
 
 #define setMode(id, value, cmd) { (int)(id), (unsigned int)(value), (unsigned int)(cmd) },
 
 #define begin_controller_modes \
-	static ControllerModeList _controller_mode_lists[] = {
+    static ControllerModeList _controller_mode_lists[] = {
 
 #define end_controller_modes(def_mode) \
-	}; \
-	static ControllerModeManager _controller_mode_manager = { \
-		_controller_mode_lists, \
-		sizeof(_controller_mode_lists) / sizeof(ControllerModeList), \
-		RESID(mode_##def_mode) }; \
-	if(viewContext) viewContext->setControllerModeManager(&_controller_mode_manager);
-	
+    }; \
+    static ControllerModeManager _controller_mode_manager = { \
+        _controller_mode_lists, \
+        sizeof(_controller_mode_lists) / sizeof(ControllerModeList), \
+        RESID(mode_##def_mode) }; \
+    if(viewContext) viewContext->setControllerModeManager(&_controller_mode_manager);
+
 
 #define add_mode(name)  { RESID(mode_##name), sizeof(name##_mode) / sizeof(ControllerMode), name##_mode },
-		
+
 /*
 //#define addMenuItem(str, id) do { \
                                     MenuItem __menuitem(#str, id); \
@@ -458,13 +455,13 @@
     if (listener) __view->addEventListener(listener); }
 
 #define begin_foreach(n)  do { \
-	unsigned int i = 0; \
-	for(i = 0; i < n; i++) { \
-	    char c[4];\
-	    sprintf(c,"%d", i+1);\
+    unsigned int i = 0; \
+    for(i = 0; i < n; i++) { \
+        char c[4];\
+        sprintf(c,"%d", i+1);\
 
 #define end_foreach   } } while(0);
-	
+
 #define my(name)    RESID(var_##name)
 
 #define begin_resid(name) static  HTResId name[] = {

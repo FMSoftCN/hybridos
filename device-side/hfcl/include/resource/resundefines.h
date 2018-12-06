@@ -42,8 +42,10 @@
 
 //text resource
 #undef begin_text_res
+#undef text_res_raw
+#undef text_res_zipped
+#undef text_res_gnumsg
 #undef end_text_res
-#undef text
 
 
 //image resource

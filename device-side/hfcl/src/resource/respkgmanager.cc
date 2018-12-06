@@ -312,45 +312,45 @@ Menu* CreateMenuFromRes(HTResId id, Menu* parent, EventListener* listener)
     return NULL;
 }
 
-HIDLanguage GetResourceLanguage (void)
+HIDLanguage GetResourceLanguage (int pkgId)
 {
-    ResPackage* package = GetResPackage(0);
+    ResPackage* package = GetResPackage(pkgId);
     if (package)
         return package->getCurrentLanguage();
 
     return R_LANG_na_NA;
 }
 
-HIDEncoding GetResourceEncoding (void)
+HIDEncoding GetResourceEncoding (int pkgId)
 {
-    ResPackage* package = GetResPackage(0);
+    ResPackage* package = GetResPackage(pkgId);
     if (package)
         return package->getCurrentEncoding();
 
     return R_ENCODING_unknown;
 }
 
-bool SetResourceLanguage (HIDLanguage lang, HIDEncoding enc)
+bool SetResourceLanguage (HIDLanguage lang, HIDEncoding enc, int pkgId)
 {
-    ResPackage* package = GetResPackage(0);
+    ResPackage* package = GetResPackage(pkgId);
     if (package)
         return package->setCurrentLang(lang, enc);
 
     return false;
 }
 
-const char *GetText(HTStrId id)
+const char *GetText(HTStrId id, int pkgId)
 {
-    ResPackage *pkg = ResPkgManager::getResPkgManager()->getPackage(0);
+    ResPackage *pkg = ResPkgManager::getResPkgManager()->getPackage(pkgId);
     if (pkg)
         return pkg->getText (id);
 
     return NULL;
 }
 
-const char *GetText(const char* txt)
+const char *GetText(const char* txt, int pkgId)
 {
-    ResPackage *pkg = ResPkgManager::getResPkgManager()->getPackage(0);
+    ResPackage *pkg = ResPkgManager::getResPkgManager()->getPackage(pkgId);
     if (pkg)
         return pkg->getText (txt);
 

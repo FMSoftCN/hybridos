@@ -178,7 +178,7 @@ bool ResLoader::releaseBitmap(Bitmap* pbmp)
     return false;
 }
 
-void* ResLoader::loadData (const char* filepath, bool *isincore)
+void* ResLoader::loadData (const char* filepath, bool *fromincore)
 {
     NameIncoresMap::iterator it = m_nameIncores.find ((HTData)filepath);
     if (it == m_nameIncores.end()) {
@@ -187,12 +187,12 @@ void* ResLoader::loadData (const char* filepath, bool *isincore)
 
     const HFCL_INCORE_RES* incores = (const HFCL_INCORE_RES*)it->second;
     if (incores) {
-        *isincore = true;
+        *fromincore = true;
         return incores->data;
     }
 
     /* try to load from file */
-    *isincore = false;
+    *fromincore = false;
 
     MG_RWops* src;
     src = MGUI_RWFromFile (filepath, "r");
@@ -240,6 +240,12 @@ void ResLoader::registerIncoreRes (const char* resname,
     for (int i = 0; i < count; i++) {
         m_nameIncores [(HTData)resname] = (HTData)(incores + i);
     }
+}
+
+void RegisterIncoreRes (const char* resname,
+        const HFCL_INCORE_RES *incores, int count)
+{
+    ResLoader::getInstance()->registerIncoreRes (resname, incores, count);
 }
 
 #if 0 /* VM: deprecated code */

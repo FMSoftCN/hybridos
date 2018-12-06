@@ -24,12 +24,12 @@
 #define begin_respkg(name, id) \
     bool FRRegister_##name##_resource(void) { \
         ResPackage* resPkg = HFCL_NEW_EX(ResPackage, (#name, id)); \
-		if(!RegisterResPackage(resPkg)) return false;
+        if(!RegisterResPackage(resPkg)) return false;
 
 #define end_respkg return true; }
 
-#define data_get(id, type)  
-#define data_get_any(id)   
+#define data_get(id, type)
+#define data_get_any(id)
 #define data_get_image(id)
 #define data_get_text(id)
 #define data_get_text_id(id)
@@ -43,14 +43,19 @@
 //internal package resource
 #define def_name(name)
 
-
 //text resource
-#define begin_text_res(lang, encoding) \
-    resPkg->addTextResource(R_LANG_##lang, R_ENCODING_##encoding, text_##lang##encoding##res);
+#define begin_text_res()
+
+#define text_res_raw(lang, encoding, txt_file) \
+    resPkg->addTextResRaw(lang, encoding, txt_file);
+
+#define text_res_zipped(lang, encoding, txt_file) \
+    resPkg->addTextResZipped(lang, encoding, txt_file);
+
+#define text_res_gnumsg(lang, encoding, txt_file) \
+    resPkg->addTextResGnuMsg(lang, encoding, txt_file);
 
 #define end_text_res
-
-//#define text(name, text_value)
 
 #define extern_lang    1
 // #undef extern_lang
@@ -64,7 +69,6 @@
 
 #define image(name, img_file)
 #define bmpfont_image(name, img_file)
-
 
 //font resource
 #define begin_font_res() \
@@ -100,16 +104,16 @@
 
 #define begin_style_res(name, super_id) \
     resPkg->addStyleResource(RESID(style_##name), \
-			super_id, \
-			style_##name##_elements_res, \
-			sizeof(style_##name##_elements_res)/sizeof(TRStyleElement));
+            super_id, \
+            style_##name##_elements_res, \
+            sizeof(style_##name##_elements_res)/sizeof(TRStyleElement));
 
 #define end_style_res
 
 #define begin_common_style \
-	resPkg->addStyleResource(0, 0, \
-			style_c_o_m_m_o_n_elements_res, \
-			sizeof(style_c_o_m_m_o_n_elements_res)/sizeof(TRStyleElement));
+    resPkg->addStyleResource(0, 0, \
+            style_c_o_m_m_o_n_elements_res, \
+            sizeof(style_c_o_m_m_o_n_elements_res)/sizeof(TRStyleElement));
 
 #define end_common_style
 
@@ -148,7 +152,7 @@
 
 //drawable resource
 #define begin_dr_res \
-	resPkg->addDrawableResource((TRDrawableArrayItem*)&drawable_res, sizeof(drawable_res));
+    resPkg->addDrawableResource((TRDrawableArrayItem*)&drawable_res, sizeof(drawable_res));
 #define end_dr_res
 
 #define begin_drawable(name, basename, super_style_id)
@@ -159,12 +163,12 @@
 #define end_common_drawable_res
 
 #define begin_common_drawable(common_id, basename, super_style_id) \
-	RegisterCommonDrawableFromRes(common_id, basename, drawable_style_##common_id##_info, super_style_id);
+    RegisterCommonDrawableFromRes(common_id, basename, drawable_style_##common_id##_info, super_style_id);
 
 #define end_common_drawable
 
 #define begin_drset_res \
-	resPkg->addDrawableSetResource((TRDrawableSetArrayItem *)&drawableset_res, sizeof(drawableset_res));
+    resPkg->addDrawableSetResource((TRDrawableSetArrayItem *)&drawableset_res, sizeof(drawableset_res));
 
 #define end_drset_res
 
@@ -177,45 +181,45 @@
 #define begin_common_drset_res
 #define end_common_drset_res
 #define begin_common_drset(view, super_drset) \
-	RegisterViewDrawableSetFromRes(#view, super_drset, drset_view_##view##_info);	
+    RegisterViewDrawableSetFromRes(#view, super_drset, drset_view_##view##_info);
 #define end_common_drset end_drset
 
 /////////////////////////////////
 //drawable set group
 #define begin_drsetgroup_res \
-	resPkg->addDrawableSetGroupResource((TRDrawableSetGroupArrayItem *)drawablesetgroup_res, sizeof(drawablesetgroup_res));
+    resPkg->addDrawableSetGroupResource((TRDrawableSetGroupArrayItem *)drawablesetgroup_res, sizeof(drawablesetgroup_res));
 
 #define begin_drsetgroup(name, super_drsetgroup)
 
-#define end_drsetgroup 
+#define end_drsetgroup
 
-#define drset(id, drset_id) 
+#define drset(id, drset_id)
 
 #define begin_common_drsetgroup_res
 
 #define end_common_drsetgroup_res
 
 #define begin_common_drsetgroup(view, super_group) \
-	RegisterViewDrawableSetGroupFromRes(#view, super_group, drsetgroup_common_view_##view##_info);
+    RegisterViewDrawableSetGroupFromRes(#view, super_group, drsetgroup_common_view_##view##_info);
 
 #define end_common_drsetgroup end_drsetgroup
 
-#define end_drsetgroup_res  
+#define end_drsetgroup_res
 
 //////////////
 
 //theme
 #define begin_theme_res
 
-#define begin_theme(name)	\
-	resPkg->addThemeResource(RESID(theme_##name), "", theme_res_declare_##name##_info);
+#define begin_theme(name)    \
+    resPkg->addThemeResource(RESID(theme_##name), "", theme_res_declare_##name##_info);
 
 #define map_theme_drset(theme_drset_id, drset_id)
 
 #define end_theme
 
-#define end_theme_res(def_theme_name)	\
-	resPkg->setTheme(RESID(theme_##def_theme_name), FALSE);
+#define end_theme_res(def_theme_name)    \
+    resPkg->setTheme(RESID(theme_##def_theme_name), FALSE);
 
 ////////////////////////////////
 
@@ -229,7 +233,7 @@
 
 //Menu resource
 #define begin_menus \
-	static MENU_RES_ARRAY menuArray[] = { 
+    static MENU_RES_ARRAY menuArray[] = {
 
 #define end_menus \
 }; \
@@ -238,7 +242,7 @@
 
 
 #define begin_menu_res(name) \
-	{RESID(menu_##name),(void *)create_menu_##name},
+    {RESID(menu_##name),(void *)create_menu_##name},
 
 
 #define end_menu_res \
@@ -267,14 +271,14 @@
 
 //UI resource
 #define begin_uis \
-	static UI_RES_ARRAY UIArray[] = { 
+    static UI_RES_ARRAY UIArray[] = {
 
 #define end_uis \
 }; \
  resPkg->addUIResource(UIArray, sizeof(UIArray)/sizeof(UI_RES_ARRAY));
 
 #define begin_ui_res(name)  \
-		{RESID(ui_##name),(void *)create_UI_##name},
+        {RESID(ui_##name),(void *)create_UI_##name},
 
     //resPkg->addUIResource(RESID(ui_##name), create_UI_##name);
 
@@ -309,11 +313,10 @@
 #define setMode(id, value, cmd)
 #define add_mode(name)
 
-
 #define set(Name, value)
 #define addTablePage(imageNormal, imageSel, view)
 #define setRect(left, top, right, bottom)
-#define setRectWH(left, top, width, height)	//JYSEO_0218_add macro
+#define setRectWH(left, top, width, height)
 #define setStyle(style_id)
 #define _m(Name, args)
 #define map(name)
@@ -329,8 +332,8 @@
 #define end_import_view
 #define begin_foreach(n)
 #define end_foreach
-#define begin_resid(name) 
-#define end_resid  
-#define my_imageid(name) 
-#define my_textid(name)    
+#define begin_resid(name)
+#define end_resid
+#define my_imageid(name)
+#define my_textid(name)
 

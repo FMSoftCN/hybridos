@@ -50,7 +50,7 @@ protected:
 class TextResRaw : public TextRes {
 public:
     TextResRaw (const char* res_name) : TextRes (res_name) {
-        m_is_incore = false;
+        m_from_incore = false;
         m_raw_strings = NULL;
     }
 
@@ -66,7 +66,7 @@ public:
     }
 
 private:
-    bool m_is_incore;
+    bool m_from_incore;
     const char** m_raw_strings;
 };
 

@@ -30,7 +30,7 @@ namespace hfcl {
 bool TextResRaw::load ()
 {
     m_raw_strings = (const char**)ResLoader::getInstance()->loadData (
-            m_res_name, &m_is_incore);
+            m_res_name, &m_from_incore);
 
     if (m_raw_strings == NULL) {
         _ERR_PRINTF ("TextResRaw::load: "
@@ -43,11 +43,11 @@ bool TextResRaw::load ()
 
 void TextResRaw::release ()
 {
-    if (m_is_incore && m_raw_strings) {
+    if (!m_from_incore && m_raw_strings) {
         free (m_raw_strings);
     }
 
-    m_is_incore = false;
+    m_from_incore = false;
     m_raw_strings = NULL;
 }
 
