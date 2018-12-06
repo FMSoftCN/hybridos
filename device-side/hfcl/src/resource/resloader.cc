@@ -121,11 +121,7 @@ GifAnimate* ResLoader::getGifAnimate(const char* filepath)
     info = GetImageResInfo(filepath);
 
     if (info != NULL) {
-#ifdef _HFCL_INCORE_BMPDATA
         gif->createGifAnimateFromMem((const char*)info->data, info->size);
-#else
-        gif->createGifAnimateFromRes((BitmapFrameArray *) info->data);
-#endif
     }
     else {
         // 2. file system

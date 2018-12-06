@@ -21,65 +21,89 @@
 
 #include "resource/textres.h"
 
+#include <zlib.h>
+
 #include "resource/resloader.h"
 
 namespace hfcl {
 
+bool TextResRaw::load ()
+{
+    m_raw_strings = (const char**)ResLoader::getInstance()->loadData (
+            m_res_name, &m_is_incore);
+
+    if (m_raw_strings == NULL) {
+        _ERR_PRINTF ("TextResRaw::load: "
+                "failed to load raw text resource\n");
+        return false;
+    }
+
+    return true;
+}
+
+void TextResRaw::release ()
+{
+    if (m_is_incore && m_raw_strings) {
+        free (m_raw_strings);
+    }
+
+    m_is_incore = false;
+    m_raw_strings = NULL;
+}
+
 bool TextResZipped::load ()
 {
-#if 0
-    if (m_l10n_zipped_str_table == NULL ||
-            m_l10n_zipped_str_table [langId].zipped_bytes == NULL) {
-        _ERR_PRINTF ("ResPkgManager::setCurrentLang: no strings for language: %d.\n", langId);
+    bool is_incore = false;
+    HFCL_ZIPPED_STRINGS* zipped_str
+        = (HFCL_ZIPPED_STRINGS*)ResLoader::getInstance()->loadData (
+            m_res_name, &is_incore);
+
+    if (zipped_str == NULL) {
+        _ERR_PRINTF ("TextResZipped::load: "
+                "failed to load zipped text resource\n");
         return false;
     }
 
+    uLongf len_uncompressed = zipped_str->origin_size;
+    size_t offset = 0;
+    int ret;
+
+    if (m_string_bucket)
+        free (m_string_bucket);
+
+    m_string_bucket = (char*)malloc (zipped_str->origin_size);
     if (m_string_bucket == NULL) {
-        size_t max_bucket_size = 0;
-        for (int i = 0; i < MAX_LANGID; i++) {
-            size_t current_size = m_l10n_zipped_str_table [i].origin_size;
-            if (current_size > max_bucket_size) {
-                max_bucket_size = current_size;
-            }
-        }
-
-        if (max_bucket_size == 0) {
-            _ERR_PRINTF ("ResPkgManager::setCurrentLang: no any language defined.\n");
-            return false;
-        }
-
-        m_string_bucket = (char*)malloc (max_bucket_size);
-        if (m_string_bucket == NULL) {
-            _ERR_PRINTF ("ResPkgManager::setCurrentLang: failed to allocate memory for bucket.\n");
-            return false;
-        }
-
-        m_raw_strings = (const char**)malloc (sizeof (char*) * (m_max_text_id + 1));
-        if (m_string_bucket == NULL) {
-            _ERR_PRINTF ("ResPkgManager::setCurrentLang: failed to allocate memory for string table.\n");
-            return false;
-        }
+        _ERR_PRINTF ("TextResZipped::load: "
+                "failed to allocate memory for bucket\n");
+        goto error;
     }
 
-    uLongf len_uncompressed = m_l10n_zipped_str_table [langId].origin_size;
-    int ret = uncompress ((Bytef*)m_string_bucket, &len_uncompressed,
-            (Bytef*)m_l10n_zipped_str_table [langId].zipped_bytes,
-            m_l10n_zipped_str_table [langId].zipped_size);
+    m_raw_strings
+        = (const char**)malloc (sizeof (char*) * zipped_str->nr_strings);
+    if (m_raw_strings == NULL) {
+        _ERR_PRINTF ("TextResZipped::load: "
+                "failed to allocate memory for string table\n");
+        goto error;
+    }
+
+    ret = uncompress ((Bytef*)m_string_bucket, &len_uncompressed,
+            (Bytef*)zipped_str->zipped_bytes, zipped_str->zipped_size);
     if (ret != Z_OK) {
-        _ERR_PRINTF ("ResPkgManager::setCurrentLang: failed when calling uncompress: %d.\n", ret);
-        return false;
+        _ERR_PRINTF ("TextResZipped::load: "
+                "failed when calling uncompress: %d\n", ret);
+        goto error;
     }
 
 #ifdef _DEBUG
-    if (len_uncompressed != m_l10n_zipped_str_table [langId].origin_size) {
-        _DBG_PRINTF ("ResPkgManager::setCurrentLang: length not matched: %lu, %u.\n",
-            len_uncompressed, m_l10n_zipped_str_table [langId].origin_size);
-        return false;
+    if (len_uncompressed != zipped_str->origin_size) {
+        _DBG_PRINTF ("TextResZipped::load: "
+                "length not matched: %lu, %u\n",
+                len_uncompressed, zipped_str->origin_size);
+        goto error;
     }
 #endif
 
-    size_t offset = 0;
-    for (HTResId i = 0; i < m_max_text_id; i++) {
+    for (Uint32 i = 0; i < zipped_str->nr_strings; i++) {
         m_raw_strings [i] = m_string_bucket + offset;
         offset += strlen (m_raw_strings [i]);
         offset += 1;
@@ -87,22 +111,32 @@ bool TextResZipped::load ()
 
 #ifdef _DEBUG
     if (offset > len_uncompressed) {
-        _DBG_PRINTF ("ResPkgManager::setCurrentLang: buffer overflow: %lu, %u.\n",
+        _DBG_PRINTF ("TextResZipped::load: buffer overflow: %lu, %u\n",
             len_uncompressed, offset);
-        return false;
+        goto error;
     }
 #endif
-#endif
+
+    if (!is_incore)
+        free (zipped_str);
     return true;
+
+error:
+    if (!is_incore)
+        free (zipped_str);
+    return false;
 }
 
 void TextResZipped::release ()
 {
-    if (m_loaded) {
+    if (m_string_bucket) {
         free (m_string_bucket);
-        m_loaded = false;
     }
-    free (m_raw_strings);
+
+    if (m_raw_strings) {
+        free (m_raw_strings);
+    }
+
     m_string_bucket = NULL;
     m_raw_strings = NULL;
 }
@@ -192,15 +226,9 @@ static void read_mo_data (MG_RWops* src, Uint32* dst, int count, bool be)
     }
 }
 
-int TextResGnuMsg::loadFromFile (const char* mo_file)
+int TextResGnuMsg::doLoad (MG_RWops* src)
 {
-    MG_RWops* src = MGUI_RWFromFile (mo_file, "r");
     bool be = false;
-
-    if (src == NULL) {
-        _ERR_PRINTF ("MyGetText::loadText: failed to open mo file: %s\n", mo_file);
-        return -1;
-    }
 
     Uint32 magic_number = MGUI_ReadLE32 (src);
     Uint32 revision;
@@ -214,12 +242,13 @@ int TextResGnuMsg::loadFromFile (const char* mo_file)
     }
     else {
         MGUI_FreeRW (src);
-        _ERR_PRINTF ("MyGetText::loadText: wrong magic number: 0x%X (%s)\n", magic_number, mo_file);
+        _ERR_PRINTF ("TextResGnuMsg::doLoad: wrong magic number: 0x%X\n",
+                magic_number);
         return -2;
     }
 
     /* TODO check revision here */
-    _MG_PRINTF ("MyGetText::loadText: revision number: 0x%X (%s)\n", revision, mo_file);
+    _MG_PRINTF ("TextResGnuMsg::doLoad: revision number: 0x%X\n", revision);
 
     Uint32 N;
     Uint32 O;
@@ -237,7 +266,7 @@ int TextResGnuMsg::loadFromFile (const char* mo_file)
 
     if (N == 0) {
         MGUI_FreeRW (src);
-        _MG_PRINTF ("MyGetText::loadText: there is no any string: %s\n", mo_file);
+        _MG_PRINTF ("TextResGnuMsg::doLoad: there is no any string\n");
         return 0;
     }
 
@@ -279,7 +308,7 @@ int TextResGnuMsg::loadFromFile (const char* mo_file)
         size_t str_len = strlen (orig_str);
         if (orig_len > str_len) {
             char* plural = orig_str + str_len + 1;
-            _MG_PRINTF ("MyGetText::loadText, skip plural %s in %s\n", plural, mo_file);
+            _MG_PRINTF ("TextResGnuMsg::doLoad: skip plural %s\n", plural);
         }
 
         delete [] orig_str;
@@ -289,12 +318,34 @@ int TextResGnuMsg::loadFromFile (const char* mo_file)
     delete [] Olist;
     delete [] Tlist;
 
-    MGUI_FreeRW (src);
     return N;
 }
 
 bool TextResGnuMsg::load ()
 {
+    MG_RWops* src;
+    size_t size;
+    const char* mo_file = m_res_name;
+    char* res_data
+        = (char*)ResLoader::getInstance()->getIncoreData (mo_file, &size);
+
+    if (res_data) {
+        src = MGUI_RWFromMem (res_data, size);
+    }
+    else {
+        src = MGUI_RWFromFile (mo_file, "r");
+    }
+
+    if (src == NULL) {
+        _ERR_PRINTF ("TextResGnuMsg::load: failed to open mo file: %s\n",
+                mo_file);
+        return false;
+    }
+
+    doLoad (src);
+
+    MGUI_FreeRW (src);
+
     return true;
 }
 

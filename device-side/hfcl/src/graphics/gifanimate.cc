@@ -539,7 +539,6 @@ void GifAnimate::createGifAnimateFromRes(BitmapFrameArray* bitmap_frame_array)
 #endif
 }
 
-#ifdef _HFCL_INCORE_BMPDATA
 void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
 {
     unsigned char c;
@@ -925,209 +924,9 @@ ret_tag_0:
     }
 #endif
 }
-#else
-void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
-{
-    unsigned char c;
-    int ok = 0;
-    MYBITMAP mybmp;
-    GIFSCREEN GifScreen;
-    IMAGEDESC ImageDesc;
-    GifAnimateFrame*frame, *current = NULL;
-    MG_RWops* area = NULL;
-
-    if (!(area = MGUI_RWFromMem ((void*)data, size))) {
-        return;
-    }
-
-    if (ReadGIFGlobal (area, &GifScreen) < 0)
-        return;
-
-    if ((ok = ReadOK (area, &c, 1)) == 0) {
-        return;
-    }
-
-    while (c != ';' && ok > 0) {
-        switch (c) {
-        case '!':
-            if ( (ok = ReadOK (area, &c, 1)) == 0) {
-                return;
-            }
-            DoExtension (area, c, &GifScreen);
-            break;
-
-        case ',':
-            if (ReadImageDesc (area, &ImageDesc, &GifScreen) < 0) {
-                return;
-            }
-            else {
-                if (ReadImage (area, &mybmp, &ImageDesc, &GifScreen, 0) < 0)
-                    return;
-            }
-
-            // frame = (GifAnimateFrame*) calloc(1, sizeof(GifAnimateFrame));
-            frame = HFCL_NEW(GifAnimateFrame);
-
-            if(!frame)
-                return;
-
-            frame->next = NULL;
-            frame->off_y = ImageDesc.Left;
-            frame->off_x = ImageDesc.Top;
-            frame->disposal = GifScreen.disposal;
-
-            frame->delay_time = (GifScreen.delayTime>10)?GifScreen.delayTime:10;
-
-            if(ExpandMyBitmap(HDC_SCREEN, &frame->bmp, &mybmp, ImageDesc.ColorMap, 0) != 0)
-            {
-                if(frame)
-                    HFCL_DELETE(frame);
-                frame = NULL;
-                if(mybmp.bits)
-                    HFCL_DELETE_ARR(mybmp.bits);
-                mybmp.bits = NULL;
-                return;
-            }
-
-            if(m_frames == NULL)
-            {
-                m_frames = frame;
-                current = frame;
-                current->prev = NULL;
-            }
-            else
-            {
-                frame->prev = current;
-                current->next = frame;
-                current = current->next;
-            }
-
-            m_last_frame = frame;
-
-            m_nr_frames++;
-            break;
-        }
-        ok = ReadOK (area, &c, 1);
-    }
-
-    m_current_frame = m_frames;
-
-    if (m_max_width != GifScreen.Width || m_max_height != GifScreen.Height)
-    {
-        m_max_width = GifScreen.Width;
-        m_max_height = GifScreen.Height;
-
-        if(m_mem_gc ) {
-            DeleteMemGC(m_mem_gc);
-        }
-
-        m_mem_gc = CreateMemGC(m_max_width, m_max_height);
-
-#ifdef _DEBUG
-        if(NULL == m_mem_gc) {
-            _DBG_PRINTF ("GifAnimate::createGifAnimateFromMem CreateMemGC Error. 0\n");
-        }
-#endif
-    }
-
-    MGUI_RWclose (area);
-}
-
-void GifAnimate::createGifAnimateFromFile (const char* file)
-{
-    unsigned char c;
-    int ok = 0;
-    MYBITMAP mybmp;
-    GIFSCREEN GifScreen;
-    IMAGEDESC ImageDesc;
-    GifAnimateFrame*frame, *current = NULL;
-    MG_RWops* area = NULL;
-
-    if (!(area = MGUI_RWFromFile (file, "rb"))) {
-        return ;
-    }
-
-    if (ReadGIFGlobal (area, &GifScreen) < 0)
-        return;
-
-    if ((ok = ReadOK (area, &c, 1)) == 0) {
-        return;
-    }
-
-    while (c != ';' && ok > 0) {
-        switch (c) {
-        case '!':
-            if ( (ok = ReadOK (area, &c, 1)) == 0) {
-                return;
-            }
-            DoExtension (area, c, &GifScreen);
-            break;
-
-        case ',':
-            if (ReadImageDesc (area, &ImageDesc, &GifScreen) < 0) {
-                return;
-            }
-            else {
-                if (ReadImage (area, &mybmp, &ImageDesc, &GifScreen, 0) < 0)
-                    return;
-            }
-
-            // frame = (GifAnimateFrame*) calloc(1, sizeof(GifAnimateFrame));
-            frame = HFCL_NEW(GifAnimateFrame);
-
-            if(!frame)
-                return;
-
-            frame->next = NULL;
-            frame->off_y = ImageDesc.Left;
-            frame->off_x = ImageDesc.Top;
-            frame->disposal = GifScreen.disposal;
-
-            frame->delay_time = (GifScreen.delayTime>10)?GifScreen.delayTime:10;
-
-            if(ExpandMyBitmap(HDC_SCREEN, &frame->bmp, &mybmp, ImageDesc.ColorMap, 0) != 0)
-            {
-                if(frame)
-                    HFCL_DELETE(frame);
-                frame = NULL;
-                if(mybmp.bits)
-                    HFCL_DELETE_ARR(mybmp.bits);
-                mybmp.bits = NULL;
-                return;
-            }
-
-            if(m_frames == NULL)
-            {
-                m_frames = frame;
-                current = frame;
-                current->prev = NULL;
-            }
-            else
-            {
-                frame->prev = current;
-                current->next = frame;
-                current = current->next;
-            }
-
-            m_last_frame = frame;
-
-            m_nr_frames++;
-            break;
-        }
-        ok = ReadOK (area, &c, 1);
-    }
-    m_current_frame = m_frames;
-    m_max_width = GifScreen.Width;
-    m_max_height = GifScreen.Height;
-
-    MGUI_RWclose (area);
-}
-#endif
-
 
 void GifAnimate::nextFrame(void)
 {
-#ifdef _HFCL_INCORE_BMPDATA
     m_next_frame_idx++;
     if(m_next_frame_idx >= 2) {
         loadGifAnimateNextFrameFromMem();
@@ -1136,9 +935,7 @@ void GifAnimate::nextFrame(void)
             return;
         }
     }
-    else
-#endif
-    {
+    else {
         if (NULL != m_current_frame)
         {
             if (NULL != m_current_frame->next)
@@ -1151,7 +948,6 @@ void GifAnimate::nextFrame(void)
 
 void GifAnimate::firstFrame(void)
 {
-#ifdef _HFCL_INCORE_BMPDATA
     int ok = 0;
     m_area->seek(m_area,0,SEEK_SET);
 
@@ -1166,9 +962,6 @@ void GifAnimate::firstFrame(void)
     loadGifAnimateNextFrameFromMem();
     m_current_frame = m_frames;
     m_last_frame = NULL;
-#else
-    m_current_frame = m_frames;
-#endif
 }
 
 GifAnimate::GifAnimate() : RefCount (0)
@@ -1214,17 +1007,13 @@ GifAnimate::~GifAnimate()
 
     while(NULL != (f = m_frames)) {
         m_frames = m_frames->next;
-#ifdef _HFCL_INCORE_BMPDATA
         UnloadBitmap(&f->bmp);
-#endif
         HFCL_DELETE(f);
 #ifdef _DEBUG
         _DBG_PRINTF ("GifAnimate::GifAnimate delete f=%x", f);
 #endif
     }
-#ifdef _HFCL_INCORE_BMPDATA
     MGUI_RWclose (m_area);
-#endif
 
     if (NULL != m_mem_gc) {
         DeleteMemGC(m_mem_gc);

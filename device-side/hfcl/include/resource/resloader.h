@@ -44,10 +44,10 @@ public:
     bool releaseBitmap(const char* filepath);
     bool releaseBitmap(Bitmap* pbmp);
 
-    char* getTextResZipped (const char* filepath);
-    char* getTextResGnuMsg (const char* filepath);
+    void* loadData (const char* filepath, bool *isincore);
+    void* getIncoreData (const char* filepath, size_t *datasize);
 
-    void registerInnerRes(int res_type, INNER_RES_INFO * resources, int count);
+    void registerInnerRes(int res_type, INNER_RES_INFO *resources, int count);
 
     static ResLoader* getInstance(void);
 

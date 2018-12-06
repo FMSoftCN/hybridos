@@ -35,24 +35,6 @@ GraphicsContext* GraphicsContext::screen_graphics_context = NULL;
 VECTOR(HDC, DCVector);
 VECTOR(POINT*, PointVector);
 
-//#define _HFCL_DC_TRANSPARENT_ 1
-
-#ifdef _HFCL_DC_TRANSPARENT_
-
-#define _HFCL_CACHED_DC_    1
-
-#ifdef _HFCL_CACHED_DC_
-static HDC g_cached_dc = HDC_INVALID;
-
-void delete_cached_dc(void)
-{
-    if (g_cached_dc != HDC_INVALID)
-        DeleteCompatibleDC(g_cached_dc);
-}
-#endif
-
-#endif
-
 class GraphicsContextPrivate {
     public:
         GraphicsContextPrivate(HDC hdc)
@@ -68,8 +50,8 @@ class GraphicsContextPrivate {
 
         ~GraphicsContextPrivate()
         {
-			// FIXME, 
-			// delete memdc ....
+            // FIXME,
+            // delete memdc ....
         }
 
         void initDC(HDC hdc)
@@ -83,114 +65,14 @@ class GraphicsContextPrivate {
                 m_dcSize.cx = 0;
                 m_dcSize.cy = 0;
             }
-#ifdef _HFCL_DC_TRANSPARENT_
-#ifdef _HFCL_CACHED_DC_
-            if (g_cached_dc == HDC_INVALID) {
-                g_cached_dc = CreateCompatibleDCEx(HDC_SCREEN, RECTW(g_rcScr), RECTH(g_rcScr));
-                SetBrushColor(g_cached_dc, RGBA2Pixel(g_cached_dc, 0, 0, 0, 255));
-            }
-#endif
-#endif
         }
 
         void beginTransparencyLayer(int alpha)
         {
-#ifdef _HFCL_DC_TRANSPARENT_
-            HDC hMemDC = HDC_INVALID;
-            POINT *pPoint = HFCL_NEW_ARR(POINT, (2 * sizeof(POINT)));
-
-            if (pPoint) {
-                if (g_cached_dc != HDC_INVALID && m_layers.empty()) {
-                    hMemDC = g_cached_dc;
-                    SaveDC(g_cached_dc);
-                } else {
-                    hMemDC = CreateCompatibleDCEx(m_viewdc, m_dcSize.cx, m_dcSize.cy);
-                }
-            }
-
-            m_layers.push_back(hMemDC);
-            // memory not enough
-            if (hMemDC == HDC_INVALID) {
-                if (pPoint)
-                    HFCL_DELETE_ARR(pPoint);
-                pPoint = NULL;
-                return;
-            }
-
-            if (hMemDC != g_cached_dc) {
-                m_dcRelPos.x = m_winPos.x -m_dcAbsPos.x;
-                m_dcRelPos.y = m_winPos.y -m_dcAbsPos.y;
-                copyPoint(m_dcAbsPos, m_winPos);
-            } else {
-                m_dcRelPos.x = -m_dcAbsPos.x;
-                m_dcRelPos.y = -m_dcAbsPos.y;
-
-                m_dcAbsPos.x = 0;
-                m_dcAbsPos.y = 0;
-            }
-
-            copyPoint(pPoint[0], m_dcAbsPos);
-            copyPoint(pPoint[1], m_dcRelPos);
-            m_points.push_back(pPoint);
-
-            //set invalid clip region
-            PCLIPRGN prgn = CreateClipRgn();
-            if (prgn) {
-                GetClipRegion(m_context, prgn);
-                OffsetRegion(prgn, -m_dcRelPos.x, -m_dcRelPos.y);
-                SelectClipRegion(hMemDC, prgn);
-                DestroyClipRgn(prgn);
-            }
-
-            SetMemDCColorKey(hMemDC, MEMDC_FLAG_SRCCOLORKEY, COLOR_black);
-            SetMemDCAlpha(hMemDC, MEMDC_FLAG_SRCALPHA, alpha);
-
-            m_context = hMemDC;
-#endif
         }
 
         void endTransparencyLayer()
         {
-#ifdef _HFCL_DC_TRANSPARENT_
-            HDC hMemDC = m_layers.back();
-            m_layers.pop_back();
-
-            if (hMemDC == HDC_INVALID)
-                return;
-
-            POINT* pPoint = m_points.back();
-            m_points.pop_back();
-            if (pPoint)
-                HFCL_DELETE_ARR(pPoint);
-            pPoint = NULL;
-
-            if (!m_layers.empty()) {
-                m_context = m_layers.back();
-            } else {
-                m_context = m_viewdc;
-            }
-
-            BitBlt(hMemDC, 0, 0, 0, 0, m_context, m_dcRelPos.x, m_dcRelPos.y, 0);
-
-            if (!m_points.empty()) {
-                pPoint = m_points.back();
-                copyPoint(m_dcAbsPos, pPoint[0]);
-                copyPoint(m_dcRelPos, pPoint[1]);
-            } else {
-                m_dcAbsPos.x = 0;
-                m_dcAbsPos.y = 0;
-
-                m_dcRelPos.x = 0;
-                m_dcRelPos.y = 0;
-            }
-
-            if (hMemDC == g_cached_dc) {
-                RestoreDC(g_cached_dc, -1);
-                FillBox(g_cached_dc, 0, 0, RECTW(g_rcScr), RECTH(g_rcScr));
-            } else {
-                DeleteCompatibleDC(hMemDC);
-            }
-#endif
         }
 
         void setMapView(View* view)
@@ -212,8 +94,8 @@ class GraphicsContextPrivate {
         {
             if (m_winPos.x != m_dcAbsPos.x || m_winPos.y != m_dcAbsPos.y) {
                 OffsetRect(&rc, m_winPos.x - m_dcAbsPos.x, m_winPos.y - m_dcAbsPos.y);
-				//rc.right = rc.right > m_dcSize.cx ? rc.left + m_dcSize.cx : rc.right;
-				//rc.bottom = rc.bottom > m_dcSize.cy ? rc.top + m_dcSize.cy : rc.bottom;
+                //rc.right = rc.right > m_dcSize.cx ? rc.left + m_dcSize.cx : rc.right;
+                //rc.bottom = rc.bottom > m_dcSize.cy ? rc.top + m_dcSize.cy : rc.bottom;
             }
         }
 
@@ -250,16 +132,16 @@ class GraphicsContextPrivate {
 };
 
 GraphicsContext* GraphicsContext::screenGraphics() {
-	if (NULL == screen_graphics_context) {
-		screen_graphics_context = HFCL_NEW_EX(GraphicsContext, (HDC_SCREEN));
-	}
-	return screen_graphics_context;
+    if (NULL == screen_graphics_context) {
+        screen_graphics_context = HFCL_NEW_EX(GraphicsContext, (HDC_SCREEN));
+    }
+    return screen_graphics_context;
 }
 
 void GraphicsContext::deleteScreenGraphics(void) {
-	if (NULL != screen_graphics_context)
-		HFCL_DELETE(screen_graphics_context);
-	screen_graphics_context = NULL;
+    if (NULL != screen_graphics_context)
+        HFCL_DELETE(screen_graphics_context);
+    screen_graphics_context = NULL;
 }
 
 void GraphicsContext::setMapView(View* view)
@@ -282,7 +164,7 @@ void GraphicsContext::getTranslation(int &offx, int &offy)
 
 Logfont* GraphicsContext::getLogFont(void)
 {
-	return GetCurFont(m_data->m_context);
+    return GetCurFont(m_data->m_context);
 }
 
 void GraphicsContext::map(int x, int y, int &x2, int &y2)
@@ -345,11 +227,11 @@ void GraphicsContext::textOutOmitted(int x, int y, const char * text, int len, i
 
     map(x, y, outx, outy);
     TextOutOmitted(hdc, outx, outy, text, len, max_extent);
-    
+
     SetBkMode(hdc, oldBkMode);
 }
 
-void GraphicsContext::textOutOmitted(int x, int y, const char * text, 
+void GraphicsContext::textOutOmitted(int x, int y, const char * text,
         int len, int max_extent, unsigned int color, Logfont * logfont)
 {
     if (!text)
@@ -368,7 +250,7 @@ void GraphicsContext::textOutOmitted(int x, int y, const char * text,
 void GraphicsContext::textOut(int x, int y, const char * text, int len,
         unsigned int color, Logfont * logfont)
 {
-	if (!text)
+    if (!text)
         return;
 
     int outx, outy;
@@ -422,13 +304,13 @@ int GraphicsContext::drawTextToCalcRect(const string& text, IntRect& rect, unsig
     PLOGFONT old_font = SelectFont (m_data->m_context, font);
     DrawText (m_data->m_context, text.c_str(), -1, &rc, format | DT_CALCRECT);
     SelectFont (m_data->m_context, old_font);
-    
+
     rect.setRect( rc.left, rc.top, rc.right, rc.bottom);
-    
+
     return RECTH(rc);
 }
-        
-int GraphicsContext::calcTextRectOnDrawing(const char *text, 
+
+int GraphicsContext::calcTextRectOnDrawing(const char *text,
         Logfont *f, unsigned int format, IntRect *rect, DTFIRSTLINE *firstline, Point *txtPos)
 {
     if (rect == NULL)
@@ -437,9 +319,9 @@ int GraphicsContext::calcTextRectOnDrawing(const char *text,
     RECT rc = {rect->left(), rect->top(), rect->right(), rect->bottom()};
 
     DrawTextEx2(m_data->m_context, text, -1, &rc, 0, format | DT_CALCRECT, firstline);
- 
+
     rect->setRect(rc.left, rc.top, rc.right, rc.bottom);
-    
+
     return RECTH(rc);
 }
 
@@ -452,7 +334,7 @@ int GraphicsContext::drawTextToGetLenght(const string& text)
     return rc.right - rc.left;
 }
 
-int GraphicsContext::getFontHeight(Logfont *f) 
+int GraphicsContext::getFontHeight(Logfont *f)
 {
     if (f) {
         return f->size;
@@ -507,7 +389,7 @@ void GraphicsContext::drawText(const char * text, const IntRect& rect,
         format &= ~(TextMode::WordBreak|TextMode::CharBreak);
         format &= format | TextMode::SingleLine;
         format &= ~(TextMode::TextOutOmitted);
-        
+
         SIZE size;
         GetTextExtent(hdc, text, -1, &size);
         if (size.cx > RECTW(rc)) { //need text ommit
@@ -524,7 +406,7 @@ void GraphicsContext::drawText(const char * text, const IntRect& rect,
         }
 
     }
-    
+
     if ((format & TextMode::ValignMiddle) ||
             (format & TextMode::ValignBottom)) {
         RECT rcc = rc;
@@ -537,7 +419,7 @@ void GraphicsContext::drawText(const char * text, const IntRect& rect,
             rc.top = rc.bottom - h;
         }
     }
-    
+
     DrawText(hdc, text, -1, &rc, format);
 
 END:
@@ -639,7 +521,7 @@ void GraphicsContext::fillRect(const IntRect& rc, Uint8 r, Uint8 g, Uint8 b, Uin
 #  else
         /* VincentWei: use a 1x1 BITMAP object with alpha channel */
         gal_pixel pixel = RGBA2Pixel(hdc, r, g, b, 0xFF);
-        BITMAP bmp_1by1 = {BMP_TYPE_ALPHACHANNEL, 
+        BITMAP bmp_1by1 = {BMP_TYPE_ALPHACHANNEL,
                     (Uint8)GetGDCapability (hdc, GDCAP_DEPTH), (Uint8)GetGDCapability (hdc, GDCAP_BPP),
                     a, 0, 1, 1, 1, (Uint8*)&pixel, NULL, 0};
 
@@ -688,7 +570,7 @@ void GraphicsContext::drawLine(int x0, int y0, int x1, int y1,
 
     int oldW = SetPenWidth(hdc, width);
     gal_pixel oldC = SetPenColor(hdc, RGBA2Pixel(hdc, r, g, b, a));
-    
+
     map(x0, y0, out_x0, out_y0);
     map(x1, y1, out_x1, out_y1);
 
@@ -699,13 +581,13 @@ void GraphicsContext::drawLine(int x0, int y0, int x1, int y1,
 }
 
 void GraphicsContext::drawHVDotLine(int x, int y, int wh, bool isHorz,
-				Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+                Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     int out_x, out_y;
     HDC hdc = m_data->m_context;
-    
+
     gal_pixel oldC = SetPenColor(hdc, RGBA2Pixel(hdc, r, g, b, a));
-    
+
     map(x, y, out_x, out_y);
     DrawHVDotLine(hdc, out_x, out_y, wh, isHorz ? TRUE : FALSE);
 
@@ -714,25 +596,25 @@ void GraphicsContext::drawHVDotLine(int x, int y, int wh, bool isHorz,
 
 void GraphicsContext::drawPolygonLine(Point *pts, int nums, int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
-	HDC hdc = m_data->m_context;
-	Point* p = HFCL_NEW_ARR(Point, (sizeof(Point) * nums));
+    HDC hdc = m_data->m_context;
+    Point* p = HFCL_NEW_ARR(Point, (sizeof(Point) * nums));
     if (NULL == p) {
         _ERR_PRINTF("HFCL_NEW_ARR for fillPolygon fail..\n");
         return;
     }
 
-	SetPenWidth(hdc, width);
-	SetPenJoinStyle(hdc, PT_JOIN_ROUND);
-	SetPenCapStyle(hdc, PT_CAP_ROUND);
+    SetPenWidth(hdc, width);
+    SetPenJoinStyle(hdc, PT_JOIN_ROUND);
+    SetPenCapStyle(hdc, PT_CAP_ROUND);
     SetPenColor(hdc, RGBA2Pixel(hdc, r, g, b, a));
 
     for (int c = 0; c < nums; ++c) {
         map(pts[c].x, pts[c].y, p[c].x, p[c].y);
     }
 
-	PolyLineEx(hdc, p, nums);
+    PolyLineEx(hdc, p, nums);
 
-	if (NULL != p) {
+    if (NULL != p) {
         HFCL_DELETE_ARR(p);
         p = NULL;
     }
@@ -805,29 +687,10 @@ int GraphicsContext::loadBitmap(Bitmap* bmp, const char * file_name)
 
     return ret;
 }
+
 int GraphicsContext::loadBitmap(Bitmap **bmp, const void* data, int size, const char * extern_name)
 {
-#ifdef _HFCL_INCORE_BMPDATA
     return LoadBitmapFromMem(m_data->m_viewdc, *bmp, data, size, extern_name);
-#else
-// incore res is BITMAP *
-    BitmapFrameArray *b = (BitmapFrameArray *)data;
-    // resouce error : 0 frames
-    if (0 == b->nr_frames || NULL == b->frames)
-    {
-        return ERR_BMP_LOAD;
-    }
-
-    PBITMAP pBmp = (BITMAP*)((b->frames->bmp));
-    if (bmp)
-        *bmp = pBmp;
-
-    if (!pBmp->bmBits) {
-        return ERR_BMP_LOAD;
-    }
-
-    return ERR_BMP_OK;
-#endif
 }
 
 void GraphicsContext::unloadBitmap(Bitmap* pBitmap)
@@ -867,9 +730,9 @@ bool GraphicsContext::getBitmapSize(Bitmap* pBitmap, int* w, int* h)
     return true;
 }
 
-Logfont* GraphicsContext::getCurFont(void) 
-{ 
-	return GetCurFont(m_data->m_context); 
+Logfont* GraphicsContext::getCurFont(void)
+{
+    return GetCurFont(m_data->m_context);
 }
 
 Logfont* GraphicsContext::createLogFontByName(const char * fontname)
@@ -903,7 +766,7 @@ int GraphicsContext::getLayers(void)
 {
 /* VincentWei: disable multiple-layer support */
 #if __MG_MULTILAYER_SUPPORT
-	return GetDCLayers(context());
+    return GetDCLayers(context());
 #else
     return 1;
 #endif
@@ -913,7 +776,7 @@ void GraphicsContext::setLayer(int layer)
 {
 /* VincentWei: disable multiple-layer support */
 #if __MG_MULTILAYER_SUPPORT
-	SetDCLayer(context(), layer);
+    SetDCLayer(context(), layer);
 #else
     return;
 #endif
@@ -923,7 +786,7 @@ void GraphicsContext::setLayerEnable(int layer, BOOL enable)
 {
 /* VincentWei: disable multiple-layer support */
 #if __MG_MULTILAYER_SUPPORT
-	SetDCLayerEnable (context(), layer, enable);
+    SetDCLayerEnable (context(), layer, enable);
 #else
     return;
 #endif
@@ -933,18 +796,18 @@ void GraphicsContext::setLayerOpacity(int layer, BOOL enable,unsigned char opaci
 {
 /* VincentWei: disable multiple-layer support */
 #if __MG_MULTILAYER_SUPPORT
-	SetDCLayerOpacity (context(), layer, enable, opacity_value);
+    SetDCLayerOpacity (context(), layer, enable, opacity_value);
 #else
     return;
 #endif
 }
 
-void GraphicsContext::setLayerColorKey(int layer, BOOL enable, 
+void GraphicsContext::setLayerColorKey(int layer, BOOL enable,
         unsigned char r, unsigned char g, unsigned char b )
 {
 /* VincentWei: disable multiple-layer support */
 #if __MG_MULTILAYER_SUPPORT
-	SetDCLayerColorKey (context(),  layer,  enable, r, g, b);
+    SetDCLayerColorKey (context(),  layer,  enable, r, g, b);
 #else
 #endif
 }
@@ -953,12 +816,12 @@ void GraphicsContext::setLayerColorKey(int layer, BOOL enable,
 
 GraphicsContext* CreateMemGC(int w, int h)
 {
-	GraphicsContext* gc = NULL;
-	gc = GraphicsContext::screenGraphics();
-	if(NULL != gc)
-		return gc->createMemGc(w, h);
+    GraphicsContext* gc = NULL;
+    gc = GraphicsContext::screenGraphics();
+    if(NULL != gc)
+        return gc->createMemGc(w, h);
 
-	return NULL;
+    return NULL;
 }
 
 void DeleteMemGC(GraphicsContext *memGc)
@@ -972,7 +835,7 @@ void DeleteMemGC(GraphicsContext *memGc)
 bool SaveScreenToFile(const char * bmpFile)
 {
 #if defined (_MGMISC_SAVESCREEN)
-    RECT rc = {0, 0, 
+    RECT rc = {0, 0,
             (int)GetGDCapability (HDC_SCREEN, GDCAP_HPIXEL),
             (int)GetGDCapability (HDC_SCREEN, GDCAP_VPIXEL)};
     return SaveScreenRectContent(&rc, bmpFile);

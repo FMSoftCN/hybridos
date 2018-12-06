@@ -44,8 +44,10 @@ typedef struct _ResourceEntry {
 
 typedef Menu * (*CB_CREATE_MENU)(Menu* parent, EventListener* listener);
 
-PAIR(DWORD, HTData, TextResPair);
-MAP(DWORD, HTData, TextResMap);
+typedef const char* hfcl_const_str_t;
+
+PAIR(DWORD, hfcl_const_str_t, TextResPair);
+MAP(DWORD, hfcl_const_str_t, TextResMap);
 VECTORCLASS(FontRes, FontResVec);
 VECTORCLASS(ImageRes, ImageResVec);
 //VECTORCLASS(DrawableRes, DrawableResVec);
@@ -145,7 +147,7 @@ public:
      * text related methods
      */
     void addTextResRaw(HIDLanguage lang, HIDEncoding enc,
-            const char** rawStrings);
+            const char* fileName);
     void addTextResZipped(HIDLanguage lang, HIDEncoding enc,
             const char* fileName);
     void addTextResGnuMsg(HIDLanguage lang, HIDEncoding enc,

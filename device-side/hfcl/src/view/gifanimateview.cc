@@ -25,20 +25,10 @@
 #include "graphics/gifanimate.h"
 #include "services/timerservice.h"
 
-#if 0
-#include "common/common.h"
-#include "mgcl/mgcl.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
-#endif
-
 namespace hfcl {
 
 GifAnimateView::GifAnimateView()
-	:View() ,m_elapsed_10ms(0)
+    :View() ,m_elapsed_10ms(0)
 {
     m_animate = NULL;
     m_timer_id = 0;
@@ -49,7 +39,7 @@ GifAnimateView::GifAnimateView()
 }
 
 GifAnimateView::GifAnimateView(View* p_parent)
-	:View(p_parent)
+    :View(p_parent)
 {
     m_animate = NULL;
     m_timer_id = 0;
@@ -60,7 +50,7 @@ GifAnimateView::GifAnimateView(View* p_parent)
 }
 
 GifAnimateView::GifAnimateView(View* p_parent, DrawableSet* drset)
-	:View(p_parent, drset)
+    :View(p_parent, drset)
 {
     m_animate = NULL;
     m_timer_id = 0;
@@ -71,7 +61,7 @@ GifAnimateView::GifAnimateView(View* p_parent, DrawableSet* drset)
 }
 
 GifAnimateView::GifAnimateView(int i_id, int x, int y, int w, int h)
-	:View(i_id, x, y, w, h)
+    :View(i_id, x, y, w, h)
 {
     m_animate = NULL;
     m_timer_id = 0;
@@ -83,19 +73,15 @@ GifAnimateView::GifAnimateView(int i_id, int x, int y, int w, int h)
 
 GifAnimateView::~GifAnimateView()
 {
-	stop();
+    stop();
     if (m_timer_id != 0)
-	    removeTimer(m_timer_id);
-	m_timer_id = 0;
+        removeTimer(m_timer_id);
+    m_timer_id = 0;
 
     if (NULL != m_animate){
-	#ifdef _HFCL_INCORE_BMPDATA
-		 m_animate->~GifAnimate();
-    #else
         HFCL_DELETE(m_animate);
-		m_animate = NULL;
-    #endif
-	}
+        m_animate = NULL;
+    }
 }
 
 bool GifAnimateView::start(void)
@@ -160,14 +146,14 @@ bool GifAnimateView::stop(void)
         removeTimer(m_timer_id);
         m_timer_id = 0;
     }
-	if(m_state == Stop) return false;
+    if(m_state == Stop) return false;
     m_state = Stop;
 
-	if(m_animate== NULL) return false;
-	m_animate->firstFrame();
+    if(m_animate== NULL) return false;
+    m_animate->firstFrame();
     // stop notity event
-	CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_GIFANIMATE_STOP, (HTData)this);
-	raiseEvent(&event);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_GIFANIMATE_STOP, (HTData)this);
+    raiseEvent(&event);
 
     return true;
 }
@@ -190,7 +176,7 @@ void GifAnimateView::setGifFile(const char* animateFile)
 {
     if (NULL != m_animate) {
         HFCL_DELETE(m_animate);
-		m_animate = NULL;
+        m_animate = NULL;
     }
 
     if (NULL == animateFile)
@@ -202,7 +188,7 @@ void GifAnimateView::setGifFile(const char* animateFile)
         m_animate->createGifAnimateFromFile(animateFile);
     }
 
-    if (NULL != m_animate 
+    if (NULL != m_animate
             && m_animate->frameCount() > 0
             && AutoPlay == m_playType) {
         start();
@@ -213,12 +199,12 @@ void GifAnimateView::setGifAnimate(GifAnimate* animate)
 {
     if (NULL != m_animate && m_animate != animate) {
         HFCL_DELETE(m_animate);
-		m_animate = NULL;
+        m_animate = NULL;
     }
 
     m_animate = animate;
 
-    if (NULL != m_animate 
+    if (NULL != m_animate
             && m_animate->frameCount() > 0
             && AutoPlay == m_playType) {
         start();
@@ -228,14 +214,14 @@ void GifAnimateView::setGifAnimate(GifAnimate* animate)
 void GifAnimateView::onPaint(GraphicsContext* context, int status)
 {
     IntRect rc = getRect();
-    RECT mapRc(rc);    
-    if (NULL == m_animate) { 
+    RECT mapRc(rc);
+    if (NULL == m_animate) {
         return;
     }
 
     context->setLayer(m_drawLayer);
     context->mapRect(mapRc);
-        
+
     m_animate->drawOneFrame(context, mapRc);
 }
 
@@ -249,44 +235,40 @@ bool GifAnimateView::handleEvent(Event* event)
         return DISPATCH_STOP_MSG;
 
     if (event->eventType() == Event::TIMER
-			&& m_timer_id == ((TimerEvent *)event)->timerID())
-	{
-		if(m_animate->frameCount() == 1)
-		{
-			updateView(false);
-			stop();
-		}
-		else
-		{
-			if (m_elapsed_10ms >= m_animate->currentFrameDelay())
-			{
-				if (!(m_animate->isLastFrame()) || Loop == m_loopType)
-				{
-#ifdef _HFCL_INCORE_BMPDATA
-	                if((Loop == m_loopType)&&(m_animate->isLastFrame()))
-					{
-					     m_animate->firstFrame();
-					}
-	                else
-#endif
-					{
-	                    m_animate->nextFrame();
-					}
-					m_elapsed_10ms = 0;
-	                m_start_ticks = GetTickCount();
-					updateView(false);
-				}
+            && m_timer_id == ((TimerEvent *)event)->timerID())
+    {
+        if(m_animate->frameCount() == 1)
+        {
+            updateView(false);
+            stop();
+        }
+        else
+        {
+            if (m_elapsed_10ms >= m_animate->currentFrameDelay())
+            {
+                if (!(m_animate->isLastFrame()) || Loop == m_loopType)
+                {
+                    if((Loop == m_loopType)&&(m_animate->isLastFrame())) {
+                         m_animate->firstFrame();
+                    }
+                    else {
+                        m_animate->nextFrame();
+                    }
+                    m_elapsed_10ms = 0;
+                    m_start_ticks = GetTickCount();
+                    updateView(false);
+                }
                 else {
-	                // last frame and not loop
-					stop();
-				}
-			}
-			else {
-	            Sint32 cur_tick = GetTickCount();
-	            m_elapsed_10ms = (Uint64) (cur_tick - m_start_ticks)*10;
-			}
-		}
-	}
+                    // last frame and not loop
+                    stop();
+                }
+            }
+            else {
+                Sint32 cur_tick = GetTickCount();
+                m_elapsed_10ms = (Uint64) (cur_tick - m_start_ticks)*10;
+            }
+        }
+    }
 
     return DISPATCH_CONTINUE_MSG;
 }

@@ -494,24 +494,24 @@ void *ResPackage::getRes(HTResId id)
 }
 
 void ResPackage::addTextResRaw(HIDLanguage lang, HIDEncoding enc,
-        const char** rawStrings)
+        const char* fileName)
 {
     m_resBuckets[R_TYPE_TEXT_RAW].textRes()[MAKELONG(enc, lang)]
-        = (HTData)rawStrings;
+        = fileName;
 }
 
 void ResPackage::addTextResZipped(HIDLanguage lang, HIDEncoding enc,
             const char* fileName)
 {
     m_resBuckets[R_TYPE_TEXT_ZIPPED].textRes()[MAKELONG(enc, lang)]
-        = (HTData)fileName;
+        = fileName;
 }
 
 void ResPackage::addTextResGnuMsg(HIDLanguage lang, HIDEncoding enc,
             const char* fileName)
 {
     m_resBuckets[R_TYPE_TEXT_GNUMSG].textRes()[MAKELONG(enc, lang)]
-        = (HTData)fileName;
+        = fileName;
 }
 
 bool ResPackage::setCurrentLang(HIDLanguage lang, HIDEncoding enc)
@@ -524,7 +524,7 @@ bool ResPackage::setCurrentLang(HIDLanguage lang, HIDEncoding enc)
     TextResMap &res = m_resBuckets[R_TYPE_TEXT_RAW].textRes();
     TextResMap::iterator it = res.find(MAKELONG(enc, lang));
     if (it != res.end() && it->second) {
-        m_textRes = HFCL_NEW_EX (TextRes, (it->second));
+        m_textRes = HFCL_NEW_EX (TextResRaw, (it->second));
         return true;
     }
 
@@ -549,22 +549,9 @@ bool ResPackage::setCurrentLang(HIDLanguage lang, HIDEncoding enc)
 
 const char* ResPackage::getText (HTStrId id)
 {
-    if (m_textRes) {
+    if (m_textRes == NULL) {
         _DBG_PRINTF ("ResPackage::getText: NOT initialized text resource\n");
         return NULL;
-    }
-
-    switch (m_textResType) {
-    case R_TYPE_TEXT_RAW:
-    case R_TYPE_TEXT_ZIPPED:
-        break;
-
-    case R_TYPE_TEXT_GNUMSG:
-        _DBG_PRINTF ("ResPackage::getText (HTStrId): Type of text resource not matched\n");
-        return NULL;
-
-    default:
-        break;
     }
 
     return m_textRes->getText (id);
@@ -574,11 +561,6 @@ const char* ResPackage::getText (const char* str)
 {
     if (m_textRes) {
         _DBG_PRINTF ("ResPackage::getText: NOT initialized text resource\n");
-        return NULL;
-    }
-
-    if (m_textResType != R_TYPE_TEXT_GNUMSG) {
-        _DBG_PRINTF ("ResPackage::getText (const char*): Type of text resource not matched\n");
         return NULL;
     }
 

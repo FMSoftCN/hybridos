@@ -160,6 +160,16 @@ typedef struct _HFCL_INCORE_RES {
     unsigned int size;
 } HFCL_INCORE_RES;
 
+typedef struct _HFCL_ZIPPED_STRINGS {
+    Uint32  lang_id;
+    Uint32  enc_id;
+    Uint32  zipped_size;
+    Uint32  origin_size;
+    Uint32  nr_strings;
+    Uint32  reserved;
+    char    zipped_bytes [0];
+} __attribute__((__packed__)) HFCL_ZIPPED_STRINGS;
+
 #ifdef __cplusplus
 
 namespace hfcl {
@@ -170,8 +180,7 @@ typedef struct INNER_RES_INFO {
     unsigned int size;
 } INNER_RES_INFO;
 
-typedef struct INNER_RES_ARRAY
-{
+typedef struct INNER_RES_ARRAY {
     HIDResType type;
     INNER_RES_INFO *pInner_res_info;
     unsigned int number;

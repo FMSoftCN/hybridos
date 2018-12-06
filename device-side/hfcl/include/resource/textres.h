@@ -33,19 +33,14 @@ MAP(my_text_t, my_text_t, TextMsgMap);
 
 class TextRes {
 public:
-    TextRes (HTData res_data) : m_res_data (res_data) { }
+    TextRes (const char* res_name) : m_res_name (res_name) { }
 
-    virtual ~TextRes () { release(); }
+    virtual ~TextRes () { }
 
-    virtual bool load () {
-        m_raw_strings = (const char**)m_res_data;
-        return true;
-    }
-    virtual void release () {};
+    virtual bool load () = 0 ;
+    virtual void release () = 0;
 
     virtual const char* getText (HTStrId strId) {
-        if (m_raw_strings)
-            return m_raw_strings [strId];
         return "";
     }
     virtual const char* getText (const char* str) {
@@ -53,45 +48,68 @@ public:
     }
 
 protected:
-    HTData m_res_data;
+    const char* m_res_name;
+};
+
+class TextResRaw : public TextRes {
+public:
+    TextResRaw (const char* res_name) : TextRes (res_name) {
+        m_is_incore = false;
+        m_raw_strings = NULL;
+    }
+
+    ~TextResRaw () { release (); }
+
+    virtual bool load ();
+    virtual void release ();
+
+    virtual const char* getText (HTStrId strId) {
+        if (m_raw_strings)
+            return m_raw_strings [strId];
+        return "";
+    }
+
+private:
+    bool m_is_incore;
     const char** m_raw_strings;
 };
 
 class TextResZipped : public TextRes {
 public:
-    TextResZipped (HTData res_data)
-        : TextRes (res_data)
-        , m_loaded (false)
+    TextResZipped (const char* res_name)
+        : TextRes (res_name)
         , m_string_bucket (NULL)
     { }
-    ~TextResZipped () { }
+    ~TextResZipped () { release (); }
 
     virtual bool load ();
     virtual void release ();
+    virtual const char* getText (HTStrId strId) {
+        if (m_raw_strings)
+            return m_raw_strings [strId];
+        return "";
+    }
 
 private:
-    bool m_loaded;
     char* m_string_bucket;
+    const char** m_raw_strings;
 };
 
 class TextResGnuMsg : public TextRes {
 public:
-    TextResGnuMsg (HTData res_data) : TextRes (res_data) { }
-    ~TextResGnuMsg () {}
+    TextResGnuMsg (const char* res_name) : TextRes (res_name) { }
+    ~TextResGnuMsg () { release (); }
 
-    int loadFromFile (const char* mo_file);
+    int doLoad (MG_RWops* src);
+
     virtual bool load ();
     virtual void release () {
         m_text_map.clear ();
     }
 
-    virtual const char* getText (HTStrId strId) {
-        return "";
-    }
     virtual const char* getText (const char* str);
 
 private:
-    bool m_loaded;
     TextMsgMap m_text_map;
 };
 
