@@ -152,7 +152,7 @@ const char* TextResGnuMsg::getText (const char* msgid)
         return msgid;
     }
 
-    return m_text_map [msgid];
+    return m_text_map [msgid].c_str ();
 }
 
 /*
@@ -346,6 +346,11 @@ bool TextResGnuMsg::load ()
     MGUI_FreeRW (src);
 
     return true;
+}
+
+void TextResGnuMsg::release ()
+{
+    m_text_map.clear ();
 }
 
 } // namespace hfcl

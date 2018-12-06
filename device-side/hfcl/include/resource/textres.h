@@ -27,10 +27,6 @@
 
 namespace hfcl {
 
-typedef const char* my_text_t;
-PAIR(my_text_t, my_text_t, TextMsgPair);
-MAP(my_text_t, my_text_t, TextMsgMap);
-
 class TextRes {
 public:
     TextRes (const char* res_name) : m_res_name (res_name) { }
@@ -103,13 +99,14 @@ public:
     int doLoad (MG_RWops* src);
 
     virtual bool load ();
-    virtual void release () {
-        m_text_map.clear ();
-    }
+    virtual void release ();
 
     virtual const char* getText (const char* str);
 
 private:
+    MAPCLASSKEY(string, string, TextMsgMap);
+    PAIR(string, string, TextMsgPair);
+
     TextMsgMap m_text_map;
 };
 
