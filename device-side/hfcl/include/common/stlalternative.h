@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef HFCL_COMMON_ALTERNATIVESTL_H_
-#define HFCL_COMMON_ALTERNATIVESTL_H_
+#ifndef HFCL_COMMON_STLALTERNATIVE_H_
+#define HFCL_COMMON_STLALTERNATIVE_H_
 
 #ifndef __cplusplus
 #   error "alternativestl.h: C++ only."
@@ -889,5 +889,5 @@ protected: \
 
 #endif /* !_HFCL_USE_STL */
 
-#endif /* HFCL_COMMON_ALTERNATIVESTL_H_ */
+#endif /* HFCL_COMMON_STLALTERNATIVE_H_ */
 

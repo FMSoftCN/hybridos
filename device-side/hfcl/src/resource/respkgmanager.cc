@@ -1,7 +1,7 @@
 /*
 ** HFCL - HybridOS Foundation Class Library
 **
-** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
+**  (C) 2018 Beijing FMSoft echnologies Co., Ltd.
 **
 ** This file is part of HFCL.
 **
@@ -84,10 +84,10 @@ bool ResPkgManager::registerPackage(ResPackage *pkg)
 bool ResPkgManager::unregisterPackage(int id)
 {
     ResPkgList::iterator it;
-    for (it = m_packageList.begin(); it !=m_packageList.end(); it++) {
+    for (it = m_packageList.begin(); it != m_packageList.end(); it++) {
         if ((*it)->getId() == id) {
             m_packageList.erase(it);
-            // VincentWei > FIXME: memory leap? HFCL_DELETE(*it);
+            HFCL_DELETE(*it);
             return true;
         }
     }
@@ -98,7 +98,7 @@ bool ResPkgManager::unregisterPackage(const char * name)
 {
     ResPkgList::iterator it;
 
-    for (it = m_packageList.begin(); it !=m_packageList.end(); it++) {
+    for (it = m_packageList.begin(); it != m_packageList.end(); it++) {
         if (strcmp((*it)->getName(), name) == 0) {
             m_packageList.erase(it);
             HFCL_DELETE(*it);
