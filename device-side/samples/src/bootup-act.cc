@@ -1,17 +1,3 @@
-/*
-** $Id: BootupApp.cpp 2515 2012-01-13 09:25:51Z ylwang $
-**
-** BootupApp.cpp : TODO
-**
-** Copyright (C) 2002 ~ 2011 Beijing FMSoft Technology Co., Ltd.
-**
-** All rights reserved by FMSoft.
-**
-** Current Maintainer : ylwang
-**
-** Create Date : 2011-10-24
-*/
-
 #include "ngux.h"
 #include "appmanager.h"
 #include "appentries.h"
@@ -73,9 +59,9 @@ extern void registerCommunicationHandlers();
 extern void turnOnLcd(char init);
 extern void RefreshBattery(NGInt level);
 
-BootupApp* BootupApp::instance = NULL;
+BootupActivity* BootupActivity::instance = NULL;
 
-BootupApp::BootupApp()
+BootupActivity::BootupActivity()
 {
 #ifdef __CALENDAR_ARABIC__
     NGInt dateSystem;
@@ -112,25 +98,25 @@ BootupApp::BootupApp()
     mIsPowerOnPlayed = false;
 }
 
-BootupApp::~BootupApp()
+BootupActivity::~BootupActivity()
 {
     instance = NULL;
     Profile::getInstance()->blockKeyTone(FALSE);
     UnregisterResPackage(RES_PKG_BOOTUP_ID);
 }
 
-void BootupApp::onCreate(ContextStream* contextStream, Intent* intent)
+void BootupActivity::onCreate(ContextStream* contextStream, Intent* intent)
 {
     FRRegister_bootup_resource();
-    AppWithBar::onCreate(contextStream, intent);
+    ActivityWithBar::onCreate(contextStream, intent);
     setFullScreen(true, true);
     
     boot(intent->action());
 }
 
-void BootupApp::onWakeup() 
+void BootupActivity::onWakeup() 
 {
-	AppWithBar::onWakeup();
+	ActivityWithBar::onWakeup();
 
 	// coming back from call ( SOS calling )
 	if (m_isSOSCalling) {
@@ -163,7 +149,7 @@ void BootupApp::onWakeup()
 		}
 	}
 
-	AppClient* top_app = (AppClient*)getTop(0);
+	ActivityClient* top_app = (ActivityClient*)getTop(0);
 	if( top_app != NULL )
 		top_app->active();
 	
@@ -211,7 +197,7 @@ NGBool IsPlayAndVibrate(NGBool ring)
     return true;
 }
 
-void BootupApp::boot(NGInt bootType)
+void BootupActivity::boot(NGInt bootType)
 {
     m_bootType = bootType;
 
@@ -224,7 +210,7 @@ void BootupApp::boot(NGInt bootType)
 	    	if (NULL != calIns)
 			{
 				calIns->InitCallHandlers();
-			//	calIns->OpenStackForCallApplication();
+			//	calIns->OpenStackForCallActivitylication();
 	    	}
 	 		SendMessageToCswForPowerOn(); 				
 	 	}
@@ -256,10 +242,10 @@ void BootupApp::boot(NGInt bootType)
 #endif
 
     /* VincentWei: The chance for the apps to load data from NVRAM here */
-    AppManager::getInstance()->onBoot ();
+    ActivityManager::getInstance()->onBoot ();
 }
 
-void BootupApp::EnterAnimate(NGInt bootType)
+void BootupActivity::EnterAnimate(NGInt bootType)
 {
     switch(bootType)
     {
@@ -284,17 +270,17 @@ void BootupApp::EnterAnimate(NGInt bootType)
     }
 }
 
-void BootupApp::showChargerUnplug(NGInt level)
+void BootupActivity::showChargerUnplug(NGInt level)
 {
-	AppWithBar::showModalView(BOOTUP_CLIENT_UNPLUGCHARGER, level, 0);
+	ActivityWithBar::showModalView(BOOTUP_CLIENT_UNPLUGCHARGER, level, 0);
 }
 
-void BootupApp::showChargerFull(void)
+void BootupActivity::showChargerFull(void)
 {
-	AppWithBar::showModalView(BOOTUP_CLIENT_FULL, 0, 0);
+	ActivityWithBar::showModalView(BOOTUP_CLIENT_FULL, 0, 0);
 }
 
-void BootupApp::onPowerOnAlarm(void)
+void BootupActivity::onPowerOnAlarm(void)
 {
     NguxTime *  sysTime = NguxTime::getSysTime();
     NGChar      AlarmTimeStr[10];
@@ -309,27 +295,27 @@ void BootupApp::onPowerOnAlarm(void)
     showMsgTextDlg((NGCPStr)AlarmTimeStr, BOOT_ALARM_ALERT, ICON_ALARM_ALERT , 0, 60);
 }
 
-void BootupApp::EnterGreetwords(void)
+void BootupActivity::EnterGreetwords(void)
 {
     showView(BOOTUP_CLIENT_GREET, 0, 0);
 }
 
-void BootupApp::EnterSIMName(void)
+void BootupActivity::EnterSIMName(void)
 {
     showView(BOOTUP_CLIENT_SIMNAME, 0, 0);
 }
 
-void BootupApp::EnterPhonelock(void)
+void BootupActivity::EnterPhonelock(void)
 {
     //TODO
 }
 
-void BootupApp::EnterTestUsim(void)
+void BootupActivity::EnterTestUsim(void)
 {
     showView(BOOTUP_CLIENT_TEST_USIM, 0, 0);
 }
 
-NGBool BootupApp::isTestUsimInserted(void)
+NGBool BootupActivity::isTestUsimInserted(void)
 {
 #if defined(ENABLE_NVRAM)
     UINT8 tmp[16] = {0,};
@@ -359,26 +345,26 @@ NGBool BootupApp::isTestUsimInserted(void)
     return false;
 }
 
-void BootupApp::showPUKblock(void)
+void BootupActivity::showPUKblock(void)
 {
 	NGUInt ret1;
 	
 	do {
-		getTopAppClient()->onControllerCommand(BOOTUP_CMD_BACKGROUND_ON, 0, 0); 
-		ret1 = BootupApp::getCurrInstance()->showMsgTextDlg(GetTextRes(SS_PUK_BLOCKED), SOSDLG, ICON_ERROR, 0);
+		getTopActivityClient()->onControllerCommand(BOOTUP_CMD_BACKGROUND_ON, 0, 0); 
+		ret1 = BootupActivity::getCurrInstance()->showMsgTextDlg(GetTextRes(SS_PUK_BLOCKED), SOSDLG, ICON_ERROR, 0);
 		showMenuBar(false);
-		getTopAppClient()->onControllerCommand(BOOTUP_CMD_BACKGROUND_OFF, 0, 0); 
+		getTopActivityClient()->onControllerCommand(BOOTUP_CMD_BACKGROUND_OFF, 0, 0); 
 
 		if(ret1 == TipDlg::TIP_SOS) {
-			getTopAppClient()->onControllerCommand(BOOTUP_CMD_BACKGROUND_ON, 0, 0); 
-			NGInt ret2 = BootupApp::getCurrInstance()->showModalView(BOOTUP_CLIENT_QUESTIONDLG_EMERGENCY, (NGParam)GetTextRes(SS_EMERGENCY_CALL_Q), YESNODLG);
-    		getTopAppClient()->onControllerCommand(BOOTUP_CMD_BACKGROUND_OFF, 0, 0); 
+			getTopActivityClient()->onControllerCommand(BOOTUP_CMD_BACKGROUND_ON, 0, 0); 
+			NGInt ret2 = BootupActivity::getCurrInstance()->showModalView(BOOTUP_CLIENT_QUESTIONDLG_EMERGENCY, (NGParam)GetTextRes(SS_EMERGENCY_CALL_Q), YESNODLG);
+    		getTopActivityClient()->onControllerCommand(BOOTUP_CMD_BACKGROUND_OFF, 0, 0); 
 
 			if (ret2 == TipDlg::TIP_OK) {
-				BootupApp::getCurrInstance()->m_isSOSCalling = true;
-                BootupApp::getCurrInstance()->m_PUKBlock = true;
+				BootupActivity::getCurrInstance()->m_isSOSCalling = true;
+                BootupActivity::getCurrInstance()->m_PUKBlock = true;
 				RefreshBattery(GetBatteryLevel());
-				Intent intent(CallApp::START_BY_EMERGENCY, "", BOOTUP_FROM_PUKLOCK);
+				Intent intent(CallActivity::START_BY_EMERGENCY, "", BOOTUP_FROM_PUKLOCK);
 				EntryCall(&intent);
                 break;
 			 }
@@ -391,7 +377,7 @@ NGUX_BEGIN_EXTERN_C
 extern void  AT_SendBootupMessages();
 NGUX_END_EXTERN_C
 
-void BootupApp::EnterDesktop(void)
+void BootupActivity::EnterDesktop(void)
 {
     CheckEarphone();
     exit();
@@ -401,7 +387,7 @@ void BootupApp::EnterDesktop(void)
     EntryLauncher(NULL);
 }
 
-void BootupApp::EnterAlarm(void)
+void BootupActivity::EnterAlarm(void)
 {
     NGUInt16 temp;
     NguxTime *sysTime = NguxTime::getSysTime();
@@ -414,20 +400,20 @@ void BootupApp::EnterAlarm(void)
     EntryAlarm( &intent);
 }
 
-NGBool BootupApp::onKey(NGInt keyCode, KeyEvent* event)
+NGBool BootupActivity::onKey(NGInt keyCode, KeyEvent* event)
 {	  
 	if ((event->eventType() == Event::KEY_LONGPRESSED)&&(keyCode==KeyEvent::KEYCODE_STOP)&& (m_LockCheck==true)) {
 		EntryShutDown(NULL);
 		return false;
 	}
 	else {
-		return AppWithBar::onKey(keyCode,  event);
+		return ActivityWithBar::onKey(keyCode,  event);
 	}
 }
 
-void BootupApp::callback(void* obj, void* data, NGInt data_bytes, NGInt type, NGBool result, NGInt reason)
+void BootupActivity::callback(void* obj, void* data, NGInt data_bytes, NGInt type, NGBool result, NGInt reason)
 {
-    BootupApp* ins = (BootupApp *)obj;
+    BootupActivity* ins = (BootupActivity *)obj;
     // PIN1
     if (VRF_PIN1 == type)
     {
@@ -450,7 +436,7 @@ void BootupApp::callback(void* obj, void* data, NGInt data_bytes, NGInt type, NG
                 {
                     ins->m_isSOSCalling = true;
                     RefreshBattery(GetBatteryLevel());
-                    Intent intent(CallApp::START_BY_EMERGENCY, "", BOOTUP_FROM_PINLOCK);
+                    Intent intent(CallActivity::START_BY_EMERGENCY, "", BOOTUP_FROM_PINLOCK);
                     EntryCall(&intent);
                     return;
                 }
@@ -477,7 +463,7 @@ void BootupApp::callback(void* obj, void* data, NGInt data_bytes, NGInt type, NG
                 {
                     // call emergency
                     RefreshBattery(GetBatteryLevel());
-                    Intent intent(CallApp::START_BY_EMERGENCY, "", BOOTUP_FROM_PUKLOCK);
+                    Intent intent(CallActivity::START_BY_EMERGENCY, "", BOOTUP_FROM_PUKLOCK);
                     EntryCall(&intent);
                     return;
                 }
@@ -493,12 +479,12 @@ void BootupApp::callback(void* obj, void* data, NGInt data_bytes, NGInt type, NG
 }
 
 
-NGUInt BootupApp::onClientCommand(NGInt sender, NGUInt cmd_id, NGULong param1, NGULong param2)
+NGUInt BootupActivity::onClientCommand(NGInt sender, NGUInt cmd_id, NGULong param1, NGULong param2)
 {
     NGUInt i;
-	AppManager *am = AppManager::getInstance();	
-    AppClient* top = ((AppWithBar*)am->getCurrentApp())->getTopAppClient();
-	AppClient *_topBooting = BootupApp::getCurrInstance()->getTopAppClient();
+	ActivityManager *am = ActivityManager::getInstance();	
+    ActivityClient* top = ((ActivityWithBar*)am->getCurrentActivity())->getTopActivityClient();
+	ActivityClient *_topBooting = BootupActivity::getCurrInstance()->getTopActivityClient();
 	
     if (top == NULL || _topBooting == NULL)
         return 0;
@@ -669,17 +655,17 @@ NGUInt BootupApp::onClientCommand(NGInt sender, NGUInt cmd_id, NGULong param1, N
     return 0;
 }
 
-void BootupApp::StopBootupTone(void)
+void BootupActivity::StopBootupTone(void)
 {
     Profile::getInstance()->stopPlayAudio();
 }
 
-void BootupApp::PlayBootupTone(void)
+void BootupActivity::PlayBootupTone(void)
 {
     Profile::getInstance()->startPlayAudio(POWER_ON_TONE);
 }
 
-void BootupApp::CheckEarphone(void)
+void BootupActivity::CheckEarphone(void)
 {
     if(GetHandsetInPhone()) {    
         Profile::getInstance()->enterEarPhoneOrBlueToothMode();
@@ -690,7 +676,7 @@ void BootupApp::CheckEarphone(void)
     }
 }
 
-NGUInt BootupApp::showMsgTextDlg(NGCPStr text_info, NGUInt type, NGInt icon_id, NGInt text_style, NGInt second)
+NGUInt BootupActivity::showMsgTextDlg(NGCPStr text_info, NGUInt type, NGInt icon_id, NGInt text_style, NGInt second)
 {
     MsgTextDlgCreateInfo dlgcreate = {
         text_info,
@@ -703,7 +689,7 @@ NGUInt BootupApp::showMsgTextDlg(NGCPStr text_info, NGUInt type, NGInt icon_id, 
     return showTipView(TIPDLGAPP_CLIENT_ID_TEXTDLG, (NGParam )&dlgcreate, 0);
 }
 
-NGUInt BootupApp::showMsgEditDlg(NGCPStr text_info, NGInt length)
+NGUInt BootupActivity::showMsgEditDlg(NGCPStr text_info, NGInt length)
 {
 	MsgTextEditDlgCreateInfo dlgcreate = {
         text_info,
@@ -720,7 +706,7 @@ NGUInt BootupApp::showMsgEditDlg(NGCPStr text_info, NGInt length)
 	return showTipView(TIPDLGAPP_CLIENT_ID_TEXTEDITDLG, (NGParam )&dlgcreate, 0);
 }
     
-NGUInt BootupApp::showModalView(NGInt view_id, NGParam param1, NGParam param2)
+NGUInt BootupActivity::showModalView(NGInt view_id, NGParam param1, NGParam param2)
 {
     switch(view_id)
     {
@@ -745,10 +731,10 @@ NGUInt BootupApp::showModalView(NGInt view_id, NGParam param1, NGParam param2)
         default:
             break;
     }
-    return AppWithBar::showModalView( view_id, param1, param2);
+    return ActivityWithBar::showModalView( view_id, param1, param2);
 }
 
-void BootupApp::setTheme()
+void BootupActivity::setTheme()
 {
     /* VincentWei: Always set Retro theme for Nokia */
     GetSystemPackage()->setTheme(R_sys_theme_Retro);			
@@ -766,7 +752,7 @@ void BootupApp::setTheme()
     }
 }
 
-void BootupApp::showErrorMsgDlg(NGInt count)
+void BootupActivity::showErrorMsgDlg(NGInt count)
 {
     showMenuBar(true);
     
@@ -802,9 +788,9 @@ void BootupApp::showErrorMsgDlg(NGInt count)
     showMenuBar(false);
 }
 
-void BootupApp::CheckPhoneLockPass(void)
+void BootupActivity::CheckPhoneLockPass(void)
 {
-    _DBG_PRINTF ("BootupApp :: PhoneLock");
+    _DBG_PRINTF ("BootupActivity :: PhoneLock");
     NGInt passwdValue = 0;
     NGChar* editbuf = getEditDlgBuf();
 
@@ -822,7 +808,7 @@ void BootupApp::CheckPhoneLockPass(void)
 		ReadRecord(NVRAM_SETTINGS_PASSWORD, 0, password, SETTINGS_SIM_PASSWORD, &error);
 
         showMenuBar(true);
-        getTopAppClient()->onControllerCommand(BOOTUP_CMD_BACKGROUND_ON, 0, 0); 
+        getTopActivityClient()->onControllerCommand(BOOTUP_CMD_BACKGROUND_ON, 0, 0); 
 		
         do
         {
@@ -859,7 +845,7 @@ void BootupApp::CheckPhoneLockPass(void)
                     // call emergency
                     m_isSOSCalling = true;
                     RefreshBattery(GetBatteryLevel());
-                    Intent intent(CallApp::START_BY_EMERGENCY, "", BOOTUP_FROM_PHONELOCK);
+                    Intent intent(CallActivity::START_BY_EMERGENCY, "", BOOTUP_FROM_PHONELOCK);
                     editbuf [0] = '\0';
                     EntryCall(&intent);
                     return;
@@ -871,7 +857,7 @@ void BootupApp::CheckPhoneLockPass(void)
         while(!passwdValue);
 
         showMenuBar(false);
-        getTopAppClient()->onControllerCommand(BOOTUP_CMD_BACKGROUND_OFF, 0, 0); 
+        getTopActivityClient()->onControllerCommand(BOOTUP_CMD_BACKGROUND_OFF, 0, 0); 
     }
 
   	m_fPhoneLockChecking = false;
@@ -893,7 +879,7 @@ void BootupApp::CheckPhoneLockPass(void)
         if(!bFound && !m_fNeedCheckPIN && !m_fNeedCheckPUK)
         {
 #ifdef __MMI_SAMSUNG_GT_FEATURE__
-            getTopAppClient()->onControllerCommand(BOOTUP_CMD_ANIMATE_RESTART, 0, 0); 
+            getTopActivityClient()->onControllerCommand(BOOTUP_CMD_ANIMATE_RESTART, 0, 0); 
 #else
             onClientCommand(0, BOOTUP_CMD_ANIMATE_FINISH, 0, 0); 
 #endif
@@ -902,14 +888,14 @@ void BootupApp::CheckPhoneLockPass(void)
     else
     {
 #ifdef __MMI_SAMSUNG_GT_FEATURE__
-        getTopAppClient()->onControllerCommand(BOOTUP_CMD_ANIMATE_RESTART, 0, 0); 
+        getTopActivityClient()->onControllerCommand(BOOTUP_CMD_ANIMATE_RESTART, 0, 0); 
 #else
         onClientCommand(0, BOOTUP_CMD_ANIMATE_FINISH, 0, 0); 
 #endif
     }
 }
 
-void BootupApp::checkSimLock(void)
+void BootupActivity::checkSimLock(void)
 {
     NGInt passwdValue = -1;
     NGChar* editbuf = getEditDlgBuf();
@@ -925,7 +911,7 @@ void BootupApp::checkSimLock(void)
         ReadRecord(NVRAM_SETTINGS_SIM_PASSWORD, 0, password, SETTINGS_SIM_PASSWORD, &error);
         //m_end_iamge->show();
         showMenuBar(true);
-        getTopAppClient()->onControllerCommand(BOOTUP_CMD_BACKGROUND_ON, 0, 0); 
+        getTopActivityClient()->onControllerCommand(BOOTUP_CMD_BACKGROUND_ON, 0, 0); 
         do
         {
             RefreshLcdService();
@@ -959,8 +945,8 @@ void BootupApp::checkSimLock(void)
                 {
                     // call emergency
                     RefreshBattery(GetBatteryLevel());
-                    Intent intent(CallApp::START_BY_EMERGENCY, "", BOOTUP_FROM_SIMLOCK);
-                    //Intent intent(CallApp::START_BY_EMERGENCY, "", 0);
+                    Intent intent(CallActivity::START_BY_EMERGENCY, "", BOOTUP_FROM_SIMLOCK);
+                    //Intent intent(CallActivity::START_BY_EMERGENCY, "", 0);
                     m_isSOSCalling = true;
                     editbuf [0] = '\0';
                     EntryCall(&intent);
@@ -980,22 +966,21 @@ void BootupApp::checkSimLock(void)
 	//sendCommand(BOOTUP_CMD_MODEBAR_HIDE, 0, 0);
     }
 
-    if (passwdValue == BOOTUP_PASSWD_RIGHT ||passwdValue == -1)
-    {
+    if (passwdValue == BOOTUP_PASSWD_RIGHT ||passwdValue == -1) {
         m_fNeedChekSim = false;
         onClientCommand(0, BOOTUP_CMD_ANIMATE_FINISH, 0, 0); 
     }
 }
 
-void BootupApp::exitTip(NGInt endCode)
+void BootupActivity::exitTip(NGInt endCode)
 {
     if(endCode == TipDlg::TIP_DESTROY && (getTop()->getId() == BOOTUP_CLIENT_EDITDLG_PASSWD))
             return;
-	
-    AppWithBar::exitTip(endCode);
+
+    ActivityWithBar::exitTip(endCode);
 }
 
-BEGIN_CONTROLLER_CLIENTS(BootupApp)
+BEGIN_CONTROLLER_CLIENTS(BootupActivity)
     CONTROLLER_CLIENT(BOOTUP_CLIENT_POWREON_KEY, BootupAnimate) 
     //CONTROLLER_CLIENT(BOOTUP_CLIENT_POWREON_ALARM, AlarmAnimate)
     CONTROLLER_CLIENT(BOOTUP_CLIENT_POWREON_CHARGEON, ChargerAnimate)
@@ -1005,9 +990,9 @@ BEGIN_CONTROLLER_CLIENTS(BootupApp)
     CONTROLLER_CLIENT(BOOTUP_CLIENT_LOGO, Logo)
     CONTROLLER_CLIENT(BOOTUP_CLIENT_TEST_USIM, BootupTestUsim)    
     CONTROLLER_CLIENT(BOOTUP_CLIENT_SIMNAME, BootupSIMName)
-END_CONTROLLER_CLIENTS_EX(AppWithBar)
+END_CONTROLLER_CLIENTS_EX(ActivityWithBar)
 
-BEGIN_DEFINE_APP(BootupApp)
+BEGIN_DEFINE_APP(BootupActivity)
     APP_SET(name, "bootup")
     APP_SET(position, POS_HIDE)
 END_DEFINE_APP
