@@ -25,6 +25,7 @@
 #include "common/common.h"
 
 typedef enum {
+    R_TYPE_VOID,
     R_TYPE_TEXT_RAW,
     R_TYPE_TEXT_ZIPPED,
     R_TYPE_TEXT_GNUMSG,
