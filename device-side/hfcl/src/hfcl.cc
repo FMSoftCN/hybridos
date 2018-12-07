@@ -32,7 +32,7 @@
 
 namespace hfcl {
 
-int InitHFCL (int argc, const char** argv)
+int Initialize (int argc, const char** argv)
 {
     InitGUI (argc, argv);
 
@@ -52,6 +52,11 @@ int InitHFCL (int argc, const char** argv)
 
     return 0;
 };
+
+void Terminate (int retValue)
+{
+    TerminateGUI (retValue);
+}
 
 } // namespace hfcl
 

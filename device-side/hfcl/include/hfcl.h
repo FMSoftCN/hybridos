@@ -27,7 +27,8 @@
 
 namespace hfcl {
 
-int InitHFCL (int argc, const char** argv);
+int Initialize (int argc, const char** argv);
+void Terminate (int retValue);
 
 } // namespace hfcl
 

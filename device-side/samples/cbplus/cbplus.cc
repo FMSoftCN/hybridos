@@ -14,7 +14,7 @@
 
 int main (int argc, const char** argv)
 {
-    InitHFCL (argc, argv);
+    Initialize (argc, argv);
 
     // register system resource
     FRRegister_sys_resource();
@@ -38,6 +38,7 @@ int main (int argc, const char** argv)
     act_mgr->startActivity ("bootup", &intent);
     act_mgr->run();
 
+    Terminate (0);
     return 0;
 }
 
