@@ -8,7 +8,7 @@ using namespace hfcl;
 
 DECLARE_ACTIVITY_FACTORY(BootupActivity)
 
-class BootupActivity : public Activity {
+class BootupActivity : public FullScreenActivity {
 public:
     BootupActivity();
     ~BootupActivity();
@@ -30,8 +30,6 @@ public:
     DECLARE_CONTROLLER_CLIENTS
 
 private:
-    static BootupActivity* getCurrInstance() { return instance; }
-    static BootupActivity* instance;
     int m_bootType;
 };
 

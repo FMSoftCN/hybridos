@@ -8,22 +8,24 @@
 #include "bootuplogo.h"
 #include "bootupgreet.h"
 
-BootupActivity* BootupActivity::instance = NULL;
-
 BootupActivity::BootupActivity()
 {
 }
 
 BootupActivity::~BootupActivity()
 {
-    instance = NULL;
     UnregisterResPackage(RES_PKG_BOOTUP_ID);
 }
 
 void BootupActivity::onCreate(ContextStream* contextStream, Intent* intent)
 {
     FRRegister_bootup_resource();
-    Activity::onCreate(contextStream, intent);
+    FullScreenActivity::onCreate(contextStream, intent);
+
+    if (intent->action ())
+        showView (BOOTUP_CLIENT_GREET, 0, 0);
+    else
+        showView (BOOTUP_CLIENT_LOGO, 0, 0);
 }
 
 BEGIN_CONTROLLER_CLIENTS(BootupActivity)
