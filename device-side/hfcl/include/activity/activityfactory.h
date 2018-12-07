@@ -62,36 +62,36 @@ public:
  *  declare a act-factory to create a act
  *  USAGE : DECLARE_ACTIVITY_FACTORY(Desktop);
  */
-#define DECLARE_ACTIVITY_FACTORY(actClassName)                     \
-    class actClassName##Factory: public ActivityFactory {          \
-        public:                                               \
-            static actClassName##Factory* getInstance(void);  \
-            virtual BaseActivity* create(void);                    \
-        private:                                              \
-            ActivityFactory::ActivityData* getActivityInfo();         \
+#define DECLARE_ACTIVITY_FACTORY(actClassName)                  \
+    class actClassName##Factory: public ActivityFactory {       \
+        public:                                                 \
+            static actClassName##Factory* getInstance(void);    \
+            virtual BaseActivity* create(void);                 \
+        private:                                                \
+            ActivityFactory::ActivityData* getActivityInfo();   \
     };
 
 /*
  *  define a act-factory to create a act
  *  USAGE : DEFINE_ACTIVITY_FACOTORY(Desktop);
  */
-#define DEFINE_ACTIVITY_FACTORY(actClassName)                     \
-    actClassName##Factory* actClassName##Factory::getInstance(void) { \
-        static actClassName##Factory* s_single = NULL;                       \
-        if (!s_single) {                                              \
-            s_single = HFCL_NEW_EX(actClassName##Factory, ());        \
-        }                                                             \
-        return s_single;                                              \
-    }                                                                 \
-    BaseActivity* actClassName##Factory::create(void) {                    \
-        return (HFCL_NEW_EX(actClassName, ()));                       \
+#define DEFINE_ACTIVITY_FACTORY(actClassName)                           \
+    actClassName##Factory* actClassName##Factory::getInstance(void) {   \
+        static actClassName##Factory* s_single = NULL;                  \
+        if (!s_single) {                                                \
+            s_single = HFCL_NEW_EX(actClassName##Factory, ());          \
+        }                                                               \
+        return s_single;                                                \
+    }                                                                   \
+    BaseActivity* actClassName##Factory::create(void) {                 \
+        return (HFCL_NEW_EX(actClassName, ()));                         \
     }
 
 #define BEGIN_DEFINE_ACTIVITY(actClassName)             \
     DEFINE_ACTIVITY_FACTORY(actClassName)               \
-    ActivityFactory::ActivityData*                    \
+    ActivityFactory::ActivityData*                      \
         actClassName##Factory::getActivityInfo (){      \
-            static ActivityData _act_info = {0}; \
+            static ActivityData _act_info = {0};        \
             if(_act_info.name == NULL) {
 
 #define END_DEFINE_ACTIVITY  } return &_act_info; }
@@ -102,22 +102,24 @@ public:
  *  get act-factory from act-class-name
  *  USAGE : GET_ACTIVITY_FACTORY(Desktop);
  */
-#define GET_ACTIVITY_FACTORY(actClassName)    \
+#define GET_ACTIVITY_FACTORY(actClassName)              \
     actClassName##Factory::getInstance()
 
 /*
  *  register act to actmanager
  *  USAGE : REGISTER_ACTIVITY("desktop", Desktop);
  */
-#define REGISTER_ACTIVITY(actName, actClassName) \
-    ActivityManager::getInstance()->registerActivity(actName, GET_ACTIVITY_FACTORY(actClassName))
+#define REGISTER_ACTIVITY(actName, actClassName)        \
+    ActivityManager::getInstance()->registerActivity(   \
+            actName, GET_ACTIVITY_FACTORY(actClassName))
 
 /*
  *  register act to actmanager with additional information
  *  USAGE : REGISTER_ACTIVITY_EX("desktop", textResId, iamgeResId, Desktop);
  */
 #define REGISTER_ACTIVITY_EX(actName, textResId, imageResId, actClassName) \
-    ActivityManager::getInstance()->registerActivity(actName, textResId, imageResId, GET_ACTIVITY_FACTORY(actClassName))
+    ActivityManager::getInstance()->registerActivity(actName, \
+            textResId, imageResId, GET_ACTIVITY_FACTORY(actClassName))
 
 #endif /* HFCL_ACTIVITY_ACTIVITYFACTORY_H_ */
 

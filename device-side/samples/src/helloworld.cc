@@ -1,3 +1,5 @@
+#include "helloworld.h"
+
 #include <cstdlib>
 
 #include <hfcl/common.h>
@@ -6,7 +8,8 @@
 #include <hfcl/drawable.h>
 #include <hfcl/resource.h>
 
-#include "bootup-act.h"
+#include "bootupactivity.h"
+#include "sys-res.h"
 
 int main (int argc, const char** argv)
 {
@@ -27,8 +30,9 @@ int main (int argc, const char** argv)
     if (argc > 1) {
         boot_type = atoi (argv [1]);
     }
+
     Intent intent(boot_type, 0, 0);
-    act_mgr->startActivity ("bootup", intent);
+    act_mgr->startActivity ("bootup", &intent);
     act_mgr->run();
 
     return 0;

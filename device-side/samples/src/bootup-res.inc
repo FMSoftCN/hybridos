@@ -1,8 +1,10 @@
+#define ACTIVITY_WIDTH   240
+#define ACTIVITY_HEIGHT  240
 
 begin_respkg(bootup, RES_PKG_BOOTUP_ID)
     //image resource
     begin_image_res()
-        image(bootup_img_logo,              "res/bootup/cbplus.gif")
+        image(animation_logo, "res/bootup/joopic.gif")
     end_image_res
 
     // dr
@@ -54,37 +56,35 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
 
     begin_uis
 
-        begin_ui_res(bootup_ui_animate)
-            def_name(bootup_view_animate_view)
-            def_name(bootup_event_gifanimate_view)
-            def_name(bootup_img_animate_end_view)
-            def_name(bootup_img_animate_first_view)
+        begin_ui_res(logo)
+            def_name(view_animation_logo)
+            def_name(event_animation_logo)
             // back panel
             begin_view(PanelView)
-                setRect(0, 0, _ngux_screen_w, _ngux_screen_h)
-                set(BkColor, Color::LAYER_COLOR_KEY)
+                setRect(0, 0, ACTIVITY_WIDTH, ACTIVITY_HEIGHT)
+                set(BkColor, Color::BLACK)
                 // animate view
                 begin_view(GifAnimateView)
-                    map(my(bootup_view_animate_view))
-                    setRect(0, 0, _ngux_screen_w, _ngux_screen_h)
-                    on(CustomEvent::CUSTOM_NOTIFY, my(bootup_event_gifanimate_view))
+                    map(my(view_animation_logo))
+                    setRect(0, 0, ACTIVITY_WIDTH, ACTIVITY_HEIGHT)
+                    on(CustomEvent::CUSTOM_NOTIFY, my(event_animation_logo))
                 end_view
+            end_view
+        end_ui_res
 
-                begin_view(ImageView)
-                    hide()
-                    map(my(bootup_img_animate_end_view))
-                    setRect(0, 0, _ngux_screen_w, _ngux_screen_h)
-                    set(Image, self_image(bootup_img_end_animate))
-                end_view
-
-                begin_view(ImageView)
-                    hide()
-                    map(my(bootup_img_animate_first_view))
-                    setRect(0, 0, _ngux_screen_w, _ngux_screen_h)
-                    set(Image, self_image(bootup_img_first_animate))
+        begin_ui_res(greet)
+            def_name(view_greet_text)
+            // back panel
+            begin_view(PanelView)
+                setRect(0, 0, ACTIVITY_WIDTH, ACTIVITY_HEIGHT)
+                set(BkColor, Color::LAYER_COLOR_KEY)
+                begin_view_ex(TextView, my_drset(bootup_drset_default_txt_color))
+                    setRect(0, 0, ACTIVITY_WIDTH, ACTIVITY_HEIGHT)
+                    map(my(view_greet_text))
                 end_view
             end_view
         end_ui_res
     end_uis
 
 end_respkg
+

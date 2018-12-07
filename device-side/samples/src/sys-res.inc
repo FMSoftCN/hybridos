@@ -8,5 +8,12 @@ begin_sys_respkg
         text_res_gnumsg (R_LANG_en_US, R_ENCODING_utf8, "res/messages/en_US/LC_MESSAGES/helloworld.mo")
     end_text_res
 
+    //drawableset resource
+    begin_drset_res
+        begin_drset(null_bk, 0)
+            dr(DR_BKGND, 0)
+        end_drset
+    end_drset_res
+
 end_sys_respkg
 

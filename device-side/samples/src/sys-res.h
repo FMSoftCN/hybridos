@@ -6,11 +6,11 @@
 #define RESID(name)   R_sys_##name
 
 #include <hfcl/resource/resdefines.head.h>
-#include "sys_res.inc"
+#include "sys-res.inc"
 #include <hfcl/resource/resundefines.h>
 
 #include <hfcl/resource/resdefines.name.h>
-#include "sys_res.inc"
+#include "sys-res.inc"
 #include <hfcl/resource/resundefines.h>
 
 #undef RESID

@@ -3,11 +3,17 @@ noinst_PROGRAMS=helloworld
 
 helloworld_SOURCES= \
     helloworld.cc \
-    bootup_res.cc \
-    bootup_res.inc \
-    bootup_res.h \
-    sys_res.inc \
-    sys_res.cc \
-    sys_res.h
+    bootup-res.cc \
+    bootup-res.inc \
+    bootup-res.h \
+    sys-res.inc \
+    sys-res.cc \
+    sys-res.h \
+    bootuplogo.cc \
+    bootuplogo.h \
+    bootupgreet.cc \
+    bootupgreet.h \
+    bootupactivity.cc \
+    bootupactivity.h
 
 EXTRA_DIST=

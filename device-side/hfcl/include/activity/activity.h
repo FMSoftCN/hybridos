@@ -67,7 +67,7 @@ class FullScreenActivity : public Activity {
 public:
     FullScreenActivity() : Activity() { }
     virtual ~FullScreenActivity() { }
-   
+
     virtual void onCreate(ContextStream* contextStream, Intent* intent); 
 };
 
