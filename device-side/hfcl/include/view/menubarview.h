@@ -26,6 +26,7 @@
 #include "panelview.h"
 #include "../graphics/graphicscontext.h"
 #include "../graphics/image.h"
+#include "../resource/respkgmanager.h"
 
 namespace hfcl {
 
@@ -33,7 +34,7 @@ class MenuBarView : public PanelView
 {
 public:
     MenuBarView(View* parent);
-    MenuBarView(View* parent, DrawableSet* dr); 
+    MenuBarView(View* parent, DrawableSet* dr);
     virtual ~MenuBarView();
 
     void setMargin(int margin) { m_margin = margin; }
@@ -47,26 +48,26 @@ public:
     void setMiddleText(const char* txt);
     void setRightText(const char* txt);
 
-    const string& leftText()  { 
-        if (m_left_strid > 0) 
+    const string& leftText()  {
+        if (m_left_strid > 0)
             m_left = GetText(m_left_strid);
-        return m_left; 
+        return m_left;
     }
-    const string& middleText()  { 
-        if (m_middle_strid > 0) 
+    const string& middleText()  {
+        if (m_middle_strid > 0)
             m_middle = GetText(m_middle_strid);
-        return m_middle; 
+        return m_middle;
     }
-    const string& rightText()  { 
-        if (m_right_strid > 0) 
+    const string& rightText()  {
+        if (m_right_strid > 0)
             m_right = GetText(m_right_strid);
-        return m_right; 
+        return m_right;
     }
-    
+
     void setLeftImage(Image* image);
     void setMiddleImage(Image* image);
     void setRightImage(Image *image);
-    bool IsLeftTextNull(void)  { 
+    bool IsLeftTextNull(void)  {
         if((m_left_strid <= 0) && (0 == m_left.length()))
         {
             return true;
@@ -91,8 +92,8 @@ private:
 
     Uint16 m_margin;
     Uint16 m_border_len;
-    Uint16 m_selItem; 
-    
+    Uint16 m_selItem;
+
     enum {
         SEL_NONE = 0,
         SEL_LEFT,
@@ -107,7 +108,7 @@ private:
             rc.m_bottom = m_rect.height();
             rc.m_left   = 0;
             rc.m_right  = m_rect.width();
-        } 
+        }
         else {
             int middle_width = m_rect.width() / 3;
             int spacing = (m_rect.width() % 3) / 2;

@@ -19,7 +19,7 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef  _GRIDVIEW_H 
+#ifndef  _GRIDVIEW_H
 #define  _GRIDVIEW_H
 
 #include "panelview.h"
@@ -31,77 +31,77 @@ namespace hfcl {
 
 class PairLayoutView;
 
-class GridView : public PanelView 
+class GridView : public PanelView
 {
     public:
-        typedef enum 
-		{              
-            GRIDVIEW_KEY_LEFT,      
-            GRIDVIEW_KEY_RIGHT,     
-            GRIDVIEW_KEY_UP,        
+        typedef enum
+        {
+            GRIDVIEW_KEY_LEFT,
+            GRIDVIEW_KEY_RIGHT,
+            GRIDVIEW_KEY_UP,
             GRIDVIEW_KEY_DOWN,
         } KEY_DIRECTION;
-        
+
         GridView(View* parent);
-		GridView(View* parent, DrawableSet* drset);
-		GridView(View* parent, int id, int x, int y, int w, int h, 
+        GridView(View* parent, DrawableSet* drset);
+        GridView(View* parent, int id, int x, int y, int w, int h,
                 int row, int col, int gap_w, int gap_h);
         ~GridView();
-        
+
         int addView(View *view);
         int remove(View *view);
         int remove(int row, int col);
-        
+
         void setRows (int row) ;
         void setCols (int col) ;
         int rows(){ return m_row; }
         int cols(){ return m_col; }
 
         virtual void setGapWidth (int gap_w);
-        virtual void setGapHeight (int gap_h); 
-		int gapWidth(){ return m_gap_w; }
+        virtual void setGapHeight (int gap_h);
+        int gapWidth(){ return m_gap_w; }
         int gapHeight(){ return m_gap_h; }
-        
+
         int setFocusItem(int row, int col);
         int setFocusItem(int index);
         int focusItemIdx(void) { return m_focusItem; }
         int focusItemPosition(int* row, int* col);
-		int oldFocusItemIdx(void) { return m_oldFocusItem; }
-		View * getOldFocusItem();
+        int oldFocusItemIdx(void) { return m_oldFocusItem; }
+        View * getOldFocusItem();
 
-		void onGetFocus();
-		void onLoseFocus();
+        void onGetFocus();
+        void onLoseFocus();
 
         virtual bool setRect(const IntRect& irc);
         bool setRect(int left, int top, int right, int bottom){
-			return setRect(IntRect(left, top, right, bottom));
-		}
+            return setRect(IntRect(left, top, right, bottom));
+        }
 
         virtual bool dispatchEvent(Event* event);
 
-		bool setOnBoundaryListener(EventListener* listener){
-			m_boundary_listener = listener; 
-			return true;
-		}
+        bool setOnBoundaryListener(EventListener* listener){
+            m_boundary_listener = listener;
+            return true;
+        }
 
-		void setAutoConvert(bool bCon) { m_bNeedConvert = bCon; }
+        void setAutoConvert(bool bCon) { m_bNeedConvert = bCon; }
 
         // bool handleEvent(Event* event);        // GT_jyseo rollbakc
 
     protected:
         int gridWidth(){ return m_grid_w; }
         int gridHeight(){ return m_grid_h; }
-        
-		virtual void changeFocusIndex(KEY_DIRECTION direction);
-        
-		void reLayout(void);
-        
-		bool notify2Parent(KEY_DIRECTION direction);
-        
+
+        virtual void changeFocusIndex(KEY_DIRECTION direction);
+
+        void reLayout(void);
+
+        bool notify2Parent(KEY_DIRECTION direction);
+
         bool onKeyPressed(int keyCode);
 
     protected:
-		enum { GRIDVIEW_FOCUS_INVALID = -1};
+        enum { GRIDVIEW_FOCUS_INVALID = -1};
 
         Uint16 m_col;
         Uint16 m_row;
@@ -111,13 +111,13 @@ class GridView : public PanelView
         Uint16 m_gap_h;
 
         EventListener* m_boundary_listener;
-        
-		int m_focusItem;
-		int m_oldFocusItem;
 
-		bool m_bNeedConvert;
+        int m_focusItem;
+        int m_oldFocusItem;
 
-		DECLARE_CLASS_NAME(GridView)
+        bool m_bNeedConvert;
+
+        DECLARE_CLASS_NAME(GridView)
 
         friend class TableBarView;
 };

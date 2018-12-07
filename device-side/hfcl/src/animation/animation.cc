@@ -26,11 +26,11 @@ namespace hfcl {
 
 int Animation::initAnimation()
 {
-	//FIXED: cannot call mGEffInit when init, 
-	// because, mGEffInit need call SetTimerEx, this function need a message queue
-	// a message queue wouble be create when a minigui window is created
+    //FIXED: cannot call mGEffInit when init,
+    // because, mGEffInit need call SetTimerEx, this function need a message queue
+    // a message queue wouble be create when a minigui window is created
     return mGEffInit();
-	return 1;
+    return 1;
 }
 
 void Animation::deinitAnimation()
@@ -41,34 +41,34 @@ void Animation::deinitAnimation()
 Animation::Animation(enum EffVariantType varianttype)
 {
     m_stop_in_progress = false;
-	static int _mgeff_is_inited = 0;
-	// init the mGEff when needed!
-	if(!_mgeff_is_inited)
-	{
-		mGEffInit();
-		_mgeff_is_inited = 1;
-	}
-	m_animation = mGEffAnimationCreate(this, 
-			(MGEFF_SETPROPERTY_CB)Animation::_setProperty, 0, varianttype);
+    static int _mgeff_is_inited = 0;
+    // init the mGEff when needed!
+    if(!_mgeff_is_inited)
+    {
+        mGEffInit();
+        _mgeff_is_inited = 1;
+    }
+    m_animation = mGEffAnimationCreate(this,
+            (MGEFF_SETPROPERTY_CB)Animation::_setProperty, 0, varianttype);
 
-	if(m_animation != 0)
-	{
-		mGEffAnimationSetContext(m_animation, (void*)this);
-		mGEffAnimationSetFinishedCb(m_animation, 
-				(MGEFF_FINISHED_CB)Animation::_finishcb);
-	}
+    if(m_animation != 0)
+    {
+        mGEffAnimationSetContext(m_animation, (void*)this);
+        mGEffAnimationSetFinishedCb(m_animation,
+                (MGEFF_FINISHED_CB)Animation::_finishcb);
+    }
 }
 
 Animation::Animation(void)
-	:m_animation(0) ,m_stop_in_progress(false)
+    :m_animation(0) ,m_stop_in_progress(false)
 {
 
 }
 
 Animation::~Animation(void)
 {
-	if (getCurState() != MGEFF_STATE_REMOVE)
-		mGEffAnimationSetContext(m_animation, NULL);
+    if (getCurState() != MGEFF_STATE_REMOVE)
+        mGEffAnimationSetContext(m_animation, NULL);
 
     if (true == getKeepLive())
         mGEffAnimationDelete(m_animation);
@@ -76,19 +76,19 @@ Animation::~Animation(void)
 
 void Animation::_finishcb(MGEFF_ANIMATION handle)
 {
-	Animation *animation = (Animation*)mGEffAnimationGetContext(handle);
-	if(animation)
-	{
-		//把animation纳入到NGUX的事件机制中，这里暂不实�?	
-	}
+    Animation *animation = (Animation*)mGEffAnimationGetContext(handle);
+    if(animation)
+    {
+        //把animation纳入到NGUX的事件机制中，这里暂不实�?
+    }
 }
 
 void Animation::_setProperty(MGEFF_ANIMATION handle, void *target, int id, void *value)
 {
-	Animation *animation = (Animation*)mGEffAnimationGetContext(handle);
-	if(animation) {
-		animation->setProperty(id, value);
-	}
+    Animation *animation = (Animation*)mGEffAnimationGetContext(handle);
+    if(animation) {
+        animation->setProperty(id, value);
+    }
 }
 
 void Animation::setAttribute(int id, int value)
@@ -136,11 +136,11 @@ void Animation::start(bool auto_delete, bool sync)
     this->onStart();
 
     m_stop_in_progress = false;
-    
-	if (true == auto_delete)
-		setKeepLive (false);
-/*    
-	if (true == sync)
+
+    if (true == auto_delete)
+        setKeepLive (false);
+/*
+    if (true == sync)
         mGEffAnimationSyncRun(m_animation);
     else
         mGEffAnimationAsyncRun(m_animation);

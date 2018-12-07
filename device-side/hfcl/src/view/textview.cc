@@ -26,9 +26,6 @@
 #include "view/containerview.h"
 #include "view/transition.h"
 
-// TODO
-extern "C" Uint8 isTransformArabic ( Uint16 inChar );
-
 namespace hfcl {
 
 //define for roll text
@@ -38,26 +35,26 @@ DEFINE_CLASS_NAME(TextView)
 
 TextView::TextView (View *p_parent)
     : View(p_parent, DEFAULT_VIEW_DRAWABLESET(TextView))
-	, m_isLongText(false)
-	, m_stringId(-1)
-	, m_lineAboveH (0)
-	, m_lineBellowH (0)
-	, m_margin(0)
-	, m_bidicheck (false)
+    , m_isLongText(false)
+    , m_stringId(-1)
+    , m_lineAboveH (0)
+    , m_lineBellowH (0)
+    , m_margin(0)
+    , m_bidicheck (false)
 {
-	m_textBuf[0] = '\0';
+    m_textBuf[0] = '\0';
 }
 
 TextView::TextView(View* p_parent, DrawableSet* drset)
     : View(p_parent, drset)
-	, m_isLongText(false)
-	, m_stringId(-1)
-	, m_lineAboveH (0)
-	, m_lineBellowH (0)
-	, m_margin(0)
-	, m_bidicheck (false)
+    , m_isLongText(false)
+    , m_stringId(-1)
+    , m_lineAboveH (0)
+    , m_lineBellowH (0)
+    , m_margin(0)
+    , m_bidicheck (false)
 {
-	m_textBuf[0] = '\0';
+    m_textBuf[0] = '\0';
 }
 
 TextView::~TextView()
@@ -67,47 +64,47 @@ TextView::~TextView()
 
 bool TextView::setLongText(void)
 {
-	// already is
-	if(m_textString.length() > 0 || m_isLongText)
-		return false;
+    // already is
+    if(m_textString.length() > 0 || m_isLongText)
+        return false;
 
-	// short text for now, need copy text?
-	if(m_textBuf[0] != '\0')
-		m_textString = m_textBuf;
+    // short text for now, need copy text?
+    if(m_textBuf[0] != '\0')
+        m_textString = m_textBuf;
 
-	m_textBuf[0] = '\0';
-	m_isLongText = true;
+    m_textBuf[0] = '\0';
+    m_isLongText = true;
 
-	return true;
+    return true;
 }
 
 bool TextView::isLongText(void)
 {
-	return m_isLongText;
+    return m_isLongText;
 }
 
 void TextView::setBidiCheck(bool bidiflag)
 {
-	m_bidicheck = true;
+    m_bidicheck = true;
 }
 
 bool TextView::isBidiCheck(void)
 {
-	return m_bidicheck;
+    return m_bidicheck;
 }
 
 void TextView::setText(const string text)
 {
-	setText(text.c_str());
+    setText(text.c_str());
 }
 
 void TextView::setText(const char* text)
 {
-	int len = 0;
-	m_stringId = -1;
+    int len = 0;
+    m_stringId = -1;
 
     /* VincentWei > OPT: do not update the content if... */
-	if (NULL == text) text = "";
+    if (NULL == text) text = "";
     if (!m_isLongText && strcmp (m_textBuf, text) == 0) {
         return;
     }
@@ -115,7 +112,7 @@ void TextView::setText(const char* text)
     len = strlen((char *)text);
     if(len > TEXT_BUFFER_LEN_OF_DEFAULT || m_isLongText) {
         m_textString = text;
-        m_isLongText = true;	
+        m_isLongText = true;
     }
     else {
         strcpy (m_textBuf, text);
@@ -159,65 +156,63 @@ void TextView::setTextColor(DWORD color)
 
 char* TextView::getText(void)
 {
-	if(m_stringId > 0) {
+    if(m_stringId > 0) {
         return (char *)GetText(m_stringId);
     } else if(m_isLongText){
-		return (char *)(m_textString.c_str());
+        return (char *)(m_textString.c_str());
     } else {
-	    return m_textBuf;
+        return m_textBuf;
     }
 }
 
 int TextView::getTextLength(void)
 {
-	if(m_stringId > 0) {
-		return strlen(GetText(m_stringId));
+    if(m_stringId > 0) {
+        return strlen(GetText(m_stringId));
     } else if(m_isLongText) {
-		return m_textString.length();
+        return m_textString.length();
     } else {
-		return strlen(m_textBuf);
+        return strlen(m_textBuf);
     }
 }
 
 void TextView::drawContent(GraphicsContext* context, IntRect &rc, int status)
 {
-	char* buf = NULL;
+    char* buf = NULL;
 
-	if(m_stringId > 0)
+    if(m_stringId > 0)
         buf = (char *)GetText(m_stringId);
     else if(m_isLongText)
-		buf = (char *)(m_textString.c_str());
-	else
-		buf = m_textBuf;
+        buf = (char *)(m_textString.c_str());
+    else
+        buf = m_textBuf;
 
     {
         char tmpchar[8]={0};
         int len = strlen(buf);
         char *str = buf;
         int *info = (int *)malloc ((len + 1) * sizeof(int));
-        int realCount = GetUTF8CharInfo (buf, len, info);	
-        info [realCount] = len; 
+        int realCount = GetUTF8CharInfo (buf, len, info);
+        info [realCount] = len;
         for (int i = 1; i <= realCount; /*i++*/)
         {
             memcpy(tmpchar, str + info[i-1], info[i] - info[i-1]);
             tmpchar [info[i] - info[i-1]] = '\0';
-            if(IsSymbolUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar)) ||IsNumberUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar)))
-            {
+            if (IsSymbolUCS2Char (UTF8ToUCS2((Uint8 *)tmpchar))
+                    || IsNumberUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar))) {
                 i++;
             }
-            else
-            {  
+            else {
                 break;
-            }			
+            }
         }
         free(info);
         info=NULL;
-        if(isTransformArabic(UTF8ToUCS2((Uint8 *)tmpchar)) ||IsArabicSymbolUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar)))
-        {	   	
+        if (IsTransformArabicUCS2Char (UTF8ToUCS2((Uint8 *)tmpchar))
+                ||IsArabicSymbolUCS2Char (UTF8ToUCS2((Uint8 *)tmpchar))) {
             context->setBiDiFirstChType (BIDI_TYPE_RTL);
         }
-        else
-        {
+        else {
             context->setBiDiFirstChType (BIDI_TYPE_LTR);
         }
     }
@@ -229,16 +224,16 @@ void TextView::drawContent(GraphicsContext* context, IntRect &rc, int status)
         status = DRAWSTATE_DISABLED;
 
     rc.inset(m_margin, 0);
-	if (getRollProp() && isRolling()) {
+    if (getRollProp() && isRolling()) {
         if(RollTextTransition::DrawRollText(this, context, m_drset,
                 DR_CONTENT, status, rc, (DWORD)buf, DRDT_TEXT) == false) {
             m_drset->setDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTMODE, TextMode::TextOutOmitted|TextMode::SingleLine);
             m_drset->draw(context, DR_CONTENT, status, rc, (DWORD)buf, DRDT_TEXT);
         }
-	}
+    }
     else {
         m_drset->draw(context, DR_CONTENT, status, rc, (DWORD)buf, DRDT_TEXT);
-	}
+    }
 
     context->setBiDiFirstChType (BIDI_TYPE_LTR);
 }
@@ -279,7 +274,7 @@ void TextView::setTextValign(unsigned int valign)
 
 void TextView::setTextBreak(int tBreak)
 {
-	if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_TEXTBREAK, tBreak))
+    if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_TEXTBREAK, tBreak))
         updateView();
 }
 
@@ -292,32 +287,32 @@ void TextView::setTextFont(unsigned int font)
 {
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_FONT, (HTData)GetFontRes(font)))
         updateView();
-}    
+}
 
 void TextView::autoFitSize(bool auto_child_fit)
 {
-	char* buf = NULL;
+    char* buf = NULL;
     if (!isAutoSize())
         return ;
 
     int w = m_rect.width();
     int h = m_rect.height();
 
-	if(m_stringId > 0)
+    if(m_stringId > 0)
         buf = (char *)GetText(m_stringId);
     else if(m_isLongText)
-		buf = (char *)(m_textString.c_str());
-	else
-		buf = m_textBuf;
+        buf = (char *)(m_textString.c_str());
+    else
+        buf = m_textBuf;
 
     GraphicsContext::screenGraphics()->setTextAboveLineExtra(m_lineAboveH);
     GraphicsContext::screenGraphics()->setTextBellowLineExtra(m_lineBellowH);
 
-	if (m_drset->calcDrawableSize(DR_CONTENT, DRAWSTATE_NORMAL, w, h, (DWORD)buf, DRDT_TEXT)) {
-	    m_rect.setSize(w + (m_margin*2), h);
-	    if (parent())
-	        parent()->onChildSizeChanged(this);
-	}
+    if (m_drset->calcDrawableSize(DR_CONTENT, DRAWSTATE_NORMAL, w, h, (DWORD)buf, DRDT_TEXT)) {
+        m_rect.setSize(w + (m_margin*2), h);
+        if (parent())
+            parent()->onChildSizeChanged(this);
+    }
 }
 
 void TextView::startRoll()
@@ -346,23 +341,23 @@ void TextView::resetRoll()
 
 bool TextView::isNeedRoll()
 {
-	char* buf = NULL;
+    char* buf = NULL;
     IntRect rc(0, 0, m_rect.width(), m_rect.height());
 
-	if(m_stringId > 0)
+    if(m_stringId > 0)
         buf = (char *)GetText(m_stringId);
     else if(m_isLongText)
-		buf = (char *)(m_textString.c_str());
-	else
-		buf = m_textBuf;
-	
-	return RollTextTransition::NeedRollText(
-		m_drset,
-		DR_CONTENT,
-		DRAWSTATE_NORMAL,
-		rc,
-		(DWORD)buf,
-		DRDT_TEXT);
+        buf = (char *)(m_textString.c_str());
+    else
+        buf = m_textBuf;
+
+    return RollTextTransition::NeedRollText(
+        m_drset,
+        DR_CONTENT,
+        DRAWSTATE_NORMAL,
+        rc,
+        (DWORD)buf,
+        DRDT_TEXT);
 }
 
 } // namespace hfcl

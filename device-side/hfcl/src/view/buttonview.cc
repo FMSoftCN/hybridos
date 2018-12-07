@@ -29,32 +29,32 @@ namespace hfcl {
 #define BTN_DEFAULT_HEIGHT   20
 
 ButtonView::ButtonView(View* p_parent)
-	: View(p_parent, DEFAULT_VIEW_DRAWABLESET(ButtonView))
-	, m_isLong(false)
-	, m_stringId(-1)
+    : View(p_parent, DEFAULT_VIEW_DRAWABLESET(ButtonView))
+    , m_isLong(false)
+    , m_stringId(-1)
 {
-	m_text[0] = '\0';
-	setRect(IntRect(0, 0, BTN_DEFAULT_WIDTH, BTN_DEFAULT_HEIGHT));
-	setFocusValid(true);
+    m_text[0] = '\0';
+    setRect(IntRect(0, 0, BTN_DEFAULT_WIDTH, BTN_DEFAULT_HEIGHT));
+    setFocusValid(true);
 }
 
 ButtonView::ButtonView(View* p_parent, DrawableSet* drset)
- 	: View(p_parent, drset)
- 	, m_isLong(false)
- 	, m_stringId(-1)
+     : View(p_parent, drset)
+     , m_isLong(false)
+     , m_stringId(-1)
 {
-	m_text[0] = '\0';
-	setRect(IntRect(0, 0, BTN_DEFAULT_WIDTH, BTN_DEFAULT_HEIGHT));
-	setFocusValid(true);
+    m_text[0] = '\0';
+    setRect(IntRect(0, 0, BTN_DEFAULT_WIDTH, BTN_DEFAULT_HEIGHT));
+    setFocusValid(true);
 }
 
 ButtonView::ButtonView(int i_id, int x, int y, int w, int h)
-	: View(NULL, DEFAULT_VIEW_DRAWABLESET(ButtonView))
+    : View(NULL, DEFAULT_VIEW_DRAWABLESET(ButtonView))
 {
-	m_text[0] = '\0';
-	setRect(IntRect(x, y, x + w, y + h));
-	setId(i_id);
-	setFocusValid(true);
+    m_text[0] = '\0';
+    setRect(IntRect(x, y, x + w, y + h));
+    setId(i_id);
+    setFocusValid(true);
 }
 
 ButtonView::~ButtonView()
@@ -65,35 +65,35 @@ ButtonView::~ButtonView()
 
 void ButtonView::setText(const char* str)
 {
-	int len = 0;
+    int len = 0;
 
-	if (NULL == str) {
+    if (NULL == str) {
         str = "";
     }
-	
-	m_stringId = -1;
-	len = strlen (str);
-	if (len > TEXT_BUFFER_LEN_OF_DEFAULT) {
-	    m_buttonString = str;
-	    m_isLong = true;	
-	}
-	else {
-	    // short text
-		memcpy (m_text, str, len);
-		m_text[len] = '\0';
-	}
+
+    m_stringId = -1;
+    len = strlen (str);
+    if (len > TEXT_BUFFER_LEN_OF_DEFAULT) {
+        m_buttonString = str;
+        m_isLong = true;
+    }
+    else {
+        // short text
+        memcpy (m_text, str, len);
+        m_text[len] = '\0';
+    }
 }
 
 const char* ButtonView::getText(void)
 {
-	if (m_stringId > 0) {
+    if (m_stringId > 0) {
         return GetText(m_stringId);
     }
     else if(m_isLong) {
-		return m_buttonString.c_str();
+        return m_buttonString.c_str();
     }
     else {
-	    return m_text;
+        return m_text;
     }
 }
 
@@ -134,46 +134,46 @@ bool ButtonView::dispatchEvent(Event* event)
 //process key down
 void ButtonView::keyDown(Event* event)
 {
-	setState(PUSHED);
+    setState(PUSHED);
 }
 
 //process key up
 void ButtonView::keyUp(Event* event)
 {
-	setState(HILIGHT);
+    setState(HILIGHT);
 }
 
 //process key pressed
 void ButtonView::keyLongPress(Event* event)
 {
-	setState(HILIGHT);
+    setState(HILIGHT);
 }
 
 //process mouse down
 void ButtonView::lButtonDown(Event* event)
 {
-	setState(PUSHED);
+    setState(PUSHED);
 }
 
 //process mouse up
 void ButtonView::lButtonUp(Event* event)
 {
-	setState(HILIGHT);
+    setState(HILIGHT);
 }
 
 //process click event
 void ButtonView::lButtonClick(Event* event)
 {
-	setState(HILIGHT);
+    setState(HILIGHT);
 }
 
 void ButtonView::onGetFocus()
 {
-	if(isDisabled())
-		return;
-	if(getState() == PUSHED)
-		setState(HILIGHT);
-	
+    if(isDisabled())
+        return;
+    if(getState() == PUSHED)
+        setState(HILIGHT);
+
 //    LOGDEBUG("ButtonView::setFocusView!!!\n");
     updateView();
 }
@@ -182,10 +182,10 @@ void ButtonView::onLoseFocus()
 {
 
 //    LOGDEBUG("ButtonView::onLoseFocus!!!\n");
-	if(isDisabled())
-		return ;
+    if(isDisabled())
+        return ;
 
-	setState(NORMAL);
+    setState(NORMAL);
 
     updateView();
 }

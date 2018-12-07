@@ -74,15 +74,15 @@ bool PanelView::setBkImageEx(Image* image)
 {
     if(!image)
         return false;
-    
+
     if (m_bkImage != NULL){
         HFCL_DELETE(m_bkImage);
     }
     m_bkImage = image;
-    
+
     m_bkColorBeSet = false;
     updateView();
-    
+
     return true;
 }
 
@@ -95,7 +95,7 @@ bool PanelView::setBkColor(const DWORD color)
     }
     m_bkColor = color;
     m_bkColorBeSet = true;
-    
+
     updateView();
     return true;
 }
@@ -117,11 +117,11 @@ void PanelView::drawBackground(GraphicsContext* context, IntRect &rc, int status
             ImageFormat f;
             f.drawMode = m_imageDrawMode;
             m_bkImage->paint(context, rc, f);
-        } 
+        }
         else if (m_bkColorBeSet) {
             //_DBG_PRINTF("PanelView::drawBackground1>>>(%d,%d,%d,%d)",rc.left(),rc.right(),rc.top(),rc.bottom());
             context->fillRect(rc, GetRValue(m_bkColor), GetGValue(m_bkColor), GetBValue(m_bkColor), GetAValue(m_bkColor));
-        } 
+        }
         else if (m_drset) {
             //_DBG_PRINTF("PanelView::drawBackground2>>>(%d,%d,%d,%d)",rc.left(),rc.right(),rc.top(),rc.bottom());
             if(isFocus())

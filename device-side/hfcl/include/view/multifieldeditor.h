@@ -20,20 +20,20 @@
 */
 
 
-#ifndef  _MULTIFIELDEDITOR_H 
+#ifndef  _MULTIFIELDEDITOR_H
 #define  _MULTIFIELDEDITOR_H
 
 #include "formateditview.h"
 
 namespace hfcl {
 
-typedef enum 
+typedef enum
 {
     TIME_FORMAT =0,
     DATE_FORMAT   =1,
 }FIELD_FORMAT;
 
-class MultiFieldEditor : public FormatEditView 
+class MultiFieldEditor : public FormatEditView
 {
     public:
         /**
@@ -41,15 +41,15 @@ class MultiFieldEditor : public FormatEditView
          */
         MultiFieldEditor(View* parent);
         MultiFieldEditor(View* parent, DrawableSet* drset);
-		MultiFieldEditor(int id, int x, int y, int w, int h);
+        MultiFieldEditor(int id, int x, int y, int w, int h);
         ~MultiFieldEditor();
 
         /**
          * Init. Param like FormatEditView.init
          */
-        void multiFieldEditorInit(int field_count, 
-                const char ** p_content_array, 
-                const char ** p_formator_array, 
+        void multiFieldEditorInit(int field_count,
+                const char ** p_content_array,
+                const char ** p_formator_array,
                 char* p_content_max_nr,
                 int* value_range,
                 FIELD_FORMAT field_format,
@@ -98,8 +98,8 @@ class MultiFieldEditor : public FormatEditView
         int m_min[FE_MAX_FIELD_NR];
         FIELD_FORMAT m_field_format;
         int m_dateFormat;
-        int m_dateSystem;        
-		DECLARE_CLASS_NAME(MultiFieldEditor)
+        int m_dateSystem;
+        DECLARE_CLASS_NAME(MultiFieldEditor)
 };
 
 } // namespace hfcl

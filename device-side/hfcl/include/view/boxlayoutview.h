@@ -46,7 +46,7 @@ class BoxLayoutView : public LayoutView {
         void paint(GraphicsContext* context, int status /*= Style::NORMAL*/);
         bool dispatchEvent(Event* event);
         bool setRect(const IntRect& pirc);
-		// to void drived class overide the base class 's function
+        // to void drived class overide the base class 's function
         bool setRect(int left, int top, int right, int bottom) { return View::setRect(left, top, right, bottom); }
 
         int   setCellInfo(int idx = 0, int size = 0, int type = 0, bool bupdate = false);

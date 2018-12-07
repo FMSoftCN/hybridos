@@ -52,7 +52,7 @@ ImageView::ImageView(const char * filePath,
                      int valign)
     : View(i_id, x, y, w, h)
 {
-	init();
+    init();
     m_image = Image::loadImage(filePath);
     setImageDrawMode(mode);
     setImageAlign(align);
@@ -61,41 +61,41 @@ ImageView::ImageView(const char * filePath,
 
 ImageView::~ImageView()
 {
-	if(m_image) {
-		HFCL_DELETE(m_image);
-	}
+    if(m_image) {
+        HFCL_DELETE(m_image);
+    }
 }
 
 void ImageView::drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/)
 {
-	View::drawBackground(context, rc, status);
+    View::drawBackground(context, rc, status);
 }
 
 void ImageView::drawContent(GraphicsContext* context, IntRect &rc, int status)
 {
-	if(m_format.rotationAngle != 0){
-		m_format.drawMode = DRAWMODE_ROTATIONANGLE;
-	}
+    if(m_format.rotationAngle != 0){
+        m_format.drawMode = DRAWMODE_ROTATIONANGLE;
+    }
 
-	if(m_image != NULL){
-    	m_image->paint(context, rc, m_format, m_xo, m_yo);
-	}
-} 
+    if(m_image != NULL){
+        m_image->paint(context, rc, m_format, m_xo, m_yo);
+    }
+}
 
 
 bool ImageView::setImage(Image *pImg)
 {
-	if (pImg == m_image) {
-		HFCL_DELETE(pImg);
-		return true;
-	}
-	
-	if(m_image != NULL) {
-		HFCL_DELETE(m_image);
-	}
-	m_image = pImg;
-	 
-	updateView();
+    if (pImg == m_image) {
+        HFCL_DELETE(pImg);
+        return true;
+    }
+
+    if(m_image != NULL) {
+        HFCL_DELETE(m_image);
+    }
+    m_image = pImg;
+
+    updateView();
 
     return true;
 }

@@ -57,7 +57,7 @@ Image::~Image()
 static int get_image_type(const char * file)
 {
     int len = strlen(file);
-    
+
     if (len > 4 && (strcasecmp(file + len - 4, ".png") == 0
                 || strcasecmp(file + len - 4, ".gif") == 0)) {
         if (len >6 && strncasecmp(file + len - 6, ".9", 2) == 0)
@@ -127,16 +127,16 @@ bool Image::setImageBitmap(Bitmap* pbmp)
     return true;
 }
 
-int Image::width(void) 
-{ 
+int Image::width(void)
+{
     int w = 0;
-    
+
     if (m_bLoadOnPainting) {
         setImageBitmap(ResLoader::getInstance()->getBitmap(m_filePath.c_str()));
     }
 
     w = m_pBitmap ? m_pBitmap->bmWidth : 0;
-        
+
     if (m_bLoadOnPainting) {
         if(m_pBitmap)
         {
@@ -144,21 +144,21 @@ int Image::width(void)
             HFCL_DELETE(m_pBitmap);
             m_pBitmap = NULL;
         }
-    } 
+    }
 
     return w;
 }
 
-int Image::height(void) 
-{ 
+int Image::height(void)
+{
     int h = 0;
-    
+
     if (m_bLoadOnPainting) {
         setImageBitmap(ResLoader::getInstance()->getBitmap(m_filePath.c_str()));
     }
 
     h = m_pBitmap ? m_pBitmap->bmHeight : 0;
-        
+
     if (m_bLoadOnPainting) {
         if(m_pBitmap)
         {
@@ -166,7 +166,7 @@ int Image::height(void)
             HFCL_DELETE(m_pBitmap);
             m_pBitmap = NULL;
         }
-    } 
+    }
 
     return h;
 }
@@ -198,22 +198,22 @@ void Image::calcPosAlign(int *px, int *py,
 void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat format, int xo, int yo)
 {
     int x = 0, y = 0, w = 0, h = 0;
-    
+
     if (m_bLoadOnPainting) {
         setImageBitmap(ResLoader::getInstance()->getBitmap(m_filePath.c_str()));
     }
-    
+
     if (NULL == m_pBitmap) {
-        return;    
+        return;
     }
     context->setReplaceColor(0);
     if (m_replaceColor) {
         context->setReplaceColor(m_replaceColor);
     }
-   
+
     switch (format.drawMode) {
         case DRAWMODE_SCALED: //IMAGE_DRAWMODE_SCALED :
-        {    
+        {
             context->fillBoxWithBitmap(rc.left(), rc.top(),
                     rc.width(), rc.height(), m_pBitmap);
             break;
@@ -228,7 +228,7 @@ void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat forma
             }
             break;
         }
-        case DRAWMODE_ADAPTED: 
+        case DRAWMODE_ADAPTED:
         {
             if (context->getBitmapSize(m_pBitmap, &w, &h)) {
                 if (w == 0 || h == 0)
@@ -256,9 +256,9 @@ void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat forma
               x = (rc.right() - m_pBitmap->bmWidth);
             else
               x = rc.left();
-                
+
             }else x = rc.left();
-            
+
             if(rc.height() > (int)m_pBitmap->bmHeight){
               if (format.valign == VALIGN_MIDDLE)
             y = (rc.top() + rc.bottom() - m_pBitmap->bmHeight)/2;
@@ -267,7 +267,7 @@ void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat forma
             else
                y = rc.top();
           }else y = rc.top();
-              
+
             w = rc.width() > (int)m_pBitmap->bmWidth ? m_pBitmap->bmWidth : rc.width();
             h = rc.height() > (int)m_pBitmap->bmHeight ? m_pBitmap->bmHeight : rc.height();
             context->fillBoxWithBitmapPart(x, y, w, h, m_pBitmap, xo, yo);
@@ -282,7 +282,7 @@ void Image::paint(GraphicsContext* context, const IntRect& rc, ImageFormat forma
             break;
         }
 
-        default: 
+        default:
         {
             if (context->getBitmapSize(m_pBitmap, &w, &h)) {
                 calcPosAlign(&x, &y, &rc, w, h, format);

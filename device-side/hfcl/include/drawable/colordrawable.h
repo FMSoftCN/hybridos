@@ -39,7 +39,7 @@ public:
         return HFCL_NEW_EX(ColorDrawable, (this));
     }
 
-    void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE); 
+    void draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data = 0, DR_DATA_TYPE type = DRDT_NONE);
     bool setElement(int e_id, HTData value);
     HTData getElement(int e_id) const;
 

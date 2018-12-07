@@ -60,7 +60,7 @@ class IntRect {
         {
         }
 
-        operator RECT() const 
+        operator RECT() const
         {
             RECT rect = {left(), top(), right(), bottom()};
             return rect;
@@ -112,18 +112,18 @@ class IntRect {
                 *bottom = m_bottom;
         }
 
-		void setWidth (int width) {
-			m_right = m_left + width;
-		}
+        void setWidth (int width) {
+            m_right = m_left + width;
+        }
 
-		void setHeight (int height) {
-			m_bottom = m_top + height;
-		}
+        void setHeight (int height) {
+            m_bottom = m_top + height;
+        }
 
-		void setSize (int width, int height) {
-			m_right = m_left + width;
-			m_bottom = m_top + height;
-		}
+        void setSize (int width, int height) {
+            m_right = m_left + width;
+            m_bottom = m_top + height;
+        }
 
         const IntRect& getRect (void) const
         {
@@ -209,12 +209,12 @@ class IntRect {
             m_bottom -= y;
         }
 
-		void inset (int left, int top, int right, int bottom) {
-			m_left += left;
-			m_top  += top;
-			m_right -= right;
-			m_bottom -= bottom;
-		}
+        void inset (int left, int top, int right, int bottom) {
+            m_left += left;
+            m_top  += top;
+            m_right -= right;
+            m_bottom -= bottom;
+        }
 
         bool contains (int x, int y) const
         {
@@ -255,7 +255,7 @@ class IntRect {
             }
             return false;
         }
-        
+
         bool intersect (int left, int top, int right, int bottom)
         {
             if (left < right && top < bottom && !this->isEmpty() &&
@@ -269,7 +269,7 @@ class IntRect {
             }
             return false;
         }
-    
+
         /**
          * Update this rectangle to enclose itself and the specified rectangle.
          * If this rectangle is empty, just set it to the specified rectangle. If the specified
@@ -295,12 +295,12 @@ class IntRect {
          */
         void sort();
 
-		bool isIn (int x, int y) const
+        bool isIn (int x, int y) const
         {
-			return (x >= m_left && x < m_right
-					&& y >= m_top && y < m_bottom);
-		}
-    
+            return (x >= m_left && x < m_right
+                    && y >= m_top && y < m_bottom);
+        }
+
     public:
         int m_left;
         int m_top;

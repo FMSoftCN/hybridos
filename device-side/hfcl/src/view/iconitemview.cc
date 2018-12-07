@@ -26,100 +26,100 @@
 
 namespace hfcl {
 
-IconItemView:: ~IconItemView() 
-{ 
-	if(m_image) {
-		HFCL_DELETE(m_image); 
-	}
+IconItemView:: ~IconItemView()
+{
+    if(m_image) {
+        HFCL_DELETE(m_image);
+    }
 }
 
-void IconItemView::setText(const char* str) 
+void IconItemView::setText(const char* str)
 {
-	int len = 0;
+    int len = 0;
 
-	if(NULL == str){
+    if(NULL == str){
         m_text[len] = '\0';
         return;
     }
 
-    	m_textId = -1;
-	len = strlen((char *)str);
-	if(len > TEXT_BUFFER_LEN_OF_DEFAULT)
-	{
-	    m_buttonString = str;
-	    m_isLong = true;	
-	}
-	// short text
-	else 
-	{
-		memcpy(m_text, str, len);
-		m_text[len] = '\0';
-	}
-}
-
-void IconItemView::setImage(Image* img) 
-{
-	if(m_image && img != m_image) {
-		HFCL_DELETE(m_image);
-		m_image = NULL;
-	}
-	m_image = img;
-
-	updateView();
-}
-
-void IconItemView::setText(const string& str) 
-{
-	setText(str.c_str());
-}
-
-void IconItemView::setText(const int stringId) 
-{
-    m_text[0] = '\0'; 
-    m_textId = stringId;	
-}
-
-const char * IconItemView::getText() 
-{
-	if(m_textId > 0) {
-        return (char *)GetText(m_textId);
-    } else if(m_isLong){
-		return (char *)(m_buttonString.c_str());
-    } else {
-	    return m_text;
+        m_textId = -1;
+    len = strlen((char *)str);
+    if(len > TEXT_BUFFER_LEN_OF_DEFAULT)
+    {
+        m_buttonString = str;
+        m_isLong = true;
+    }
+    // short text
+    else
+    {
+        memcpy(m_text, str, len);
+        m_text[len] = '\0';
     }
 }
 
-const int IconItemView::getTextId() 
+void IconItemView::setImage(Image* img)
 {
-	return m_textId; 
+    if(m_image && img != m_image) {
+        HFCL_DELETE(m_image);
+        m_image = NULL;
+    }
+    m_image = img;
+
+    updateView();
+}
+
+void IconItemView::setText(const string& str)
+{
+    setText(str.c_str());
+}
+
+void IconItemView::setText(const int stringId)
+{
+    m_text[0] = '\0';
+    m_textId = stringId;
+}
+
+const char * IconItemView::getText()
+{
+    if(m_textId > 0) {
+        return (char *)GetText(m_textId);
+    } else if(m_isLong){
+        return (char *)(m_buttonString.c_str());
+    } else {
+        return m_text;
+    }
+}
+
+const int IconItemView::getTextId()
+{
+    return m_textId;
 }
 
 void IconItemView::drawContent(GraphicsContext* context, IntRect& rc, int status)
 {
-	IntRect rctmp = rc;
+    IntRect rctmp = rc;
 
-	if(!m_imageWithoutText)
-		rctmp.m_bottom -= m_imgHeight;
+    if(!m_imageWithoutText)
+        rctmp.m_bottom -= m_imgHeight;
 
-	//draw image
-	if(m_image != NULL)
-	{
-		ImageFormat format;
-		format.align = ALIGN_CENTER;
-		format.valign = VALIGN_MIDDLE;
-		format.drawMode = DRAWSTATE_NORMAL;
+    //draw image
+    if(m_image != NULL)
+    {
+        ImageFormat format;
+        format.align = ALIGN_CENTER;
+        format.valign = VALIGN_MIDDLE;
+        format.drawMode = DRAWSTATE_NORMAL;
 
-		m_image->paint(context, rctmp, format);
-	}
+        m_image->paint(context, rctmp, format);
+    }
 
-	if(!m_imageWithoutText)
-	{
-		const char *txt = getText();
-		rctmp.m_top = rctmp.bottom();
-		rctmp.m_bottom = rc.bottom();
-		m_drset->draw(context, DR_CONTENT, status, rctmp, (DWORD)txt, DRDT_TEXT);
-	}
+    if(!m_imageWithoutText)
+    {
+        const char *txt = getText();
+        rctmp.m_top = rctmp.bottom();
+        rctmp.m_bottom = rc.bottom();
+        m_drset->draw(context, DR_CONTENT, status, rctmp, (DWORD)txt, DRDT_TEXT);
+    }
 }
 
 

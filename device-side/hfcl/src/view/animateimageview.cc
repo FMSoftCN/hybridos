@@ -55,7 +55,7 @@ AnimateImageView::AnimateImageView(const char * filePath,
                      int valign)
     : View(i_id, x, y, w, h)
 {
-	init();
+    init();
     m_image = Image::loadImage(filePath);
     setImageDrawMode(mode);
     setImageAlign(align);
@@ -64,39 +64,39 @@ AnimateImageView::AnimateImageView(const char * filePath,
 
 AnimateImageView::~AnimateImageView()
 {
-	stop();
-	if(m_image) {
-		HFCL_DELETE(m_image);
-	}
+    stop();
+    if(m_image) {
+        HFCL_DELETE(m_image);
+    }
 }
 
 void AnimateImageView::drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/)
 {
-	View::drawBackground(context, rc, status);
+    View::drawBackground(context, rc, status);
 }
 
 void AnimateImageView::drawContent(GraphicsContext* context, IntRect &rc, int status)
 {
-	if(m_format.rotationAngle != 0){
-		m_format.drawMode = DRAWMODE_ROTATIONANGLE;
-	}
-	if(m_image != NULL){
+    if(m_format.rotationAngle != 0){
+        m_format.drawMode = DRAWMODE_ROTATIONANGLE;
+    }
+    if(m_image != NULL){
         m_image->paint(context, rc, m_format, m_xo, m_yo);
-	}
-} 
+    }
+}
 
 bool AnimateImageView::setImage(Image *pImg)
 {
-	if (pImg == m_image) {
-		return true;
-	}
+    if (pImg == m_image) {
+        return true;
+    }
 
-	if (m_image != NULL) {
-		HFCL_DELETE(m_image);
-	}
+    if (m_image != NULL) {
+        HFCL_DELETE(m_image);
+    }
 
-	m_image = pImg;
-	updateView();
+    m_image = pImg;
+    updateView();
     return true;
 }
 
@@ -169,7 +169,7 @@ bool AnimateImageView::stop(void)
         removeTimer(m_timer_id);
         m_timer_id = -1;
     }
-	if(m_state == Stop) return false;
+    if(m_state == Stop) return false;
     m_state = Stop;
 
     return true;
@@ -193,23 +193,23 @@ bool AnimateImageView::handleEvent(Event* event)
         return DISPATCH_STOP_MSG;
 
     if (event->eventType() == Event::TIMER
-			&& m_timer_id == ((TimerEvent *)event)->timerID())
-	{
-		if(m_elapsed_10ms >= m_timeDuration)
-		{
-			if(m_imageId_array_index < (m_imageId_array_num-1))
-			{
-				m_imageId_array_index++;
-			}
-			else{
-				m_imageId_array_index = 0;
-			}
-			setImage(GetImageRes(m_imageId_array[m_imageId_array_index]));
-			setReplaceColor(m_replaceColor);
-			m_elapsed_10ms = 0;
-		}
-		m_elapsed_10ms = m_elapsed_10ms + 10;
-	}
+            && m_timer_id == ((TimerEvent *)event)->timerID())
+    {
+        if(m_elapsed_10ms >= m_timeDuration)
+        {
+            if(m_imageId_array_index < (m_imageId_array_num-1))
+            {
+                m_imageId_array_index++;
+            }
+            else{
+                m_imageId_array_index = 0;
+            }
+            setImage(GetImageRes(m_imageId_array[m_imageId_array_index]));
+            setReplaceColor(m_replaceColor);
+            m_elapsed_10ms = 0;
+        }
+        m_elapsed_10ms = m_elapsed_10ms + 10;
+    }
 
     return DISPATCH_CONTINUE_MSG;
 }

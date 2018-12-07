@@ -26,7 +26,7 @@
 #include "../common/stlalternative.h"
 #include "../common/intrect.h"
 
-// TUNNING CONDITION: 
+// TUNNING CONDITION:
 #define HFCL_LOG_FILE   "/dev/null"
 
 namespace hfcl {
@@ -78,47 +78,47 @@ private:
  * at the top of your source file) to change that behavior.
  */
 #define HFCL_NDEBUG 1
-#ifndef	HFCL_LOG_NDEBUG
+#ifndef    HFCL_LOG_NDEBUG
 #if defined(HFCL_NDEBUG) && !defined(MMI_NO_TRACE)
-#define	HFCL_LOG_NDEBUG	1
+#define    HFCL_LOG_NDEBUG    1
 #else
-#define	HFCL_LOG_NDEBUG	0
+#define    HFCL_LOG_NDEBUG    0
 #endif
 #endif
 
 // debug  print, macro difine
-#ifndef	LOGD
-#if	HFCL_LOG_NDEBUG
-#define	LOGD(...)   LOGHFLF("HFCL DEBUG >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
+#ifndef    LOGD
+#if    HFCL_LOG_NDEBUG
+#define    LOGD(...)   LOGHFLF("HFCL DEBUG >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
 #else
-#define	LOGD(...)   ((void)0)
+#define    LOGD(...)   ((void)0)
 #endif
 #endif
 
 // info print, macro difine
-#ifndef	LOGI
-#if	HFCL_LOG_NDEBUG
-#define	LOGI(...)   LOGHFLF("HFCL INFO >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
+#ifndef    LOGI
+#if    HFCL_LOG_NDEBUG
+#define    LOGI(...)   LOGHFLF("HFCL INFO >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
 #else
-#define	LOGI(...)   ((void)0)
+#define    LOGI(...)   ((void)0)
 #endif
 #endif
 
 // error  print, macro difine
-#ifndef	LOGE
-#if	HFCL_LOG_NDEBUG
-#define	LOGE(...)   LOGHFLF("HFCL Error >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
+#ifndef    LOGE
+#if    HFCL_LOG_NDEBUG
+#define    LOGE(...)   LOGHFLF("HFCL Error >> ", __FILE__, __LINE__, __func__, __VA_ARGS__);
 #else
-#define	LOGE(...)   ((void)0)
+#define    LOGE(...)   ((void)0)
 #endif
 #endif
 
 // if memory leak print, macro difine
-#ifndef	LOGMEM
-#if	1
-#define	LOGMEM(...)   LOGMEMORY(__VA_ARGS__);
+#ifndef    LOGMEM
+#if    1
+#define    LOGMEM(...)   LOGMEMORY(__VA_ARGS__);
 #else
-#define	LOGMEM(...)   ((void)0)
+#define    LOGMEM(...)   ((void)0)
 #endif
 #endif
 
@@ -130,9 +130,9 @@ private:
 #define LOGDEBUG _DBG_PRINTF
 #define LOGERROR _ERR_PRINTF
 
-#define	LOGI    _MG_PRINTF
-#define	LOGD    _DBG_PRINTF
-#define	LOGE    _ERR_PRINTF
+#define    LOGI    _MG_PRINTF
+#define    LOGD    _DBG_PRINTF
+#define    LOGE    _ERR_PRINTF
 
 #endif /* __CC_ARM */
 

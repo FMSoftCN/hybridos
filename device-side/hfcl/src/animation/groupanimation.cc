@@ -24,51 +24,51 @@
 namespace hfcl {
 
 GroupAnimation::GroupAnimation(enum EffAnimationType type, GroupAnimation* parent)
-	:Animation ()
+    :Animation ()
 {
-	m_animation = mGEffAnimationCreateGroup(type);
-        
-	if(m_animation != 0) {
-		mGEffAnimationSetContext(m_animation, (void*)this);  
-		mGEffAnimationSetFinishedCb(m_animation, 
-				(MGEFF_FINISHED_CB)Animation::_finishcb);
-	}
-	if (NULL != parent) {
-		parent->add((Animation*)this);
-	}
+    m_animation = mGEffAnimationCreateGroup(type);
+
+    if(m_animation != 0) {
+        mGEffAnimationSetContext(m_animation, (void*)this);
+        mGEffAnimationSetFinishedCb(m_animation,
+                (MGEFF_FINISHED_CB)Animation::_finishcb);
+    }
+    if (NULL != parent) {
+        parent->add((Animation*)this);
+    }
 }
 
 GroupAnimation::~GroupAnimation()
 {
-	AMILIST::iterator i;
-	
-	for (i = m_amiList.begin(); i != m_amiList.end(); i = m_amiList.erase(i))
-	{
+    AMILIST::iterator i;
+
+    for (i = m_amiList.begin(); i != m_amiList.end(); i = m_amiList.erase(i))
+    {
         // the animation will be deleted by group.
         (*i)->setKeepLive (false);
-		// delete (*i);
-		HFCL_DELETE(*i);
-	}
+        // delete (*i);
+        HFCL_DELETE(*i);
+    }
 }
 
 void GroupAnimation::add (Animation *ani)
 {
-	/*
+    /*
     // the animation will be deleted by group.
     (*i)->setKeepLive (false);
     */
-	mGEffAnimationAddToGroup(m_animation, ani->m_animation);
-	
-	m_amiList.push_back(ani);
+    mGEffAnimationAddToGroup(m_animation, ani->m_animation);
+
+    m_amiList.push_back(ani);
 }
 
 void GroupAnimation::onStart()
 {
-	AMILIST::iterator i;
-	for (i = m_amiList.begin(); i != m_amiList.end(); ++i)
-	{
+    AMILIST::iterator i;
+    for (i = m_amiList.begin(); i != m_amiList.end(); ++i)
+    {
         (*i)->onStart();
-	}
+    }
 }
 
 } // namespace hfcl

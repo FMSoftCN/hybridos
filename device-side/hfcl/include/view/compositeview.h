@@ -28,42 +28,42 @@
 namespace hfcl {
 
 enum {
-	DRSET_SELF = 0,
+    DRSET_SELF = 0,
 };
 
 class CompositeView : public PanelView
 {
 public:
-	enum {
-		DRSET_MAX = 1,
-	};
+    enum {
+        DRSET_MAX = 1,
+    };
 
-	CompositeView(View *p_parent, DrawableSet* drset, DrawableSetGroup* g = NULL) : PanelView(p_parent, drset), m_drsets(g) { }
-	CompositeView(View *p_parent, DrawableSetGroup* g = NULL) : PanelView(p_parent), m_drsets(g) { }
-	CompositeView(int i_id, int x, int y, int w, int h, DrawableSetGroup* g = NULL) : PanelView(i_id, x, y, w, h) , m_drsets(g) { }
-	virtual ~CompositeView();
+    CompositeView(View *p_parent, DrawableSet* drset, DrawableSetGroup* g = NULL) : PanelView(p_parent, drset), m_drsets(g) { }
+    CompositeView(View *p_parent, DrawableSetGroup* g = NULL) : PanelView(p_parent), m_drsets(g) { }
+    CompositeView(int i_id, int x, int y, int w, int h, DrawableSetGroup* g = NULL) : PanelView(i_id, x, y, w, h) , m_drsets(g) { }
+    virtual ~CompositeView();
 
 
-	// bool setDrawableSet(int i_id, DrawableSet* drset);
+    // bool setDrawableSet(int i_id, DrawableSet* drset);
 
-	DrawableSet* getDrawableSet(int i_id, unsigned int view_class = 0);
+    DrawableSet* getDrawableSet(int i_id, unsigned int view_class = 0);
 
-	bool setDrawableSetGroup(DrawableSetGroup *g);
+    bool setDrawableSetGroup(DrawableSetGroup *g);
 
 
 protected:
-	DrawableSetGroup* m_drsets;
-	virtual void updateDrawableSets(int i_id=-1);
+    DrawableSetGroup* m_drsets;
+    virtual void updateDrawableSets(int i_id=-1);
 
-private:	
-	DECLARE_CLASS_NAME(PanelView)
+private:
+    DECLARE_CLASS_NAME(PanelView)
 };
 
 #define GROUP_GETDRAWABLESET(drset_id, clss) getDrawableSet(drset_id, clss::CLASS_NAME)
 #define SETDRAWABLESET(var, drset_id, cmp_id) do { \
-	if(var && (drset_id == -1  || cmp_id == drset_id)) { \
-		DrawableSet* __drset = getDrawableSet(cmp_id); \
-		if(__drset) var->setDrawableSet(__drset); } }while(0)
+    if(var && (drset_id == -1  || cmp_id == drset_id)) { \
+        DrawableSet* __drset = getDrawableSet(cmp_id); \
+        if(__drset) var->setDrawableSet(__drset); } }while(0)
 
 
 

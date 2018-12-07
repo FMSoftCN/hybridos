@@ -33,25 +33,25 @@ Intent::Intent(int i_action, string s_data, int i_tag)
 }
 
 Intent::Intent(Intent *intent)
-	: m_action(intent->action())
-	, m_data(intent->data())
-	, m_tag(intent->tag())
+    : m_action(intent->action())
+    , m_data(intent->data())
+    , m_tag(intent->tag())
 {
-	setDataEx((void*)(intent->dataEx()));
+    setDataEx((void*)(intent->dataEx()));
 }
 
 void Intent::putValue(string& key, void* value)
 {
-	m_intentStore[key] = value;
+    m_intentStore[key] = value;
 }
 
 void *Intent::getValue(string key)
 {
-	IntentMap::iterator it;
-	it = m_intentStore.find(key);
-	if(it != m_intentStore.end())
-		return m_intentStore[key];
-	return (void*)0;
+    IntentMap::iterator it;
+    it = m_intentStore.find(key);
+    if(it != m_intentStore.end())
+        return m_intentStore[key];
+    return (void*)0;
 }
 
 } // namespace hfcl

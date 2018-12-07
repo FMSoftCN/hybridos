@@ -31,10 +31,10 @@ namespace hfcl {
 class Drawable;
 class ScrollView;
 class ItemView;
-		
+
 LIST(MGEFF_ANIMATION, AniList);
 
-class ListView : public ScrollView 
+class ListView : public ScrollView
 {
 public:
     ListView(View *p_parent);
@@ -63,7 +63,7 @@ public:
     //int  tailGap(void)      {return m_tailGap;};
     //void setTailGap(int gap){m_tailGap = gap;};
 
-    /* \brief judge is a item is added to listview 
+    /* \brief judge is a item is added to listview
      * * \param[in] item the item pointer.
      * * \return bool true if is, or false
      * */
@@ -77,7 +77,7 @@ public:
     bool addItem(ItemView *item) { return addItemByIndex(item, -1); }
     bool addItem(View *item)     { return addItem ((ItemView*)item);}
     bool addItemWithAppend(ItemView *item);
-    /* \brief remove a item at by index. 
+    /* \brief remove a item at by index.
      * * \param[in] index the item index to remove.
      * * \return bool true if success , or false
      * */
@@ -129,18 +129,18 @@ public:
 
     ItemView* itemFromId(int iid) { return (ItemView*) (m_content ? m_content->getView(iid) : NULL); }
 
-    int itemIndexAt(int x, int y) const { 
+    int itemIndexAt(int x, int y) const {
         int idx;
         itemAt(x, y, &idx);
         return idx;
     }
     int firstVisibleItemIndex() const { return itemIndexAt(m_offx + m_hGap, m_offy + m_vGap + m_separatorWidth); }
     int lastVisibleItemIndex() const  { return itemIndexAt(m_offx + m_hGap, m_offy + getRect().height() - m_vGap - m_separatorWidth); }
-    
+
 public:
     class ItemIterator {
     protected:
-        ItemIterator(ItemView* first) : m_current (first) { }	
+        ItemIterator(ItemView* first) : m_current (first) { }
         virtual bool check(ItemView *view) = 0;
         void init(const ItemIterator& it) { m_current = it.m_current; }
 
@@ -150,10 +150,10 @@ public:
         ItemIterator(): m_current(NULL) { }
 
         bool isEnd() { return m_current == NULL; }
-        void prev() { 
+        void prev() {
             while(m_current && !check((m_current = (ItemView*)m_current->previousSibling()))) ;
         }
-        void next() { 
+        void next() {
             while(m_current && !check((m_current = (ItemView*)m_current->nextSibling()))) ;
         }
 
@@ -166,8 +166,8 @@ public:
         int m_bottom;
         VisibleItemIterator(ItemView* first, int bottom) : ItemIterator(first), m_bottom(bottom) { }
 
-        bool check(ItemView* view) { 
-            if(!view) 
+        bool check(ItemView* view) {
+            if(!view)
                 return false;
             if(view->getRect().bottom() > m_bottom) {
                 m_current = NULL;
@@ -178,7 +178,7 @@ public:
     public:
         VisibleItemIterator() : m_bottom(0) { }
         VisibleItemIterator(const VisibleItemIterator & it) : ItemIterator(it) { m_bottom = it.m_bottom; }
-        VisibleItemIterator& operator=(const VisibleItemIterator& it) { 
+        VisibleItemIterator& operator=(const VisibleItemIterator& it) {
             ItemIterator::init(it);
             m_bottom = it.m_bottom;
             return *this;
@@ -189,7 +189,7 @@ public:
 
     class SelectedItemIterator : public ItemIterator {
         friend class ListView;
-        SelectedItemIterator(ItemView* first) : ItemIterator(first) { 
+        SelectedItemIterator(ItemView* first) : ItemIterator(first) {
         }
         bool check(ItemView* view) {
             return view && view->isSelected();

@@ -29,8 +29,8 @@ namespace hfcl {
 
 class MoveViewAnimation : public ViewAnimation
 {
-	public:
-		/*param pt is target point.*/
+    public:
+        /*param pt is target point.*/
         MoveViewAnimation(View *view, Point pt);
 
         /*set start value.*/

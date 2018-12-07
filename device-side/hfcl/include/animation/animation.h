@@ -28,65 +28,65 @@ namespace hfcl {
 
 class Animation : public Object
 {
-	friend class GroupAnimation;
-	
-	protected:
-		MGEFF_ANIMATION m_animation;
+    friend class GroupAnimation;
 
-		Animation(enum EffVariantType varianttype);  
+    protected:
+        MGEFF_ANIMATION m_animation;
 
-	public:
-		Animation();
-		virtual ~Animation();
+        Animation(enum EffVariantType varianttype);
+
+    public:
+        Animation();
+        virtual ~Animation();
         static int initAnimation();
         static void deinitAnimation();
 
-		void start(bool keepalive=true, bool sync=true);
-		void stop();
-		void pause();
-		void resume();
+        void start(bool keepalive=true, bool sync=true);
+        void stop();
+        void pause();
+        void resume();
         void wait();
 
-		void setAttribute(int id, int value);
-		int getAttribute(int id);
+        void setAttribute(int id, int value);
+        int getAttribute(int id);
 
-		inline void setDuration(int duration) { 
-			setAttribute(MGEFF_PROP_DURATION, duration); 
-		}
-		inline int  getDuration() { return getAttribute(MGEFF_PROP_DURATION); }
-		
-		inline void setLoopCount(int loopcount = MGEFF_INFINITE) { 
-			setAttribute(MGEFF_PROP_LOOPCOUNT, loopcount); 
-		}
-		inline int getLoopCount() { return getAttribute(MGEFF_PROP_LOOPCOUNT); }
-		
-		inline void setDirection(int direction = MGEFF_DIR_FORWARD) { 
-			setAttribute(MGEFF_PROP_DIRECTION, direction); 
-		}
-		inline int  getDirection() { return getAttribute(MGEFF_PROP_DIRECTION); }
-		
-		inline void setKeepLive(bool bkeeplive = true) { 
-			setAttribute(MGEFF_PROP_KEEPALIVE, bkeeplive); 
-		}
-		inline bool getKeepLive() { return getAttribute(MGEFF_PROP_KEEPALIVE); }
-		
-		inline int  getCurLoop() { return getAttribute(MGEFF_PROP_CURLOOP); }
-		inline int  getCurFrame() { return getAttribute(MGEFF_PROP_CURFRAME); }
-		inline int  getCurState() { return getAttribute(MGEFF_PROP_STATE); }
+        inline void setDuration(int duration) {
+            setAttribute(MGEFF_PROP_DURATION, duration);
+        }
+        inline int  getDuration() { return getAttribute(MGEFF_PROP_DURATION); }
+
+        inline void setLoopCount(int loopcount = MGEFF_INFINITE) {
+            setAttribute(MGEFF_PROP_LOOPCOUNT, loopcount);
+        }
+        inline int getLoopCount() { return getAttribute(MGEFF_PROP_LOOPCOUNT); }
+
+        inline void setDirection(int direction = MGEFF_DIR_FORWARD) {
+            setAttribute(MGEFF_PROP_DIRECTION, direction);
+        }
+        inline int  getDirection() { return getAttribute(MGEFF_PROP_DIRECTION); }
+
+        inline void setKeepLive(bool bkeeplive = true) {
+            setAttribute(MGEFF_PROP_KEEPALIVE, bkeeplive);
+        }
+        inline bool getKeepLive() { return getAttribute(MGEFF_PROP_KEEPALIVE); }
+
+        inline int  getCurLoop() { return getAttribute(MGEFF_PROP_CURLOOP); }
+        inline int  getCurFrame() { return getAttribute(MGEFF_PROP_CURFRAME); }
+        inline int  getCurState() { return getAttribute(MGEFF_PROP_STATE); }
 
         void setCurve(enum EffMotionType curve);
-        MGEFF_MOTIONCURVE getCurve(); 
+        MGEFF_MOTIONCURVE getCurve();
 
         void setStartValue(const void * value);
         const void * getStartValue();
         void setEndValue(const void * value);
         const void * getEndValue();
 
-	protected:
-		static void _finishcb(MGEFF_ANIMATION handle);
-		virtual void setProperty(int id, void *curvalue) = 0;
-		static void _setProperty(MGEFF_ANIMATION handle, void *target, int id, void *value);
-		virtual void onStart(){};
+    protected:
+        static void _finishcb(MGEFF_ANIMATION handle);
+        virtual void setProperty(int id, void *curvalue) = 0;
+        static void _setProperty(MGEFF_ANIMATION handle, void *target, int id, void *value);
+        virtual void onStart(){};
 
 
     private:

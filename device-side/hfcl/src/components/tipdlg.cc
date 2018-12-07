@@ -54,7 +54,8 @@ TipDlg::~TipDlg()
 void TipDlg::create(HTResId resid)
 {
     createMainWindow(m_rect.left(), m_rect.top(), m_rect.width(), m_rect.height());
-    mgclSetWindowExStyle(m_viewWindow, Window::HFCL_WS_EX_TRANSPARENT,true); 
+
+    // FIXME: mgclSetWindowExStyle(m_viewWindow, Window::HFCL_WS_EX_TRANSPARENT,true);
 
     CreateViewFromRes(resid == 0 ? UI_TEMPL : resid, this, (ViewContext*)this, NULL);
 }

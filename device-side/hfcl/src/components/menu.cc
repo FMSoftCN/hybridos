@@ -78,7 +78,7 @@ MenuItem::MenuItem(int strId, Image* img, int i_id, bool dsbl/*=false*/, Drawabl
 }
 
 MenuItem::~MenuItem()
-{   
+{
    stopRoll();
 }
 
@@ -122,24 +122,24 @@ void MenuItem::calcRect(const IntRect& rc, IntRect& txtRc, IntRect& imgRc)
 void MenuItem::drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/)
 {
     IntRect textRc(rc);
-    
+
     if(isDisabled())
         status = DRAWSTATE_DISABLED;
 
 #if 0
-    if (m_idxText[0] != '\0') 
+    if (m_idxText[0] != '\0')
     {
         IntRect idxItemRc(rc);
         _DBG_PRINTF("MenuItem::drawContent>>>%d,%d,%d,%d\n",rc.left(),rc.top(),rc.right(),rc.bottom());
         if(IsAllItemViewNeedConvert())
         {
             idxItemRc.setRect(rc.right() - MENU_SL_ITEM_H2, rc.top(), rc.right(), rc.bottom());
-        } 
-        else 
+        }
+        else
         {
             idxItemRc.setRect(rc.left(), rc.top(), rc.left() + MENU_SL_ITEM_H2, rc.bottom());
         }
-        
+
         m_drset->draw(context, DR_CONTENT2, status, idxItemRc,(DWORD)m_idxText, DRDT_TEXT);
     }
 #endif
@@ -151,7 +151,7 @@ void MenuItem::onMenuEnter(Menu* owner)
 {
     Activity *act = (Activity *)(ActivityManager::getInstance()->getCurrentActivity());
     if(act != NULL) {
-        act->bindMenu(NULL); 
+        act->bindMenu(NULL);
     }
 
     if (NULL != owner) {
@@ -209,7 +209,7 @@ void RadioMenuItem::onMenuEnter(Menu* owner)
         setCheck(true);
         owner->uncheckRadioItemExcept(this);
     }
-   
+
     MenuItem::onMenuEnter(owner);
     updateView();
 }
@@ -310,7 +310,7 @@ Menu::Menu(HTResId resid)
     , m_menuParent(NULL)
     , m_menuBar(NULL)
     , m_separator_top(NULL)
-    , m_separator_bottom(NULL)    
+    , m_separator_bottom(NULL)
     , m_list_themedrset_id(-1)
     , m_item_themedrset_id(-1)
     , m_menubar_themedrset_id(-1)
@@ -365,7 +365,7 @@ void Menu::create(HTResId resid)
     // theme listview
     if (m_list_themedrset_id != -1 && m_menuItemList) {
         m_menuItemList->themeAble(true);
-        m_menuItemList->setThemeDrsetId(m_list_themedrset_id);         
+        m_menuItemList->setThemeDrsetId(m_list_themedrset_id);
         m_menuItemList->setDrawableSet(GetDrawableSetResFromTheme(m_list_themedrset_id));
     }
 
@@ -408,7 +408,7 @@ void Menu::drawBackground(GraphicsContext* context, IntRect &rc, int status)
         return;
     }
 
-    // update background only once. background will not update durning draw parent menu; the flag reset in showMenu. 
+    // update background only once. background will not update durning draw parent menu; the flag reset in showMenu.
     if (g_needUpdateBkg && m_currentMenu == this) {
         g_needUpdateBkg = FALSE;
 
@@ -486,7 +486,7 @@ bool Menu::onKey(int keyCode, KeyEvent* event)
             }
             break;
 
-        case KeyEvent::KEYCODE_ENTER: 
+        case KeyEvent::KEYCODE_ENTER:
             if (!m_isProcessing) {
                    onMenuEnter();
             }
@@ -495,7 +495,7 @@ bool Menu::onKey(int keyCode, KeyEvent* event)
         case KeyEvent::KEYCODE_SOFTKEY_LEFT:
         case KeyEvent::KEYCODE_CURSOR_LEFT:
 #if 0
-            if (!m_isProcessing && ItemView::IsAllItemViewNeedConvert()) 
+            if (!m_isProcessing && ItemView::IsAllItemViewNeedConvert())
             {
                MenuItem* mi = getCurMenuItem();
                     if (mi->isDisabled())
@@ -612,7 +612,7 @@ void Menu::updateParentMenu(Menu * menuP)
    menuP->setLayer(0);
    //IncludeWindowStyle((unsigned int)menuP->viewWindow(), WS_VISIBLE);
    ShowWindow(menuP->viewWindow(), SW_SHOWNORMAL);
-   menuP->updateWindow(false);   
+   menuP->updateWindow(false);
 
    Menu* parent = menuP->getMenuParent();
    if(parent){
@@ -642,13 +642,13 @@ void Menu::showMenu(Activity *act)
             m_currentMenu->hide();
         }
     }
-  
+
     if (act) {
         m_ownActivity = act;
         act->bindMenu(this);
     }
     else {
-        Activity *act = (Activity *)(ActivityManager::getInstance()->getCurrentActivity());   
+        Activity *act = (Activity *)(ActivityManager::getInstance()->getCurrentActivity());
         act->bindMenu(this);
         m_ownActivity = act;
     }
@@ -714,7 +714,7 @@ void Menu::hideMenu(void)
 void Menu::closeAllMenu(void)
 {
     Activity *act = (Activity *)(ActivityManager::getInstance()->getCurrentActivity());
-   
+
     _DBG_PRINTF ("MENU TRACE :: closeAllMenu menu is : [%s] \n", act->name());
 
     if (act != NULL && act == m_ownActivity) {
@@ -727,7 +727,7 @@ void Menu::closeAllMenu(void)
         setActiveWindow(act->viewWindow());
         act->bindMenu(NULL);
     }
-   
+
     if (NULL != m_currentMenu) {
         Menu *root = m_currentMenu;
         while (root->isExitMenuParent()){
@@ -776,7 +776,7 @@ void Menu::closeMenu(void)
             _DBG_PRINTF ("MENU TRACE :: after Menu closeMenu p is:%p\n", p);
             m_currentMenu = p;
             p->showMenu();
-        } 
+        }
         else {
             _DBG_PRINTF ("MENU TRACE :: after Menu closeMenu act is:%p  act name is:(%s)\n", act, act == NULL ? "null":act->name() );
             if (NULL != act) {
@@ -816,7 +816,7 @@ bool Menu::addMenuItem(MenuItem* mi)
     // we do NOT theme item if item has its own theme.
     if (!mi->isThemeAble() && m_item_themedrset_id != -1) {
         mi->themeAble(true);
-        mi->setThemeDrsetId(m_item_themedrset_id);      
+        mi->setThemeDrsetId(m_item_themedrset_id);
         mi->setDrawableSet(GetDrawableSetResFromTheme(m_item_themedrset_id));
     }
 
@@ -854,7 +854,7 @@ bool Menu::addMenuItemByIndex(MenuItem* mi,int index)
 }
 
 bool Menu::notifyToParent(MenuKeyCustomType mkct, int menuId)
-{   
+{
     if (menuId >= 0) {
         CustomEvent event(Event::CUSTOM_NOTIFY, mkct, menuId);
         raiseEvent(&event);
@@ -936,14 +936,14 @@ void Menu::autoFit()
         itemnum = MAX_MENUITEM_NUM;
     else if(itemnum < 1)
         itemnum = 1;
-      
+
     h = itemnum * MENU_ITEM_H + MENUBAR_H;
 
     int y = SCREEN_HEIGHT - h;
-    MoveWindow (m_viewWindow, 0, y, SCREEN_WIDTH, h, FALSE);  
+    MoveWindow (m_viewWindow, 0, y, SCREEN_WIDTH, h, FALSE);
     ShowWindow (m_viewWindow, SW_SHOWNORMAL);
 
-    // top seperator line 
+    // top seperator line
     m_separator_top->setRect(0, 0, SCREEN_WIDTH, 1);
 
     // menu list rect
@@ -954,7 +954,7 @@ void Menu::autoFit()
 
     // bottom seperator line
     m_separator_bottom->setRect(0, h-1, SCREEN_WIDTH, 1);
-    
+
     // menubar rect
     if (m_menuBar) {
         m_menuBar->setRect(0, h - MENUBAR_H, m_rect.width(), h);
@@ -1000,7 +1000,7 @@ DEFINE_UI_TEMPL(Menu)
 BEGIN_SETVIEW(Menu)
     MAP_VIEW(m_separator_top, SEPARATOR_TOP, PanelView)
     MAP_VIEW(m_menuItemList, ITEMLIST, ListView)
-    MAP_VIEW(m_separator_bottom, SEPARATOR_BOTTOM, PanelView)    
+    MAP_VIEW(m_separator_bottom, SEPARATOR_BOTTOM, PanelView)
     MAP_VIEW(m_menuBar, MENUBAR, MenuBarView)
 END_SETVIEW
 

@@ -37,7 +37,7 @@ HTHandle mgclFopen(const char* path, const int mode)
 
 int mgclFclose(HTHandle fPointer)
 {
-    return MMI_FS_Close((FS_HANDLE)fPointer); 
+    return MMI_FS_Close((FS_HANDLE)fPointer);
 }
 
 int mgclFread(void* ptr, int size, int nmemb, HTHandle stream)
@@ -49,39 +49,39 @@ int mgclFread(void* ptr, int size, int nmemb, HTHandle stream)
 
 int mgclFwrite(const void* ptr, int size, int nmemb, HTHandle stream)
 {
-	int len = 0;
+    int len = 0;
     MMI_FS_Write((FS_HANDLE)stream, (void*)ptr, size * nmemb, (INT32*)&len);
     return len;
 }
 
 int mgclFputs(const char* ptr, HTHandle stream)
 {
-	int len = 0;
-	int slen = strlen (ptr);
-	if (slen < 0 || slen > 1024) // FIXME, not support large string.
-		return -1;
+    int len = 0;
+    int slen = strlen (ptr);
+    if (slen < 0 || slen > 1024) // FIXME, not support large string.
+        return -1;
     MMI_FS_Write((FS_HANDLE)stream, (void*)ptr, strlen(ptr) + 1, (INT32*)&len);
     return len;
 }
 
 char* mgclFgets(char* ptr, int size, HTHandle stream)
 {
-	int len;
-	//int x_pos;
-    
-	MMI_FS_Read((FS_HANDLE)stream, (void *)ptr, size, (INT32*)&len);
-	if (len < 0){
-		return NULL;
-	}
+    int len;
+    //int x_pos;
 
-	for(int i = 0; i < len; i++){
-		if (ptr[i] == '\n' || ptr[i] == '\r'){
-			ptr[i+1] = '\0';
-			MMI_FS_Seek((FS_HANDLE)stream, - (len - (i + 1)), FS_FILE_CURRENT);
-			return ptr;
-		}
-	}
-	ptr[size - 1] = '\0';
+    MMI_FS_Read((FS_HANDLE)stream, (void *)ptr, size, (INT32*)&len);
+    if (len < 0){
+        return NULL;
+    }
+
+    for(int i = 0; i < len; i++){
+        if (ptr[i] == '\n' || ptr[i] == '\r'){
+            ptr[i+1] = '\0';
+            MMI_FS_Seek((FS_HANDLE)stream, - (len - (i + 1)), FS_FILE_CURRENT);
+            return ptr;
+        }
+    }
+    ptr[size - 1] = '\0';
     return ptr;
 }
 
@@ -89,10 +89,10 @@ int mgclFeof(HTHandle stream)
 {
     long pos = MMI_FS_Seek((FS_HANDLE)stream, 0, FS_FILE_CURRENT);
     long tell = MMI_FS_Seek((FS_HANDLE)stream, 0, FS_FILE_END);
-    
-	MMI_FS_Seek((FS_HANDLE)stream, pos, FS_FILE_BEGIN);
-    
-	return (pos == tell) ? 0 : 1;
+
+    MMI_FS_Seek((FS_HANDLE)stream, pos, FS_FILE_BEGIN);
+
+    return (pos == tell) ? 0 : 1;
 }
 
 int mgclFseek(HTHandle stream, long offset, int whence)
@@ -109,7 +109,7 @@ int mgclRemove(const char* pathname)
 {
     //char * unicodeFileName[256];
     //memset(unicodeFileName, 0, sizeof(unicodeFileName));
-    
+
     //NGUtf8ToUnicode((unsigned char*)pathname, (unsigned char*)unicodeFileName);
     return MMI_FS_Delete((const Uint8 *)pathname);
 }

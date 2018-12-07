@@ -38,9 +38,9 @@ namespace hfcl {
 class Event {
 public:
     enum EventType {
-        KEY_DOWN, 
-        KEY_UP, 
-        KEY_LONGPRESSED, 
+        KEY_DOWN,
+        KEY_UP,
+        KEY_LONGPRESSED,
         KEY_ALWAYSPRESS,
         KEY_CHAR,
         MOTION_DOWN,
@@ -296,12 +296,12 @@ protected:
 
     // notice : dont unref for these event listeners
     // becuase the add interface haven't add the reference
-    // 
+    //
     LIST(EventListener *, EventListenerList);
     EventListenerList m_listeners;
 
     EventListener* m_current_raise;
-    EventListener* m_want_to_remove;        
+    EventListener* m_want_to_remove;
 };
 
 } // namespace hfcl

@@ -96,7 +96,7 @@ class PageNavigateView : public PanelView
          * if use this func sould called in front of init().
          */
         void setScaled(bool b_isScaled) { setFlag(b_isScaled, SCALED); }
-		bool isScaled() { return m_flags & SCALED; }
+        bool isScaled() { return m_flags & SCALED; }
 
         /*
          * by m_pageview, m_normalImage, m_curImage, m_leftImage
@@ -150,10 +150,10 @@ class PageNavigateView : public PanelView
         //PanelView* m_panelView;
         ContainerView* m_panelView;
 
-		enum {
-			SCALED = (1 << PanelView::FLAG_SHIFT),
-			FLAG_SHIFT = (1 + PanelView::FLAG_SHIFT)
-		};
+        enum {
+            SCALED = (1 << PanelView::FLAG_SHIFT),
+            FLAG_SHIFT = (1 + PanelView::FLAG_SHIFT)
+        };
 
 };
 

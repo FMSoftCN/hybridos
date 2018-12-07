@@ -21,9 +21,11 @@ public:
 
     void onCreate(ContextStream* contextstream, Intent* intent);
 
+#if 0
     bool onKey(int keyCode, KeyEvent* event);
     virtual unsigned int onClientCommand(int sender, unsigned int cmd_id,
             HTData param1, HTData param2);
+#endif
 
     DECLARE_CONTROLLER_CLIENTS
 

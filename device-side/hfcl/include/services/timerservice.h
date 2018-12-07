@@ -34,16 +34,16 @@ namespace hfcl {
 typedef enum {
     TIMER_PRIORITY_LOW       = 1,
     TIMER_PRIORITY_MIDDLE    = 2,
-    TIMER_PRIORITY_HIGH      = 3,   
+    TIMER_PRIORITY_HIGH      = 3,
     TIMER_PRIORITY_QTY
 } TimerPriority;
 
-#define SERVICE_TIMER_ID 		0xEF
-#define SERVICE_TIMER_INTERVAL 	10
+#define SERVICE_TIMER_ID         0xEF
+#define SERVICE_TIMER_INTERVAL     10
 
 class TimerEventListener;
 
-class TimerService : public Service 
+class TimerService : public Service
 {
 public:
     static inline TimerService* getInstance() {
@@ -70,7 +70,7 @@ public:
 
 private:
     BOOL m_bPause;
-   
+
     TimerService();
 
     static BOOL TimerProc (HWND listener, LINT id, DWORD data);
@@ -85,8 +85,8 @@ public:
         memset(m_timerIdArray, 0, LISTENER_TIMER_MAX * sizeof(int));
     }
 
-    TimerEventListener(int start_ref) : EventListener(start_ref) { 
-        memset(m_timerIdArray, 0, LISTENER_TIMER_MAX * sizeof(int)); 
+    TimerEventListener(int start_ref) : EventListener(start_ref) {
+        memset(m_timerIdArray, 0, LISTENER_TIMER_MAX * sizeof(int));
     }
 
     virtual ~TimerEventListener() {
@@ -106,7 +106,7 @@ public:
         }
         return 0;
     }
-    
+
     int registerTimerSingle(int interval, const char *listenername, TimerPriority priority = TIMER_PRIORITY_LOW)
     {
         return TimerService::getInstance()->addTimerListenerSingle(interval, this, priority, listenername);

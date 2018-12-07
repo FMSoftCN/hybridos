@@ -20,7 +20,7 @@
 */
 
 
-#ifndef  _BUSYLISTVIEW_H 
+#ifndef  _BUSYLISTVIEW_H
 #define  _BUSYLISTVIEW_H
 
 namespace hfcl {
@@ -42,14 +42,14 @@ class BusyListView : public PanelView
     public:
         ///////////// Constructor/Destructor
         BusyListView(View* parent);
-		BusyListView(View* parent, DrawableSet* drset);
+        BusyListView(View* parent, DrawableSet* drset);
         virtual ~BusyListView();
 
         ///////////// item ops
         bool addItem(void);
-		bool addItem(void* addData);
+        bool addItem(void* addData);
         bool addItemByIndex(int index);
-		bool addItemByIndex(int index, void* addData);
+        bool addItemByIndex(int index, void* addData);
         bool removeItem(int index);
         int itemCount(void);
         ///////////// set/get normal item height
@@ -65,20 +65,20 @@ class BusyListView : public PanelView
         void hilight(int index, bool focus);
         int hilightItemIndex(void);
         bool isFocus(void){return m_focus;}
-		View* hilightItem(void);
-		View* itemFromIndex(int index);
+        View* hilightItem(void);
+        View* itemFromIndex(int index);
         ////////////// dispatch event
         virtual bool dispatchEvent(Event* event);
         //virtual bool setRect(const IntRect& irc);
         void reLayout(int index);
-		void reLayout(void);
+        void reLayout(void);
 
-		void setScrollGap(int gapWidth){m_scrollGap = gapWidth;}
-		int scrollGap(void){return m_scrollGap;}
-		
-		void setItemRowGap(int gapHeight){m_itemRowGap = gapHeight;}
-		int itemRowGap(void){return m_itemRowGap;}
-		
+        void setScrollGap(int gapWidth){m_scrollGap = gapWidth;}
+        int scrollGap(void){return m_scrollGap;}
+
+        void setItemRowGap(int gapHeight){m_itemRowGap = gapHeight;}
+        int itemRowGap(void){return m_itemRowGap;}
+
         ////////////// scrollbar related
         void setScrollbarWidth(int w);
         int scrollbarWidth(void);
@@ -86,23 +86,23 @@ class BusyListView : public PanelView
         int scrollbarMarginRight(void);
         ///////////// re-load data
         int reLoadData(void);
-		///////////// clear
-		void clear(void);
-		///////////// freeze
-		void freeze(bool f);
-		///////////// status & addData
-		void initSelectMark(int count);
-		void selectItem(int index, bool sel);
-		void select(int index, bool sel);
+        ///////////// clear
+        void clear(void);
+        ///////////// freeze
+        void freeze(bool f);
+        ///////////// status & addData
+        void initSelectMark(int count);
+        void selectItem(int index, bool sel);
+        void select(int index, bool sel);
         void selectAll(bool sel);
-		bool isItemSelected(int index);
-		void initItemAddData(int count);
-		void setItemAddData(int index, void* data);
-		void* itemAddData(int index);
+        bool isItemSelected(int index);
+        void initItemAddData(int count);
+        void setItemAddData(int index, void* data);
+        void* itemAddData(int index);
 
-		void setScrollBarFloating(bool b) { m_bScrollFloating = b; }
-		bool isScrollBarFloating(void) { return m_bScrollFloating; }
-		void setSpecialItemIndex(int index){m_special_item_index = index;}
+        void setScrollBarFloating(bool b) { m_bScrollFloating = b; }
+        bool isScrollBarFloating(void) { return m_bScrollFloating; }
+        void setSpecialItemIndex(int index){m_special_item_index = index;}
     protected:
         void init(void);
         void reInit(void);
@@ -111,12 +111,12 @@ class BusyListView : public PanelView
 
         ////////////// key process
         bool onKeyPressed(int keyCode);
-        
+
         void   setHilightView(View* view);
 
         ////////////// draw ops
-		virtual void drawContent(GraphicsContext* context, IntRect &rc, int status);
-		virtual void drawScroll(GraphicsContext* context, IntRect &rc, int status);
+        virtual void drawContent(GraphicsContext* context, IntRect &rc, int status);
+        virtual void drawScroll(GraphicsContext* context, IntRect &rc, int status);
 
         ////////////// layout
         virtual void layoutDownToUp(int from_height = -1, int hilight_index = 1);
@@ -159,18 +159,18 @@ class BusyListView : public PanelView
         int m_v_scrollbar_width;
         /// top dock - true, bottom dock - false
         int m_dock_top;
-		/// freeze mark
-		bool m_freeze;
-		/// select mark
-		BitMark m_select_mark;
-		/// add data keeper
-		PointerKeeper m_data_keeper;
-		// the gap from item to scroll.
-		int m_scrollGap;
-		int m_itemRowGap;
+        /// freeze mark
+        bool m_freeze;
+        /// select mark
+        BitMark m_select_mark;
+        /// add data keeper
+        PointerKeeper m_data_keeper;
+        // the gap from item to scroll.
+        int m_scrollGap;
+        int m_itemRowGap;
 
-		bool  m_focus;
-		bool  m_bScrollFloating;
+        bool  m_focus;
+        bool  m_bScrollFloating;
 
         DECLARE_CLASS_NAME(BusyListView)
 };

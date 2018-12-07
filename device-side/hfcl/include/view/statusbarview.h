@@ -45,14 +45,14 @@ class StatusBarView : public PanelView {
                 : id(i_id), location(loca), pv(v), pvWidth(w), pvHeight(h) { }
             SBViewNode()
                 : id(0), location(SHOW_IN_RIGHT), pv(NULL), pvWidth(0), pvHeight(0) { }
-            SBViewNode(const SBViewNode& n) { 
+            SBViewNode(const SBViewNode& n) {
                 id = n.id; location = n.location;
-                pv = n.pv; pvWidth = n.pvWidth; pvHeight = n.pvHeight; 
+                pv = n.pv; pvWidth = n.pvWidth; pvHeight = n.pvHeight;
             }
         };
 
         //LIST(SBViewNode *, SBVList)
-		LISTEX(SBViewNode *, SBVList, do{return *v1 == *v2;}while (0), do{HFCL_DELETE(*n);} while (0));
+        LISTEX(SBViewNode *, SBVList, do{return *v1 == *v2;}while (0), do{HFCL_DELETE(*n);} while (0));
 
         StatusBarView(View* p_parent);
         StatusBarView(View* p_parent, DrawableSet* dr);

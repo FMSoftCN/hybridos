@@ -35,10 +35,10 @@ bool mgclGetMessage(PMSG pmsg, HWND hwnd)
 
 int mgclGetTextMCharInfo(HWND hWnd, const char* mstr, int len, int* pos_chars)
 {
-	if (!IsWindow(hWnd))
+    if (!IsWindow(hWnd))
          return -1;
-	
-	return GetTextMCharInfo(GetWindowFont(hWnd), mstr, len, pos_chars);
+
+    return GetTextMCharInfo(GetWindowFont(hWnd), mstr, len, pos_chars);
 }
 
 DWORD mgclDoModal(HWND hWnd, BOOL bAutoDestroy)
@@ -71,7 +71,7 @@ DWORD mgclDoModal(HWND hWnd, BOOL bAutoDestroy)
              MSG_KEYDOWN, MSG_KEYUP, PM_REMOVE));
     }
 
-    hwnd = hWnd; 
+    hwnd = hWnd;
     /*
         VERY IMPORTANT: In windows, when user call DestroyMainWindow, the memory pointed by "self"
         would be free. and self's memory would be pad by unknown values. so we should save hwnd to
@@ -82,10 +82,10 @@ DWORD mgclDoModal(HWND hWnd, BOOL bAutoDestroy)
         // hook key
         // update lcd service and key tone FIXME
         if (Msg.hwnd == HWND_DESKTOP
-			&& ( Msg.message == MSG_KEYDOWN 
-			   || Msg.message == MSG_KEYUP 
-			   || Msg.message == MSG_KEYLONGPRESS 
-			   || Msg.message == MSG_KEYALWAYSPRESS))
+            && ( Msg.message == MSG_KEYDOWN
+               || Msg.message == MSG_KEYUP
+               || Msg.message == MSG_KEYLONGPRESS
+               || Msg.message == MSG_KEYALWAYSPRESS))
         {
             // stop process
             if(DISPATCH_STOP_MSG == ActivityManager::getInstance()->processKeyHook(&Msg))
@@ -133,9 +133,9 @@ DWORD mgclDoModal(HWND hWnd, BOOL bAutoDestroy)
             ExcludeWindowExStyle (hOwner, MGCL_WS_EX_MODALDISABLED);
             if (isActive && IsWindowVisible (hOwner)) {
                 ShowWindow (hOwner, SW_SHOWNORMAL);
-                SetActiveWindow (hOwner); 
-            }    
-        }    
+                SetActiveWindow (hOwner);
+            }
+        }
     }
 #if 0
     if ((GetWindowStyle(hWnd)&NCSS_MNWND_MODE) && bAutoDestroy) {
@@ -154,7 +154,7 @@ DWORD mgclDoModal(HWND hWnd, BOOL bAutoDestroy)
         MainWindowCleanup(_hwnd);
     }
 #endif
-    
+
     return ret;
 }
 
@@ -167,17 +167,17 @@ DWORD mgclDoModalView(HWND hwnd)
 
     if (!(GetWindowExStyle(hwnd) & WS_EX_DLGHIDE))
         ShowWindow (hwnd, SW_SHOWNORMAL);
-	
+
     SetActiveWindow(hwnd);
 
     while (mgclGetMessage(&Msg, hwnd)) {
         // hook key
         // update lcd service and key tone FIXME
         if (Msg.hwnd == HWND_DESKTOP
-			&& ( Msg.message == MSG_KEYDOWN 
-			   || Msg.message == MSG_KEYUP 
-			   || Msg.message == MSG_KEYLONGPRESS 
-			   || Msg.message == MSG_KEYALWAYSPRESS))
+            && ( Msg.message == MSG_KEYDOWN
+               || Msg.message == MSG_KEYUP
+               || Msg.message == MSG_KEYLONGPRESS
+               || Msg.message == MSG_KEYALWAYSPRESS))
         {
             // stop process
             if(DISPATCH_STOP_MSG == ActivityManager::getInstance()->processKeyHook(&Msg))

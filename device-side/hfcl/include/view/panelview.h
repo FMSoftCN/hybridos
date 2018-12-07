@@ -44,26 +44,26 @@ public:
     bool setBkImage(const char * image_file);
     bool setBkImageEx(Image* image);
     bool setUpdate(bool update);
-    
+
     bool isUpdate(void){ return m_update;};
-    
-	virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
+
+    virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 
     //bool setBkOpacity(unsigned char opacity);
 
     void setImageDrawMode(int mode);
 
 protected:
-	enum {
-		FLAG_SHIFT = ContainerView::FLAG_SHIFT
-	};
+    enum {
+        FLAG_SHIFT = ContainerView::FLAG_SHIFT
+    };
 
 private:
-	bool 	m_update;
-	Image 	*m_bkImage;
-	int 	m_imageDrawMode;
-	bool 	m_bkColorBeSet;
-	DWORD 	m_bkColor;
+    bool     m_update;
+    Image     *m_bkImage;
+    int     m_imageDrawMode;
+    bool     m_bkColorBeSet;
+    DWORD     m_bkColor;
 
     DECLARE_CLASS_NAME(PanelView)
 };

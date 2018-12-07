@@ -61,7 +61,7 @@ typedef struct list_head list_t;
  * \fn void __list_add(struct list_head * _new, \
                 struct list_head * prev, \
                 struct list_head * next)
- * \brief Insert a _new entry between two known consecutive entries. 
+ * \brief Insert a _new entry between two known consecutive entries.
  *
  * This is only for internal list manipulation where we know
  * the prev/next entries already!
@@ -77,7 +77,7 @@ static inline void __list_add(struct list_head * _new,
 }
 
 /**
- * \fn void list_add(struct list_head *_new, struct list_head *head) 
+ * \fn void list_add(struct list_head *_new, struct list_head *head)
  * \brief Add a _new entry, insert a _new entry after the specified head.
  *        This is good for implementing stacks.
  * \param _new _new entry to be added
@@ -141,7 +141,7 @@ static inline void list_del(struct list_head *entry)
 static inline void list_del_init(struct list_head *entry)
 {
     __list_del(entry->prev, entry->next);
-    INIT_LIST_HEAD(entry); 
+    INIT_LIST_HEAD(entry);
 }
 
 /**
@@ -174,9 +174,9 @@ static inline int list_empty(const struct list_head *head)
  */
 #define list_for_each(pos, head) \
     for (pos = (head)->next; pos != (head); pos = pos->next)
-            
+
 /**
- * \def list_for_each_safe(pos, n, head)    
+ * \def list_for_each_safe(pos, n, head)
  * \brief Iterate over a list safe against removal of list entry.
  * \param pos The &struct list_head to use as a loop counter.
  * \param n Another &struct list_head to use as temporary storage
@@ -197,7 +197,7 @@ static inline int list_empty(const struct list_head *head)
     for (pos = (begin)->next; pos != (head); pos = (pos)->next)
 
 /**
- * \def list_for_index(pos, i, head, index)    
+ * \def list_for_index(pos, i, head, index)
  * \brief Iterate over a list for index.
  *
  * \param pos The &struct list_head to use as a loop counter.

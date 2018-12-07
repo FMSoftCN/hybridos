@@ -32,37 +32,37 @@
 #endif
 
 //GSM 7bit Default Alphabet Table
-const unsigned short ui_GsmToUnicodeTab[128] = 
-{ 
-//	   0	  1		  2		  3		  4		  5		  6		  7		  8		  9		  A		  B		  C		  D		  E		  F	
-//	0x0040, 0x00A3, 0x0024, 0x00A5, 0x00E8, 0x00E9, 0x00F9, 0x00EC, 0x00F2, 0x00E7, 0x000A, 0x00D8, 0x00F8, 0x000D, 0x00C5, 0x00E5,	//0x  godevil_040827
-	0x0040, 0x00A3, 0x0024, 0x00A5, 0x00E8, 0x00E9, 0x00F9, 0x00EC, 0x00F2, 0x00C7, 0x000A, 0x00D8, 0x00F8, 0x000D, 0x00C5, 0x00E5,	//0x
-	0x0394, 0x005F, 0x03A6, 0x0393, 0x039B, 0x03A9, 0x03A0, 0x03A8, 0x03A3, 0x0398, 0x039E, 0x0020, 0x00C6, 0x00E6, 0x00DF, 0x00C9,	//1x
-	0x0020, 0x0021, 0x0022, 0x0023, 0x00A4, 0x0025, 0x0026, 0x0027, 0x0028, 0x0029, 0x002A, 0x002B, 0x002C, 0x002D, 0x002E, 0x002F,	//2x
-	0x0030, 0x0031, 0x0032, 0x0033, 0x0034, 0x0035, 0x0036, 0x0037, 0x0038, 0x0039, 0x003A, 0x003B, 0x003C, 0x003D, 0x003E, 0x003F,	//3x
-	0x00A1, 0x0041, 0x0042, 0x0043, 0x0044, 0x0045, 0x0046, 0x0047, 0x0048, 0x0049, 0x004A, 0x004B, 0x004C, 0x004D, 0x004E, 0x004F,	//4x
-	0x0050, 0x0051, 0x0052, 0x0053, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059, 0x005A, 0x00C4, 0x00D6, 0x00D1, 0x00DC, 0x00A7,	//5x
-	0x00BF, 0x0061, 0x0062, 0x0063, 0x0064, 0x0065, 0x0066, 0x0067, 0x0068, 0x0069, 0x006A, 0x006B, 0x006C, 0x006D, 0x006E, 0x006F,	//6x
-	0x0070, 0x0071, 0x0072, 0x0073, 0x0074, 0x0075, 0x0076, 0x0077, 0x0078, 0x0079, 0x007A, 0x00E4, 0x00F6, 0x00F1, 0x00FC, 0x00E0	//7x
+const unsigned short ui_GsmToUnicodeTab[128] =
+{
+//       0      1          2          3          4          5          6          7          8          9          A          B          C          D          E          F
+//    0x0040, 0x00A3, 0x0024, 0x00A5, 0x00E8, 0x00E9, 0x00F9, 0x00EC, 0x00F2, 0x00E7, 0x000A, 0x00D8, 0x00F8, 0x000D, 0x00C5, 0x00E5,    //0x  godevil_040827
+    0x0040, 0x00A3, 0x0024, 0x00A5, 0x00E8, 0x00E9, 0x00F9, 0x00EC, 0x00F2, 0x00C7, 0x000A, 0x00D8, 0x00F8, 0x000D, 0x00C5, 0x00E5,    //0x
+    0x0394, 0x005F, 0x03A6, 0x0393, 0x039B, 0x03A9, 0x03A0, 0x03A8, 0x03A3, 0x0398, 0x039E, 0x0020, 0x00C6, 0x00E6, 0x00DF, 0x00C9,    //1x
+    0x0020, 0x0021, 0x0022, 0x0023, 0x00A4, 0x0025, 0x0026, 0x0027, 0x0028, 0x0029, 0x002A, 0x002B, 0x002C, 0x002D, 0x002E, 0x002F,    //2x
+    0x0030, 0x0031, 0x0032, 0x0033, 0x0034, 0x0035, 0x0036, 0x0037, 0x0038, 0x0039, 0x003A, 0x003B, 0x003C, 0x003D, 0x003E, 0x003F,    //3x
+    0x00A1, 0x0041, 0x0042, 0x0043, 0x0044, 0x0045, 0x0046, 0x0047, 0x0048, 0x0049, 0x004A, 0x004B, 0x004C, 0x004D, 0x004E, 0x004F,    //4x
+    0x0050, 0x0051, 0x0052, 0x0053, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059, 0x005A, 0x00C4, 0x00D6, 0x00D1, 0x00DC, 0x00A7,    //5x
+    0x00BF, 0x0061, 0x0062, 0x0063, 0x0064, 0x0065, 0x0066, 0x0067, 0x0068, 0x0069, 0x006A, 0x006B, 0x006C, 0x006D, 0x006E, 0x006F,    //6x
+    0x0070, 0x0071, 0x0072, 0x0073, 0x0074, 0x0075, 0x0076, 0x0077, 0x0078, 0x0079, 0x007A, 0x00E4, 0x00F6, 0x00F1, 0x00FC, 0x00E0    //7x
 };
 
 //GSM 7Bit default alphabet extention table
-const unsigned short ui_EXT_GsmToUnicodeTab[128] = 
+const unsigned short ui_EXT_GsmToUnicodeTab[128] =
 {
-//	   0	  1		  2		  3		  4		  5		  6		  7		  8		  9		  A		  B		  C		  D		  E		  F	
-	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x000A, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,	//0x
-	0x0000, 0x0000, 0x0000, 0x0000, 0x005E, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0020, 0x0000, 0x0000, 0x0000, 0x0000,	//1x
-	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x007B, 0x007D, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x005C,	//2x
-	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x005B, 0x007E, 0x005D, 0x0000,	//3x
-	0x007C, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,	//4x
-	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,	//5x
-	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x20AC, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,	//6x
-	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,	//7x
+//       0      1          2          3          4          5          6          7          8          9          A          B          C          D          E          F
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x000A, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,    //0x
+    0x0000, 0x0000, 0x0000, 0x0000, 0x005E, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0020, 0x0000, 0x0000, 0x0000, 0x0000,    //1x
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x007B, 0x007D, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x005C,    //2x
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x005B, 0x007E, 0x005D, 0x0000,    //3x
+    0x007C, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,    //4x
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,    //5x
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x20AC, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,    //6x
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,    //7x
 };
 
-const unsigned char ui_UnicodeToGsmTab[256] = 
-{ 
-//   0      1    2     3      4    5     6     7     8     9     A     B     C     D     E     F        
+const unsigned char ui_UnicodeToGsmTab[256] =
+{
+//   0      1    2     3      4    5     6     7     8     9     A     B     C     D     E     F
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x0A, 0x20, 0x20, 0x0D, 0x20, 0x20, //0x
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, //1x
     0x20, 0x21, 0x22, 0x23, 0x02, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, //2x
@@ -85,34 +85,34 @@ const unsigned char ui_UnicodeToGsmTab[256] =
 
 unsigned char NGUnicodeToUCS2Encoding(unsigned short unicode,unsigned char  *charLength,unsigned char  *arrOut)
 {
-	unsigned char  status =0;
-	unsigned char  index = 0;
+    unsigned char  status =0;
+    unsigned char  index = 0;
 
-	if(arrOut != 0)
-	{
-		unicode = unicode & 0xff;
-		if( unicode  < 256 )
-		{
-			if(unicode == 0x80)
-			{
-				arrOut[index++] = 0xac ;//*((Uint8*)(&unicode));
-				arrOut[index] = 0x20;
-			}
-			else
-			{
-				arrOut[index++] = *((unsigned char *)(&unicode));
-				arrOut[index] = 0;
-			}
-		}
-		else
-		{
-			arrOut[index++] = *((unsigned char *)(&unicode));
-			arrOut[index] =   *(((unsigned char *)(&unicode)) + 1);
-		}
-		*charLength = 2;
-	}	
+    if(arrOut != 0)
+    {
+        unicode = unicode & 0xff;
+        if( unicode  < 256 )
+        {
+            if(unicode == 0x80)
+            {
+                arrOut[index++] = 0xac ;//*((Uint8*)(&unicode));
+                arrOut[index] = 0x20;
+            }
+            else
+            {
+                arrOut[index++] = *((unsigned char *)(&unicode));
+                arrOut[index] = 0;
+            }
+        }
+        else
+        {
+            arrOut[index++] = *((unsigned char *)(&unicode));
+            arrOut[index] =   *(((unsigned char *)(&unicode)) + 1);
+        }
+        *charLength = 2;
+    }
 
-	return status;
+    return status;
 }
 
 unsigned short NGIsGsmChar(unsigned short code)
@@ -138,7 +138,7 @@ unsigned short NGIsGsmChar(unsigned short code)
         }
         else ret = StrOut;
     }
-    else 
+    else
     {
         switch ( code ) {
             case 0x0394: ret = 0x10; break;
@@ -153,7 +153,7 @@ unsigned short NGIsGsmChar(unsigned short code)
             case 0x039E: ret = 0x1A; break;
 
 #if 0
-            case 0x20AC: 
+            case 0x20AC:
                 ret = 0x1B65;
                 break;
 #endif
@@ -174,9 +174,9 @@ unsigned char NGFindUCS2Mode(unsigned short *str, unsigned short length, unsigne
 
     if ( str == NULL )
         return (unsigned char)NOT_CONVERTIBLE;
-    
+
     srclen = NGUCS2Strlen(str);
-    
+
     if ( length == 0 )
         length = srclen;
 
@@ -197,7 +197,7 @@ unsigned char NGFindUCS2Mode(unsigned short *str, unsigned short length, unsigne
                     *Page = FirstUCS;
                     mode =  UCS2MODE_COMPRESS81;
                 }
-                else 
+                else
                 {
                     if ( (SecondUCS - FirstUCS) < 0x80 )
                     {
@@ -233,7 +233,7 @@ unsigned short NGUCS2Len(unsigned short * source, unsigned short maxlength)
 
     if ( source == NULL )
         return length;
-    
+
     srclen = NGUCS2Strlen(source);
 
     mode = NGFindUCS2Mode(source, srclen, &basePointer);
@@ -247,7 +247,7 @@ unsigned short NGUCS2Len(unsigned short * source, unsigned short maxlength)
                     length = (srclen * 2) + 1;
             }
             break;
-            
+
         case UCS2MODE_COMPRESS81:
             {
                 for ( i = 0; i < srclen && source[i] ; i++ )
@@ -263,7 +263,7 @@ unsigned short NGUCS2Len(unsigned short * source, unsigned short maxlength)
                 length += 3;
             }
             break;
-        
+
         case UCS2MODE_COMPRESS82:
             {
                 for ( i = 0; i < srclen && source[i] ; i++ )
@@ -297,7 +297,7 @@ unsigned short NGUCS2NBCharLen(unsigned short * source, unsigned short maxlength
 
     if ( source == NULL )
         return length;
-    
+
     srclen = NGUCS2Strlen(source);
 
     mode = NGFindUCS2Mode(source, srclen, &basePointer);
@@ -307,27 +307,27 @@ unsigned short NGUCS2NBCharLen(unsigned short * source, unsigned short maxlength
             {
                 if ( maxlength % 2 == 0 )
                 {
-                    if ( srclen < ((maxlength - 2)  / 2))  
+                    if ( srclen < ((maxlength - 2)  / 2))
                         length = srclen;
                     else
                         length = (maxlength - 2)  / 2;
                 }
                 else
                 {
-                    if ( srclen < ((maxlength  / 2) - 1))  
+                    if ( srclen < ((maxlength  / 2) - 1))
                         length = srclen;
                     else
                         length = (maxlength  / 2) - 1;
                 }
             }
             break;
-            
+
         case UCS2MODE_COMPRESS81:
             {
                 unsigned short nbchar = 0;
-                
+
                 length += 3;
-                
+
                 for ( i = 0; i < srclen && i < maxlength && source[i] ; i++ )
                 {
                     if ( length >= maxlength )
@@ -335,7 +335,7 @@ unsigned short NGUCS2NBCharLen(unsigned short * source, unsigned short maxlength
                         length = nbchar;
                         break;
                     }
-                                    
+
                     temp = NGIsGsmChar(source[i]);
 
                     if ( temp > 0x7F && temp != NOT_CONVERTIBLE )
@@ -347,13 +347,13 @@ unsigned short NGUCS2NBCharLen(unsigned short * source, unsigned short maxlength
                 }
             }
             break;
-        
+
         case UCS2MODE_COMPRESS82:
-            {  
+            {
                 unsigned short nbchar = 0;
-                
+
                 length += 4;
-                
+
                 for ( i = 0; i < srclen && i < maxlength && source[i] ; i++ )
                 {
                     if ( length >= maxlength )
@@ -361,7 +361,7 @@ unsigned short NGUCS2NBCharLen(unsigned short * source, unsigned short maxlength
                         length = nbchar;
                         break;
                     }
-                        
+
                     temp = NGIsGsmChar(source[i]);
 
                     if ( temp > 0x7F && temp != NOT_CONVERTIBLE )
@@ -376,10 +376,10 @@ unsigned short NGUCS2NBCharLen(unsigned short * source, unsigned short maxlength
 
         default:
             {
-                if ( srclen < maxlength )  
+                if ( srclen < maxlength )
                     length = srclen;
                 else
-                    length = maxlength; 
+                    length = maxlength;
             }
             break;
     }
@@ -405,10 +405,10 @@ unsigned short NGConvertUnicodeToUCS2(unsigned char * target, unsigned short * s
 
             for (i = 0; length < tarlength-1 && i < srclength && source[i]; i++)
             {
-                *(&ucs2->data+i*2) = (source[i]&0xFF00)>>8; 
-                *(&ucs2->data+i*2+1) = (source[i]&0x00FF);  
+                *(&ucs2->data+i*2) = (source[i]&0xFF00)>>8;
+                *(&ucs2->data+i*2+1) = (source[i]&0x00FF);
             }
-            length = i*2+(unsigned char *)&ucs2->data-(unsigned char *)ucs2; 
+            length = i*2+(unsigned char *)&ucs2->data-(unsigned char *)ucs2;
         }
         break;
 
@@ -460,7 +460,7 @@ unsigned short NGConvertUnicodeToUCS2(unsigned char * target, unsigned short * s
             ucs2->id = 0x82;
 
             ucs2->base_pointer[0] = (unsigned char)((basePointer & 0xFF00)>>8);
-            ucs2->base_pointer[1] = (unsigned char)((basePointer & 0x00FF));   
+            ucs2->base_pointer[1] = (unsigned char)((basePointer & 0x00FF));
 
             for ( i = 0, j=0; j < srclength && i < tarlength && source[j] ; i++, j++ )
             {
@@ -511,7 +511,7 @@ unsigned short NGConvertUCS2ToUnicode(unsigned short * target, unsigned char * s
 
                 data = (unsigned char *)&(ucs2->data);
 
-                srclength = (srclength - ((unsigned char *)data - (unsigned char *)ucs2))/2;  // only string length 
+                srclength = (srclength - ((unsigned char *)data - (unsigned char *)ucs2))/2;  // only string length
 
                 for ( i = 0; i < srclength && i < tarlength; i++ )
                 {
@@ -589,30 +589,30 @@ unsigned short NGConvertUCS2ToUnicode(unsigned short * target, unsigned char * s
     {
         target[length] = 0;
     }
-    
+
     return length;
 } /*--- End of gapi_GetUnicodefromUCS2() ---*/
 
 unsigned short  NGAnsiiToUnicodeString(char *pOutBuffer, char *pInBuffer )
 {
-	short count = -1;
-	unsigned char charLen = 0;
-	unsigned char  arrOut[2];
+    short count = -1;
+    unsigned char charLen = 0;
+    unsigned char  arrOut[2];
 
-	while( *pInBuffer != '\0')
-	{
-		NGUnicodeToUCS2Encoding(*pInBuffer,&charLen,arrOut);
-		pOutBuffer[++count] = arrOut[0];
-		pOutBuffer[++count] = arrOut[1];
-		pInBuffer++;
-	}
+    while( *pInBuffer != '\0')
+    {
+        NGUnicodeToUCS2Encoding(*pInBuffer,&charLen,arrOut);
+        pOutBuffer[++count] = arrOut[0];
+        pOutBuffer[++count] = arrOut[1];
+        pInBuffer++;
+    }
 
-	pOutBuffer[++count] = '\0';
+    pOutBuffer[++count] = '\0';
     pOutBuffer[++count] = '\0';
 
-	return count + 1;
+    return count + 1;
 }
- 
+
 int NGUnicodeToUtf8 (const unsigned char *_in, unsigned char *out)
 {
     int i = 0;
@@ -621,17 +621,17 @@ int NGUnicodeToUtf8 (const unsigned char *_in, unsigned char *out)
     unsigned char *tmp = NULL;
     unsigned char *in = (unsigned char*)_in;
     unsigned short unicode = 0;
-	
+
     int charscount =  NGUnicodeStrlen((char *)_in);
 
-	if(charscount < 2 ) return 0;
-	
+    if(charscount < 2 ) return 0;
+
     tmp = out;
 
     for (i = 0; i < charscount; i += 2)
     {
         unicode = (in[i+1] << 8) | in[i];
-        
+
         if (unicode >= 0x0000 && unicode <= 0x007f)
         {
             *tmp = (unsigned char)unicode;
@@ -723,7 +723,7 @@ int NGUtf8ToUnicode (const unsigned char *in, unsigned char *out)
 
             *tmp = ((t2 & (0xff >> 6)) << 6) | t3;//(t1 << 4) | (t2 >> 2);
             tmp++;
-			
+
             *tmp = (t1 << 4) | (t2 >> 2);//((t2 & (0xff >> 6)) << 6) | t3;
             tmp++;
 #endif
@@ -746,7 +746,7 @@ int NGUnicodeStrlen( char * str)
     int i = -1;
     if(str == NULL)
         return i;
-	
+
     for(i = 0;;i+=2)
     {
         if(0 == str[i] && 0 == str[i + 1])
@@ -754,7 +754,7 @@ int NGUnicodeStrlen( char * str)
             break;
         }
     }
-    
+
     return i;
 }
 
@@ -776,7 +776,7 @@ void dump_unicode(const unsigned char *utf16)
     int i = 0;
     unsigned short *p = (unsigned short *)utf16;
     int size = NGUnicodeStrlen((char*)utf16);
-    
+
     _MG_PRINTF ("OUTPUT STR Unicode : \n");
     for (i = 0; i < size; i++)
     {

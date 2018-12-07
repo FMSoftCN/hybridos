@@ -112,7 +112,7 @@ void TrackBarView::setThumbBlockImage(Image* img)
     if (NULL == m_drThumbBlock)
         return;
     //m_drThumbBlock->setImage(img);
-	//m_drset->setDrawableElement();
+    //m_drset->setDrawableElement();
     updateView();
 }*/
 
@@ -127,29 +127,29 @@ void TrackBarView::drawContent(GraphicsContext* context, IntRect &rc, int status
     int track_l = 0, track_w = 0, track_b = 0, track_h = 0;
     IntRect irc, thumb_irc;
 
-	m_drset->calcDrawableSize(DR_THUMB, DRAWSTATE_NORMAL, w, h);
-	
-	if (m_type == TrackBarView::VERTICAL)
-	{
-		track_b = rc.bottom() - h / 2;
-		track_h = (rc.height() - h ) * m_curValue / m_maxValue;
-		irc.setRect(rc.m_left, track_b - track_h, rc.m_right, track_b);
-	}
-	else
-	{
-		track_l = rc.m_left  + w / 2;
-		track_w = (rc.width() - w) * m_curValue / m_maxValue;
-		//irc.setRect(track_l, rc.m_top, track_l + w, rc.m_bottom);
-		irc.setRect(track_l, rc.m_top, track_l + track_w, rc.m_bottom);
-	}
-	//TODO m_drTrackBar->draw(context, irc, status);
-	m_drset->draw(context, DR_CONTENT, DRAWSTATE_NORMAL, irc);
+    m_drset->calcDrawableSize(DR_THUMB, DRAWSTATE_NORMAL, w, h);
 
-	if (m_type == TrackBarView::VERTICAL)
-		irc.setRect(rc.m_left, track_b - track_h - h / 2, rc.m_right, track_b - track_h + h / 2);
-	else
-		irc.setRect(track_l + track_w - w / 2, rc.m_top, track_l + track_w + w / 2, rc.m_bottom);
-	m_drset->draw(context, DR_THUMB, DRAWSTATE_NORMAL, irc);
+    if (m_type == TrackBarView::VERTICAL)
+    {
+        track_b = rc.bottom() - h / 2;
+        track_h = (rc.height() - h ) * m_curValue / m_maxValue;
+        irc.setRect(rc.m_left, track_b - track_h, rc.m_right, track_b);
+    }
+    else
+    {
+        track_l = rc.m_left  + w / 2;
+        track_w = (rc.width() - w) * m_curValue / m_maxValue;
+        //irc.setRect(track_l, rc.m_top, track_l + w, rc.m_bottom);
+        irc.setRect(track_l, rc.m_top, track_l + track_w, rc.m_bottom);
+    }
+    //TODO m_drTrackBar->draw(context, irc, status);
+    m_drset->draw(context, DR_CONTENT, DRAWSTATE_NORMAL, irc);
+
+    if (m_type == TrackBarView::VERTICAL)
+        irc.setRect(rc.m_left, track_b - track_h - h / 2, rc.m_right, track_b - track_h + h / 2);
+    else
+        irc.setRect(track_l + track_w - w / 2, rc.m_top, track_l + track_w + w / 2, rc.m_bottom);
+    m_drset->draw(context, DR_THUMB, DRAWSTATE_NORMAL, irc);
 
 
     if (m_border > 0) {
@@ -163,7 +163,7 @@ void TrackBarView::drawContent(GraphicsContext* context, IntRect &rc, int status
             m_drset->draw(context, DR_CONTENT2, DRAWSTATE_NORMAL, irc);
             irc.setRect(rc.m_right-m_border, rc.m_top, rc.m_right, rc.m_bottom);
             m_drset->draw(context, DR_CONTENT2, DRAWSTATE_NORMAL, irc);
-	#if 0
+    #if 0
             for (int i=1; i<m_maxValue; i++)
             {
                 track_w = (rc.width() - w) * i / m_maxValue;
@@ -171,7 +171,7 @@ void TrackBarView::drawContent(GraphicsContext* context, IntRect &rc, int status
                 irc.setRect(track_l + track_w-m_border, rc.m_top, track_l + track_w, rc.m_bottom);
                 m_drset->draw(context, DR_CONTENT2, DRAWSTATE_NORMAL, irc);
             }
-	#endif
+    #endif
         }
     }
 }

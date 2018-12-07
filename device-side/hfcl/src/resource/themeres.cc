@@ -30,8 +30,8 @@ namespace hfcl {
 
 ThemeRes::ThemeRes()
 {
-	m_theme_name = "default_theme";
-	m_maptable = NULL;
+    m_theme_name = "default_theme";
+    m_maptable = NULL;
 }
 
 ThemeRes::~ThemeRes()
@@ -40,25 +40,25 @@ ThemeRes::~ThemeRes()
 
 void ThemeRes::setDrawableSetMapTable(TRThemeItem* items)
 {
-	m_maptable = items;
+    m_maptable = items;
 }
 
 DrawableSet* ThemeRes::getDrawableSet(int theme_drset_id)
 {
-	int drset_id = 0, i = 0;
-	if(m_maptable != NULL) {
-		while(m_maptable[i].theme_drset_id != -1) {
-			if(m_maptable[i].theme_drset_id == theme_drset_id) {
-				drset_id = m_maptable[i].drset_id;
-				break;
-			}
-			++i;
-		}
-		if(drset_id > 0)
-			return GetDrawableSetRes(drset_id);
-	}
+    int drset_id = 0, i = 0;
+    if(m_maptable != NULL) {
+        while(m_maptable[i].theme_drset_id != -1) {
+            if(m_maptable[i].theme_drset_id == theme_drset_id) {
+                drset_id = m_maptable[i].drset_id;
+                break;
+            }
+            ++i;
+        }
+        if(drset_id > 0)
+            return GetDrawableSetRes(drset_id);
+    }
 
-	return GetCommonDrawableSet();
+    return GetCommonDrawableSet();
 }
 
 } // namespace hfcl

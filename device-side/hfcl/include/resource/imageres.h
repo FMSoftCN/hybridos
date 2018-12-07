@@ -50,8 +50,8 @@ public:
      */
     Image* get(const char* resPath);
 
-    /* 
-     * load real gifanimate 
+    /*
+     * load real gifanimate
      */
     GifAnimate* getGifAnimate(const char* resPath);
 

@@ -28,47 +28,47 @@ DEFINE_CLASS_NAME(SelectedIconItemView)
 
 SelectedIconItemView::~SelectedIconItemView()
 {
-	if(m_normalImg) {
-		HFCL_DELETE(m_normalImg);
-	}
-	if(m_selImg) {
-		HFCL_DELETE(m_selImg);
-	}
+    if(m_normalImg) {
+        HFCL_DELETE(m_normalImg);
+    }
+    if(m_selImg) {
+        HFCL_DELETE(m_selImg);
+    }
 }
 
-void SelectedIconItemView::setNormalImage(Image *img) 
+void SelectedIconItemView::setNormalImage(Image *img)
 {
-	if(m_normalImg && m_normalImg != img) {
-		HFCL_DELETE(m_normalImg);
-		m_normalImg = NULL;
-	}
-	m_normalImg = img;
+    if(m_normalImg && m_normalImg != img) {
+        HFCL_DELETE(m_normalImg);
+        m_normalImg = NULL;
+    }
+    m_normalImg = img;
 }
 
-void SelectedIconItemView::setSelectedImage(Image* img) 
+void SelectedIconItemView::setSelectedImage(Image* img)
 {
-	if(m_selImg && m_selImg != img) {
-		HFCL_DELETE(m_selImg);
-		m_selImg = NULL;
-	}
-	m_selImg = img; 
+    if(m_selImg && m_selImg != img) {
+        HFCL_DELETE(m_selImg);
+        m_selImg = NULL;
+    }
+    m_selImg = img;
 }
 
 void SelectedIconItemView::drawContent(GraphicsContext* context, IntRect &rc, int status)
 {
-	ImageFormat format;	
-	format.align = ALIGN_CENTER;
-	format.valign = VALIGN_MIDDLE;
-	format.drawMode = DRAWSTATE_NORMAL;
+    ImageFormat format;
+    format.align = ALIGN_CENTER;
+    format.valign = VALIGN_MIDDLE;
+    format.drawMode = DRAWSTATE_NORMAL;
 
-	if(isSelected()) {
-		if(m_selImg != NULL)
-			m_selImg->paint(context, rc, format);
-	}
-	else {
-		if(m_normalImg != NULL)
-			m_normalImg->paint(context, rc, format);
-	}
+    if(isSelected()) {
+        if(m_selImg != NULL)
+            m_selImg->paint(context, rc, format);
+    }
+    else {
+        if(m_normalImg != NULL)
+            m_normalImg->paint(context, rc, format);
+    }
 
 }
 

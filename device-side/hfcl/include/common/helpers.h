@@ -30,12 +30,13 @@ int GetFirstUTF8CharLen (const char *str, int len);
 int GetLastUTF8CharLen (const char *str, int len);
 int GetUTF8CharInfo (const char *mstr, int len, int *retPosChars);
 int GetUTF8CharCount (const char *mstr, int len);
-BOOL HasUCS2Char (const char *mstr, int len);
+bool HasUCS2Char (const char *mstr, int len);
 int GetUTF8LenByCharCount (const char *mstr, int charCount);
 Uint16 UTF8ToUCS2 (Uint8 *utf8);
-BOOL IsNumberUCS2Char (Uint16 inChar);
-BOOL IsSymbolUCS2Char (Uint16 inChar);
-BOOL IsArabicSymbolUCS2Char (Uint16 inChar);
+bool IsNumberUCS2Char (Uint16 inChar);
+bool IsSymbolUCS2Char (Uint16 inChar);
+bool IsArabicSymbolUCS2Char (Uint16 inChar);
+bool IsTransformArabicUCS2Char (Uint16 inChar);
 
 } // namespace hfcl
 

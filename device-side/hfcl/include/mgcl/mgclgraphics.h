@@ -120,9 +120,9 @@ Uint32 mgclSetBrushColor(HDC hdc, Uint32 color);
  * @param mode The new background mode, be can one of the following values:
  *
  *      - BM_TRANSPARENT \n
- *        Indicate that reserve the background untouched when drawing text. 
+ *        Indicate that reserve the background untouched when drawing text.
  *      - BM_OPAQUE \n
- *        Indicate that erase the background with background color when 
+ *        Indicate that erase the background with background color when
  *        drawing text.
  *
  * @returns The old background mode of the DC \a hdc.
@@ -134,7 +134,7 @@ Uint32 mgclSetBkMode(HDC hdc, Uint32 mode);
  *
  * @param hdc The device context.
  * @param pText The formatted text.
- * @param nCount The length of the text. If it is less than 0, MiniGUI will 
+ * @param nCount The length of the text. If it is less than 0, MiniGUI will
  *        treat it as a null-terminated string.
  * @param pRect The output rectangle.
  * @param nFormat The methods used to format the text.
@@ -148,8 +148,8 @@ int mgclTextOutOmitted(HDC hdc, int x, int y, const char *mtext, int len, int ma
  * \fn void GUIAPI GetBoundRect (PRECT pdrc, const RECT* psrc1, const RECT* psrc2)
  * \brief Gets the bound rectangle of two source rectangles.
  *
- * This function creates the bound rect (\a pdrc) of two rectangles 
- * (\a psrc1 and \a prsrc2). The bound rect is the smallest rectangle 
+ * This function creates the bound rect (\a pdrc) of two rectangles
+ * (\a psrc1 and \a prsrc2). The bound rect is the smallest rectangle
  * that contains both source rectangles.
  *
  * \param pdrc The destination rectangle.
@@ -159,7 +159,7 @@ int mgclTextOutOmitted(HDC hdc, int x, int y, const char *mtext, int len, int ma
 void mgclGetBoundRect(IntRect* pdrc, const IntRect* psrc1, const IntRect* psrc2);
 
 /**
- * @brief mgclSelectClipRect Sets the visible region of a DC to be a rectangle. 
+ * @brief mgclSelectClipRect Sets the visible region of a DC to be a rectangle.
  *
  * @param hdc The device context.
  * @param prc Pointer to the rectangle.
@@ -171,8 +171,8 @@ void mgclSelectClipRect(HDC hdc, const RECT* prc);
  *
  * @param hdc The handle to the DC whose state is to be saved.
  *
- * @returns  If the function succeeds, the return value identifies the saved 
- *         state. If the function fails, the return value is zero. 
+ * @returns  If the function succeeds, the return value identifies the saved
+ *         state. If the function fails, the return value is zero.
  */
 int mgclSaveDC(HDC hdc);
 
@@ -180,10 +180,10 @@ int mgclSaveDC(HDC hdc);
  * @brief mgclRestoreDC Restores a device context (DC) to the specified state.
  *
  * @param hdc The handle to the DC.
- * @param saved_dc Specifies the saved state to be restored. 
+ * @param saved_dc Specifies the saved state to be restored.
  *
- * @returns If the function succeeds, the return value is nonzero. If the 
- *         function fails, the return value is zero. 
+ * @returns If the function succeeds, the return value is nonzero. If the
+ *         function fails, the return value is zero.
  */
 bool mgclRestoreDC(HDC hdc, int saved_dc);
 
@@ -204,16 +204,16 @@ bool mgclSetMemDCAlpha(HDC mem_dc, DWORD flags, Uint8 alpha);
  *        another device context.
  *
  * @param hsdc The source device context.
- * @param sx The x coordinate of the upper-left corner of the rectangle 
+ * @param sx The x coordinate of the upper-left corner of the rectangle
  *        in the source DC.
- * @param sy The y coordinate of the upper-left corner of the rectangle 
+ * @param sy The y coordinate of the upper-left corner of the rectangle
  *        in the source DC.
  * @param sw The width of the source rectangle.
  * @param sh The height of the source rectangle.
  * @param hddc The destination device context \a hddc.
- * @param dx The x coordinate of the upper-left corner of the rectangle 
+ * @param dx The x coordinate of the upper-left corner of the rectangle
  *        in the destination DC.
- * @param dy The y coordinate of the upper-left corner of the rectangle 
+ * @param dy The y coordinate of the upper-left corner of the rectangle
  *        in the destination DC.
  * @param dwRop The raster operation, currently ignored.
  */
@@ -257,7 +257,7 @@ void mgclRectangle(HDC hdc, int x0, int y0, int x1, int y1);
  *   - MEMDC_FLAG_SRCCOLORKEY\n
  *     The created memory DC will use a source color key to blit to other DC.
  *   - MEMDC_FLAG_SRCALPHA\n
- *     The created memory DC will use a source alpha blending to blit to 
+ *     The created memory DC will use a source alpha blending to blit to
  *     other DC.
  *   - MEMDC_FLAG_RLEACCEL\n
  *     The memory DC will be RLE encoded.
@@ -284,9 +284,9 @@ void mgclDeleteMemDC(HDC mem_dc);
  *        with the specified reference DC.
  *
  * @param hdc The handle to the reference DC.
- * @param width The expected width of the result memory DC. If it is zero, 
+ * @param width The expected width of the result memory DC. If it is zero,
  *        the width will be equal to the width of the reference DC.
- * @param height The expected height of the result memory DC. If it is zero, 
+ * @param height The expected height of the result memory DC. If it is zero,
  *        the height will be equal to the height of the reference DC.
  *
  * @returns The handle to the memory DC, HDC_INVALID indicates an error.
@@ -318,10 +318,10 @@ bool mgclSetMemDCColorKey(HDC mem_dc, DWORD flags, Uint32 color_key);
  * @param x The x coordinate of the upper-left corner of the box.
  * @param y The y coordinate of the upper-left corner of the box.
  * @param w The width of the box. Can be zero, means the width
- *        or the height will be equal to the width or the height of 
+ *        or the height will be equal to the width or the height of
  *        the BITMAP object.
  * @param h The height of the box. Can be zero, means the width
- *        or the height will be equal to the width or the height of 
+ *        or the height will be equal to the width or the height of
  *        the BITMAP object.
  * @param bmp The pointer to the BITMAP object.
  *
@@ -388,7 +388,7 @@ bool mgclInitBitmap(HDC hdc, Uint32 w, Uint32 h, Uint32 pitch,
 bool mgclSaveScreenRectContent(const RECT* rc, const char* filename);
 
 void mgclDrawLine(HDC hdc, int x0, int y0, int x1, int y1,
-				int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+                int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
 /**
  * \brief Fills an polygon.
@@ -403,36 +403,36 @@ void mgclDrawLine(HDC hdc, int x0, int y0, int x1, int y1,
 void mgclFillPolygon(HDC hdc, const POINT* pts, int vertices, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
 static inline void mgclLPtoDP(HDC hdc, POINT *pt) {
-	LPtoDP(hdc, pt);
+    LPtoDP(hdc, pt);
 }
 static inline void mgclLPtoDP(HDC hdc, int *px, int *py) {
-	POINT pt = { *px, *py };
-	LPtoDP(hdc, &pt);
-	*px = pt.x;
-	*py = pt.y;
+    POINT pt = { *px, *py };
+    LPtoDP(hdc, &pt);
+    *px = pt.x;
+    *py = pt.y;
 }
 
-static inline void mgclExcludeClipRect(HDC hdc, const RECT *prc) 
+static inline void mgclExcludeClipRect(HDC hdc, const RECT *prc)
 {
-	ExcludeClipRect(hdc, prc);
+    ExcludeClipRect(hdc, prc);
 }
 
-static inline void mgclSetWindowOrg(HDC hdc, int x, int y) 
+static inline void mgclSetWindowOrg(HDC hdc, int x, int y)
 {
-	POINT pt = {x, y };
-	SetWindowOrg(hdc, &pt);
+    POINT pt = {x, y };
+    SetWindowOrg(hdc, &pt);
 }
 
 static inline void mgclGetWindowOrg(HDC hdc, POINT *pt) {
-	GetWindowOrg(hdc, pt);
+    GetWindowOrg(hdc, pt);
 }
 
 static inline void mgclSetMapMode(HDC hdc, int mode) {
-	SetMapMode(hdc, mode);
+    SetMapMode(hdc, mode);
 }
 
 static inline int mgclGetMapMode(HDC hdc) {
-	return GetMapMode(hdc);
+    return GetMapMode(hdc);
 }
 
 

@@ -30,24 +30,24 @@ namespace hfcl {
 class ItemView : public PanelView
 {
 public:
-    ItemView(View* p_parent) 
-        : PanelView(p_parent, DEFAULT_VIEW_DRAWABLESET(ItemView)) { 
+    ItemView(View* p_parent)
+        : PanelView(p_parent, DEFAULT_VIEW_DRAWABLESET(ItemView)) {
             m_select_mark_rect.setRect(0, 0, 20, 20);
-            setFocusValid(true); 
+            setFocusValid(true);
             convertLayout(false);
             m_margenWidth = 0;
         }
 
     ItemView(View* p_parent, DrawableSet* drset)
-        : PanelView(p_parent, drset) { 
+        : PanelView(p_parent, drset) {
             m_select_mark_rect.setRect(0, 0, 20, 20);
-            setFocusValid(true); 
+            setFocusValid(true);
             convertLayout(false);
             m_margenWidth = 0;
         }
-    ItemView() : PanelView(NULL, DEFAULT_VIEW_DRAWABLESET(ItemView)) { 
+    ItemView() : PanelView(NULL, DEFAULT_VIEW_DRAWABLESET(ItemView)) {
         m_select_mark_rect.setRect(0, 0, 20, 20);
-        setFocusValid(true); 
+        setFocusValid(true);
         convertLayout(false);
         m_margenWidth = 0;
     }
@@ -72,28 +72,28 @@ public:
      *
      * @param rect Mark rect in ItemView
      */
-    void setSelectMarkRect(int left, int top, int right, int bottom) { 
-        m_select_mark_rect.setRect(left, top, right, bottom); 
+    void setSelectMarkRect(int left, int top, int right, int bottom) {
+        m_select_mark_rect.setRect(left, top, right, bottom);
     }
     void setSelectMarkRect(const IntRect& rect) { m_select_mark_rect = rect; }
     IntRect& selectMarkRect() { return m_select_mark_rect; }
 
     void paint(GraphicsContext* context, int status);
-    
+
     void setItemHeight(int h);
     int getItemHeight() { return getRect().height(); }
-    
+
     bool isSelected()   { return m_flags & SELECTED; }
-    virtual  void setSelected(bool select) { 
-        if(select != isSelected()) { 
-            setFlag(select, SELECTED); 
+    virtual  void setSelected(bool select) {
+        if(select != isSelected()) {
+            setFlag(select, SELECTED);
             updateView();
         }
     }
 
     void setPaintHilightFirst(bool b) { setFlag(b, HILIGHT_TOP); }
     bool isPaintHilightFirst(void)    { return m_flags & HILIGHT_TOP; }
-    
+
     static void SetAllItemViewNeedConvert(bool b){ g_is_all_itemview_need_convert = b; }
     static bool IsAllItemViewNeedConvert(void){ return g_is_all_itemview_need_convert; }
     void setMarginWidth(int margin){m_margenWidth = margin;}
@@ -101,11 +101,11 @@ public:
 
 protected:
     enum {
-        SELECTED 		= (1 << (PanelView::FLAG_SHIFT)),
-        HILIGHT_TOP 	= (1 << (PanelView::FLAG_SHIFT + 1)),	        
-        LAYOUT_CONVERT 	= (1 << (PanelView::FLAG_SHIFT + 2)),
-        BE_CONVERTED	= (1 << (PanelView::FLAG_SHIFT + 3)),
-        FLAG_SHIFT 		= (4 + (PanelView::FLAG_SHIFT))
+        SELECTED         = (1 << (PanelView::FLAG_SHIFT)),
+        HILIGHT_TOP     = (1 << (PanelView::FLAG_SHIFT + 1)),
+        LAYOUT_CONVERT     = (1 << (PanelView::FLAG_SHIFT + 2)),
+        BE_CONVERTED    = (1 << (PanelView::FLAG_SHIFT + 3)),
+        FLAG_SHIFT         = (4 + (PanelView::FLAG_SHIFT))
     };
 
     int getHilightDrawState();
@@ -115,8 +115,8 @@ private:
     IntRect m_select_mark_rect;
     static bool g_is_all_itemview_need_convert;
 
-    void convertLayout(bool b) 	{ setFlag(b, BE_CONVERTED); }
-    bool isConverted(void)  		{ return m_flags & BE_CONVERTED; }
+    void convertLayout(bool b)     { setFlag(b, BE_CONVERTED); }
+    bool isConverted(void)          { return m_flags & BE_CONVERTED; }
 
     DECLARE_CLASS_NAME(ItemView)
 };  // ItemView

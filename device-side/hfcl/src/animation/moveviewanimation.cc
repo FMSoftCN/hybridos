@@ -30,39 +30,39 @@ namespace hfcl {
 MoveViewAnimation::MoveViewAnimation(View *view, Point pt)
 : ViewAnimation(view, MGEFF_POINT)
 {
-	setPoint(pt);
+    setPoint(pt);
 }
 
 void MoveViewAnimation::onStart()
 {
-	Point oldPt;
-	View *__view = getView();
+    Point oldPt;
+    View *__view = getView();
 
-	if(!__view)
-		return;
+    if(!__view)
+        return;
 
-	__view->getPosition(&oldPt.x, &oldPt.y);
+    __view->getPosition(&oldPt.x, &oldPt.y);
 
-	setStartValue((void *)&oldPt);
+    setStartValue((void *)&oldPt);
 }
 
 void MoveViewAnimation::setPoint(Point pt)
 {
-	setEndValue((void *)&pt);
+    setEndValue((void *)&pt);
 }
 
 void MoveViewAnimation::setProperty(int id, void *value)
 {
-	if(NULL == value)
-		return;
+    if(NULL == value)
+        return;
 
-	Point *pt = (Point*)value;
+    Point *pt = (Point*)value;
 
     IntRect rect = getView()->getRect();
 
-	rect.offset(pt->x - rect.left(), pt->y - rect.top());
+    rect.offset(pt->x - rect.left(), pt->y - rect.top());
 
-	getView()->setRect(rect);
+    getView()->setRect(rect);
 }
 
 } // namespace hfcl

@@ -40,7 +40,7 @@ ImageRes::ImageRes()
 }
 
 // ImageResVec's size method would cause a disconstruct called for this,
-// I don't want it call this, so, we don't release any resource, or call 
+// I don't want it call this, so, we don't release any resource, or call
 // method clean
 void ImageRes::clean()
 {

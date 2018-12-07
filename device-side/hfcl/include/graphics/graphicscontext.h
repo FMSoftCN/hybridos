@@ -29,14 +29,14 @@
 
 namespace hfcl {
 
-typedef BITMAP 	Bitmap;
+typedef BITMAP     Bitmap;
 
 #ifdef  USE_HFCL_FONT
 typedef DEVFONT Devfont;
 #endif
-typedef POINT 	Point;
+typedef POINT     Point;
 
-// for inner resource 
+// for inner resource
 typedef struct _tagBitmapFrame {
     int off_x;
     int off_y;
@@ -124,12 +124,12 @@ public:
     }
 
     void textOutOmitted(int x, int y, const char * text, int len, int max_extent);
-    void textOutOmitted(int x, int y, const char * text, int len, 
+    void textOutOmitted(int x, int y, const char * text, int len,
             int max_extent, unsigned int color, Logfont * logfont);
     void textOutOmitted(int x, int y, const string& text, int max_extent){
         textOutOmitted(x, y, text.c_str(), text.size(), max_extent);
     }
-    void textOutOmitted(int x, int y, const string& text, 
+    void textOutOmitted(int x, int y, const string& text,
             int max_extent, unsigned int color, Logfont * logfont) {
         textOutOmitted(x, y, text.c_str(), text.size(), max_extent, color, logfont);
     }
@@ -142,15 +142,15 @@ public:
         drawText(text.c_str(), rc, color, logfont, format);
     }
     int drawTextToCalcRect(const string& text, IntRect& rect, unsigned int format, Logfont *font = NULL);
-    int calcTextRectOnDrawing(const char *text, Logfont *f, 
+    int calcTextRectOnDrawing(const char *text, Logfont *f,
             unsigned int format, IntRect *rect, DTFIRSTLINE *firstline = NULL, Point *txtPos = NULL);
-    int calcTextRectOnDrawing(const string& text, Logfont *f, 
+    int calcTextRectOnDrawing(const string& text, Logfont *f,
             unsigned int format, IntRect *rect, DTFIRSTLINE *firstline = NULL, Point *txtPos = NULL) {
         return calcTextRectOnDrawing(text.c_str(), f, format, rect, firstline, txtPos);
     }
     int drawTextToGetLenght(const string& text);
-    int getFontHeight(Logfont *f = NULL); 
-    int getFontWidth(Logfont *f = NULL); 
+    int getFontHeight(Logfont *f = NULL);
+    int getFontWidth(Logfont *f = NULL);
 
     //Bitmap
     bool fillBoxWithBitmap(int x, int y, int w, int h, const Bitmap* pBitmap);
@@ -170,11 +170,11 @@ public:
     //Font
     Logfont* getCurFont(void);
     Logfont* createLogFontByName(const char * fontname);
-    
+
     void deleteLogFont(Logfont* logfont);
 
     void rotateBitmap(const Bitmap *pBitmap, int lx, int ty, int angle);
-    HDC context(); 
+    HDC context();
     bool captureScreen2Bitmap(Bitmap* pbmp);
 
     void setMapView(View *view);
@@ -186,7 +186,7 @@ public:
     void setLayerEnable(int layer, BOOL enable);
     void setLayerOpacity(int layer, BOOL enable, unsigned char opacity_value);
     void setLayerColorKey(int layer, BOOL enable, unsigned char r, unsigned char g, unsigned char b );
-    
+
     // create memdc
     GraphicsContext* createMemGc(int w, int h);
 

@@ -40,7 +40,7 @@ PageNavigateView::PageNavigateView(int i_id,
                     ,m_pageView(pageView)
                     ,m_panelView(NULL)
 {
-	setFocusValid(true);
+    setFocusValid(true);
     m_pageView = pageView;
     m_normalImage = Image::loadImage(normalImageFile);
     m_curImage = Image::loadImage(curImageFile);
@@ -337,7 +337,7 @@ bool PageNavigateView::dispatchEvent(Event *event)
                         m_pageView->nextPage();
                 break;
             default:
-				return View::dispatchEvent(event);
+                return View::dispatchEvent(event);
         }
     }
 

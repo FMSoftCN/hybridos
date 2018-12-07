@@ -20,14 +20,14 @@
 */
 
 
-#ifndef  _TIMEEDITOR_H 
+#ifndef  _TIMEEDITOR_H
 #define  _TIMEEDITOR_H
 
 #include "formateditview.h"
 
 namespace hfcl {
 
-class TimeEditor : public FormatEditView 
+class TimeEditor : public FormatEditView
 {
     public:
         typedef enum __enum_TimeFormat
@@ -40,7 +40,7 @@ class TimeEditor : public FormatEditView
          */
         TimeEditor(View* parent);
         TimeEditor(View* parent, DrawableSet* drset);
-		TimeEditor(int id, int x, int y, int w, int h);
+        TimeEditor(int id, int x, int y, int w, int h);
         ~TimeEditor();
 
         /*
@@ -95,7 +95,7 @@ class TimeEditor : public FormatEditView
         int m_field_m;
         int m_field_ap;
 
-		DECLARE_CLASS_NAME(TimeEditor)
+        DECLARE_CLASS_NAME(TimeEditor)
 };
 
 } // namespace hfcl

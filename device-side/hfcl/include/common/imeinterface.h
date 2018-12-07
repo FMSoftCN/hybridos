@@ -20,7 +20,7 @@
 */
 #ifndef IME_INTERFACE_H
 #define IME_INTERFACE_H
-#define IME_STATUS_OPENED 	(IME_STATUS_USER_MIN + 1)
+#define IME_STATUS_OPENED     (IME_STATUS_USER_MIN + 1)
 
 extern HWND g_imeWnd; //decleared in mFramework.cpp
 
@@ -37,7 +37,7 @@ inline bool isImeOpen(void) {
 
 inline bool isImeEnable(void) {
     if (isImeExist())
-		return SendMessage(g_imeWnd, MSG_IME_GETSTATUS, IME_STATUS_ENABLED, 0);
+        return SendMessage(g_imeWnd, MSG_IME_GETSTATUS, IME_STATUS_ENABLED, 0);
     return false;
 }
 

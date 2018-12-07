@@ -39,7 +39,7 @@ class TrackBarView : public View
         TrackBarView(int i_id, int x, int y, int w, int h);
         //TrackBarView(Image* startImg, Image* pauseImg, GNInt min = 0, GNInt max = 100);
         ~TrackBarView();
-        
+
         void setType(TRACKBARTYPE t_type){ m_type = t_type; }
         TRACKBARTYPE type(void){ return m_type; }
 
@@ -88,7 +88,7 @@ class TrackBarView : public View
         //ImageDrawable* m_drTrackBar;
         //ImageDrawable* m_drThumbBlock;
 
-	DECLARE_CLASS_NAME(TrackBarView)
+    DECLARE_CLASS_NAME(TrackBarView)
 };
 
 } // namespace hfcl

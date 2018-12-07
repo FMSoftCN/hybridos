@@ -28,12 +28,12 @@ namespace hfcl {
 class AlphaViewAnimation: public ViewAnimation
 {
 public:
-	AlphaViewAnimation(View* view, int endAlpha = 0);
-	~AlphaViewAnimation();
+    AlphaViewAnimation(View* view, int endAlpha = 0);
+    ~AlphaViewAnimation();
 
 protected:
-	void setProperty(int id, void* value);
-	void onStart();
+    void setProperty(int id, void* value);
+    void onStart();
 
 private:
 

@@ -30,20 +30,20 @@ namespace hfcl {
 
 class GroupAnimation : public Animation
 {
-	public:
-		LIST (Animation *, AMILIST);
-		
-		GroupAnimation(enum EffAnimationType type, GroupAnimation * parent = NULL);
+    public:
+        LIST (Animation *, AMILIST);
 
-		~GroupAnimation(); 
-		void setProperty(int id, void *curvalue) {/* do nothing */}
+        GroupAnimation(enum EffAnimationType type, GroupAnimation * parent = NULL);
 
-		void add(Animation *ani);
+        ~GroupAnimation();
+        void setProperty(int id, void *curvalue) {/* do nothing */}
+
+        void add(Animation *ani);
     protected:
         virtual void onStart();
 
-	private:
-		AMILIST m_amiList;
+    private:
+        AMILIST m_amiList;
 };
 
 } // namespace hfcl

@@ -38,54 +38,54 @@ public:
     virtual void onGetFocus();
     virtual void onLoseFocus();
 
-	void setText(int strId) { m_stringId=strId; }
-	void setText(const char* str);
-	void setText(const string& str) { setText(str.c_str()); }
-	const char* getText();
+    void setText(int strId) { m_stringId=strId; }
+    void setText(const char* str);
+    void setText(const string& str) { setText(str.c_str()); }
+    const char* getText();
 
 protected:
-	enum {
-		NORMAL = 0,
-		PUSHED,
-		HILIGHT,
-	};
+    enum {
+        NORMAL = 0,
+        PUSHED,
+        HILIGHT,
+    };
 
-	enum {
-		STATE = (0x7 << View::FLAG_SHIFT),
-		STATE_SHIFT = View::FLAG_SHIFT,
-		FLAG_SHIFT = (3 + View::FLAG_SHIFT),
-	};
+    enum {
+        STATE = (0x7 << View::FLAG_SHIFT),
+        STATE_SHIFT = View::FLAG_SHIFT,
+        FLAG_SHIFT = (3 + View::FLAG_SHIFT),
+    };
 
-	void setState(int s) {
-		m_flags = (m_flags & ~STATE) | ((s & 0x7)<<STATE_SHIFT);
-	}
+    void setState(int s) {
+        m_flags = (m_flags & ~STATE) | ((s & 0x7)<<STATE_SHIFT);
+    }
 
-	int getState() {
-		return (m_flags & STATE) >> STATE_SHIFT;
-	}
+    int getState() {
+        return (m_flags & STATE) >> STATE_SHIFT;
+    }
 
-	int getDrawStatus() {
-		switch(getState()) {
-		case NORMAL:  return isFocus() ? DRAWSTATE_FOCUSED :DRAWSTATE_NORMAL;
-		case HILIGHT: return DRAWSTATE_HILIGHT;
-		case PUSHED:  return DRAWSTATE_PUSHED;
-		}
-		return DRAWSTATE_NORMAL;
-	}
+    int getDrawStatus() {
+        switch(getState()) {
+        case NORMAL:  return isFocus() ? DRAWSTATE_FOCUSED :DRAWSTATE_NORMAL;
+        case HILIGHT: return DRAWSTATE_HILIGHT;
+        case PUSHED:  return DRAWSTATE_PUSHED;
+        }
+        return DRAWSTATE_NORMAL;
+    }
 
-	void drawBackground(GraphicsContext* context, IntRect&rc, int status /*= Style::NORMAL*/)
-	{
-		if(m_drset) {
-			m_drset->draw(context, DR_BKGND, getDrawStatus(), rc);
-		}
-	}
+    void drawBackground(GraphicsContext* context, IntRect&rc, int status /*= Style::NORMAL*/)
+    {
+        if(m_drset) {
+            m_drset->draw(context, DR_BKGND, getDrawStatus(), rc);
+        }
+    }
 
-	void drawContent(GraphicsContext* context, IntRect&rc, int status /*= Style::NORMAL*/)
-	{
-		m_drset->draw(context, DR_CONTENT, getDrawStatus(), rc, (DWORD)m_text, DRDT_TEXT);
-	}
+    void drawContent(GraphicsContext* context, IntRect&rc, int status /*= Style::NORMAL*/)
+    {
+        m_drset->draw(context, DR_CONTENT, getDrawStatus(), rc, (DWORD)m_text, DRDT_TEXT);
+    }
 
-	char   m_text[TEXT_BUFFER_LEN_OF_DEFAULT+1];
+    char   m_text[TEXT_BUFFER_LEN_OF_DEFAULT+1];
 
 private:
     void keyDown(Event* event);
@@ -95,12 +95,12 @@ private:
     void lButtonDown(Event* event);
     void lButtonUp(Event* event);
     void lButtonClick(Event* event);
-	
-	bool m_isLong;
-	int m_stringId;
-	string m_buttonString;
-	
-	DECLARE_CLASS_NAME(ButtonView)
+
+    bool m_isLong;
+    int m_stringId;
+    string m_buttonString;
+
+    DECLARE_CLASS_NAME(ButtonView)
 };
 
 } // namespace hfcl

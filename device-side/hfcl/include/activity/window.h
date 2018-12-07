@@ -83,7 +83,7 @@ public:
     int doModal(bool bAutoDestory = false);
     unsigned int doModalView();
     void endDlg(int endCode);
-    
+
     void lockKeyOnPainting (bool bLockable) { m_keyLockable = bLockable; }
     virtual void drawScroll(GraphicsContext* context, IntRect &rc, int status);
     virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status);
@@ -95,10 +95,10 @@ protected:
     int sendKeyMessage(Event::EventType ketype, WPARAM wParam, LPARAM lParam);
     int sendMouseMessage(Event::EventType Mousetype, WPARAM wParam, LPARAM lParam);
     int sendIdleMessage();
-    
+
     HWND m_viewWindow;
     HDC m_context;
-    
+
     static LRESULT defaultAppProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     static HWND createMainWindow(const char* caption, WNDPROC proc,
             int x, int y, int width, int height, DWORD addData, bool visible = true);

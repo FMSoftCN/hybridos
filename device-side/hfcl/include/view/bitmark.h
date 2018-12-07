@@ -20,7 +20,7 @@
 */
 
 
-#ifndef  _BIT_MARK_H 
+#ifndef  _BIT_MARK_H
 #define  _BIT_MARK_H
 
 namespace hfcl {
@@ -28,45 +28,45 @@ namespace hfcl {
 ////////////////////// Features /////////////////////////
 class BitMark
 {
-	public:
-		BitMark();
-		~BitMark();
+    public:
+        BitMark();
+        ~BitMark();
 
-		// init
-		bool init(int count);
-		// get count
-		int count(void);
-		// get mark
-		bool getMark(int index);
-		// set mark
-		void setMark(int index, bool mark);
+        // init
+        bool init(int count);
+        // get count
+        int count(void);
+        // get mark
+        bool getMark(int index);
+        // set mark
+        void setMark(int index, bool mark);
 
-		void move(int from, int to, int count);
+        void move(int from, int to, int count);
 
-	private:
-		int m_bitcount;
-		Uint8* m_bitbuf;
+    private:
+        int m_bitcount;
+        Uint8* m_bitbuf;
 };
 class PointerKeeper
 {
-	public:
-		PointerKeeper();
-		~PointerKeeper();
+    public:
+        PointerKeeper();
+        ~PointerKeeper();
 
-		// init
-		bool init(int count);
-		// get count
-		int count(void);
-		// get pointer
-		void* getPointer(int index);
-		// set pointer
-		void setPointer(int index, void* pointer);
-		
-		void move(int from, int to, int count);
+        // init
+        bool init(int count);
+        // get count
+        int count(void);
+        // get pointer
+        void* getPointer(int index);
+        // set pointer
+        void setPointer(int index, void* pointer);
 
-	private:
-		int m_pointercount;
-		unsigned int* m_pointerbuf;
+        void move(int from, int to, int count);
+
+    private:
+        int m_pointercount;
+        unsigned int* m_pointerbuf;
 };
 
 } // namespace hfcl

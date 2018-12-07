@@ -46,15 +46,15 @@ EditView::EditView(View *p)
     , m_bInsertSpace(true)
     , m_bAutoTrans(false)
     , m_beditorflag(false)
-#ifdef __MMI_T9__	
+#ifdef __MMI_T9__
     , m_addword (false)
 #endif
-    , m_exchange(false)	
+    , m_exchange(false)
     , m_input_mode(-1)
     , m_default_input_mode(0)
     , m_writing_language(-1)
 {
-	adaptViewStyle();
+    adaptViewStyle();
 }
 
 EditView::EditView(View *p, DrawableSet *drs)
@@ -70,15 +70,15 @@ EditView::EditView(View *p, DrawableSet *drs)
     , m_bInsertSpace(true)
     , m_bAutoTrans(false)
     , m_beditorflag(false)
-#ifdef __MMI_T9__	
+#ifdef __MMI_T9__
     , m_addword (false)
 #endif
-    , m_exchange(false)		
+    , m_exchange(false)
     , m_input_mode(-1)
     , m_default_input_mode(0)
     , m_writing_language(-1)
 {
-	adaptViewStyle();
+    adaptViewStyle();
 }
 
 EditView::~EditView()
@@ -89,27 +89,27 @@ EditView::~EditView()
 
 void EditView::adaptViewStyle(void)
 {
-    setTextColor(m_drset->getDrawableElement(DR_CONTENT, 
+    setTextColor(m_drset->getDrawableElement(DR_CONTENT,
                 isFocus() ? SYS_SE_HILIGHTCOLOR : SYS_SE_COLOR));
 }
 
 void EditView::changeTheme(void)
 {
-	View::changeTheme();
-	adaptViewStyle();
+    View::changeTheme();
+    adaptViewStyle();
 }
 
 void EditView::raiseNotifyEvent(int notiCode, int exParam1, int exParam2)
 {
     CustomEvent e(Event::CUSTOM_NOTIFY, notiCode, (int)this);
-	e.setExParam(exParam1, exParam2);
+    e.setExParam(exParam1, exParam2);
     raiseEvent (&e);
 }
 
 void EditView::onGetFocus(void)
 {
-	View::onGetFocus();
-	//adaptViewStyle();
+    View::onGetFocus();
+    //adaptViewStyle();
     setImeTarget((int)this, 1);
 
 #ifdef __MMI_T9__
@@ -146,10 +146,10 @@ void EditView::onLoseFocus(void)
 {
     showCaret (false);
 
-	View::onLoseFocus();
-	//adaptViewStyle();
+    View::onLoseFocus();
+    //adaptViewStyle();
 
-    setImeTarget((int)NULL, 1);	
+    setImeTarget((int)NULL, 1);
 }
 
 void EditView::setInputMode(Uint16 mode)
@@ -206,7 +206,7 @@ void EditView::SwitchShiftToLower(string str , int caretpos, bool flag)
 {
    if(imeGetInputModeFlag() == INPUT_MODE_MULTITAP && imeIsMultiShiftInputMode())
    {
-      imeSetMultitapShiftMode (SHIFT_STATE_LOWER);	
+      imeSetMultitapShiftMode (SHIFT_STATE_LOWER);
       imeCheckMultitapPunctuationCharacter (str, caretpos, flag);
    }
    else if(imeGetInputModeFlag() == INPUT_MODE_SMART)
@@ -236,7 +236,7 @@ void EditView::add_comma_in_calculator(char * str)
     if( str[0] == '.') return;
     // if a value has integers and decimals
     if( strchr( str, '.') != '\0' )
-    { 
+    {
         char str_tmp[MAX_VALUES_IN_CALCULATOR_3COMMA];
         memset(str_tmp, 0x00, MAX_VALUES_IN_CALCULATOR_3COMMA);
         strncpy(str_tmp, str,strlen(str) + 1);
@@ -276,114 +276,114 @@ void EditView::add_comma_in_calculator(char * str)
             }
             buf[index_buf] = '\0';
         }
-    }	
+    }
     // copy to str
     strncpy(str , buf, strlen(buf) + 1);
 }
 
 void EditView::remove_comma_per3digit_in_calculator(char *str)
 {
-	Uint16  index_sou=0, index_des=0;
-	char des[MAX_VALUES_IN_CALCULATOR_3COMMA];
+    Uint16  index_sou=0, index_des=0;
+    char des[MAX_VALUES_IN_CALCULATOR_3COMMA];
 
-	memset(des, 0x00, MAX_VALUES_IN_CALCULATOR_3COMMA);
-	while(str[index_sou])	
-	{
-		if (str[index_sou] == ',')
+    memset(des, 0x00, MAX_VALUES_IN_CALCULATOR_3COMMA);
+    while(str[index_sou])
+    {
+        if (str[index_sou] == ',')
             index_sou++;
-		else
+        else
             des[index_des++] = str[index_sou++];
-	}
-	des[index_des] = '\0';	
-	strncpy(str, des, strlen(des) + 1);
+    }
+    des[index_des] = '\0';
+    strncpy(str, des, strlen(des) + 1);
 }
 
 void EditView::remove_Repeative_Zerodigit_WhenClear_in_calculator(char *str_all_index_merge)
 {
-	Uint16 i =0;
-	for(i=0;str_all_index_merge[i] == '0' && str_all_index_merge[i+1] != 0 && str_all_index_merge[i+1] != '.'; i++)
-	{	
-		setCaretPosition(caretPosition()-1);
-	}
-	strcpy(str_all_index_merge, (str_all_index_merge + i) );
+    Uint16 i =0;
+    for(i=0;str_all_index_merge[i] == '0' && str_all_index_merge[i+1] != 0 && str_all_index_merge[i+1] != '.'; i++)
+    {
+        setCaretPosition(caretPosition()-1);
+    }
+    strcpy(str_all_index_merge, (str_all_index_merge + i) );
 
 }
 
 string EditView::apply_comma_multiple_value_in_calculator(char *str, int *cursor)
 {
-	Uint16 index_value=0,index_1_digit=0,index_merge=0,index_cursor=0;
-	char str_all[MAX_VALUES_IN_CALCULATOR_3COMMA][MAX_DIGIT_IN_CALCULATOR_3COMMA];
-	char str_merge[MAX_VALUES_IN_CALCULATOR_3COMMA]="";
+    Uint16 index_value=0,index_1_digit=0,index_merge=0,index_cursor=0;
+    char str_all[MAX_VALUES_IN_CALCULATOR_3COMMA][MAX_DIGIT_IN_CALCULATOR_3COMMA];
+    char str_merge[MAX_VALUES_IN_CALCULATOR_3COMMA]="";
     char *pStr = str;
-	Uint16 nbcursor_before=0, nbcursor_after=0;
-	Uint16 i=0;
-	
-	for(i=0;i<MAX_VALUES_IN_CALCULATOR_3COMMA;i++)
-	{
-		memset(str_all[i], 0x00, MAX_DIGIT_IN_CALCULATOR_3COMMA);
-	}
-	memset(str_merge, 0x00, MAX_VALUES_IN_CALCULATOR_3COMMA);
+    Uint16 nbcursor_before=0, nbcursor_after=0;
+    Uint16 i=0;
 
-	while(*pStr)	
-	{
-		//when it is opertator
-		if( *pStr == '+' || *pStr == '-' || *pStr == 'x' || *pStr == '/' || *pStr == '(' || *pStr == ')' )	
-		{
-			//insert null
-			if(index_1_digit != 0)	str_all[index_value++][index_1_digit] = '\0';
-			//
-			index_1_digit=0;
-			//
-			str_all[index_value][index_1_digit++] = *pStr;
-			str_all[index_value++][index_1_digit] = '\0';
-			index_1_digit=0;
-			pStr++;
-		}
-		//when it is digit
-		else
-		{
-			str_all[index_value][index_1_digit++] = *pStr++;
-		}
-	}
-	str_all[index_value][index_1_digit] = '\0';
-	
-	//merge all
-	for(index_merge=0;index_merge < index_value+1;index_merge++)
-	{
-		remove_comma_per3digit_in_calculator(str_all[index_merge]);
-		remove_Repeative_Zerodigit_WhenClear_in_calculator(str_all[index_merge]);
-		add_comma_in_calculator( str_all[index_merge]);
-		strcat(str_merge, str_all[index_merge] );
-	}
+    for(i=0;i<MAX_VALUES_IN_CALCULATOR_3COMMA;i++)
+    {
+        memset(str_all[i], 0x00, MAX_DIGIT_IN_CALCULATOR_3COMMA);
+    }
+    memset(str_merge, 0x00, MAX_VALUES_IN_CALCULATOR_3COMMA);
 
-	//count cursor before
-	for(index_cursor=0;str[index_cursor]!=0;index_cursor++)
-	{
-		//count cursor after
-		if( str[index_cursor] == ',' ) nbcursor_before++;
-	}
-	
-	//copy to pp_Editor->p_EditResult
-	//strncpy(pp_Editor->p_EditResult , str_merge , strlen(str_merge) + 1 );
+    while(*pStr)
+    {
+        //when it is opertator
+        if( *pStr == '+' || *pStr == '-' || *pStr == 'x' || *pStr == '/' || *pStr == '(' || *pStr == ')' )
+        {
+            //insert null
+            if(index_1_digit != 0)    str_all[index_value++][index_1_digit] = '\0';
+            //
+            index_1_digit=0;
+            //
+            str_all[index_value][index_1_digit++] = *pStr;
+            str_all[index_value++][index_1_digit] = '\0';
+            index_1_digit=0;
+            pStr++;
+        }
+        //when it is digit
+        else
+        {
+            str_all[index_value][index_1_digit++] = *pStr++;
+        }
+    }
+    str_all[index_value][index_1_digit] = '\0';
 
-	//count cursor after
-	for(index_cursor=0; str_merge[index_cursor] != 0; index_cursor++)
-	{
-		if( str_merge[index_cursor] == ',' ) nbcursor_after++;
-	}
+    //merge all
+    for(index_merge=0;index_merge < index_value+1;index_merge++)
+    {
+        remove_comma_per3digit_in_calculator(str_all[index_merge]);
+        remove_Repeative_Zerodigit_WhenClear_in_calculator(str_all[index_merge]);
+        add_comma_in_calculator( str_all[index_merge]);
+        strcat(str_merge, str_all[index_merge] );
+    }
 
-	//when inserting a digit
-	if( nbcursor_after > nbcursor_before && str_merge[*cursor-1] != '(')
-	{
-		 (*cursor)++; 
-	}
-	//when removing a digit
-	else if( nbcursor_after < nbcursor_before && str_merge[*cursor-1] != '.')
-	{
-		 (*cursor)--; 
-	}
+    //count cursor before
+    for(index_cursor=0;str[index_cursor]!=0;index_cursor++)
+    {
+        //count cursor after
+        if( str[index_cursor] == ',' ) nbcursor_before++;
+    }
+
+    //copy to pp_Editor->p_EditResult
+    //strncpy(pp_Editor->p_EditResult , str_merge , strlen(str_merge) + 1 );
+
+    //count cursor after
+    for(index_cursor=0; str_merge[index_cursor] != 0; index_cursor++)
+    {
+        if( str_merge[index_cursor] == ',' ) nbcursor_after++;
+    }
+
+    //when inserting a digit
+    if( nbcursor_after > nbcursor_before && str_merge[*cursor-1] != '(')
+    {
+         (*cursor)++;
+    }
+    //when removing a digit
+    else if( nbcursor_after < nbcursor_before && str_merge[*cursor-1] != '.')
+    {
+         (*cursor)--;
+    }
     return string(str_merge);
 
-	
+
 }
 } // namespace hfcl

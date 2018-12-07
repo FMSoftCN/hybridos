@@ -14,7 +14,9 @@ public:
     DECLARE_VIEWCONTEXT
 
 private:
+#if 0
     bool onKey(int keyCode, KeyEvent* event);
+#endif
     bool handleEvent(Event* event);
 
     int m_timer_id;

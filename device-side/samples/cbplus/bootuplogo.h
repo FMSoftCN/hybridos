@@ -15,13 +15,15 @@ public:
     DECLARE_VIEWCONTEXT
 
 private:
+#if 0
     bool onKey(int keyCode, KeyEvent* event);
-    bool handleEvent(Event* event);
     unsigned int onControllerCommand(unsigned int cmd_id,
         HTData param1, HTData param2);
+#endif
+
+    bool handleEvent(Event* event);
 
     void onMenuCommand(CustomEvent* event);
-    void stopAnimate(void);
     bool onGifAnimateNotify(CustomEvent* event);
 
     GifAnimateView* m_animateview;

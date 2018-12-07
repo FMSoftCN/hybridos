@@ -19,29 +19,29 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #define animation_begin(func_name, func_list) \
-	Animation * func_name func_list { \
-		Animation *ret_aim = NULL;  \
-		GroupAnimation * __group = NULL; \
-		__group = NULL;
+    Animation * func_name func_list { \
+        Animation *ret_aim = NULL;  \
+        GroupAnimation * __group = NULL; \
+        __group = NULL;
 
 #define foreach_view( ... )  do { \
-	unsigned int i = 0; \
-	View* __views[] = { __VA_ARGS__} ; \
-	for(i = 0; i < sizeof(__views) / sizeof(View*); i ++) { \
-		View * _theview = __views[i];
+    unsigned int i = 0; \
+    View* __views[] = { __VA_ARGS__} ; \
+    for(i = 0; i < sizeof(__views) / sizeof(View*); i ++) { \
+        View * _theview = __views[i];
 
 #define end_foreach   } } while(0);
-	
+
 #define animation_end \
-		return ret_aim; }
+        return ret_aim; }
 
 #define group_begin(type) do{ \
-	GroupAnimation* tmp_group = HFCL_NEW_EX(GroupAnimation, ((type), __group)); \
-	GroupAnimation* __group = tmp_group; \
-	Animation* __anim = (Animation*)__group;
+    GroupAnimation* tmp_group = HFCL_NEW_EX(GroupAnimation, ((type), __group)); \
+    GroupAnimation* __group = tmp_group; \
+    Animation* __anim = (Animation*)__group;
 
 #define group_end \
-	ret_aim = __anim; } while(0);
+    ret_aim = __anim; } while(0);
 
 #define add_anim(ani)  __group->add((ani))
 
@@ -56,28 +56,28 @@
 #define move_view(view, target_pt) ret_aim = (Animation*) HFCL_NEW_EX(MoveViewAnimation, ((view), (target_pt)))
 
 #define move_view_begin(view, target_pt) do{ \
-	Animation* __anim = (Animation*) HFCL_NEW_EX(MoveViewAnimation, ((view), (target_pt))); 
+    Animation* __anim = (Animation*) HFCL_NEW_EX(MoveViewAnimation, ((view), (target_pt)));
 
 #define move_view_end \
-	if(__group) __group->add(__anim); \
-	ret_aim = __anim; } while(0);
+    if(__group) __group->add(__anim); \
+    ret_aim = __anim; } while(0);
 
 
 #define scale_view_begin(view, target_rect) do{ \
-	Animation* __anim = (Animation*) HFCL_NEW_EX(ScaleViewAnimation, ((view), (target_rect))); 
+    Animation* __anim = (Animation*) HFCL_NEW_EX(ScaleViewAnimation, ((view), (target_rect)));
 
 #define alpha_view_begin(view, target_alpha) do{ \
-	Animation* __anim = (Animation*) HFCL_NEW_EX(AlphaViewAnimation, ((view), (target_alpha)));
+    Animation* __anim = (Animation*) HFCL_NEW_EX(AlphaViewAnimation, ((view), (target_alpha)));
 
 #define scale_view_end \
-	if(__group) __group->add(__anim); \
-	ret_aim = __anim; } while(0);
+    if(__group) __group->add(__anim); \
+    ret_aim = __anim; } while(0);
 
 #define scale_view(view, target_rect) ret_aim = (Animation*) HFCL_NEW_EX(MoveViewAnimation, ((view), (target_rect)))
 
 #define alpha_view_end \
-	if(__group) __group->add(__anim); \
-	ret_aim = __anim; } while(0);
+    if(__group) __group->add(__anim); \
+    ret_aim = __anim; } while(0);
 
 #define alpha_view(view, target_alpha) ret_aim = (Animation*) HFCL_NEW_EX(AlphaViewAnimation, ((view), (target_alpha)))
 

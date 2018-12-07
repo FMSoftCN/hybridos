@@ -64,7 +64,7 @@ ListView::ListView(View *p_parent, DrawableSet* drset)
 ListView::~ListView(void)
 {
 #if 0
-    for (AniList::iterator it = m_aniList.begin(); it != m_aniList.end();) 
+    for (AniList::iterator it = m_aniList.begin(); it != m_aniList.end();)
     {
         MGEFF_ANIMATION _a = *it;
         it++;
@@ -90,13 +90,13 @@ bool ListView::addItemByIndex(ItemView *item, int index)
 bool ListView::addItemWithAppend(ItemView *item)
 {
     int index;
-    
+
     if(!m_content || !item)
         return false;
-    
+
     index = itemCount() -1;
     index = index <0?0:index;
-    
+
     if(m_content->insertBefore(index, (View*)item))
         updateContent();
     return true;
@@ -184,7 +184,7 @@ void ListView::upFindItem(void)
 
     hilight((ItemView*)view);
 
-    if(!view->isVisible()|| !view->focusValid()) { 
+    if(!view->isVisible()|| !view->focusValid()) {
         upFindItem();
     }
 }
@@ -205,7 +205,7 @@ void ListView::downFindItem(void)
     }
 
     hilight((ItemView*)view);
-    
+
     if(!view->isVisible() || !view->focusValid()) {
         downFindItem();
     }
@@ -406,7 +406,7 @@ void ListView::relayout(bool isScrollGap)
     viewh = itofix(m_rect.height());
     //contw = itofix(m_content->getRect().width());
     conth = itofix(m_content->getRect().height());
-    
+
     for (View* view = m_content->firstChild(); view; view = view->nextSibling()) {
         /*
          * Every Item has the same height:
@@ -436,7 +436,7 @@ void ListView::relayout(bool isScrollGap)
             if(m_scrollGap > 0) {
                 if(isVScrollBarOnLeft()) {
                     rc.m_left = listRc.m_left + (m_barWidth+1) + m_scrollGap;
-                    rc.m_right = listRc.m_right ;                        
+                    rc.m_right = listRc.m_right ;
                 }
                 else {
                     rc.m_right = listRc.m_right - (m_barWidth+1) -m_scrollGap;
@@ -648,7 +648,7 @@ Next:
             view = get_next_focus(item);
         }
         //   _DBG_PRINTF("ListView::nextFocus  m_hilightItem11 %p  %p  ",view,item)
-        if (view) 
+        if (view)
         {
             //   _DBG_PRINTF("ListView::nextFocus  m_hilightItem12  ")
             view->focusMe();
@@ -658,8 +658,8 @@ Next:
                 //      _DBG_PRINTF("ListView::nextFocus  m_hilightItem14  ")
                 hilight(item);
             }
-        } 
-        else if (!item) 
+        }
+        else if (!item)
         {   // goto the first item
             m_hilightItem = NULL;
             goto Next;
@@ -773,12 +773,12 @@ PREV:
 }
 
 bool ListView::onKeyPressed(int keyCode)
-{   
-    if (NULL == m_content 
+{
+    if (NULL == m_content
             || m_content->viewCount() < 1) {
         return DISPATCH_CONTINUE_MSG;
     }
-    
+
     if (keyCode ==  KeyEvent::KEYCODE_CURSOR_UP) {
         if (operationMode() == OPM_EDIT) {
             prevFocus();

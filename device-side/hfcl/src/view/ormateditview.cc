@@ -93,25 +93,25 @@ void FormatEditView::drawContent(GraphicsContext* context, IntRect &rc, int stat
                 resid = SS_PM;
             // 1. field content
             // calc
-            m_drset->calcDrawableSize(DR_CONTENT, status, length, height, 
+            m_drset->calcDrawableSize(DR_CONTENT, status, length, height,
                     (DWORD)GetText(resid), DRDT_TEXT);
 
             // adjust rect
-            rect.setRect(rc.left() + current_left, 
-                    rc.top() + current_top, 
-                    rc.left() + current_left + length, 
+            rect.setRect(rc.left() + current_left,
+                    rc.top() + current_top,
+                    rc.left() + current_left + length,
                     rc.top() + current_top + height);
 
             // hilight bkg
             if (m_show_current_hilight && i == m_current_index) {
                 m_drset->draw(context, DR_CONTENT2, status, rect);
                 // draw hilight text
-                m_drset->draw(context, DR_CONTENT, DRAWSTATE_SELECTED, rect, 
+                m_drset->draw(context, DR_CONTENT, DRAWSTATE_SELECTED, rect,
                         (DWORD)GetText(resid), DRDT_TEXT);
             }
             else {
                 // draw normal
-                m_drset->draw(context, DR_CONTENT, status, rect, 
+                m_drset->draw(context, DR_CONTENT, status, rect,
                         (DWORD)GetText(resid), DRDT_TEXT);
             }
         }
@@ -119,41 +119,41 @@ void FormatEditView::drawContent(GraphicsContext* context, IntRect &rc, int stat
         {
             // 1. field content
             // calc
-            m_drset->calcDrawableSize(DR_CONTENT, status, length, height, 
+            m_drset->calcDrawableSize(DR_CONTENT, status, length, height,
                     (DWORD)m_field_content[i].c_str(), DRDT_TEXT);
 
             // adjust rect
-            rect.setRect(rc.left() + current_left, 
-                    rc.top() + current_top, 
-                    rc.left() + current_left + length, 
+            rect.setRect(rc.left() + current_left,
+                    rc.top() + current_top,
+                    rc.left() + current_left + length,
                     rc.top() + current_top + height);
 
             // hilight bkg
             if (m_show_current_hilight && i == m_current_index) {
                 m_drset->draw(context, DR_CONTENT2, status, rect);
                 // draw hilight text
-                m_drset->draw(context, DR_CONTENT, DRAWSTATE_SELECTED, rect, 
+                m_drset->draw(context, DR_CONTENT, DRAWSTATE_SELECTED, rect,
                         (DWORD)m_field_content[i].c_str(), DRDT_TEXT);
             }
             else {
                 // draw normal
-                m_drset->draw(context, DR_CONTENT, status, rect, 
+                m_drset->draw(context, DR_CONTENT, status, rect,
                         (DWORD)m_field_content[i].c_str(), DRDT_TEXT);
             }
         }
-        
+
         // adjust current_left
         current_left += length;
 
         // 2. formator
         // calc
-        m_drset->calcDrawableSize(DR_CONTENT, status, length, height, 
+        m_drset->calcDrawableSize(DR_CONTENT, status, length, height,
                 (DWORD)m_formators[i].c_str(), DRDT_TEXT);
 
         // adjust rect
-        rect.setRect(rc.left() + current_left, 
-                rc.top() + current_top, 
-                rc.left() + current_left + length, 
+        rect.setRect(rc.left() + current_left,
+                rc.top() + current_top,
+                rc.left() + current_left + length,
                 rc.top() + current_top + height);
 
         // draw
@@ -169,7 +169,7 @@ int FormatEditView::visibleWidth(void)
     int len = 0, i = 0;
     int length = 0, height = 0;
     HTResId resid = SS_AM;
-    
+
     for (i = 0; i < m_field_count; ++i) {
 
         if (!m_field_content[i].compare("AM") ||!m_field_content[i].compare("PM"))
@@ -182,7 +182,7 @@ int FormatEditView::visibleWidth(void)
             // 1. field content
             // calc
             if (m_field_content[i].length() > 0) {
-                m_drset->calcDrawableSize(DR_CONTENT, 0, length, height, 
+                m_drset->calcDrawableSize(DR_CONTENT, 0, length, height,
                         (DWORD)GetText(resid), DRDT_TEXT);
 
                 len += length;
@@ -193,17 +193,17 @@ int FormatEditView::visibleWidth(void)
             // 1. field content
             // calc
             if (m_field_content[i].length() > 0) {
-                m_drset->calcDrawableSize(DR_CONTENT, 0, length, height, 
+                m_drset->calcDrawableSize(DR_CONTENT, 0, length, height,
                         (DWORD)m_field_content[i].c_str(), DRDT_TEXT);
 
                 len += length;
             }
         }
-        
+
         // 2. formator
         // calc
         if (m_formators[i].length() > 0) {
-            m_drset->calcDrawableSize(DR_CONTENT, 0, length, height, 
+            m_drset->calcDrawableSize(DR_CONTENT, 0, length, height,
                     (DWORD)m_formators[i].c_str(), DRDT_TEXT);
 
             len += length;
@@ -219,7 +219,7 @@ int FormatEditView::visibleHeight(void)
     return getRect().height() - 2;
 }
 
-void FormatEditView::initEditor(int field_count, 
+void FormatEditView::initEditor(int field_count,
         const char ** p_content_array, const char ** p_formator_array, char* p_content_max_nr)
 {
     int i = 0;
@@ -242,7 +242,7 @@ void FormatEditView::addZero(void)
         return;
 
     has_len = m_field_content[m_current_index].length();
-    need_len = m_field_max_char[m_current_index]; 
+    need_len = m_field_max_char[m_current_index];
 
 
     // want to add zero
@@ -317,8 +317,8 @@ bool FormatEditView::dispatchEvent(Event* event)
     switch(event->eventType())
     {
         case Event::MOTION_UP:
-        case Event::MOTION_DOWN:      
-        case Event::MOTION_CLICK:          
+        case Event::MOTION_DOWN:
+        case Event::MOTION_CLICK:
             // TODO, for mouse support.
             break;
         case Event::KEY_UP:
@@ -359,7 +359,7 @@ bool FormatEditView::dispatchEvent(Event* event)
                             return DISPATCH_STOP_MSG;
                         }
                         break;
-                    default: 
+                    default:
                         break;
                 }
             }
@@ -479,7 +479,7 @@ int FormatEditView::getAmPos()
 
     for (i = 0; i < m_field_count; i++)
     {
-        if (m_field_content[i].length() > 0 
+        if (m_field_content[i].length() > 0
             && (!m_field_content[i].compare("AM") || !m_field_content[i].compare("PM")))
             return i;
     }
@@ -504,7 +504,7 @@ void FormatEditView::setAlignMargin(void)
         else if (align == ALIGN_RIGHT)
             align = ALIGN_LEFT;
     }
-       
+
     // Calc margin left
     if (getRect().width() <= w) {
         m_margin_left = 0;
@@ -513,7 +513,7 @@ void FormatEditView::setAlignMargin(void)
             m_margin_left = 0;
         else if (align == ALIGN_RIGHT)
             m_margin_left = getRect().width() - w;
-        else  
+        else
             m_margin_left = (getRect().width() - w)/2;
     }
 
@@ -524,7 +524,7 @@ void FormatEditView::setAlignMargin(void)
     else {
         m_margin_top = (getRect().height() - h)/2;
     }
-    
+
 }
 
 void FormatEditView::reLayout(void)

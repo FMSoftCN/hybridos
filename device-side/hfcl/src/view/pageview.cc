@@ -26,94 +26,94 @@ namespace hfcl {
 
 View *PageView::nextPage(void)
 {
-	View * next = getCurPage();
-	if(!next)
-		setCurPage(firstChild());
-	else
-	{
-		next = next->nextSibling();
-		if(!next && isLoopAble())
-			next = firstChild();
-		if(next)
-			setCurPage(next);
-	}
+    View * next = getCurPage();
+    if(!next)
+        setCurPage(firstChild());
+    else
+    {
+        next = next->nextSibling();
+        if(!next && isLoopAble())
+            next = firstChild();
+        if(next)
+            setCurPage(next);
+    }
 
-	return getCurPage();
+    return getCurPage();
 
 }
 
 View *PageView::prevPage(void)
 {
-	View *prev = getCurPage();
+    View *prev = getCurPage();
 
-	if(!prev)
-		setCurPage(firstChild());
-	else {
-		prev = prev->previousSibling();
-		if(!prev && isLoopAble())
-			prev = lastChild();
-		if(prev)
-			setCurPage(prev);
-	}
+    if(!prev)
+        setCurPage(firstChild());
+    else {
+        prev = prev->previousSibling();
+        if(!prev && isLoopAble())
+            prev = lastChild();
+        if(prev)
+            setCurPage(prev);
+    }
 
-	return getCurPage();
+    return getCurPage();
 }
 
 bool PageView::setCurPage(View *page)
 {
-	if(NULL != m_cur_page)
-		m_cur_page->hide();
-	
-	m_cur_page = page;
-	
-	if (NULL != m_cur_page) 
-		m_cur_page->show();
+    if(NULL != m_cur_page)
+        m_cur_page->hide();
 
-	updateView();
-	
-	return false;
+    m_cur_page = page;
+
+    if (NULL != m_cur_page)
+        m_cur_page->show();
+
+    updateView();
+
+    return false;
 }
 
 bool PageView::appendPage(View *page)
 {
-	IntRect irc(getRect());
-	irc.setRect(0, 0, irc.right(), irc.bottom());
+    IntRect irc(getRect());
+    irc.setRect(0, 0, irc.right(), irc.bottom());
 
-	addChild(page);
-	if (page)
-	{
+    addChild(page);
+    if (page)
+    {
 
-		page->setRect(irc);
-		page->hide();
-	}
+        page->setRect(irc);
+        page->hide();
+    }
 
-	return true;
+    return true;
 }
 
 bool PageView::addPage(View *page)
 {
-	IntRect irc(getRect());
-	irc.setRect(0, 0, irc.right(), irc.bottom());
+    IntRect irc(getRect());
+    irc.setRect(0, 0, irc.right(), irc.bottom());
 
-	addChildHead(page);
-	if (page)
-	{
+    addChildHead(page);
+    if (page)
+    {
 
-		page->setRect(irc);
-		page->hide();
-	}
+        page->setRect(irc);
+        page->hide();
+    }
 
-	return false;
+    return false;
 }
 
 bool PageView::dispatchEvent(Event *event)
 {
-	if(Event::CUSTOM_NOTIFY == event->eventType())
-	{
-		return (!View::dispatchEvent(event));
-	}
+    if(Event::CUSTOM_NOTIFY == event->eventType())
+    {
+        return (!View::dispatchEvent(event));
+    }
 
-	PanelView::dispatchEvent(event);
+    PanelView::dispatchEvent(event);
 
     return DISPATCH_CONTINUE_MSG;
 
@@ -121,12 +121,12 @@ bool PageView::dispatchEvent(Event *event)
 
 bool PageView::setCurPageByIndex(const unsigned int index)
 {
-	return setCurPage(pageFromIndex(index));
+    return setCurPage(pageFromIndex(index));
 }
 
 int PageView::getCurPageIndex(void)
 {
-	return indexFromPage(getCurPage());
+    return indexFromPage(getCurPage());
 }
 
 } // namespace hfcl

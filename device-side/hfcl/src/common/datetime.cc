@@ -29,7 +29,7 @@ namespace hfcl {
 time_t NguxTime::g_date_time = 0;
 NguxTime* NguxTime::g_sys_time = NULL;
 
-static inline BOOL _format_date_time(const NguxTime *pNguxTime, char *dateStr, 
+static inline BOOL _format_date_time(const NguxTime *pNguxTime, char *dateStr,
         char *timeStr, UINT16 fmt)
 {
     TM_FILETIME filetime;
@@ -38,7 +38,7 @@ static inline BOOL _format_date_time(const NguxTime *pNguxTime, char *dateStr,
     char tmpDate[16], tmpTime[16];
     UINT8 dateLen = 14, timeLen = 10;
     BOOL err;
-	UINT32 ret;
+    UINT32 ret;
 
     if (pNguxTime) {
         filetime.DateTime = pNguxTime->g_date_time;
@@ -49,7 +49,7 @@ static inline BOOL _format_date_time(const NguxTime *pNguxTime, char *dateStr,
 
     if(!dateStr) {
         pDate = tmpDate;
-        fmt |= (TM_GetTimeFormat() & 0x7F0); 
+        fmt |= (TM_GetTimeFormat() & 0x7F0);
     }
     if (!timeStr) {
         pTime = tmpTime;
@@ -58,14 +58,14 @@ static inline BOOL _format_date_time(const NguxTime *pNguxTime, char *dateStr,
 
     err = TM_FormatFileTime(filetime, fmt, 0, (char *)pDate, dateLen, (char *)pTime, timeLen);
 
-	if (!err) {
-		TM_GetLastErr(&ret);
-	}
+    if (!err) {
+        TM_GetLastErr(&ret);
+    }
 
-	if (pDate)
-		*(pDate + 10) = '\0';
+    if (pDate)
+        *(pDate + 10) = '\0';
 
-	return err;
+    return err;
 }
 
 static inline UINT16 _get_time_flag(eTimeFormat format, const char *split)
@@ -78,7 +78,7 @@ static inline UINT16 _get_time_flag(eTimeFormat format, const char *split)
         flag |= TM_FMT_COLON_TIME;
     }
 
-	switch (format) {
+    switch (format) {
         case TIM_FMT_12H:
             flag |= TM_FMT_TWELVE_TIME;
             break;
@@ -101,11 +101,11 @@ static inline UINT16 _get_date_flag(eDateFormat format, const char *split)
         flag |= TM_FMT_COLON_DATE;
     } else if (*split == '/') {
         flag |= TM_FMT_SLASH_DATE;
-    } else { 
+    } else {
         flag |= TM_FMT_BASELINE_DATE;
     }
 
-	switch (format) {
+    switch (format) {
         case DATE_FMT_DMY:
             flag |= TM_FMT_DMY_DATE;
             break;
@@ -129,29 +129,29 @@ string FormatDateString (const NguxTime *pTime, eDateFormat format, const char *
     if (_format_date_time(pTime, datestr, NULL, _get_date_flag(format, split)))
         return string((char*)datestr);
    else
-    	return "2018/09/06";
+        return "2018/09/06";
 }
 
 string FormatTimeString (const NguxTime *pTime, eTimeFormat format, const char *split)
 {
     char timestr[32];
-	//UINT32 err = 0;
+    //UINT32 err = 0;
     if (_format_date_time(pTime, NULL, timestr, _get_time_flag(format, split)))
-	{
+    {
         return string((char*)timestr);
-	}
+    }
     else
-    	return "10:34";
+        return "10:34";
 }
 
-string FormatDateTimeString (const NguxTime *pTime, 
-		eDateFormat dateFmt, const char *dateSplit, 
+string FormatDateTimeString (const NguxTime *pTime,
+        eDateFormat dateFmt, const char *dateSplit,
         eTimeFormat timeFmt, const char *timeSplit)
 {
     char timestr[32];
     char datestr[32];
 
-    if (_format_date_time(pTime, datestr, timestr, 
+    if (_format_date_time(pTime, datestr, timestr,
                 _get_date_flag(dateFmt, dateSplit)|_get_time_flag(timeFmt, timeSplit))) {
         char datetime[64];
         sprintf(datetime, "%s %s", datestr, timestr);
@@ -163,7 +163,7 @@ string FormatDateTimeString (const NguxTime *pTime,
 
 const static unsigned char daysInMonth[12]= {31,28,31,30,31,30,31,31,30,31,30,31};
 
-int Date::DaysOfMonth(int y, int m) 
+int Date::DaysOfMonth(int y, int m)
 {
 #ifdef __CALENDAR_ARABIC__
     DATE_SYS_ENUM dateSystem = GetDateSystem();
@@ -211,14 +211,14 @@ int Date::DayOfWeek(int y, int m, int d)
         }
         w = DayOfYear(y,m,d);
         w = (w%7) + weekOfBase;
-        if(d>0) w = w -1;        
+        if(d>0) w = w -1;
 
         return w;
     }
     else
 #endif
     {
-    	// optimize 1 : w int to register int
+        // optimize 1 : w int to register int
         register int w = 1;
         y = (y-1)%400 + 1;
         register int ly = (y-1)/4;
@@ -236,7 +236,7 @@ int Date::DayOfWeek(int y, int m, int d)
 int Date::DayOfYear(int y, int m, int d)
 {
     register int c = 0;
-    for (register int i = 1; i< m; i++) 
+    for (register int i = 1; i< m; i++)
     {
         c = c + DaysOfMonth(y,i);
     }

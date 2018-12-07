@@ -20,7 +20,7 @@
 */
 
 
-#ifndef  _FORMATEDITVIEW_H 
+#ifndef  _FORMATEDITVIEW_H
 #define  _FORMATEDITVIEW_H
 
 #include "view.h"
@@ -36,7 +36,7 @@ namespace hfcl {
 /**
  * @brief FormatEditView is a Edit like : xxxField xxxFormator xxxField xxxFormator ....
  *
- * This View needs two kinds of Drawable : 
+ * This View needs two kinds of Drawable :
  * (FormatEditView::DR_CONTENT) DR_CONTENT and (FormatEditView::DR_FIELD_BKG) DR_CONTENT2
  *
  * 1. Support Max 10 Fields
@@ -68,15 +68,15 @@ class FormatEditView : public View
         int getAmPos();
         void setAlignMargin();
 
-		void setTextFont(unsigned int font);
+        void setTextFont(unsigned int font);
 
     protected:
         /**
          * InitEditor With Content And Format
          *
          * @param field_count Field Count, Formator Count Is field_count - 1
-         * @param p_content_array Pointer To Field Content Array 
-         * e.g. : 
+         * @param p_content_array Pointer To Field Content Array
+         * e.g. :
          * const char *content[] =
          * {
          *  "12",
@@ -223,7 +223,7 @@ class FormatEditView : public View
          */
         bool m_auto_next;
 
-		DECLARE_CLASS_NAME(FormatEditView)
+        DECLARE_CLASS_NAME(FormatEditView)
 };
 
 } // namespace hfcl

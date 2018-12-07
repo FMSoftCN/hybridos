@@ -42,7 +42,7 @@ private:
 public:
     ActivityStack(){ }
     virtual ~ActivityStack(){ }
-    
+
     void push(ActivityInfo *act);
     void pop();
     bool isEmpty();

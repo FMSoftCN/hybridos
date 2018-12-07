@@ -32,7 +32,7 @@ namespace hfcl {
  * @param space  Two View of between to distance.
  * @param direction  The Layout of direction and size type of scalar.
  *
- * @return 
+ * @return
  */
 LayoutView::LayoutView(int margin, int space, int direction)
     : m_margin(margin)
@@ -71,7 +71,7 @@ LayoutView::LayoutView()
 /**
  * @brief LayoutView destructor
  *
- * @return 
+ * @return
  */
 LayoutView::~LayoutView()
 {

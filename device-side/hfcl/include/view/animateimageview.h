@@ -36,7 +36,7 @@ public:
         Pause,
         Stop
     }PlayState;
-    
+
     AnimateImageView(View* parent);
     AnimateImageView(View* parent, DrawableSet* drset);
     AnimateImageView(Image* pImage, int id, int x, int y, int w, int h);
@@ -49,7 +49,7 @@ public:
 
     bool setImage(Image* pImg);
     Image *getImage(void) { return m_image; }
-    
+
     void setImageDrawMode(int  mode) {
         m_format.drawMode = mode;
     }
@@ -76,18 +76,18 @@ public:
     int getImageHeight(void);
     bool setReplaceColor(const DWORD color);
     bool start(void);
-    bool stop(void); 
+    bool stop(void);
     bool setImageIdArray(unsigned int * array, unsigned int num, int timeDuration,const DWORD color);
     bool handleEvent(Event* event);
-    
+
 protected:
-    Image*    		m_image;
-    ImageFormat 	m_format;
+    Image*            m_image;
+    ImageFormat     m_format;
     unsigned int  * m_imageId_array;
     unsigned int    m_imageId_array_num;
     unsigned int    m_imageId_array_index;
-    int		        m_timeDuration;
-    int         	m_elapsed_10ms;
+    int                m_timeDuration;
+    int             m_elapsed_10ms;
 
     void init() {
         m_format.drawMode = DRAWMODE_NORMAL;
@@ -113,7 +113,7 @@ private:
     int         m_yo;
     int         m_timer_id;
     PlayState   m_state;
-    DWORD 	    m_replaceColor;
+    DWORD         m_replaceColor;
 };
 
 } // namespace hfcl

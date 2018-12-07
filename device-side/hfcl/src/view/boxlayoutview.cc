@@ -65,7 +65,7 @@ void BoxLayoutView::paint(GraphicsContext* context, int status)
 {
     for (int i = 0; i < m_count; i++) {
         if (NULL != m_cells[i].s_view) {
-				//FIXEDME: View should take focus by itself
+                //FIXEDME: View should take focus by itself
             if ((m_cells[i].s_view)->isFocus())
                 (m_cells[i].s_view)->onPaint(context, FOCUS);
             else
@@ -86,11 +86,11 @@ bool BoxLayoutView::dispatchEvent(Event* event)
                 if (NULL != m_cells[i].s_view) {
                     int _x = ((MouseEvent *)event)->x();
                     int _y = ((MouseEvent *)event)->y();
-                   
+
                     IntRect irc = (m_cells[i].s_view)->getRect();
 
                     if (irc.contains(_x, _y)) {
-                       (m_cells[i].s_view)->focusMe();    
+                       (m_cells[i].s_view)->focusMe();
                        (m_cells[i].s_view)->dispatchEvent(event);
                     }
                 }

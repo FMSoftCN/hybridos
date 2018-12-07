@@ -19,7 +19,7 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#define MODULE_ID   0 
+#define MODULE_ID   0
 #define MAKE_ELEMENT_NAME(name)   SYS_SE_##name
 #define MAKE_DRAWABLE_NAME(name)  DR_##name
 

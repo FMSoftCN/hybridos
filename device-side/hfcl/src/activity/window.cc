@@ -151,32 +151,32 @@ void Window::drawBackground(GraphicsContext* context, IntRect &rc, int status)
     if (m_drawLayer == -1) {
         for (int i = 0; i < context->getLayers(); i++) {
             context->setLayer(i);
-            context->fillRect(rc, 
+            context->fillRect(rc,
                               GetRValue(Color::LAYER_COLOR_KEY),
-                              GetGValue(Color::LAYER_COLOR_KEY), 
+                              GetGValue(Color::LAYER_COLOR_KEY),
                               GetBValue(Color::LAYER_COLOR_KEY), m_alpha);
                               //the default value is 255
                               //GetBValue(Color::LAYER_COLOR_KEY), 0xFF);
             if (i != 0){
-                context->setLayerColorKey(i, TRUE, 
+                context->setLayerColorKey(i, TRUE,
                         GetRValue(Color::LAYER_COLOR_KEY),
-                        GetGValue(Color::LAYER_COLOR_KEY), 
+                        GetGValue(Color::LAYER_COLOR_KEY),
                         GetBValue(Color::LAYER_COLOR_KEY));
             }
         }
     }
     else {
         context->setLayer(m_drawLayer);
-        context->fillRect(rc, 
+        context->fillRect(rc,
                 GetRValue(Color::LAYER_COLOR_KEY),
-                GetGValue(Color::LAYER_COLOR_KEY), 
+                GetGValue(Color::LAYER_COLOR_KEY),
                 GetBValue(Color::LAYER_COLOR_KEY), m_alpha);
                 // the default value is 255
                 //GetBValue(Color::LAYER_COLOR_KEY), 0xFF);
         if (m_drawLayer != 0){
-            context->setLayerColorKey(m_drawLayer, TRUE, 
+            context->setLayerColorKey(m_drawLayer, TRUE,
                     GetRValue(Color::LAYER_COLOR_KEY),
-                    GetGValue(Color::LAYER_COLOR_KEY), 
+                    GetGValue(Color::LAYER_COLOR_KEY),
                     GetBValue(Color::LAYER_COLOR_KEY));
         }
         //PanelView::drawBackground (context, rc, status);
@@ -220,7 +220,7 @@ int Window::sendKeyMessage(Event::EventType keytype,
 
 int Window::sendMouseMessage(Event::EventType mouseType,
         WPARAM wParam, LPARAM lParam)
-{    
+{
     //DWORD key_flags = (DWORD)wParam;
     int x_pos = LOSWORD (lParam);
     int y_pos = HISWORD (lParam);
@@ -229,8 +229,8 @@ int Window::sendMouseMessage(Event::EventType mouseType,
 
     if (f == NULL)
         return 0;
-    
-    f->windowToView(&x_pos, &y_pos);        
+
+    f->windowToView(&x_pos, &y_pos);
     MouseEvent evt(mouseType, x_pos, y_pos);
     f->dispatchEvent(&evt);
 
@@ -259,15 +259,15 @@ int Window::sendMouseMessage(Event::EventType mouseType,
 
 int Window::sendIdleMessage()
 {
-	onIdle();
-	return 0;
+    onIdle();
+    return 0;
 }
 
 LRESULT Window::defaultAppProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     Window* window = Window::window(hWnd);
     switch (message) {
-        case MSG_KEYDOWN: 
+        case MSG_KEYDOWN:
             return window ? window->sendKeyMessage(Event::KEY_DOWN, wParam, lParam) : 0;
 
         case MSG_KEYUP:
@@ -294,11 +294,11 @@ LRESULT Window::defaultAppProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 
         case MSG_IDLE:
             return window ? window->sendIdleMessage() : 0;
-            
+
         case MSG_ERASEBKGND: {
             // VincentWei: skip erasing background.
 #if 0
-#  ifdef __MMI_SAMSUNG_GT_FEATURE__                
+#  ifdef __MMI_SAMSUNG_GT_FEATURE__
             if(window) {
                 GraphicsContext gc((HDC)wParam);
                 IntRect rc;
@@ -307,7 +307,7 @@ LRESULT Window::defaultAppProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
                     gc.setLayer(window->layer());
                 }
                 window->drawBackground(&gc, rc, 0);
-            }    
+            }
 #  else
             TRANSPARENTINFO  trans_info;
             HDC hdc_trans = mgclBeginTransparentBkgnd(hWnd, (HDC)wParam, window->bkgAlpha(),  &trans_info);
@@ -326,7 +326,7 @@ LRESULT Window::defaultAppProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
                 IntRect rc;
                 GetBoundsRect((HDC)wParam, (RECT*)&rc);
                 window->markDirty(rc);
-            }    
+            }
 #endif
             return 0;
         }
@@ -425,7 +425,7 @@ bool Window::createMainWindow(int x, int y, int w, int h, bool visible)
     //has valid window
     if (m_viewWindow != HWND_INVALID)
         return false;
-      
+
     m_viewWindow = createMainWindow ("window", defaultAppProc,
             x, y, w, h, (DWORD)this, visible);
 
@@ -443,7 +443,7 @@ bool Window::createMainWindow(int x, int y, int w, int h, bool visible)
 
 bool Window::createMainWindow(void)
 {
-    return createMainWindow(0, 0, 
+    return createMainWindow(0, 0,
             GetGDCapability(HDC_SCREEN, GDCAP_HPIXEL),
             GetGDCapability(HDC_SCREEN, GDCAP_VPIXEL));
 }

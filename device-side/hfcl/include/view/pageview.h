@@ -27,55 +27,55 @@
 
 namespace hfcl {
 
-class PageView : public PanelView 
+class PageView : public PanelView
 {
-	public:
-		PageView (View *p_parent, DrawableSet* drset)
-			:PanelView(p_parent, drset), m_cur_page(NULL) { 
-                setLoopAble(true);setFocusValid(true); 
+    public:
+        PageView (View *p_parent, DrawableSet* drset)
+            :PanelView(p_parent, drset), m_cur_page(NULL) {
+                setLoopAble(true);setFocusValid(true);
             }
-		PageView (int x, int y, int w, int h, int i_id)
-			:PanelView(x, y, w, h, i_id) , m_cur_page(NULL) { 
-                setLoopAble(true);setFocusValid(true); 
-            }
-
-		PageView (View *p_parent)
-			:PanelView(p_parent) , m_cur_page(NULL){ 
-                setLoopAble(true);setFocusValid(true); 
+        PageView (int x, int y, int w, int h, int i_id)
+            :PanelView(x, y, w, h, i_id) , m_cur_page(NULL) {
+                setLoopAble(true);setFocusValid(true);
             }
 
-		virtual bool dispatchEvent(Event *event);
+        PageView (View *p_parent)
+            :PanelView(p_parent) , m_cur_page(NULL){
+                setLoopAble(true);setFocusValid(true);
+            }
 
-		View *nextPage(void);
-		View *prevPage(void);
+        virtual bool dispatchEvent(Event *event);
 
-		bool setCurPage(View *page);
-		View *getCurPage(void) { return m_cur_page; }
+        View *nextPage(void);
+        View *prevPage(void);
 
-		bool setCurPageByIndex(const unsigned int index);
-		int getCurPageIndex(void);
+        bool setCurPage(View *page);
+        View *getCurPage(void) { return m_cur_page; }
 
-		unsigned int indexFromPage(View *page) { return getChildIndex(page); }
-		View* pageFromIndex(const unsigned int index) { return getChildByIndex(index); }
+        bool setCurPageByIndex(const unsigned int index);
+        int getCurPageIndex(void);
 
-		bool addPage(View *);
-		bool appendPage(View *);
-		bool delPage(View *page) { return removeChild(page) == 0; }
+        unsigned int indexFromPage(View *page) { return getChildIndex(page); }
+        View* pageFromIndex(const unsigned int index) { return getChildByIndex(index); }
 
-		int getPageCount() {return viewCount();}
+        bool addPage(View *);
+        bool appendPage(View *);
+        bool delPage(View *page) { return removeChild(page) == 0; }
 
-		void setLoopAble(bool isLoop) { setFlag(isLoop, LOOPABLE);}
-		bool isLoopAble(void) {return m_flags & LOOPABLE;}
+        int getPageCount() {return viewCount();}
+
+        void setLoopAble(bool isLoop) { setFlag(isLoop, LOOPABLE);}
+        bool isLoopAble(void) {return m_flags & LOOPABLE;}
 
 
-	protected:
-		enum {
-			LOOPABLE = (1 << View::FLAG_SHIFT),
-			FLAG_SHIFT = (1 + View::FLAG_SHIFT)
-		};
+    protected:
+        enum {
+            LOOPABLE = (1 << View::FLAG_SHIFT),
+            FLAG_SHIFT = (1 + View::FLAG_SHIFT)
+        };
 
-	private:
-		View *m_cur_page;
+    private:
+        View *m_cur_page;
 };
 
 } // namespace hfcl

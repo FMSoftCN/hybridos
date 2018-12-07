@@ -32,8 +32,8 @@ class ArrowTextView : public View
 {
     public:
         ArrowTextView() : View()
-			, m_isLongText(false)
-			, m_stringId(-1)
+            , m_isLongText(false)
+            , m_stringId(-1)
             , m_limg(NULL)
             , m_hasImage(1)
             , m_hasText(1)
@@ -41,90 +41,90 @@ class ArrowTextView : public View
             , m_imgHeight(0)
             , m_textOutLine(0)
         {
-        	m_text[0] = '\0';
+            m_text[0] = '\0';
         }
 
         ArrowTextView(View *p_parent)
             : View(p_parent, DEFAULT_VIEW_DRAWABLESET(ArrowTextView))
             , m_isLongText(false)
-			, m_stringId(-1)
-            , m_limg(NULL)            
+            , m_stringId(-1)
+            , m_limg(NULL)
             , m_hasImage(1)
             , m_hasText(1)
             , m_imgWidth(0)
             , m_imgHeight(0)
             , m_textOutLine(0)
         {
-			m_text[0] = '\0';
-		}
+            m_text[0] = '\0';
+        }
 
         ArrowTextView(View *p_parent, DrawableSet* drset)
             : View(p_parent, drset)
             , m_isLongText(false)
-			, m_stringId(-1)
-            , m_limg(NULL)            
+            , m_stringId(-1)
+            , m_limg(NULL)
             , m_hasImage(1)
             , m_hasText(1)
             , m_imgWidth(0)
-            , m_imgHeight(0) 
+            , m_imgHeight(0)
             , m_roll(false)
             , m_textOutLine(0)
         {
-		m_text[0] = '\0';
-	}
+        m_text[0] = '\0';
+    }
 
-	virtual ~ArrowTextView();
+    virtual ~ArrowTextView();
 
-	void setText(int strId) {m_stringId=strId; }
-	void setText(const char* str); 
-	void setText(const string& str) { 	setText(str.c_str()); }
-	char * getText();
+    void setText(int strId) {m_stringId=strId; }
+    void setText(const char* str);
+    void setText(const string& str) {     setText(str.c_str()); }
+    char * getText();
 
-	void setLeftImage(Image *img);
-	Image* getLeftImage() { return  m_limg; }
-	void setRightImage(Image *img);
-	Image* getRightImage() { return  m_rimg; }
+    void setLeftImage(Image *img);
+    Image* getLeftImage() { return  m_limg; }
+    void setRightImage(Image *img);
+    Image* getRightImage() { return  m_rimg; }
 
-	int  getImageWidth()      { return m_imgWidth; }
-	int  getImageHeight()     { return m_imgHeight; }
-	void setImageWidth(int w) { m_imgWidth = w; }
-	void setImageHeight(int h){ m_imgHeight = h; }
+    int  getImageWidth()      { return m_imgWidth; }
+    int  getImageHeight()     { return m_imgHeight; }
+    void setImageWidth(int w) { m_imgWidth = w; }
+    void setImageHeight(int h){ m_imgHeight = h; }
 
-	bool hasImage()          { return m_hasImage; }
-	void enableImage(bool b) { m_hasImage = b; }
-	bool hasText()           { return m_hasText; }
-	void enableText(bool b)  { m_hasText = b; }
-	void setTextOutLine(bool b) { m_textOutLine = (b)?TextMode::OutLine:0x0; }
+    bool hasImage()          { return m_hasImage; }
+    void enableImage(bool b) { m_hasImage = b; }
+    bool hasText()           { return m_hasText; }
+    void enableText(bool b)  { m_hasText = b; }
+    void setTextOutLine(bool b) { m_textOutLine = (b)?TextMode::OutLine:0x0; }
 
-	virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
+    virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 
-	void onGetFocus() { if(!m_roll) startRollText(); }
-	void onLoseFocus() { if(!m_roll) stopRollText(); }
+    void onGetFocus() { if(!m_roll) startRollText(); }
+    void onLoseFocus() { if(!m_roll) stopRollText(); }
 
-	void setRollProp(bool roll) { m_roll = roll; }
+    void setRollProp(bool roll) { m_roll = roll; }
 
-	void startRollText();
-	void stopRollText();
+    void startRollText();
+    void stopRollText();
 
-	void setTextFont(unsigned int font);//GT_mspark_20130916_for set font
-    
+    void setTextFont(unsigned int font);//GT_mspark_20130916_for set font
+
     private:
-	char  m_text[TEXT_BUFFER_LEN_OF_DEFAULT+1]; //the text 
-	string  m_textstring;
-	bool  m_isLongText;
-	int   m_stringId;
-	Image*  m_limg; //the left arrow
-	Image*  m_rimg; //the right arrow 
-	unsigned int  m_hasImage:1;
-	unsigned int  m_hasText:1;
-	unsigned int  m_imgWidth:30; //the width of image
-	unsigned int  m_imgHeight:30;
-	bool  m_roll;
-	unsigned int  m_textOutLine;
+    char  m_text[TEXT_BUFFER_LEN_OF_DEFAULT+1]; //the text
+    string  m_textstring;
+    bool  m_isLongText;
+    int   m_stringId;
+    Image*  m_limg; //the left arrow
+    Image*  m_rimg; //the right arrow
+    unsigned int  m_hasImage:1;
+    unsigned int  m_hasText:1;
+    unsigned int  m_imgWidth:30; //the width of image
+    unsigned int  m_imgHeight:30;
+    bool  m_roll;
+    unsigned int  m_textOutLine;
 
-	void calcRect(const IntRect& rc, IntRect& txtRc, IntRect& leftArrowRc, IntRect& rightArrowRc);
+    void calcRect(const IntRect& rc, IntRect& txtRc, IntRect& leftArrowRc, IntRect& rightArrowRc);
 
-	DECLARE_CLASS_NAME(ArrowTextView)
+    DECLARE_CLASS_NAME(ArrowTextView)
 };
 
 

@@ -25,47 +25,47 @@ namespace hfcl {
 
 CompositeView::~CompositeView()
 {
-	if(m_drsets &&
-		!(m_drsets->isCommon()) ) {
-		HFCL_DELETE(m_drsets);
-		m_drsets = NULL;
-	}
+    if(m_drsets &&
+        !(m_drsets->isCommon()) ) {
+        HFCL_DELETE(m_drsets);
+        m_drsets = NULL;
+    }
 }
 
 #if 0
 bool CompositeView::setDrawableSet(int i_id, DrawableSet* drset)
 {
-	if(m_drsets->setDrawableSet(i_id, drset))
-	{
-		updateDrawableSets(i_id);
-		return true;
-	}
-	return false;
+    if(m_drsets->setDrawableSet(i_id, drset))
+    {
+        updateDrawableSets(i_id);
+        return true;
+    }
+    return false;
 }
 #endif
 
 DrawableSet* CompositeView::getDrawableSet(int i_id, unsigned int view_class)
 {
-	return m_drsets->getDrawableSet(i_id);
+    return m_drsets->getDrawableSet(i_id);
 }
 
-bool CompositeView::setDrawableSetGroup(DrawableSetGroup *g) 
+bool CompositeView::setDrawableSetGroup(DrawableSetGroup *g)
 {
-	if(m_drsets != g && !(m_drsets->isCommon()) ) {
-		HFCL_DELETE(m_drsets);
-		m_drsets = NULL;
-	}
-	m_drsets = g;
-	updateDrawableSets();
-	return true;
+    if(m_drsets != g && !(m_drsets->isCommon()) ) {
+        HFCL_DELETE(m_drsets);
+        m_drsets = NULL;
+    }
+    m_drsets = g;
+    updateDrawableSets();
+    return true;
 }
 
 
-void CompositeView::updateDrawableSets(int i_id) 
-{ 
-	if(i_id == -1 || i_id == DRSET_SELF) {
-		View::setDrawableSet(getDrawableSet(DRSET_SELF));
-	}
+void CompositeView::updateDrawableSets(int i_id)
+{
+    if(i_id == -1 || i_id == DRSET_SELF) {
+        View::setDrawableSet(getDrawableSet(DRSET_SELF));
+    }
 }
 
 

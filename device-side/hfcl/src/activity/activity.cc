@@ -25,7 +25,7 @@ namespace hfcl {
 
 Activity::Activity() : Window()
 {
-	m_menu = NULL;
+    m_menu = NULL;
 }
 
 Activity::~Activity()
@@ -43,18 +43,18 @@ void Activity::onCreate(ContextStream* contextStream, Intent* intent)
 
 void Activity::onWakeup(void)
 {
-	setActiveWindow (viewWindow());
-	show();
+    setActiveWindow (viewWindow());
+    show();
 };
 
-void Activity::onMove2Top(void) 
+void Activity::onMove2Top(void)
 {
     if (NULL != m_menu) {
         //m_menu->closeMenu(m_menu);
         m_menu->closeAllMenu();
         m_menu = NULL;
     }
-	setActiveWindow (viewWindow());
+    setActiveWindow (viewWindow());
     show();
 }
 
@@ -121,7 +121,7 @@ void Activity::setFullScreen(bool isFullScreen)
     }
     else {
         // TODO: Restore old rectangle
-		setWindowRect(m_old_rect);
+        setWindowRect(m_old_rect);
     }
 }
 

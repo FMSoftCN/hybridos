@@ -40,7 +40,7 @@ PairLayoutView::~PairLayoutView()
 
 void PairLayoutView::paint(GraphicsContext* context, int status)
 {
-	//FIXEME : View's onPaint should get the focus by it self
+    //FIXEME : View's onPaint should get the focus by it self
     if (NULL != m_firstView) {
         if (m_firstView->isFocus())
             m_firstView->onPaint(context, FOCUS);
@@ -71,7 +71,7 @@ bool PairLayoutView::dispatchEvent(Event* event)
             if (NULL != m_firstView) {
                 irc = m_firstView->getRect();
                 if (irc.contains(_x, _y)) {
-                   m_firstView->focusMe();    
+                   m_firstView->focusMe();
                    m_firstView->dispatchEvent(event);
                     break;
                 }
@@ -79,7 +79,7 @@ bool PairLayoutView::dispatchEvent(Event* event)
             if (NULL != m_secondView) {
                 irc = m_secondView->getRect();
                 if (irc.contains(_x, _y)) {
-                   m_secondView->focusMe();    
+                   m_secondView->focusMe();
                    m_secondView->dispatchEvent(event);
                     break;
                 }
@@ -135,9 +135,9 @@ bool PairLayoutView::setRect(const IntRect& pirc)
     }
 
     if (isVertDirection()) {
-		calcVertFirstSecondSize(pirc, firstIrc, secondIrc, isReversed());
+        calcVertFirstSecondSize(pirc, firstIrc, secondIrc, isReversed());
     } else {
-		calcHorzFirstSecondSize(pirc, firstIrc, secondIrc, isReversed());
+        calcHorzFirstSecondSize(pirc, firstIrc, secondIrc, isReversed());
     }
 
     LOGD("%d %d %d %d\n", firstIrc.m_left, firstIrc.m_top, firstIrc.m_right, firstIrc.m_bottom);
@@ -148,7 +148,7 @@ bool PairLayoutView::setRect(const IntRect& pirc)
     if (NULL != m_secondView)
         m_secondView->setRect(secondIrc);
 
-	return true;
+    return true;
 }
 
 #if 0

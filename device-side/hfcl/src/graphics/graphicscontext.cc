@@ -653,10 +653,8 @@ bool GraphicsContext::fillBoxWithBitmap(int x, int y, int w, int h, const Bitmap
     return FillBoxWithBitmap(hdc, outx, outy, w, h, pBitmap);
 }
 
-extern "C" Uint32 __mg_newgal_replace_color;
 bool GraphicsContext::setReplaceColor(const DWORD color)
 {
-    __mg_newgal_replace_color = (Uint32)color;
     return true;
 }
 

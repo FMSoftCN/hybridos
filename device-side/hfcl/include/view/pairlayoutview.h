@@ -58,10 +58,10 @@ class PairLayoutView : public LayoutView {
 
         ~PairLayoutView();
 
-		void paint(GraphicsContext* context, int status/* = Style::NORMAL*/);
-		bool dispatchEvent(Event* event);
+        void paint(GraphicsContext* context, int status/* = Style::NORMAL*/);
+        bool dispatchEvent(Event* event);
         bool setRect(const IntRect& pirc);
-		// to void drived class overide the base class 's function
+        // to void drived class overide the base class 's function
         bool setRect(int left, int top, int right, int bottom) { return View::setRect(left, top, right, bottom); }
 
         // IntRect& getCalcRect(void);
@@ -81,8 +81,8 @@ class PairLayoutView : public LayoutView {
         void  removeAll(void);
 
     private:
-		void calcVertFirstSecondSize(const IntRect& pirc, IntRect& fIrc, IntRect& sIrc, bool bReversed = false);
-		void calcHorzFirstSecondSize(const IntRect& pirc, IntRect& fIrc, IntRect& sIrc, bool bReversed = false);
+        void calcVertFirstSecondSize(const IntRect& pirc, IntRect& fIrc, IntRect& sIrc, bool bReversed = false);
+        void calcHorzFirstSecondSize(const IntRect& pirc, IntRect& fIrc, IntRect& sIrc, bool bReversed = false);
 
         View* m_firstView;
         View* m_secondView;

@@ -25,9 +25,9 @@
 namespace hfcl {
 
 AlphaViewAnimation::AlphaViewAnimation(View* view, int endAlpha)
-	:ViewAnimation(view, MGEFF_INT)
+    :ViewAnimation(view, MGEFF_INT)
 {
-	setEndValue(&endAlpha);
+    setEndValue(&endAlpha);
 }
 
 AlphaViewAnimation::~AlphaViewAnimation()
@@ -36,20 +36,20 @@ AlphaViewAnimation::~AlphaViewAnimation()
 
 void AlphaViewAnimation::setProperty(int id, void* value)
 {
-	if (NULL == m_view) {
-		return;
-	}
-	m_view->setAlpha(*(int*)value);
+    if (NULL == m_view) {
+        return;
+    }
+    m_view->setAlpha(*(int*)value);
 
-	m_view->updateView();
+    m_view->updateView();
 }
 
 void AlphaViewAnimation::onStart()
 {
-	if (NULL != m_view) {
-		int opacity = m_view->alpha();
-		setStartValue(&opacity);
-	}
+    if (NULL != m_view) {
+        int opacity = m_view->alpha();
+        setStartValue(&opacity);
+    }
 }
 
 } // namespace hfcl

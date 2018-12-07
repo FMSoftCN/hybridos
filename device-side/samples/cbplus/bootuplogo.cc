@@ -36,7 +36,7 @@ bool BootupLogo::onGifAnimateNotify(CustomEvent* event)
     if (event->customWparam() != CustomEvent::CUS_GIFANIMATE_STOP)
         return false;
 
-    stopAnimate();
+    // TODO: show greeting words
     return true;
 }
 

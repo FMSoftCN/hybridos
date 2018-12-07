@@ -31,74 +31,74 @@ namespace hfcl {
 class SimpleItemView : public ItemView
 {
 public:
-	SimpleItemView();
-	SimpleItemView(View *p_parent);
+    SimpleItemView();
+    SimpleItemView(View *p_parent);
     SimpleItemView(View* p_parent, DrawableSet* drset);
-	virtual ~SimpleItemView();
+    virtual ~SimpleItemView();
 
-	virtual void setText(int strid);
-	virtual void setText(const char* str);
-	virtual void setText(const string& str);
-	char * getText();
+    virtual void setText(int strid);
+    virtual void setText(const char* str);
+    virtual void setText(const string& str);
+    char * getText();
 
-	void setImage(Image *img);
-	Image* getImage()         { return  m_img; }
-	int  getImageWidth()      { return m_imgWidth; }
-	int  getImageHeight()     { return m_imgHeight; }
-	void setImageWidth(int w) { m_imgWidth = w; }
-	void setImageHeight(int h){ m_imgHeight = h; }
+    void setImage(Image *img);
+    Image* getImage()         { return  m_img; }
+    int  getImageWidth()      { return m_imgWidth; }
+    int  getImageHeight()     { return m_imgHeight; }
+    void setImageWidth(int w) { m_imgWidth = w; }
+    void setImageHeight(int h){ m_imgHeight = h; }
 
-	void setCheck(int check) { setSelected (check == CHECKED);  }
-	int  getCheck()          { return isSelected() ? CHECKED : UNCHECKED; }
-	
-	void setAlign(int align) { m_align = align; }
-	int  getAlign()          { return m_align; }
+    void setCheck(int check) { setSelected (check == CHECKED);  }
+    int  getCheck()          { return isSelected() ? CHECKED : UNCHECKED; }
 
-	bool hasImage()          { return m_hasImage; }
-	void enableImage(bool b) { m_hasImage = b; }
-	bool hasText()           { return m_hasText; }
-	void enableText(bool b)  { m_hasText = b; }
-	void setImagePos(int pos){ m_imagePos = pos; }
-	int  imagePos()  		 { return m_imagePos; }
+    void setAlign(int align) { m_align = align; }
+    int  getAlign()          { return m_align; }
 
-	void setGap(unsigned int gap) 	{ m_gap = gap; }
-	unsigned int gap(void) { return m_gap; }
-	void setTextRightGap(unsigned int gap) 	{ m_textRightGap = gap; }
-	unsigned int textRightGap(void) { return m_textRightGap; }
-	
-	void setRollProp(bool roll) { stopRoll(); m_bRoll = roll; }
-	bool getRollProp() { return m_bRoll; }
+    bool hasImage()          { return m_hasImage; }
+    void enableImage(bool b) { m_hasImage = b; }
+    bool hasText()           { return m_hasText; }
+    void enableText(bool b)  { m_hasText = b; }
+    void setImagePos(int pos){ m_imagePos = pos; }
+    int  imagePos()           { return m_imagePos; }
 
-	void startRoll();
-	void stopRoll();
-	void resetRoll();
-	
-	bool isNeedRoll();
-	void setRolling(bool b) { m_bRolling = b; }
-	bool isRolling() { return m_bRolling; }
+    void setGap(unsigned int gap)     { m_gap = gap; }
+    unsigned int gap(void) { return m_gap; }
+    void setTextRightGap(unsigned int gap)     { m_textRightGap = gap; }
+    unsigned int textRightGap(void) { return m_textRightGap; }
 
-	virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
+    void setRollProp(bool roll) { stopRoll(); m_bRoll = roll; }
+    bool getRollProp() { return m_bRoll; }
 
-protected:
-	virtual void calcRect(const IntRect& rc, IntRect& txtRc, IntRect& imgRc);
+    void startRoll();
+    void stopRoll();
+    void resetRoll();
 
-	DECLARE_CLASS_NAME(SimpleItemView)
+    bool isNeedRoll();
+    void setRolling(bool b) { m_bRolling = b; }
+    bool isRolling() { return m_bRolling; }
+
+    virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 
 protected:
-	int   m_stringId;
-	string  m_simpleString;
-	Image*  m_img; //the icon of Item
-	unsigned int  m_align:2;
-	unsigned int  m_hasImage:1;
-	unsigned int  m_hasText:1;
-	unsigned int  m_unsed:1;
-	unsigned int  m_imgWidth:12; //the width of image
-	unsigned int  m_imgHeight:12;
-	unsigned int  m_imagePos;  // 0 is left , 1 is right , other is error
-	unsigned int  m_gap;
-	unsigned int  m_textRightGap;
-	bool  m_bRoll;	
-	bool  m_bRolling;
+    virtual void calcRect(const IntRect& rc, IntRect& txtRc, IntRect& imgRc);
+
+    DECLARE_CLASS_NAME(SimpleItemView)
+
+protected:
+    int   m_stringId;
+    string  m_simpleString;
+    Image*  m_img; //the icon of Item
+    unsigned int  m_align:2;
+    unsigned int  m_hasImage:1;
+    unsigned int  m_hasText:1;
+    unsigned int  m_unsed:1;
+    unsigned int  m_imgWidth:12; //the width of image
+    unsigned int  m_imgHeight:12;
+    unsigned int  m_imagePos;  // 0 is left , 1 is right , other is error
+    unsigned int  m_gap;
+    unsigned int  m_textRightGap;
+    bool  m_bRoll;
+    bool  m_bRolling;
 };
 
 } // namespace hfcl

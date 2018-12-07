@@ -19,23 +19,23 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #define animation_begin(func_name, func_list) \
-	Animation * func_name func_list ;
-	
-#define animation_end 
+    Animation * func_name func_list ;
+
+#define animation_end
 
 #define group_begin(type)
-#define group_end 
-#define add_anim(ani) 
+#define group_end
+#define add_anim(ani)
 
 #define set_duration(n)
-#define set_loop(n)  
+#define set_loop(n)
 #define set_keeplive(n)
 #define set_direction(n)
 #define set_curve(n)
 #define set_startvalue(n)
 #define set_endtvalue(n)
 
-#define foreach_view( ... ) 
+#define foreach_view( ... )
 #define end_foreach
 
 #define move_view(view, target_pt)

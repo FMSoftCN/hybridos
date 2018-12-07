@@ -53,7 +53,7 @@ SlEditView::SlEditView(View *p)
     : EditView (p)
     , m_strings("")
     , m_pswdChar(DEF_PSWD_CHAR)
-	, m_caretPos(0)
+    , m_caretPos(0)
     , m_passwordStyleShow(0)
     , m_prevEventType(0)
     , m_highlight(false)
@@ -65,7 +65,7 @@ SlEditView::SlEditView(View *p, DrawableSet *drs)
     : EditView (p, drs)
     , m_strings("")
     , m_pswdChar(DEF_PSWD_CHAR)
-	, m_caretPos(0)
+    , m_caretPos(0)
     , m_passwordStyleShow(0)
     , m_prevEventType(0)
     , m_highlight(false)
@@ -79,11 +79,11 @@ SlEditView::~SlEditView()
         removeTimer(m_timerId);
      if (0 != m_SlTimerId)
     {
-        MMI_active_multitap = -1;	
+        MMI_active_multitap = -1;
         removeTimer(m_SlTimerId);
     }
 }
-    
+
 void SlEditView::onGetFocus(void)
 {
     if (0 != m_timerId)
@@ -91,7 +91,7 @@ void SlEditView::onGetFocus(void)
     m_timerId = registerTimer(500, "SlEditView");
     if(m_addword)
         imeEnable(true);
-	EditView::onGetFocus();
+    EditView::onGetFocus();
 
     if (m_bAutoOmitted){
         setOmittedStyle(false);
@@ -108,17 +108,17 @@ void SlEditView::onLoseFocus(void)
     }
     if (0 != m_SlTimerId)
     {
-        MMI_active_multitap = -1;	
+        MMI_active_multitap = -1;
         removeTimer(m_SlTimerId);
         m_SlTimerId = 0;
     }
 
-	EditView::onLoseFocus();
+    EditView::onLoseFocus();
     if (m_bAutoOmitted){
         setOmittedStyle(true);
     }
-	m_bSelect = false;
-	
+    m_bSelect = false;
+
 }
 
 void SlEditView::SlKeyupNoDraw(void)
@@ -140,50 +140,50 @@ void SlEditView::setFont (HTResId id)
 
 void SlEditView::setText(const char * str)
 {
-	unsigned int len,valid_len;
-	char *pStr = (char *)str;
-	len = strlen(str);
-	valid_len = 0;
+    unsigned int len,valid_len;
+    char *pStr = (char *)str;
+    len = strlen(str);
+    valid_len = 0;
 
-	if(m_IsCharCount)
-	{
-	    unsigned int maxcount  =0;
-	    maxcount =  GetUTF8CharCount(str,strlen(str));
-	    if(maxcount > m_txtLimit && m_txtLimit > 0)
-	    {
-	        len= GetUTF8LenByCharCount(str,m_txtLimit);
-	    }
-	}
-	else
-	{
-	    if(len > m_txtLimit && m_txtLimit > 0)
-		len = m_txtLimit;
-	}
-	while(valid_len <= len)
-	{
-		int ch_len = 1;
-		char ch = *pStr;
-		if(ch&0x80)
-		{
-			while(ch&(0x80 >> ch_len))
-				ch_len++;
-		}
-		if(valid_len+ch_len > len)
-		{
-			break;
-		}
-		valid_len += ch_len;
-		pStr += ch_len;
-	}
-	
-	char *tmp = (char *)malloc((len+1) * sizeof(char));
-	memset(tmp, 0, (len+1) * sizeof(char));
-	
-	strncpy(tmp, str, valid_len);
-	
-	m_strings = tmp;
-	free(tmp);
-	tmp = NULL;
+    if(m_IsCharCount)
+    {
+        unsigned int maxcount  =0;
+        maxcount =  GetUTF8CharCount(str,strlen(str));
+        if(maxcount > m_txtLimit && m_txtLimit > 0)
+        {
+            len= GetUTF8LenByCharCount(str,m_txtLimit);
+        }
+    }
+    else
+    {
+        if(len > m_txtLimit && m_txtLimit > 0)
+        len = m_txtLimit;
+    }
+    while(valid_len <= len)
+    {
+        int ch_len = 1;
+        char ch = *pStr;
+        if(ch&0x80)
+        {
+            while(ch&(0x80 >> ch_len))
+                ch_len++;
+        }
+        if(valid_len+ch_len > len)
+        {
+            break;
+        }
+        valid_len += ch_len;
+        pStr += ch_len;
+    }
+
+    char *tmp = (char *)malloc((len+1) * sizeof(char));
+    memset(tmp, 0, (len+1) * sizeof(char));
+
+    strncpy(tmp, str, valid_len);
+
+    m_strings = tmp;
+    free(tmp);
+    tmp = NULL;
 
 #if 0
     if (m_txtLimit < 0 || strlen(str) <= m_txtLimit){
@@ -197,24 +197,24 @@ void SlEditView::setText(const char * str)
 #endif
     m_caretPos = m_strings.size();
 
-	if(m_style & EDVS_PSWD)
-	{
-		m_passwordStyleShow = true;
-		m_char_pos = m_caretPos;
-		m_careTick = 0;
-	}
-	#ifdef __MMI_T9__
-	else
-	{
-	    int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
-	    imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
-	}
-	#endif
+    if(m_style & EDVS_PSWD)
+    {
+        m_passwordStyleShow = true;
+        m_char_pos = m_caretPos;
+        m_careTick = 0;
+    }
+    #ifdef __MMI_T9__
+    else
+    {
+        int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+        imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
+    }
+    #endif
 
-    SwitchShiftToLower(getText(),getTextLength(),true);	
+    SwitchShiftToLower(getText(),getTextLength(),true);
     updateView();
 }
-    
+
 void SlEditView::setText(string str)
 {
     if(m_IsCharCount)
@@ -232,29 +232,29 @@ void SlEditView::setText(string str)
     {
         if (m_txtLimit < 0 || str.size() <= m_txtLimit)
             m_strings = str;
-        else 
+        else
             m_strings = str.substr(0, m_txtLimit);
-    }	
+    }
     m_caretPos = m_strings.size();
 
-	if(m_style & EDVS_PSWD)
-	{
-		m_passwordStyleShow = true;
-		m_char_pos = m_caretPos;
-		m_careTick = 0;
-	}
-	#ifdef __MMI_T9__
-	else
-	{
-	    int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
-	    imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
-	}
-	#endif
+    if(m_style & EDVS_PSWD)
+    {
+        m_passwordStyleShow = true;
+        m_char_pos = m_caretPos;
+        m_careTick = 0;
+    }
+    #ifdef __MMI_T9__
+    else
+    {
+        int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+        imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
+    }
+    #endif
 
-    SwitchShiftToLower(getText(),getTextLength(),true);		
+    SwitchShiftToLower(getText(),getTextLength(),true);
     updateView();
 }
-    
+
 string SlEditView::getText()
 {
     return m_strings;
@@ -266,17 +266,17 @@ void SlEditView::insertText(const char *text)
     unsigned int txtcount=0, strcount=0;
     if (text == NULL || (m_style & EDVS_READONLY))
         return;
-	
+
     txtLen = strlen(text);
     currLen = m_strings.size();
     insLen = txtLen;
 
-	if( (m_style & EDVS_PSWD) && (m_strings.size() < m_txtLimit))
-	{
-		m_passwordStyleShow = false;
-		m_char_pos = m_caretPos;
-		m_careTick = 0;
-	}
+    if( (m_style & EDVS_PSWD) && (m_strings.size() < m_txtLimit))
+    {
+        m_passwordStyleShow = false;
+        m_char_pos = m_caretPos;
+        m_careTick = 0;
+    }
 
     if(m_IsCharCount)
     {
@@ -339,22 +339,22 @@ void SlEditView::replacePrevChar(const char *ch)
     memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
     memset(m_edit_tempstr2,0,EDITOR_MAX_LEN);
     strcpy(m_edit_tempstr1, m_strings.c_str());
-    
+
     if (!bTail) {
         strcpy(m_edit_tempstr2, m_edit_tempstr1 + m_caretPos);
         m_edit_tempstr1[m_caretPos] = '\0';
     }
     int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
-        
+
     m_edit_tempstr1[m_caretPos - lastChLen] = '\0';
 
     if(m_IsCharCount)
     {
         unsigned int strcount =  GetUTF8CharCount(m_strings.c_str(),m_strings.size());
         unsigned int inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
-   
+
         if (m_txtLimit > 0 && strcount - 1 + inscount > m_txtLimit) {
-            inscount = m_txtLimit -( strcount - 1);	
+            inscount = m_txtLimit -( strcount - 1);
             insLen = GetUTF8LenByCharCount(ch,inscount);
         }
     }
@@ -369,11 +369,11 @@ void SlEditView::replacePrevChar(const char *ch)
     }
 
     m_strings = m_edit_tempstr1;
-    
+
     if (!bTail) {
         m_strings += m_edit_tempstr2;
     }
-    
+
     m_caretPos += insLen - lastChLen;
     if (m_caretPos > m_strings.size()){
         m_caretPos = m_strings.size();
@@ -381,7 +381,7 @@ void SlEditView::replacePrevChar(const char *ch)
 
     if(m_caretPos == 0)
     {
-       	switch(imeGetCurrentInputMode())
+           switch(imeGetCurrentInputMode())
         {
             case INPUT_MODE_SMART_SHIFT_ABC:
             case INPUT_MODE_SMART_SHIFT_FRENCH:
@@ -397,7 +397,7 @@ void SlEditView::replacePrevChar(const char *ch)
                 imeSetSwitch();
 #endif
                 break;
-        } 
+        }
     }
 
     showCaret(true);
@@ -407,8 +407,8 @@ void SlEditView::replacePrevChar(const char *ch)
 
 void SlEditView::deleteAllCharacters(void)
 {
-	m_strings = "";
-	m_caretPos = m_strings.length();
+    m_strings = "";
+    m_caretPos = m_strings.length();
 #ifdef __MMI_T9__
     if(imeGetInputModeFlag() == INPUT_MODE_SMART) {
         SynText();
@@ -417,7 +417,7 @@ void SlEditView::deleteAllCharacters(void)
 
     if(m_caretPos == 0)
     {
-       	switch(imeGetCurrentInputMode())
+           switch(imeGetCurrentInputMode())
         {
             case INPUT_MODE_SMART_SHIFT_ABC:
             case INPUT_MODE_SMART_SHIFT_FRENCH:
@@ -433,8 +433,8 @@ void SlEditView::deleteAllCharacters(void)
                 imeSetSwitch();
 #endif
                 break;
-        } 
-    }	
+        }
+    }
 }
 #ifdef __MMI_T9__
 void SlEditView::insertStringFromT9(char *ch, int cursor)
@@ -449,7 +449,7 @@ void SlEditView::insertStringFromT9(char *ch, int cursor)
             int Len = GetUTF8LenByCharCount(ch,m_txtLimit);
             memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
             strncpy(m_edit_tempstr1, ch,Len);
-            int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));   
+            int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
             m_edit_tempstr1[Len - lastChLen] = '\0';
             m_strings = m_edit_tempstr1;
             cursor = m_strings.size();
@@ -458,7 +458,7 @@ void SlEditView::insertStringFromT9(char *ch, int cursor)
             m_caretPos = cursor;
             SynText();
         }
-        else   
+        else
         {
             m_strings = ch;
             if(cursor <0)
@@ -473,7 +473,7 @@ void SlEditView::insertStringFromT9(char *ch, int cursor)
         {
             memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
             strncpy(m_edit_tempstr1, ch,m_txtLimit);
-            int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));   
+            int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
             m_edit_tempstr1[m_txtLimit - lastChLen] = '\0';
             m_strings = m_edit_tempstr1;
             cursor = m_strings.size();
@@ -497,10 +497,10 @@ void SlEditView::insertStringFromT9(char *ch, int cursor)
 
 void SlEditView::SynText(void)
 {
-	//m_caretPos = m_strings.length();
-	m_bSelect = false;
-	int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
-	imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
+    //m_caretPos = m_strings.length();
+    m_bSelect = false;
+    int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+    imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
 }
 
 void SlEditView::DeleteChar(void)
@@ -517,17 +517,17 @@ void SlEditView::DeleteChar(void)
 
 void SlEditView::ResetT9Mode(bool  Neednotifyevent)
 {
-	m_addword = false;
-	m_bSelect = false;
-	if(imeGetInputModeFlag() == INPUT_MODE_SMART)
-	{
-		int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
-		imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
-	}
-	if(Neednotifyevent)	
-		raiseNotifyEvent(NOTIFY_EDIT_CHANGED);
-	updateView();
-}    
+    m_addword = false;
+    m_bSelect = false;
+    if(imeGetInputModeFlag() == INPUT_MODE_SMART)
+    {
+        int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+        imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
+    }
+    if(Neednotifyevent)
+        raiseNotifyEvent(NOTIFY_EDIT_CHANGED);
+    updateView();
+}
 
 void SlEditView::setCursorFromT9(void)
 {
@@ -561,7 +561,7 @@ void SlEditView::setCursorFromT9(void)
 void SlEditView::entryAddWordMode(void)
 {
     m_addword = true;
-    setActiveWordCount(imeT9GetActiveWordCount());	
+    setActiveWordCount(imeT9GetActiveWordCount());
     m_inputmethod = imeGetCurrentInputMode();
     raiseNotifyEvent(NOTIFY_EDIT_CHANGED);
     updateView();
@@ -571,13 +571,13 @@ void SlEditView:: displayAddWord(char *ch, int* pos, int wordlen,string &str, bo
 {
     unsigned int totalLen = str.size();
     unsigned int insLen = (ch != NULL ? strlen(ch) : 0);
-    unsigned int delcount = wordlen;	
+    unsigned int delcount = wordlen;
     int bTail = ((int)totalLen == *pos);
     int deslen = 0;
     memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
     memset(m_edit_tempstr2,0,EDITOR_MAX_LEN);
     strcpy(m_edit_tempstr1, str.c_str());
-    
+
     if (!bTail) {
         strcpy(m_edit_tempstr2, m_edit_tempstr1 + *pos);
         m_edit_tempstr1[*pos] = '\0';
@@ -586,7 +586,7 @@ void SlEditView:: displayAddWord(char *ch, int* pos, int wordlen,string &str, bo
     {
         int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
         deslen += lastChLen;
-        m_edit_tempstr1[*pos - deslen] = '\0';	
+        m_edit_tempstr1[*pos - deslen] = '\0';
         wordlen--;
     }
     m_edit_tempstr1[*pos - deslen] = '\0';
@@ -595,9 +595,9 @@ void SlEditView:: displayAddWord(char *ch, int* pos, int wordlen,string &str, bo
     {
         unsigned int strcount =  GetUTF8CharCount(str.c_str(),str.size());
         unsigned int inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
-   
+
         if (m_txtLimit > 0 && strcount - delcount + inscount > m_txtLimit) {
-            inscount = m_txtLimit -( strcount - delcount);	
+            inscount = m_txtLimit -( strcount - delcount);
             insLen = GetUTF8LenByCharCount(ch,inscount);
         }
     }
@@ -609,65 +609,65 @@ void SlEditView:: displayAddWord(char *ch, int* pos, int wordlen,string &str, bo
     }
     if(imeIsSmartShiftInputMode())
     {
-        if(m_edit_tempstr1[0]  == '\0'  || 
-                (m_edit_tempstr1[*pos - deslen -1] == ' ' && (m_edit_tempstr1[*pos - deslen -2] == '.'  
+        if(m_edit_tempstr1[0]  == '\0'  ||
+                (m_edit_tempstr1[*pos - deslen -1] == ' ' && (m_edit_tempstr1[*pos - deslen -2] == '.'
                 ||m_edit_tempstr1[*pos - deslen -2] == '!' || m_edit_tempstr1[*pos - deslen -2] == '?')))
                 ch[0]= toupper (ch[0]);
-    }	
+    }
     if (insLen > 1 || (insLen == 1 && isprint(*ch))){
         strncat(m_edit_tempstr1, ch, insLen);
     }
 
     str = m_edit_tempstr1;
-    
+
     if (!bTail) {
         str += m_edit_tempstr2;
     }
-    
+
     *pos += insLen - deslen;
     if (*pos > (int)str.size()){
         *pos = str.size();
     }
 
-	if(internal) {
-	    m_addword = false;
-	    //m_bSelect = false;
-	    SynText();
-	    showCaret(true);
-	    raiseNotifyEvent(NOTIFY_EDIT_CHANGED);
-	    updateView();
-	}
+    if(internal) {
+        m_addword = false;
+        //m_bSelect = false;
+        SynText();
+        showCaret(true);
+        raiseNotifyEvent(NOTIFY_EDIT_CHANGED);
+        updateView();
+    }
 }
 
 void SlEditView:: addWord(char *ch)
 {
     int wordlen = getActiveWordCount();
-	imeSetInputMode(m_inputmethod);
-	imeChangeInputboxMode(m_inputmethod);
-	if(ch==NULL)
-	{
-		SynText();
-		m_addword = false;
-		m_bSelect = false;
-		raiseNotifyEvent(NOTIFY_EDIT_CHANGED);
-		updateView();
-	}	
-	else if(strlen(ch) ==0)
-	{
-		SynText();
-		m_addword = false;
-		//m_bSelect = false;
-		raiseNotifyEvent(NOTIFY_EDIT_CHANGED);
-		updateView();
-	}
-	else
-	{
-		int len;
-		char temp[102];
-		displayAddWord(ch, (int*)&m_caretPos, wordlen, m_strings, true);
-		len = NGUtf8ToUnicode((unsigned char*)ch,(unsigned char*)temp);
-		imeT9AddCustWordIntoLDB((unsigned short *)temp,len/2-1);
-	}
+    imeSetInputMode(m_inputmethod);
+    imeChangeInputboxMode(m_inputmethod);
+    if(ch==NULL)
+    {
+        SynText();
+        m_addword = false;
+        m_bSelect = false;
+        raiseNotifyEvent(NOTIFY_EDIT_CHANGED);
+        updateView();
+    }
+    else if(strlen(ch) ==0)
+    {
+        SynText();
+        m_addword = false;
+        //m_bSelect = false;
+        raiseNotifyEvent(NOTIFY_EDIT_CHANGED);
+        updateView();
+    }
+    else
+    {
+        int len;
+        char temp[102];
+        displayAddWord(ch, (int*)&m_caretPos, wordlen, m_strings, true);
+        len = NGUtf8ToUnicode((unsigned char*)ch,(unsigned char*)temp);
+        imeT9AddCustWordIntoLDB((unsigned short *)temp,len/2-1);
+    }
 }
 
 #endif
@@ -675,7 +675,7 @@ int SlEditView::getTextMCharLen(void)
 {
     return GetUTF8CharInfo(m_strings.c_str(), m_strings.size(), NULL);
 }
-    
+
 static inline char _charactor(int key_code)
 {
     if (key_code == KeyEvent::KEYCODE_STAR){
@@ -694,7 +694,7 @@ bool SlEditView::dispatchEvent(Event *event)
     int code = ((KeyEvent *)event)->keyCode();
 
     if(getExchangeFlag())
-    { 
+    {
         if(code == KeyEvent::KEYCODE_CURSOR_LEFT)
             code = KeyEvent::KEYCODE_CURSOR_RIGHT;
         else if(code == KeyEvent::KEYCODE_CURSOR_RIGHT)
@@ -703,39 +703,39 @@ bool SlEditView::dispatchEvent(Event *event)
 
     if(event->eventType() == Event::KEY_DOWN)
     {
-#ifdef __MMI_GB_V5__            
+#ifdef __MMI_GB_V5__
         char ch[2]={0, 0};
         ui_char_t temp;
         unsigned char utf8[10] = {0};
 
         if ((ch[0] = _charactor(code)) > 0){
             ch[1] = '\0';
-	       if(imeGetInputModeFlag() == INPUT_MODE_SMART)
-		{
-		    if (isImeExist() && isImeEnable() && !isImeOpen()
-			&& ch[0] >= '1' && ch[0] <= '9'){
-			openImeWin();
-			imeInsertChar(ch[0]);
-		    } 
-		}
-		else if(imeGetInputModeFlag() == INPUT_MODE_MULTITAP)
-		{
-			if(imeGetPreviousActiveMultitap() == code)
-			{
-				temp = (Uint16)getMultitapCharCode(code);
-				mmi_chset_ucs2_to_utf8((unsigned char *)utf8,(unsigned short)temp);
-				replacePrevChar((const char *)utf8);
-			}else
-			{
-				temp = (Uint16)getMultitapCharCode(code);
-				mmi_chset_ucs2_to_utf8((unsigned char *)utf8,(unsigned short)temp);
-				insertText((const char *)utf8);
-			}
-		}
-		else
-		{
-		    insertText(ch);
-		}
+           if(imeGetInputModeFlag() == INPUT_MODE_SMART)
+        {
+            if (isImeExist() && isImeEnable() && !isImeOpen()
+            && ch[0] >= '1' && ch[0] <= '9'){
+            openImeWin();
+            imeInsertChar(ch[0]);
+            }
+        }
+        else if(imeGetInputModeFlag() == INPUT_MODE_MULTITAP)
+        {
+            if(imeGetPreviousActiveMultitap() == code)
+            {
+                temp = (Uint16)getMultitapCharCode(code);
+                mmi_chset_ucs2_to_utf8((unsigned char *)utf8,(unsigned short)temp);
+                replacePrevChar((const char *)utf8);
+            }else
+            {
+                temp = (Uint16)getMultitapCharCode(code);
+                mmi_chset_ucs2_to_utf8((unsigned char *)utf8,(unsigned short)temp);
+                insertText((const char *)utf8);
+            }
+        }
+        else
+        {
+            insertText(ch);
+        }
             return DISPATCH_STOP_MSG;
         }
 #endif
@@ -759,19 +759,19 @@ bool SlEditView::dispatchEvent(Event *event)
             blinkCaret();
             if(code == KeyEvent::KEYCODE_CURSOR_RIGHT)
                 return DISPATCH_STOP_MSG;
-        } 
+        }
 
         switch(code)
         {
             case KeyEvent::KEYCODE_SOFTKEY_LEFT :
                 // Left Soft Key .. Do Nothings ??
                 if(getTextHighlight())
-                    setTextHighlight(false); 
+                    setTextHighlight(false);
                 break;
             case KeyEvent::KEYCODE_SOFTKEY_RIGHT :
                 if (m_strings.size() > 0) {
                     if(getTextHighlight())
-                    {  
+                    {
                         setTextHighlight(false);
                         deleteAllCharacters();
                         raiseNotifyEvent(NOTIFY_EDIT_CHANGED);
@@ -781,7 +781,7 @@ bool SlEditView::dispatchEvent(Event *event)
                     else
                     {
 #ifdef __MMI_T9__
-                    if(imeGetInputModeFlag() == INPUT_MODE_SMART)	
+                    if(imeGetInputModeFlag() == INPUT_MODE_SMART)
                     {
                         if(m_caretPos <0)
                             m_caretPos = 0;
@@ -827,13 +827,13 @@ bool SlEditView::dispatchEvent(Event *event)
                     }
                     else if(preT9ShiftMode != imeIsT9ShiftMode())
                     {
-                        imeSetSwitch(); 
+                        imeSetSwitch();
                     }
                     updateView();
                     return DISPATCH_STOP_MSG;
                 }
                 else
-#endif	//__MMI_T9__		
+#endif    //__MMI_T9__
                 if (m_caretPos > 0) {
                     int lastChLen = GetLastUTF8CharLen(m_strings.c_str(), m_caretPos);
                     m_caretPos -= lastChLen;
@@ -860,7 +860,7 @@ bool SlEditView::dispatchEvent(Event *event)
                     {
                         unsigned int strcount  =0;
                         strcount =  GetUTF8CharCount(m_strings.c_str(),m_caretPos);
-                        if(strcount >= m_txtLimit)	
+                        if(strcount >= m_txtLimit)
                             max_check = FALSE;
                     }
                     else
@@ -890,14 +890,14 @@ bool SlEditView::dispatchEvent(Event *event)
                     return DISPATCH_STOP_MSG;
                 }
                 else
-#endif	//__MMI_T9__
+#endif    //__MMI_T9__
                 if (!(m_style & EDVS_PSWD) && !m_AddWord && m_bInsertSpace && m_caretPos == getTextLength()){
                     insertText(" ");
                     return DISPATCH_STOP_MSG;
                 } else if (m_caretPos < getTextLength()) {
                     string sub = m_strings.substr(m_caretPos, -1);
                     int firstChLen = GetFirstUTF8CharLen(sub.c_str(), getTextLength() - m_caretPos);
-                    m_caretPos += firstChLen; 
+                    m_caretPos += firstChLen;
                     showCaret(true);
                     updateView();
                     return DISPATCH_STOP_MSG;
@@ -915,10 +915,10 @@ bool SlEditView::dispatchEvent(Event *event)
                         return DISPATCH_STOP_MSG;
                     }
                 }
-#endif	//__MMI_T9__		
+#endif    //__MMI_T9__
 
             case KeyEvent::KEYCODE_CURSOR_DOWN :
-#ifdef __MMI_T9__ 
+#ifdef __MMI_T9__
                 if(imeGetInputModeFlag() == INPUT_MODE_SMART)
                 {
                     m_addword = false;
@@ -928,11 +928,11 @@ bool SlEditView::dispatchEvent(Event *event)
                         imeRefreshString();
 
                         if(imeT9IsAddwordByArrowkey())
-                            entryAddWordMode();                        
+                            entryAddWordMode();
                         return DISPATCH_STOP_MSG;
                     }
                 }
-#endif	//__MMI_T9__		
+#endif    //__MMI_T9__
             default :
                 break;
         }
@@ -944,7 +944,7 @@ bool SlEditView::dispatchEvent(Event *event)
         ui_char_t temp;
         unsigned char utf8[10] = {0};
 
-		if ((ch[0] = _charactor(code)) > 0){
+        if ((ch[0] = _charactor(code)) > 0){
             if(m_prevEventType == Event::KEY_LONGPRESSED)
                 return DISPATCH_CONTINUE_MSG;
 
@@ -964,7 +964,7 @@ bool SlEditView::dispatchEvent(Event *event)
                     imeDisableActiveMultitapWithoutDraw();
                     SynText();
                 }
-                
+
                 if (isImeExist() && isImeEnable()&&
                      ch[0] >= '1' && ch[0] <= '9')
                 {
@@ -984,13 +984,13 @@ bool SlEditView::dispatchEvent(Event *event)
                         m_bSelect = true;
                         m_startPosX = m_caretPos;
                     }
-                    showCaret(false);		
+                    showCaret(false);
                     setImeTarget((int)this, 1);
                     imeInsertChar(ch[0]);
-                } 
+                }
             }
             else if(imeGetInputModeFlag() == INPUT_MODE_MULTITAP
-                    || (imeGetInputModeFlag() == INPUT_MODE_SMART && ch[0] == '0'))                
+                    || (imeGetInputModeFlag() == INPUT_MODE_SMART && ch[0] == '0'))
             {
                 m_bSelect = false;
 
@@ -1005,32 +1005,32 @@ bool SlEditView::dispatchEvent(Event *event)
                     if(imeGetPreviousActiveMultitap() == code)
                     {
                         temp =(Uint16)getMultitapCharCode(code);
-                        imeCheckMultitapPunctuationCharacter(m_strings,m_caretPos,true,isSpaceMode());		
+                        imeCheckMultitapPunctuationCharacter(m_strings,m_caretPos,true,isSpaceMode());
 
                         if(imeIsMultiShiftInputMode() &&
                             ((imeGetMultitapShiftMode()!= SHIFT_STATE_LOWER) || (imeGetPreMultitapShiftMode() == SHIFT_STATE_UPPER)))
                         {
-                            temp=toupper(temp);	
-                        }	
+                            temp=toupper(temp);
+                        }
                         mmi_chset_ucs2_to_utf8((unsigned char *)utf8,(unsigned short)temp);
                         replacePrevChar((char *)utf8);
                     }
-                    else if(m_strings.length() < textMaxLimit() 
-						|| (m_IsCharCount && (unsigned int)GetUTF8CharCount(m_strings.c_str(),m_strings.size()) < textMaxLimit()) )
+                    else if(m_strings.length() < textMaxLimit()
+                        || (m_IsCharCount && (unsigned int)GetUTF8CharCount(m_strings.c_str(),m_strings.size()) < textMaxLimit()) )
                     {
-                        if(ch[0] == '0') 
+                        if(ch[0] == '0')
                         {
                            m_addword = false;
                            imeChangeKeyzeroMultitaps(false,code);
                         }
                         temp = (Uint16)getMultitapCharCode(code);
-                        imeSetPreMultitapShiftMode(SHIFT_STATE_INIT);		
-                        imeCheckMultitapPunctuationCharacter(m_strings,m_caretPos,false,isSpaceMode());			
+                        imeSetPreMultitapShiftMode(SHIFT_STATE_INIT);
+                        imeCheckMultitapPunctuationCharacter(m_strings,m_caretPos,false,isSpaceMode());
                         if(imeIsMultiShiftInputMode() &&(imeGetMultitapShiftMode()!=SHIFT_STATE_LOWER))
                         {
                             temp=toupper(temp);
                             imeSetMultitapShiftMode(SHIFT_STATE_UPPER);
-                            imeSetPreMultitapShiftMode(imeGetMultitapShiftMode());			
+                            imeSetPreMultitapShiftMode(imeGetMultitapShiftMode());
                         }
                         mmi_chset_ucs2_to_utf8((unsigned char *)utf8,(unsigned short)temp);
                         insertText((char *)utf8);
@@ -1041,7 +1041,7 @@ bool SlEditView::dispatchEvent(Event *event)
                         imeDisableActiveMultitapWithoutDraw();
                         m_SlTimerId = 0;
                         blinkCaret();
-                    }                    
+                    }
                 }
                 if(imeGetInputModeFlag() == INPUT_MODE_SMART && ch[0] == '0')
                     SynText();
@@ -1051,7 +1051,7 @@ bool SlEditView::dispatchEvent(Event *event)
             {
                ;
             }
-#endif            
+#endif
             else
             {
                 m_bSelect = false;
@@ -1059,16 +1059,16 @@ bool SlEditView::dispatchEvent(Event *event)
                 ch[1] = '\0';
                 insertText(ch);
             }
-		}				
-#endif        
-	    if(imeGetInputModeFlag() == INPUT_MODE_MULTITAP
+        }
+#endif
+        if(imeGetInputModeFlag() == INPUT_MODE_MULTITAP
              || (imeGetInputModeFlag() == INPUT_MODE_SMART && code ==  KeyEvent::KEYCODE_0))
-		{
-			if((code >=  KeyEvent::KEYCODE_0) &&  (code<= KeyEvent::KEYCODE_9))
-			{
-			    SlKeyupNoDraw();
-			}
-		}
+        {
+            if((code >=  KeyEvent::KEYCODE_0) &&  (code<= KeyEvent::KEYCODE_9))
+            {
+                SlKeyupNoDraw();
+            }
+        }
 
         if(((code >=  KeyEvent::KEYCODE_0) && (code<= KeyEvent::KEYCODE_9))
             || code == KeyEvent::KEYCODE_CURSOR_LEFT
@@ -1082,12 +1082,12 @@ bool SlEditView::dispatchEvent(Event *event)
                 imeT9CheckPunctuationCharacter(isSpaceMode());
             imeSetSwitch();
 #endif
-        }        
+        }
     }
     else if(event->eventType() == Event::KEY_LONGPRESSED)
     {
         m_prevEventType = event->eventType();
-        
+
         if (code == KeyEvent::KEYCODE_0 && m_bAutoTrans) {
             if(getText().find('+') == string::npos)
                 replacePrevChar("+");
@@ -1103,7 +1103,7 @@ bool SlEditView::dispatchEvent(Event *event)
             {
                     SynText();
             }
-#endif	//__MMI_T9__
+#endif    //__MMI_T9__
             updateView();
             return DISPATCH_STOP_MSG;
         } else if (code == KeyEvent::KEYCODE_CURSOR_RIGHT) {
@@ -1116,7 +1116,7 @@ bool SlEditView::dispatchEvent(Event *event)
             {
                     SynText();
             }
-#endif	//__MMI_T9__
+#endif    //__MMI_T9__
             updateView();
             return DISPATCH_STOP_MSG;
         }
@@ -1139,7 +1139,7 @@ bool SlEditView::dispatchEvent(Event *event)
                 m_SlTimerId = 0;
                 blinkCaret();
             }
-#endif       
+#endif
             return DISPATCH_STOP_MSG;
         }
 #ifdef __SUPPORT_MANUAL_KEYPAD_LOCK_IN_ALLSCREEN__
@@ -1158,7 +1158,7 @@ bool SlEditView::dispatchEvent(Event *event)
                 if(m_caretPos < 0)
                     m_caretPos = 0;
 #ifdef __MMI_T9__
-                else			
+                else
                     DeleteChar();
 #endif
             }else{
@@ -1177,9 +1177,9 @@ bool SlEditView::dispatchEvent(Event *event)
 
 void SlEditView::drawBackground(GraphicsContext* gc, IntRect &rc, int status)
 {
-	if(m_drset) {
-		m_drset->draw(gc, DR_BKGND, isFocus() ? DRAWSTATE_HILIGHT : DRAWSTATE_NORMAL, rc);
-	}
+    if(m_drset) {
+        m_drset->draw(gc, DR_BKGND, isFocus() ? DRAWSTATE_HILIGHT : DRAWSTATE_NORMAL, rc);
+    }
 }
 
 int SlEditView::CalculateCursor(GraphicsContext *gc,IntRect rc, string tmpStr, int  caretPos, int *caretWidth)
@@ -1199,8 +1199,8 @@ int SlEditView::CalculateCursor(GraphicsContext *gc,IntRect rc, string tmpStr, i
 
         NGUtf8ToUnicode((unsigned char*)tempStr.c_str(), (unsigned char *)temp_unicode_str);
         ConvertToGlyphForm(temp_unicode_str, visual_str_len, 0);
-        getBidiString(temp_unicode_str, bidiStrOrder, visual_str_len, gc->getBiDiFlag(), TRUE);        
-        
+        getBidiString(temp_unicode_str, bidiStrOrder, visual_str_len, gc->getBiDiFlag(), TRUE);
+
         unicodeCaretPos = GetUTF8CharCount(tempStr.c_str(), caretPos);
         if(getTextHighlight())
         {
@@ -1220,7 +1220,7 @@ int SlEditView::CalculateCursor(GraphicsContext *gc,IntRect rc, string tmpStr, i
             gc->getTextDrawSize(temp_unicode_str, m_font, &w, &subh);
             subw += rc.right() - rc.left() - w;
         }
-        
+
         if(MMI_active_multitap >= 0)
         {
             tmpChar[0] = temp_unicode_str[unicodeCaretPos-1];
@@ -1233,7 +1233,7 @@ int SlEditView::CalculateCursor(GraphicsContext *gc,IntRect rc, string tmpStr, i
             gc->getTextDrawSize(tmpChar, m_font, &w, &subh);
             subw += w;
         }
-        
+
         free(temp_unicode_str);
         free(bidiStrOrder);
     }
@@ -1244,46 +1244,44 @@ int SlEditView::CalculateCursor(GraphicsContext *gc,IntRect rc, string tmpStr, i
         subw = 0;
     }
 
-    return subw;	
+    return subw;
 }
 
 void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const IntRect &rc, unsigned int color, Logfont *f, unsigned int format)
 {
     int subw, subh, strw, strh, sw;;
     int caretWidth = 0;
-    int tmpcur =0;	
+    int tmpcur =0;
     string tmpStr(text);
 
-    int len = m_strings.size();	
+    int len = m_strings.size();
     int *info = (int *)malloc ((len + 1) * sizeof(int));
 
-#ifdef __MMI_T9_ARABIC__	
+#ifdef __MMI_T9_ARABIC__
     const char *str = m_strings.c_str();
     char tmpchar[8]={0};
-    int realCount = GetUTF8CharInfo (m_strings.c_str(), len, info);	
+    int realCount = GetUTF8CharInfo (m_strings.c_str(), len, info);
 
-    info [realCount] = len; 
-    for (int i = 1; i <= realCount; /*i++*/)
-    {
+    info [realCount] = len;
+    for (int i = 1; i <= realCount; /*i++*/) {
         memcpy(tmpchar, str + info[i-1], info[i] - info[i-1]);
         tmpchar [info[i] - info[i-1]] = '\0';
-        if(IsSymbolUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar)) ||IsNumberUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar)))
-        {
+        if (IsSymbolUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar))
+                || IsNumberUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar))) {
             i++;
         }
         else
-        {  
+        {
             break;
-        }			
+        }
     }
 
-    if(isTransformArabic(UTF8ToUCS2((Uint8 *)tmpchar))||IsArabicSymbolUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar)))
-    {
+    if (IsTransformArabicUCS2Char (UTF8ToUCS2((Uint8 *)tmpchar))
+                || IsArabicSymbolUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar))) {
         SetBiDiFlag(true);
         setExchangeFlag(true);
     }
-    else
-    {
+    else {
         SetBiDiFlag(false);
         setExchangeFlag(false);
     }
@@ -1293,7 +1291,7 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
     gc->getTextDrawSize (sub, f, &sw, &subh);
 
     if ((sw >= 0 && sw <= rc.width()) || (m_caretPos == 0) ) {
-        subw = CalculateCursor(gc, rc,tmpStr, m_caretPos, &caretWidth);	
+        subw = CalculateCursor(gc, rc,tmpStr, m_caretPos, &caretWidth);
         gc->getTextDrawSize (tmpStr, f, &strw, &strh);
 
         if(strw> rc.width()) {
@@ -1318,12 +1316,12 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
             tmpStr = tmp;
         }
 
-        gc->drawText (tmpStr, rc, color, f, format); 
+        gc->drawText (tmpStr, rc, color, f, format);
 
     } else {
 
-        unsigned int add_charLen=0,charLen =0,count=0;      
-        char sub0[100]={0};   
+        unsigned int add_charLen=0,charLen =0,count=0;
+        char sub0[100]={0};
         memset(sub0,0,100);
         strncpy(sub0, tmpStr.c_str(),m_caretPos);
         char *str = sub0;
@@ -1336,9 +1334,9 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
             if(*str == 0)
                 break;
             count++;
-        }		
+        }
         while (1){
-            int _w, _h;			
+            int _w, _h;
             charLen = info[count--];
             if (charLen <=  0)
             {
@@ -1351,8 +1349,8 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
                 gc->getTextDrawSize(str, f, &_w, &_h);
                 if (_w  > rc.width()) {
                     add_charLen = add_charLen - charLen;
-                    str = str + charLen;	
-                    tmpcur = add_charLen;					
+                    str = str + charLen;
+                    tmpcur = add_charLen;
                     break;
                 }
                 else if(_w  == rc.width())
@@ -1368,9 +1366,9 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
             }
 
         }
-        if(strlen(str) !=0)	
-            tmpStr = str;	
-        subw = CalculateCursor(gc, rc,tmpStr,tmpcur,&caretWidth);	
+        if(strlen(str) !=0)
+            tmpStr = str;
+        subw = CalculateCursor(gc, rc,tmpStr,tmpcur,&caretWidth);
         gc->drawText (tmpStr, rc, color, f, format);
     }
 
@@ -1387,65 +1385,65 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
         if(m_startPosX == 0)
         {
             startx = rc.left();
-            subCaretStr = text.substr(m_startPosX, m_caretPos - m_startPosX); 
+            subCaretStr = text.substr(m_startPosX, m_caretPos - m_startPosX);
             gc->getTextDrawSize(subCaretStr, m_font, &w, &h);
-            caretWidth = w;	
+            caretWidth = w;
         }
         else
         {
 
             if (sw <= rc.width()) {
                 subCaretStr  = text.substr(0, m_startPosX);
-                gc->getTextDrawSize(subCaretStr, m_font, &w, &h);		
-                startx=  rc.left() + w;
-                subCaretStr = text.substr(m_startPosX, m_caretPos - m_startPosX); 
                 gc->getTextDrawSize(subCaretStr, m_font, &w, &h);
-                caretWidth = w;				
+                startx=  rc.left() + w;
+                subCaretStr = text.substr(m_startPosX, m_caretPos - m_startPosX);
+                gc->getTextDrawSize(subCaretStr, m_font, &w, &h);
+                caretWidth = w;
             }else{
                 int tmpstartx=0;
                 if ((int)m_caretPos - tmpcur >= m_startPosX)
-                    tmpstartx = 0;		
+                    tmpstartx = 0;
                 else
-                    tmpstartx = m_startPosX -(m_caretPos -tmpcur); 
+                    tmpstartx = m_startPosX -(m_caretPos -tmpcur);
 
                 subCaretStr  = tmpStr.substr(0, tmpstartx);
-                gc->getTextDrawSize(subCaretStr, m_font, &w, &h);			
-                startx=rc.left() + w;
-                subCaretStr = tmpStr.substr(tmpstartx, tmpcur - tmpstartx); 
                 gc->getTextDrawSize(subCaretStr, m_font, &w, &h);
-                caretWidth = w;		
+                startx=rc.left() + w;
+                subCaretStr = tmpStr.substr(tmpstartx, tmpcur - tmpstartx);
+                gc->getTextDrawSize(subCaretStr, m_font, &w, &h);
+                caretWidth = w;
             }
         }
 
-        if (gc->getBiDiFlag() && !(m_style & EDVS_PSWD)) 
+        if (gc->getBiDiFlag() && !(m_style & EDVS_PSWD))
         {
             startx = rc.right() - (startx - rc.left());
-            m_caretRect.setRect (startx -caretWidth , rc.top(), 
+            m_caretRect.setRect (startx -caretWidth , rc.top(),
                     startx, rc.top() + h);
         }
         else
         {
-            m_caretRect.setRect (startx, rc.top(), 
+            m_caretRect.setRect (startx, rc.top(),
                     startx+ caretWidth, rc.top() + h);
         }
-        gc->fillRect(m_caretRect, 
-                (m_txtColor >> 16) & 0xFF, 
-                (m_txtColor >> 8) & 0xFF, 
-                (m_txtColor >> 0) & 0xFF, 
+        gc->fillRect(m_caretRect,
+                (m_txtColor >> 16) & 0xFF,
+                (m_txtColor >> 8) & 0xFF,
+                (m_txtColor >> 0) & 0xFF,
                 (m_txtColor >> 24) & 0xFF);
 
-        SetRasterOperation (gc->context(), oldrop); 
+        SetRasterOperation (gc->context(), oldrop);
     }
     else
-#endif	//__MMI_T9__
-        // draw caret 
+#endif    //__MMI_T9__
+        // draw caret
         if (isFocus() && m_bCaretShown){
             int startx = 0;
             int starty = 0;
             //int careth = f != NULL ? f->size : gc->getFontHeight(m_font);
             int careth = gc->getFontHeight(m_font);
             int oldrop;
-            oldrop = SetRasterOperation (gc->context(), ROP_XOR);          
+            oldrop = SetRasterOperation (gc->context(), ROP_XOR);
 
             if (sw >= rc.width()) {
                 startx = rc.left();
@@ -1462,7 +1460,7 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
                     default:
                         startx = rc.left();
                         break;
-                } 
+                }
             }
 
             switch(m_align & TextVAlignMask)
@@ -1481,14 +1479,14 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
 
             if(getTextHighlight())
             {
-                if (gc->getBiDiFlag() && !(m_style & EDVS_PSWD)) 
+                if (gc->getBiDiFlag() && !(m_style & EDVS_PSWD))
                 {
-                    m_caretRect.setRect (subw, starty, 
+                    m_caretRect.setRect (subw, starty,
                             rc.right(), starty + careth);
                 }
                 else
                 {
-                    m_caretRect.setRect (rc.left(), starty, 
+                    m_caretRect.setRect (rc.left(), starty,
                             rc.left() + subw, starty + careth);
                 }
             }
@@ -1501,21 +1499,21 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
                     caretWidth++;
                 }
 
-                if (gc->getBiDiFlag() && !(m_style & EDVS_PSWD)) 
+                if (gc->getBiDiFlag() && !(m_style & EDVS_PSWD))
                 {
-                    m_caretRect.setRect (startx + subw, starty, 
+                    m_caretRect.setRect (startx + subw, starty,
                             startx + subw + caretWidth, starty + careth);
                 }
                 else
                 {
-                    m_caretRect.setRect (startx + subw, starty, 
+                    m_caretRect.setRect (startx + subw, starty,
                             startx + subw + caretWidth, starty + careth);
                 }
-            }	
-            gc->fillRect(m_caretRect, 
-                    (m_txtColor >> 16) & 0xFF, 
-                    (m_txtColor >> 8) & 0xFF, 
-                    (m_txtColor >> 0) & 0xFF, 
+            }
+            gc->fillRect(m_caretRect,
+                    (m_txtColor >> 16) & 0xFF,
+                    (m_txtColor >> 8) & 0xFF,
+                    (m_txtColor >> 0) & 0xFF,
                     (m_txtColor >> 24) & 0xFF);
 
             SetRasterOperation (gc->context(), oldrop);
@@ -1535,19 +1533,19 @@ void SlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
     IntRect irc ( rc.left() + m_hMargin, rc.top() + m_vMargin,
             rc.right() - m_hMargin, rc.bottom() - m_vMargin);
 
-	if(m_style & EDVS_CHAR_BREAK)
-	{
-		format |= DT_CHARBREAK;
-	}
+    if(m_style & EDVS_CHAR_BREAK)
+    {
+        format |= DT_CHARBREAK;
+    }
 
     if (m_style & EDVS_BASELINE)
     {
         //FIXME , top vcernter bottom ??
         int y = irc.bottom();
-        gc->drawHVDotLine(irc.left(), y, irc.right(), y, 
-                (m_txtColor >> 16) & 0xFF, 
-                (m_txtColor >> 8) & 0xFF, 
-                (m_txtColor >> 0) & 0xFF, 
+        gc->drawHVDotLine(irc.left(), y, irc.right(), y,
+                (m_txtColor >> 16) & 0xFF,
+                (m_txtColor >> 8) & 0xFF,
+                (m_txtColor >> 0) & 0xFF,
                 (m_txtColor >> 24) & 0xFF);
     }
 
@@ -1563,7 +1561,7 @@ void SlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
         case TextAlignCenter: format |= DT_CENTER; break;
         case TextAlignRight:  format |= DT_RIGHT;  break;
     }
-    
+
     switch (m_align & TextVAlignMask)
     {
         case TextVAlignTop:     format |= DT_TOP;     break;
@@ -1571,28 +1569,28 @@ void SlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
         case TextVAlignBottom:  format |= DT_BOTTOM;  break;
     }
 
-    // draw content text string 
+    // draw content text string
     if (m_strings.size() > 0) {
         if ((m_style & EDVS_PSWD) && m_pswdChar){
-			
+
             unsigned int len = m_strings.size();
             memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
-			
-			if(m_passwordStyleShow) {
-				m_careTick = 0;
-				memset(m_edit_tempstr1, m_pswdChar, len);
-			}
-			else {
-				if(++m_careTick >= 2) {
-					m_careTick = 0;
-					m_passwordStyleShow = true;
-				}
-				string str = m_strings;
-				char* ptr = (char*)str.c_str();
-	            memset(m_edit_tempstr1, m_pswdChar, len);
-				if(m_char_pos < len)
-					m_edit_tempstr1[m_char_pos]  = *(ptr+m_char_pos);
-			}
+
+            if(m_passwordStyleShow) {
+                m_careTick = 0;
+                memset(m_edit_tempstr1, m_pswdChar, len);
+            }
+            else {
+                if(++m_careTick >= 2) {
+                    m_careTick = 0;
+                    m_passwordStyleShow = true;
+                }
+                string str = m_strings;
+                char* ptr = (char*)str.c_str();
+                memset(m_edit_tempstr1, m_pswdChar, len);
+                if(m_char_pos < len)
+                    m_edit_tempstr1[m_char_pos]  = *(ptr+m_char_pos);
+            }
             m_edit_tempstr1[len] = '\0';
             innerDrawText(gc, string(m_edit_tempstr1), irc, color, m_font, format);
         }
@@ -1610,17 +1608,17 @@ void SlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
         int careth = gc->getFontHeight(m_font);
 
         switch (m_align & TextAlignMask) {
-            case TextAlignLeft:   
-                startx = irc.left();   
+            case TextAlignLeft:
+                startx = irc.left();
                 break;
-            case TextAlignCenter: 
-                startx = (irc.left() + irc.right()) >> 1;   
+            case TextAlignCenter:
+                startx = (irc.left() + irc.right()) >> 1;
                 break;
-            case TextAlignRight:  
-                startx = irc.right() - 2;   
+            case TextAlignRight:
+                startx = irc.right() - 2;
                 break;
         }
-        
+
         switch(m_align & TextVAlignMask) {
             case TextVAlignBottom:
                 starty = irc.bottom() - careth;
@@ -1634,52 +1632,52 @@ void SlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
                 break;
         }
 
-		if (imeIsArabic() && !(m_style & EDVS_PSWD)) {
-			startx = irc.right() - (startx - irc.left()) - 1;
-		}
+        if (imeIsArabic() && !(m_style & EDVS_PSWD)) {
+            startx = irc.right() - (startx - irc.left()) - 1;
+        }
 
         m_caretRect.setRect(startx, starty, startx + 1, starty + careth);
-        
-        gc->fillRect(m_caretRect, 
-                (m_txtColor >> 16) & 0xFF, 
-                (m_txtColor >> 8) & 0xFF, 
-                (m_txtColor >> 0) & 0xFF, 
+
+        gc->fillRect(m_caretRect,
+                (m_txtColor >> 16) & 0xFF,
+                (m_txtColor >> 8) & 0xFF,
+                (m_txtColor >> 0) & 0xFF,
                 (m_txtColor >> 24) & 0xFF);
     }
 
-#ifdef __MMI_T9_ARABIC__	
+#ifdef __MMI_T9_ARABIC__
     gc->setBiDiFlag (IsArabicSet());
 #endif
 }
 
 bool SlEditView::handleEvent(Event* event)
 {
-    if (event->eventType() == Event::TIMER 
+    if (event->eventType() == Event::TIMER
             && m_timerId == ((TimerEvent *)event)->timerID()
-            && isFocus())   
+            && isFocus())
     {
         if(!getTextHighlight() && m_SlTimerId == 0)
             blinkCaret();
         //lionel remove to fixed the blink bug;
-		//updateView();
+        //updateView();
     }
-    if (event->eventType() == Event::TIMER 
-        && m_SlTimerId == ((TimerEvent *)event)->timerID())   
+    if (event->eventType() == Event::TIMER
+        && m_SlTimerId == ((TimerEvent *)event)->timerID())
     {
         imeDisableActiveMultitapWithoutDraw();
         if(imeGetPreMultitapShiftMode() == SHIFT_STATE_UPPER)
         {
             imeSetPreMultitapShiftMode(SHIFT_STATE_INIT);
 #ifdef __MMI_T9__
-            imeSetSwitch();	
+            imeSetSwitch();
 #endif
-        }	
-            
+        }
+
         removeTimer(m_SlTimerId);
         m_SlTimerId = 0;
         blinkCaret();
     }
-	return true;
+    return true;
 }
 
 } // namespace hfcl

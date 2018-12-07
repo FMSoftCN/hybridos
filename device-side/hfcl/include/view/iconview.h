@@ -73,7 +73,7 @@ class IconView : public ScrollView
             if (m_gridView) return m_gridView->setFocusItem(index);
             return 0;
         }
-        inline int focusItem(void) { 
+        inline int focusItem(void) {
             if (m_gridView) return m_gridView->focusItemIdx();
             return 0;
         }
@@ -84,10 +84,10 @@ class IconView : public ScrollView
         inline void setGridsRect (int left, int top, int right, int bottom) {
             if (m_gridView) m_gridView->setRect(left, top, right, bottom);
         }
-		inline void setAutoConvert(bool bCon) { 
-			if (m_gridView) m_gridView->setAutoConvert(bCon); 
-		}
-		
+        inline void setAutoConvert(bool bCon) {
+            if (m_gridView) m_gridView->setAutoConvert(bCon);
+        }
+
         void makeHilightVisible();
 
         virtual bool handleEvent(Event* event);
@@ -98,7 +98,7 @@ class IconView : public ScrollView
         virtual void onGetFocus(){
             if (m_gridView) m_gridView->focusMe();
         }
-        
+
     private:
         GridView *m_gridView;
 };

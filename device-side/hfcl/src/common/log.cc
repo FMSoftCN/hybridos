@@ -29,26 +29,26 @@ Log::Log (const char* logFile = NULL, bool benable = true)
     :m_enable(benable)
 {
     m_fpLog = NULL;
-    
+
     if (logFile)
         m_fpLog = fopen(logFile,"wt");
-    
+
     if (m_fpLog == NULL)
         m_fpLog = stderr;
 }
 
-Log::~Log() 
+Log::~Log()
 {
     if (m_fpLog && m_fpLog != stderr)
         fclose(m_fpLog);
     releaseLog();
 }
 
-Log* Log::getLog(void) 
+Log* Log::getLog(void)
 {
     if (Log::m_log == NULL){
-		Log::m_log = HFCL_NEW_EX (Log, (HFCL_LOG_FILE, true));      
-	}
+        Log::m_log = HFCL_NEW_EX (Log, (HFCL_LOG_FILE, true));
+    }
     return Log::m_log;
 }
 
@@ -62,7 +62,7 @@ void Log::releaseLog(void)
 int Log::logPrintf(const char* head, const char* format, va_list args)
 {
     if (m_enable) {
-		_MG_PRINTF("%s", head);
+        _MG_PRINTF("%s", head);
         _MG_PRINTF(format, args);
         return 0;
     } else {

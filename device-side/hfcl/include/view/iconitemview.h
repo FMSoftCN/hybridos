@@ -31,63 +31,63 @@ namespace hfcl {
 class IconItemView : public ItemView
 {
 public:
-	IconItemView() 
+    IconItemView()
         : m_textId(-1)
         ,m_isLong(false)
         , m_imgHeight(20)
         , m_imageWithoutText(false)
-        , m_image(NULL) 
-    { 	
+        , m_image(NULL)
+    {
         m_text[0] = '\0';
     }
-	IconItemView(View *p_parent)
-		:ItemView(p_parent, DEFAULT_VIEW_DRAWABLESET(IconItemView))
+    IconItemView(View *p_parent)
+        :ItemView(p_parent, DEFAULT_VIEW_DRAWABLESET(IconItemView))
         , m_textId(-1)
         ,m_isLong(false)
         , m_imgHeight(20)
         , m_imageWithoutText(false)
-        , m_image(NULL) 
-    { 
+        , m_image(NULL)
+    {
     }
-	IconItemView(View *p_parent, DrawableSet* drset)
-		:ItemView(p_parent, drset)
+    IconItemView(View *p_parent, DrawableSet* drset)
+        :ItemView(p_parent, drset)
         , m_textId(-1)
         ,m_isLong(false)
         , m_imgHeight(20)
         , m_imageWithoutText(false)
-        , m_image(NULL) 
-    {	
-        m_text[0] = '\0'; 
+        , m_image(NULL)
+    {
+        m_text[0] = '\0';
     }
 
-	virtual ~IconItemView();
+    virtual ~IconItemView();
 
-	void setText(const char* str);
-	void setText(const string& str);
-	void setText(const int stringId);
-	const char * getText();
-	const int getTextId();
+    void setText(const char* str);
+    void setText(const string& str);
+    void setText(const int stringId);
+    const char * getText();
+    const int getTextId();
 
-	void setImage(Image* img);
-	Image* getImage() { return m_image; }
+    void setImage(Image* img);
+    Image* getImage() { return m_image; }
 
-	void setImageWithoutText(bool imageWithoutText) { m_imageWithoutText = imageWithoutText; }
+    void setImageWithoutText(bool imageWithoutText) { m_imageWithoutText = imageWithoutText; }
 
-	void setImageHeight(int height) { m_imgHeight = height; }
-	int  getImageHeight() { return m_imgHeight; }
+    void setImageHeight(int height) { m_imgHeight = height; }
+    int  getImageHeight() { return m_imgHeight; }
 
-	void drawContent(GraphicsContext* context, IntRect& rc, int status);
+    void drawContent(GraphicsContext* context, IntRect& rc, int status);
 
 protected:
-	char m_text[TEXT_BUFFER_LEN_OF_DEFAULT+1];
-	int  m_textId;
-	string m_buttonString;
-	bool m_isLong;
-	int  m_imgHeight;
-	bool m_imageWithoutText;
-	Image* m_image;
+    char m_text[TEXT_BUFFER_LEN_OF_DEFAULT+1];
+    int  m_textId;
+    string m_buttonString;
+    bool m_isLong;
+    int  m_imgHeight;
+    bool m_imageWithoutText;
+    Image* m_image;
 
-	DECLARE_CLASS_NAME(IconItemView)
+    DECLARE_CLASS_NAME(IconItemView)
 };
 
 

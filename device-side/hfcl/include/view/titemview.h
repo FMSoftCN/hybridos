@@ -24,7 +24,7 @@
  * This file this the template of ItemViewName
  * Because some plateform's c++ compiler don't support template
  * we use the macro to implement it
- * 
+ *
  * it same as template<class Base> class TItemView : public Base { .... }
  *
  * use macro, you create a new file, such as my_item.h, and
@@ -39,7 +39,7 @@
  * #undef ItemBaseName
  *
  * #endif
- * 
+ *
  */
 
 namespace hfcl {
@@ -47,11 +47,11 @@ namespace hfcl {
 class ItemViewName : public ItemBaseName
 {
 public:
-    ItemViewName(View* parent) 
-		: ItemBaseName(parent, GetDrawable(DR_ITEMVIEW)) { }
+    ItemViewName(View* parent)
+        : ItemBaseName(parent, GetDrawable(DR_ITEMVIEW)) { }
 
     ItemViewName(View* parent, Drawable* dr)
-		: ItemBaseName(parent, dr) { }
+        : ItemBaseName(parent, dr) { }
     ItemViewName() : ItemBaseName(NULL, GetDrawable(DR_ITEMVIEW)) { }
 
     void draw_hilite(GraphicsContext* context, IntRect &rc, int status);
@@ -59,31 +59,31 @@ public:
     void setItemHeight(int h);
     int getItemHeight() { return getRect().height(); }
     bool isSelected()   { return m_flags & SELECTED; }
-    void setSelected(bool select) { 
-		if(select != isSelected()) { 
-			setFlag(select, SELECTED); 
-			updateView();
-		}
-	}
+    void setSelected(bool select) {
+        if(select != isSelected()) {
+            setFlag(select, SELECTED);
+            updateView();
+        }
+    }
     void setFocus(bool focus) {
-		if(focus != isFocus())
-		{
-			setFlag(focus, FOCUSED);
-			updateView();
-		}
-	}
+        if(focus != isFocus())
+        {
+            setFlag(focus, FOCUSED);
+            updateView();
+        }
+    }
     bool isFocus() { return m_flags & FOCUSED; }
 
-	void setPaintHilightFirst(bool b) { setFlag(b, HILIGHT_TOP); }
-	bool isPaintHilightFirst()        { return m_flags & HILIGHT_TOP; }
+    void setPaintHilightFirst(bool b) { setFlag(b, HILIGHT_TOP); }
+    bool isPaintHilightFirst()        { return m_flags & HILIGHT_TOP; }
 
 protected:
     enum {
-		FOCUSED = (1 << (ItemBaseName::FLAG_SHIFT)), //FIXED ME, Should defined in view
-		SELECTED = (2 << (ItemBaseName::FLAG_SHIFT)),
-		HILIGHT_TOP = (4 << (ItemBaseName::FLAG_SHIFT)),
-		FLAG_SHIFT = (3 + (ItemBaseName::FLAG_SHIFT))
-	};
+        FOCUSED = (1 << (ItemBaseName::FLAG_SHIFT)), //FIXED ME, Should defined in view
+        SELECTED = (2 << (ItemBaseName::FLAG_SHIFT)),
+        HILIGHT_TOP = (4 << (ItemBaseName::FLAG_SHIFT)),
+        FLAG_SHIFT = (3 + (ItemBaseName::FLAG_SHIFT))
+    };
 
 }; //end of ItemViewName
 

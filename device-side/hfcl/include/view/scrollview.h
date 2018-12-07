@@ -45,7 +45,7 @@ public:
 
     void setContent(ContainerView* content);
     inline ContainerView* content(void) const {return m_content;}
-   
+
     virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
     virtual void drawScroll(GraphicsContext* context, IntRect &rc, int status/* = Style::NORMAL*/);
 
@@ -55,10 +55,10 @@ public:
         if(ph)
             *ph = m_content ? m_content->getRect().height() : 0;
     }
-    
+
     bool dispatchEvent(Event*);
     bool handleEvent(Event* event);
-    
+
     /*
      * set vertical scrollbar and horizontal scrollbar width.
      */
@@ -71,7 +71,7 @@ public:
     void setVBarVisible(bool b_isVisible) { setFlag(b_isVisible, VBAR_VISIBLE); }
     void setHBarVisible(bool b_isVisible) { setFlag(b_isVisible, HBAR_VISIBLE); }
     void setBarVisible(bool b_isVisible) { setFlag(b_isVisible, VBAR_VISIBLE | HBAR_VISIBLE); }
-    
+
     bool vBarVisible(void) { return (m_flags & VBAR_VISIBLE) == VBAR_VISIBLE; }
     bool hBarVisible(void) { return (m_flags & HBAR_VISIBLE) == HBAR_VISIBLE; }
 
@@ -79,9 +79,9 @@ public:
     bool loopScroll() { return m_flags & LOOP_SCROLL; }
     bool autoShowBar() { return m_flags& AUTOSHOWBAR; }
     bool scrollVisiable(int * barWidth, bool isVertical = TRUE);
-    
+
     void setAutoShowBar(bool b) { setFlag(isScrollBarAlwaysShow() ? true : b, AUTOSHOWBAR); }
-    
+
     void setScrollBarAlwaysShow(bool b) { setFlag(b, ALWAYS_SHOW); }
     bool isScrollBarAlwaysShow(void) { return (m_flags & ALWAYS_SHOW) == ALWAYS_SHOW; }
 
@@ -90,12 +90,12 @@ public:
 
     void setVScrollBarOnLeft(bool b) { setFlag(b, VBAR_ON_LEFT); }
     bool isVScrollBarOnLeft(void) { return (m_flags & VBAR_ON_LEFT) == VBAR_ON_LEFT; }
-    
+
     static void SetAllScrollBarOnLeft(bool b){ g_is_all_scrollbar_on_left = b; }
     static bool IsAllScrollBarOnLeft(void){ return g_is_all_scrollbar_on_left; }
     void setVStep(Uint16 vstep){m_vStep = vstep;}
     void setHStep(Uint16 hstep){m_hStep = hstep;}
-    
+
 protected:
     enum {
         LOOP_SCROLL   = (0x01 << (PanelView::FLAG_SHIFT)), //scroll the content with loop
@@ -105,9 +105,9 @@ protected:
         ALWAYS_SHOW   = (0x01 << (PanelView::FLAG_SHIFT + 4)),
         BAR_FLOATING  = (0x01 << (PanelView::FLAG_SHIFT + 5)),
         VBAR_ON_LEFT  = (0x01 << (PanelView::FLAG_SHIFT + 6)),
-        FLAG_SHIFT 	  = (PanelView::FLAG_SHIFT + 7)
+        FLAG_SHIFT       = (PanelView::FLAG_SHIFT + 7)
     };
-    
+
 protected:
     void onChildSizeChanged(View *child) {
         if(child == m_content)
@@ -132,7 +132,7 @@ private:
 private:
     int m_timerId;
     static bool g_is_all_scrollbar_on_left;
-    
+
     DECLARE_CLASS_NAME(ScrollView)
 };
 

@@ -29,11 +29,11 @@ namespace hfcl {
  *
  * @param hWnd The window receives the MSG_TIMER message. If \a timer_proc
  *        is not NULL, MiniGUI will call \a timer_proc instead sending
- *        MSG_TIMER message to this window. If you use timer callback 
+ *        MSG_TIMER message to this window. If you use timer callback
  *        procedure, \a hWnd can be any value you can pass.
- * @param id The timeout value of the timer. Note that the timeout value 
+ * @param id The timeout value of the timer. Note that the timeout value
  *        with MSG_TIMER message as the first parameter of the message.
- * @param speed The timeout value of the timer. Note that the timeout value 
+ * @param speed The timeout value of the timer. Note that the timeout value
  *        is in unit of 10 ms.
  * @param timer_proc The timer callback procedure. If this argument is NULL,
  *        MiniGUI will send MSG_TIMER to the window procedure of \a hWnd.
@@ -46,7 +46,7 @@ bool mgclSetTimerEx(HWND hWnd, int id, unsigned int speed, TIMERPROC timer_proc)
  * @brief mgclKillTimer Destroys a timer.
  *
  * @param hWnd The window owns the timer.
- * @param id The identifier of the timer. If \a id equals or is less than 0, 
+ * @param id The identifier of the timer. If \a id equals or is less than 0,
  *        this function will kill all timers in the system.
  *
  * @returns The number of actually killed timer.

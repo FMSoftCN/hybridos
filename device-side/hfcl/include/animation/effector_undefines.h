@@ -19,15 +19,15 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #undef animation_begin
-	
-#undef animation_end 
+
+#undef animation_end
 
 #undef group_begin
-#undef group_end 
-#undef add_anim 
+#undef group_end
+#undef add_anim
 
 #undef set_duration
-#undef set_loop  
+#undef set_loop
 #undef set_keeplive
 #undef set_direction
 

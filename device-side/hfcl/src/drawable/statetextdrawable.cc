@@ -29,80 +29,80 @@ namespace hfcl {
 
 void StateTextDrawable::draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data/* = 0*/, DR_DATA_TYPE type/* = DRDT_NONE*/)
 {
-	const char* str = NULL; 
-	HTData format;
-	if(type == DRDT_TEXT) {
-		format = 0;
-		format = TextMode::setAlign(format, getElement(SYS_SE_TEXTALIGN));
-		format = TextMode::setVAlign(format, getElement(SYS_SE_TEXTVALIGN));
-		format = TextMode::setBreak(format, getElement(SYS_SE_TEXTBREAK));
-		//format = TextMode::setTextOutMode(format, getElement(SYS_SE_TEXTOUTMODE));
-		format = TextMode::setTextOutLineMode(format, getElement(SYS_SE_TEXTOUTLINEMODE));
-		format |= getElement(SYS_SE_TEXTOUTMODE);
+    const char* str = NULL;
+    HTData format;
+    if(type == DRDT_TEXT) {
+        format = 0;
+        format = TextMode::setAlign(format, getElement(SYS_SE_TEXTALIGN));
+        format = TextMode::setVAlign(format, getElement(SYS_SE_TEXTVALIGN));
+        format = TextMode::setBreak(format, getElement(SYS_SE_TEXTBREAK));
+        //format = TextMode::setTextOutMode(format, getElement(SYS_SE_TEXTOUTMODE));
+        format = TextMode::setTextOutLineMode(format, getElement(SYS_SE_TEXTOUTLINEMODE));
+        format |= getElement(SYS_SE_TEXTOUTMODE);
 
-		str = (const char*)data;
-	}
-	else if(type == DRDT_FORMATTEXT) {
-		FormatText * ft = (FormatText*)data;
-		if(ft) {
-			str = ft->text;
-			format = ft->textFormat;
-		}
-	}
+        str = (const char*)data;
+    }
+    else if(type == DRDT_FORMATTEXT) {
+        FormatText * ft = (FormatText*)data;
+        if(ft) {
+            str = ft->text;
+            format = ft->textFormat;
+        }
+    }
 
-	if(!str)
-		return;
+    if(!str)
+        return;
 
-	Logfont *font  = (Logfont *)getElement(SYS_GET_STATE_FONT_ID(draw_state));
-	if(!font)
-		font = (Logfont *)getElement(SYS_SE_FONT);
-	HTData color = getElement(SYS_GET_STATE_COLOR_ID(draw_state));
-	gc->drawText(str, rc, color, font, format);
+    Logfont *font  = (Logfont *)getElement(SYS_GET_STATE_FONT_ID(draw_state));
+    if(!font)
+        font = (Logfont *)getElement(SYS_SE_FONT);
+    HTData color = getElement(SYS_GET_STATE_COLOR_ID(draw_state));
+    gc->drawText(str, rc, color, font, format);
 }
 
 bool StateTextDrawable::calcDrawableSize(int draw_state, int& w, int& h, DWORD data, DR_DATA_TYPE type)
 {
-	const char* str = NULL; 
-	HTData format;
+    const char* str = NULL;
+    HTData format;
 
-	if(type == DRDT_TEXT)
-	{
-		format = 0;
-		format = TextMode::setAlign(format, getElement(SYS_SE_TEXTALIGN));
-		format = TextMode::setVAlign(format, getElement(SYS_SE_TEXTVALIGN));
-		format = TextMode::setBreak(format, getElement(SYS_SE_TEXTBREAK));
-		//format = TextMode::setTextOutMode(format, getElement(SYS_SE_TEXTOUTMODE));
-		format |= getElement(SYS_SE_TEXTOUTMODE);
+    if(type == DRDT_TEXT)
+    {
+        format = 0;
+        format = TextMode::setAlign(format, getElement(SYS_SE_TEXTALIGN));
+        format = TextMode::setVAlign(format, getElement(SYS_SE_TEXTVALIGN));
+        format = TextMode::setBreak(format, getElement(SYS_SE_TEXTBREAK));
+        //format = TextMode::setTextOutMode(format, getElement(SYS_SE_TEXTOUTMODE));
+        format |= getElement(SYS_SE_TEXTOUTMODE);
 
-		str = (const char*)data;
-	}
-	else if(type == DRDT_FORMATTEXT)
-	{
-		FormatText * ft = (FormatText*)data;
-		if(ft) {
-			str = ft->text;
-			format = ft->textFormat;
-		}
-	}
+        str = (const char*)data;
+    }
+    else if(type == DRDT_FORMATTEXT)
+    {
+        FormatText * ft = (FormatText*)data;
+        if(ft) {
+            str = ft->text;
+            format = ft->textFormat;
+        }
+    }
 
-	if(!str)
-		return false;
+    if(!str)
+        return false;
 
 
-	if(format & TextMode::SingleLine)
-	{
-		w = GraphicsContext::screenGraphics()->drawTextToGetLenght(str);
-	}
-	else
-	{
-		IntRect rc(0, 0, w, h);
-		Logfont *font  = (Logfont *)getElement(SYS_GET_STATE_FONT_ID(draw_state));
-		if(!font)
-		    font = (Logfont *)getElement(SYS_SE_FONT);
-	
-		h = GraphicsContext::screenGraphics()->drawTextToCalcRect(str, rc, format,font);
-	}
-	return true;
+    if(format & TextMode::SingleLine)
+    {
+        w = GraphicsContext::screenGraphics()->drawTextToGetLenght(str);
+    }
+    else
+    {
+        IntRect rc(0, 0, w, h);
+        Logfont *font  = (Logfont *)getElement(SYS_GET_STATE_FONT_ID(draw_state));
+        if(!font)
+            font = (Logfont *)getElement(SYS_SE_FONT);
+
+        h = GraphicsContext::screenGraphics()->drawTextToCalcRect(str, rc, format,font);
+    }
+    return true;
 }
 
 } // namespace hfcl

@@ -29,13 +29,13 @@ TimerService::TimerService()
 
 TimerService::~TimerService()
 {
-    stop();   
+    stop();
 }
 
 BOOL TimerService::TimerProc (HWND listener, LINT id, DWORD data)
 {
-	Event::EventType eventType = Event::TIMER;
-	TimerEvent event(eventType, id);
+    Event::EventType eventType = Event::TIMER;
+    TimerEvent event(eventType, id);
 
     if(listener != 0)
         ((TimerEventListener *)(listener))->handleEvent(&event);
@@ -45,8 +45,8 @@ BOOL TimerService::TimerProc (HWND listener, LINT id, DWORD data)
 
 BOOL TimerService::OneShotTimerProc (HWND listener, LINT id, DWORD data)
 {
-	Event::EventType eventType = Event::TIMER;
-	TimerEvent event(eventType, id);
+    Event::EventType eventType = Event::TIMER;
+    TimerEvent event(eventType, id);
 
     if(listener != 0)
         ((TimerEventListener *)(listener))->handleEvent(&event);
@@ -66,7 +66,7 @@ int TimerService::addTimerListener (int interval, TimerEventListener* listener,
                 this, listener, listenername);
 #endif
         LINT id = (LINT)listenername;
-	    if (SetTimerEx ((HWND)listener, id, interval/10,
+        if (SetTimerEx ((HWND)listener, id, interval/10,
                 TimerService::TimerProc)) {
             return id;
         }
@@ -91,7 +91,7 @@ int TimerService::addTimerListenerSingle(int interval,
                 this, listener, listenername);
 #endif
         LINT id = (LINT)listenername;
-	    if (SetTimerEx ((HWND)listener, id, interval/10,
+        if (SetTimerEx ((HWND)listener, id, interval/10,
                 TimerService::OneShotTimerProc))
             return id;
         else {
@@ -105,27 +105,27 @@ int TimerService::addTimerListenerSingle(int interval,
 void TimerService::removeTimerListener(TimerEventListener* listener, int id)
 {
     if (id != 0)
-	    KillTimer((HWND)listener, id);
+        KillTimer((HWND)listener, id);
 }
 
 void TimerService::pause()
 {
-	//TODO
+    //TODO
 }
 
 void TimerService::resume()
 {
-	//TODO
+    //TODO
 }
 
 void TimerService::start(void)
 {
-	//TODO
+    //TODO
 }
 
 void TimerService::stop(void)
 {
-	//TODO
+    //TODO
 }
 
 bool TimerService::canStop(void)

@@ -74,7 +74,7 @@ public:
 
     virtual void autoFitSize(bool auto_child_fit = false);
 
-    virtual void onChildSizeChanged(View* child) { 
+    virtual void onChildSizeChanged(View* child) {
         if(isAutoSize()) {
             autoFitSize();
             if(parent())

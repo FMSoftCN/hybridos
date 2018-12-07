@@ -26,9 +26,9 @@ namespace hfcl {
 MethodEventListener::MethodEventListener (void* ctx, EventHandle event_handle, int event_type)
     :EventListener(0)
 {
-	m_ctx = ctx;
-	m_eventHandle = event_handle;
-	m_eventType = event_type;
+    m_ctx = ctx;
+    m_eventHandle = event_handle;
+    m_eventType = event_type;
 }
 
 MethodEventListener::~MethodEventListener()
@@ -37,11 +37,11 @@ MethodEventListener::~MethodEventListener()
 
 bool MethodEventListener::handleEvent(Event* event)
 {
-	if (m_ctx && m_eventHandle && event && (m_eventType == 0 || event->eventType() == m_eventType)) {
-		(((MethodEventListener*) m_ctx)->*m_eventHandle)(event);
-		return EVENT_HANDLED;
-	}
-	return EVENT_NOT_HANDLED;
+    if (m_ctx && m_eventHandle && event && (m_eventType == 0 || event->eventType() == m_eventType)) {
+        (((MethodEventListener*) m_ctx)->*m_eventHandle)(event);
+        return EVENT_HANDLED;
+    }
+    return EVENT_NOT_HANDLED;
 }
 
 } // namespace hfcl

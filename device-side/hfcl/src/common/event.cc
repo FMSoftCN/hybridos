@@ -27,48 +27,48 @@ bool EventBroadcaster::raiseEvent (Event* event)
 {
     EventListenerList::iterator it, next;
 
-	if(m_listeners.size() <= 0)
-		return true;
+    if(m_listeners.size() <= 0)
+        return true;
 
     for (it = m_listeners.begin(); it != m_listeners.end(); ){
         m_current_raise = *it;
-		next = ++it;
+        next = ++it;
 
-		// hal_HstSendEvent(0xcc9cFFFF);
+        // hal_HstSendEvent(0xcc9cFFFF);
         if(m_current_raise) {
-     		// hal_HstSendEvent((UINT32)(m_current_raise));			
+             // hal_HstSendEvent((UINT32)(m_current_raise));
             m_current_raise->handleEvent(event);
         }
 
         // in handleEvent, some may be removed, so we need to see.
         if(m_want_to_remove) {
-			// 1. remove current one, we just remove it here
-			if(m_want_to_remove == m_current_raise) {
-				m_listeners.remove(m_want_to_remove);
-			}
-			// 2. remove next one, we just jump over "next", then remove "next"
-			// it now is next, we so			
-			else if(m_want_to_remove == (*next)) {
-				// end? we are done, no need to remove
-				if(next == m_listeners.end())
-					break;
+            // 1. remove current one, we just remove it here
+            if(m_want_to_remove == m_current_raise) {
+                m_listeners.remove(m_want_to_remove);
+            }
+            // 2. remove next one, we just jump over "next", then remove "next"
+            // it now is next, we so
+            else if(m_want_to_remove == (*next)) {
+                // end? we are done, no need to remove
+                if(next == m_listeners.end())
+                    break;
 
-				// not end? we should move next->next
-				++it;
+                // not end? we should move next->next
+                ++it;
 
-				// then real remove "next"
-				m_listeners.remove(*next);
-			}
-			// 3. remove other, we just remove here, everything is OK			
-			else {
-				m_listeners.remove(m_want_to_remove);
-			}
+                // then real remove "next"
+                m_listeners.remove(*next);
+            }
+            // 3. remove other, we just remove here, everything is OK
+            else {
+                m_listeners.remove(m_want_to_remove);
+            }
 
-			m_want_to_remove = NULL;
-	    }
+            m_want_to_remove = NULL;
+        }
     }
 
-	m_want_to_remove = NULL;
+    m_want_to_remove = NULL;
     m_current_raise = NULL;
     return true;
 }
@@ -79,7 +79,7 @@ void EventBroadcaster::addEventListener(EventListener* listener)
         return;
     }
 
-	// we push back that if add when raiseEvent it is OK
+    // we push back that if add when raiseEvent it is OK
     m_listeners.push_back(listener);
 }
 
@@ -92,13 +92,13 @@ void EventBroadcaster::removeEventListener(EventListener* listener)
     // FIXME, remove when raiseEvent, we need to avoid abort
     // 1. if we are in raiseEvent, we can NOT remove, we just mark the object
     // we will remove in raiseEvent.
-	if (m_current_raise != NULL) {
-		m_want_to_remove = listener;
-	}
-	// 2. if we are not in raiseEvent, we just remove it.
-	else {
-    	m_listeners.remove(listener);
-	}
+    if (m_current_raise != NULL) {
+        m_want_to_remove = listener;
+    }
+    // 2. if we are not in raiseEvent, we just remove it.
+    else {
+        m_listeners.remove(listener);
+    }
 }
 
 void EventBroadcaster::releaseEventListeners()
@@ -126,8 +126,8 @@ void EventBroadcaster::releaseEventListeners()
     }
     while (true);
 
-	m_current_raise = NULL;
-	m_want_to_remove = NULL;
+    m_current_raise = NULL;
+    m_want_to_remove = NULL;
 }
 
 } // namespace hfcl

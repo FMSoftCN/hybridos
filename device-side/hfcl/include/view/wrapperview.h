@@ -33,37 +33,37 @@ namespace hfcl {
 class WrapperView : public View     // GT_jyseo rollback  , public EventListener
 {
 public:
-	WrapperView(View *p_parent):View(p_parent, DEFAULT_VIEW_DRAWABLESET(WrapperView)) {  }
-	WrapperView(View *p_parent, DrawableSet* drset)
-		:View(p_parent, drset) {  }
+    WrapperView(View *p_parent):View(p_parent, DEFAULT_VIEW_DRAWABLESET(WrapperView)) {  }
+    WrapperView(View *p_parent, DrawableSet* drset)
+        :View(p_parent, drset) {  }
 
-	~WrapperView();
+    ~WrapperView();
     void hide();
     void show();
     void showCaret(bool show);
     bool isWrapprVisible ();
-	//virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
+    //virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 protected:
-	typedef unsigned int HANDLE;
-	HANDLE m_wrapwnd; // the minigui window handle 
+    typedef unsigned int HANDLE;
+    HANDLE m_wrapwnd; // the minigui window handle
 
-	virtual void createWnd(const char * wnd_class);
-	void detachWnd();
+    virtual void createWnd(const char * wnd_class);
+    void detachWnd();
 
 private:
-	static void _notify_proc(HANDLE handle, int id, int nc, DWORD add_data);
-	bool onKeyPressed(int keyCode);
+    static void _notify_proc(HANDLE handle, int id, int nc, DWORD add_data);
+    bool onKeyPressed(int keyCode);
 #if 0   // GT_jyseo rollback
-	bool handleEvent(Event* event);
-	void closeTimer(void);
-#endif    
-	void calcWndRect(IntRect& r);
+    bool handleEvent(Event* event);
+    void closeTimer(void);
+#endif
+    void calcWndRect(IntRect& r);
 #if 0   // GT_jyseo rollback
-	int m_timerId;
-	int m_timerCount;
-#endif  	
-	int m_pressedKey;
-	int m_keyStatus;
+    int m_timerId;
+    int m_timerCount;
+#endif
+    int m_pressedKey;
+    int m_keyStatus;
 
 public:
     enum{
@@ -80,46 +80,46 @@ public:
         TEXT_INSERT = 0x000F0C0L,
         TEXT_MSG_CHAR = 0X11,
     };
-	enum {
-		NOTIFY_BEGIN = CustomEvent::CUS_MAX,
-		NOTIFY_EDIT_CHANGED = 1000,
-		NOTIFY_EDIT_ENTER,  // only in single-line edit
-		NOTIFY_EDIT_MAXTEXT,
-	};
-	void setText(const char * str);
-	void setText(string str) { setText(str.c_str()); }
-	string getText();
+    enum {
+        NOTIFY_BEGIN = CustomEvent::CUS_MAX,
+        NOTIFY_EDIT_CHANGED = 1000,
+        NOTIFY_EDIT_ENTER,  // only in single-line edit
+        NOTIFY_EDIT_MAXTEXT,
+    };
+    void setText(const char * str);
+    void setText(string str) { setText(str.c_str()); }
+    string getText();
     void setViewStyle(int dwStyle, bool isInclde);
     void setIncludeStyle(int dwStyle) { setViewStyle(dwStyle, true); }
     void setExcludeStyle(int dwStyle) { setViewStyle(dwStyle, false); }
     void setTextMaxLimit(int max);
-	void insertText(const char *text);
-	void replacePrevChar(const char *ch);
+    void insertText(const char *text);
+    void replacePrevChar(const char *ch);
     unsigned long  viewStyle(void);
-	virtual HPlatformOwner getPlatformOwner() { return m_wrapwnd; }
-	virtual void getOwnerOffset(int &x, int &y) { /* stop the offset  */}
+    virtual HPlatformOwner getPlatformOwner() { return m_wrapwnd; }
+    virtual void getOwnerOffset(int &x, int &y) { /* stop the offset  */}
 
     bool setRect(const IntRect& pirc);
-	// to void drived class overide the base class 's function
-    bool setRect(int left, int top, int right, int bottom) { 
-		return View::setRect(left, top, right, bottom); 
-	}
+    // to void drived class overide the base class 's function
+    bool setRect(int left, int top, int right, int bottom) {
+        return View::setRect(left, top, right, bottom);
+    }
 
-	void setFont (Font *f) {
-		SetWindowFont(m_wrapwnd, f->getLogfont());
-	}
+    void setFont (Font *f) {
+        SetWindowFont(m_wrapwnd, f->getLogfont());
+    }
 
-	virtual bool dispatchEvent(Event *event);
+    virtual bool dispatchEvent(Event *event);
 
-	virtual void onGetFocus(void);
-	virtual void onLoseFocus(void);
+    virtual void onGetFocus(void);
+    virtual void onLoseFocus(void);
 
-	bool isWrapperView() { return true;}
+    bool isWrapperView() { return true;}
 
 protected:
-	virtual int notifyToEventType(int nc_code) { return 0; }
+    virtual int notifyToEventType(int nc_code) { return 0; }
 
-	DECLARE_CLASS_NAME(WrapperView)
+    DECLARE_CLASS_NAME(WrapperView)
 };
 
 

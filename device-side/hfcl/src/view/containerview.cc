@@ -87,7 +87,7 @@ bool ContainerView::insertAfter(View* view, View *child)
     View *next = NULL;
     if(view && view->parent() != this)
         return false;
-    
+
     if(!child)
         return false;
 
@@ -96,7 +96,7 @@ bool ContainerView::insertAfter(View* view, View *child)
 
     if(child->parent())
         child->parent()->detachChild(child);
-    
+
     child->setPrevSlibling(view);
     if(view)
     {
@@ -112,7 +112,7 @@ bool ContainerView::insertAfter(View* view, View *child)
 
     if(view == m_lastChild)
         m_lastChild = child;
-    
+
     if(!m_firstChild)
         m_firstChild = child;
 
@@ -123,13 +123,13 @@ bool ContainerView::insertAfter(View* view, View *child)
 }
 
 bool ContainerView::insertBefore(int idx, View* child)
-{ 
+{
     if(!child)
         return false;
-    if(idx < 0) 
+    if(idx < 0)
         return insertAfter(lastChild(), child);
     else
-        return insertBefore(getChildByIndex(idx), child); 
+        return insertBefore(getChildByIndex(idx), child);
 }
 
 bool ContainerView::insertBefore(View *view, View* child)
@@ -243,7 +243,7 @@ int ContainerView::detachChild(View* view)
 
     if(m_focusView == view)
     {
-        m_focusView = NULL;    
+        m_focusView = NULL;
     }
 
     return 0;
@@ -304,14 +304,14 @@ View* ContainerView::getView (int i_id) const
             if(c)
                 return c;
         }
-            
+
     }
     return NULL;
 }
 
 View *ContainerView::getChildByPosition(int x_pos, int y_pos) const
 {
-    for(View *view = lastChild(); NULL != view ; view = view->previousSibling()) 
+    for(View *view = lastChild(); NULL != view ; view = view->previousSibling())
     {
         IntRect irc = view->getRect();
         if (irc.contains(x_pos, y_pos)){
@@ -418,7 +418,7 @@ bool ContainerView::dispatchEvent(Event* event)
                 int y = ((MouseEvent *)event)->y();
                 focusMe();
                 windowToView(&x, &y);
-                while (view != (View *)0) 
+                while (view != (View *)0)
                 {
                     if(view->getRect().isIn(x, y))
                     {
@@ -433,7 +433,7 @@ bool ContainerView::dispatchEvent(Event* event)
             }
         case Event::KEY_DOWN:
         case Event::KEY_LONGPRESSED:
-        case Event::KEY_ALWAYSPRESS:        // GT_yhkang add longpress event    
+        case Event::KEY_ALWAYSPRESS:        // GT_yhkang add longpress event
         case Event::KEY_UP:
         case Event::KEY_CHAR:
             {
@@ -464,7 +464,7 @@ void ContainerView::setFocusView(View* view)
         old_focusView->onLoseFocus();
 
     setFocusValid(true);
-    
+
     m_focusView->onGetFocus();
 
     if (m_focusView->isContainerView()){
@@ -483,13 +483,13 @@ void ContainerView::releaseFocusView(void)
 
     old_focusView = m_focusView;
     m_focusView = NULL;
-    
+
     old_focusView->onLoseFocus();
     if (old_focusView->isContainerView()){
         ((ContainerView *)old_focusView)->releaseFocusView();
     }
     setFocusValid(false);
-    
+
     // FIXME ylwang changed at 2012-04-06
     /*
     CustomEvent event(Event::CUSTOM_NOTIFY, (int)NOTIFY_LOSE_FOCUS, (int)m_focusView);
@@ -497,10 +497,10 @@ void ContainerView::releaseFocusView(void)
     */
 }
 
-void ContainerView::autoFitSize(bool auto_child_fit) 
+void ContainerView::autoFitSize(bool auto_child_fit)
 {
     IntRect rc;
-    for(View *view = firstChild(); view ; view = view->nextSibling()) 
+    for(View *view = firstChild(); view ; view = view->nextSibling())
     {
         if(auto_child_fit)
             view->autoFitSize(true);

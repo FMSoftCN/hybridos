@@ -28,7 +28,7 @@
 
 namespace hfcl {
 
-class Transition 
+class Transition
 {
 public:
     virtual bool isEnd() = 0;
@@ -39,7 +39,7 @@ public:
     virtual void release() { HFCL_DELETE(this); }
 };
 
-class TransitionManager : TimerEventListener {	
+class TransitionManager : TimerEventListener {
 public:
     MAP(unsigned int, Transition*, TransitionMap)
 
@@ -49,8 +49,8 @@ public:
     int m_interval;
 
 public:
-    TransitionManager() { 
-        m_timerId = 0; 
+    TransitionManager() {
+        m_timerId = 0;
         m_interval = 300;
     }
 
@@ -74,7 +74,7 @@ protected:
     unsigned int  m_offsetStep:12;
     int m_countdown;
 
-public:	
+public:
     RollTextTransition(View *owner, int step) : m_owner(owner) {
         m_offsetStep = step;
         m_offset = 0;
@@ -84,14 +84,14 @@ public:
 
     int getOffset() { return m_offset; }
 
-    void update() { 
-        if(--m_countdown > 0) 
-            return; 
+    void update() {
+        if(--m_countdown > 0)
+            return;
 
-        nextOffset(); 
+        nextOffset();
 
-        if(m_owner) 
-            m_owner->updateView(); 
+        if(m_owner)
+            m_owner->updateView();
     }
 
     bool isEnd() { return m_owner == NULL; }
@@ -114,7 +114,7 @@ public:
 
 ///the common functions
 TransitionManager* GetCommonTransitionManager();
-Transition* GetTransition(HTData key);	
+Transition* GetTransition(HTData key);
 void AddRollText(View *view, Transition* t);
 void RemoveRollText(View* view);
 void ResetRollText(View *view);

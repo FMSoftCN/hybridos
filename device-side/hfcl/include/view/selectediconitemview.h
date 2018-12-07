@@ -31,33 +31,33 @@ namespace hfcl {
 class SelectedIconItemView : public ItemView
 {
 public:
-	SelectedIconItemView() { }
-	SelectedIconItemView(View *p_parent)
-		:ItemView(p_parent, DEFAULT_VIEW_DRAWABLESET(SelectedIconItemView))
-		,m_normalImg(NULL)
-		,m_selImg(NULL)
-	{ }
-	SelectedIconItemView(View *p_parent, DrawableSet* drset)
-		:ItemView(p_parent ,drset)
-		,m_normalImg(NULL)
-		,m_selImg(NULL)
-	{ }
+    SelectedIconItemView() { }
+    SelectedIconItemView(View *p_parent)
+        :ItemView(p_parent, DEFAULT_VIEW_DRAWABLESET(SelectedIconItemView))
+        ,m_normalImg(NULL)
+        ,m_selImg(NULL)
+    { }
+    SelectedIconItemView(View *p_parent, DrawableSet* drset)
+        :ItemView(p_parent ,drset)
+        ,m_normalImg(NULL)
+        ,m_selImg(NULL)
+    { }
 
-	virtual ~SelectedIconItemView();
+    virtual ~SelectedIconItemView();
 
-	void setNormalImage(Image *img);
-	void setSelectedImage(Image* img);
+    void setNormalImage(Image *img);
+    void setSelectedImage(Image* img);
 
-	Image* getNormalImage() { return m_normalImg; }
-	Image* getSelectedImage() { return m_selImg; }
+    Image* getNormalImage() { return m_normalImg; }
+    Image* getSelectedImage() { return m_selImg; }
 
-	void drawContent(GraphicsContext* context, IntRect &rc, int status);
+    void drawContent(GraphicsContext* context, IntRect &rc, int status);
 
 protected:
-	Image* m_normalImg;
-	Image* m_selImg;
+    Image* m_normalImg;
+    Image* m_selImg;
 
-	DECLARE_CLASS_NAME(SelectedIconItemView)
+    DECLARE_CLASS_NAME(SelectedIconItemView)
 
 };
 

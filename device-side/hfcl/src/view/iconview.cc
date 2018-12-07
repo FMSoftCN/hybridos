@@ -64,13 +64,13 @@ void IconView::makeHilightVisible()
         int offY = m_offy;
         IntRect rc = f->getRect();
         getSize(NULL, &h); //get the viewport size
-        
+
         if ((offY + h) < rc.m_bottom)
             offY = rc.m_bottom - h;
 
         if (offY > rc.m_top)
             offY = rc.m_top;
-        
+
         moveViewport(m_offx, offY);
     }
 }

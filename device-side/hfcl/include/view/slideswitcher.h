@@ -20,14 +20,14 @@
 */
 
 
-#ifndef  _SLIDESWITCHER_H 
+#ifndef  _SLIDESWITCHER_H
 #define  _SLIDESWITCHER_H
 
 #include "panelview.h"
 
 namespace hfcl {
 
-class SlideSwitcher : public PanelView  
+class SlideSwitcher : public PanelView
 {
     public:
         typedef enum __enumSlideStyle
@@ -35,13 +35,13 @@ class SlideSwitcher : public PanelView
             Vertical = 0,
             Horizontal
         }SlideStyle;
-        
+
         /**
          * Constructor/Destructor
          */
         SlideSwitcher(View* parent);
-		SlideSwitcher(View* parent, DrawableSet* drset);
-		SlideSwitcher(View* parent, int id, int x, int y, int w, int h, SlideStyle style, int gap_w);
+        SlideSwitcher(View* parent, DrawableSet* drset);
+        SlideSwitcher(View* parent, int id, int x, int y, int w, int h, SlideStyle style, int gap_w);
         ~SlideSwitcher();
         /**
          * Add/Remove A Item To/From SlideSwitcher
@@ -56,7 +56,7 @@ class SlideSwitcher : public PanelView
         void setItemHeight(int h) { m_item_height = h; }
         int itemHeight(void) { return m_item_height; }
         void setGapWidth(int w) { m_gap_w = w; }
-		int gapWidth(){ return m_gap_w; }
+        int gapWidth(){ return m_gap_w; }
         /**
          * Set/Get Style
          */
@@ -69,7 +69,7 @@ class SlideSwitcher : public PanelView
         /**
          * Relayout The SlideSwitcher
          */
-		void reLayout(void);
+        void reLayout(void);
         /**
          * @brief Calculate Item's Rect according to Item's offset index to Center(Focus) Item
          *
@@ -96,7 +96,7 @@ class SlideSwitcher : public PanelView
          */
         View* focusItem(void) { return m_curr_focus_view; };
 
-        //bool handleEvent(Event* event);     // GT_jyseo rollback 
+        //bool handleEvent(Event* event);     // GT_jyseo rollback
 
     protected:
         /**
@@ -104,7 +104,7 @@ class SlideSwitcher : public PanelView
          */
         void focusPrevItem();
         void focusNextItem();
-     
+
         bool onKeyPressed(int keyCode);
     private:
         /**
@@ -124,7 +124,7 @@ class SlideSwitcher : public PanelView
          * Current Focus View
          */
         View* m_curr_focus_view;
-	
+
         DECLARE_CLASS_NAME(SlideSwitcher)
 };
 

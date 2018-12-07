@@ -57,7 +57,7 @@ MultiFieldEditor::~MultiFieldEditor()
 {
 }
 
-void MultiFieldEditor::multiFieldEditorInit(int field_count, const char ** p_content_array, 
+void MultiFieldEditor::multiFieldEditorInit(int field_count, const char ** p_content_array,
                 const char ** p_formator_array, char* p_content_max_nr, int* p_value_range, FIELD_FORMAT field_format, int date_system
                 )
 {
@@ -83,8 +83,8 @@ void MultiFieldEditor::multiFieldEditorInit(int field_count, const char ** p_con
         2,
         4
     };
-    
-    int range[] = 
+
+    int range[] =
     {
         1, 12,
         1, 31,
@@ -92,8 +92,8 @@ void MultiFieldEditor::multiFieldEditorInit(int field_count, const char ** p_con
     };
 
     // FormatEditView init
-    initEditor(field_count, p_content_array?p_content_array:content, 
-            p_formator_array?p_formator_array:formator, 
+    initEditor(field_count, p_content_array?p_content_array:content,
+            p_formator_array?p_formator_array:formator,
             p_content_max_nr?p_content_max_nr:max_char
             );
 
@@ -129,7 +129,7 @@ bool MultiFieldEditor::dispatchEvent(Event* event)
 }
 
 bool MultiFieldEditor::onChangeField(void)
-{ 
+{
     return true;
 }
 
@@ -270,7 +270,7 @@ void MultiFieldEditor::checkDays(void)
         else
             m_field_content[0] = buf;
 
-        addZero();        
+        addZero();
     }
 }
 

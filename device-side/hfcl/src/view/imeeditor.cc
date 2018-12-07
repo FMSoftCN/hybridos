@@ -100,20 +100,20 @@ void TimeEditor::timeEditorInit(void)
 #else
     if (false && m_format == F12HOUR)
 #endif
-    { 
+    {
         m_field_ap = FIELD0;
         m_field_h = FIELD1;
         m_field_m = FIELD2;
-        
-        initEditor(3, arbcontent, arbformator, max_char); 
+
+        initEditor(3, arbcontent, arbformator, max_char);
     }
     else
     {
         m_field_h = FIELD0;
         m_field_m = FIELD1;
         m_field_ap = FIELD2;
-        
-        initEditor(3, content, formator, max_char); 
+
+        initEditor(3, content, formator, max_char);
     }
 }
 
@@ -181,7 +181,7 @@ bool TimeEditor::isAm(void)
 }
 
 void TimeEditor::setTimeFormat(TimeFormat format)
-{ 
+{
     int num = 0;
     char buf[64];
     int i;
@@ -200,7 +200,7 @@ void TimeEditor::setTimeFormat(TimeFormat format)
         m_min_m = 0;
 
         m_field_count = 3;
-        
+
         num = atoi(m_field_content[m_field_h].c_str());
 
         // pm
@@ -217,7 +217,7 @@ void TimeEditor::setTimeFormat(TimeFormat format)
                 sprintf(buf, "%02d", 12);
                 m_field_content[m_field_h] = buf;
             }
-        } 
+        }
 
 #ifdef ENABLE_BIDI_LANGUAGE
         if (IsArabicSet())
@@ -227,7 +227,7 @@ void TimeEditor::setTimeFormat(TimeFormat format)
         {
             string content[3];
             string temp;
-    
+
             content[FIELD0] = m_field_content[m_field_ap];
             content[FIELD1] = m_field_content[m_field_h];
             content[FIELD2] = m_field_content[m_field_m];
@@ -235,7 +235,7 @@ void TimeEditor::setTimeFormat(TimeFormat format)
             m_field_ap = FIELD0;
             m_field_h = FIELD1;
             m_field_m = FIELD2;
-            
+
             for (i = 0; i < 3; ++i) {
                 m_field_content[i] = content[i];
             }
@@ -244,7 +244,7 @@ void TimeEditor::setTimeFormat(TimeFormat format)
             m_formators[FIELD0] = m_formators[FIELD1];
             m_formators[FIELD1] = temp;
         }
-                    
+
     }
     // change from F12HOUR
     else {
@@ -297,10 +297,10 @@ void TimeEditor::setTimeFormat(TimeFormat format)
             m_formators[FIELD0] = m_formators[FIELD1];
             m_formators[FIELD1] = temp;
         }
-        
+
     }
 
-    refresh(); 
+    refresh();
 }
 
 void TimeEditor::refresh(void)
@@ -312,7 +312,7 @@ bool TimeEditor::dispatchEvent(Event* event)
 {
     // 2 means am/pm field
     if (m_current_index == m_field_ap
-            && event->eventType() == Event::KEY_UP 
+            && event->eventType() == Event::KEY_UP
             && ((KeyEvent*)event)->keyCode() != KeyEvent::KEYCODE_CURSOR_LEFT
             && ((KeyEvent*)event)->keyCode() != KeyEvent::KEYCODE_CURSOR_RIGHT) {
 
@@ -337,7 +337,7 @@ bool TimeEditor::dispatchEvent(Event* event)
 }
 
 bool TimeEditor::onChangeField(void)
-{ 
+{
     return true;
 }
 
@@ -345,7 +345,7 @@ bool TimeEditor::checkContent(void)
 {
     int num = 0, tmp = 0;
     char buf[64];
-    
+
     if (-1 == m_current_index || m_field_ap == m_current_index)
         return false;
 

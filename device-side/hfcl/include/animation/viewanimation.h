@@ -32,7 +32,7 @@ class ViewAnimation  : public Animation
     protected:
         View * m_view;
     public:
-        ViewAnimation(View *view, enum EffVariantType varianttype); 
+        ViewAnimation(View *view, enum EffVariantType varianttype);
         virtual ~ViewAnimation();
 
         inline void setView(View *view){ m_view = view; }

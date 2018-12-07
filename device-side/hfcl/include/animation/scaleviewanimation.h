@@ -25,21 +25,21 @@
 
 namespace hfcl {
 
-class ScaleViewAnimation  : public ViewAnimation 
+class ScaleViewAnimation  : public ViewAnimation
 {
     public:
         ScaleViewAnimation(View *view, IntRect &rect)
-			:ViewAnimation(view, MGEFF_RECT){
-			//setStartValue((void *)&(view->getRect()));
-			setEndValue((void *)&rect);		
-		}
+            :ViewAnimation(view, MGEFF_RECT){
+            //setStartValue((void *)&(view->getRect()));
+            setEndValue((void *)&rect);
+        }
         virtual ~ScaleViewAnimation(){
 
-		}
+        }
 
-	protected:
-		void setProperty(int id, void* value);
-		void onStart();
+    protected:
+        void setProperty(int id, void* value);
+        void onStart();
 };
 
 } // namespace hfcl

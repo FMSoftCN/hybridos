@@ -25,20 +25,20 @@
 namespace hfcl {
 
 SlideSwitcher::SlideSwitcher(View * p_parent, DrawableSet* drset)
-	:PanelView(p_parent, drset)
-	, m_gap_w(0)
+    :PanelView(p_parent, drset)
+    , m_gap_w(0)
     , m_style(Horizontal)
     , m_item_width(0)
     , m_item_height(0)
     , m_curr_focus_view(NULL)
 //    , m_timerId(0)    // GT_jyseo rollback
-//    , m_pressedKey(0)     // GT_jyseo rollback 
+//    , m_pressedKey(0)     // GT_jyseo rollback
 {
 }
 
 SlideSwitcher::SlideSwitcher(View * p_parent)
-	:PanelView(p_parent, DEFAULT_VIEW_DRAWABLESET(SlideSwitcher))
-	, m_gap_w(0)
+    :PanelView(p_parent, DEFAULT_VIEW_DRAWABLESET(SlideSwitcher))
+    , m_gap_w(0)
     , m_style(Horizontal)
     , m_item_width(0)
     , m_item_height(0)
@@ -48,10 +48,10 @@ SlideSwitcher::SlideSwitcher(View * p_parent)
 {
 }
 
-SlideSwitcher::SlideSwitcher(View * p_parent, int i_id, int x, int y, 
-		int w, int h, SlideStyle style, int gap_w)
-	: PanelView(i_id, x, y, w, h)
-	, m_gap_w(gap_w)
+SlideSwitcher::SlideSwitcher(View * p_parent, int i_id, int x, int y,
+        int w, int h, SlideStyle style, int gap_w)
+    : PanelView(i_id, x, y, w, h)
+    , m_gap_w(gap_w)
     , m_style(style)
     , m_item_width(0)
     , m_item_height(0)
@@ -108,11 +108,11 @@ void SlideSwitcher::calcuItemRect(int offindex, IntRect& rect, bool forward)
         if (Horizontal == m_style) {
             rect.setRect(
                     // left
-                    getRect().width()/2 - m_item_width/2, 
+                    getRect().width()/2 - m_item_width/2,
                     // top
-                    (getRect().height() - m_item_height)/2, 
+                    (getRect().height() - m_item_height)/2,
                     // right
-                    getRect().width()/2 + m_item_width/2, 
+                    getRect().width()/2 + m_item_width/2,
                     // bottom
                     getRect().height() - ((getRect().height() - m_item_height)/2));
         }
@@ -120,11 +120,11 @@ void SlideSwitcher::calcuItemRect(int offindex, IntRect& rect, bool forward)
         else {
             rect.setRect(
                     // left
-                    (getRect().width() - m_item_width)/2, 
+                    (getRect().width() - m_item_width)/2,
                     // top
-                    getRect().height()/2 - m_item_height/2, 
+                    getRect().height()/2 - m_item_height/2,
                     // right
-                    getRect().width() - (getRect().width() - m_item_width)/2, 
+                    getRect().width() - (getRect().width() - m_item_width)/2,
                     // bottom
                     getRect().height()/2 + m_item_height/2
                     );
@@ -139,11 +139,11 @@ void SlideSwitcher::calcuItemRect(int offindex, IntRect& rect, bool forward)
         if (Horizontal == m_style) {
             rect.setRect(
                     // left
-                    m_curr_focus_view->getRect().right() + offindex*m_gap_w + (offindex - 1)*m_item_width, 
+                    m_curr_focus_view->getRect().right() + offindex*m_gap_w + (offindex - 1)*m_item_width,
                     // top
-                    m_curr_focus_view->getRect().top(), 
+                    m_curr_focus_view->getRect().top(),
                     // right
-                    m_curr_focus_view->getRect().right() + offindex*m_gap_w + offindex*m_item_width, 
+                    m_curr_focus_view->getRect().right() + offindex*m_gap_w + offindex*m_item_width,
                     // bottom
                     m_curr_focus_view->getRect().bottom());
         }
@@ -151,9 +151,9 @@ void SlideSwitcher::calcuItemRect(int offindex, IntRect& rect, bool forward)
         else {
             rect.setRect(
                     // left
-                    m_curr_focus_view->getRect().left(), 
+                    m_curr_focus_view->getRect().left(),
                     // top
-                    m_curr_focus_view->getRect().bottom() + offindex*m_gap_w + (offindex - 1)*m_item_height, 
+                    m_curr_focus_view->getRect().bottom() + offindex*m_gap_w + (offindex - 1)*m_item_height,
                     // right
                     m_curr_focus_view->getRect().right(),
                     // bottom
@@ -166,11 +166,11 @@ void SlideSwitcher::calcuItemRect(int offindex, IntRect& rect, bool forward)
         if (Horizontal == m_style) {
             rect.setRect(
                     // left
-                    m_curr_focus_view->getRect().left() - offindex*m_gap_w - offindex*m_item_width, 
+                    m_curr_focus_view->getRect().left() - offindex*m_gap_w - offindex*m_item_width,
                     // top
-                    m_curr_focus_view->getRect().top(), 
+                    m_curr_focus_view->getRect().top(),
                     // right
-                    m_curr_focus_view->getRect().left() - offindex*m_gap_w - (offindex - 1)*m_item_width, 
+                    m_curr_focus_view->getRect().left() - offindex*m_gap_w - (offindex - 1)*m_item_width,
                     // bottom
                     m_curr_focus_view->getRect().bottom());
         }
@@ -180,7 +180,7 @@ void SlideSwitcher::calcuItemRect(int offindex, IntRect& rect, bool forward)
                     // left
                     m_curr_focus_view->getRect().left(),
                     // top
-                    m_curr_focus_view->getRect().top() - offindex*m_gap_w - offindex*m_item_height, 
+                    m_curr_focus_view->getRect().top() - offindex*m_gap_w - offindex*m_item_height,
                     // right
                     m_curr_focus_view->getRect().right(),
                     // bottom
@@ -223,7 +223,7 @@ void SlideSwitcher::reLayout (void)
             item->setRect(rect);
             item->show();
         }
-    } 
+    }
 
     // 4. adjust Right/Bottom, Here Can Be optimized : Not All Item cause some can NOT be seen.
     for ( i = 1; i <= right_bottom; ++i) {
@@ -234,9 +234,9 @@ void SlideSwitcher::reLayout (void)
             item->setRect(rect);
             item->show();
         }
-    } 
+    }
 
-    updateView(); 
+    updateView();
 }
 
 void SlideSwitcher::focusNextItem()
@@ -288,9 +288,9 @@ bool SlideSwitcher::addItem(View *view, bool toRefresh)
 {
     if (NULL == view)
         return false;
-    // add into the tree, 
+    // add into the tree,
     // maybe it was in the tree ?
-    addChild(view); 
+    addChild(view);
 
     if (NULL == m_curr_focus_view) {
         m_curr_focus_view = view;
@@ -308,7 +308,7 @@ bool SlideSwitcher::addItem(View *view, bool toRefresh)
 bool SlideSwitcher::removeItem(View *item)
 {
     View* _tmp_item = NULL, *_tmp_next = NULL;
-	if (NULL != item) {
+    if (NULL != item) {
         _tmp_item = item;
         _tmp_next = item->nextSibling();
         removeChild(item);
@@ -342,10 +342,10 @@ bool SlideSwitcher::dispatchEvent(Event* event)
     switch(event->eventType())
     {
         case Event::MOTION_UP:
-        case Event::MOTION_DOWN:      
-        case Event::MOTION_CLICK:          
+        case Event::MOTION_DOWN:
+        case Event::MOTION_CLICK:
             // TODO, for mouse support.
-            break;  
+            break;
         case Event::KEY_LONGPRESSED:
         case Event::KEY_DOWN:
         case Event::KEY_ALWAYSPRESS:
@@ -354,7 +354,7 @@ bool SlideSwitcher::dispatchEvent(Event* event)
             if ( onKeyPressed (code) ) {
 
                 return DISPATCH_STOP_MSG;
-        	}
+            }
         }
         default:
             return View::dispatchEvent(event);
@@ -390,7 +390,7 @@ bool SlideSwitcher::onKeyPressed(int keyCode)
                     focusNextItem();
                 break;
             }
-        default: 
+        default:
             return false;
     }
     return true;

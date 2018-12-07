@@ -80,7 +80,7 @@ bool TableBarView ::setTablePos(int pos)
 {
     if(pos < TableBarView::TABLE_POS_TOP || pos >TABLE_POS_BOTTOM)
         return false;
-    
+
     if(m_tablePos != pos)
     {
         m_tablePos = pos;
@@ -104,40 +104,40 @@ int TableBarView :: tableHeight(void)
 }
 void TableBarView::setTableGapW(int value)
 {
-    m_tablesGrid->setGapWidth(value);  
+    m_tablesGrid->setGapWidth(value);
 }
 
 void TableBarView::setTableGapH(int value)
 {
-    m_tablesGrid->setGapHeight(value);  
+    m_tablesGrid->setGapHeight(value);
 }
 
 /////////////////////////////////////////////
 TableItemView::~TableItemView()
 {
-	if(m_normalImg) {
-		HFCL_DELETE(m_normalImg);
-	}
-	if(m_selImg) {
-		HFCL_DELETE(m_selImg);
-	}
+    if(m_normalImg) {
+        HFCL_DELETE(m_normalImg);
+    }
+    if(m_selImg) {
+        HFCL_DELETE(m_selImg);
+    }
 }
 
 void TableItemView::setNormalImage(Image* img) {
-	if(m_normalImg && img != m_normalImg) {
-		HFCL_DELETE(m_normalImg);
-		m_normalImg = NULL;
-	}
-	m_normalImg = img;
+    if(m_normalImg && img != m_normalImg) {
+        HFCL_DELETE(m_normalImg);
+        m_normalImg = NULL;
+    }
+    m_normalImg = img;
 }
 
-void TableItemView::setSelImage(Image* img) 
+void TableItemView::setSelImage(Image* img)
 {
-	if(m_selImg && img != m_selImg) {
-		HFCL_DELETE(m_selImg);
-		m_selImg = NULL;
-	}
-	m_selImg = img;
+    if(m_selImg && img != m_selImg) {
+        HFCL_DELETE(m_selImg);
+        m_selImg = NULL;
+    }
+    m_selImg = img;
 }
 
 
@@ -158,7 +158,7 @@ bool TableBarView::setTablePageBkg(Image * img)
 bool TableBarView::setTablePageBkg(const char *file)
 {
     bool ret = false;
-    
+
     if(m_pages)
     {
         ret = m_pages->setBkImage(file);
@@ -171,7 +171,7 @@ bool TableBarView::setTablePageBkg(const char *file)
 bool TableBarView::setTableBkg(const char *file)
 {
     bool ret = false;
-    
+
     if(m_tablesGrid)
     {
         ret = m_tablesGrid->setBkImage(file);
@@ -182,14 +182,14 @@ bool TableBarView::setTableBkg(const char *file)
 
 bool TableBarView::setSelectTableBkg(const char *file)
 {
-	return setSelectTableBkg(Image::loadImage(file));
+    return setSelectTableBkg(Image::loadImage(file));
 
 }
 
 bool TableBarView::setTableBkg(Image * img)
 {
     bool ret = false;
-    
+
     if(m_tablesGrid)
     {
        ret = m_tablesGrid->setBkImageEx(img);
@@ -289,10 +289,10 @@ bool TableBarView::addTablePage(const char * tableFile, const char* selectTableF
     if(!tableFile || !tableInfo)
         return false;
 
-    tableView = HFCL_NEW_EX(ImageView, ((char *)tableFile, 0, 0, 0, 0, 0, DRAWMODE_NORMAL, ALIGN_CENTER, VALIGN_MIDDLE)); 
+    tableView = HFCL_NEW_EX(ImageView, ((char *)tableFile, 0, 0, 0, 0, 0, DRAWMODE_NORMAL, ALIGN_CENTER, VALIGN_MIDDLE));
     if(selectTableFile)
-        selectView = HFCL_NEW_EX(ImageView, ((char *)selectTableFile, 0, 0, 0, 0, 0, DRAWMODE_NORMAL, ALIGN_CENTER, VALIGN_MIDDLE)); 
-   return addTablePage(tableView, selectView, tableInfo); 
+        selectView = HFCL_NEW_EX(ImageView, ((char *)selectTableFile, 0, 0, 0, 0, 0, DRAWMODE_NORMAL, ALIGN_CENTER, VALIGN_MIDDLE));
+   return addTablePage(tableView, selectView, tableInfo);
 }
 #endif
 
@@ -301,11 +301,11 @@ bool TableBarView::addTablePage(Image* tableImg, Image* selectTableImg, View * t
     if(!tableImg && !tableInfo)
         return false;
 
-	TableItemView * item = HFCL_NEW_EX(TableItemView, (NULL, GROUP_GETDRAWABLESET(DRSET_TABITEM, ItemView)));
-	item->setSelImage(selectTableImg);
-	item->setNormalImage(tableImg);
+    TableItemView * item = HFCL_NEW_EX(TableItemView, (NULL, GROUP_GETDRAWABLESET(DRSET_TABITEM, ItemView)));
+    item->setSelImage(selectTableImg);
+    item->setNormalImage(tableImg);
 
-   return addTablePage(item, tableInfo); 
+   return addTablePage(item, tableInfo);
 }
 
 bool TableBarView::addTablePage(ItemView* tabitem, View * tableInfo)
@@ -319,7 +319,7 @@ bool TableBarView::addTablePage(ItemView* tabitem, View * tableInfo)
     m_pages->appendPage(tableInfo);
     m_pages->setCurPageByIndex(0);
     int count = m_pages->getPageCount();
-    
+
     m_tablesGrid->setCols(count);
     m_tablesGrid->addView(tabitem);
     m_tablesGrid->setFocusItem(0);
@@ -336,7 +336,7 @@ bool TableBarView:: init(void)
        //addChild(m_pages);
        return relayoutRect();
    }
-   return true; 
+   return true;
 }
 
 bool TableBarView::addTablePage(View * table, View * tableInfo)
@@ -400,27 +400,27 @@ int TableBarView::selectTableIndex(void)
 bool TableBarView::dispatchEvent(Event * event)
 {
     ItemView *item = NULL;
-	//View::dispatchEvent(event);
-	switch(event->eventType())
-	{
-		case Event::MOTION_UP:
-		case Event::MOTION_DOWN:      
-		case Event::MOTION_CLICK:          
-			// TODO, for mouse support.
-			break;
-		case Event::KEY_DOWN:
+    //View::dispatchEvent(event);
+    switch(event->eventType())
+    {
+        case Event::MOTION_UP:
+        case Event::MOTION_DOWN:
+        case Event::MOTION_CLICK:
+            // TODO, for mouse support.
+            break;
+        case Event::KEY_DOWN:
         case Event::KEY_LONGPRESSED:
         case Event::KEY_ALWAYSPRESS:
-			{
-				switch(((KeyEvent *)event)->keyCode())
-				{
-					case KeyEvent::KEYCODE_CURSOR_UP :
-					case KeyEvent::KEYCODE_CURSOR_DOWN :
+            {
+                switch(((KeyEvent *)event)->keyCode())
+                {
+                    case KeyEvent::KEYCODE_CURSOR_UP :
+                    case KeyEvent::KEYCODE_CURSOR_DOWN :
                         if(!m_pages->getCurPage()->isFocus())
                             m_pages->setFocus(m_pages->getCurPage());
                         m_pages->dispatchEvent(event);
  //  add by xulei ; send event to GridView for focus, so that draw
- //  Bkg                       
+ //  Bkg
                         if(!m_tablesGrid->isFocus())
                             m_tablesGrid->setFocus(m_tablesGrid);
 
@@ -429,9 +429,9 @@ bool TableBarView::dispatchEvent(Event * event)
                         m_tablesGrid->dispatchEvent(event);
                         item = (ItemView*)m_tablesGrid->focusView();
                         item->setSelected(true);
-						break;
-					case KeyEvent::KEYCODE_CURSOR_LEFT :
-					case KeyEvent::KEYCODE_CURSOR_RIGHT :
+                        break;
+                    case KeyEvent::KEYCODE_CURSOR_LEFT :
+                    case KeyEvent::KEYCODE_CURSOR_RIGHT :
                         {
                             int code = ((KeyEvent *)event)->keyCode();
                             if(!m_tablesGrid->isFocus())
@@ -452,7 +452,7 @@ bool TableBarView::dispatchEvent(Event * event)
 
                         }
                         break;
-                    default: 
+                    default:
                         break;
                 }
             }
@@ -476,7 +476,7 @@ void TableBarView::initDrawable(DrawableSelector * selector)
     ,m_normalView(NULL)
      ,m_selectView(NULL)
 {
-    m_isSelect =false; 
+    m_isSelect =false;
 }
 
     TableItemView::TableItemView(View *p_parent, DrawableSelector * selector)
@@ -531,7 +531,7 @@ void TableItemView:: paint(GraphicsContext * context, int status)
     IntRect rc = getRect();
     if(itemSelect()||isFocus())
     {
-#if 1 
+#if 1
         if(NULL != getBkImage())
         {
             IntRect rc1 = m_normalView->getRect();
@@ -542,7 +542,7 @@ void TableItemView:: paint(GraphicsContext * context, int status)
             context->fillRect(m_selectView->getRect(), 0x80, 0x80, 0x80, 0xff);
         }
 #if 0
-        _DBG_PRINTF("\nOnFocus ItemView l:%d, t:%d, r:%d, b:%d  \n",  
+        _DBG_PRINTF("\nOnFocus ItemView l:%d, t:%d, r:%d, b:%d  \n",
                 m_selectView->getRect().left(),
                 m_selectView->getRect().top(),
                 m_selectView->getRect().right(),
@@ -556,7 +556,7 @@ void TableItemView:: paint(GraphicsContext * context, int status)
         }
     }
 #if 0
-    _DBG_PRINTF("\nItemView l:%d, t:%d, r:%d, b:%d  \n",  
+    _DBG_PRINTF("\nItemView l:%d, t:%d, r:%d, b:%d  \n",
             m_normalView->getRect().left(),
             m_normalView->getRect().top(),
             m_normalView->getRect().right(),

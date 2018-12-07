@@ -25,47 +25,47 @@ namespace hfcl {
 
 Font* Font::createFont(const char* fontname)
 {
-	if(!fontname)
-		return NULL;
+    if(!fontname)
+        return NULL;
 
-	static const char* _sys_font_name[] = {
-		"default",
-		"defwchar",
-		"fixed",
-		"caption",
-		"menu",
-		"control",
-		NULL
-	};
+    static const char* _sys_font_name[] = {
+        "default",
+        "defwchar",
+        "fixed",
+        "caption",
+        "menu",
+        "control",
+        NULL
+    };
 
-	Logfont * logfont = NULL;
-	
-	for(int i=0; _sys_font_name[i]; i++) {
-		if(strcmp(_sys_font_name[i], fontname) == 0) {
-			logfont = GetSystemFont(i);
-			break;
-		}
-	}
+    Logfont * logfont = NULL;
 
-	if(!logfont)
-		logfont = CreateLogFontByName(fontname);
-	
-	if(!logfont)
-		return NULL;
+    for(int i=0; _sys_font_name[i]; i++) {
+        if(strcmp(_sys_font_name[i], fontname) == 0) {
+            logfont = GetSystemFont(i);
+            break;
+        }
+    }
 
-	return HFCL_NEW_EX(Font, (logfont));
+    if(!logfont)
+        logfont = CreateLogFontByName(fontname);
+
+    if(!logfont)
+        return NULL;
+
+    return HFCL_NEW_EX(Font, (logfont));
 }
 
 Font::~Font()
 {
-	if(!m_logfont)
-		return ;
+    if(!m_logfont)
+        return ;
 
-	for (int i=0; i < NR_SYSLOGFONTS; i++)
-		if (g_SysLogFont[i] == m_logfont)
-			return;
+    for (int i=0; i < NR_SYSLOGFONTS; i++)
+        if (g_SysLogFont[i] == m_logfont)
+            return;
 
-	DestroyLogFont(m_logfont);
+    DestroyLogFont(m_logfont);
 }
 
 Logfont* Font::getLogfont()

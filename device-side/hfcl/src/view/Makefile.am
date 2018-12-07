@@ -10,6 +10,8 @@ libhfcl_view_la_SOURCES = \
     scrollview.cc \
     panelview.cc \
     listview.cc \
+    simpleitemview.cc \
+    menubarview.cc \
     itemview.cc \
     textview.cc \
     buttonview.cc \

@@ -25,7 +25,7 @@
 namespace hfcl {
 
 #define MGCL_WS_EX_MODALDISABLED     0x10000000L
-#define MGCL_MSG_MNWND_ENDDIALOG   MSG_LASTUSERMSG + 4 
+#define MGCL_MSG_MNWND_ENDDIALOG   MSG_LASTUSERMSG + 4
 
 
 DWORD mgclDoModal(HWND hWnd, BOOL bAutoDestroy);
@@ -65,14 +65,14 @@ int mgclDefaultMainWinProc(HWND hWnd, int msg, WPARAM wParam, LPARAM lParam);
  * @brief mgclShowWindow Shows or hides a window.
  *
  * @param hWnd The handle to the window.
- * @param iCmdShow The command to show or hide, can be one of 
+ * @param iCmdShow The command to show or hide, can be one of
  * the following values:
  *      - SW_SHOW\n
  *        Shows the window.
  *      - SW_HIDE\n
  *        Hides the window.
  *      - SW_SHOWNORMAL\n
- *        Shows the window, and if the window is a main window 
+ *        Shows the window, and if the window is a main window
  *        sets it to be the top most main window.
  *
  * @returns true on sucess, otherwise false.
@@ -167,7 +167,7 @@ int mgclInitGUI(int args, const char** argv);
  *
  * @param hwnd The handle to the window.
  *
- * @returns The handle to the secondary DC, HDC_SCREEN indicates that 
+ * @returns The handle to the secondary DC, HDC_SCREEN indicates that
  *          the window has no secondary DC.
  */
 HDC mgclGetSecondaryDC(HWND hwnd);

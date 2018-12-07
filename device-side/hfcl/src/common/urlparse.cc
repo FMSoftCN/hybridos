@@ -67,10 +67,10 @@ bool URL_IsPhoneNumber(char const * str_ptr, int *confirm_len_ptr)
     int hyphen_count = 0;
     int tailer_hyphen_count = 0;
     int min_number_len = GUIURL_PHONE_NUMBER_LEN_MIN;
-    bool	is_atleast_onechar_numeric = FALSE;
+    bool    is_atleast_onechar_numeric = FALSE;
     char const *str_pos_ptr = NULL;
-    
-    
+
+
     if (NULL == str_ptr || NULL == confirm_len_ptr)
     {
         return FALSE;
@@ -96,11 +96,11 @@ bool URL_IsPhoneNumber(char const * str_ptr, int *confirm_len_ptr)
     while(IsPhoneNumberChar(*(str_ptr + *confirm_len_ptr))
         || IsPhoneNumberHyphen(*(str_ptr + *confirm_len_ptr)))
     {
-    	if(IsDigit(*(str_ptr + *confirm_len_ptr)) && !is_atleast_onechar_numeric)
-    		is_atleast_onechar_numeric = TRUE;
-		
+        if(IsDigit(*(str_ptr + *confirm_len_ptr)) && !is_atleast_onechar_numeric)
+            is_atleast_onechar_numeric = TRUE;
+
         *confirm_len_ptr = *confirm_len_ptr + 1;
-        
+
         if(IsPhoneNumberHyphen(*(str_ptr + *confirm_len_ptr - 1)))
         {
             hyphen_count++;
@@ -136,7 +136,7 @@ bool URL_IsPhoneNumber(char const * str_ptr, int *confirm_len_ptr)
             else if('p' == *str_pos_ptr || 'P' == *str_pos_ptr)
             {
                 extra_char_count = 1;
-                
+
                 while('p' == *(str_pos_ptr + extra_char_count)
                     || 'P' == *(str_pos_ptr + extra_char_count))
                 {
@@ -176,7 +176,7 @@ bool URL_IsPhoneNumber(char const * str_ptr, int *confirm_len_ptr)
 
     *confirm_len_ptr = *confirm_len_ptr - tailer_hyphen_count;
     hyphen_count -= tailer_hyphen_count;
-    
+
 
     return (*confirm_len_ptr - hyphen_count <= GUIURL_PHONE_NUMBER_LEN_MAX);
 }
@@ -220,11 +220,11 @@ int URL_ParseDataGen(
                 {
                     addrTable[cnt] = ((pos&0xFFFF)<<16)|(pn_len&0xFFFF);
                     pos += pn_len;
-					cnt++;
+                    cnt++;
 
-					if(cnt >= tableSize)
-						return cnt;
-					
+                    if(cnt >= tableSize)
+                        return cnt;
+
                     break;
                 }
             }

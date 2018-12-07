@@ -31,23 +31,23 @@ namespace hfcl {
 
 class EditView : public View
 {
-	DECLARE_CLASS_NAME(EditView)
+    DECLARE_CLASS_NAME(EditView)
 public:
-	EditView(View *p);
-	EditView(View *p, DrawableSet* drset);
-	virtual ~EditView();
-    
+    EditView(View *p);
+    EditView(View *p, DrawableSet* drset);
+    virtual ~EditView();
+
     bool isWrapprVisible () { return false; }
-    
+
     virtual void setText(const char * str) {}
-	virtual void setText(string str) {}
-	virtual string getText() { return string(""); }
-	virtual unsigned int getTextLength() { return 0; }
-	virtual void insertText(char *text) {}
+    virtual void setText(string str) {}
+    virtual string getText() { return string(""); }
+    virtual unsigned int getTextLength() { return 0; }
+    virtual void insertText(char *text) {}
 #ifdef __MMI_T9__
-	virtual void insertStringFromT9(char *ch, int cursor) {}
-	virtual void entryAddWordMode(void) {}
-	virtual void ResetT9Mode(bool  Neednotifyevent = FALSE) {}
+    virtual void insertStringFromT9(char *ch, int cursor) {}
+    virtual void entryAddWordMode(void) {}
+    virtual void ResetT9Mode(bool  Neednotifyevent = FALSE) {}
 #endif
 
     typedef enum {
@@ -101,12 +101,12 @@ public:
     bool isOnlyNumber(void){ return m_style & EDVS_ONLY_NUM; }
     bool isABCMode(void)   { return m_style & EDVS_ABC_MODE; }
 
-	void setAutoOmitted(bool bSet)    { m_bAutoOmitted = bSet; }
-	bool isAutoOmitted(void)    { return m_bAutoOmitted; }
+    void setAutoOmitted(bool bSet)    { m_bAutoOmitted = bSet; }
+    bool isAutoOmitted(void)    { return m_bAutoOmitted; }
     void setInputMode(Uint16 mode);
     void setDefaultInputMode(Uint16 mode) { m_default_input_mode = mode; }
     Uint16 getDefaultInputMode(void)    { return m_default_input_mode; }
-   
+
     void setMargin(unsigned int horz, unsigned int vert) {
         m_hMargin = horz; m_vMargin = vert;
     }
@@ -118,54 +118,54 @@ public:
     unsigned int textColor(void) { return m_txtColor; }
     virtual void setFont (Logfont *f) { m_font = f; }
 
-    void showCaret(bool bShow) { 
-		if(isReadOnly())
-		{
-			m_bCaretShown = false;
-		}
-		else
-		{
-			m_bCaretShown = bShow; 
-        	updateView(m_caretRect);
-		}
+    void showCaret(bool bShow) {
+        if(isReadOnly())
+        {
+            m_bCaretShown = false;
+        }
+        else
+        {
+            m_bCaretShown = bShow;
+            updateView(m_caretRect);
+        }
     }
     bool isCaretShown(void) { return m_bCaretShown; }
     inline void blinkCaret(void) { showCaret(!m_bCaretShown); }
     virtual int setCaretPosition(int pos) { return 0; }
-	virtual int caretPosition(void) { return 0; }
+    virtual int caretPosition(void) { return 0; }
     virtual int getLineCount(void) { return 1; }
 
     void enableSpaceInsert(bool enable) { m_bInsertSpace = enable; }
     void setAutoTransChar(bool bTrans) { m_bAutoTrans = bTrans; }
 
-	void adaptViewStyle(void);
-	virtual void changeTheme(void);
+    void adaptViewStyle(void);
+    virtual void changeTheme(void);
 
     virtual int getTextMCharLen(void) { return 0; }
-	
+
     virtual void onGetFocus(void);
-	virtual void onLoseFocus(void);
-    void setAddWordFlag(bool addflag) { m_addword = addflag;}	
+    virtual void onLoseFocus(void);
+    void setAddWordFlag(bool addflag) { m_addword = addflag;}
     bool getAddWordFlag(void) { return m_addword;}
-#ifdef __MMI_T9__	
+#ifdef __MMI_T9__
     bool isStringSelect(void) { return m_bSelect; }
     void setActiveWordCount(int count) { m_activeword= count;}
-    int getActiveWordCount(void) { return m_activeword;}	
+    int getActiveWordCount(void) { return m_activeword;}
 #endif
-    void setExchangeFlag(bool exchangeflag) { m_exchange = exchangeflag;}	
+    void setExchangeFlag(bool exchangeflag) { m_exchange = exchangeflag;}
     bool getExchangeFlag(void) { return m_exchange;}
-	enum {
-		NOTIFY_BEGIN = CustomEvent::CUS_MAX,
-		NOTIFY_EDIT_CHANGED = 1000,
-		NGTIFY_EDIT_LINE_CHANGED,
-		NOTIFY_EDIT_ENTER,  // only in single-line edit
-		NOTIFY_EDIT_MAXTEXT,
-		NOTIFY_EDIT_READY_INSERT_TEXT,
-		NOTIFY_EDIT_REPLACING_TEXT,
-		NOTIFY_EDIT_SETTING_TEXT,
-		NOTIFY_EDIT_HILIGHT_NUMBER_FOCUS,
-		NOTIFY_EDIT_HILIGHT_NUMBER_DATA,
-	};
+    enum {
+        NOTIFY_BEGIN = CustomEvent::CUS_MAX,
+        NOTIFY_EDIT_CHANGED = 1000,
+        NGTIFY_EDIT_LINE_CHANGED,
+        NOTIFY_EDIT_ENTER,  // only in single-line edit
+        NOTIFY_EDIT_MAXTEXT,
+        NOTIFY_EDIT_READY_INSERT_TEXT,
+        NOTIFY_EDIT_REPLACING_TEXT,
+        NOTIFY_EDIT_SETTING_TEXT,
+        NOTIFY_EDIT_HILIGHT_NUMBER_FOCUS,
+        NOTIFY_EDIT_HILIGHT_NUMBER_DATA,
+    };
 protected:
     void raiseNotifyEvent(int notiCode, int exParam1 = 0, int exParam2 = 0);
     void add_comma_in_calculator(char *str);
@@ -186,14 +186,14 @@ protected:
     bool  m_bInsertSpace;
     bool  m_bAutoTrans;
     bool  m_bAutoOmitted;
-    bool  m_beditorflag;	
+    bool  m_beditorflag;
     IntRect m_caretRect;
     bool  m_bSelect;
     bool  m_addword;
-#ifdef __MMI_T9__	
+#ifdef __MMI_T9__
     unsigned int  m_inputmethod;
     bool  Neednotifyevent;
-    int   m_activeword;	
+    int   m_activeword;
 #endif
     bool  m_exchange;
     bool  m_IsCharCount;

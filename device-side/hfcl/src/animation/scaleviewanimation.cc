@@ -26,14 +26,14 @@
 namespace hfcl {
 
 void ScaleViewAnimation::setProperty(int id, void* value){
-	getView()->setRect(*(IntRect*)value);
-	_DBG_PRINTF ("Sale set property......%d %d %d %d\n", 
-			((IntRect*)value)->left(), ((IntRect*)value)->top(), 
-			((IntRect*)value)->width(), ((IntRect*)value)->height());
+    getView()->setRect(*(IntRect*)value);
+    _DBG_PRINTF ("Sale set property......%d %d %d %d\n",
+            ((IntRect*)value)->left(), ((IntRect*)value)->top(),
+            ((IntRect*)value)->width(), ((IntRect*)value)->height());
 }
 void ScaleViewAnimation::onStart(){
-	View *view = getView();
-	setStartValue((void *)&(view->getRect()));
+    View *view = getView();
+    setStartValue((void *)&(view->getRect()));
 }
 
 } // namespace hfcl

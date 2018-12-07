@@ -28,22 +28,22 @@ namespace hfcl {
 
 void StateImageDrawable::draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data/* = 0*/, DR_DATA_TYPE type/* = DRDT_NONE*/)
 {
-	Image *img;
-	if(type == DRDT_IMAGE && data != 0)
-		img = (Image*)data;
-	else
-	{
-		img = (Image*)getElement(SYS_GET_STATE_IMAGE_ID(draw_state));	
-	}
+    Image *img;
+    if(type == DRDT_IMAGE && data != 0)
+        img = (Image*)data;
+    else
+    {
+        img = (Image*)getElement(SYS_GET_STATE_IMAGE_ID(draw_state));
+    }
 
-	if(!img)
-		return ;
+    if(!img)
+        return ;
 
-	ImageFormat format;
-	format.drawMode = getElement(SYS_SE_IMAGEDRAWMODE);
-	format.align = getElement(SYS_SE_IMAGEALIGN);
-	format.valign = getElement(SYS_SE_IMAGEVALIGN);
-	img->paint(gc, rc, format);
+    ImageFormat format;
+    format.drawMode = getElement(SYS_SE_IMAGEDRAWMODE);
+    format.align = getElement(SYS_SE_IMAGEALIGN);
+    format.valign = getElement(SYS_SE_IMAGEVALIGN);
+    img->paint(gc, rc, format);
 }
 
 } // namespace hfcl

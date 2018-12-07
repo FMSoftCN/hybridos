@@ -26,9 +26,9 @@ namespace hfcl {
 
 void StateColorDrawable::draw(GraphicsContext* gc, int draw_state, const IntRect &rc, HTData data/* = 0*/, DR_DATA_TYPE type/* = DRDT_NONE*/)
 {
-	HTData color = getElement(SYS_GET_STATE_COLOR_ID(draw_state));
+    HTData color = getElement(SYS_GET_STATE_COLOR_ID(draw_state));
 
-	gc->fillRect(rc, GetRValue(color), GetGValue(color), GetBValue(color), GetAValue(color));
+    gc->fillRect(rc, GetRValue(color), GetGValue(color), GetBValue(color), GetAValue(color));
 }
 
 } // namespace hfcl

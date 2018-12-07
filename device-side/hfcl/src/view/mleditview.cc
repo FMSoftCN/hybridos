@@ -77,7 +77,7 @@ MlEditView::MlEditView(View *p, DrawableSet *drs)
     , m_lineBellowH (1)
     , m_startShowLine (0)
     , m_lineCout (0)
-    , m_urlNumberParseEnable(0)    
+    , m_urlNumberParseEnable(0)
     , m_hilightNumberIndex(-1)
     , m_prevEventType(0)
     , m_scrollStyle(0)
@@ -104,7 +104,7 @@ MlEditView::~MlEditView()
         m_multapTimerId = 0;
     }
 }
-    
+
 void MlEditView::onGetFocus(void)
 {
     if (0 != m_timerId)
@@ -193,21 +193,21 @@ void MlEditView::setText(const char * str)
     int count = GetUTF8CharCount(m_strings.c_str(),m_caretPos);
     imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
 #endif
-    
+
     raiseNotifyEvent(NOTIFY_EDIT_SETTING_TEXT);
-    
+
     layoutStrings();
 
-    if(m_urlNumberParseEnable&& isReadOnly()) // reset the hilight 
+    if(m_urlNumberParseEnable&& isReadOnly()) // reset the hilight
     {
         m_startShowLine         = 0;
         m_hilightValid          = FALSE;
         m_hilightNumberIndex    = -1;
     }
-    SwitchShiftToLower(getText(),getTextLength(),true);    
+    SwitchShiftToLower(getText(),getTextLength(),true);
     updateView();
 }
-    
+
 void MlEditView::setText(string str)
 {
     if(m_IsCharCount)
@@ -216,40 +216,40 @@ void MlEditView::setText(string str)
        maxcount =  GetUTF8CharCount(str.c_str(),str.size());
        if (m_txtLimit < 0 || maxcount <= m_txtLimit){
             m_strings = str;
-        } else { 
-                int Len = GetUTF8LenByCharCount(str.c_str(),m_txtLimit); 
-                m_strings = str.substr(0, Len); 
+        } else {
+                int Len = GetUTF8LenByCharCount(str.c_str(),m_txtLimit);
+                m_strings = str.substr(0, Len);
         }
     }
     else
     {
         if (m_txtLimit < 0 || str.size() <= m_txtLimit){
             m_strings = str;
-        } else { 
+        } else {
             m_strings = str.substr(0, m_txtLimit);
         }
-    }    
+    }
     if(m_style & EDVS_3COMMA)
     {
         strcpy(m_edit_tempstr1, m_strings.c_str());
         m_strings = apply_comma_multiple_value_in_calculator(m_edit_tempstr1, &m_caretPos);
-    }    
+    }
     m_caretPos = m_strings.length();
 #ifdef __MMI_T9__
     int count = GetUTF8CharCount(m_strings.c_str(),m_caretPos);
     imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
 #endif
     raiseNotifyEvent(NOTIFY_EDIT_SETTING_TEXT);
-    
+
     layoutStrings();
 
-    if(m_urlNumberParseEnable && isReadOnly()) // reset the hilight 
+    if(m_urlNumberParseEnable && isReadOnly()) // reset the hilight
     {
         m_startShowLine         = 0;
         m_hilightValid          = FALSE;
         m_hilightNumberIndex    = -1;
     }
-    SwitchShiftToLower(getText(),getTextLength(),true);        
+    SwitchShiftToLower(getText(),getTextLength(),true);
     updateView();
 }
 
@@ -259,7 +259,7 @@ string MlEditView::getText()
 }
 
 void MlEditView::_insertText(const char *text, int* pos, string& str, bool internal)
-{    
+{
     unsigned int txtLen, insLen, currLen;
     unsigned int txtcount=0,strcount=0;
     txtLen = strlen(text);
@@ -281,7 +281,7 @@ void MlEditView::_insertText(const char *text, int* pos, string& str, bool inter
             insLen = m_txtLimit - currLen;
         }
     }
-    
+
     if (insLen > 1 || (insLen == 1 && (isprint(*text) || *text == '\n'))){
         char *src = (char *) str.c_str();
         memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
@@ -331,7 +331,7 @@ void MlEditView::_insertText(const char *text, int* pos, string& str, bool inter
 #ifdef __MMI_T9__
             if(imeGetInputModeFlag() == INPUT_MODE_SMART)
                 SynText();
-#endif    
+#endif
 
             updateView();
             raiseNotifyEvent(NOTIFY_EDIT_CHANGED);
@@ -342,14 +342,14 @@ void MlEditView::_insertText(const char *text, int* pos, string& str, bool inter
 void MlEditView::insertText(const char *text, int *pos, string &str)
 {
     _insertText(text, pos, str, false);
-    
+
 }
-    
+
 void MlEditView::insertText(const char *text)
 {
     if (text == NULL || (m_style & EDVS_READONLY))
         return;
-    
+
     raiseNotifyEvent(NOTIFY_EDIT_READY_INSERT_TEXT, (int)text, (int)m_caretPos);
     _insertText(text, &m_caretPos, m_strings, true);
 }
@@ -363,22 +363,22 @@ void MlEditView::layoutStringsByWord(void)
     int utfLen = 0;
     Uint16 tmpChar;
     int thisLineW = 0;
-                                
+
     char * ptr = (char *)(m_strings.c_str());
-    if(enableScroll() && m_hMargin < 2)  // we should reserve more margin for scroll. 
+    if(enableScroll() && m_hMargin < 2)  // we should reserve more margin for scroll.
         m_hMargin = 2;
 
     int rcW = getRect().width() - (m_hMargin << 1);
 
     int sW = 0, sH = 0;
     unsigned int i = 0, j = 0;
-    int lineend,counttmp;    
-    
+    int lineend,counttmp;
+
     int oldLineCount = m_lineCout;
 
     m_lineCout = 0;
     m_lineCharList.clear();
-    
+
     cCount = GetUTF8CharCount(ptr, m_strings.length());
 
     if(cCount > 500) {
@@ -400,7 +400,7 @@ void MlEditView::layoutStringsByWord(void)
     {
         tmpChar = ((Uint16*)sub)[j + 0] = *((Uint16*)tmpStr + i);
         ((Uint16*)sub)[j + 1] = '\0';
-        
+
 
 #if 0 /* VincentWei: Do not use RDA font API */
         Get_CharWidthHeight (tmpChar, &sW, &sH);
@@ -412,9 +412,9 @@ void MlEditView::layoutStringsByWord(void)
         sW = glyph_info.advance_x;
 #endif
         thisLineW += sW;
-        
-        if (thisLineW > rcW 
-                || ((Uint16*)sub)[j] == '\n') 
+
+        if (thisLineW > rcW
+                || ((Uint16*)sub)[j] == '\n')
         {
             memset(buf, 0x0, sizeof(buf));
             if(DT_WORDBREAK)
@@ -437,9 +437,9 @@ void MlEditView::layoutStringsByWord(void)
                         utfLen = idxUnicodeGlyphToUTF8((Uint16 *)sub, j+1);
                         m_lineCharList.push_back(utfLen);
                         thisLineW = 0;
-                        m_lineCout++;                            
+                        m_lineCout++;
                     }
-                    else 
+                    else
                     {
                         BOOL findflag=FALSE;
                         lineend = j;
@@ -447,15 +447,15 @@ void MlEditView::layoutStringsByWord(void)
                         while(j>0)
                         {
                             if(((Uint16*)sub)[j]  == ' ')
-                            {    
-                                memset(&((Uint16*)sub)[j+1], 0x0, lineend- j);        
+                            {
+                                memset(&((Uint16*)sub)[j+1], 0x0, lineend- j);
                                 findflag = TRUE;
                                 utfLen = idxUnicodeGlyphToUTF8((Uint16 *)sub, j+1);
                                 m_lineCharList.push_back(utfLen);
                                 thisLineW = 0;
                                 m_lineCout++;
                                 i ++;
-                                break;                         
+                                break;
                             }
                             i --;
                             j --;
@@ -475,7 +475,7 @@ void MlEditView::layoutStringsByWord(void)
                 j = 0;
             }
             else
-            {    
+            {
                 ((Uint16*)sub)[j] = '\0';
             }
             j = 0;
@@ -492,11 +492,11 @@ void MlEditView::layoutStringsByWord(void)
         m_lineCharList.push_back(utfLen);
         m_lineCout++;
     }
-    
+
     if(cCount > 500) {
         if (tmpStr != NULL){
             free(tmpStr);
-        }    
+        }
     }
 
     if (m_lineCout < oldLineCount) {
@@ -509,7 +509,7 @@ void MlEditView::layoutStrings(int fromLine)
 {
     int i, lineLen = 0;
 
-    if(enableScroll() && m_hMargin < 2)  // we should reserve more margin for scroll. 
+    if(enableScroll() && m_hMargin < 2)  // we should reserve more margin for scroll.
         m_hMargin = 2;
 
     int rcW = getRect().width() - (m_hMargin << 1);
@@ -517,7 +517,7 @@ void MlEditView::layoutStrings(int fromLine)
     char *_str = (char *)(m_strings.c_str());
     int _total = m_strings.size();
     int oldLineCount = m_lineCout;
-    char *_start = _str; 
+    char *_start = _str;
     int thisLineW = 0;
     int lineEnd = 0;
     int w, h;
@@ -525,28 +525,28 @@ void MlEditView::layoutStrings(int fromLine)
     int count=0;
     BOOL findflag;
     GraphicsContext *gc = GraphicsContext::screenGraphics();
-    
+
     if (fromLine == 0) {
         m_lineCout = 0;
         m_lineCharList.clear();
-    } 
+    }
     else {
         m_lineCout = fromLine;
         // erase the old layout info
         while (fromLine++ < oldLineCount){
             m_lineCharList.pop_back();
         }
-        // get the start to layout 
+        // get the start to layout
         for (IntList::iterator it = m_lineCharList.begin(); it != m_lineCharList.end(); it++) {
             _start += *it;
             _total -= *it;
         }
     }
-            
+
     while (_start != NULL) {
         char *_end = strchr (_start, '\n');
         int _len = (_end == NULL) ? strlen(_start) : _end - _start + 1;
-            
+
         int *info = (int *)malloc ((_len + 1) * sizeof(int));
 
         int realCount = GetUTF8CharInfo (_start, _len, info);
@@ -568,7 +568,7 @@ void MlEditView::layoutStrings(int fromLine)
             for (i = 0; i < realCount; ) {
                 ((Uint16*)m_edit_tempstr2)[i-count] = ((Uint16*)m_edit_tempstr1)[i-offset];
                 ((Uint16*)m_edit_tempstr2)[i-count+1] = '\0';
-                
+
                 gc->getTextDrawSize((unsigned short *)m_edit_tempstr2, m_font, &w, &h);
                 thisLineW = w;
 
@@ -578,7 +578,7 @@ void MlEditView::layoutStrings(int fromLine)
                     if(m_isWordBreak == TRUE) {
                         int counttmp = i;
                         while(counttmp>count) {
-                            if(((Uint16*)m_edit_tempstr1)[counttmp]  == ' ') {    
+                            if(((Uint16*)m_edit_tempstr1)[counttmp]  == ' ') {
                                 findflag = TRUE;
                                 lineLen = info[++counttmp] - lineEnd;
                                 m_lineCharList.push_back(lineLen);
@@ -608,14 +608,14 @@ void MlEditView::layoutStrings(int fromLine)
                 i++;
             }
 
-            //end line 
-            if (thisLineW > 0) { 
+            //end line
+            if (thisLineW > 0) {
                 lineLen = _len - lineEnd;
                 m_lineCharList.push_back(lineLen);
                 m_lineCout++;
             }
         }
-        
+
         free(info);
         info=NULL;
         _start = (_end != NULL) ? _end + 1 : NULL;
@@ -630,26 +630,26 @@ void MlEditView::layoutStrings(int fromLine)
         _DBG_PRINTF ("MlEditView::layoutStrings > m_startShowLine: %d", m_startShowLine);
     }
 }
-    
+
 void MlEditView::refreshCaretPos(bool fromXY)
 {
     if (fromXY) {
         m_caretPos = 0;
         IntList::iterator it = m_lineCharList.begin();
-        
+
         for (int i = 0; i < m_caretPosY; i++) {
             m_caretPos += (*it);
             it++;
         }
-        
+
         if (m_caretPosX > 0 && it != m_lineCharList.end() && *it > 0) {
             string lineString = m_strings.substr(m_caretPos, *it);
             char *_str = (char *)lineString.c_str();
             int len = lineString.size();
-            
+
             if (len <= m_caretPosX) {
                 m_caretPos += len;
-                // at the end of a line, 
+                // at the end of a line,
                 // and there is a line seperator.
                 if (len > 0 && _str[len - 1] == '\n') {
                     m_caretPos--;
@@ -658,13 +658,13 @@ void MlEditView::refreshCaretPos(bool fromXY)
             else {
                 int *info = (int *)malloc ((len + 1) * sizeof(int));
                 int realCount = GetUTF8CharInfo (_str, len, info);
-                
+
                 info [realCount] = len;
 
                 for (int i = 0; i <= realCount; i++) {
                     if (info[i] >= m_caretPosX) {
                         m_caretPos += info[i];
-                        // at the end of a line, 
+                        // at the end of a line,
                         // and there is a line seperator.
                         if (i == realCount && _str[info[i]] == '\n') {
                             m_caretPos--;
@@ -676,13 +676,13 @@ void MlEditView::refreshCaretPos(bool fromXY)
                   info = NULL;
             }
         }
-    } 
+    }
     else {
         int total = m_caretPos;
 
         m_caretPosX = 0;
         m_caretPosY = 0;
-        
+
         for (IntList::iterator it = m_lineCharList.begin(); it != m_lineCharList.end(); it++) {
 
             if (total > *it) {
@@ -716,16 +716,16 @@ void MlEditView::_replacePrevChar(const char *ch, int* pos, string &str, bool in
     strcpy(m_edit_tempstr1, str.c_str());
 
     if (!bTail) {
-        if(m_style & EDVS_3COMMA && m_edit_tempstr1[*pos] == ',') 
+        if(m_style & EDVS_3COMMA && m_edit_tempstr1[*pos] == ',')
             (*pos)++;
         strcpy(m_edit_tempstr2, m_edit_tempstr1 + *pos);
 
-        if(m_style & EDVS_3COMMA && m_edit_tempstr1[*pos-1] == ',') 
+        if(m_style & EDVS_3COMMA && m_edit_tempstr1[*pos-1] == ',')
             (*pos)--;
         m_edit_tempstr1[*pos] = '\0';
     }
     int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
-        
+
     if(m_edit_tempstr1[*pos - lastChLen] == '\n')
         isNewline = TRUE;
 
@@ -736,7 +736,7 @@ void MlEditView::_replacePrevChar(const char *ch, int* pos, string &str, bool in
         unsigned int inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
 
         if (m_txtLimit > 0 && strcount - 1 + inscount > m_txtLimit) {
-            inscount = m_txtLimit -( strcount - 1);    
+            inscount = m_txtLimit -( strcount - 1);
             insLen = GetUTF8LenByCharCount(ch,inscount);
         }
     }
@@ -751,7 +751,7 @@ void MlEditView::_replacePrevChar(const char *ch, int* pos, string &str, bool in
     }
 
     str = m_edit_tempstr1;
-    
+
     if (!bTail) {
         str += m_edit_tempstr2;
     }
@@ -783,7 +783,7 @@ void MlEditView::_replacePrevChar(const char *ch, int* pos, string &str, bool in
                 imeSetMultitapShiftMode(SHIFT_STATE_INIT);
                 imeSetSwitch();
                 break;
-        } 
+        }
     }
 #endif
 
@@ -799,7 +799,7 @@ void MlEditView::replacePrevChar(const char *ch, int *pos, string &str)
 {
     _replacePrevChar(ch, pos, str, false);
 }
-    
+
 void MlEditView::replacePrevChar(const char *ch)
 {
     raiseNotifyEvent(NOTIFY_EDIT_REPLACING_TEXT, (int)ch, (int)m_caretPos);
@@ -817,7 +817,7 @@ void MlEditView::deleteAllCharacters(void)
         //m_bSelect = false;
         SynText();
     }
-#endif    
+#endif
     raiseNotifyEvent(NOTIFY_EDIT_CHANGED);
     updateView();
 }
@@ -835,7 +835,7 @@ void MlEditView::insertStringFromT9(char *ch, int cursor)
             int Len = GetUTF8LenByCharCount (ch, m_txtLimit);
             memset (m_edit_tempstr1,0,EDITOR_MAX_LEN);
             strncpy (m_edit_tempstr1, ch,Len);
-            int lastChLen = GetLastUTF8CharLen (m_edit_tempstr1, strlen(m_edit_tempstr1));   
+            int lastChLen = GetLastUTF8CharLen (m_edit_tempstr1, strlen(m_edit_tempstr1));
             m_edit_tempstr1[Len - lastChLen] = '\0';
             m_strings = m_edit_tempstr1;
             cursor = m_strings.size();
@@ -856,7 +856,7 @@ void MlEditView::insertStringFromT9(char *ch, int cursor)
         if(len > m_txtLimit) {
             memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
             strncpy(m_edit_tempstr1, ch,m_txtLimit);
-            int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));   
+            int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
             m_edit_tempstr1[m_txtLimit - lastChLen] = '\0';
             m_strings = m_edit_tempstr1;
             cursor = m_strings.size();
@@ -886,7 +886,7 @@ void MlEditView::SynText(void)
     //m_bSelect = false;
     //count = GetUTF8CharCount(m_strings.c_str(),m_caretPos);
     imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),m_caretPos);
-}    
+}
 
 void MlEditView::DeleteChar(void)
 {
@@ -898,7 +898,7 @@ void MlEditView::DeleteChar(void)
     if(imeT9GetActiveWordCount() == 0)
         m_bSelect = false;
     imeRefreshString();
-}                        
+}
 
 void MlEditView::ResetT9Mode (bool Neednotifyevent)
 {
@@ -909,11 +909,11 @@ void MlEditView::ResetT9Mode (bool Neednotifyevent)
         imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
     }
 
-    if (Neednotifyevent)    
+    if (Neednotifyevent)
         raiseNotifyEvent(NOTIFY_EDIT_CHANGED);
     updateView();
-}    
-    
+}
+
 void MlEditView::setCursorFromT9(void)
 {
     int unicodeCursor = imeT9GetUnicodeCursor();
@@ -954,13 +954,13 @@ void MlEditView::displayAddWord(char *ch, int* pos, int wordlen,string &str, boo
 {
     unsigned int totalLen = str.size();
     int insLen = (ch != NULL ? strlen(ch) : 0);
-    int delcount = wordlen;    
+    int delcount = wordlen;
     int bTail = ((int)totalLen == *pos);
     int deslen = 0;
     memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
     memset(m_edit_tempstr2,0,EDITOR_MAX_LEN);
     strcpy(m_edit_tempstr1, str.c_str());
-    
+
     if (!bTail) {
         strcpy(m_edit_tempstr2, m_edit_tempstr1 + *pos);
         m_edit_tempstr1[*pos] = '\0';
@@ -969,7 +969,7 @@ void MlEditView::displayAddWord(char *ch, int* pos, int wordlen,string &str, boo
     while(wordlen) {
         int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
         deslen += lastChLen;
-        m_edit_tempstr1[*pos - deslen] = '\0';    
+        m_edit_tempstr1[*pos - deslen] = '\0';
         wordlen--;
     }
 
@@ -978,7 +978,7 @@ void MlEditView::displayAddWord(char *ch, int* pos, int wordlen,string &str, boo
         unsigned int inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
 
         if (m_txtLimit > 0 && strcount - delcount + inscount > m_txtLimit) {
-            inscount = m_txtLimit -( strcount - delcount);    
+            inscount = m_txtLimit -( strcount - delcount);
             insLen = GetUTF8LenByCharCount(ch,inscount);
         }
     }
@@ -989,8 +989,8 @@ void MlEditView::displayAddWord(char *ch, int* pos, int wordlen,string &str, boo
     }
 
     if(imeIsSmartShiftInputMode()) {
-        if(m_edit_tempstr1[0]  == '\0'  || 
-                (m_edit_tempstr1[*pos - deslen -1] == ' ' && (m_edit_tempstr1[*pos - deslen -2] == '.'  
+        if(m_edit_tempstr1[0]  == '\0'  ||
+                (m_edit_tempstr1[*pos - deslen -1] == ' ' && (m_edit_tempstr1[*pos - deslen -2] == '.'
                 ||m_edit_tempstr1[*pos - deslen -2] == '!' || m_edit_tempstr1[*pos - deslen -2] == '?')))
                 ch[0]= toupper (ch[0]);
     }
@@ -1000,11 +1000,11 @@ void MlEditView::displayAddWord(char *ch, int* pos, int wordlen,string &str, boo
     }
 
     str = m_edit_tempstr1;
-    
+
     if (!bTail) {
         str += m_edit_tempstr2;
     }
-    
+
     *pos += insLen - deslen;
     if (*pos > (int)str.size()){
         *pos = str.size();
@@ -1056,7 +1056,7 @@ int MlEditView::getTextMCharLen(void)
 {
     return GetUTF8CharInfo(m_strings.c_str(), m_strings.size(), NULL);
 }
-    
+
 static inline char _charactor(int key_code)
 {
     if (key_code == KeyEvent::KEYCODE_STAR){
@@ -1077,13 +1077,13 @@ bool MlEditView::dispatchEvent(Event *event)
     int code = ((KeyEvent *)event)->keyCode();
 
     if(getExchangeFlag())
-    { 
+    {
         if(code == KeyEvent::KEYCODE_CURSOR_LEFT)
             code = KeyEvent::KEYCODE_CURSOR_RIGHT;
         else if(code == KeyEvent::KEYCODE_CURSOR_RIGHT)
             code = KeyEvent::KEYCODE_CURSOR_LEFT;
     }
-   
+
     if(event->eventType() == Event::KEY_DOWN)
     {
 #ifdef __MMI_T9__
@@ -1101,7 +1101,7 @@ bool MlEditView::dispatchEvent(Event *event)
         char ch[2]={0, 0};
 
         if ((ch[0] = _charactor(code)) > 0){
-            
+
             if(imeGetInputModeFlag() == INPUT_MODE_SMART)
             {
                 if (isImeExist() && isImeEnable() && !isImeOpen()
@@ -1109,7 +1109,7 @@ bool MlEditView::dispatchEvent(Event *event)
                     openImeWin();
                     setImeTarget((int)this, 1);
                     imeInsertChar(ch[0]);
-                } 
+                }
             }
             else if(imeGetInputModeFlag() == INPUT_MODE_MULTITAP)
             {
@@ -1131,7 +1131,7 @@ bool MlEditView::dispatchEvent(Event *event)
             }
             return DISPATCH_STOP_MSG;
         }
-#endif        
+#endif
         m_prevEventType = event->eventType();
 
         if (0 != m_multapTimerId && _charactor(code) == -1)
@@ -1152,11 +1152,11 @@ bool MlEditView::dispatchEvent(Event *event)
             case KeyEvent::KEYCODE_SOFTKEY_RIGHT :
                 if (m_strings.size() > 0) {
 #ifdef __MMI_T9__
-                    if(imeGetInputModeFlag() == INPUT_MODE_SMART)    
-                    {  
+                    if(imeGetInputModeFlag() == INPUT_MODE_SMART)
+                    {
                         if(m_caretPos <0)
                             m_caretPos = 0;
-                        else              
+                        else
                             DeleteChar();
                         if(m_bSelect==false)
                             blinkCaret();
@@ -1166,13 +1166,13 @@ bool MlEditView::dispatchEvent(Event *event)
                         replacePrevChar(NULL);
                     }
                     return DISPATCH_STOP_MSG;
-#else    
+#else
                     replacePrevChar(NULL);
                     return DISPATCH_STOP_MSG;
 #endif
                 }
                 return DISPATCH_CONTINUE_MSG;
-//#if 0                
+//#if 0
             case KeyEvent::KEYCODE_CURSOR_LEFT :
 #ifdef __MMI_T9__
                 if(imeGetInputModeFlag() == INPUT_MODE_SMART)
@@ -1197,7 +1197,7 @@ bool MlEditView::dispatchEvent(Event *event)
                     return DISPATCH_STOP_MSG;
                 }
                 else
-#endif                
+#endif
                 if (m_caretPos > 0) {
                     int lastChLen = GetLastUTF8CharLen(m_strings.c_str(), m_caretPos);
                     m_caretPos -= lastChLen;
@@ -1205,19 +1205,19 @@ bool MlEditView::dispatchEvent(Event *event)
                     showCaret(true);
                     updateView();
                     return DISPATCH_STOP_MSG;
-                   }    
+                   }
                 return DISPATCH_CONTINUE_MSG;
             case KeyEvent::KEYCODE_CURSOR_RIGHT :
 #ifdef __MMI_T9__
                    if(imeGetInputModeFlag() == INPUT_MODE_SMART)
                    {
-                    bool max_check = TRUE;        
+                    bool max_check = TRUE;
                     m_bSelect = false;
                     if(m_IsCharCount)
                     {
                         unsigned int strcount  =0;
                         strcount =  GetUTF8CharCount(m_strings.c_str(),m_caretPos);
-                        if(strcount >= m_txtLimit)    
+                        if(strcount >= m_txtLimit)
                             max_check = FALSE;
                     }
                     else
@@ -1228,7 +1228,7 @@ bool MlEditView::dispatchEvent(Event *event)
                     if (max_check)
                     {
                         bool preT9ShiftMode = imeIsT9ShiftMode();
-                        
+
                         imeT9KeyArrowRightHandlerMultilineInputBox();
                         imeRefreshString();
                         setCursorFromT9();
@@ -1248,26 +1248,26 @@ bool MlEditView::dispatchEvent(Event *event)
                     return DISPATCH_STOP_MSG;
                    }
                    else
-#endif    
+#endif
                 if (m_bInsertSpace && m_caretPos == (int)getTextLength()){
                     insertText(" ");
                     return DISPATCH_STOP_MSG;
                 } else if (m_caretPos < (int)getTextLength()) {
                     string sub = m_strings.substr(m_caretPos, -1);
                     int firstChLen = GetFirstUTF8CharLen(sub.c_str(), (int)getTextLength() - m_caretPos);
-                    m_caretPos += firstChLen; 
+                    m_caretPos += firstChLen;
                     refreshCaretPos(false);
                     showCaret(true);
                     updateView();
                     return DISPATCH_STOP_MSG;
                 }
-        
+
                 return DISPATCH_CONTINUE_MSG;
             case KeyEvent::KEYCODE_CURSOR_UP :
                 if(m_urlNumberParseEnable)
-                { 
+                {
                     updateHilightNumber(KeyEvent::KEYCODE_CURSOR_UP);
-                    return TRUE;                    
+                    return TRUE;
                 }
                 else
                 {
@@ -1287,13 +1287,13 @@ bool MlEditView::dispatchEvent(Event *event)
                             int ret = switchLine(true);
                             int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
                             imeT9KeyArrowUpHandlerMultilineInputBox(count);
-                            
+
                             return ret;
                         }
                     }
                     else
-#endif            
-     
+#endif
+
                     {
                         return switchLine(true);
                     }
@@ -1301,9 +1301,9 @@ bool MlEditView::dispatchEvent(Event *event)
                 }
             case KeyEvent::KEYCODE_CURSOR_DOWN :
                 if(m_urlNumberParseEnable)
-                { 
+                {
                     updateHilightNumber(KeyEvent::KEYCODE_CURSOR_DOWN);
-                    return TRUE;                    
+                    return TRUE;
                 }
                 else
                 {
@@ -1331,7 +1331,7 @@ bool MlEditView::dispatchEvent(Event *event)
                         }
                     }
                     else
-#endif            
+#endif
                     {
                         return switchLine(false);
                     }
@@ -1349,12 +1349,12 @@ bool MlEditView::dispatchEvent(Event *event)
         if ((ch[0] = _charactor(code)) > 0){
             if(m_prevEventType == Event::KEY_LONGPRESSED)
                 return DISPATCH_CONTINUE_MSG;
-            
+
             ch[1] = '\0';
             if(imeGetInputModeFlag() == INPUT_MODE_SMART && ch[0] != '0')
             {
                 ch[0] = '0' + code;
-                
+
                 if(::imeGetPreviousActiveMultitap() >= 0)
                 {
                     imeDisableActiveMultitapWithoutDraw();
@@ -1381,12 +1381,12 @@ bool MlEditView::dispatchEvent(Event *event)
                         m_startPosX=m_caretPosX;
                         m_startPosY=m_caretPosY;
                     }
-                    showCaret(false);       
+                    showCaret(false);
                     setImeTarget((int)this, 1);
                     imeInsertChar(ch[0]);
-                } 
+                }
             }
-            else if(imeGetInputModeFlag() == INPUT_MODE_MULTITAP 
+            else if(imeGetInputModeFlag() == INPUT_MODE_MULTITAP
                 || (imeGetInputModeFlag() == INPUT_MODE_SMART && ch[0] == '0'))
             {
                 unsigned char utf8[10] = {0};
@@ -1402,7 +1402,7 @@ bool MlEditView::dispatchEvent(Event *event)
                     }
                     else
                     {
-                        imeCheckMultitapPunctuationCharacter(m_strings,m_caretPos,true);          
+                        imeCheckMultitapPunctuationCharacter(m_strings,m_caretPos,true);
                         if(imeIsMultiShiftInputMode() &&
                             ((imeGetMultitapShiftMode()!= SHIFT_STATE_LOWER) || (imeGetPreMultitapShiftMode() == SHIFT_STATE_UPPER)))
                         {
@@ -1413,7 +1413,7 @@ bool MlEditView::dispatchEvent(Event *event)
                     }
                 }
                 else if(m_strings.length() < textMaxLimit()
-                    || (m_IsCharCount && GetUTF8CharCount(m_strings.c_str(),m_strings.size()) < (int)textMaxLimit()) )                    
+                    || (m_IsCharCount && GetUTF8CharCount(m_strings.c_str(),m_strings.size()) < (int)textMaxLimit()) )
                 {
                     if(ch[0] == '0')
                     {
@@ -1440,7 +1440,7 @@ bool MlEditView::dispatchEvent(Event *event)
                 {
                     removeTimer(m_multapTimerId);
                     imeDisableActiveMultitapWithoutDraw();
-                    m_multapTimerId = 0; 
+                    m_multapTimerId = 0;
                     blinkCaret();
                 }
                 else
@@ -1450,10 +1450,10 @@ bool MlEditView::dispatchEvent(Event *event)
         if(imeGetInputModeFlag() == INPUT_MODE_SMART && ch[0] == '0')
             SynText();
             }
-        }               
+        }
 #endif
-        
-        if(imeGetInputModeFlag() == INPUT_MODE_MULTITAP 
+
+        if(imeGetInputModeFlag() == INPUT_MODE_MULTITAP
              || (imeGetInputModeFlag() == INPUT_MODE_SMART && code ==  KeyEvent::KEYCODE_0))
         {
             if((code >=  KeyEvent::KEYCODE_0) &&  (code<= KeyEvent::KEYCODE_9))
@@ -1494,7 +1494,7 @@ bool MlEditView::dispatchEvent(Event *event)
                 //m_bSelect = false;
                 SynText();
             }
-#endif    
+#endif
             updateView();
             return DISPATCH_STOP_MSG;
         } else if (code == KeyEvent::KEYCODE_CURSOR_RIGHT) {
@@ -1506,22 +1506,22 @@ bool MlEditView::dispatchEvent(Event *event)
                 //m_bSelect = false;
                 SynText();
             }
-#endif    
+#endif
             updateView();
             return DISPATCH_STOP_MSG;
         }else if(code == KeyEvent::KEYCODE_SOFTKEY_RIGHT && m_strings.size() > 0){
-            if(imeGetInputModeFlag() == INPUT_MODE_SMART){ 
+            if(imeGetInputModeFlag() == INPUT_MODE_SMART){
                 if(m_caretPos <0)
                     m_caretPos = 0;
 #ifdef __MMI_T9__
-                else   
+                else
                     DeleteChar();
 #endif
                 blinkCaret();
             }else{
                 replacePrevChar(NULL);
             }
-    
+
             return DISPATCH_STOP_MSG;
         }
         else if(code >= KeyEvent::KEYCODE_0 && code <= KeyEvent::KEYCODE_9 && imeGetInputModeFlag() != INPUT_MODE_NUMBER)
@@ -1544,19 +1544,19 @@ bool MlEditView::dispatchEvent(Event *event)
                 m_multapTimerId = 0;
                 blinkCaret();
             }
-#endif            
-            
+#endif
+
             return DISPATCH_STOP_MSG;
         }
         return DISPATCH_CONTINUE_MSG;
     }
     else if (event->eventType() == Event::KEY_ALWAYSPRESS) {
         if (code == KeyEvent::KEYCODE_SOFTKEY_RIGHT && m_strings.size() > 0) {
-            if(imeGetInputModeFlag() == INPUT_MODE_SMART){  
+            if(imeGetInputModeFlag() == INPUT_MODE_SMART){
                 if(m_caretPos <0)
                     m_caretPos = 0;
 #ifdef __MMI_T9__
-                else   
+                else
                     DeleteChar();
 #endif
                 blinkCaret();
@@ -1564,7 +1564,7 @@ bool MlEditView::dispatchEvent(Event *event)
             else {
                 replacePrevChar(NULL);
             }
-           
+
             return DISPATCH_STOP_MSG;
         }
         else if (code == KeyEvent::KEYCODE_CURSOR_DOWN) {
@@ -1581,7 +1581,7 @@ bool MlEditView::dispatchEvent(Event *event)
 
     return DISPATCH_CONTINUE_MSG;
 }
-    
+
 bool MlEditView::switchLine(bool isUpLine)
 {
     if (isUpLine) //goto prev line
@@ -1593,17 +1593,17 @@ bool MlEditView::switchLine(bool isUpLine)
             m_caretPosY--;
             refreshCaretPos(true);
         } else {
-#ifdef __MMI_SPREADSPECTRUM_STYLE__                
+#ifdef __MMI_SPREADSPECTRUM_STYLE__
             return DISPATCH_CONTINUE_MSG;
 #else
             m_caretPosX = 0;
             m_caretPosY = 0;
             m_caretPos = 0;
-#endif            
+#endif
         }
-    } 
+    }
     else {
-        // goto next line  
+        // goto next line
         if (m_caretPos >= (int)getTextLength())
             return DISPATCH_CONTINUE_MSG;
 
@@ -1631,14 +1631,14 @@ void MlEditView::drawBackground(GraphicsContext* gc, IntRect &rc, int status)
 
 int MlEditView::hilightNumberPos(int nextHilightIndex, int *startPos, int *len)
 {
-    int i=0; 
+    int i=0;
     int cutStartPos = 0,    cut_len = 0, CaretPosition = -1;
     int __table[MAX_HILIGHT_NUM_CNT];
     string str;
     memset(__table, 0x0, sizeof(__table));
 
     char * ptr = NULL;
-    
+
     if(m_urlStringsLen < 0) // means parse all context, don't cut.
         ptr = (char*)m_strings.c_str();
     else {
@@ -1647,22 +1647,22 @@ int MlEditView::hilightNumberPos(int nextHilightIndex, int *startPos, int *len)
         ptr         = (char *)str.c_str();
         memset(ptr+m_urlStringsLen, 0x0, len - m_urlStringsLen);
     }
-    
+
     int numberCnt = URL_ParseDataGen(ptr, __table, MAX_HILIGHT_NUM_CNT);
 
     if(nextHilightIndex >= numberCnt)
         nextHilightIndex = numberCnt ;
-    
+
     for(i = 0; i < numberCnt; i++) {
         cutStartPos     = (__table[i]&0xFFFF0000)>>16;
         cut_len         = (__table[i]&0xFFFF);
         //cutEndPos         = cutStartPos + cut_len;
-        
+
         if(nextHilightIndex == i) {
             CaretPosition     =      cutStartPos;
             *startPos         =     cutStartPos;
             *len              =    cut_len;
-        }                                
+        }
     }
 
     return CaretPosition;
@@ -1674,7 +1674,7 @@ void MlEditView::raiseHilightNumberNotify(bool isSelect)
     if(isSelect) {
         char number[40+1];
         int __table[MAX_HILIGHT_NUM_CNT];
-        
+
         memset(__table, 0x0, sizeof(__table));
         memset(number, 0x0, sizeof(number));
         char * ptr = (char*)(m_strings.c_str());
@@ -1692,14 +1692,14 @@ int MlEditView::queryLineIndex(int pos)
 {
     unsigned int i;
     int lineStart = 0, lineEnd = 0;
-    
-    IntList::iterator it = m_lineCharList.begin(); 
+
+    IntList::iterator it = m_lineCharList.begin();
     for(i =0; i< m_lineCharList.size(); i++) {
         lineEnd += (*it);
-        
+
         if(pos >= lineStart && pos < lineEnd)
             return i;
-        
+
         lineStart += (*it);
         it ++;
     }
@@ -1708,16 +1708,16 @@ int MlEditView::queryLineIndex(int pos)
 }
 
 int MlEditView::updateHilightNumber(int keyCode)
-{ 
+{
     if(!m_urlNumberParseEnable)
         return -1;
-    
+
     int __table[MAX_HILIGHT_NUM_CNT];
 
     memset(__table, 0x0, sizeof(__table));
     unsigned int startLine, endLine, startCharPos = 0, endCharPos = 0;
     int w, h;
-    
+
     getSize(&w, &h);
     int fontH = m_font->size; //GraphicsContext::screenGraphics()->getFontHeight(m_font);
     int lineH = fontH + m_lineAboveH + m_lineBellowH;
@@ -1725,7 +1725,7 @@ int MlEditView::updateHilightNumber(int keyCode)
 
     char * ptr = NULL;
     string str;
-    
+
     if(m_urlStringsLen < 0) // means parse all context, don't cut.
         ptr = (char*)m_strings.c_str();
     else {
@@ -1734,12 +1734,12 @@ int MlEditView::updateHilightNumber(int keyCode)
         ptr = (char *)str.c_str();
         memset(ptr+m_urlStringsLen, 0x0, len - m_urlStringsLen);
     }
-    
+
     int numberCnt = URL_ParseDataGen(ptr, __table, MAX_HILIGHT_NUM_CNT);
     int curHilightIdx;
     if(numberCnt > 0) {
         bool isChange = FALSE;
-        
+
         if(m_startShowLine > 0) {
             startLine = m_startShowLine ;
             endLine   = m_startShowLine + cnt;
@@ -1752,7 +1752,7 @@ int MlEditView::updateHilightNumber(int keyCode)
         }
 
         unsigned int i;
-        IntList::iterator it = m_lineCharList.begin(); 
+        IntList::iterator it = m_lineCharList.begin();
         for(i =0; i< m_lineCharList.size(); i++) {
             if(i < startLine) {
                 startCharPos += (*it);
@@ -1761,7 +1761,7 @@ int MlEditView::updateHilightNumber(int keyCode)
             if(i < endLine) {
                 endCharPos += (*it);
             }
-            
+
             if(i== endLine)
                 break;
             it ++;
@@ -1773,7 +1773,7 @@ int MlEditView::updateHilightNumber(int keyCode)
                     m_hilightNumberIndex = numberCnt -1;
                 }
                 curHilightIdx = m_hilightNumberIndex;
-                
+
                 if(curHilightIdx >= 0) {
 
                     int pos, len;
@@ -1825,7 +1825,7 @@ int MlEditView::updateHilightNumber(int keyCode)
                             m_startShowLine -= (cnt -1);
                             _DBG_PRINTF ("MlEditView::updateHilightNumber_4 > m_startShowLine: %d", m_startShowLine);
                             updateView();
-                            return TRUE;    
+                            return TRUE;
                         }
                     }
                 }
@@ -1837,7 +1837,7 @@ int MlEditView::updateHilightNumber(int keyCode)
                 curHilightIdx = m_hilightNumberIndex;
                 if(curHilightIdx < 0)
                     curHilightIdx = 0;
-                
+
                 int pos, len;
                 unsigned int nextPos = hilightNumberPos(curHilightIdx, &pos, &len);
                 if(nextPos>= startCharPos && nextPos <= endCharPos) {
@@ -1882,11 +1882,11 @@ int MlEditView::updateHilightNumber(int keyCode)
                             m_startShowLine = line ;
                             _DBG_PRINTF ("MlEditView::updateHilightNumber_8 > m_startShowLine: %d", m_startShowLine);
                             updateView();
-                            return TRUE;    
+                            return TRUE;
                         }
-                    }                    
+                    }
                 }
-                    
+
             }
         }
 
@@ -1897,7 +1897,7 @@ int MlEditView::updateHilightNumber(int keyCode)
         }
     }
 
-    if(keyCode == KeyEvent::KEYCODE_CURSOR_UP) {        
+    if(keyCode == KeyEvent::KEYCODE_CURSOR_UP) {
         m_startShowLine = m_startShowLine -(cnt-1);
         _DBG_PRINTF ("MlEditView::updateHilightNumber_9 > m_startShowLine: %d", m_startShowLine);
         if (m_startShowLine < 0) {
@@ -1906,7 +1906,7 @@ int MlEditView::updateHilightNumber(int keyCode)
     }
     else {
         if (cnt + m_startShowLine < m_lineCharList.size()) {
-            m_startShowLine = m_startShowLine + (cnt - 1);    
+            m_startShowLine = m_startShowLine + (cnt - 1);
             if (m_startShowLine + cnt > m_lineCharList.size()) {
                 m_startShowLine = m_lineCharList.size() - cnt;
                 _DBG_PRINTF ("MlEditView::updateHilightNumber_10 > m_startShowLine: %d", m_startShowLine);
@@ -1931,12 +1931,12 @@ int MlEditView::updateHilightNumber(int keyCode)
 
 void MlEditView::drawHilightNumber(GraphicsContext* gc, int x, int y, int startCharIdx, int charCnt, char* lineStrPtr)
 {
-    int i=0; 
+    int i=0;
     int startChar, endChar;
     int subTable[20];
     bool hilightBkgTable[20];
     char hilightStrTable[20][40];
-    
+
     int subTableCnt =0;
     string str;
     int lineLen = charCnt;
@@ -1949,7 +1949,7 @@ void MlEditView::drawHilightNumber(GraphicsContext* gc, int x, int y, int startC
     memset(__table, 0x0, sizeof(__table));
     memset(hilightStrTable, 0x0, sizeof(hilightStrTable));
     char * ptr = NULL;
-    
+
     if(m_urlStringsLen < 0) // means parse all context, don't cut.
         ptr = (char*)m_strings.c_str();
     else {
@@ -1958,15 +1958,15 @@ void MlEditView::drawHilightNumber(GraphicsContext* gc, int x, int y, int startC
         ptr = (char *)str.c_str();
         memset(ptr+m_urlStringsLen, 0x0, len - m_urlStringsLen);
     }
-    
+
     int numberCnt = URL_ParseDataGen(ptr, __table, MAX_HILIGHT_NUM_CNT);
-    
+
     startChar = startCharIdx;
     endChar   = startCharIdx + charCnt;
-    
+
     memset(subTable, 0x0, sizeof(subTable));
     memset(hilightBkgTable, 0x0, sizeof(hilightBkgTable));
-    
+
     for(i = 0; i < numberCnt; i++) {
         cutStartPos = (__table[i]&0xFFFF0000)>>16;
         int _x = 0, _w = 0, _h = 0;
@@ -1974,13 +1974,13 @@ void MlEditView::drawHilightNumber(GraphicsContext* gc, int x, int y, int startC
         char buf[256];
         char sub_buf[256];
         char * _ptr = (char*)lineStrPtr;
-        
+
         memset(buf, 0x0, sizeof(buf));
         memset(sub_buf, 0x0, sizeof(sub_buf));
 
         cut_len = (__table[i]&0xFFFF);
         cutEndPos = cutStartPos + cut_len;
-         
+
         if(cutStartPos > endChar)
             continue;
         else if(cutEndPos < startChar)
@@ -1994,16 +1994,16 @@ void MlEditView::drawHilightNumber(GraphicsContext* gc, int x, int y, int startC
             }
             else {
                 memcpy(sub_buf, _ptr, (cutStartPos - startChar));
-                gc->getTextDrawSize(sub_buf, m_font, &off, &_h);                                    
+                gc->getTextDrawSize(sub_buf, m_font, &off, &_h);
                 _ptr = _ptr + (cutStartPos - startChar);
                 memcpy(buf, _ptr, cut_len);
                 //copy_len = cut_len;
                 gc->getTextDrawSize(buf, m_font, &_w, &_h);
             }
             _x = off + x;
-                                            
+
             subTable[subTableCnt] = ((_x&0xFFFF)<<16)| (_w&0xFFFF);
-            
+
         }
         else if(cutStartPos >= startChar && cutEndPos > endChar) {
             if(cutStartPos == startChar) {
@@ -2020,7 +2020,7 @@ void MlEditView::drawHilightNumber(GraphicsContext* gc, int x, int y, int startC
                 gc->getTextDrawSize(buf, m_font, &_w, &_h);
             }
             _x = off + x;
-                        
+
             subTable[subTableCnt] = ((_x&0xFFFF)<<16)| (_w&0xFFFF);
 
         }
@@ -2028,7 +2028,7 @@ void MlEditView::drawHilightNumber(GraphicsContext* gc, int x, int y, int startC
             off = 0;
             memcpy(buf, _ptr, cut_len -(startChar - cutStartPos));
             gc->getTextDrawSize(buf, m_font, &_w, &_h);
-            
+
             _x += off + x;
 
             subTable[subTableCnt] = ((_x& 0xFFFF)<<16) | (_w&0xFFFF);
@@ -2043,12 +2043,12 @@ void MlEditView::drawHilightNumber(GraphicsContext* gc, int x, int y, int startC
         else {
             continue;
         }
-        
+
         if(m_hilightNumberIndex == i) {
             hilightBkgTable[subTableCnt] = TRUE;
             strcpy(hilightStrTable[subTableCnt], buf);
             //CaretPosition = cutEndPos;
-        }                                
+        }
         subTableCnt++;
 
         if(m_hilightValid)
@@ -2058,40 +2058,40 @@ void MlEditView::drawHilightNumber(GraphicsContext* gc, int x, int y, int startC
     if(subTableCnt > 0) {
 
         int idx =0;
-        for(idx =0; idx < subTableCnt; idx ++) {                                                    
+        for(idx =0; idx < subTableCnt; idx ++) {
 
             int _x1        = (subTable[idx]&0xFFFF0000)>>16;
             int _width    = subTable[idx]&0xFFFF;
-            
+
             if(isDrawHilightBkg && hilightBkgTable[idx]) {
                 RECT rc = {_x1, y, _x1 + _width, y + (int)m_lineAboveH + fontH};
-                gc->fillRect(rc, 
-                            (Color::GRAY >> 16) & 0xFF, 
-                            (Color::GRAY >> 8) & 0xFF, 
-                            (Color::GRAY >> 0) & 0xFF, 
+                gc->fillRect(rc,
+                            (Color::GRAY >> 16) & 0xFF,
+                            (Color::GRAY >> 8) & 0xFF,
+                            (Color::GRAY >> 0) & 0xFF,
                             (Color::GRAY >> 24) & 0xFF);
                 gc->drawText( hilightStrTable[idx], rc,Color::WHITE, m_font, DT_LEFT | DT_TOP);
-                
+
             //    gc->textOut(_x1, y, hilightStrTable[idx], Color::WHITE, m_font);
             }
-            gc->drawLine(_x1 , y + m_lineAboveH + fontH-2, _x1+_width ,  y + m_lineAboveH + fontH-2, 1, 
-                            (m_txtColor >> 16) & 0xFF, 
-                            (m_txtColor >> 8) & 0xFF, 
-                            (m_txtColor >> 0) & 0xFF, 
+            gc->drawLine(_x1 , y + m_lineAboveH + fontH-2, _x1+_width ,  y + m_lineAboveH + fontH-2, 1,
+                            (m_txtColor >> 16) & 0xFF,
+                            (m_txtColor >> 8) & 0xFF,
+                            (m_txtColor >> 0) & 0xFF,
                             (m_txtColor >> 24) & 0xFF);
         }
     }
 }
-    
+
 void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
 {
     Point caretPos = {0, 0};
     IntRect irc ( rc.left() + m_hMargin, rc.top() + m_vMargin,
             rc.right() - m_hMargin, rc.bottom() - m_vMargin);
-    
+
     gc->setTextAboveLineExtra(m_lineAboveH);
     gc->setTextBellowLineExtra(m_lineBellowH);
-    
+
     int fontH = gc->getFontHeight(m_font);
     int lineH = fontH + m_lineAboveH + m_lineBellowH;
     int len = m_strings.size();
@@ -2129,33 +2129,35 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
             }
         }
 
-        IntList::iterator it = m_lineCharList.begin(); 
-#ifdef __MMI_T9_ARABIC__    
+        IntList::iterator it = m_lineCharList.begin();
+#ifdef __MMI_T9_ARABIC__
         int *info = (int *)malloc ((len + 1) * sizeof(int));
         int realCount = GetUTF8CharInfo (m_strings.c_str(), len, info);
-        info [realCount] = len; 
+        info [realCount] = len;
         for (int i = 1; i <= realCount; /*i++*/) {
 
             memcpy(tmpchar, str + info[i-1], info[i] - info[i-1]);
             tmpchar [info[i] - info[i-1]] = '\0';
-            if(IsSymbolUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar)) ||IsNumberUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar))) {
+            if (IsSymbolUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar))
+                    || IsNumberUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar))) {
                 i++;
             }
-            else {  
+            else {
                 break;
-            }            
+            }
         }
 
         free(info);
         info=NULL;
 
-        if(isTransformArabic(UTF8ToUCS2((Uint8 *)tmpchar)) ||IsArabicSymbolUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar))) {
+        if (IsTransformArabicUCS2Char (UTF8ToUCS2((Uint8 *)tmpchar))
+                || IsArabicSymbolUCS2Char(UTF8ToUCS2((Uint8 *)tmpchar))) {
             SetBiDiFlag(true);
-            setExchangeFlag(true);        
+            setExchangeFlag(true);
         }
         else {
             SetBiDiFlag(false);
-            setExchangeFlag(false);        
+            setExchangeFlag(false);
         }
 #endif
 
@@ -2181,11 +2183,11 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
                  * Now, the ommitted style only used by Dial Screen,
                  *      and must used the DIAL font.
                  * For other fonts , should to do :
-                 *  - re calculate the width of "..." 
+                 *  - re calculate the width of "..."
                  *  - and cut the sub string in one line by the above width .
                  */
-                if ((m_style & EDVS_OMITTED) 
-                        && m_startShowLine > 0 
+                if ((m_style & EDVS_OMITTED)
+                        && m_startShowLine > 0
                         && lineNo == m_startShowLine) {
 
                     //first line, omitted head
@@ -2214,7 +2216,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
                         Uint16 visual_str_len, charDir;
                         Uint16 tmpChar[2] = {0,};
                         int unicodeStartPosX, unicodeCaretPosX;
-                        
+
                         memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
                         strcpy(m_edit_tempstr1, m_strings.c_str());
 
@@ -2222,7 +2224,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
                             while(activeWordCount) {
                                 int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
                                 activeWordLen += lastChLen;
-                                m_edit_tempstr1[m_caretPos - activeWordLen] = '\0'; 
+                                m_edit_tempstr1[m_caretPos - activeWordLen] = '\0';
                                 activeWordCount--;
                             }
                             total = m_caretPos - activeWordLen;
@@ -2270,7 +2272,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
                                 }
 
                                 caretPos.x = irc.left() + w;
-                                caretPos.y = y;                             
+                                caretPos.y = y;
                                 caretWidth = 0;
 
                                 if (/*m_startPosY == m_caretPosY ||*/ m_startPosY == (int)lineNo) {
@@ -2291,14 +2293,14 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
                                         for(i=unicodeStartPosX; i<unicodeCaretPosX; i++) {
                                             tmpChar[0] = ((unsigned short*)m_edit_tempstr2)[i/*bidiStrOrder[i]-1*/];
                                             gc->getTextDrawSize(tmpChar, m_font, &w, &h);
-                                            caretWidth += w;                                    
+                                            caretWidth += w;
                                         }
                                     }
                                     else {
                                         for(i=unicodeStartPosX; i<visual_str_len; i++) {
                                             tmpChar[0] = ((unsigned short*)m_edit_tempstr2)[i/*bidiStrOrder[i]-1*/];
                                             gc->getTextDrawSize(tmpChar, m_font, &w, &h);
-                                            caretWidth += w;                                    
+                                            caretWidth += w;
                                         }
                                     }
 
@@ -2320,24 +2322,24 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
                                     for(i=0; i< unicodeCaretPosX; i++) {
                                         tmpChar[0] = ((unsigned short*)m_edit_tempstr2)[i/*bidiStrOrder[i]-1*/];
                                         gc->getTextDrawSize(tmpChar, m_font, &w, &h);
-                                        caretWidth += w;                                    
+                                        caretWidth += w;
                                     }
                                 }
                                 else {
                                     gc->getTextDrawSize((unsigned short*)m_edit_tempstr2, m_font, &w, &h);
-                                    caretWidth += w;                                    
+                                    caretWidth += w;
                                 }
 
                                 int oldrop = SetRasterOperation (gc->context(), ROP_XOR);
-                               
-                                m_caretRect.setRect (caretPos.x, caretPos.y, 
+
+                                m_caretRect.setRect (caretPos.x, caretPos.y,
                                     caretPos.x + caretWidth, caretPos.y + fontH);
 
                                 gc->fillRect(m_caretRect, GetRValue(m_txtColor), GetGValue(m_txtColor), GetBValue(m_txtColor), GetAValue(m_txtColor));
 
                                 SetRasterOperation (gc->context(), oldrop);
                             }
-                        }            
+                        }
                     }
                     else
 #endif
@@ -2353,9 +2355,9 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
 
                             if(lineStr.size() > 0)
                             {
-                                utf8len = lineStr.size();        
+                                utf8len = lineStr.size();
                                 if(m_caretPosX > utf8len)
-                                        m_caretPosX = utf8len;        
+                                        m_caretPosX = utf8len;
                                 index =GetUTF8CharCount(lineStr.c_str(),m_caretPosX);
 
                                 memset(m_edit_tempstr2, 0x0, sizeof(m_edit_tempstr2));
@@ -2382,7 +2384,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
                                 Uint16 tmpChar[2] = {0, };
 
                                 caretPos.x += irc.left();
-                                caretPos.y = y;                                    
+                                caretPos.y = y;
 
                                 if(gc->getBiDiFlag()) {
                                     gc->getTextDrawSize((unsigned short*)m_edit_tempstr2, m_font, &w, &h);
@@ -2394,12 +2396,12 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
                                     gc->getTextDrawSize(tmpChar, m_font, &w, &h);
                                     caretPos.x += w;
                                 }
-                                
+
                                 if (MMI_active_multitap >= 0) {
                                     tmpChar[0] = ((unsigned short*)m_edit_tempstr2)[index-1];
                                     gc->getTextDrawSize(tmpChar, m_font, &w, &h);
                                     caretWidth = w;
-                                }            
+                                }
                             }
                         }
                     }
@@ -2414,14 +2416,14 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
 
     if (m_style & EDVS_BASELINE) {
         for (int y = irc.top() + lineH; y < irc.bottom() ; y += lineH){
-            gc->drawHVDotLine(irc.left(), y, irc.right(), y, 
-                    (m_txtColor >> 16) & 0xFF, 
-                    (m_txtColor >> 8) & 0xFF, 
-                    (m_txtColor >> 0) & 0xFF, 
+            gc->drawHVDotLine(irc.left(), y, irc.right(), y,
+                    (m_txtColor >> 16) & 0xFF,
+                    (m_txtColor >> 8) & 0xFF,
+                    (m_txtColor >> 0) & 0xFF,
                     (m_txtColor >> 24) & 0xFF);
         }
     }
-    
+
     caretPos.y += m_lineAboveH;
 
     if (isFocus() && m_bCaretShown && !isReadOnly()){
@@ -2437,7 +2439,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
             caretWidth++;
         }
 
-        m_caretRect.setRect (caretPos.x, caretPos.y, 
+        m_caretRect.setRect (caretPos.x, caretPos.y,
                 caretPos.x + caretWidth, caretPos.y + fontH);
 
         gc->fillRect(m_caretRect, GetRValue(m_txtColor), GetGValue(m_txtColor), GetBValue(m_txtColor), GetAValue(m_txtColor));
@@ -2446,7 +2448,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
             SetRasterOperation (gc->context(), oldrop);
     }
 
-#ifdef __MMI_T9_ARABIC__    
+#ifdef __MMI_T9_ARABIC__
     SetBiDiFlag(IsArabicSet());
 #endif
    //drawScroll(gc, rc, status);
@@ -2455,23 +2457,23 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
 
 bool MlEditView::handleEvent(Event* event)
 {
-    if (event->eventType() == Event::TIMER 
+    if (event->eventType() == Event::TIMER
             && m_timerId == ((TimerEvent *)event)->timerID()
             && isFocus()) {
 #ifdef __MMI_T9__
        if(m_bSelect==false && m_multapTimerId == 0)
-#endif           
+#endif
             blinkCaret();
     }
 
-    if (event->eventType() == Event::TIMER 
+    if (event->eventType() == Event::TIMER
         && m_multapTimerId == ((TimerEvent *)event)->timerID()) {
 
         imeDisableActiveMultitapWithoutDraw();
         if (imeGetPreMultitapShiftMode() == SHIFT_STATE_UPPER) {
             imeSetPreMultitapShiftMode(SHIFT_STATE_INIT);
 #ifdef __MMI_T9__
-            imeSetSwitch();    
+            imeSetSwitch();
 #endif
         }
 
@@ -2479,17 +2481,17 @@ bool MlEditView::handleEvent(Event* event)
         m_multapTimerId = 0;
 #ifdef __MMI_T9__
         if(m_bSelect==false)
-#endif      
+#endif
             blinkCaret();
     }
 
     return true;
 }
 
-int MlEditView::setCaretPosition(int pos) 
-{ 
-    int old = m_caretPos; 
-    m_caretPos = pos; 
+int MlEditView::setCaretPosition(int pos)
+{
+    int old = m_caretPos;
+    m_caretPos = pos;
 #ifdef __MMI_T9__
     if (imeGetInputModeFlag() == INPUT_MODE_SMART) {
         imeT9SetUnicodeCursor(GetUTF8CharCount(m_strings.c_str(), pos));
@@ -2497,7 +2499,7 @@ int MlEditView::setCaretPosition(int pos)
 #endif
 
     refreshCaretPos(false);
-    return old; 
+    return old;
 }
 
 void MlEditView::drawScroll (GraphicsContext* gc, IntRect &rc, int status)
@@ -2507,28 +2509,28 @@ void MlEditView::drawScroll (GraphicsContext* gc, IntRect &rc, int status)
 
     int w, h;
     IntRect _rc, bkgRc;
-    
+
     getSize(&w, &h);
 
     int fontH         = m_font->size; // GraphicsContext::screenGraphics()->getFontHeight(m_font);
     int lineH         = fontH + m_lineAboveH + m_lineBellowH;
-  
+
     int showCnt         = (h- m_vMargin)/lineH;
     int lines         = m_lineCharList.size();
     int scrollWith     = DEFAULT_EDIT_SCROLL_W;
-    
+
     if(lines <= showCnt)
         return ;
 
     int posY;
-    
+
     if(m_startShowLine > 0)
         posY = rc.top() + (m_startShowLine*100*h/lines)/100;
     else
         posY = rc.top();
-    
+
     int foreH = showCnt*h/lines;
-    
+
     if((int)m_startShowLine + showCnt >= lines) {
         if(gc->getBiDiFlag())
             _rc.setRect(rc.left(), posY, rc.left() +scrollWith/2, h);

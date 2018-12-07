@@ -72,7 +72,7 @@ public:
     bool start(void);
     bool pause(void);
     bool resume(void);
-    bool stop(void); 
+    bool stop(void);
     bool reset(void);
     PlayState state(void) {return m_state;}
 

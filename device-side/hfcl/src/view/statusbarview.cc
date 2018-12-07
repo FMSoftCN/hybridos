@@ -90,7 +90,7 @@ View* StatusBarView::getSBView(int v_id) const
 StatusBarView::SBViewNode* StatusBarView::find(int v_id) const
 {
     for (SBVList::const_iterator it = m_sbwList.begin(); it != m_sbwList.end(); ++it) {
-		SBViewNode* nd = (*it);
+        SBViewNode* nd = (*it);
         if (nd && nd->id == v_id) {
             return nd;
         }

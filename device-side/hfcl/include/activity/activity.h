@@ -68,7 +68,7 @@ public:
     FullScreenActivity() : Activity() { }
     virtual ~FullScreenActivity() { }
 
-    virtual void onCreate(ContextStream* contextStream, Intent* intent); 
+    virtual void onCreate(ContextStream* contextStream, Intent* intent);
 };
 
 } // namespace hfcl

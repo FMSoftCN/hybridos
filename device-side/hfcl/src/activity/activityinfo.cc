@@ -44,7 +44,7 @@ ActivityInfo::~ActivityInfo()
         // delete m_act;
         HFCL_DELETE(m_act);
     m_act = NULL;
-	/*
+    /*
     if (m_stream)
         // delete m_stream;
         HFCL_DELETE(m_stream);
@@ -54,32 +54,32 @@ ActivityInfo::~ActivityInfo()
 
 BaseActivity* ActivityInfo::getActivity(void)
 {
-	return m_act;
+    return m_act;
 }
 
 void ActivityInfo::setActivity(BaseActivity* act)
 {
-	m_act = act;
+    m_act = act;
 }
 
 string ActivityInfo::getName(void)
 {
-	return m_actname;
+    return m_actname;
 }
 
 void ActivityInfo::setName(string name)
 {
-	m_actname = name;
+    m_actname = name;
 }
 /*
 ContextStream* ActivityInfo::getContextStream(void)
 {
-	return m_stream;
+    return m_stream;
 }
 
 void ActivityInfo::setContextStream(ContextStream* cs)
 {
-	m_stream = cs;
+    m_stream = cs;
 }
 */
 } // namespace hfcl

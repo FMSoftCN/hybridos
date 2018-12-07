@@ -57,8 +57,8 @@ int File::open(const char * filename, int mode)
 
     m_fileName = (char *)filename;
     length();
-    
-	return m_filePointer;
+
+    return m_filePointer;
 }
 
 int File::close(void)
@@ -73,7 +73,7 @@ int File::close(void)
 int File::close(HTHandle fsHandle)
 {
     int ret;
-	if (fsHandle == 0)
+    if (fsHandle == 0)
         return -1;
 
     ret = mgclFclose(fsHandle);

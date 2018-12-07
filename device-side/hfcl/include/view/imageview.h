@@ -42,7 +42,7 @@ public:
 
     bool setImage(Image* pImg);
     Image *getImage(void) { return m_image; }
-    
+
     void setImageDrawMode(int  mode) {
         m_format.drawMode = mode;
     }

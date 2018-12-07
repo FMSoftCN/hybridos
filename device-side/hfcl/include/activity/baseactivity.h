@@ -36,10 +36,10 @@ public:
     typedef enum _ACT_STATE
     {
         ORIGIN = 0,
-        INIT, 
-        RUNNING, 
-        SLEEP, 
-        SUSPEND, 
+        INIT,
+        RUNNING,
+        SLEEP,
+        SUSPEND,
     } ACT_STATE;
 
     BaseActivity():m_priority(PRIORITY_HIGH), m_name(NULL), m_state(INIT){};

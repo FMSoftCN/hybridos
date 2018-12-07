@@ -29,44 +29,44 @@ namespace hfcl {
 ** if incorrect, cut the tail.
 **/
 static int check_utf8_str(char *_buff, int _len)
-{		
-	int _tail_utf8_len = 1;
-	int _tail_real_len = 1;
+{
+    int _tail_utf8_len = 1;
+    int _tail_real_len = 1;
 
-	if (_buff == NULL)
-		return 0;
+    if (_buff == NULL)
+        return 0;
 
-	if (_len <= 0) {
-		_len = strlen(_buff);
-	}
-	char *_tail = _buff + _len - 1;
+    if (_len <= 0) {
+        _len = strlen(_buff);
+    }
+    char *_tail = _buff + _len - 1;
 
-	if (!((*_tail) & 0x80)) {
-		// tail is assic charater
-		return _len;
-	}
+    if (!((*_tail) & 0x80)) {
+        // tail is assic charater
+        return _len;
+    }
 
-	while(((*_tail) & 0x80) && !((*_tail) & 0x40)) {
-		_tail_real_len++;
-		_tail--;
-	}
+    while(((*_tail) & 0x80) && !((*_tail) & 0x40)) {
+        _tail_real_len++;
+        _tail--;
+    }
 
-	if (!((*_tail) & 0x80)) {
-		*(_tail + 1) = '\0';
-		return _len - (_tail_real_len - 1);
-	}
-	
-	while ((*_tail)  & (0x80 >> _tail_utf8_len)) {
-    	_tail_utf8_len++;
-	}
-	
-	if (_tail_utf8_len != _tail_real_len) {
-		// cut the error tail
-		*_tail = '\0';
-		return _len - _tail_real_len;
-	}
-	
-	return _len;
+    if (!((*_tail) & 0x80)) {
+        *(_tail + 1) = '\0';
+        return _len - (_tail_real_len - 1);
+    }
+
+    while ((*_tail)  & (0x80 >> _tail_utf8_len)) {
+        _tail_utf8_len++;
+    }
+
+    if (_tail_utf8_len != _tail_real_len) {
+        // cut the error tail
+        *_tail = '\0';
+        return _len - _tail_real_len;
+    }
+
+    return _len;
 }
 
 static int utf8_len_first_char (unsigned char* mstr, int len)
@@ -107,16 +107,16 @@ int GetUTF8CharInfo(const char *mstr, int len, int *retPosChars)
         return 0;
     }
 
-	if ((_p_str = (unsigned char *)HFCL_MALLOC(len + 1)) == NULL) {
-		return 0;
-	}
-	
-	memcpy(_p_str, mstr, len + 1);
-	_p_str[len] = '\0';
-	
+    if ((_p_str = (unsigned char *)HFCL_MALLOC(len + 1)) == NULL) {
+        return 0;
+    }
+
+    memcpy(_p_str, mstr, len + 1);
+    _p_str[len] = '\0';
+
     str_temp = (unsigned char *)_p_str;
 
-	len = check_utf8_str((char *)str_temp, len);
+    len = check_utf8_str((char *)str_temp, len);
 
     while (left_bytes > 0) {
         if (retPosChars)
@@ -130,29 +130,29 @@ int GetUTF8CharInfo(const char *mstr, int len, int *retPosChars)
             continue;
         }
         else if (len_cur_char == 0) {
-		    int   c = *((unsigned char *)(str_temp));
-	        int n = 1;
-		    if (c & 0x80) {
-		        while (c & (0x80 >> n))
-	            n++;
-		    }
-				
-			if(left_bytes < n) {
-				break;
-			}
-			else {
-	            count ++;
-	            left_bytes -= n;
-	            str_temp += n;
-			}
-		 }
-		 else {
-        	break;
+            int   c = *((unsigned char *)(str_temp));
+            int n = 1;
+            if (c & 0x80) {
+                while (c & (0x80 >> n))
+                n++;
+            }
+
+            if(left_bytes < n) {
+                break;
+            }
+            else {
+                count ++;
+                left_bytes -= n;
+                str_temp += n;
+            }
+         }
+         else {
+            break;
         }
     }
 
-	HFCL_FREE(_p_str);
-	
+    HFCL_FREE(_p_str);
+
     return count;
 }
 
@@ -167,11 +167,11 @@ int GetLastUTF8CharLen(const char *str, int len)
     {
         return 0;
     }
-	
+
     str_temp = (unsigned char *)str;
 
-	len = check_utf8_str((char *)str_temp, len);
-		
+    len = check_utf8_str((char *)str_temp, len);
+
     while (left_bytes > 0) {
         len_cur_char = utf8_len_first_char(str_temp, left_bytes);
         if (len_cur_char > 0) {
@@ -180,7 +180,7 @@ int GetLastUTF8CharLen(const char *str, int len)
             lastlen = len_cur_char;
             continue;
         } else {
-        	break;
+            break;
         }
     }
     return lastlen;
@@ -193,9 +193,9 @@ int GetFirstUTF8CharLen(const char *str, int len)
         return 0;
     }
 
-	len = check_utf8_str((char*)str, len);
+    len = check_utf8_str((char*)str, len);
 
-	return utf8_len_first_char((unsigned char*)str, len);
+    return utf8_len_first_char((unsigned char*)str, len);
 }
 
 int GetUTF8CharCount(const char *mstr, int len)
@@ -209,9 +209,9 @@ int GetUTF8CharCount(const char *mstr, int len)
     {
         return 0;
     }
-	
-	//len = check_utf8_str((char *)str_temp, len);
-	
+
+    //len = check_utf8_str((char *)str_temp, len);
+
     while (left_bytes > 0) {
         len_cur_char = utf8_len_first_char(str_temp, left_bytes);
         if (len_cur_char > 0) {
@@ -220,7 +220,7 @@ int GetUTF8CharCount(const char *mstr, int len)
             str_temp += len_cur_char;
             continue;
         } else {
-        	break;
+            break;
         }
     }
     return count;
@@ -230,42 +230,42 @@ int GetUTF8LenByCharCount(const char *mstr, int charcount)
 {
    char *str_temp = NULL;
    int charLen, tLen = 0;
-   
+
     if(mstr == NULL || charcount <= 0)
     {
         return 0;
     }
-	str_temp = (char *)mstr;
-	while (charcount){
-		charLen = GetFirstUTF8CharLen(str_temp, strlen(str_temp));
-		tLen += charLen;
-		str_temp += charLen;
-		charcount --;		
-	}		 
+    str_temp = (char *)mstr;
+    while (charcount){
+        charLen = GetFirstUTF8CharLen(str_temp, strlen(str_temp));
+        tLen += charLen;
+        str_temp += charLen;
+        charcount --;
+    }
     return  tLen;
 }
 
 Uint16 UTF8ToUCS2 (Uint8 *utf8)
 {
     Uint16  ucs2;
-	unsigned char c = utf8[0];
+    unsigned char c = utf8[0];
 
-	if (c < 0x80) {
-		ucs2 = c;
-	} else if (c < 0xe0) {
-		ucs2 = ((Uint16) (c & 0x1f) << 6) | (Uint16) (utf8[1] ^ 0x80);
-	} else {
-	    ucs2 =	  ((Uint16) (c & 0x0f) << 12)
-				| ((Uint16) (utf8[1] ^ 0x80) << 6)
-				|  (Uint16) (utf8[2] ^ 0x80);
-	}
+    if (c < 0x80) {
+        ucs2 = c;
+    } else if (c < 0xe0) {
+        ucs2 = ((Uint16) (c & 0x1f) << 6) | (Uint16) (utf8[1] ^ 0x80);
+    } else {
+        ucs2 =      ((Uint16) (c & 0x0f) << 12)
+                | ((Uint16) (utf8[1] ^ 0x80) << 6)
+                |  (Uint16) (utf8[2] ^ 0x80);
+    }
 
-	return ucs2;
+    return ucs2;
 }
 
 bool IsNumberUCS2Char (Uint16 inChar)
 {
-   if (inChar >= 0x0030  && inChar <= 0x0039) 
+   if (inChar >= 0x0030  && inChar <= 0x0039)
       return true;
    else
       return false;
@@ -274,7 +274,7 @@ bool IsNumberUCS2Char (Uint16 inChar)
 bool IsSymbolUCS2Char (Uint16 inChar)
 {
    if ((inChar >= 0x0020  && inChar <= 0x002F) || (inChar >= 0x003A  && inChar <= 0x0040)
-      ||(inChar >= 0x005B  && inChar <= 0x0060)|| (inChar >= 0x007B  && inChar <= 0x007E) 
+      ||(inChar >= 0x005B  && inChar <= 0x0060)|| (inChar >= 0x007B  && inChar <= 0x007E)
       || (inChar >= 0x00A1 && inChar <= 0x00BF)||(inChar == 0x20AC)||(inChar == 0x060C))
       return true;
    else
@@ -287,6 +287,15 @@ bool IsArabicSymbolUCS2Char (Uint16 inChar)
       return true;
    else
       return false;
+}
+
+bool IsTransformArabicUCS2Char (Uint16 inChar)
+{
+    if ((inChar >= 0x0621 && inChar <= 0x0650)
+            || (inChar >= 0x0671 && inChar <= 0x06D3))
+        return true;
+
+    return false;
 }
 
 } // namespace hfcl

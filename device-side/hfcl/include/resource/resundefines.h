@@ -67,8 +67,8 @@
 
 //sys resource
 #undef sys_style
-#undef sys_text     
-#undef sys_image    
+#undef sys_text
+#undef sys_image
 #undef sys_bmpfont_image
 #undef sys_font
 #undef sys_bmpfont
@@ -132,13 +132,13 @@
 #undef end_common_drset_res
 /////////////////////////////////
 //drawable set group
-#undef begin_drsetgroup_res  
+#undef begin_drsetgroup_res
 #undef begin_drsetgroup
-#undef end_drsetgroup 
+#undef end_drsetgroup
 #undef drset
 #undef begin_common_drsetgroup
 #undef end_common_drsetgroup
-#undef end_drsetgroup_res 
+#undef end_drsetgroup_res
 #undef begin_common_drsetgroup_res
 #undef end_common_drsetgroup_res
 
@@ -248,7 +248,7 @@
 #undef begin_foreach
 #undef end_foreach
 #undef begin_resid
-#undef end_resid  
+#undef end_resid
 #undef my_imageid
 #undef my_textid
 

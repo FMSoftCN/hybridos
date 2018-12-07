@@ -37,8 +37,8 @@ void TransitionManager::addTransition(HTData key, Transition* t)
 
     oldt = t;
 #else
-	removeTransition(key);
-	m_trMaps[key] = t;
+    removeTransition(key);
+    m_trMaps[key] = t;
 #endif
 
     if (m_timerId == 0)
@@ -50,7 +50,7 @@ void TransitionManager::removeTransition(HTData key)
     TransitionMap::iterator it = m_trMaps.find(key);
     if (it == m_trMaps.end())
         return;
-	
+
     it->second->release();
     m_trMaps.erase(it);
 }
@@ -96,7 +96,7 @@ TransitionManager::~TransitionManager()
     for (TransitionMap::iterator it = m_trMaps.begin(); it != m_trMaps.end(); ++it) {
         it->second->release();
     }
-	if(m_timerId>0) removeTimer(m_timerId);
+    if(m_timerId>0) removeTimer(m_timerId);
 
 }
 
@@ -122,52 +122,52 @@ Transition* GetTransition(HTData key)
 
 static int UTF8ToUCS2 (Uint16 *ucs2, Uint8 *utf8)
 {
-	unsigned char c = utf8[0];
+    unsigned char c = utf8[0];
 
-	if (c < 0x80) 
-	{
-		*ucs2 = c;
-		return 1;
-	} 
-	else if (c < 0xe0)
-	{
-		*ucs2 = ((Uint16) (c & 0x1f) << 6) | (Uint16) (utf8[1] ^ 0x80);
-		return 2;
-	} 
-	else
-	{
-	    *ucs2 =	  ((Uint16) (c & 0x0f) << 12)
-				| ((Uint16) (utf8[1] ^ 0x80) << 6)
-				|  (Uint16) (utf8[2] ^ 0x80);
-		return 3;
-	}
+    if (c < 0x80)
+    {
+        *ucs2 = c;
+        return 1;
+    }
+    else if (c < 0xe0)
+    {
+        *ucs2 = ((Uint16) (c & 0x1f) << 6) | (Uint16) (utf8[1] ^ 0x80);
+        return 2;
+    }
+    else
+    {
+        *ucs2 =      ((Uint16) (c & 0x0f) << 12)
+                | ((Uint16) (utf8[1] ^ 0x80) << 6)
+                |  (Uint16) (utf8[2] ^ 0x80);
+        return 3;
+    }
 }
 
 static inline bool is_bidi_right(unsigned char *_str)
 {
-	int _clen;
-	Uint32 _dir;
-	Uint16 _unicode = 0;
-	
-	if (_str == NULL){
-		return false;
-	}
+    int _clen;
+    Uint32 _dir;
+    Uint16 _unicode = 0;
 
-	while (*_str != '\0' && (_clen = UTF8ToUCS2(&_unicode, _str)) == 1) {
-		if (isalpha(*_str)) {
-			return false;
-		}
-		_str++;
-	}
+    if (_str == NULL){
+        return false;
+    }
 
-	if (*_str == '\0') {
-		return false;
-	}
+    while (*_str != '\0' && (_clen = UTF8ToUCS2(&_unicode, _str)) == 1) {
+        if (isalpha(*_str)) {
+            return false;
+        }
+        _str++;
+    }
+
+    if (*_str == '\0') {
+        return false;
+    }
 
     if (GetGlyphBIDIType (GetSystemFont (SYSLOGFONT_WCHAR_DEF), (Glyph32)_unicode, &_dir))
-		return (_dir == BIDI_TYPE_RTL || _dir == BIDI_TYPE_AL || _dir == BIDI_TYPE_AN);
-        
-	return false;
+        return (_dir == BIDI_TYPE_RTL || _dir == BIDI_TYPE_AL || _dir == BIDI_TYPE_AN);
+
+    return false;
 }
 
 bool RollTextTransition::DrawRollText(View *view, GraphicsContext* context,
@@ -176,7 +176,7 @@ bool RollTextTransition::DrawRollText(View *view, GraphicsContext* context,
 {
     int length, height;
     IntRect rcroll = rc;
-	unsigned char *_str = NULL;
+    unsigned char *_str = NULL;
 
     if(type == DRDT_TEXT)
     {
@@ -190,7 +190,7 @@ bool RollTextTransition::DrawRollText(View *view, GraphicsContext* context,
         }
     }
 
-	if (!context  || !drset || data == 0)
+    if (!context  || !drset || data == 0)
         return false;
 
     RollTextTransition* t = (RollTextTransition*)GetTransition((HTData)view);
@@ -204,20 +204,20 @@ bool RollTextTransition::DrawRollText(View *view, GraphicsContext* context,
     if (length <= rc.width()) {
         return false;
     }
-	
-	if ( t->m_offset > length - rc.width()+5) {
-//		t->m_offset = rc.width() * (-1);
+
+    if ( t->m_offset > length - rc.width()+5) {
+//        t->m_offset = rc.width() * (-1);
         t->m_owner = NULL;
         return false;
-	}
+    }
 
-	if (is_bidi_right(_str)) {
-	    rcroll.m_right += t->m_offset;
-	    rcroll.m_left = rcroll.m_right - length;
-	} else {
-	    rcroll.m_left -= t->m_offset;
-	    rcroll.m_right = rcroll.m_left + length;
-	}
+    if (is_bidi_right(_str)) {
+        rcroll.m_right += t->m_offset;
+        rcroll.m_left = rcroll.m_right - length;
+    } else {
+        rcroll.m_left -= t->m_offset;
+        rcroll.m_right = rcroll.m_left + length;
+    }
     context->save();
 
     context->clip(rc);
@@ -235,7 +235,7 @@ bool RollTextTransition::NeedRollText(DrawableSet* drset, int draw_id, int draw_
         return false;
 
     int length = rc.width();
-	int height = rc.height();
+    int height = rc.height();
 
     if (!drset->calcDrawableSize(draw_id, draw_state, length, height, data, type))
         return false;
@@ -263,7 +263,7 @@ void RemoveRollText(View* view)
 {
     if (!view)
         return;
-	
+
     TransitionManager* tm = GetCommonTransitionManager();
     tm->removeTransition((HTData)view);
 }

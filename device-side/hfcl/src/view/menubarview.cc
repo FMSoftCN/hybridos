@@ -19,30 +19,29 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "view/menubarview.h"
+#include "graphics/textmode.h"
 
-#include "textmode.h"
-#include "resource/respkgmanager.h"
-#include "menubarview.h"
 namespace hfcl {
 
 #define MENUBAR_MARGIN  0
 #define MENUBAR_BORDER_LEN 16
 
-MenuBarView::MenuBarView(View* p_parent) 
-	: PanelView(p_parent, DEFAULT_VIEW_DRAWABLESET(MenuBarView))
-	, m_left_strid(-1)
-	, m_middle_strid(-1)
-	, m_right_strid(-1)
-	, m_left_image(NULL)
-	, m_middle_image(NULL)
-	, m_right_image(NULL)
-	, m_margin (MENUBAR_MARGIN)
-	, m_border_len(MENUBAR_BORDER_LEN)
+MenuBarView::MenuBarView(View* p_parent)
+    : PanelView(p_parent, DEFAULT_VIEW_DRAWABLESET(MenuBarView))
+    , m_left_strid(-1)
+    , m_middle_strid(-1)
+    , m_right_strid(-1)
+    , m_left_image(NULL)
+    , m_middle_image(NULL)
+    , m_right_image(NULL)
+    , m_margin (MENUBAR_MARGIN)
+    , m_border_len(MENUBAR_BORDER_LEN)
 {
 
 }
 
-MenuBarView::MenuBarView(View* p_parent, DrawableSet* drset) 
+MenuBarView::MenuBarView(View* p_parent, DrawableSet* drset)
     : PanelView(p_parent, drset)
     , m_left_image(NULL)
     , m_middle_image(NULL)
@@ -54,15 +53,15 @@ MenuBarView::MenuBarView(View* p_parent, DrawableSet* drset)
 
 MenuBarView::~MenuBarView()
 {
-	if(m_left_image) {
-		HFCL_DELETE(m_left_image);
-	}
-	if(m_middle_image) {
-		HFCL_DELETE(m_middle_image);
-	}
-	if(m_right_image) {
-		HFCL_DELETE(m_right_image);
-	}
+    if(m_left_image) {
+        HFCL_DELETE(m_left_image);
+    }
+    if(m_middle_image) {
+        HFCL_DELETE(m_middle_image);
+    }
+    if(m_right_image) {
+        HFCL_DELETE(m_right_image);
+    }
 }
 
 void MenuBarView::setLeftText(int strid)
@@ -99,7 +98,7 @@ void MenuBarView::setRightText(int strid)
 }
 
 void MenuBarView::setLeftText (const char* txt)
-{ 
+{
     if (txt == NULL)
         txt = "";
 
@@ -114,7 +113,7 @@ void MenuBarView::setLeftText (const char* txt)
 }
 
 void MenuBarView::setMiddleText(const char* txt)
-{ 
+{
     if (txt == NULL)
         txt = "";
 
@@ -129,7 +128,7 @@ void MenuBarView::setMiddleText(const char* txt)
 }
 
 void MenuBarView::setRightText(const char* txt)
-{ 
+{
     if (txt == NULL)
         txt = "";
 
@@ -145,67 +144,67 @@ void MenuBarView::setRightText(const char* txt)
 
 void MenuBarView::drawContent(GraphicsContext* context, IntRect& rc, int status)
 {
-	PanelView::drawContent(context, rc, status);
+    PanelView::drawContent(context, rc, status);
 
-	if(m_left_strid>0)
-		drawText(context, m_left_strid, SEL_LEFT);
-	else
-		drawText(context, m_left, SEL_LEFT);
-	
+    if(m_left_strid>0)
+        drawText(context, m_left_strid, SEL_LEFT);
+    else
+        drawText(context, m_left, SEL_LEFT);
+
     drawImage(context, SEL_LEFT);
 
     if(m_right_strid>0)
-		drawText(context, m_right_strid, SEL_RIGHT);
-	else
-		drawText(context, m_right, SEL_RIGHT);
-	
+        drawText(context, m_right_strid, SEL_RIGHT);
+    else
+        drawText(context, m_right, SEL_RIGHT);
+
     drawImage(context, SEL_RIGHT);
-	
+
     if(m_middle_strid>0)
-		drawText(context, m_middle_strid, SEL_MIDDLE);
-	else
-		drawText(context, m_middle, SEL_MIDDLE);
-	
+        drawText(context, m_middle_strid, SEL_MIDDLE);
+    else
+        drawText(context, m_middle, SEL_MIDDLE);
+
     drawImage(context, SEL_MIDDLE);
 }
 
 void MenuBarView::drawText(GraphicsContext* context, const string &str, int item)
 {
-	if(str.length() > 0) {
-		IntRect rc;
-		int state = DRAWSTATE_NORMAL;
+    if(str.length() > 0) {
+        IntRect rc;
+        int state = DRAWSTATE_NORMAL;
 
-		calcRect(rc, item);
+        calcRect(rc, item);
 
         if (item != SEL_MIDDLE)
             m_drset->setDrawableElement (DR_CONTENT, SYS_SE_FONT, (DWORD)GetSystemFont (SYSLOGFONT_CAPTION));
         else
             m_drset->setDrawableElement (DR_CONTENT, SYS_SE_FONT, (DWORD)GetSystemFont (SYSLOGFONT_DEFAULT));
 
-		if (m_selItem == item) {
-			state = DRAWSTATE_PUSHED; //draw hilight if need
+        if (m_selItem == item) {
+            state = DRAWSTATE_PUSHED; //draw hilight if need
             _DBG_PRINTF ("MenuBarView::drawText: hilight item: %d\n", item);
-			m_drset->draw(context, DR_HILIGHT, state, rc);
-		}
+            m_drset->draw(context, DR_HILIGHT, state, rc);
+        }
 
-		FormatText formatText = {
-			str.c_str(),
-			(item - 1) | TextMode::ValignMiddle | TextMode::SingleLine | m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTLINEMODE),
-		};
+        FormatText formatText = {
+            str.c_str(),
+            (item - 1) | TextMode::ValignMiddle | TextMode::SingleLine | m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTLINEMODE),
+        };
 
 #if 0
-		int w, h;
-		if (m_drset->calcDrawableSize(DR_CONTENT, 
-				DRAWSTATE_NORMAL, w, h, (DWORD)&formatText, DRDT_FORMATTEXT))
-		{
-			if (item == SEL_LEFT)
-				rc.setRect(rc.left(), rc.top(), rc.left() + w, rc.bottom());
-			else if (item == SEL_RIGHT)
-				rc.setRect(rc.right() - w, rc.top(), rc.right(), rc.bottom());
-		}
+        int w, h;
+        if (m_drset->calcDrawableSize(DR_CONTENT,
+                DRAWSTATE_NORMAL, w, h, (DWORD)&formatText, DRDT_FORMATTEXT))
+        {
+            if (item == SEL_LEFT)
+                rc.setRect(rc.left(), rc.top(), rc.left() + w, rc.bottom());
+            else if (item == SEL_RIGHT)
+                rc.setRect(rc.right() - w, rc.top(), rc.right(), rc.bottom());
+        }
 #endif
-		m_drset->draw(context, DR_CONTENT, state, rc, (DWORD)&formatText, DRDT_FORMATTEXT);
-	}
+        m_drset->draw(context, DR_CONTENT, state, rc, (DWORD)&formatText, DRDT_FORMATTEXT);
+    }
 }
 
 void MenuBarView::drawText(GraphicsContext* context, int strId, int item)
@@ -213,112 +212,112 @@ void MenuBarView::drawText(GraphicsContext* context, int strId, int item)
     IntRect rc;
     int state = DRAWSTATE_NORMAL;
 
-	calcRect (rc, item);
+    calcRect (rc, item);
 
     if (item != SEL_MIDDLE)
         m_drset->setDrawableElement (DR_CONTENT, SYS_SE_FONT, (DWORD)GetSystemFont (SYSLOGFONT_CAPTION));
     else
         m_drset->setDrawableElement (DR_CONTENT, SYS_SE_FONT, (DWORD)GetSystemFont (SYSLOGFONT_DEFAULT));
 
-	if (m_selItem == item) {
+    if (m_selItem == item) {
         state = DRAWSTATE_PUSHED; //draw hilight if need
-		m_drset->draw (context, DR_HILIGHT, state, rc);
+        m_drset->draw (context, DR_HILIGHT, state, rc);
     }
 
     FormatText formatText = {
         GetText(strId),
-        (item == SEL_LEFT ? TextMode::AlignLeft : (item == SEL_RIGHT ? TextMode::AlignRight : TextMode::AlignCenter)) 
-        | TextMode::ValignMiddle | TextMode::SingleLine | TextMode::CharBreak 
+        (item == SEL_LEFT ? TextMode::AlignLeft : (item == SEL_RIGHT ? TextMode::AlignRight : TextMode::AlignCenter))
+        | TextMode::ValignMiddle | TextMode::SingleLine | TextMode::CharBreak
         | m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTLINEMODE),
     };
 
     m_drset->draw (context, DR_CONTENT, state, rc, (DWORD)&formatText, DRDT_FORMATTEXT);
 
 #if 0
-	int w, h;
-	if (m_drset->calcDrawableSize(DR_CONTENT, DRAWSTATE_NORMAL, w, h, (DWORD)&formatText, DRDT_FORMATTEXT))
-	{
-		int mid_img_w = 14;
-		
-		if (item == SEL_LEFT)
-		{
-			if(m_right_strid > 0) // has right text
-			{
-				int w_tmp = 0;
-				FormatText formatText_r = {
-					GetText(m_right_strid), 
-					TextMode::AlignRight | TextMode::ValignMiddle | TextMode::SingleLine | m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTLINEMODE)
-				};
+    int w, h;
+    if (m_drset->calcDrawableSize(DR_CONTENT, DRAWSTATE_NORMAL, w, h, (DWORD)&formatText, DRDT_FORMATTEXT))
+    {
+        int mid_img_w = 14;
 
-				m_drset->calcDrawableSize(DR_CONTENT, DRAWSTATE_NORMAL, w_tmp, h, (DWORD)&formatText_r, DRDT_FORMATTEXT);
-				if((NULL == m_middle_image) && (0 == m_middle_strid))
-				{
-					if(w > (_ngux_screen_w>>1) &&  (w + w_tmp + (m_margin*3)) > _ngux_screen_w)
-						rc.setRect(rc.left(), rc.top(), ((_ngux_screen_w>>1) - (m_margin*1.5)), rc.bottom());
-					else
-						rc.setRect(rc.left(), rc.top(), rc.left() + w, rc.bottom());
-				}
-				else
-				{
-					if((rc.left() + w) > ((_ngux_screen_w - mid_img_w - m_margin) >> 1))	
-						rc.setRect(rc.left(), rc.top(), ((_ngux_screen_w - mid_img_w - m_margin) >> 1), rc.bottom());
-					else
-						rc.setRect(rc.left(), rc.top(), rc.left() + w, rc.bottom());
-				}
-			}
-			else  // no right text
-			{
-				if((NULL == m_middle_image) && (0 == m_middle_strid)) {
-					rc.setRect(rc.left(), rc.top(), rc.left() + w, rc.bottom());
-				} else {
-					if (w < ((_ngux_screen_w - mid_img_w - m_margin * 3) >> 1)) {						
-						rc.setRect(rc.left(), rc.top(), rc.left() + w, rc.bottom());
-					} else {
-						rc.setRect(rc.left(), rc.top(), ((_ngux_screen_w - mid_img_w - m_margin * 3) >> 1), rc.bottom());
-					}
-				}
-			}	
-		}
-		else if (item == SEL_RIGHT)
-		{
-			if(m_left_strid > 0) // has left text 
-			{
-				int w_tmp = 0;
-				FormatText formatText_r = {
-					GetText(m_left_strid), 
-					TextMode::AlignLeft | TextMode::ValignMiddle | TextMode::SingleLine | m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTLINEMODE)
-				};
-				
-				m_drset->calcDrawableSize(DR_CONTENT, DRAWSTATE_NORMAL, w_tmp, h, (DWORD)&formatText_r, DRDT_FORMATTEXT);
-				if((NULL == m_middle_image) && (0 == m_middle_strid))
-				{
-					if(w > (_ngux_screen_w>>1) && (w + w_tmp + (m_margin*3)) > _ngux_screen_w)
-						rc.setRect((_ngux_screen_w>>1)+(m_margin*1.5),rc.top(),_ngux_screen_w - m_margin,rc.bottom());
-					else
-						rc.setRect(rc.right() - w, rc.top(), rc.right(), rc.bottom());
-				}
-				else
-				{
-					if((_ngux_screen_w - w - m_margin) < ((_ngux_screen_w + mid_img_w + m_margin) >> 1))
-						rc.setRect((_ngux_screen_w + mid_img_w + m_margin) >> 1, rc.top(), rc.right(), rc.bottom());
-					else
-						rc.setRect(rc.right() - w, rc.top(), rc.right(), rc.bottom());
-				}
-			}
-			else // no left text
-			{
-				if((NULL == m_middle_image) && (0 == m_middle_strid)) { // no middle image and text
-					rc.setRect(rc.right() - w, rc.top(), rc.right(), rc.bottom());
-				} else {
-					if (w < ((_ngux_screen_w - mid_img_w - m_margin * 3) >> 1)) {
-						rc.setRect(rc.right() - w, rc.top(), rc.right(), rc.bottom());
-					} else {
-						rc.setRect(rc.right() - ((_ngux_screen_w - mid_img_w - m_margin * 3) >> 1), rc.top(), rc.right(), rc.bottom());
-					}
-				}
-			}
-		}
-	}
+        if (item == SEL_LEFT)
+        {
+            if(m_right_strid > 0) // has right text
+            {
+                int w_tmp = 0;
+                FormatText formatText_r = {
+                    GetText(m_right_strid),
+                    TextMode::AlignRight | TextMode::ValignMiddle | TextMode::SingleLine | m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTLINEMODE)
+                };
+
+                m_drset->calcDrawableSize(DR_CONTENT, DRAWSTATE_NORMAL, w_tmp, h, (DWORD)&formatText_r, DRDT_FORMATTEXT);
+                if((NULL == m_middle_image) && (0 == m_middle_strid))
+                {
+                    if(w > (_ngux_screen_w>>1) &&  (w + w_tmp + (m_margin*3)) > _ngux_screen_w)
+                        rc.setRect(rc.left(), rc.top(), ((_ngux_screen_w>>1) - (m_margin*1.5)), rc.bottom());
+                    else
+                        rc.setRect(rc.left(), rc.top(), rc.left() + w, rc.bottom());
+                }
+                else
+                {
+                    if((rc.left() + w) > ((_ngux_screen_w - mid_img_w - m_margin) >> 1))
+                        rc.setRect(rc.left(), rc.top(), ((_ngux_screen_w - mid_img_w - m_margin) >> 1), rc.bottom());
+                    else
+                        rc.setRect(rc.left(), rc.top(), rc.left() + w, rc.bottom());
+                }
+            }
+            else  // no right text
+            {
+                if((NULL == m_middle_image) && (0 == m_middle_strid)) {
+                    rc.setRect(rc.left(), rc.top(), rc.left() + w, rc.bottom());
+                } else {
+                    if (w < ((_ngux_screen_w - mid_img_w - m_margin * 3) >> 1)) {
+                        rc.setRect(rc.left(), rc.top(), rc.left() + w, rc.bottom());
+                    } else {
+                        rc.setRect(rc.left(), rc.top(), ((_ngux_screen_w - mid_img_w - m_margin * 3) >> 1), rc.bottom());
+                    }
+                }
+            }
+        }
+        else if (item == SEL_RIGHT)
+        {
+            if(m_left_strid > 0) // has left text
+            {
+                int w_tmp = 0;
+                FormatText formatText_r = {
+                    GetText(m_left_strid),
+                    TextMode::AlignLeft | TextMode::ValignMiddle | TextMode::SingleLine | m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTLINEMODE)
+                };
+
+                m_drset->calcDrawableSize(DR_CONTENT, DRAWSTATE_NORMAL, w_tmp, h, (DWORD)&formatText_r, DRDT_FORMATTEXT);
+                if((NULL == m_middle_image) && (0 == m_middle_strid))
+                {
+                    if(w > (_ngux_screen_w>>1) && (w + w_tmp + (m_margin*3)) > _ngux_screen_w)
+                        rc.setRect((_ngux_screen_w>>1)+(m_margin*1.5),rc.top(),_ngux_screen_w - m_margin,rc.bottom());
+                    else
+                        rc.setRect(rc.right() - w, rc.top(), rc.right(), rc.bottom());
+                }
+                else
+                {
+                    if((_ngux_screen_w - w - m_margin) < ((_ngux_screen_w + mid_img_w + m_margin) >> 1))
+                        rc.setRect((_ngux_screen_w + mid_img_w + m_margin) >> 1, rc.top(), rc.right(), rc.bottom());
+                    else
+                        rc.setRect(rc.right() - w, rc.top(), rc.right(), rc.bottom());
+                }
+            }
+            else // no left text
+            {
+                if((NULL == m_middle_image) && (0 == m_middle_strid)) { // no middle image and text
+                    rc.setRect(rc.right() - w, rc.top(), rc.right(), rc.bottom());
+                } else {
+                    if (w < ((_ngux_screen_w - mid_img_w - m_margin * 3) >> 1)) {
+                        rc.setRect(rc.right() - w, rc.top(), rc.right(), rc.bottom());
+                    } else {
+                        rc.setRect(rc.right() - ((_ngux_screen_w - mid_img_w - m_margin * 3) >> 1), rc.top(), rc.right(), rc.bottom());
+                    }
+                }
+            }
+        }
+    }
     m_drset->draw(context, DR_CONTENT, state, rc, (DWORD)&formatText, DRDT_FORMATTEXT);
 #endif
 }
@@ -326,9 +325,9 @@ void MenuBarView::drawText(GraphicsContext* context, int strId, int item)
 void MenuBarView::drawImage(GraphicsContext* context, int item)
 {
     IntRect rc;
-	ImageFormat f;
+    ImageFormat f;
 
-	calcRect(rc, item);
+    calcRect(rc, item);
 
     // m_border_len is bigger than View's height
     if (m_border_len > rc.height()) {
@@ -336,51 +335,51 @@ void MenuBarView::drawImage(GraphicsContext* context, int item)
     }
 
     if (SEL_LEFT == item && NULL != m_left_image) {
-		f.drawMode = DRAWMODE_NORMAL;
-		f.align = ALIGN_LEFT;
-		f.valign = VALIGN_MIDDLE;
+        f.drawMode = DRAWMODE_NORMAL;
+        f.align = ALIGN_LEFT;
+        f.valign = VALIGN_MIDDLE;
         rc.setRect(
-                rc.left(), 
-                rc.top() + (rc.height() - m_border_len)/2, 
-                rc.left() + m_border_len, 
+                rc.left(),
+                rc.top() + (rc.height() - m_border_len)/2,
+                rc.left() + m_border_len,
                 rc.top() + (rc.height() - m_border_len)/2 + m_border_len);
-		m_left_image->paint(context, rc,f);
+        m_left_image->paint(context, rc,f);
     }
     else if (SEL_MIDDLE == item && NULL != m_middle_image) {
-		f.drawMode = DRAWMODE_NORMAL;
-		f.align = ALIGN_CENTER;
-		f.valign = VALIGN_MIDDLE;
-			
+        f.drawMode = DRAWMODE_NORMAL;
+        f.align = ALIGN_CENTER;
+        f.valign = VALIGN_MIDDLE;
+
         rc.setRect(
-                rc.left() + (rc.right() - rc.left())/2 - m_border_len/2, 
-                rc.top() + (rc.height() - m_border_len)/2, 
-                rc.left() + (rc.right() - rc.left())/2 + m_border_len/2, 
+                rc.left() + (rc.right() - rc.left())/2 - m_border_len/2,
+                rc.top() + (rc.height() - m_border_len)/2,
+                rc.left() + (rc.right() - rc.left())/2 + m_border_len/2,
                 rc.top() + (rc.height() - m_border_len)/2 + m_border_len);
-		m_middle_image->paint(context, rc,f);
+        m_middle_image->paint(context, rc,f);
     }
     else if (SEL_RIGHT == item && NULL != m_right_image) {
-		f.drawMode = DRAWMODE_NORMAL;
-		f.align = ALIGN_RIGHT;
-		f.valign = VALIGN_MIDDLE;
+        f.drawMode = DRAWMODE_NORMAL;
+        f.align = ALIGN_RIGHT;
+        f.valign = VALIGN_MIDDLE;
         rc.setRect(
-                rc.right() - m_border_len, 
-                rc.top() + (rc.height() - m_border_len)/2, 
-                rc.right(), 
+                rc.right() - m_border_len,
+                rc.top() + (rc.height() - m_border_len)/2,
+                rc.right(),
                 rc.top() + (rc.height() - m_border_len)/2 + m_border_len);
-		m_right_image->paint(context, rc,f);
+        m_right_image->paint(context, rc,f);
     }
 }
 
 void MenuBarView::setLeftImage(Image* image)
 {
-	if (m_left_image == image)
-		return;
-	
-	if (m_left_image != NULL) {
-		HFCL_DELETE(m_left_image);
-	}
+    if (m_left_image == image)
+        return;
 
-	m_left_image = image;
+    if (m_left_image != NULL) {
+        HFCL_DELETE(m_left_image);
+    }
+
+    m_left_image = image;
 
     IntRect rc;
     updateView (calcRect (rc, SEL_LEFT));
@@ -388,12 +387,12 @@ void MenuBarView::setLeftImage(Image* image)
 
 void MenuBarView::setMiddleImage(Image* image)
 {
-	if (m_middle_image == image)
-		return;
-	
-	if (m_middle_image != NULL) {
-		HFCL_DELETE(m_middle_image);
-	}
+    if (m_middle_image == image)
+        return;
+
+    if (m_middle_image != NULL) {
+        HFCL_DELETE(m_middle_image);
+    }
 
     IntRect rc;
     updateView (calcRect (rc, SEL_MIDDLE));
@@ -401,12 +400,12 @@ void MenuBarView::setMiddleImage(Image* image)
 
 void MenuBarView::setRightImage(Image* image)
 {
-	if (m_right_image == image)
-		return;
-	
-	if (m_right_image != NULL) {
-		HFCL_DELETE(m_right_image);
-	}
+    if (m_right_image == image)
+        return;
+
+    if (m_right_image != NULL) {
+        HFCL_DELETE(m_right_image);
+    }
 
     IntRect rc;
     updateView (calcRect (rc, SEL_RIGHT));

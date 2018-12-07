@@ -39,18 +39,18 @@ enum {
 };
 
 class ImeBase
-{ 
+{
 public:
-	ImeBase() {};
-	virtual ~ImeBase() {};
+    ImeBase() {};
+    virtual ~ImeBase() {};
 
     virtual void enable (bool b_enable) = 0;
     virtual void setInputMode (Uint16 mode) = 0;
     virtual void changeInputboxMode (Uint16 mode) = 0;
     virtual int  getCurrentInputMode () = 0;
-	virtual int  getInputModeFlag () = 0;
-	virtual void setInputModeFlag (Uint8 flag) = 0;
-	virtual bool isArabic () = 0;
+    virtual int  getInputModeFlag () = 0;
+    virtual void setInputModeFlag (Uint8 flag) = 0;
+    virtual bool isArabic () = 0;
     virtual bool isSmartShiftInputMode () = 0;
     virtual int  getPreMultitapShiftMode () = 0;
     virtual void setPreMultitapShiftMode (int state) = 0;
@@ -68,8 +68,8 @@ public:
     virtual Uint16  getLanguage () = 0;
     virtual void setLanguage (Uint16 lang, Uint16 mode = MULTITAP_SHIFT_ABC) = 0;
 
-#ifdef __MMI_T9__    
-	virtual void IMESwitch() = 0;
+#ifdef __MMI_T9__
+    virtual void IMESwitch() = 0;
     virtual void switchT9() = 0;
     virtual void clearT9ShiftMode() = 0;
     virtual void setT9ShiftMode() = 0;
