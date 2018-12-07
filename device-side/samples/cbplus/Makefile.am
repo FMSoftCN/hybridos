@@ -1,8 +1,9 @@
 SUBDIRS=res
-noinst_PROGRAMS=helloworld
+noinst_PROGRAMS=cbplus
 
-helloworld_SOURCES= \
-    helloworld.cc \
+cbplus_SOURCES= \
+    cbplus.cc \
+    cbplus.h \
     bootup-res.cc \
     bootup-res.inc \
     bootup-res.h \

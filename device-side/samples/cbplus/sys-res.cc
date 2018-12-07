@@ -1,7 +1,7 @@
 
 #include <hfcl/resource.h>
 
-#include "helloworld.h"
+#include "cbplus.h"
 #include "sys-res.h"
 
 using namespace hfcl;

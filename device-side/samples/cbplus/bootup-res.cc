@@ -2,7 +2,7 @@
 #include <hfcl/view.h>
 #include <hfcl/resource.h>
 
-#include "helloworld.h"
+#include "cbplus.h"
 #include "bootup-res.h"
 
 using namespace hfcl;

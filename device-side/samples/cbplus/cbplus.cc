@@ -1,4 +1,4 @@
-#include "helloworld.h"
+#include "cbplus.h"
 
 #include <cstdlib>
 
@@ -14,7 +14,7 @@
 int main (int argc, const char** argv)
 {
     if (!SetResourceLanguage (R_LANG_en_US)) {
-        _ERR_PRINTF ("helloworld: Faield calling SetResourceLanguage with %d\n",
+        _ERR_PRINTF ("cbplus: Faield calling SetResourceLanguage with %d\n",
                 R_LANG_en_US);
         return 1;
     }

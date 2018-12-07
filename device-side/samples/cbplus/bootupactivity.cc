@@ -3,7 +3,7 @@
 
 #include <hfcl/resource.h>
 
-#include "helloworld.h"
+#include "cbplus.h"
 #include "bootup-res.h"
 #include "bootuplogo.h"
 #include "bootupgreet.h"

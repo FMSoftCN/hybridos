@@ -2,7 +2,7 @@
 #ifndef HFCL_SAMPLES_BOOTUP_RES_H__
 #define HFCL_SAMPLES_BOOTUP_RES_H__
 
-#include "helloworld.h"
+#include "cbplus.h"
 #include "sys-res.h"
 
 #define RESPKGID      RPKG_bootup
