@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.60)
 AC_INIT(hfcl-samples,0.1.0)
-AC_CONFIG_SRCDIR(cbplus/helloworld.cc)
+AC_CONFIG_SRCDIR(cbplus/cbplus.cc)
 
 dnl ========================================================================
 dnl Need for cross-compiling

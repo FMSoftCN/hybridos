@@ -66,7 +66,7 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
                 // animate view
                 begin_view(GifAnimateView)
                     map(my(view_animation_logo))
-                    setRect(0, 0, ACTIVITY_WIDTH, ACTIVITY_HEIGHT)
+                    setRect(0, 100, ACTIVITY_WIDTH, ACTIVITY_HEIGHT)
                     on(CustomEvent::CUSTOM_NOTIFY, my(event_animation_logo))
                 end_view
             end_view
