@@ -106,7 +106,7 @@ Menu * CreateMenuFromRes(HTResId id, Menu* parent, EventListener* listener);
 #define REGISTER_RESPKG(name) FRRegister_##name##_resource()
 
 bool SetResourceLanguage (HIDLanguage lang,
-        HIDEncoding enc = R_ENCODING_unknown, int pkgId = 0);
+        HIDEncoding enc = R_ENCODING_utf8, int pkgId = 0);
 HIDLanguage GetResourceLanguage (int pkgId = 0);
 HIDEncoding GetResourceEncoding (int pkgId = 0);
 

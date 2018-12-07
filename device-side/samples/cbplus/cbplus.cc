@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 
+#include <hfcl/hfcl.h>
 #include <hfcl/common.h>
 #include <hfcl/activity.h>
 #include <hfcl/view.h>
@@ -13,14 +14,16 @@
 
 int main (int argc, const char** argv)
 {
-    if (!SetResourceLanguage (R_LANG_en_US)) {
-        _ERR_PRINTF ("cbplus: Faield calling SetResourceLanguage with %d\n",
-                R_LANG_en_US);
-        return 1;
-    }
+    InitHFCL (argc, argv);
 
     // register system resource
     FRRegister_sys_resource();
+
+    if (!SetResourceLanguage (R_LANG_zh_CN)) {
+        _ERR_PRINTF ("cbplus: Failed when calling SetResourceLanguage with %d\n",
+                R_LANG_zh_CN);
+        return 1;
+    }
 
     REGISTER_ACTIVITY("bootup", BootupActivity);
 

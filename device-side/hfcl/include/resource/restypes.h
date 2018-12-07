@@ -63,7 +63,7 @@ typedef enum {
 #define RESINDEX(resID) ((resID & RES_IDX_MASK) >> RES_IDX_SHIFT)
 
 typedef enum {
-    R_LANG_na_NA,
+    R_LANG_na_NA,   // Invalid (not available) language (locale)
     R_LANG_zh_CN,
     R_LANG_zh_TW,
     R_LANG_zh_HK,
@@ -125,7 +125,7 @@ typedef enum {
 } HIDLanguage;
 
 typedef enum {
-    R_ENCODING_unknown,     // Unknown charset (default)
+    R_ENCODING_unknown = 0, // Unknown charset
     R_ENCODING_utf8,        // UTF-8 charset (default)
     R_ENCODING_ascii,       // ASCII charset
     R_ENCODING_latin1,      // West European (ISO-8859-1, Latin 1) charset
