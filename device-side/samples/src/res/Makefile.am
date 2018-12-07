@@ -1,1 +1,1 @@
-EXTRA_DIST=
+DIST_SUBDIRS=messages images

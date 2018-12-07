@@ -4,7 +4,7 @@
 begin_respkg(bootup, RES_PKG_BOOTUP_ID)
     //image resource
     begin_image_res()
-        image(animation_logo, "res/bootup/joopic.gif")
+        image(animation_logo, "res/images/splash/joopic.gif")
     end_image_res
 
     // dr
