@@ -1,4 +1,4 @@
-# HybridOS Code Convention
+# HybridOS Code and Development Convention
 
 HybridOS Specification 0005  
 Author: Vincent Wei  
@@ -13,7 +13,7 @@ All Rights Reserved.
 
 ## Introduction
 
-HybridOS integrates many third-party open source libraries in differen
+HybridOS integrates many third-party open source libraries in different
 languages. So it is hard to make a unified coding style for all components
 of HybridOS.
 
@@ -159,6 +159,29 @@ Use the following commands in your `~/.vimrc` file:
     set shiftwidth=4
     sytax on
 
+## Development Environment
+
+Host operating system: Ubuntu 16.04 LTS
+
+Please make sure that you have installed the following packages:
+
+1. Building tools:
+    * git
+    * gcc/g++
+    * binutils
+    * autoconf/automake
+    * libtool
+    * make
+    * cmake
+    * pkg-config
+2. Dependent libraries:
+    * libgtk2.0-dev
+    * libjpeg-dev
+    * libpng12-dev
+    * libfreetype6-dev
+    * libsqlite3-dev
+    * libxml2-dev
+
 [Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
 [FMSoft Technologies]: https://www.fmsoft.cn
 [HybridOS Official Site]: https://hybrid.fmsoft.cn
@@ -168,7 +191,7 @@ Use the following commands in your `~/.vimrc` file:
 [HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
 [HybridOS Security Design]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0003.md
 [HybridOS Device Simulation Environment]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0004.md
-[HybridOS Code Convention]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0005.md
+[HybridOS Code and Development Convention]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0005.md
 
 [Linux Kernel Coding Style]: https://www.kernel.org/doc/html/latest/process/coding-style.html
 [Google C++ Style Guide]: https://google.github.io/styleguide/cppguide.html

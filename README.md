@@ -147,7 +147,7 @@ thus reducing development cost.
 * [HybridOS Foundation Class Library]
 * [HybridOS Security Design]
 * [HybridOS Device Simulation Environment]
-* [HybridOS Code Convention]
+* [HybridOS Code and Development Convention]
 
 ## Source Tree
 
@@ -157,7 +157,7 @@ thus reducing development cost.
     |-- server-side/    # The source for server side.
     |-- client-side/    # The source for client side.
 
-    
+
 ## Current Status
 
 * Nov. 2018: Initiate this project and organize specifications and design documents.
@@ -170,8 +170,8 @@ Copyright (C) 2018 [Beijing FMSoft Technologies Co., Ltd.]
 * For server side, HybridOS uses AGPL v3.
 * For documents, GPL v3 applies.
 
-Note that HybridOS integrates many mature open source software, such as SQLite, FreeType, 
-V8 JavaScript engine, and so on. For the copyright owners and licenses for these software, 
+Note that HybridOS integrates many mature open source software, such as SQLite, FreeType,
+V8 JavaScript engine, and so on. For the copyright owners and licenses for these software,
 please refer to the README or LICENSE files contained in the source trees.
 
 [Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
@@ -183,5 +183,5 @@ please refer to the README or LICENSE files contained in the source trees.
 [HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
 [HybridOS Security Design]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0003.md
 [HybridOS Device Simulation Environment]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0004.md
-[HybridOS Code Convention]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0005.md
+[HybridOS Code and Development Convention]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0005.md
 
