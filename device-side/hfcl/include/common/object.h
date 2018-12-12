@@ -176,6 +176,18 @@ public:
     RefCount* ptr() const { return _ptr; }
 };
 
+class CopyOnWriteable : public RefCount {
+public:
+    CopyOnWriteable () : RefCount () {}
+    CopyOnWriteable (int start_ref) : RefCount (start_ref) { }
+
+    virtual CopyOnWriteable *clone() { return NULL; }
+
+    bool needCopy() { return getRefCnt () > 1; }
+};
+
+} // namespace hfcl
+
 #define AUTOPTR(Base) \
     class Base##Ptr : public AutoPtr { \
         public: \
@@ -185,8 +197,6 @@ public:
             Base* ptr() { return (Base*)AutoPtr::ptr(); } \
             Base* operator->() { return ptr(); } \
     };
-
-} // namespace hfcl
 
 #endif /* HFCL_COMMON_OBJECT_H_ */
 

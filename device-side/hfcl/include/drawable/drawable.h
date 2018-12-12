@@ -36,17 +36,6 @@ namespace hfcl {
 class View;
 class GraphicsContext;
 
-class CopyOnWriteable : public RefCount
-{
-public:
-    CopyOnWriteable() : RefCount() {}
-    CopyOnWriteable(int start_ref) : RefCount(start_ref) { }
-
-    virtual CopyOnWriteable * clone() { return NULL; }
-
-    bool needCopy() { return getRefCnt() > 1; }
-};
-
 //////////////////////////////////////////////////////////////////////////////////////
 //style
 
