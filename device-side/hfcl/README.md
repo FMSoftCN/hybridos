@@ -92,6 +92,6 @@ The following people took part in the development of mGNGUX:
 * DONG Junjie
 * YAN Xiaowei
 * WANG Jian
-* XU Lei
-* WANG Qin
+* HE Jia
+* WANG Yulong
 * ZHONG Dalin
