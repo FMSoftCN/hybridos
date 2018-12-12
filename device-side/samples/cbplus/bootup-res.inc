@@ -62,7 +62,7 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
             // back panel
             begin_view(PanelView)
                 setRect(0, 0, ACTIVITY_WIDTH, ACTIVITY_HEIGHT)
-                set(BkColor, Color::BLACK)
+                set(BkColor, MakeRGBA (255, 255, 255, 0))
                 // animate view
                 begin_view(GifAnimateView)
                     map(my(view_animation_logo))

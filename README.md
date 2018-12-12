@@ -174,9 +174,9 @@ Note that HybridOS integrates many mature open source software, such as SQLite, 
 V8 JavaScript engine, and so on. For the copyright owners and licenses for these software, 
 please refer to the README or LICENSE files contained in the source trees.
 
-[Beijing FMSoft Technologies Co., Ltd.]: http://www.fmsoft.cn
-[FMSoft Technologies]: http://www.fmsoft.cn
-[HybridOS Official Site]: http://www.hybridos.org
+[Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
+[FMSoft Technologies]: https://www.fmsoft.cn
+[HybridOS Official Site]: https://hybrid.fmsoft.cn
 
 [HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md

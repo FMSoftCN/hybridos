@@ -14,9 +14,9 @@ All Rights Reserved.
 ## Introduction
 
 
-[Beijing FMSoft Technologies Co., Ltd.]: http://www.fmsoft.cn
-[FMSoft Technologies]: http://www.fmsoft.cn
-[HybridOS Official Site]: http://www.hybridos.org
+[Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
+[FMSoft Technologies]: https://www.fmsoft.cn
+[HybridOS Official Site]: https://hybrid.fmsoft.cn
 
 [HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
