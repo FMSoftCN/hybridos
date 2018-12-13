@@ -1,0 +1,247 @@
+
+background-attachment
+    scroll fixed inherit
+
+background-color
+    aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow <rgb> transparent inherit
+
+background-image
+    <uri> none inherit
+
+background-position-x
+    <percentage> <length> left center right inherit
+
+background-position-y
+    <percentage> <length> top center bottom inherit
+
+background-repeat
+    repeat repeat-x repeat-y no-repeat inherit
+
+border-collapse
+    collapse separate inherit
+
+border-spacing
+    <length> inherit
+
+border-left-color
+    aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow <rgb> transparent inherit
+
+border-top-color
+    aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow <rgb> transparent inherit
+
+border-right-color
+    aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow <rgb> transparent inherit
+
+border-bottom-color
+    aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow <rgb> transparent inherit
+
+border-left-style
+    none hidden dotted dashed solid double groove ridge inset outset inherit
+
+border-top-style
+    none hidden dotted dashed solid double groove ridge inset outset inherit
+
+border-right-style
+    none hidden dotted dashed solid double groove ridge inset outset inherit
+
+border-bottom-style
+    none hidden dotted dashed solid double groove ridge inset outset inherit
+
+border-left-width
+    thin medium think <length> inherit
+
+border-top-width
+    thin medium think <length> inherit
+
+border-right-width
+    thin medium think <length> inherit
+
+border-bottom-width
+    thin medium think <length> inherit
+
+bottom
+    <length> <percentage> auto inherit
+
+caption-side
+    top bottom inherit
+
+clear
+    none left right both inherit
+
+clip
+    <shape> auto inherit
+
+color
+    aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow <rgb> inherit
+
+content
+    normal none <string> <uri> <counter> open-quote close-quote no-open-quote no-close-quote inherit
+
+counter-increment
+    <counter> none inherit
+
+counter-reset
+    <counter> none inherit
+
+cursor
+    <uri> auto crosshair default pointer move e-resize ne-resize nw-resize n-resize se-resize sw-resize s-resize w-resize text wait help progress inherit
+
+direction
+    ltr rtl inherit
+
+display
+    inline block list-item inline-block table inline-table table-row-group table-header-group table-footer-group table-row table-column-group table-column table-cell table-caption none inherit
+
+empty-cells
+    show hide inherit
+
+float
+    left right none inherit
+
+font-family
+    serif sans-serif cursive fantasy monospace <family-name> inherit
+
+font-size
+    xx-small x-small small medium large x-large xx-large larger smaller <length> <percentage> inherit
+
+font-style
+    normal italic oblique inherit
+
+font-variant
+    normal small-caps inherit
+
+font-weight
+    normal bold bolder lighter 100 200 300 400 500 600 700 800 900 inherit
+
+height
+    <length> <percentage> auto inherit
+
+left
+    <length> <percentage> auto inherit
+
+letter-spacing
+    normal <length> inherit
+
+line-height
+    normal <number> <length> <percentage> inherit
+
+list-style-image
+    <uri> none inherit
+
+list-style-position
+    inside outside inherit
+
+list-style-type
+    disc circle square decimal decimal-leading-zero lower-roman upper-roman lower-greek lower-latin upper-latin armenian georgian lower-alpha upper-alpha none inherit
+
+margin-right
+    <length> <percentage> auto inherit
+
+margin-left
+    <length> <percentage> auto inherit
+
+margin-top
+    <length> <percentage> auto inherit
+
+margin-bottom
+    <length> <percentage> auto inherit
+
+max-height
+    <length> <percentage> none inherit
+
+max-width
+    <length> <percentage> none inherit
+
+min-height
+    <length> <percentage> inherit
+
+min-width
+    <length> <percentage> inherit
+
+orphans
+    <integer> inherit
+
+outline-color
+    aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow <rgb> invert inherit
+
+outline-style
+    none hidden dotted dashed solid double groove ridge inset outset inherit
+
+outline-width
+    thin medium thick <length> inherit
+
+overflow
+    visible hidden scroll auto inherit
+
+padding-top
+    <length> <percentage> inherit
+
+padding-right
+    <length> <percentage> inherit
+
+padding-bottom
+    <length> <percentage> inherit
+
+padding-left
+    <length> <percentage> inherit
+
+page-break-after
+    auto always avoid left right inherit
+
+page-break-before
+    auto always avoid left right inherit
+
+page-break-inside
+    avoid auto inherit
+
+position
+    static relative absolute fixed inherit
+
+quotes
+    <dual-string> none inherit
+
+right
+    <length> <percentage> auto inherit
+
+table-layout
+    auto fixed inherit
+
+text-align
+    left right center justify inherit
+
+text-decoration
+    none underline overline line-through blink inherit
+
+text-indent
+    <length> <percentage> inherit
+
+text-transform
+    capitalize uppercase lowercase none inherit
+
+top
+    <length> <percentage> auto inherit
+
+unicode-bidi
+    normal embed bidi-override inherit
+
+vertical-align
+    baseline sub super top text-top middle bottom text-bottom <percentage> <length> inherit
+
+visibility
+    visible hidden collapse inherit
+
+white-space
+    normal pre nowrap pre-wrap pre-line inherit
+
+widows
+    <integer> inherit
+
+width
+    <length> <percentage> auto inherit
+
+word-spacing
+    normal <length> inherit
+
+z-index
+    auto <integer> inherit
+
