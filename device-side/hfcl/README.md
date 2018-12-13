@@ -87,7 +87,7 @@ The following people are the main developers of HFCL:
 
 * Vincent Wei
 
-The following people took part in the development of mGNGUX:
+The following people had been involved in the development of mGNGUX:
 
 * DONG Junjie
 * YAN Xiaowei
