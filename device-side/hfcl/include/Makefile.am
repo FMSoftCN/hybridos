@@ -1,4 +1,4 @@
-SUBDIRS=common mgcl activity graphics drawable view animation components \
+SUBDIRS=common css mgcl activity graphics drawable view animation components \
     services resource
 
 # The directory where the include files will be installed

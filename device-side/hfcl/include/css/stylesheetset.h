@@ -23,6 +23,7 @@
 #define HFCL_CSS_STYLESHEETSET_H_
 
 #include "../css/stylesheet.h"
+#include "../common/object.h"
 
 namespace hfcl {
 
@@ -50,35 +51,9 @@ public:
 
     virtual bool setStyleSheet(int id, StyleSheet* dr) = 0;
     virtual StyleSheet* getStyleSheet(int id) const = 0;
-
-    virtual bool setStyleSheet(int dr_id, int se_id, HTData value) = 0;
-    HTData getStyleSheet(int dr_id, int se_id) const {
-        const StyleSheet* dr = getStyleSheet(dr_id);
-        return dr ? dr->getElement(se_id) : 0;
-    }
 };
 
 class SimpleStyleSheetSet : public StyleSheetSet {
-public:
-    SimpleStyleSheetSet () { }
-    SimpleStyleSheetSet (StyleSheetSet* s) : StyleSheetSet (s) { }
-    SimpleStyleSheetSet (SimpleStyleSheetSet* s)
-            : StyleSheetSet ((StyleSheetSet*)s) { }
-    virtual ~SimpleStyleSheetSet();
-
-    friend bool operator== (StyleSheetNode &dn1, StyleSheetNode &dn2) {
-        if ((dn1.id == dn2.id) && (dn1.dr == dn2.dr))
-            return true;
-        return false;
-    }
-
-    virtual StyleSheet* getStyleSheet (int dr_id) const;
-    virtual bool setStyleSheet (int dr_id, StyleSheet* dr);
-
-    CopyOnWriteable* clone() {
-        return (CopyOnWriteable*)(HFCL_NEW_EX(SimpleStyleSheetSet, (this)));
-    }
-
 private:
     struct StyleSheetNode {
         int _id;
@@ -94,6 +69,27 @@ private:
 
     LIST (StyleSheetNode *, StyleSheetList)
 
+public:
+    SimpleStyleSheetSet () { }
+    SimpleStyleSheetSet (StyleSheetSet* s) : StyleSheetSet (s) { }
+    SimpleStyleSheetSet (SimpleStyleSheetSet* s)
+            : StyleSheetSet ((StyleSheetSet*)s) { }
+    virtual ~SimpleStyleSheetSet();
+
+    friend bool operator== (StyleSheetNode &dn1, StyleSheetNode &dn2) {
+        if ((dn1._id == dn2._id) && (dn1._dr == dn2._dr))
+            return true;
+        return false;
+    }
+
+    virtual StyleSheet* getStyleSheet (int dr_id) const;
+    virtual bool setStyleSheet (int dr_id, StyleSheet* dr);
+
+    CopyOnWriteable* clone() {
+        return (CopyOnWriteable*)(HFCL_NEW_EX(SimpleStyleSheetSet, (this)));
+    }
+
+private:
     StyleSheetList m_drawables;
     StyleSheetNode* find (int dr_id) const;
 };

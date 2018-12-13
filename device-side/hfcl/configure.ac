@@ -162,6 +162,7 @@ AC_OUTPUT([
     m4/Makefile
     include/Makefile
     include/common/Makefile
+    include/css/Makefile
     include/mgcl/Makefile
     include/activity/Makefile
     include/graphics/Makefile
@@ -173,6 +174,7 @@ AC_OUTPUT([
     include/services/Makefile
     src/Makefile
     src/common/Makefile
+    src/css/Makefile
     src/mgcl/Makefile
     src/activity/Makefile
     src/graphics/Makefile

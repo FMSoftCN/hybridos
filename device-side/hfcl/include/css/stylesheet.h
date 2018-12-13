@@ -96,7 +96,7 @@ private:
 class PropertyValueComputed {
 public:
     PropertyValueComputed();
-    PropertyValueComputed(View* view, PropertyValueSpecified* m_specified);
+    //PropertyValueComputed(View* view, PropertyValueSpecified* m_specified);
     ~PropertyValueComputed();
 
     DWORD32 getValue() const { return m_value; }
@@ -114,8 +114,8 @@ private:
     HTData m_data;
 
     PropertyValueSpecified* m_specified;
-    View* m_view;
-}
+    //View* m_view;
+};
 
 class StyleSheet {
 public:
@@ -542,7 +542,7 @@ private:
 
     int m_id;
     PropertyValueMap m_map;
-}
+};
 
 namespace css {
 

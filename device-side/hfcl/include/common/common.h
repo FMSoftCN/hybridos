@@ -59,9 +59,16 @@
 /* HFCL types */
 typedef unsigned int    HTResId;
 typedef unsigned int    HTStrId;
+typedef uintptr_t       HTHandle;
+typedef uintptr_t       HTData;
+
+#if defined(_WIN64)
+typedef double          HTReal;
+#elif defined(__LP64__)
+typedef double          HTReal;
+#else
 typedef float           HTReal;
-typedef intptr_t        HTHandle;
-typedef intptr_t        HTData;
+#endif
 
 #undef _HFCL_SHOW_OPTIMIZE_INFO
 
