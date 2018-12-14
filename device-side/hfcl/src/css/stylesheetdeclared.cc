@@ -19,37 +19,9 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef HFCL_CSS_STYLESHEET_H_
-#define HFCL_CSS_STYLESHEET_H_
-
-#include "../common/common.h"
-#include "../common/stlalternative.h"
-#include "propertyvalue.h"
-
-#define PPT_FLAG_INHERITED     0x00000001
+#include "css/stylesheetdeclared.h"
 
 namespace hfcl {
 
-class StyleSheet {
-public:
-    StyleSheet () : m_ssid (0) {}
-    StyleSheet (int ssid) : m_ssid (ssid) {}
-    virtual ~StyleSheet () {}
-
-    virtual bool getProperty (PropertyIds pid, DWORD32 *value,
-            HTData *data = NULL) = 0;
-    virtual bool setProperty (PropertyIds pid, DWORD32 value,
-            HTData data = 0) = 0;
-
-protected:
-    int m_ssid;
-};
-
-namespace css {
-
-} // namespace css
-
 } // namespace hfcl
-
-#endif /* HFCL_CSS_STYLESHEET_H_ */
 

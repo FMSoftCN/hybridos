@@ -35,7 +35,7 @@ namespace hfcl {
 
 class StyleSheetDeclared : public StyleSheet {
 public:
-    StyleSheetDeclared () : {}
+    StyleSheetDeclared () {}
     StyleSheetDeclared (int ssid) : StyleSheet (ssid) {}
     ~StyleSheetDeclared () {}
 

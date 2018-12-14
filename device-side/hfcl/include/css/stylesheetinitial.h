@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef HFCL_CSS_STYLESHEET_H_
-#define HFCL_CSS_STYLESHEET_H_
+#ifndef HFCL_CSS_STYLESHEETINITIAL_H_
+#define HFCL_CSS_STYLESHEETINITIAL_H_
 
 #include "../common/common.h"
 #include "../common/stlalternative.h"
@@ -31,28 +31,37 @@ namespace hfcl {
 
 class StyleSheetInitial : public StyleSheet {
 public:
-    StyleSheetInitial () : StyleSheet (0) {}
-    virtual ~StyleSheetInitial () {}
+    StyleSheetInitial ();
+    ~StyleSheetInitial () {}
 
     DWORD32 getPropertyFlags (PropertyIds pid) { return m_flags[pid]; }
-    virtual bool getProperty (PropertyIds pid, CSSValue *value,
+    virtual bool getProperty (PropertyIds pid, DWORD32 *value,
             HTData *data = NULL) {
         if (value) {
             *value = m_values[pid];
         }
-        if (addData) {
-            *addData = m_data[pid];
+        if (data) {
+            *data = m_data[pid];
         }
         return true;
     }
-    virtual bool setProperty (PropertyIds pid, CSSValue value,
+    virtual bool setProperty (PropertyIds pid, DWORD32 value,
             HTData data = 0) {
         m_values[pid] = value;
         m_data[pid] = data;
+        return true;
     }
 
-protected:
-    CSSValue m_values[MAX_PID];
+    static StyleSheetInitial* getSingleton(void) {
+        if (s_singleton == NULL)
+            s_singleton = HFCL_NEW_EX(StyleSheetInitial, ());
+        return s_singleton;
+    }
+
+private:
+    static StyleSheetInitial* s_singleton;
+
+    DWORD32 m_values[MAX_PID];
     DWORD32 m_flags[MAX_PID];
     HTData m_data[MAX_PID];
 };
@@ -63,5 +72,5 @@ namespace css {
 
 } // namespace hfcl
 
-#endif /* HFCL_CSS_STYLESHEET_H_ */
+#endif /* HFCL_CSS_STYLESHEETINITIAL_H_ */
 

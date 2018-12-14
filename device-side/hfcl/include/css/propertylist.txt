@@ -48,7 +48,7 @@ border-collapse
 
 border-spacing
     values: <length> inherit
-    initial: <length>,0
+    initial: <length-px>,0
     inherited: yes
     appliesto: table
 
