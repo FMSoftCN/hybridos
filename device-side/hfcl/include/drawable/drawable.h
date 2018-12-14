@@ -236,8 +236,6 @@ public:
     }
 };
 
-
-
 class SimpleDrawableSet : public DrawableSet
 {
     struct DrawableNode{
