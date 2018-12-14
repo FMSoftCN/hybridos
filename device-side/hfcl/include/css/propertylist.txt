@@ -1,247 +1,442 @@
+<length>: <%-em> <%-ex> <%-cap> <%-ch> <%-ic> <%-rem> <%-lh> <%-rlh> <%-vm> <%-vh> <%-vi> <%-vb> <%-vmin> <%-vmax> <%-cm> <%-mm> <%-Q> <%-in> <%-pc> <%-pt> <%-px>
+
+<color>: aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow aliceblue antiquewhite aquamarine azure beige bisque blanchedalmond blueviolet brown burlywood cadetblue chartreuse chocolate coral cornflowerblue cornsilk crimson cyan darkblue darkcyan darkgoldenrod darkgray darkgreen darkgrey darkkhaki darkmagenta darkolivegreen darkorange darkorchid darkred darksalmon darkseagreen darkslateblue darkslategray darkslategrey darkturquoise darkviolet deeppink deepskyblue dimgray dimgrey dodgerblue firebrick floralwhite forestgreen gainsboro ghostwhite gold goldenrod greenyellow grey honeydew hotpink indianred indigo ivory khaki lavender lavenderblush lawngreen lemonchiffon lightblue lightcoral lightcyan lightgoldenrodyellow lightgray lightgreen lightgrey lightpink lightsalmon lightseagreen lightskyblue lightslategray lightslategrey lightsteelblue lightyellow limegreen linen magenta mediumaquamarine mediumblue mediumorchid mediumpurple mediumseagreen mediumslateblue mediumspringgreen mediumturquoise mediumvioletred midnightblue mintcream mistyrose moccasin navajowhite oldlace olivedrab orangered orchid palegoldenrod palegreen paleturquoise palevioletred papayawhip peachpuff peru pink plum powderblue rosybrown royalblue saddlebrown salmon sandybrown seagreen seashell sienna skyblue slateblue slategray slategrey snow springgreen steelblue tan thistle tomato turquoise violet wheat whitesmoke yellowgreen current-color transparent <rgb> <rgba> <hsl> <hsla>
+
+<border-style>: <border-style>
+<border-width>: thin medium think <length>
+
+<angle>: <%-deg> <%-grad> <%-rad> <%-turn>
+<time>: <%-s> <%-ms>
+<frequency>: <%-hz> <%-khz>
+<resolution>: <%-dpi> <%-dpcm> <%-dppx>
 
 background-attachment
-    scroll fixed inherit
+    values: scroll fixed inherit
+    initial: scroll
+    inherited: no
 
 background-color
-    aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow <rgb> transparent inherit
+    values: <color> inherit
+    initial: transparent
+    inherited: no
 
 background-image
-    <uri> none inherit
+    values: <url> none inherit
+    initial: none
+    inherited: no
 
 background-position-x
-    <percentage> <length> left center right inherit
+    values: <percentage> <length> left center right inherit
+    initial: <percentage>,0
+    inherited: no
 
 background-position-y
-    <percentage> <length> top center bottom inherit
+    values: <percentage> <length> top center bottom inherit
+    initial: <percentage>,0
+    inherited: no
 
 background-repeat
-    repeat repeat-x repeat-y no-repeat inherit
+    values: repeat repeat-x repeat-y no-repeat inherit
+    initial: repeat
+    inherited: no
 
 border-collapse
-    collapse separate inherit
+    values: collapse separate inherit
+    initial: separate
+    inherited: yes
+    appliseto: table
 
 border-spacing
-    <length> inherit
+    values: <length> inherit
+    initial: <length>,0
+    inherited: yes
+    appliseto: table
 
 border-left-color
-    aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow <rgb> transparent inherit
+    values: <color> inherit
+    initial: <rgb>,0
+    inherited: no
 
 border-top-color
-    aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow <rgb> transparent inherit
+    values: <color> inherit
+    initial: <rgb>,0
+    inherited: no
 
 border-right-color
-    aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow <rgb> transparent inherit
+    values: <color> inherit
+    initial: <rgb>,0
+    inherited: no
 
 border-bottom-color
-    aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow <rgb> transparent inherit
+    values: <color> inherit
+    initial: <rgb>,0
+    inherited: no
 
 border-left-style
-    none hidden dotted dashed solid double groove ridge inset outset inherit
+    values: <border-style> inherit
+    initial: none
+    inherited: no
 
 border-top-style
-    none hidden dotted dashed solid double groove ridge inset outset inherit
+    values: <border-style> inherit
+    initial: none
+    inherited: no
 
 border-right-style
-    none hidden dotted dashed solid double groove ridge inset outset inherit
+    values: <border-style> inherit
+    initial: none
+    inherited: no
 
 border-bottom-style
-    none hidden dotted dashed solid double groove ridge inset outset inherit
+    values: <border-style> inherit
+    initial: none
+    inherited: no
 
 border-left-width
-    thin medium think <length> inherit
+    values:  inherit
+    initial: medium
+    inherited: no
 
 border-top-width
-    thin medium think <length> inherit
+    values: <border-width> inherit
+    initial: medium
+    inherited: no
 
 border-right-width
-    thin medium think <length> inherit
+    values: <border-width> inherit
+    initial: medium
+    inherited: no
 
 border-bottom-width
-    thin medium think <length> inherit
+    values: <border-width> inherit
+    initial: medium
+    inherited: no
 
 bottom
-    <length> <percentage> auto inherit
+    values: <length> <percentage> auto inherit
+    initial: auto
+    inherited: no
+    appliseto: positioned
 
 caption-side
-    top bottom inherit
+    values: top bottom inherit
+    initial: top
+    inherited: yes
+    appliseto: table-caption
 
 clear
-    none left right both inherit
+    values: none left right both inherit
+    initial: none
+    inherited: no
 
 clip
-    <shape> auto inherit
+    values: <shape> auto inherit
+    initial: auto
+    inherited: no
+    appliseto: absolutely-positioned
 
 color
-    aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow <rgb> inherit
+    values: <color> inherit
+    initial: <rgb>,0
+    inherited: yes
 
 content
-    normal none <string> <uri> <counter> open-quote close-quote no-open-quote no-close-quote inherit
+    values: normal none <string> <url> <counter> open-quote close-quote no-open-quote no-close-quote inherit
+    initial: normal
+    inherited: no
+    appliseto: pseudo
 
 counter-increment
-    <counter> none inherit
+    values: <counter> none inherit
+    initial: none
+    inherited: no
 
 counter-reset
-    <counter> none inherit
+    values: <counter> none inherit
+    initial: none
+    inherited: no
 
 cursor
-    <uri> auto crosshair default pointer move e-resize ne-resize nw-resize n-resize se-resize sw-resize s-resize w-resize text wait help progress inherit
+    values: <url> auto crosshair default pointer move e-resize ne-resize nw-resize n-resize se-resize sw-resize s-resize w-resize text wait help progress inherit
+    initial: auto
+    inherited: yes
 
 direction
-    ltr rtl inherit
+    values: ltr rtl inherit
+    initial: ltr
+    inherited: yes
 
 display
-    inline block list-item inline-block table inline-table table-row-group table-header-group table-footer-group table-row table-column-group table-column table-cell table-caption none inherit
+    values: inline block list-item inline-block table inline-table table-row-group table-header-group table-footer-group table-row table-column-group table-column table-cell table-caption none inherit
+    initial: inline
+    inherited: no
 
 empty-cells
-    show hide inherit
+    values: show hide inherit
+    initial: show
+    inherited: yes
+    appliseto: table-cell
 
 float
-    left right none inherit
+    values: left right none inherit
+    initial: none
+    inherited: no
 
 font-family
-    serif sans-serif cursive fantasy monospace <family-name> inherit
+    values: serif sans-serif cursive fantasy monospace <family-name> inherit
+    initial: <string>,default
+    inherited: yes
 
 font-size
-    xx-small x-small small medium large x-large xx-large larger smaller <length> <percentage> inherit
+    values: xx-small x-small small medium large x-large xx-large larger smaller <length> <percentage> inherit
+    initial: medium
+    inherited: yes
 
 font-style
-    normal italic oblique inherit
+    values: normal italic oblique inherit
+    initial: normal
+    inherited: yes
 
 font-variant
-    normal small-caps inherit
+    values: normal small-caps inherit
+    initial: normal
+    inherited: yes
 
 font-weight
-    normal bold bolder lighter 100 200 300 400 500 600 700 800 900 inherit
+    values: normal bold bolder lighter 100 200 300 400 500 600 700 800 900 inherit
+    initial: normal
+    inherited: yes
 
 height
-    <length> <percentage> auto inherit
+    values: <length> <percentage> auto inherit
+    initial: auto
+    inherited: no
 
 left
-    <length> <percentage> auto inherit
+    values: <length> <percentage> auto inherit
+    initial: auto
+    inherited: no
+    appliseto: positioned
 
 letter-spacing
-    normal <length> inherit
+    values: normal <length> inherit
+    initial: normal
+    inherited: yes
 
 line-height
-    normal <number> <length> <percentage> inherit
+    values: normal <number> <length> <percentage> inherit
+    initial: normal
+    inherited: yes
 
 list-style-image
-    <uri> none inherit
+    values: <url> none inherit
+    initial: none
+    inherited: yes
 
 list-style-position
-    inside outside inherit
+    values: inside outside inherit
+    initial: outside
+    inherited: yes
 
 list-style-type
-    disc circle square decimal decimal-leading-zero lower-roman upper-roman lower-greek lower-latin upper-latin armenian georgian lower-alpha upper-alpha none inherit
+    values: disc circle square decimal decimal-leading-zero lower-roman upper-roman lower-greek lower-latin upper-latin armenian georgian lower-alpha upper-alpha none inherit
+    initial: disc
+    inherited: yes
 
 margin-right
-    <length> <percentage> auto inherit
+    values: <length> <percentage> auto inherit
+    initial: <length-px>,0
+    inherited: no
 
 margin-left
-    <length> <percentage> auto inherit
+    values: <length> <percentage> auto inherit
+    initial: <length-px>,0
+    inherited: no
 
 margin-top
-    <length> <percentage> auto inherit
+    values: <length> <percentage> auto inherit
+    initial: <length-px>,0
+    inherited: no
 
 margin-bottom
-    <length> <percentage> auto inherit
+    values: <length> <percentage> auto inherit
+    initial: <length-px>,0
+    inherited: no
 
 max-height
-    <length> <percentage> none inherit
+    values: <length> <percentage> none inherit
+    initial: none
+    inherited: no
 
 max-width
-    <length> <percentage> none inherit
+    values: <length> <percentage> none inherit
+    initial: none
+    inherited: no
 
 min-height
-    <length> <percentage> inherit
+    values: <length> <percentage> inherit
+    initial: <length-px>,0
+    inherited: no
 
 min-width
-    <length> <percentage> inherit
+    values: <length> <percentage> inherit
+    initial: <length-px>,0
+    inherited: no
+
+opacity
+    values: <alphavalue> inherit
+    initial: <alphavalue>,1
+    inherited: no
 
 orphans
-    <integer> inherit
+    values: <integer> inherit
+    initial: <integer>,2
+    inherited: yes
+    appliseto: block-container
 
 outline-color
-    aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow <rgb> invert inherit
+    values: <color> invert inherit
+    initial: invert
+    inherited: no
 
 outline-style
-    none hidden dotted dashed solid double groove ridge inset outset inherit
+    values: <border-style> inherit
+    initial: invert
+    inherited: no
 
 outline-width
-    thin medium thick <length> inherit
+    values: <border-width> inherit
+    initial: medium
+    inherited: no
 
 overflow
-    visible hidden scroll auto inherit
+    values: visible hidden scroll auto inherit
+    initial: visible
+    inherited: no
 
 padding-top
-    <length> <percentage> inherit
+    values: <length> <percentage> inherit
+    initial: <length-px>,0
+    inherited: no
 
 padding-right
-    <length> <percentage> inherit
+    values: <length> <percentage> inherit
+    initial: <length-px>,0
+    inherited: no
 
 padding-bottom
-    <length> <percentage> inherit
+    values: <length> <percentage> inherit
+    initial: <length-px>,0
+    inherited: no
 
 padding-left
-    <length> <percentage> inherit
+    values: <length> <percentage> inherit
+    initial: <length-px>,0
+    inherited: no
 
 page-break-after
-    auto always avoid left right inherit
+    values: auto always avoid left right inherit
+    initial: auto
+    inherited: no
+    appliseto: block-level
 
 page-break-before
-    auto always avoid left right inherit
+    values: auto always avoid left right inherit
+    initial: auto
+    inherited: no
+    appliseto: block-level
 
 page-break-inside
-    avoid auto inherit
+    values: avoid auto inherit
+    initial: auto
+    inherited: no
+    appliseto: block-level
 
 position
-    static relative absolute fixed inherit
+    values: static relative absolute fixed inherit
+    initial: static
+    inherited: no
 
 quotes
-    <dual-string> none inherit
+    values: <dual-string> none inherit
+    initial: none
+    inherited: yes
 
 right
-    <length> <percentage> auto inherit
+    values: <length> <percentage> auto inherit
+    initial: auto
+    inherited: no
+    appliseto: positioned
 
 table-layout
-    auto fixed inherit
+    values: auto fixed inherit
+    initial: auto
+    inherited: no
 
 text-align
-    left right center justify inherit
+    values: left right center justify inherit
+    initial: left
+    inherited: yes
 
 text-decoration
-    none underline overline line-through blink inherit
+    values: none underline overline line-through blink inherit
+    initial: none
+    inherited: no
 
 text-indent
-    <length> <percentage> inherit
+    values: <length> <percentage> inherit
+    initial: <length-px>,0
+    inherited: yes
 
 text-transform
-    capitalize uppercase lowercase none inherit
+    values: capitalize uppercase lowercase none inherit
+    initial: none
+    inherited: yes
 
 top
-    <length> <percentage> auto inherit
+    values: <length> <percentage> auto inherit
+    initial: auto
+    inherited: no
+    appliseto: positioned
 
 unicode-bidi
-    normal embed bidi-override inherit
+    values: normal embed bidi-override inherit
+    initial: normal
+    inherited: no
 
 vertical-align
-    baseline sub super top text-top middle bottom text-bottom <percentage> <length> inherit
+    values: baseline sub super top text-top middle bottom text-bottom <percentage> <length> inherit
+    initial: baseline
+    inherited: no
+    appliseto: inline-level
 
 visibility
-    visible hidden collapse inherit
+    values: visible hidden collapse inherit
+    initial: visible
+    inherited: yes
 
 white-space
-    normal pre nowrap pre-wrap pre-line inherit
+    values: normal pre nowrap pre-wrap pre-line inherit
+    initial: normal
+    inherited: yes
 
 widows
-    <integer> inherit
+    values: <integer> inherit
+    initial: <integer>,2
+    inherited: yes
 
 width
-    <length> <percentage> auto inherit
+    values: <length> <percentage> auto inherit
+    initial: auto
+    inherited: no
 
 word-spacing
-    normal <length> inherit
+    values: normal <length> inherit
+    initial: normal
+    inherited: yes
 
 z-index
-    auto <integer> inherit
-
+    values: auto <integer> inherit
+    initial: auto
+    inherited: no
+    appliseto: positioned
