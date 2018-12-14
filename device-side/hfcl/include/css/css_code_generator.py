@@ -17,13 +17,97 @@ SRC_FILE="propertylist.txt"
 PROPERTYVALUE_FILE="propertyvalue.h"
 STYLESHEETDECLARED_FILE="stylesheetdeclared.h"
 
-RE_START_WITH_SPACE = re.compile(r"^\s")
-def start_with_space(value):
-    if RE_START_WITH_SPACE.match(value) == None:
+RE_START_WITH_VALUES = re.compile(r"^\s+values:")
+def start_with_values(line):
+    if RE_START_WITH_VALUES.match(line) == None:
         return False
     return True
 
+RE_START_WITH_INITIAL = re.compile(r"^\s+initial:")
+def start_with_initial(line):
+    if RE_START_WITH_INITIAL.match(line) == None:
+        return False
+    return True
+
+RE_START_WITH_INHERITED = re.compile(r"^\s+inherited:")
+def start_with_inherited(line):
+    if RE_START_WITH_INHERITED.match(line) == None:
+        return False
+    return True
+
+RE_START_WITH_APPLIESTO = re.compile(r"^\s+appliesto:")
+def start_with_appliesto(line):
+    if RE_START_WITH_APPLIESTO.match(line) == None:
+        return False
+    return True
+
+RE_START_WITH_SPACE = re.compile(r"^\s")
+def start_with_space(line):
+    if RE_START_WITH_SPACE.match(line) == None:
+        return False
+    return True
+
+RE_NOT_KEYWORD = re.compile(r"^<\S+>$")
+def is_keyword(value):
+    if RE_NOT_KEYWORD.match(value) is None:
+        return True
+    return False
+
+def do_subexpand(def_info, definition):
+    values = definition.split()
+    if len(values) > 0:
+        for value in values:
+            if value in def_info:
+                definition = definition.replace(value, def_info[value])
+                return do_subexpand(def_info, definition)
+
+    return definition
+
+def expand_definition(def_info, token, definition):
+    token = token.strip()
+    word = token.strip("<>")
+    definition = definition.replace('%', word)
+    def_info[token] = do_subexpand(def_info, definition)
+
+def get_value_list(line):
+    fragments = line.split(":")
+
+    if len(fragments) == 2:
+        values = fragments[1].strip()
+        value_list = values.split()
+        if value_list is None or len(value_list) == 0:
+            return None
+        return value_list
+
+    return None
+
+def get_value(line):
+    fragments = line.split(":")
+
+    if len(fragments) == 2:
+        value = fragments[1].strip()
+        if len(value) == 0:
+            return None
+        return value
+
+    return None
+
+def set_value_list(property_info, property_token, def_info, values):
+    value_list = values.split()
+    if len(value_list) > 0:
+        for value in value_list:
+            if value in def_info:
+                values = values.replace(value, def_info[value])
+
+    value_list = values.split()
+    property_info[property_token]['values'] = value_list
+
+    print("values for property %s" % (property_token, ))
+    for value in value_list:
+        print("%s" % (value, ))
+
 def scan_src_file(fsrc):
+    def_info = {}
     property_info = {}
 
     property_token = ""
@@ -37,50 +121,63 @@ def scan_src_file(fsrc):
             org_line = fsrc.readline()
             continue
 
-        if property_token == "":
-            if start_with_space (org_line):
-                print("scan_src_file (Line %d): property name expected without leading space (%s)" % (line_no, stripped_line, ))
-                return None
-            else:
-                property_token = stripped_line
+        tokens = stripped_line.split(":")
+        if len (tokens) > 0 and not is_keyword(tokens[0]):
+            expand_definition (def_info, tokens[0], tokens[1])
         else:
-            if start_with_space (org_line):
-                value_line = stripped_line
+            if start_with_values (org_line):
+                values = get_value(stripped_line)
+                if values is None:
+                    print("scan_src_file (Line %d): value list expected (%s)" % (line_no, stripped_line, ))
+                    return None
+                else:
+                    set_value_list(property_info, property_token, def_info, values)
+
+            elif start_with_initial (org_line):
+                initial_value = get_value(stripped_line)
+                if initial_value is None:
+                    print("scan_src_file (Line %d): initial value expected (%s)" % (line_no, stripped_line, ))
+                    return None
+                else:
+                    property_info[property_token]['initial'] = initial_value
+
+            elif start_with_inherited (org_line):
+                inherited_value = get_value(stripped_line)
+                if inherited_value is None or (inherited_value != "no" and inherited_value != "yes"):
+                    print("scan_src_file (Line %d): inherited value (yes/no) expected (%s)" % (line_no, stripped_line, ))
+                    return None
+                else:
+                    property_info[property_token]['inherited'] = inherited_value
+
+            elif start_with_appliesto (org_line):
+                appliesto_value = get_value(stripped_line)
+                if appliesto_value is None:
+                    print("scan_src_file (Line %d): appliesto value expected (%s)" % (line_no, stripped_line, ))
+                    return None
+                else:
+                    property_info[property_token]['appliesto'] = appliesto_value
+
+            elif not start_with_space (org_line):
+                property_token = stripped_line
+                if property_token in property_info:
+                    print("scan_src_file (Line %d): duplicated property name (%s)" % (line_no, stripped_line, ))
+                    return None
+                property_info[property_token] = {}
             else:
-                print("scan_src_file (Line %d): value list expected with leading space for property %s (%s)" % (line_no, property_token, stripped_line, ))
+                print("scan_src_file (Line %d): syntax error %s (%s)" % (line_no, property_token, stripped_line, ))
                 return None
 
-        if property_token != "" and value_line != "":
-            if property_token in property_info:
-                print("scan_src_file (Line %d): duplicated property name (%s)" % (line_no, stripped_line, ))
-                return None
-
-            value_list = value_line.split()
-            property_info[property_token] = value_list
-
-            print("property name (%s)" % (property_token, ))
-            for value in value_list:
-                print("    value: %s" % (value, ))
-
-            property_token = ""
-            value_line = ""
-
+        line_no = line_no + 1
         org_line = fsrc.readline()
 
     return property_info
-
-RE_NOT_KEYWORD = re.compile(r"^<\S+>$")
-def is_keyword(value):
-    if RE_NOT_KEYWORD.match(value) is None:
-        return True
-    return False
 
 def generate_type_and_keyword_lists(property_info):
     type_dict = {}
     keyword_dict = {}
 
     for key in property_info:
-        value_list = property_info[key]
+        value_list = property_info[key]['values']
 
         for j in range(0, len(value_list)):
             if is_keyword(value_list[j]):
@@ -222,7 +319,7 @@ def write_values(fout, property_info, type_list, keyword_list):
 
     for i in range(0, len(property_tokens)):
 
-        value_list = property_info[property_tokens[i]]
+        value_list = property_info[property_tokens[i]]['values']
         value_list.sort()
 
         fout.write("// Values for for property %s\n" % (property_tokens[i], ))
@@ -265,7 +362,7 @@ def write_class_stylesheetdeclared(fout, property_tokens):
 
     for i in range(0, len(property_tokens)):
 
-        value_list = property_info[property_tokens[i]]
+        value_list = property_info[property_tokens[i]]['values']
         value_list.sort()
 
         fout.write("    // Operator for property %s\n" % (property_tokens[i], ))

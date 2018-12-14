@@ -1,9 +1,9 @@
 <length>: <%-em> <%-ex> <%-cap> <%-ch> <%-ic> <%-rem> <%-lh> <%-rlh> <%-vm> <%-vh> <%-vi> <%-vb> <%-vmin> <%-vmax> <%-cm> <%-mm> <%-Q> <%-in> <%-pc> <%-pt> <%-px>
 
-<color>: aqua black blue fuchsia gray green lime maroon navy olive orange purple red silver teal white yellow aliceblue antiquewhite aquamarine azure beige bisque blanchedalmond blueviolet brown burlywood cadetblue chartreuse chocolate coral cornflowerblue cornsilk crimson cyan darkblue darkcyan darkgoldenrod darkgray darkgreen darkgrey darkkhaki darkmagenta darkolivegreen darkorange darkorchid darkred darksalmon darkseagreen darkslateblue darkslategray darkslategrey darkturquoise darkviolet deeppink deepskyblue dimgray dimgrey dodgerblue firebrick floralwhite forestgreen gainsboro ghostwhite gold goldenrod greenyellow grey honeydew hotpink indianred indigo ivory khaki lavender lavenderblush lawngreen lemonchiffon lightblue lightcoral lightcyan lightgoldenrodyellow lightgray lightgreen lightgrey lightpink lightsalmon lightseagreen lightskyblue lightslategray lightslategrey lightsteelblue lightyellow limegreen linen magenta mediumaquamarine mediumblue mediumorchid mediumpurple mediumseagreen mediumslateblue mediumspringgreen mediumturquoise mediumvioletred midnightblue mintcream mistyrose moccasin navajowhite oldlace olivedrab orangered orchid palegoldenrod palegreen paleturquoise palevioletred papayawhip peachpuff peru pink plum powderblue rosybrown royalblue saddlebrown salmon sandybrown seagreen seashell sienna skyblue slateblue slategray slategrey snow springgreen steelblue tan thistle tomato turquoise violet wheat whitesmoke yellowgreen current-color transparent <rgb> <rgba> <hsl> <hsla>
+<color>: color-aqua color-black color-blue color-fuchsia color-gray color-green color-lime color-maroon color-navy color-olive color-orange color-purple color-red color-silver color-teal color-white color-yellow color-aliceblue color-antiquewhite color-aquamarine color-azure color-beige color-bisque color-blanchedalmond color-blueviolet color-brown color-burlywood color-cadetblue color-chartreuse color-chocolate color-coral color-cornflowerblue color-cornsilk color-crimson color-cyan color-darkblue color-darkcyan color-darkgoldenrod color-darkgray color-darkgreen color-darkgrey color-darkkhaki color-darkmagenta color-darkolivegreen color-darkorange color-darkorchid color-darkred color-darksalmon color-darkseagreen color-darkslateblue color-darkslategray color-darkslategrey color-darkturquoise color-darkviolet color-deeppink color-deepskyblue color-dimgray color-dimgrey color-dodgerblue color-firebrick color-floralwhite color-forestgreen color-gainsboro color-ghostwhite color-gold color-goldenrod color-greenyellow color-grey color-honeydew color-hotpink color-indianred color-indigo color-ivory color-khaki color-lavender color-lavenderblush color-lawngreen color-lemonchiffon color-lightblue color-lightcoral color-lightcyan color-lightgoldenrodyellow color-lightgray color-lightgreen color-lightgrey color-lightpink color-lightsalmon color-lightseagreen color-lightskyblue color-lightslategray color-lightslategrey color-lightsteelblue color-lightyellow color-limegreen color-linen color-magenta color-mediumaquamarine color-mediumblue color-mediumorchid color-mediumpurple color-mediumseagreen color-mediumslateblue color-mediumspringgreen color-mediumturquoise color-mediumvioletred color-midnightblue color-mintcream color-mistyrose color-moccasin color-navajowhite color-oldlace color-olivedrab color-orangered color-orchid color-palegoldenrod color-palegreen color-paleturquoise color-palevioletred color-papayawhip color-peachpuff color-peru color-pink color-plum color-powderblue color-rosybrown color-royalblue color-saddlebrown color-salmon color-sandybrown color-seagreen color-seashell color-sienna color-skyblue color-slateblue color-slategray color-slategrey color-snow color-springgreen color-steelblue color-tan color-thistle color-tomato color-turquoise color-violet color-wheat color-whitesmoke color-yellowgreen current-color transparent <rgb> <rgba> <hsl> <hsla>
 
-<border-style>: <border-style>
-<border-width>: thin medium think <length>
+<border-style>: bs-none bs-hidden bs-dotted bs-dashed bs-solid bs-double bs-groove bs-ridge bs-inset bs-outset
+<border-width>: bw-thin bw-medium bw-think <length>
 
 <angle>: <%-deg> <%-grad> <%-rad> <%-turn>
 <time>: <%-s> <%-ms>
@@ -44,13 +44,13 @@ border-collapse
     values: collapse separate inherit
     initial: separate
     inherited: yes
-    appliseto: table
+    appliesto: table
 
 border-spacing
     values: <length> inherit
     initial: <length>,0
     inherited: yes
-    appliseto: table
+    appliesto: table
 
 border-left-color
     values: <color> inherit
@@ -116,13 +116,13 @@ bottom
     values: <length> <percentage> auto inherit
     initial: auto
     inherited: no
-    appliseto: positioned
+    appliesto: positioned
 
 caption-side
     values: top bottom inherit
     initial: top
     inherited: yes
-    appliseto: table-caption
+    appliesto: table-caption
 
 clear
     values: none left right both inherit
@@ -133,7 +133,7 @@ clip
     values: <shape> auto inherit
     initial: auto
     inherited: no
-    appliseto: absolutely-positioned
+    appliesto: absolutely-positioned
 
 color
     values: <color> inherit
@@ -144,7 +144,7 @@ content
     values: normal none <string> <url> <counter> open-quote close-quote no-open-quote no-close-quote inherit
     initial: normal
     inherited: no
-    appliseto: pseudo
+    appliesto: pseudo
 
 counter-increment
     values: <counter> none inherit
@@ -175,7 +175,7 @@ empty-cells
     values: show hide inherit
     initial: show
     inherited: yes
-    appliseto: table-cell
+    appliesto: table-cell
 
 float
     values: left right none inherit
@@ -216,7 +216,7 @@ left
     values: <length> <percentage> auto inherit
     initial: auto
     inherited: no
-    appliseto: positioned
+    appliesto: positioned
 
 letter-spacing
     values: normal <length> inherit
@@ -292,7 +292,7 @@ orphans
     values: <integer> inherit
     initial: <integer>,2
     inherited: yes
-    appliseto: block-container
+    appliesto: block-container
 
 outline-color
     values: <color> invert inherit
@@ -338,19 +338,19 @@ page-break-after
     values: auto always avoid left right inherit
     initial: auto
     inherited: no
-    appliseto: block-level
+    appliesto: block-level
 
 page-break-before
     values: auto always avoid left right inherit
     initial: auto
     inherited: no
-    appliseto: block-level
+    appliesto: block-level
 
 page-break-inside
     values: avoid auto inherit
     initial: auto
     inherited: no
-    appliseto: block-level
+    appliesto: block-level
 
 position
     values: static relative absolute fixed inherit
@@ -366,7 +366,7 @@ right
     values: <length> <percentage> auto inherit
     initial: auto
     inherited: no
-    appliseto: positioned
+    appliesto: positioned
 
 table-layout
     values: auto fixed inherit
@@ -397,7 +397,7 @@ top
     values: <length> <percentage> auto inherit
     initial: auto
     inherited: no
-    appliseto: positioned
+    appliesto: positioned
 
 unicode-bidi
     values: normal embed bidi-override inherit
@@ -408,7 +408,7 @@ vertical-align
     values: baseline sub super top text-top middle bottom text-bottom <percentage> <length> inherit
     initial: baseline
     inherited: no
-    appliseto: inline-level
+    appliesto: inline-level
 
 visibility
     values: visible hidden collapse inherit
@@ -439,4 +439,4 @@ z-index
     values: auto <integer> inherit
     initial: auto
     inherited: no
-    appliseto: positioned
+    appliesto: positioned
