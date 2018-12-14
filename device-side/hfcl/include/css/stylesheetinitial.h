@@ -25,22 +25,36 @@
 #include "../common/common.h"
 #include "../common/stlalternative.h"
 #include "propertyvalue.h"
+#include "stylesheet.h"
 
 namespace hfcl {
 
-class StyleSheet {
+class StyleSheetInitial : public StyleSheet {
 public:
-    StyleSheet () : m_ssid (0) {}
-    StyleSheet (int id) : m_ssid (ssid) {}
-    virtual ~StyleSheet () {}
+    StyleSheetInitial () : StyleSheet (0) {}
+    virtual ~StyleSheetInitial () {}
 
-    virtual bool getProperty (PropertyIds pid, DWORD32 *value,
-            HTData *data = NULL) = 0;
-    virtual bool setProperty (PropertyIds pid, DWORD32 value,
-            HTData data = 0) = 0;
+    DWORD32 getPropertyFlags (PropertyIds pid) { return m_flags[pid]; }
+    virtual bool getProperty (PropertyIds pid, CSSValue *value,
+            HTData *data = NULL) {
+        if (value) {
+            *value = m_values[pid];
+        }
+        if (addData) {
+            *addData = m_data[pid];
+        }
+        return true;
+    }
+    virtual bool setProperty (PropertyIds pid, CSSValue value,
+            HTData data = 0) {
+        m_values[pid] = value;
+        m_data[pid] = data;
+    }
 
 protected:
-    int m_ssid;
+    CSSValue m_values[MAX_PID];
+    DWORD32 m_flags[MAX_PID];
+    HTData m_data[MAX_PID];
 };
 
 namespace css {

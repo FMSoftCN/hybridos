@@ -356,7 +356,7 @@ def write_class_stylesheetdeclared(fout, property_tokens):
     fout.write("class StyleSheetDeclared : public StyleSheet {\n")
     fout.write("public:\n")
     fout.write("    StyleSheetDeclared () : {}\n")
-    fout.write("    StyleSheetDeclared (int id) : StyleSheet (id) {}\n")
+    fout.write("    StyleSheetDeclared (int ssid) : StyleSheet (ssid) {}\n")
     fout.write("    ~StyleSheetDeclared () {}\n")
     fout.write("\n")
 
@@ -371,8 +371,10 @@ def write_class_stylesheetdeclared(fout, property_tokens):
         fout.write("    }\n")
         fout.write("\n")
 
-    fout.write("protected:\n")
-    fout.write("    virtual bool setProperty (PropertyIds id, DWORD32 value, HTData addData = 0);\n")
+    fout.write("    virtual bool getProperty (PropertyIds pid, DWORD32 *value,\n")
+    fout.write("            HTData *data = NULL) = 0;\n")
+    fout.write("    virtual bool setProperty (PropertyIds pid, DWORD32 value,\n")
+    fout.write("            HTData data = 0) = 0;\n")
     fout.write("\n")
     fout.write("private:\n")
     fout.write("    MAPCLASSKEY(PropertyIds, PropertyValue, PropertyValueMap);\n")

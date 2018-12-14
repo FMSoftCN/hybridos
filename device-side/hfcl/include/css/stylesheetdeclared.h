@@ -36,7 +36,7 @@ namespace hfcl {
 class StyleSheetDeclared : public StyleSheet {
 public:
     StyleSheetDeclared () : {}
-    StyleSheetDeclared (int id) : StyleSheet (id) {}
+    StyleSheetDeclared (int ssid) : StyleSheet (ssid) {}
     ~StyleSheetDeclared () {}
 
     // Operator for property background-attachment
@@ -454,8 +454,10 @@ public:
         return setProperty (PID_Z_INDEX, value, addData);
     }
 
-protected:
-    virtual bool setProperty (PropertyIds id, DWORD32 value, HTData addData = 0);
+    virtual bool getProperty (PropertyIds pid, DWORD32 *value,
+            HTData *data = NULL) = 0;
+    virtual bool setProperty (PropertyIds pid, DWORD32 value,
+            HTData data = 0) = 0;
 
 private:
     MAPCLASSKEY(PropertyIds, PropertyValue, PropertyValueMap);
