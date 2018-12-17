@@ -314,7 +314,8 @@ def write_values(fout, property_info, type_list, keyword_list):
 
     fout.write("// The property value types\n")
     fout.write("typedef enum _PropertyValueTypes {\n")
-    fout.write("    PVT_KEYWORD = 0,\n")
+    fout.write("    PVT_NONE = 0,\n")
+    fout.write("    PVT_KEYWORD,\n")
     for i in range(0, len(type_list)):
         fout.write("    %s,\n" %(make_value_type_id(type_list[i]), ))
     fout.write("    MAX_PVT,\n")

@@ -204,7 +204,8 @@ typedef enum _PropertyIds {
 
 // The property value types
 typedef enum _PropertyValueTypes {
-    PVT_KEYWORD = 0,
+    PVT_NONE = 0,
+    PVT_KEYWORD,
     PVT_ALPHAVALUE,
     PVT_COUNTER,
     PVT_DUAL_STRING,
