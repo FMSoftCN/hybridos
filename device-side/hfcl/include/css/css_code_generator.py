@@ -103,9 +103,9 @@ def set_value_list(property_info, property_token, def_info, values):
     value_list = values.split()
     property_info[property_token]['values'] = value_list
 
-    print("values for property %s" % (property_token, ))
-    for value in value_list:
-        print("%s" % (value, ))
+#    print("values for property %s" % (property_token, ))
+#    for value in value_list:
+#        print("%s" % (value, ))
 
 def scan_src_file(fsrc):
     def_info = {}
@@ -503,18 +503,18 @@ if __name__ == "__main__":
     fsrc.close()
     print("DONE")
 
-    print("Generating type and keyword list")
+    print("Generating type and keyword list...")
     type_list, keyword_list = generate_type_and_keyword_lists(property_info)
     type_list.sort()
     keyword_list.sort()
 
-    print("types:")
-    for type_token in type_list:
-        print("    %s" % (type_token, ))
-
-    print("keywords:")
-    for keyword_token in keyword_list:
-        print("    %s" % (keyword_token, ))
+#    print("types:")
+#    for type_token in type_list:
+#        print("    %s" % (type_token, ))
+#
+#    print("keywords:")
+#    for keyword_token in keyword_list:
+#        print("    %s" % (keyword_token, ))
 
     print("DONE")
 
