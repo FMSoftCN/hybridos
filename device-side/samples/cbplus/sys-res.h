@@ -5,6 +5,8 @@
 #define RESPKGID      RPKG_sys
 #define RESID(name)   R_sys_##name
 
+#include <hfcl/css/stylesheetdeclared.h>
+
 #include <hfcl/resource/resdefines.head.h>
 #include "sys-res.inc"
 #include <hfcl/resource/resundefines.h>

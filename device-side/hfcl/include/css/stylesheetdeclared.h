@@ -455,9 +455,9 @@ public:
     }
 
     virtual bool getProperty (PropertyIds pid, DWORD32 *value,
-            HTData *data = NULL) = 0;
+            HTData *data = NULL);
     virtual bool setProperty (PropertyIds pid, DWORD32 value,
-            HTData data = 0) = 0;
+            HTData data = 0);
 
 private:
     MAPCLASSKEY(PropertyIds, PropertyValue, PropertyValueMap);

@@ -27,6 +27,7 @@
 #include "../view/viewcontext.h"
 #include "../resource/fontres.h"
 #include "../resource/imageres.h"
+#include "../css/stylesheetdeclared.h"
 
 namespace hfcl {
 
@@ -112,6 +113,7 @@ public:
     bool addMenuResource(HTResId id, CB_CREATE_MENU createMenu);
     bool addMenuResource(MENU_RES_ARRAY *pMnuArray, int nMenuCount);
 
+    void addStyleSheetResource(const StyleSheetDeclared* styleSheet);
     void addDrawableResource(TRDrawableArrayItem* all_elements, int size);
     void addDrawableSetResource(TRDrawableSetArrayItem *all_items, int size);
     void addThemeResource(HTResId theme_id, const char* theme_name,

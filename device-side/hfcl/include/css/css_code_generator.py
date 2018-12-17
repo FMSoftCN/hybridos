@@ -406,9 +406,9 @@ def write_class_stylesheetdeclared(fout, property_tokens):
         fout.write("\n")
 
     fout.write("    virtual bool getProperty (PropertyIds pid, DWORD32 *value,\n")
-    fout.write("            HTData *data = NULL) = 0;\n")
+    fout.write("            HTData *data = NULL);\n")
     fout.write("    virtual bool setProperty (PropertyIds pid, DWORD32 value,\n")
-    fout.write("            HTData data = 0) = 0;\n")
+    fout.write("            HTData data = 0);\n")
     fout.write("\n")
     fout.write("private:\n")
     fout.write("    MAPCLASSKEY(PropertyIds, PropertyValue, PropertyValueMap);\n")

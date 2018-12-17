@@ -32,6 +32,7 @@ typedef enum {
     R_TYPE_IMAGE,
     R_TYPE_FONT,
     R_TYPE_STYLE,
+    R_TYPE_STYLE_SHEET,
     R_TYPE_UI,
     R_TYPE_DRAWABLE,
     R_TYPE_DRAWABLESET,

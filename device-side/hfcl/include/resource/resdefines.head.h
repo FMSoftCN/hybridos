@@ -270,8 +270,6 @@
 
 #define set(Name, value)
 #define addTablePage(value1, value2, value3)
-#define setRect(left, top, right, bottom)
-#define setRectWH(left, top, width, height)
 #define setStyle(style_id)
 #define _m(Name, args)
 #define map(name)

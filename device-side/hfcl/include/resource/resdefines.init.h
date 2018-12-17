@@ -110,6 +110,8 @@
 
 #define end_style_sheet_res }
 
+#define style(pid, value, user_data)
+
 #define begin_common_style \
     resPkg->addStyleResource(0, 0, \
             style_c_o_m_m_o_n_elements_res, \
@@ -258,9 +260,7 @@
  resPkg->addUIResource(UIArray, sizeof(UIArray)/sizeof(UI_RES_ARRAY));
 
 #define begin_ui_res(name)  \
-        {RESID(ui_##name),(void *)create_UI_##name},
-
-    //resPkg->addUIResource(RESID(ui_##name), create_UI_##name);
+        {RESID(ui_##name),(void *)create_ui_##name},
 
 #define end_ui_res
 
@@ -295,8 +295,6 @@
 
 #define set(Name, value)
 #define addTablePage(imageNormal, imageSel, view)
-#define setRect(left, top, right, bottom)
-#define setRectWH(left, top, width, height)
 #define setStyle(style_id)
 #define _m(Name, args)
 #define map(name)
