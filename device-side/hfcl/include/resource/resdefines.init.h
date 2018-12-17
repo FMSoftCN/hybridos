@@ -38,7 +38,9 @@
 //package sys package
 #define begin_sys_respkg  begin_respkg(sys, 0)
 #define end_sys_respkg  end_respkg
-#define set_common_style(style_id)  if(RESPKGID == 0) {Style::SetCommonStyle(GetStyleRes(style_id));}
+
+#define set_common_style_sheet(ssid)    \
+    if(RESPKGID == 0) {Style::SetCommonStyleSheet(GetStyleSheetRes(ssid));}
 
 //internal package resource
 #define def_name(name)
@@ -56,10 +58,6 @@
     resPkg->addTextResGnuMsg(lang, encoding, txt_file);
 
 #define end_text_res
-
-#define extern_lang    1
-// #undef extern_lang
-
 
 //image resource
 #define begin_image_res() \
@@ -80,35 +78,37 @@
 #define bmpfont(nmae, font_name)
 
 //devbmpfont info
-#define begin_devbmpfont(devfont_name, font_name) resPkg->addBMPDevFont(font_name, devbmpfont_##devfont_name##_item_infos);
+#define begin_devbmpfont(devfont_name, font_name) \
+    resPkg->addBMPDevFont(font_name, devbmpfont_##devfont_name##_item_infos);
 
 #define end_devbmpfont
 #define devbmpfont(start_mchar, num_char, glyph_width, img_id)
 
 //sys resource
-#define sys_style(name)    GetStyleRes(SYSRESID(style_##name))
-#define sys_image(name)    GetImageRes(SYSRESID(img_##name))
-#define sys_font(name)     GetFontRes(SYSRESID(font_##name))
+#define sys_style_sheet(name)   GetStyleSheetRes(SYSRESID(style_sheet_##name))
+#define sys_image(name)         GetImageRes(SYSRESID(img_##name))
+#define sys_font(name)          GetFontRes(SYSRESID(font_##name))
 
 //style resource
-#define self_style(name)    GetStyleRes(RESID(style_##name))
-#define self_image(name)    GetImageRes(RESID(img_##name))
-#define self_gif(name)    GetGifAnimateRes(RESID(img_##name))
-#define self_font(name)     GetFontRes(RESID(font_##name))
+#define self_stylesheet_(name)  GetStyleSheetRes(RESID(style_sheet_##name))
+#define self_image(name)        GetImageRes(RESID(img_##name))
+#define self_gif(name)          GetGifAnimateRes(RESID(img_##name))
+#define self_font(name)         GetFontRes(RESID(font_##name))
 
 #define rgba(r, g, b, a)
 
-#define begin_styles
+#define begin_style_sheets
 
-#define end_styles
+#define end_style_sheets
 
-#define begin_style_res(name, super_id) \
-    resPkg->addStyleResource(RESID(style_##name), \
-            super_id, \
-            style_##name##_elements_res, \
-            sizeof(style_##name##_elements_res)/sizeof(TRStyleElement));
+#define begin_style_sheet_res(name) { \
+    StyleSheetDeclared* curr_style_sheet = style_sheet_##name##_res; \
+    resPkg->addStyleSheetResource(curr_style_sheet);
 
-#define end_style_res
+#define style(pid, value, user_data) \
+    curr_style_sheet->set##pid##((value), (HTData)(user_data));
+
+#define end_style_sheet_res }
 
 #define begin_common_style \
     resPkg->addStyleResource(0, 0, \
@@ -117,38 +117,18 @@
 
 #define end_common_style
 
-//#define style(id, status, value)
-//#define style_color_rgba(id, status, r, g, b, a)
-//#define style_color(id, status, r, g, b)
-//#define style_image(id, status, img_id)
-//#define style_font(id, status, font_id)
-
-#define style(id, value)
-#define style_color_rgba(id, r, g, b, a)
-#define style_color(id, r, g, b)
-#define style_image(id, img_id)
-#define style_font(id, font_id)
-
 
 //sys HTResId by name
-#define sysid_font(name)  (SYSRESID(font_##name))
-#define sysid_image(name) (SYSRESID(img_##name))
-//#define sysid_text(name)  (SYSRESID(txt_##name))
-#define sysid_style(name) (SYSRESID(style_##name))
-#define sysid_dr(name)    (SYSRESID(dr_##name))
-#define sysid_drset(name) (SYSRESID(drset_##name))
+#define sysid_font(name)        (SYSRESID(font_##name))
+#define sysid_image(name)       (SYSRESID(img_##name))
+#define sysid_style_sheet(name) (SYSRESID(style_sheet_##name))
 
 //get HTResId by name
-#define my_font(name) (RESID(font_##name))
-#define my_image(name) (RESID(img_##name))
-//#define my_text(name) (RESID(txt_##name))
-#define my_style(name) (RESID(style_##name))
-#define my_dr(name) (RESID(dr_##name))
-#define my_drset(name) (RESID(drset_##name))
-#define my_drgroup(name) (RESID(drsetgroup_##name))
-#define my_menu(name)  (RESID(menu_##name))
-#define my_ui(name) (RESID(ui_##name))
-
+#define my_font(name)           (RESID(font_##name))
+#define my_image(name)          (RESID(img_##name))
+#define my_style_sheet(name)    (RESID(style_sheet_##name))
+#define my_menu(name)           (RESID(menu_##name))
+#define my_ui(name)             (RESID(ui_##name))
 
 //drawable resource
 #define begin_dr_res \

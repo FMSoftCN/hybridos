@@ -33,7 +33,7 @@
 
 #undef begin_sys_respkg
 #undef end_sys_respkg
-#undef set_common_style
+#undef set_common_style_sheet
 
 
 //internal package resource
@@ -66,7 +66,7 @@
 #undef devbmpfont
 
 //sys resource
-#undef sys_style
+#undef sys_style_sheet
 #undef sys_text
 #undef sys_image
 #undef sys_bmpfont_image
@@ -75,7 +75,7 @@
 #undef sys_dr
 
 //style resource
-#undef self_style
+#undef self_style_sheet
 #undef self_text
 #undef self_image
 #undef self_gif
@@ -83,87 +83,28 @@
 
 #undef rgba
 
-#undef begin_styles
-#undef end_styles
+#undef begin_style_sheets
+#undef end_style_sheets
 
-#undef begin_style_res
-#undef end_style_res
+#undef begin_style_sheet_res
+#undef end_style_sheet_res
 
-#undef begin_common_style
-#undef end_common_style
+#undef begin_common_style_sheet
+#undef end_common_style_sheet
 
 #undef style
-#undef style_color_rgba
-#undef style_color
-#undef style_image
-#undef style_font
 
 //sys HTResId by name
 #undef sysid_font
 #undef sysid_image
 #undef sysid_text
-#undef sysid_style
-#undef sysid_dr
-#undef sysid_drset
+#undef sysid_style_sheet
+
 //get HTResId by name
 #undef my_font
 #undef my_image
 #undef my_text
-#undef my_style
-#undef my_dr
-#undef my_drset
-#undef my_drgroup
-//drawable resource
-#undef begin_dr_res
-#undef end_dr_res
-#undef begin_dr
-#undef end_dr
-#undef setdr
-
-//drawableset resource
-#undef begin_drset_res
-#undef begin_drset
-#undef dr
-#undef end_drset
-#undef end_drset_res
-#undef begin_common_drset_res
-#undef begin_common_drset
-#undef end_common_drset
-#undef end_common_drset_res
-/////////////////////////////////
-//drawable set group
-#undef begin_drsetgroup_res
-#undef begin_drsetgroup
-#undef end_drsetgroup
-#undef drset
-#undef begin_common_drsetgroup
-#undef end_common_drsetgroup
-#undef end_drsetgroup_res
-#undef begin_common_drsetgroup_res
-#undef end_common_drsetgroup_res
-
-//////////////
-//theme
-#undef begin_theme_res
-#undef begin_theme
-#undef map_theme_drset
-#undef end_theme
-#undef end_theme_res
-/////////////////////////
-
-//audio res : temp
-#undef begin_audio_res
-#undef audio
-#undef end_audio_res
-
-#undef drawable
-#undef begin_drawable
-#undef end_drawable
-#undef begin_common_drawable
-#undef end_common_drawable
-
-#define begin_common_drawable_res
-#define end_common_drawable_res
+#undef my_style_sheet
 
 //Menu resource
 #undef begin_menus
@@ -251,6 +192,5 @@
 #undef end_resid
 #undef my_imageid
 #undef my_textid
-
 
 #undef SYSRESID

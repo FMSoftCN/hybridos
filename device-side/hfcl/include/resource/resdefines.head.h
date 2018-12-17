@@ -34,7 +34,6 @@
 #define data_get_text_id(id)
 #define data_get_int(id)
 
-
 //package sys package
 #define begin_sys_respkg  begin_respkg(sys, 0)
 #define end_sys_respkg  end_respkg
@@ -83,69 +82,48 @@
 #define devbmpfont(s,n,g,i)
 
 //sys resource
-#define sys_style(name)
+#define sys_style_sheet(name)
 #define sys_image(name)
 #define sys_font(name)
 
 //style resource
-#define self_style(name)
+#define self_style_sheet(name)
 #define self_image(name)
 #define self_gif(name)
 #define self_font(name)
 
-#define rgba(r, g, b, a)   (((r) & 0xFF) | (((g) & 0xFF) << 8) | (((b) & 0xFF) << 16) | (((a) & 0xFF) << 24))
+#define rgba(r, g, b, a)    \
+    (((r) & 0xFF) |         \
+    (((g) & 0xFF) << 8) |   \
+    (((b) & 0xFF) << 16) |  \
+    (((a) & 0xFF) << 24))
 
-#define begin_styles \
-    enum { RESID(style_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_STYLE, 0),
+#define begin_style_sheets \
+    enum { RESID(ss_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_STYLE_SHEET, 0),
 
-#define end_styles    RESID(style_end_id) };
+#define end_style_sheets    RESID(ss_end_id), };
 
-#define begin_style_res(name, super_id)   RESID(style_##name),
+#define begin_style_sheet_res(name)   RESID(style_sheet_##name),
 
-#define end_style_res
+#define end_style_sheet_res
 
-#define begin_common_style
-#define end_common_style
-
-//#define style(id, status, value)
-//#define style_color_rgba(id, status, r, g, b, a)
-//#define style_color(id, status, r, g, b)
-//#define style_image(id, status, img_id)
-//#define style_font(id, status, font_id)
-
-#define style(id, value)
-#define style_color_rgba(id, r, g, b, a)
-#define style_color(id, r, g, b)
-#define style_image(id, img_id)
-#define style_font(id, font_id)
+#define style(pid, value, user_data)
 
 //sys HTResId by name
 #define sysid_font(name)
 #define sysid_image(name)
-//#define sysid_text(name)
-#define sysid_style(name)
-#define sysid_dr(name)
-#define sysid_drset(name)
+#define sysid_style_sheet(name)
+
 //get HTResId by name
 #define my_font(name)
 #define my_image(name)
-//#define my_text(name)
-#define my_style(name)
-#define my_dr(name)
-#define my_drset(name)
-#define my_drgroup(name)
+#define my_style_sheet(name)
 #define my_ui(name)
 
 //drawable resource
 #define begin_dr_res enum { RESID(dr_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_DRAWABLE, 0),
 
 #define end_dr_res RESID(dr_end_id) };
-
-//#define begin_dr(name) RESID(dr_##name),
-
-//#define end_dr(name, type)
-
-//#define setdr(prop_id, value)
 
 //drawableset resource
 #define begin_drset_res enum { RESID(drset_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_DRAWABLESET, 0),

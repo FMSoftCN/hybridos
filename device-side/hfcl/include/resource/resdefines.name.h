@@ -85,24 +85,16 @@
 
 #define rgba(r, g, b, a)
 
-#define begin_styles
-#define end_styles
+#define begin_style_sheets
+#define end_style_sheets
 
-#define begin_style_res(name, super_id)
-#define end_style_res
-#define begin_common_style
-#define end_common_style
+#define begin_style_sheet_res(name)
+#define end_style_sheet_res
 
-//#define style(id, status, value)
-//#define style_color_rgba(id, status, r, g, b, a)
-//#define style_color(id, status, r, g, b)
-//#define style_image(id, status, img_id)
-//#define style_font(id, status, font_id)
-#define style(id, value)
-#define style_color_rgba(id, r, g, b, a)
-#define style_color(id, r, g, b)
-#define style_image(id, img_id)
-#define style_font(id, font_id)
+#define begin_common_style_sheet
+#define end_common_style_sheet
+
+#define style(pid, value, user_data)
 
 //sys HTResId by name
 #define sysid_font(name)
