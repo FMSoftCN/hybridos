@@ -424,6 +424,8 @@ def write_footer(fout, header_guard):
     fout.write("#endif /* %s */\n" % (header_guard, ))
 
 def write_class_stylesheetinitial(fout, property_info):
+    property_tokens = list(property_info.keys())
+    property_tokens.sort()
 
     fout.write("/*\n")
     fout.write("** HFCL - HybridOS Foundation Class Library\n")
@@ -464,7 +466,7 @@ def write_class_stylesheetinitial(fout, property_info):
     fout.write("\n")
 
     fout.write("    // Initial values\n")
-    for property_token in property_info:
+    for property_token in property_tokens:
         pid = make_property_id(property_token);
         value_token = property_info[property_token]['initial']
         inherited = property_info[property_token]['inherited']
