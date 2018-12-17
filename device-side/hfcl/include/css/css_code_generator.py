@@ -217,17 +217,22 @@ def make_value_id(property_token, value_token):
 
     return "PV_" + property_id + "_" + value_id;
 
-def make_value_macro(property_token, value_token):
+def make_value_macro(property_token, value_token, inherited):
     value_id = value_token.strip('<>')
     value_id = value_id.replace('-', '_')
     value_id = value_id.upper()
 
-    if is_keyword(value_token):
-        return "MAKE_PROPERTY_VALUE(PVT_KEYWORD, PVK_" + value_id + ")"
+    if inherited == "yes":
+        inherited = "PPT_FLAG_INHERITED, "
     else:
-        return "MAKE_PROPERTY_VALUE(PVT_" + value_id + ", PVK_USER_DATA)"
+        inherited = "PPT_FLAG_NOT_INHERITED, "
 
-def make_initial_value(property_token, value_token):
+    if is_keyword(value_token):
+        return "MAKE_PROPERTY_VALUE(" + inherited + "PVT_KEYWORD, PVK_" + value_id + ")"
+    else:
+        return "MAKE_PROPERTY_VALUE(" + inherited + "PVT_" + value_id + ", PVK_USER_DATA)"
+
+def make_initial_value(property_token, value_token, inherited):
     user_data = None
     values = value_token.split(",")
     if len(values) > 1:
@@ -238,11 +243,16 @@ def make_initial_value(property_token, value_token):
     value_id = value_id.replace('-', '_')
     value_id = value_id.upper()
 
+    if inherited == "yes":
+        inherited = "PPT_FLAG_INHERITED, "
+    else:
+        inherited = "PPT_FLAG_NOT_INHERITED, "
+
     if is_keyword(value_token):
         user_data = None
-        return "MAKE_PROPERTY_VALUE(PVT_KEYWORD, PVK_" + value_id + ")", user_data
+        return "MAKE_PROPERTY_VALUE(" + inherited + "PVT_KEYWORD, PVK_" + value_id + ")", user_data
     else:
-        return "MAKE_PROPERTY_VALUE(PVT_" + value_id + ", PVK_USER_DATA)", user_data
+        return "MAKE_PROPERTY_VALUE(" + inherited + "PVT_" + value_id + ", PVK_USER_DATA)", user_data
 
 def make_operator_name(property_token):
     operator_name = ''.join(x for x in property_token.title() if x.isalnum())
@@ -322,13 +332,19 @@ def write_values(fout, property_info, type_list, keyword_list):
 
     fout.write("// The property values\n")
     fout.write("\n")
-    fout.write("#define MAKE_PROPERTY_VALUE(type, keyword)      \\\n")
-    fout.write("    ((DWORD32)(                                 \\\n")
-    fout.write("        ((DWORD32)((keyword) & 0xFFFF)) |       \\\n")
-    fout.write("        ((DWORD32)((type) & 0xFFFF) << 16)      \\\n")
+
+    fout.write("#define PPT_FLAG_INHERITED     0x80000000\n")
+    fout.write("#define PPT_FLAG_NOT_INHERITED 0x00000000\n")
+    fout.write("\n")
+    fout.write("#define MAKE_PROPERTY_VALUE(inherited, type, keyword)   \\\n")
+    fout.write("    ((DWORD32)(                                         \\\n")
+    fout.write("        ((DWORD32)((keyword) & 0xFFFF)) |               \\\n")
+    fout.write("        ((DWORD32)((type) & 0x7FFF) << 16) |            \\\n")
+    fout.write("        ((DWORD32)(inherited))                          \\\n")
     fout.write("    ))\n")
     fout.write("\n")
-    fout.write("#define PROPERTY_VALUE_TYPE(value)      (((value) & 0xFFFF0000) >> 16)\n")
+    fout.write("#define PROPERTY_VALUE_INHERITED(value) ((value) & PPT_FLAG_INHERITED)\n")
+    fout.write("#define PROPERTY_VALUE_TYPE(value)      (((value) & 0x7FFF0000) >> 16)\n")
     fout.write("#define PROPERTY_VALUE_KEYWORD(value)   ((value) & 0x0000FFFF)\n")
     fout.write("\n")
 
@@ -336,11 +352,12 @@ def write_values(fout, property_info, type_list, keyword_list):
 
         value_list = property_info[property_tokens[i]]['values']
         value_list.sort()
+        inherited = property_info[property_tokens[i]]['inherited']
 
         fout.write("// Values for for property %s\n" % (property_tokens[i], ))
         for value in value_list:
             fout.write("#define %s \\\n" % (make_value_id (property_tokens[i], value), ))
-            fout.write("    %s\n" % (make_value_macro (property_tokens[i], value), ))
+            fout.write("    %s\n" % (make_value_macro (property_tokens[i], value, inherited), ))
         fout.write("\n")
 
     fout.write("\n")
@@ -354,6 +371,7 @@ def write_class_propertyvalue(fout, property_tokens, property_info):
     fout.write("    PropertyValue(DWORD32 value, HTData data = 0);\n")
     fout.write("    ~PropertyValue() {};\n")
     fout.write("\n")
+    fout.write("    bool isInherited() const { return (bool)PROPERTY_VALUE_INHERITED(m_value); }\n")
     fout.write("    DWORD32 getValue() const { return m_value; }\n")
     fout.write("    int getType() const { return PROPERTY_VALUE_TYPE(m_value); }\n")
     fout.write("    int getKeyword() const { return PROPERTY_VALUE_KEYWORD(m_value); }\n")
@@ -441,7 +459,6 @@ def write_class_stylesheetinitial(fout, property_info):
     fout.write("{\n")
 
     fout.write("\n")
-    fout.write("    memset(&m_flags, 0, sizeof(m_flags));\n")
     fout.write("    memset(&m_data, 0, sizeof(m_data));\n")
     fout.write("\n")
 
@@ -449,7 +466,8 @@ def write_class_stylesheetinitial(fout, property_info):
     for property_token in property_info:
         pid = make_property_id(property_token);
         value_token = property_info[property_token]['initial']
-        initial_value, user_data = make_initial_value (property_token, value_token)
+        inherited = property_info[property_token]['inherited']
+        initial_value, user_data = make_initial_value (property_token, value_token, inherited)
         fout.write("    m_values[%s] = %s;\n" % (pid, initial_value, ))
         if user_data is not None:
             # TODO: check the type of the user data more here.
@@ -457,8 +475,6 @@ def write_class_stylesheetinitial(fout, property_info):
                 fout.write("    m_data[%s] = (HTData)%s;\n" % (pid, user_data, ))
             else:
                 fout.write("    m_data[%s] = (HTData)\"%s\";\n" % (pid, user_data, ))
-        if property_info[property_token]['inherited'] == 'yes':
-            fout.write("    m_flags[%s] |= PPT_FLAG_INHERITED;\n" % (pid, ))
         fout.write("\n")
 
     fout.write("}\n")

@@ -26,8 +26,6 @@
 #include "../common/stlalternative.h"
 #include "propertyvalue.h"
 
-#define PPT_FLAG_INHERITED     0x00000001
-
 namespace hfcl {
 
 class StyleSheet {

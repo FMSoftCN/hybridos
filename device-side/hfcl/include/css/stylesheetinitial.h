@@ -34,7 +34,6 @@ public:
     StyleSheetInitial ();
     ~StyleSheetInitial () {}
 
-    DWORD32 getPropertyFlags (PropertyIds pid) { return m_flags[pid]; }
     virtual bool getProperty (PropertyIds pid, DWORD32 *value,
             HTData *data = NULL) {
         if (value) {
@@ -62,7 +61,6 @@ private:
     static StyleSheetInitial* s_singleton;
 
     DWORD32 m_values[MAX_PID];
-    DWORD32 m_flags[MAX_PID];
     HTData m_data[MAX_PID];
 };
 

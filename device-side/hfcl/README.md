@@ -29,15 +29,15 @@ So we design HFCL as the successor of mGNGUX.
 The key features of HFCL are follow:
 
 * It acts as the framework for HybridOS native app.
-* It provides a complete set of rich views with support for
-  Cascading Style Sheet.
+* It provides a complete set of rich views with support for CSS
+  (Cascading Style Sheet).
 * It is the foundation of Hybrid App Engine.
 * It is cross multiple windowing platforms including MiniGUI, Windows, macOS,
   Gtk+, and others.
 
 ## Current status
 
-At present, HFCL is under development actively. We do not recommend the use of
+At present, HFCL is under development actively. We do not recommend to use
 HFCL in real products.
 
 ## Building for Ubuntu Linux 16.04
