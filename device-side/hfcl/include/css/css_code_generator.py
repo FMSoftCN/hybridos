@@ -396,7 +396,7 @@ def write_class_stylesheetdeclared(fout, property_tokens):
     fout.write("public:\n")
     fout.write("    StyleSheetDeclared () {}\n")
     fout.write("    StyleSheetDeclared (int ssid) : StyleSheet (ssid) {}\n")
-    fout.write("    ~StyleSheetDeclared () {}\n")
+    fout.write("    ~StyleSheetDeclared ();\n")
     fout.write("\n")
 
     for i in range(0, len(property_tokens)):

@@ -37,7 +37,7 @@ class StyleSheetDeclared : public StyleSheet {
 public:
     StyleSheetDeclared () {}
     StyleSheetDeclared (int ssid) : StyleSheet (ssid) {}
-    ~StyleSheetDeclared () {}
+    ~StyleSheetDeclared ();
 
     // Operator for property background-attachment
     bool setBackgroundAttachment (DWORD32 value, HTData addData = 0) {
