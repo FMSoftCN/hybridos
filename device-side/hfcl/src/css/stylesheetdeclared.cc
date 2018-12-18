@@ -56,7 +56,8 @@ bool StyleSheetDeclared::setProperty (PropertyIds pid, DWORD32 value,
     PropertyValue* pv;
     PropertyValueMap::iterator it = m_map.find (pid);
 
-    /* TODO: check validation of the value */
+    /* TODO: check validity of the value */
+
     if (it == m_map.end ()) {
         pv = HFCL_NEW_EX(PropertyValue, (value, data));
         m_map [pid] = pv;
