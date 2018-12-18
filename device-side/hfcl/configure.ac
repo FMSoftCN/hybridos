@@ -99,12 +99,12 @@ AC_CHECK_FUNCS([memmove memset putenv strchr strdup strerror strstr])
 
 AM_CONFIG_HEADER(hfclconfig.h)
 
-devel_mode="no"
+devel_mode="yes"
 AC_ARG_ENABLE(develmode,
 [  --enable-develmode       developer mode <default=no>],
 devel_mode=$enableval)
 
-detail_debug="no"
+detail_debug="yes"
 AC_ARG_ENABLE(detail_debug,
 [  --enable-detaildebug     detailed debug information <default=no>],
 detail_debug=$enableval)

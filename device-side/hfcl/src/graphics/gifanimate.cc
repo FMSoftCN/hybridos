@@ -532,11 +532,9 @@ void GifAnimate::createGifAnimateFromRes(BitmapFrameArray* bitmap_frame_array)
     }
 
     m_mem_gc = CreateMemGC(m_max_width, m_max_height);
-#ifdef _DEBUG
     if (NULL == m_mem_gc) {
         _ERR_PRINTF ("Error -- GifAnimate::createGifAnimateFromRes CreateMemGC Error. 1\n");
     }
-#endif
 }
 
 void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
@@ -550,23 +548,17 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
     GifAnimateFrame *current = NULL;
 
     if (!(m_area = MGUI_RWFromMem ((void*)data, size))) {
-#ifdef _DEBUG
         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (m_area == NULL).\n");
-#endif
         return;
     }
 
     if (ReadGIFGlobal (m_area, &m_gif_screen) < 0) {
-#ifdef _DEBUG
         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ReadGIFGlobal < 0).\n");
-#endif
         return;
     }
 
     if ((ok = ReadOK (m_area, &c, 1)) == 0) {
-#ifdef _DEBUG
         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ReadOK == 0).\n");
-#endif
         return;
     }
 
@@ -574,9 +566,7 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
         switch (c) {
         case '!':
             if ( (ok = ReadOK (m_area, &c, 1)) == 0) {
-#ifdef _DEBUG
                 _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (case '!' ReadOK == 0).\n");
-#endif
                 return;
             }
             DoExtension (m_area, c, &m_gif_screen);
@@ -584,16 +574,12 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
 
         case ',':
             if (ReadImageDesc (m_area, &ImageDesc, &m_gif_screen) < 0) {
-#ifdef _DEBUG
                 _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ReadImageDesc < 0).\n");
-#endif
                 return;
             }
             else {
                 if (ReadImage (m_area, &mybmp, &ImageDesc, &m_gif_screen, 0) < 0) {
-#ifdef _DEBUG
                     _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ReadImage < 0).\n");
-#endif
                     return;
                 }
             }
@@ -601,9 +587,7 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
             frame = HFCL_NEW(GifAnimateFrame);
 
             if(!frame) {
-#ifdef _DEBUG
                 _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (new frame).\n");
-#endif
                 return;
             }
             frame->next = NULL;
@@ -621,9 +605,7 @@ void GifAnimate::createGifAnimateFromMem(const char * data, unsigned int size)
                 if(mybmp.bits)
                     HFCL_DELETE_ARR(mybmp.bits);
                 mybmp.bits = NULL;
-#ifdef _DEBUG
                 _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem error (ExpandMyBitmap).\n");
-#endif
                 return;
             }
 
@@ -677,11 +659,9 @@ ret_tag_0:
 
     m_mem_gc = CreateMemGC(m_max_width, m_max_height);
 
-#ifdef _DEBUG
     if(NULL == m_mem_gc) {
         _DBG_PRINTF ("Error -- GifAnimate::createGifAnimateFromMem CreateMemGC Error. 0\n");
     }
-#endif
 }
 
 void GifAnimate::loadGifAnimateNextFrameFromMem()
@@ -875,8 +855,7 @@ void GifAnimate::createGifAnimateFromFile (const char* file)
             {
                 m_frames = frame;
                 current = frame;
-                current->prev = NULL;
-            }
+                current->prev = NULL; }
             else
             {
                 frame->prev = current;
@@ -1009,9 +988,7 @@ GifAnimate::~GifAnimate()
         m_frames = m_frames->next;
         UnloadBitmap(&f->bmp);
         HFCL_DELETE(f);
-#ifdef _DEBUG
-        _DBG_PRINTF ("GifAnimate::GifAnimate delete f=%x", f);
-#endif
+        _DBG_PRINTF ("GifAnimate::GifAnimate delete f=%x\n", f);
     }
     MGUI_RWclose (m_area);
 
@@ -1066,15 +1043,11 @@ void GifAnimate::restorePrevFrame(const IntRect &rect, GifAnimateFrame* frame)
 void GifAnimate::drawFrameOnMem(const IntRect &rect, GifAnimateFrame* frame)
 {
     if (NULL == frame) {
-#ifdef _DEBUG
         _DBG_PRINTF ("Error :: GifAnimate::drawFrameOnMem ... frame == NULL \n");
-#endif
         return;
     }
     if (NULL == m_mem_gc) {
-#ifdef _DEBUG
         _DBG_PRINTF ("Error :: GifAnimate::drawFrameOnMem ... m_mem_gc == NULL \n");
-#endif
         return;
     }
 
@@ -1094,23 +1067,17 @@ void GifAnimate::drawOneFrame(GraphicsContext* graphics,
         const IntRect &rect, GifAnimateFrame* frame)
 {
     if (NULL == graphics) {
-#ifdef _DEBUG
         _DBG_PRINTF ("Error :: GifAnimate::drawOneFrame ... graphics == NULL \n");
-#endif
         return;
     }
 
     if (NULL == m_current_frame) {
-#ifdef _DEBUG
         _DBG_PRINTF ("Error :: GifAnimate::drawOneFrame ... m_current_frame == NULL \n");
-#endif
         return;
     }
 
     if (NULL == m_mem_gc) {
-#ifdef _DEBUG
         _DBG_PRINTF ("Error :: GifAnimate::drawOneFrame ... m_mem_gc == NULL \n");
-#endif
         return;
     }
 

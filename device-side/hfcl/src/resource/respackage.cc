@@ -88,6 +88,7 @@ ResourceBucket::~ResourceBucket()
 
             HFCL_DELETE(v);
         }
+        break;
 
     /* the following ones will be deperacated */
     case R_TYPE_STYLE:

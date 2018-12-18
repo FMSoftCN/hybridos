@@ -34,8 +34,6 @@ typedef enum {
     R_TYPE_STYLE_SHEET,
     R_TYPE_UI,
     R_TYPE_MENU,
-    R_TYPE_MEDIA,
-    R_TYPE_ANIMATION,
     R_TYPE_BINARY,
     /* the following ones will be deperacated */
     R_TYPE_STYLE,

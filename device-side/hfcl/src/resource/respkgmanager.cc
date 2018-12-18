@@ -36,8 +36,9 @@ ResPkgManager::~ResPkgManager()
     ResPkgList::iterator it;
 
     for(it = m_packageList.begin(); it !=m_packageList.end(); it++) {
+        ResPackage* pkg = *it;
         m_packageList.erase(it);
-        HFCL_DELETE(*it);
+        HFCL_DELETE(pkg);
     }
 }
 
@@ -73,8 +74,9 @@ bool ResPkgManager::registerPackage(ResPackage *pkg)
     ResPkgList::iterator it;
 
     for (it = m_packageList.begin(); it != m_packageList.end(); it++) {
-        if (*it == pkg)
+        if (*it == pkg) {
             return true;
+        }
     }
 
     m_packageList.push_back(pkg);
@@ -85,9 +87,10 @@ bool ResPkgManager::unregisterPackage(int id)
 {
     ResPkgList::iterator it;
     for (it = m_packageList.begin(); it != m_packageList.end(); it++) {
-        if ((*it)->getId() == id) {
+        ResPackage* pkg = *it;
+        if (pkg->getId() == id) {
             m_packageList.erase(it);
-            HFCL_DELETE(*it);
+            HFCL_DELETE(pkg);
             return true;
         }
     }
@@ -99,9 +102,10 @@ bool ResPkgManager::unregisterPackage(const char * name)
     ResPkgList::iterator it;
 
     for (it = m_packageList.begin(); it != m_packageList.end(); it++) {
-        if (strcmp((*it)->getName(), name) == 0) {
+        ResPackage* pkg = *it;
+        if (strcmp(pkg->getName(), name) == 0) {
             m_packageList.erase(it);
-            HFCL_DELETE(*it);
+            HFCL_DELETE(pkg);
             return true;
         }
     }

@@ -10,6 +10,7 @@
 
 BootupActivity::BootupActivity()
 {
+    REGISTER_RESPKG(bootup);
 }
 
 BootupActivity::~BootupActivity()
@@ -19,7 +20,6 @@ BootupActivity::~BootupActivity()
 
 void BootupActivity::onCreate(ContextStream* contextStream, Intent* intent)
 {
-    FRRegister_bootup_resource();
     FullScreenActivity::onCreate(contextStream, intent);
 
     if (intent->action ())
