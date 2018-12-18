@@ -72,6 +72,8 @@ class RefCount : Noncopyable {
          */
         virtual ~RefCount() { }
 
+        virtual void onNoRef () { HFCL_DELETE (this); }
+
         /**
          * Return the reference count.
          */
@@ -83,8 +85,7 @@ class RefCount : Noncopyable {
         /**
          * Increment the reference count. Must be balanced by a call to unref().
          */
-        int ref()
-        {
+        int ref() {
             return refInc();
         }
 
@@ -94,10 +95,9 @@ class RefCount : Noncopyable {
          * case, then the object needs to have been allocated via new, and not on
          * the stack.
          */
-        int unref()
-        {
+        int unref() {
             if (refDec () == 0) {
-                HFCL_DELETE(this);
+                onNoRef ();
                 return 0;
             }
             return m_refCount;
@@ -107,13 +107,13 @@ class RefCount : Noncopyable {
          * Helper version of ref(), that first checks to see if this is not null.
          * If this is null, then do nothing.
          */
-        inline int safeRef()
-        {
+        inline int safeRef() {
             return ref();
         }
 
         /**
-         * Helper version of unref(), that first checks to see if this is not null.
+         * Helper version of unref(), that first checks to see if this is not
+         * null.
          * If this is null, then do nothing.
          */
         inline int safeUnref()

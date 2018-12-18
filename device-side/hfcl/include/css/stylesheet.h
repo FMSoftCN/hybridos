@@ -23,12 +23,13 @@
 #define HFCL_CSS_STYLESHEET_H_
 
 #include "../common/common.h"
+#include "../common/object.h"
 #include "../common/stlalternative.h"
 #include "propertyvalue.h"
 
 namespace hfcl {
 
-class StyleSheet {
+class StyleSheet : public RefCount {
 public:
     StyleSheet () : m_ssid (0) {}
     StyleSheet (int ssid) : m_ssid (ssid) {}

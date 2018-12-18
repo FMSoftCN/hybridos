@@ -23,5 +23,40 @@
 
 namespace hfcl {
 
+bool StyleSheetDeclared::getProperty (PropertyIds pid, DWORD32 *value,
+        HTData *data)
+{
+    PropertyValueMap::iterator it = m_map.find (pid);
+    if (it == m_map.end ()) {
+        return false;
+    }
+
+    if (value)
+        *value = m_map [pid]->getValue();
+    if (data)
+        *data = m_map [pid]->getData();
+
+    return true;
+}
+
+bool StyleSheetDeclared::setProperty (PropertyIds pid, DWORD32 value,
+    HTData data)
+{
+    PropertyValue* pv;
+    PropertyValueMap::iterator it = m_map.find (pid);
+
+    if (it == m_map.end ()) {
+        pv = HFCL_NEW_EX(PropertyValue, (value, data));
+        m_map [pid] = pv;
+        return true;
+    }
+    else {
+        PropertyValue* pv = it->second;
+        pv->setValue(value, data);
+    }
+
+    return false;
+}
+
 } // namespace hfcl
 

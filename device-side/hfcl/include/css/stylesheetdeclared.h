@@ -460,8 +460,8 @@ public:
             HTData data = 0);
 
 private:
-    MAPCLASSKEY(PropertyIds, PropertyValue, PropertyValueMap);
-    PAIR(PropertyIds, PropertyValue, PropertyValuePair);
+    MAPCLASSKEY(PropertyIds, PropertyValue*, PropertyValueMap);
+    PAIR(PropertyIds, PropertyValue*, PropertyValuePair);
 
     PropertyValueMap m_map;
 };

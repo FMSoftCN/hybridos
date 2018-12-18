@@ -31,17 +31,19 @@ typedef enum {
     R_TYPE_TEXT_GNUMSG,
     R_TYPE_IMAGE,
     R_TYPE_FONT,
-    R_TYPE_STYLE,
     R_TYPE_STYLE_SHEET,
     R_TYPE_UI,
-    R_TYPE_DRAWABLE,
-    R_TYPE_DRAWABLESET,
-    R_TYPE_DRSETGROUP,
-    R_TYPE_THEME,
     R_TYPE_MENU,
     R_TYPE_MEDIA,
     R_TYPE_ANIMATION,
     R_TYPE_BINARY,
+    /* the following ones will be deperacated */
+    R_TYPE_STYLE,
+    R_TYPE_DRAWABLE,
+    R_TYPE_DRAWABLESET,
+    R_TYPE_DRSETGROUP,
+    R_TYPE_THEME,
+    /* the ones above will be deperacated */
     NR_RES_TYPE,
 } HIDResType;
 

@@ -67,6 +67,29 @@ ResourceBucket::~ResourceBucket()
             HFCL_DELETE((FontResVec *)resouces);
         break;
 
+    case R_TYPE_UI:
+        if (resouces)
+            HFCL_DELETE((UiResVec *)resouces);
+        break;
+
+    case R_TYPE_MENU:
+        if (resouces)
+            HFCL_DELETE((MenuResVec *)resouces);
+        break;
+
+    case R_TYPE_STYLE_SHEET:
+        if (resouces) {
+            StyleSheetResVec *v = (StyleSheetResVec*)resouces;
+
+            StyleSheetResVec::iterator it;
+            for (it = v->begin(); it != v->end(); ++it) {
+                (*it)->unref();
+            }
+
+            HFCL_DELETE(v);
+        }
+
+    /* the following ones will be deperacated */
     case R_TYPE_STYLE:
         if (resouces) {
             StyleResVec *v = (StyleResVec*)resouces;
@@ -78,11 +101,6 @@ ResourceBucket::~ResourceBucket()
 
             HFCL_DELETE(v);
         }
-        break;
-
-    case R_TYPE_UI:
-        if (resouces)
-            HFCL_DELETE((UiResVec *)resouces);
         break;
 
     case R_TYPE_DRAWABLE:
@@ -136,11 +154,6 @@ ResourceBucket::~ResourceBucket()
         }
         break;
 
-    case R_TYPE_MENU:
-        if (resouces)
-            HFCL_DELETE((MenuResVec *)resouces);
-        break;
-
     default:
         break;
     }
@@ -173,13 +186,13 @@ FontResVec &ResourceBucket::fontRes(void)
     return ( *((FontResVec *)resouces) );
 }
 
-StyleResVec &ResourceBucket::styleRes(void)
+StyleSheetResVec &ResourceBucket::styleSheetRes(void)
 {
     if (NULL == resouces) {
-        resouces = HFCL_NEW_EX(StyleResVec, ());
+        resouces = HFCL_NEW_EX(StyleSheetResVec, ());
     }
 
-    return ( *((StyleResVec *)resouces) );
+    return ( *((StyleSheetResVec *)resouces) );
 }
 
 UiResVec &ResourceBucket::uiRes(void)
@@ -198,6 +211,15 @@ MenuResVec& ResourceBucket::menuRes(void)
     }
 
     return (*((MenuResVec*)resouces));
+}
+
+StyleResVec &ResourceBucket::styleRes(void)
+{
+    if (NULL == resouces) {
+        resouces = HFCL_NEW_EX(StyleResVec, ());
+    }
+
+    return ( *((StyleResVec *)resouces) );
 }
 
 DrawableResVec &ResourceBucket::drawableRes(void)
@@ -326,30 +348,9 @@ bool ResPackage::addFontResource(const ResourceEntry *fonts)
     return true;
 }
 
-bool ResPackage::addStyleResource(HTResId id, HTResId superid,
-        const TRStyleElement *elements, int count)
+bool ResPackage::addStyleSheetResource(StyleSheetDeclared* cssDeclared)
 {
-    // add the common resource
-    if(id == 0) {
-        AddCommonStyleElementsFromRes(elements);
-        return true;
-    }
-
-    if (!elements || !count)
-        return false;
-
-    Style* style = NULL;
-    if (count > 30)
-        style = HFCL_NEW_EX (HashedStyle, (elements));
-    else
-        style = HFCL_NEW_EX (SimpleStyle, (elements));
-
-    Style* super = GetStyleRes (superid);
-    if (!super)
-        super = GetCommonStyle();
-
-    style->setSuper(super);
-    m_resBuckets[R_TYPE_STYLE].styleRes().push_back(style);
+    m_resBuckets[R_TYPE_STYLE_SHEET].styleSheetRes().push_back(cssDeclared);
 
     return true;
 }
@@ -379,6 +380,34 @@ bool ResPackage::addMenuResource(MENU_RES_ARRAY *pMnuArray, int nMenuCount)
 bool ResPackage::addMenuResource(HTResId id, CB_CREATE_MENU cb_createMenu)
 {
     m_resBuckets[R_TYPE_MENU].menuRes().push_back(cb_createMenu);
+
+    return true;
+}
+
+bool ResPackage::addStyleResource(HTResId id, HTResId superid,
+        const TRStyleElement *elements, int count)
+{
+    // add the common resource
+    if(id == 0) {
+        AddCommonStyleElementsFromRes(elements);
+        return true;
+    }
+
+    if (!elements || !count)
+        return false;
+
+    Style* style = NULL;
+    if (count > 30)
+        style = HFCL_NEW_EX (HashedStyle, (elements));
+    else
+        style = HFCL_NEW_EX (SimpleStyle, (elements));
+
+    Style* super = GetStyleRes (superid);
+    if (!super)
+        super = GetCommonStyle();
+
+    style->setSuper(super);
+    m_resBuckets[R_TYPE_STYLE].styleRes().push_back(style);
 
     return true;
 }
@@ -474,14 +503,17 @@ void *ResPackage::getRes(HTResId id)
     case R_TYPE_FONT:
         return (void *)getFont(id);
 
-    case R_TYPE_STYLE:
-        return (void *)getStyle(id);
+    case R_TYPE_STYLE_SHEET:
+        return (void *)getStyleSheet(id);
 
     case R_TYPE_UI:
         return (void *)getUi(id);
 
     case R_TYPE_MENU:
         return (void *)getMenu(id);
+
+    case R_TYPE_STYLE:
+        return (void *)getStyle(id);
 
     case R_TYPE_DRAWABLE:
         return (void*)getDrawable(id);
@@ -567,19 +599,6 @@ const char* ResPackage::getText (const char* str)
     return m_textRes->getText (str);
 }
 
-Style *ResPackage::getStyle(HTResId id)
-{
-    unsigned int idx = RESINDEX(id) - 1;
-    if (id == 0)
-        return NULL;
-
-    if (R_TYPE_STYLE != RESTYPE(id) || idx < 0
-            || idx >= (unsigned int)m_resBuckets[RESTYPE(id)].styleRes().size())
-        return NULL;
-
-    return m_resBuckets[RESTYPE(id)].styleRes()[idx];
-}
-
 GifAnimate *ResPackage::getGifAnimate(HTResId id)
 {
     unsigned int idx = RESINDEX(id) - 1;
@@ -623,6 +642,19 @@ Logfont *ResPackage::getFont(HTResId id)
     return m_resBuckets[RESTYPE(id)].fontRes()[idx].get();
 }
 
+StyleSheetDeclared *ResPackage::getStyleSheet(HTResId id)
+{
+    unsigned int idx = RESINDEX(id) - 1;
+    if (id == 0)
+        return NULL;
+
+    if (R_TYPE_STYLE_SHEET != RESTYPE(id) || idx < 0
+            || idx >= (unsigned int)m_resBuckets[RESTYPE(id)].styleSheetRes().size())
+        return NULL;
+
+    return m_resBuckets[RESTYPE(id)].styleSheetRes()[idx];
+}
+
 CB_CREATE_VIEW ResPackage::getUi(HTResId id)
 {
     unsigned int idx = RESINDEX(id) - 1;
@@ -659,6 +691,19 @@ Menu* ResPackage::createMenu(HTResId id, Menu *parent, EventListener* listener)
         return NULL;
 
     return cbm(parent, listener);
+}
+
+Style *ResPackage::getStyle(HTResId id)
+{
+    unsigned int idx = RESINDEX(id) - 1;
+    if (id == 0)
+        return NULL;
+
+    if (R_TYPE_STYLE != RESTYPE(id) || idx < 0
+            || idx >= (unsigned int)m_resBuckets[RESTYPE(id)].styleRes().size())
+        return NULL;
+
+    return m_resBuckets[RESTYPE(id)].styleRes()[idx];
 }
 
 Drawable* ResPackage::getDrawable(HTResId id)

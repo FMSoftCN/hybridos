@@ -33,8 +33,9 @@ namespace hfcl {
 
 class DrawableSet;
 class Drawable;
-class Menu;
 class DrawableSetGroup;
+
+class Menu;
 class GifAnimate;
 class ThemeRes;
 
@@ -51,16 +52,16 @@ PAIR(DWORD, hfcl_const_str_t, TextResPair);
 MAP(DWORD, hfcl_const_str_t, TextResMap);
 VECTORCLASS(FontRes, FontResVec);
 VECTORCLASS(ImageRes, ImageResVec);
-//VECTORCLASS(DrawableRes, DrawableResVec);
+VECTOR(StyleSheetDeclared*, StyleSheetResVec);
+VECTOR(CB_CREATE_VIEW, UiResVec);
+VECTOR(CB_CREATE_MENU, MenuResVec);
+
+/* The following ones will be deprecated */
 VECTOR(Drawable*, DrawableResVec);
 VECTOR(DrawableSet*, DrawableSetResVec)
 VECTOR(DrawableSetGroup*, DrawableSetGroupResVec)
 VECTOR(ThemeRes*, ThemeResVec)
-//VECTOR(DrawableSet *, DrawableSetVec);
 VECTOR(Style *, StyleResVec);
-VECTOR(CB_CREATE_VIEW, UiResVec);
-VECTOR(CB_CREATE_MENU, MenuResVec);
-//MAPCLASSKEY(string, DrawableSet *, DrawableSetMap);
 
 class ResourceBucket {
 public:
@@ -70,9 +71,12 @@ public:
     TextResMap &textRes(void);
     ImageResVec &imageRes(void);
     FontResVec &fontRes(void);
-    StyleResVec &styleRes(void);
+    StyleSheetResVec &styleSheetRes(void);
     UiResVec &uiRes(void);
     MenuResVec &menuRes(void);
+
+    /* The following ones will be deprecated */
+    StyleResVec &styleRes(void);
     DrawableResVec &drawableRes(void);
     DrawableSetResVec &drawableSetRes(void);
     DrawableSetGroupResVec& drawableSetGroupRes(void);
@@ -105,15 +109,15 @@ public:
      */
     bool addImageResource(const ResourceEntry *images);
     bool addFontResource(const ResourceEntry *fonts);
-    bool addStyleResource(HTResId id,  HTResId superid,
-            const TRStyleElement *elements, int count);
+    bool addStyleSheetResource(StyleSheetDeclared* styleSheet);
     bool addUIResource(HTResId id, CB_CREATE_VIEW createView);
     bool addUIResource(UI_RES_ARRAY *pUIArray, int nUICount);
-
     bool addMenuResource(HTResId id, CB_CREATE_MENU createMenu);
     bool addMenuResource(MENU_RES_ARRAY *pMnuArray, int nMenuCount);
 
-    void addStyleSheetResource(const StyleSheetDeclared* styleSheet);
+    /* to be deprecated */
+    bool addStyleResource(HTResId id,  HTResId superid,
+            const TRStyleElement *elements, int count);
     void addDrawableResource(TRDrawableArrayItem* all_elements, int size);
     void addDrawableSetResource(TRDrawableSetArrayItem *all_items, int size);
     void addThemeResource(HTResId theme_id, const char* theme_name,
@@ -127,18 +131,20 @@ public:
      * getting resource
      */
     void *getRes(HTResId id);
-    Style *getStyle(HTResId id);
     Image *getImage(HTResId id);
     Bitmap *getBitmap(HTResId id);
     GifAnimate *getGifAnimate(HTResId id);
-
     Logfont *getFont(HTResId id);
+    StyleSheetDeclared *getStyleSheet(HTResId id);
 
     CB_CREATE_VIEW getUi(HTResId id);
     CB_CREATE_MENU getMenu(HTResId id);
     View *createView(HTResId id, View *parent, ViewContext *viewContext,
         ContentProvider *provider = NULL);
     Menu *createMenu(HTResId id, Menu *parent, EventListener* listener);
+
+    /* to be deprecated */
+    Style *getStyle(HTResId id);
     Drawable* getDrawable(HTResId id);
     DrawableSet* getDrawableSet(HTResId);
     DrawableSetGroup* getDrawableSetGroup(HTResId);

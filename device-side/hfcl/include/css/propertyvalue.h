@@ -4923,7 +4923,9 @@ typedef enum _PropertyValueKeywords {
 class PropertyValue {
 public:
     PropertyValue();
-    PropertyValue(DWORD32 value, HTData data = 0);
+    PropertyValue(DWORD32 value, HTData data = 0) {
+        m_value = value; m_data = data;
+    }
     ~PropertyValue() {};
 
     bool isInherited() const { return (bool)PROPERTY_VALUE_INHERITED(m_value); }
@@ -4934,6 +4936,9 @@ public:
     HTReal getDataAsNumber() const { return (HTReal)m_data; }
     int getDataAsInteger() const { return (int)m_data; }
     const char* getDataAsCString() const { return (const char*)m_data; }
+    void setValue(DWORD32 value, HTData data = 0) {
+        m_value = value; m_data = data;
+    }
 
 private:
     DWORD32 m_value;
