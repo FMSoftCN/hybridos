@@ -113,8 +113,9 @@
 
 #define begin_css_res
 
-#define begin_css(name, selector) { \
-    StyleSheetDeclared* curr_css = css_##name##_res; \
+#define begin_css(name, selector) {                     \
+    StyleSheetDeclared* curr_css =                      \
+        HFCL_NEW_EX(StyleSheetDeclared, (selector));    \
     resPkg->addCssResource(curr_css);
 
 #define style(pid, value, user_data) \
@@ -128,12 +129,13 @@
 // css group
 #define begin_css_group_res
 
-#define begin_css_group(name) { \
-    StyleSheetGroup* curr_css_group = css_group_##name##_res; \
+#define begin_css_group(name) {                         \
+    StyleSheetDeclaredGroup* curr_css_group =           \
+        HFCL_NEW(StyleSheetDeclaredGroup);              \
     resPkg->addCssGroupResource(curr_css_group);
 
 #define css(name) \
-    curr_css_group->appendCss(self_css(name));
+    curr_css_group->append(self_css(name));
 
 #define end_css_group }
 

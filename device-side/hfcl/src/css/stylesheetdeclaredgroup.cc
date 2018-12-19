@@ -19,9 +19,28 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "css/stylesheetgroup.h"
+#include "css/stylesheetdeclaredgroup.h"
 
 namespace hfcl {
+
+StyleSheetDeclaredGroup::~StyleSheetDeclaredGroup()
+{
+    StyleSheetDeclaredVec::iterator it;
+    for (it = m_css_vec.begin(); it != m_css_vec.end(); ++it) {
+        StyleSheetDeclared* css = *it;
+        _DBG_PRINTF ("~StyleSheetDeclaredGroup: %p, %d\n", css, css->getRefCnt());
+        css->unref();
+    }
+    m_css_vec.clear();
+}
+
+bool StyleSheetDeclaredGroup::append(StyleSheetDeclared* css)
+{
+    css->ref();
+    _DBG_PRINTF ("StyleSheetDeclaredGroup::append: %p %d\n", css, css->getRefCnt());
+    m_css_vec.push_back(css);
+    return true;
+}
 
 } // namespace hfcl
 

@@ -27,10 +27,10 @@
 namespace hfcl {
 
 class Object {
-    public:
-        Object();
+public:
+    Object();
 
-        virtual ~Object();
+    virtual ~Object();
 };
 
 /**
@@ -60,69 +60,69 @@ class Noncopyable {
  * delete) if getRefCnt() > 1.
  */
 class RefCount : Noncopyable {
-    public:
-        /**
-         * Default construct, initializing the reference count to 1.
-         */
-        RefCount() : m_refCount(1) { }
-        RefCount(int start_ref) : m_refCount(start_ref) { } //for special use
+public:
+    /**
+     * Default construct, initializing the reference count to 1.
+     */
+    RefCount() : m_refCount(1) { }
+    RefCount(int start_ref) : m_refCount(start_ref) { } //for special use
 
-        /**
-         * Destruct, asserting that the reference count is 1.
-         */
-        virtual ~RefCount() { }
+    /**
+     * Destruct, asserting that the reference count is 1.
+     */
+    virtual ~RefCount() { }
 
-        virtual void onNoRef () { HFCL_DELETE (this); }
+    virtual void onNoRef () { HFCL_DELETE (this); }
 
-        /**
-         * Return the reference count.
-         */
-        int getRefCnt() const { return m_refCount; }
+    /**
+     * Return the reference count.
+     */
+    int getRefCnt() const { return m_refCount; }
 
-        inline int refInc() {return ++m_refCount;}
-        inline int refDec() {return --m_refCount;}
+    inline int refInc() {return ++m_refCount;}
+    inline int refDec() {return --m_refCount;}
 
-        /**
-         * Increment the reference count. Must be balanced by a call to unref().
-         */
-        int ref() {
-            return refInc();
+    /**
+     * Increment the reference count. Must be balanced by a call to unref().
+     */
+    int ref() {
+        return refInc();
+    }
+
+    /**
+     * Decrement the reference count. If the reference count is 1 before the
+     * decrement, then call delete on the object. Note that if this is the
+     * case, then the object needs to have been allocated via new, and not on
+     * the stack.
+     */
+    int unref() {
+        if (refDec () == 0) {
+            onNoRef ();
+            return 0;
         }
+        return m_refCount;
+    }
 
-        /**
-         * Decrement the reference count. If the reference count is 1 before the
-         * decrement, then call delete on the object. Note that if this is the
-         * case, then the object needs to have been allocated via new, and not on
-         * the stack.
-         */
-        int unref() {
-            if (refDec () == 0) {
-                onNoRef ();
-                return 0;
-            }
-            return m_refCount;
-        }
+    /**
+     * Helper version of ref(), that first checks to see if this is not null.
+     * If this is null, then do nothing.
+     */
+    inline int safeRef() {
+        return ref();
+    }
 
-        /**
-         * Helper version of ref(), that first checks to see if this is not null.
-         * If this is null, then do nothing.
-         */
-        inline int safeRef() {
-            return ref();
-        }
+    /**
+     * Helper version of unref(), that first checks to see if this is not
+     * null.
+     * If this is null, then do nothing.
+     */
+    inline int safeUnref()
+    {
+        return unref();
+    }
 
-        /**
-         * Helper version of unref(), that first checks to see if this is not
-         * null.
-         * If this is null, then do nothing.
-         */
-        inline int safeUnref()
-        {
-            return unref();
-        }
-
-    private:
-        mutable int m_refCount;
+private:
+    mutable int m_refCount;
 };
 
 

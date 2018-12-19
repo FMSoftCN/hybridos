@@ -28,7 +28,7 @@
 #include "../resource/fontres.h"
 #include "../resource/imageres.h"
 #include "../css/stylesheetdeclared.h"
-#include "../css/stylesheetgroup.h"
+#include "../css/stylesheetdeclaredgroup.h"
 
 namespace hfcl {
 
@@ -54,7 +54,7 @@ MAP(DWORD, hfcl_const_str_t, TextResMap);
 VECTORCLASS(FontRes, FontResVec);
 VECTORCLASS(ImageRes, ImageResVec);
 VECTOR(StyleSheetDeclared*, StyleSheetResVec);
-VECTOR(StyleSheetGroup*, StyleSheetGroupResVec);
+VECTOR(StyleSheetDeclaredGroup*, StyleSheetGroupResVec);
 VECTOR(CB_CREATE_VIEW, UiResVec);
 VECTOR(CB_CREATE_MENU, MenuResVec);
 
@@ -113,7 +113,7 @@ public:
     bool addImageResource(const ResourceEntry *images);
     bool addFontResource(const ResourceEntry *fonts);
     bool addCssResource(StyleSheetDeclared* cssDeclared);
-    bool addCssGroupResource(StyleSheetGroup* cssGroup);
+    bool addCssGroupResource(StyleSheetDeclaredGroup* cssGroup);
     bool addUIResource(HTResId id, CB_CREATE_VIEW createView);
     bool addUIResource(UI_RES_ARRAY *pUIArray, int nUICount);
     bool addMenuResource(HTResId id, CB_CREATE_MENU createMenu);
@@ -140,7 +140,7 @@ public:
     GifAnimate *getGifAnimate(HTResId id);
     Logfont *getFont(HTResId id);
     StyleSheetDeclared *getCss(HTResId id);
-    StyleSheetGroup *getCssGroup(HTResId id);
+    StyleSheetDeclaredGroup *getCssGroup(HTResId id);
 
     CB_CREATE_VIEW getUi(HTResId id);
     CB_CREATE_MENU getMenu(HTResId id);

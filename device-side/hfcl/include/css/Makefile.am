@@ -7,7 +7,7 @@ myinclude_HEADERS= \
     stylesheet.h \
     stylesheetinitial.h \
     stylesheetdeclared.h \
-    stylesheetgroup.h
+    stylesheetdeclaredgroup.h
 
 EXTRA_DIST= \
     css_code_generator.py

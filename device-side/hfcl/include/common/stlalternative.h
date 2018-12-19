@@ -41,9 +41,9 @@
 #define LIST(type, name) typedef std::list<type> name;
 
 #define MAP(type1, type2, name) typedef std::map<type1, type2> name;
-#define MAPCLASS(type1, type2, name) MAP(type1, type2,name)
-#define MAPCLASSVALUE(type1, type2, name) MAP(type1, type2,name)
-#define MAPCLASSKEY(type1, type2, name) MAP(type1, type2,name)
+#define MAPCLASS(type1, type2, name) MAP(type1, type2, name)
+#define MAPCLASSVALUE(type1, type2, name) MAP(type1, type2, name)
+#define MAPCLASSKEY(type1, type2, name) MAP(type1, type2, name)
 #define MAPEX(TKey, TValue, ClassName,  cmp_key, del_key, del_value) \
         MAP(TKey, TValue, ClassName)
 
@@ -525,6 +525,7 @@ public:
     }
     void clear() {
         clear_node(_root.rb_node);
+        _root.rb_node = NULL;
         _count = 0;
     }
 
@@ -876,7 +877,8 @@ protected: \
     void key_copy(void *dest, const void* src) {*((TKey*)dest) = *((TKey*)src); } \
 };
 
-#define MAPCLASS(TKey, TValue, ClassName)  MAPEX(TKey, TValue, ClassName, do { return (*k1) - (*k2); } while (0), do { k->~TKey(); } while (0), do { v->~TValue(); } while (0))
+#define MAPCLASS(TKey, TValue, ClassName)  \
+    MAPEX(TKey, TValue, ClassName, do { return (*k1)-(*k2); } while (0), do { k->~TKey(); } while (0), do { v->~TValue(); } while (0))
 #define MAPCLASSVALUE(TKey, TValue, ClassName) \
     MAPEX(TKey, TValue, ClassName, do { return (*k1)-(*k2); } while (0), do { } while (0), do { v->~TValue(); } while (0))
 #define MAPCLASSKEY(TKey, TValue, ClassName) \

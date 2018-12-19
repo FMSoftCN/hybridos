@@ -83,7 +83,24 @@ ResourceBucket::~ResourceBucket()
 
             StyleSheetResVec::iterator it;
             for (it = v->begin(); it != v->end(); ++it) {
-                (*it)->unref();
+                StyleSheetDeclared* css = *it;
+                _DBG_PRINTF ("Removing css from resource bucket: %p, %d\n", css, css->getRefCnt());
+                css->unref();
+            }
+
+            HFCL_DELETE(v);
+        }
+        break;
+
+    case R_TYPE_CSSGROUP:
+        if (resouces) {
+            StyleSheetGroupResVec *v = (StyleSheetGroupResVec*)resouces;
+
+            StyleSheetGroupResVec::iterator it;
+            for (it = v->begin(); it != v->end(); ++it) {
+                StyleSheetDeclaredGroup* css_group = *it;
+                _DBG_PRINTF ("Removing css group from resource bucket: %p, %d\n", css_group, css_group->getRefCnt());
+                css_group->unref();
             }
 
             HFCL_DELETE(v);
@@ -361,14 +378,12 @@ bool ResPackage::addFontResource(const ResourceEntry *fonts)
 bool ResPackage::addCssResource(StyleSheetDeclared* cssDeclared)
 {
     m_resBuckets[R_TYPE_CSS].cssRes().push_back(cssDeclared);
-
     return true;
 }
 
-bool ResPackage::addCssGroupResource(StyleSheetGroup* cssGroup)
+bool ResPackage::addCssGroupResource(StyleSheetDeclaredGroup* cssGroup)
 {
-    m_resBuckets[R_TYPE_CSS].cssGroupRes().push_back(cssGroup);
-
+    m_resBuckets[R_TYPE_CSSGROUP].cssGroupRes().push_back(cssGroup);
     return true;
 }
 
@@ -672,7 +687,7 @@ StyleSheetDeclared *ResPackage::getCss(HTResId id)
     return m_resBuckets[RESTYPE(id)].cssRes()[idx];
 }
 
-StyleSheetGroup *ResPackage::getCssGroup(HTResId id)
+StyleSheetDeclaredGroup *ResPackage::getCssGroup(HTResId id)
 {
     unsigned int idx = RESINDEX(id) - 1;
     if (id == 0)

@@ -42,10 +42,11 @@ bool StyleSheetDeclared::getProperty (PropertyIds pid, DWORD32 *value,
         return false;
     }
 
+    PropertyValue* pv = m_map [pid];
     if (value)
-        *value = m_map [pid]->getValue();
+        *value = pv->getValue();
     if (data)
-        *data = m_map [pid]->getData();
+        *data = pv->getData();
 
     return true;
 }
@@ -54,17 +55,17 @@ bool StyleSheetDeclared::setProperty (PropertyIds pid, DWORD32 value,
     HTData data)
 {
     PropertyValue* pv;
-    PropertyValueMap::iterator it = m_map.find (pid);
+    PropertyValueMap::iterator it = m_map.find(pid);
 
     /* TODO: check validity of the value */
 
-    if (it == m_map.end ()) {
+    if (it == m_map.end()) {
         pv = HFCL_NEW_EX(PropertyValue, (value, data));
         m_map [pid] = pv;
         return true;
     }
     else {
-        PropertyValue* pv = it->second;
+        PropertyValue* pv = (PropertyValue*)it->second;
         pv->setValue(value, data);
     }
 

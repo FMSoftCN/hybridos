@@ -25,7 +25,7 @@
 #include "../resource/restypes.h"
 #include "../graphics/graphicscontext.h"
 #include "../css/stylesheetdeclared.h"
-#include "../css/stylesheetgroup.h"
+#include "../css/stylesheetdeclaredgroup.h"
 
 namespace hfcl {
 
@@ -93,7 +93,7 @@ Image * GetImageRes(HTResId id);
 Bitmap * GetBitmapRes(HTResId id);
 GifAnimate* GetGifAnimateRes(HTResId id);
 StyleSheetDeclared* GetCssRes(HTResId id);
-StyleSheetGroup* GetCssGroupRes(HTResId id);
+StyleSheetDeclaredGroup* GetCssGroupRes(HTResId id);
 
 Drawable* GetDrawableRes(HTResId id);
 DrawableSet* GetDrawableSetRes(HTResId id);

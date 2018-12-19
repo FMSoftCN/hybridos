@@ -239,7 +239,7 @@ StyleSheetDeclared* GetCssRes(HTResId id)
     return NULL;
 }
 
-StyleSheetGroup* GetCssGroupRes(HTResId id)
+StyleSheetDeclaredGroup* GetCssGroupRes(HTResId id)
 {
     ResPackage *resPkg = GetResPackage(RPKGID(id));
 

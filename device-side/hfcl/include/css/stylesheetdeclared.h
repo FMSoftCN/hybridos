@@ -459,9 +459,11 @@ public:
             HTData data = 0);
 
 private:
-    MAPCLASSKEY(PropertyIds, PropertyValue*, PropertyValueMap);
-    PAIR(PropertyIds, PropertyValue*, PropertyValuePair);
-
+    /* VincentWei:
+     * for map, the size of key type must be aligned at intptr_t.
+     * Or it->second cannot work correctly, you will get SEGV.
+     */
+    MAP(intptr_t, PropertyValue*, PropertyValueMap);
     PropertyValueMap m_map;
 };
 

@@ -8,5 +8,5 @@ libhfcl_css_la_SOURCES = \
     stylesheet.cc   \
     stylesheetdeclared.cc \
     stylesheetinitial.cc \
-    stylesheetgroup.cc
+    stylesheetdeclaredgroup.cc
 

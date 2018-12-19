@@ -113,9 +113,7 @@
 // style sheet
 #define begin_css_res
 
-#define begin_css(name, selector)                   \
-    static StyleSheetDeclared* css_##name##_res =   \
-        HFCL_NEW_EX(StyleSheetDeclared, (selector));
+#define begin_css(name, selector)
 
 #define style(id, value, user_data)
 
@@ -127,9 +125,7 @@
 // css group
 #define begin_css_group_res
 
-#define begin_css_group(name)                           \
-    static StyleSheetGroup* css_group_##name##_res =    \
-        HFCL_NEW(StyleSheetGroup);
+#define begin_css_group(name)
 
 #define css(name)
 
