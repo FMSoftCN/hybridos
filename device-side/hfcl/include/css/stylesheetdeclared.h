@@ -464,6 +464,7 @@ private:
      * Or it->second cannot work correctly, you will get SEGV.
      */
     MAP(intptr_t, PropertyValue*, PropertyValueMap);
+
     PropertyValueMap m_map;
 };
 

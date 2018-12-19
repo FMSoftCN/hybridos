@@ -790,6 +790,11 @@ public:
 #define LIST(Type, ClassName) LISTEX(Type, ClassName, do{return (*v1) == (*v2);}while (0),do{} while (0))
 #define LISTCLASS(Type, ClassName) LISTEX(Type, ClassName, do{return (*v1) == (*v2); }while (0), do{n->~Type(); } while (0))
 
+/* VincentWei:
+ * for map, the size of TKey must be aligned at intptr_t.
+ * Or it->second cannot work correctly, you will get SEGV.
+ */
+
 #define PAIR(TKey, TValue, ClassName) \
     class ClassName { \
     public: \

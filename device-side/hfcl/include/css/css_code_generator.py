@@ -394,8 +394,7 @@ def write_class_propertyvalue(fout, property_tokens, property_info):
 def write_class_stylesheetdeclared(fout, property_tokens):
     fout.write("class StyleSheetDeclared : public StyleSheet {\n")
     fout.write("public:\n")
-    fout.write("    StyleSheetDeclared () {}\n")
-    fout.write("    StyleSheetDeclared (int ssid) : StyleSheet (ssid) {}\n")
+    fout.write("    StyleSheetDeclared (const char* selector) : StyleSheet (selector) {}\n")
     fout.write("    ~StyleSheetDeclared ();\n")
     fout.write("\n")
 
