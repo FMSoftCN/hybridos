@@ -41,7 +41,7 @@ public:
 
 class TransitionManager : TimerEventListener {
 public:
-    MAP(unsigned int, Transition*, TransitionMap)
+    MAP(HTData, Transition*, TransitionMap)
 
     TransitionMap m_trMaps;
 
