@@ -19,10 +19,15 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-//package resource
+// package resource
 #undef begin_respkg
 #undef end_respkg
+
+#undef begin_sys_respkg
+#undef end_sys_respkg
+
+// local package resource
+#undef def_name
 
 #undef data_get
 #undef data_get_any
@@ -31,42 +36,9 @@
 #undef data_get_text_id
 #undef data_get_int
 
-#undef begin_sys_respkg
-#undef end_sys_respkg
-#undef set_common_style_sheet
-
-
-//internal package resource
-#undef def_name
-
-
-//text resource
-#undef begin_text_res
-#undef text_res_raw
-#undef text_res_zipped
-#undef text_res_gnumsg
-#undef end_text_res
-
-
-//image resource
-#undef begin_image_res
-#undef end_image_res
-#undef image
-#undef bmpfont_image
-
-//font resource
-#undef begin_font_res
-#undef end_font_res
-#undef font
-#undef bmpfont
-
-//dev bmp font
-#undef begin_devbmpfont
-#undef end_devbmpfont
-#undef devbmpfont
-
-//sys resource
-#undef sys_style_sheet
+// sys resource
+#undef sys_css
+#undef sys_css_group
 #undef sys_text
 #undef sys_image
 #undef sys_bmpfont_image
@@ -74,37 +46,67 @@
 #undef sys_bmpfont
 #undef sys_dr
 
-//style resource
-#undef self_style_sheet
+// style resource
+#undef self_css
+#undef self_css_group
 #undef self_text
 #undef self_image
 #undef self_gif
 #undef self_font
 
-#undef rgba
-
-#undef begin_style_sheets
-#undef end_style_sheets
-
-#undef begin_style_sheet_res
-#undef end_style_sheet_res
-
-#undef begin_common_style_sheet
-#undef end_common_style_sheet
-
-#undef style
-
-//sys HTResId by name
+// system HTResId by name
 #undef sysid_font
 #undef sysid_image
 #undef sysid_text
-#undef sysid_style_sheet
+#undef sysid_css
+#undef sysid_css_group
 
-//get HTResId by name
+// local HTResId by name
 #undef my_font
 #undef my_image
 #undef my_text
-#undef my_style_sheet
+#undef my_css
+#undef my_css_group
+#undef my_menu
+#undef my_ui
+
+// text resource
+#undef begin_text_res
+#undef text_res_raw
+#undef text_res_zipped
+#undef text_res_gnumsg
+#undef end_text_res
+
+// image resource
+#undef begin_image_res
+#undef end_image_res
+#undef image
+#undef bmpfont_image
+
+// font resource
+#undef begin_font_res
+#undef end_font_res
+#undef font
+#undef bmpfont
+
+// dev bmp font
+#undef begin_devbmpfont
+#undef end_devbmpfont
+#undef devbmpfont
+
+#undef rgba
+
+#undef begin_css_res
+#undef begin_css
+#undef style
+#undef end_css
+#undef end_css_res
+
+#undef begin_css_group_res
+#undef begin_css_group
+#undef css
+#undef end_css_group
+#undef end_css_group_res
 
 //Menu resource
 #undef begin_menus
@@ -116,7 +118,6 @@
 #undef begin_menu
 #undef begin_theme_menu
 #undef end_menu
-#undef my_menu
 
 #undef setMenuRect
 #undef setOnMenuListener
@@ -137,7 +138,6 @@
 //UI resource
 #undef begin_uis
 #undef end_uis
-#undef my_ui
 
 #undef begin_ui_res
 #undef end_ui_res
@@ -169,7 +169,6 @@
 #undef setMode
 #undef add_mode
 
-
 #undef set
 #undef addTablePage
 #undef setRect
@@ -190,7 +189,5 @@
 #undef end_foreach
 #undef begin_resid
 #undef end_resid
-#undef my_imageid
-#undef my_textid
 
 #undef SYSRESID

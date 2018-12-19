@@ -27,6 +27,14 @@
 
 #define end_respkg
 
+// system package
+#define begin_sys_respkg  begin_respkg(sys, 0)
+#define end_sys_respkg  end_respkg
+
+// local package resource
+#define def_name(name)
+
+// get data from id
 #define data_get(id, type)
 #define data_get_any(id)
 #define data_get_image(id)
@@ -34,17 +42,35 @@
 #define data_get_text_id(id)
 #define data_get_int(id)
 
-//package sys package
-#define begin_sys_respkg  begin_respkg(sys, 0)
-#define end_sys_respkg  end_respkg
-#define set_common_style(style_id)
+// system HTResId by name
+#define sysid_font(name)
+#define sysid_image(name)
+#define sysid_css(name)
+#define sysid_css_group(name)
 
+// local HTResId by name
+#define my_var(name)
+#define my_font(name)
+#define my_image(name)
+#define my_css(name)
+#define my_css_group(name)
+#define my_ui(name)
+#define my_menu(name)
 
-//internal package resource
-#define def_name(name)
+// sys resource
+#define sys_css(name)
+#define sys_css_group(name)
+#define sys_image(name)
+#define sys_font(name)
 
+// resource object
+#define self_css(name)
+#define self_css_group(name)
+#define self_image(name)
+#define self_gif(name)
+#define self_font(name)
 
-//text resource
+// text resource
 #define begin_text_res() \
     enum { RESID(txt_res_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_VOID, 0),
 
@@ -54,10 +80,7 @@
 
 #define end_text_res  RESID(txt_res_end_id) };
 
-#undef extern_lang
-
-
-//image resource
+// image resource
 #define begin_image_res() \
     enum { RESID(img_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_IMAGE, 0),
 
@@ -66,8 +89,7 @@
 #define image(name, img_file) RESID(img_##name),
 #define bmpfont_image(name, img_file) RESID(img_bmpfont_##name),
 
-
-//font resource
+// font resource
 #define begin_font_res() \
     enum { RESID(font_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_FONT, 0),
 
@@ -76,21 +98,10 @@
 #define font(name, font_name) RESID(font_##name),
 #define bmpfont(name, font_name) RESID(bmpfont_##name),
 
-//dev bmp font
+// dev bmp font
 #define begin_devbmpfont(devfont_name, font_name)
 #define end_devbmpfont
 #define devbmpfont(s,n,g,i)
-
-//sys resource
-#define sys_style_sheet(name)
-#define sys_image(name)
-#define sys_font(name)
-
-//style resource
-#define self_style_sheet(name)
-#define self_image(name)
-#define self_gif(name)
-#define self_font(name)
 
 #define rgba(r, g, b, a)    \
     (((r) & 0xFF) |         \
@@ -98,107 +109,31 @@
     (((b) & 0xFF) << 16) |  \
     (((a) & 0xFF) << 24))
 
-#define begin_style_sheets \
-    enum { RESID(ss_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_STYLE_SHEET, 0),
+/////////////////////////////////
+// css
+#define begin_css_res       \
+    enum { RESID(css_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_CSS, 0),
 
-#define end_style_sheets    RESID(ss_end_id), };
-
-#define begin_style_sheet_res(name, selector)   RESID(style_sheet_##name),
-
-#define end_style_sheet_res
+#define begin_css(name, selector)   RESID(css_##name),
 
 #define style(pid, value, user_data)
 
-//sys HTResId by name
-#define sysid_font(name)
-#define sysid_image(name)
-#define sysid_style_sheet(name)
+#define end_css
 
-//get HTResId by name
-#define my_font(name)
-#define my_image(name)
-#define my_style_sheet(name)
-#define my_ui(name)
-
-//drawable resource
-#define begin_dr_res enum { RESID(dr_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_DRAWABLE, 0),
-
-#define end_dr_res RESID(dr_end_id) };
-
-//drawableset resource
-#define begin_drset_res enum { RESID(drset_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_DRAWABLESET, 0),
-
-#define end_drset_res RESID(drset_end_id) };
-
-#define begin_drset(name, viewclass) RESID(drset_##name),
-
-#define end_drset
-
-#define dr(dr_id, name)
-
-#define begin_common_drset_res
-#define end_common_drset_res
-#define begin_common_drset(view, super)
-#define end_common_drset
+#define end_css_res     RESID(css_end_id), };
 
 /////////////////////////////////
-//drawable set group
-#define begin_drsetgroup_res  enum { RESID(drsetgroup_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_DRSETGROUP, 0),
+// css group
+#define begin_css_group_res \
+    enum { RESID(cssg_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_CSSGROUP, 0),
 
-#define begin_drsetgroup(name, super_drsetgroup) RESID(drsetgroup_##name),
+#define begin_css_group(name)   RESID(css_group_##name),
 
-#define end_drsetgroup
+#define css(cssid)
 
-#define drset(id, drset_id)
+#define end_css_group
 
-#define begin_common_drsetgroup(view, super_group)
-#define end_common_drsetgroup end_drsetgroup
-
-#define end_drsetgroup_res  RESID(drsetgroup_end_id) };
-
-#define begin_common_drsetgroup_res
-
-#define end_common_drsetgroup_res
-
-
-//////////////
-
-//theme
-#define begin_theme_res  enum { RESID(theme_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_THEME, 0),
-
-#define begin_theme(name) RESID(theme_##name),
-
-#define map_theme_drset(theme_drset_id, drset_id)
-
-#define end_theme
-
-#define end_theme_res(def_theme_name) RESID(theme_end_id) };
-
-////////////////////////////////
-
-//audio res : temp
-#define begin_audio_res
-
-#define audio(input, output)
-
-#define end_audio_res
-
-
-
-//drawable
-#define drawable(name, base_dr_id, super_style_id) RESID(dr_##name),
-
-#define begin_drawable(name, base_dr_id, super_style_id) RESID(dr_##name),
-
-#define end_drawable
-
-#define begin_common_drawable_res
-#define end_common_drawable_res
-
-#define begin_common_drawable(common_id, basename, super_style_id)
-
-#define end_common_drawable
-
+#define end_css_group_res  RESID(cssg_end_id), };
 
 //Menu resource
 #define begin_menus \
@@ -211,8 +146,6 @@
 #define begin_menu()
 #define begin_theme_menu(list_theme_drset_id, item_theme_drset_id, menubar_theme_drset_id)
 #define end_menu
-
-#define my_menu(name)
 
 #define setMenuRect(l, t, r, b)
 #define setOnMenuListener()
@@ -287,6 +220,4 @@
 #define end_foreach
 #define begin_resid(name)
 #define end_resid
-#define my_imageid(name)
-#define my_textid(name)
 

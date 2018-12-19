@@ -77,7 +77,7 @@ ResourceBucket::~ResourceBucket()
             HFCL_DELETE((MenuResVec *)resouces);
         break;
 
-    case R_TYPE_STYLE_SHEET:
+    case R_TYPE_CSS:
         if (resouces) {
             StyleSheetResVec *v = (StyleSheetResVec*)resouces;
 
@@ -187,13 +187,22 @@ FontResVec &ResourceBucket::fontRes(void)
     return ( *((FontResVec *)resouces) );
 }
 
-StyleSheetResVec &ResourceBucket::styleSheetRes(void)
+StyleSheetResVec &ResourceBucket::cssRes(void)
 {
     if (NULL == resouces) {
         resouces = HFCL_NEW_EX(StyleSheetResVec, ());
     }
 
     return ( *((StyleSheetResVec *)resouces) );
+}
+
+StyleSheetGroupResVec &ResourceBucket::cssGroupRes(void)
+{
+    if (NULL == resouces) {
+        resouces = HFCL_NEW_EX(StyleSheetGroupResVec, ());
+    }
+
+    return ( *((StyleSheetGroupResVec *)resouces) );
 }
 
 UiResVec &ResourceBucket::uiRes(void)
@@ -349,9 +358,16 @@ bool ResPackage::addFontResource(const ResourceEntry *fonts)
     return true;
 }
 
-bool ResPackage::addStyleSheetResource(StyleSheetDeclared* cssDeclared)
+bool ResPackage::addCssResource(StyleSheetDeclared* cssDeclared)
 {
-    m_resBuckets[R_TYPE_STYLE_SHEET].styleSheetRes().push_back(cssDeclared);
+    m_resBuckets[R_TYPE_CSS].cssRes().push_back(cssDeclared);
+
+    return true;
+}
+
+bool ResPackage::addCssGroupResource(StyleSheetGroup* cssGroup)
+{
+    m_resBuckets[R_TYPE_CSS].cssGroupRes().push_back(cssGroup);
 
     return true;
 }
@@ -504,8 +520,8 @@ void *ResPackage::getRes(HTResId id)
     case R_TYPE_FONT:
         return (void *)getFont(id);
 
-    case R_TYPE_STYLE_SHEET:
-        return (void *)getStyleSheet(id);
+    case R_TYPE_CSS:
+        return (void *)getCss(id);
 
     case R_TYPE_UI:
         return (void *)getUi(id);
@@ -643,17 +659,30 @@ Logfont *ResPackage::getFont(HTResId id)
     return m_resBuckets[RESTYPE(id)].fontRes()[idx].get();
 }
 
-StyleSheetDeclared *ResPackage::getStyleSheet(HTResId id)
+StyleSheetDeclared *ResPackage::getCss(HTResId id)
 {
     unsigned int idx = RESINDEX(id) - 1;
     if (id == 0)
         return NULL;
 
-    if (R_TYPE_STYLE_SHEET != RESTYPE(id) || idx < 0
-            || idx >= (unsigned int)m_resBuckets[RESTYPE(id)].styleSheetRes().size())
+    if (R_TYPE_CSS != RESTYPE(id) || idx < 0
+            || idx >= (unsigned int)m_resBuckets[RESTYPE(id)].cssRes().size())
         return NULL;
 
-    return m_resBuckets[RESTYPE(id)].styleSheetRes()[idx];
+    return m_resBuckets[RESTYPE(id)].cssRes()[idx];
+}
+
+StyleSheetGroup *ResPackage::getCssGroup(HTResId id)
+{
+    unsigned int idx = RESINDEX(id) - 1;
+    if (id == 0)
+        return NULL;
+
+    if (R_TYPE_CSSGROUP != RESTYPE(id) || idx < 0
+            || idx >= (unsigned int)m_resBuckets[RESTYPE(id)].cssGroupRes().size())
+        return NULL;
+
+    return m_resBuckets[RESTYPE(id)].cssGroupRes()[idx];
 }
 
 CB_CREATE_VIEW ResPackage::getUi(HTResId id)

@@ -28,10 +28,29 @@
 //package sys package
 #define begin_sys_respkg  begin_respkg(sys, 0)
 #define end_sys_respkg  end_respkg
-#define set_common_style(style_id)
 
 //internal package resource
 #define def_name(name)
+
+// system HTResId by name
+#define sysid_font(name)        (SYSRESID(font_##name))
+#define sysid_image(name)       (SYSRESID(img_##name))
+#define sysid_css(name)         (SYSRESID(css_##name))
+#define sysid_css_group(name)   (SYSRESID(css_group_##name))
+
+// local HTResId by name
+#define my_var(name)            (RESID(var_##name))
+#define my_font(name)           (RESID(font_##name))
+#define my_image(name)          (RESID(img_##name))
+#define my_css(name)            (RESID(css_##name))
+#define my_css_group(name)      (RESID(css_group_##name))
+#define my_ui(name)             (RESID(ui_##name))
+#define my_menu(name)           (RESID(menu_##name))
+
+#if 0 /* to be deprecated */
+#define my_textid(name)         name,
+#define my_imageid(name)        (RESID(img_##name))
+#endif
 
 //text resource
 #define begin_text_res()
@@ -70,14 +89,14 @@
     (HTResId)(img_id) },
 
 //sys resource
-#define sys_style_sheet(name)   GetStyleSheetRes(SYSRESID(style_sheet_##name))
+#define sys_css(name)           GetStyleSheetRes(SYSRESID(css_##name))
 #define sys_image(name)         GetImageRes(SYSRESID(img_##name))
-#define sys_bmpfont_image(name) (SYSRESID(img_bmpfont_##name))
 #define sys_font(name)          GetFontRes(SYSRESID(font_##name))
+#define sys_bmpfont_image(name) (SYSRESID(img_bmpfont_##name))
 #define sys_bmpfont(name)       (SYSRESID(bmpfont_##name))
 
 //style resource
-#define self_style_sheet(name)  GetStyleSheetRes(RESID(style_sheet_##name))
+#define self_css(name)          GetStyleSheetRes(RESID(css_##name))
 #define self_image(name)        GetImageRes(RESID(img_##name))
 #define self_gif(name)          GetGifAnimateRes(RESID(img_##name))
 #define self_bmpfont_image(name)    (RESID(img_bmpfont_##name))
@@ -90,40 +109,35 @@
     (((b) & 0xFF) << 16) | \
     (((a) & 0xFF) << 24))
 
-#define begin_style_sheets
-#define end_style_sheets
+/////////////////////////////////
+// style sheet
+#define begin_css_res
 
-#define begin_style_sheet_res(name, selector)                   \
-    static StyleSheetDeclared* style_sheet_##name##_res =   \
+#define begin_css(name, selector)                   \
+    static StyleSheetDeclared* css_##name##_res =   \
         HFCL_NEW_EX(StyleSheetDeclared, (selector));
-
-#define end_style_sheet_res
 
 #define style(id, value, user_data)
 
-//get system HTResId by name
-#define sysid_font(name)        (SYSRESID(font_##name))
-#define sysid_image(name)       (SYSRESID(img_##name))
-#define sysid_style_sheet(name) (SYSRESID(style_sheet_##name))
+#define end_css
 
-//get package HTResId by name
-#define my_font(name)           (RESID(font_##name))
-#define my_image(name)          (RESID(img_##name))
-#define my_style_sheet(name)    (RESID(style_sheet_##name))
-#define my_menu(name)           (RESID(menu_##name))
-#define my_ui(name)             (RESID(ui_##name))
+#define end_css_res
+
+/////////////////////////////////
+// css group
+#define begin_css_group_res
+
+#define begin_css_group(name)                           \
+    static StyleSheetGroup* css_group_##name##_res =    \
+        HFCL_NEW(StyleSheetGroup);
+
+#define css(name)
+
+#define end_css_group
+
+#define end_css_group_res
 
 ////////////////////////////////
-
-
-//audio res : temp
-#define begin_audio_res
-
-#define audio(input, output)
-
-#define end_audio_res
-
-
 //Menu resource
 #define begin_menus
 #define end_menus
@@ -392,14 +406,9 @@
         }                           \
     } while(0);
 
-#define my(name)    RESID(var_##name)
-
 #define begin_resid(name) \
     static  HTResId name[] = {
 
 #define end_resid \
     };
-
-#define my_imageid(name)    RESID(img_##name),
-#define my_textid(name)     name,
 

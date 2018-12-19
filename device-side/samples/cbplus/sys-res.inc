@@ -7,12 +7,25 @@ begin_sys_respkg
         text_res_gnumsg (R_LANG_zh_TW, R_ENCODING_utf8, "res/messages/zh_TW/LC_MESSAGES/helloworld.mo")
     end_text_res
 
-    // CSS resource
-    begin_style_sheets
-        begin_style_sheet_res(default, "view")
+    // CSS
+    begin_css_res
+        begin_css(allview, "view")
             style(BackgroundColor, PV_BACKGROUND_COLOR_COLOR_ALICEBLUE, 0)
-        end_style_sheet_res
-    end_style_sheets
+        end_css
+        begin_css(textview, "view[type=text]")
+            style(BackgroundColor, PV_BACKGROUND_COLOR_COLOR_ALICEBLUE, 0)
+        end_css
+    end_css_res
+
+    // CSS Group
+    begin_css_group_res
+        begin_css_group(logo)
+            css(allview)
+        end_css_group
+        begin_css_group(greet)
+            css(textview)
+        end_css_group
+    end_css_group_res
 
 end_sys_respkg
 

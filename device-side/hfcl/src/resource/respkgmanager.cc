@@ -229,6 +229,26 @@ Bitmap * GetBitmapRes(HTResId id)
     return NULL;
 }
 
+StyleSheetDeclared* GetCssRes(HTResId id)
+{
+    ResPackage *resPkg = GetResPackage(RPKGID(id));
+
+    if (resPkg && (RESTYPE(id) & R_TYPE_CSS))
+        return resPkg->getCss(id);
+
+    return NULL;
+}
+
+StyleSheetGroup* GetCssGroupRes(HTResId id)
+{
+    ResPackage *resPkg = GetResPackage(RPKGID(id));
+
+    if (resPkg && (RESTYPE(id) & R_TYPE_CSSGROUP))
+        return resPkg->getCssGroup(id);
+
+    return NULL;
+}
+
 Drawable* GetDrawableRes(HTResId id)
 {
     ResPackage *resPkg = GetResPackage(RPKGID(id));

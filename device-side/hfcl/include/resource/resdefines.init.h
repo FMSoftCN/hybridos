@@ -28,6 +28,14 @@
 
 #define end_respkg return true; }
 
+//package sys package
+#define begin_sys_respkg  begin_respkg(sys, 0)
+#define end_sys_respkg  end_respkg
+
+// local package resource
+#define def_name(name)
+
+// get data from id
 #define data_get(id, type)
 #define data_get_any(id)
 #define data_get_image(id)
@@ -35,17 +43,34 @@
 #define data_get_text_id(id)
 #define data_get_int(id)
 
-//package sys package
-#define begin_sys_respkg  begin_respkg(sys, 0)
-#define end_sys_respkg  end_respkg
+// system HTResId by name
+#define sysid_font(name)        (SYSRESID(font_##name))
+#define sysid_image(name)       (SYSRESID(img_##name))
+#define sysid_css(name)         (SYSRESID(css_##name))
+#define sysid_css_group(name)   (SYSRESID(css_group_##name))
 
-#define set_common_style_sheet(ssid)    \
-    if(RESPKGID == 0) {Style::SetCommonStyleSheet(GetStyleSheetRes(ssid));}
+// local HTResId by name
+#define my_font(name)           (RESID(font_##name))
+#define my_image(name)          (RESID(img_##name))
+#define my_css(name)            (RESID(css_##name))
+#define my_css_group(name)      (RESID(css_group_##name))
+#define my_ui(name)             (RESID(ui_##name))
+#define my_menu(name)           (RESID(menu_##name))
 
-//internal package resource
-#define def_name(name)
+// sys resource
+#define sys_css(name)           GetCssRes(SYSRESID(css_##name))
+#define sys_css_group(name)     GetCssGroupRes(SYSRESID(css_group_##name))
+#define sys_image(name)         GetImageRes(SYSRESID(img_##name))
+#define sys_font(name)          GetFontRes(SYSRESID(font_##name))
 
-//text resource
+// resource object
+#define self_css(name)          GetCssRes(RESID(css_##name))
+#define self_css_group(name)    GetCssGroupRes(RESID(css_group_##name))
+#define self_image(name)        GetImageRes(RESID(img_##name))
+#define self_gif(name)          GetGifAnimateRes(RESID(img_##name))
+#define self_font(name)         GetFontRes(RESID(font_##name))
+
+// text resource
 #define begin_text_res()
 
 #define text_res_raw(lang, encoding, txt_file) \
@@ -59,7 +84,7 @@
 
 #define end_text_res
 
-//image resource
+// image resource
 #define begin_image_res() \
     resPkg->addImageResource(image_res);
 
@@ -68,7 +93,7 @@
 #define image(name, img_file)
 #define bmpfont_image(name, img_file)
 
-//font resource
+// font resource
 #define begin_font_res() \
     resPkg->addFontResource(font_res);
 
@@ -77,141 +102,42 @@
 #define font(name, font_name)
 #define bmpfont(nmae, font_name)
 
-//devbmpfont info
+// devbmpfont info
 #define begin_devbmpfont(devfont_name, font_name) \
     resPkg->addBMPDevFont(font_name, devbmpfont_##devfont_name##_item_infos);
 
 #define end_devbmpfont
 #define devbmpfont(start_mchar, num_char, glyph_width, img_id)
 
-//sys resource
-#define sys_style_sheet(name)   GetStyleSheetRes(SYSRESID(style_sheet_##name))
-#define sys_image(name)         GetImageRes(SYSRESID(img_##name))
-#define sys_font(name)          GetFontRes(SYSRESID(font_##name))
-
-//style resource
-#define self_stylesheet_(name)  GetStyleSheetRes(RESID(style_sheet_##name))
-#define self_image(name)        GetImageRes(RESID(img_##name))
-#define self_gif(name)          GetGifAnimateRes(RESID(img_##name))
-#define self_font(name)         GetFontRes(RESID(font_##name))
-
 #define rgba(r, g, b, a)
 
-#define begin_style_sheets
+#define begin_css_res
 
-#define end_style_sheets
-
-#define begin_style_sheet_res(name, selector) { \
-    StyleSheetDeclared* curr_style_sheet = style_sheet_##name##_res; \
-    resPkg->addStyleSheetResource(curr_style_sheet);
+#define begin_css(name, selector) { \
+    StyleSheetDeclared* curr_css = css_##name##_res; \
+    resPkg->addCssResource(curr_css);
 
 #define style(pid, value, user_data) \
-    curr_style_sheet->set##pid##((value), (HTData)(user_data));
+    curr_css->set##pid((value), (HTData)(user_data));
 
-#define end_style_sheet_res }
+#define end_css }
 
-#define style(pid, value, user_data)
-
-#define begin_common_style \
-    resPkg->addStyleResource(0, 0, \
-            style_c_o_m_m_o_n_elements_res, \
-            sizeof(style_c_o_m_m_o_n_elements_res)/sizeof(TRStyleElement));
-
-#define end_common_style
-
-
-//sys HTResId by name
-#define sysid_font(name)        (SYSRESID(font_##name))
-#define sysid_image(name)       (SYSRESID(img_##name))
-#define sysid_style_sheet(name) (SYSRESID(style_sheet_##name))
-
-//get HTResId by name
-#define my_font(name)           (RESID(font_##name))
-#define my_image(name)          (RESID(img_##name))
-#define my_style_sheet(name)    (RESID(style_sheet_##name))
-#define my_menu(name)           (RESID(menu_##name))
-#define my_ui(name)             (RESID(ui_##name))
-
-//drawable resource
-#define begin_dr_res \
-    resPkg->addDrawableResource((TRDrawableArrayItem*)&drawable_res, sizeof(drawable_res));
-#define end_dr_res
-
-#define begin_drawable(name, basename, super_style_id)
-
-#define end_drawable
-
-#define begin_common_drawable_res
-#define end_common_drawable_res
-
-#define begin_common_drawable(common_id, basename, super_style_id) \
-    RegisterCommonDrawableFromRes(common_id, basename, drawable_style_##common_id##_info, super_style_id);
-
-#define end_common_drawable
-
-#define begin_drset_res \
-    resPkg->addDrawableSetResource((TRDrawableSetArrayItem *)&drawableset_res, sizeof(drawableset_res));
-
-#define end_drset_res
-
-#define begin_drset(name, super_drset)
-
-#define end_drset
-
-#define dr(id, dr_id)
-
-#define begin_common_drset_res
-#define end_common_drset_res
-#define begin_common_drset(view, super_drset) \
-    RegisterViewDrawableSetFromRes(#view, super_drset, drset_view_##view##_info);
-#define end_common_drset end_drset
+#define end_css_res
 
 /////////////////////////////////
-//drawable set group
-#define begin_drsetgroup_res \
-    resPkg->addDrawableSetGroupResource((TRDrawableSetGroupArrayItem *)drawablesetgroup_res, sizeof(drawablesetgroup_res));
+// css group
+#define begin_css_group_res
 
-#define begin_drsetgroup(name, super_drsetgroup)
+#define begin_css_group(name) { \
+    StyleSheetGroup* curr_css_group = css_group_##name##_res; \
+    resPkg->addCssGroupResource(curr_css_group);
 
-#define end_drsetgroup
+#define css(name) \
+    curr_css_group->appendCss(self_css(name));
 
-#define drset(id, drset_id)
+#define end_css_group }
 
-#define begin_common_drsetgroup_res
-
-#define end_common_drsetgroup_res
-
-#define begin_common_drsetgroup(view, super_group) \
-    RegisterViewDrawableSetGroupFromRes(#view, super_group, drsetgroup_common_view_##view##_info);
-
-#define end_common_drsetgroup end_drsetgroup
-
-#define end_drsetgroup_res
-
-//////////////
-
-//theme
-#define begin_theme_res
-
-#define begin_theme(name)    \
-    resPkg->addThemeResource(RESID(theme_##name), "", theme_res_declare_##name##_info);
-
-#define map_theme_drset(theme_drset_id, drset_id)
-
-#define end_theme
-
-#define end_theme_res(def_theme_name)    \
-    resPkg->setTheme(RESID(theme_##def_theme_name), FALSE);
-
-////////////////////////////////
-
-//audio res : temp
-#define begin_audio_res
-
-#define audio(input, output)
-
-#define end_audio_res
-
+#define end_css_group_res
 
 //Menu resource
 #define begin_menus \
