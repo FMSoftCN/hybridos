@@ -88,7 +88,7 @@
 #define begin_style_sheets
 #define end_style_sheets
 
-#define begin_style_sheet_res(name)
+#define begin_style_sheet_res(name, selector)
 #define end_style_sheet_res
 
 #define begin_common_style_sheet

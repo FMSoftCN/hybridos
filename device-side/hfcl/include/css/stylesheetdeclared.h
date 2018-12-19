@@ -35,8 +35,7 @@ namespace hfcl {
 
 class StyleSheetDeclared : public StyleSheet {
 public:
-    StyleSheetDeclared () {}
-    StyleSheetDeclared (int ssid) : StyleSheet (ssid) {}
+    StyleSheetDeclared (const char* selector) : StyleSheet (selector) {}
     ~StyleSheetDeclared ();
 
     // Operator for property background-attachment

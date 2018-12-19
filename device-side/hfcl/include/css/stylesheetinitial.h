@@ -31,10 +31,10 @@ namespace hfcl {
 
 class StyleSheetInitial : public StyleSheet {
 public:
-    StyleSheetInitial ();
-    ~StyleSheetInitial () {}
+    StyleSheetInitial();
+    ~StyleSheetInitial() {}
 
-    virtual bool getProperty (PropertyIds pid, DWORD32 *value,
+    virtual bool getProperty(PropertyIds pid, DWORD32 *value,
             HTData *data = NULL) {
         if (value) {
             *value = m_values[pid];
@@ -44,7 +44,7 @@ public:
         }
         return true;
     }
-    virtual bool setProperty (PropertyIds pid, DWORD32 value,
+    virtual bool setProperty(PropertyIds pid, DWORD32 value,
             HTData data = 0) {
         m_values[pid] = value;
         m_data[pid] = data;

@@ -103,7 +103,7 @@
 
 #define end_style_sheets    RESID(ss_end_id), };
 
-#define begin_style_sheet_res(name)   RESID(style_sheet_##name),
+#define begin_style_sheet_res(name, selector)   RESID(style_sheet_##name),
 
 #define end_style_sheet_res
 

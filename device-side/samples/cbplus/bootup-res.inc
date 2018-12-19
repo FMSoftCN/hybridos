@@ -9,7 +9,7 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
 
     // CSS resource
     begin_style_sheets
-        begin_style_sheet_res(default)
+        begin_style_sheet_res(default, ".test")
             style(BackgroundColor, PV_BACKGROUND_COLOR_COLOR_RED, 0)
         end_style_sheet_res
     end_style_sheets

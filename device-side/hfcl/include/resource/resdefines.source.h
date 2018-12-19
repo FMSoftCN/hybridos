@@ -93,9 +93,9 @@
 #define begin_style_sheets
 #define end_style_sheets
 
-#define begin_style_sheet_res(name)                   \
+#define begin_style_sheet_res(name, selector)                   \
     static StyleSheetDeclared* style_sheet_##name##_res =   \
-        HFCL_NEW_EX(StyleSheetDeclared, (RESID(style_sheet_##name)));
+        HFCL_NEW_EX(StyleSheetDeclared, (selector));
 
 #define end_style_sheet_res
 

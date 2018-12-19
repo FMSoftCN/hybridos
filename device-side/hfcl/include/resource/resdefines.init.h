@@ -101,7 +101,7 @@
 
 #define end_style_sheets
 
-#define begin_style_sheet_res(name) { \
+#define begin_style_sheet_res(name, selector) { \
     StyleSheetDeclared* curr_style_sheet = style_sheet_##name##_res; \
     resPkg->addStyleSheetResource(curr_style_sheet);
 

@@ -9,7 +9,7 @@ begin_sys_respkg
 
     // CSS resource
     begin_style_sheets
-        begin_style_sheet_res(default)
+        begin_style_sheet_res(default, "view")
             style(BackgroundColor, PV_BACKGROUND_COLOR_COLOR_ALICEBLUE, 0)
         end_style_sheet_res
     end_style_sheets

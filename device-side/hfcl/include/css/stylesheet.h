@@ -31,17 +31,17 @@ namespace hfcl {
 
 class StyleSheet : public RefCount {
 public:
-    StyleSheet () : m_ssid (0) {}
-    StyleSheet (int ssid) : m_ssid (ssid) {}
-    virtual ~StyleSheet () {}
+    StyleSheet() : m_selector (NULL) {}
+    StyleSheet(const char* selector) : m_selector (selector) {}
+    virtual ~StyleSheet() {}
 
-    virtual bool getProperty (PropertyIds pid, DWORD32 *value,
+    virtual bool getProperty(PropertyIds pid, DWORD32 *value,
             HTData *data = NULL) = 0;
-    virtual bool setProperty (PropertyIds pid, DWORD32 value,
+    virtual bool setProperty(PropertyIds pid, DWORD32 value,
             HTData data = 0) = 0;
 
 protected:
-    int m_ssid;
+    const char* m_selector;
 };
 
 namespace css {

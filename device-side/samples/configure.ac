@@ -72,7 +72,7 @@ PKG_CHECK_MODULES([MGPLUS], [mgplus >= 1.4.0])
 PKG_CHECK_MODULES([MGEFF], [mgeff >= 1.2.0])
 PKG_CHECK_MODULES([HFCL], [hfcl >= 0.1.0])
 
-LIBS="$LIBS $MINIGUI_LIBS $MGPLUS_LIBS $MGEFF_LIBS $HFCL_LIBS -lefence"
+LIBS="$LIBS $MINIGUI_LIBS $MGPLUS_LIBS $MGEFF_LIBS $HFCL_LIBS"
 
 dnl ========================================================================
 dnl Write Output
