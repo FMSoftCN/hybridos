@@ -26,8 +26,8 @@
 
 using namespace hfcl;
 
-#define RESPKGID      RPKG_sys
-#define RESID(name)   R_sys_##name
+#define RESPKGID     RESPKGID_NAME(sys)
+#define RESID(name)  RESID_PKG(sys, name)
 
 #include <hfcl/resource/resdefines.source.h>
 #include "sys-res.inc"

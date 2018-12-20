@@ -170,7 +170,7 @@ bool UnregisterResPackageById(int id)
 
 void* GetRes(HTResId id)
 {
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
+    ResPackage *resPkg = GetResPackageById(RPKGID(id));
     if (resPkg)
         return resPkg->getRes(id);
 
@@ -179,7 +179,7 @@ void* GetRes(HTResId id)
 
 Logfont* GetFontRes(HTResId id)
 {
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
+    ResPackage *resPkg = GetResPackageById(RPKGID(id));
     if (resPkg && (RESTYPE(id) & R_TYPE_FONT))
         return resPkg->getFont(id);
 
@@ -192,7 +192,7 @@ Style* GetStyleRes(HTResId id)
     if (id == 0)
         return GetCommonStyle();
 
-    resPkg = GetResPackage(RPKGID(id));
+    resPkg = GetResPackageById(RPKGID(id));
     if(resPkg && (RESTYPE(id) & R_TYPE_STYLE))
         return resPkg->getStyle(id);
 
@@ -201,7 +201,7 @@ Style* GetStyleRes(HTResId id)
 
 GifAnimate* GetGifAnimateRes(HTResId id)
 {
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
+    ResPackage *resPkg = GetResPackageById(RPKGID(id));
 
     if(resPkg && (RESTYPE(id) & R_TYPE_IMAGE))
         return resPkg->getGifAnimate(id);
@@ -211,7 +211,7 @@ GifAnimate* GetGifAnimateRes(HTResId id)
 
 Image * GetImageRes(HTResId id)
 {
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
+    ResPackage *resPkg = GetResPackageById(RPKGID(id));
 
     if(resPkg && (RESTYPE(id) & R_TYPE_IMAGE))
         return resPkg->getImage(id);
@@ -221,7 +221,7 @@ Image * GetImageRes(HTResId id)
 
 Bitmap * GetBitmapRes(HTResId id)
 {
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
+    ResPackage *resPkg = GetResPackageById(RPKGID(id));
 
     if (resPkg && (RESTYPE(id) & R_TYPE_IMAGE))
         return resPkg->getBitmap(id);
@@ -231,7 +231,7 @@ Bitmap * GetBitmapRes(HTResId id)
 
 StyleSheetDeclared* GetCssRes(HTResId id)
 {
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
+    ResPackage *resPkg = GetResPackageById(RPKGID(id));
 
     if (resPkg && (RESTYPE(id) & R_TYPE_CSS))
         return resPkg->getCss(id);
@@ -241,7 +241,7 @@ StyleSheetDeclared* GetCssRes(HTResId id)
 
 StyleSheetDeclaredGroup* GetCssGroupRes(HTResId id)
 {
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
+    ResPackage *resPkg = GetResPackageById(RPKGID(id));
 
     if (resPkg && (RESTYPE(id) & R_TYPE_CSSGROUP))
         return resPkg->getCssGroup(id);
@@ -251,7 +251,7 @@ StyleSheetDeclaredGroup* GetCssGroupRes(HTResId id)
 
 Drawable* GetDrawableRes(HTResId id)
 {
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
+    ResPackage *resPkg = GetResPackageById(RPKGID(id));
 
     if (resPkg && (RESTYPE(id) & R_TYPE_DRAWABLE))
         return resPkg->getDrawable(id);
@@ -264,7 +264,7 @@ DrawableSet* GetDrawableSetRes(HTResId id)
     if(!(RESTYPE(id) & R_TYPE_DRAWABLESET))
         return NULL;
 
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
+    ResPackage *resPkg = GetResPackageById(RPKGID(id));
 
     if(resPkg)
         return resPkg->getDrawableSet(id);
@@ -277,7 +277,7 @@ ThemeRes* GetThemeRes(HTResId id)
     if(!(RESTYPE(id) & R_TYPE_THEME))
         return NULL;
 
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
+    ResPackage *resPkg = GetResPackageById(RPKGID(id));
 
     if(resPkg)
         return resPkg->getThemeRes(id);
@@ -296,7 +296,7 @@ DrawableSet* GetDrawableSetResFromTheme(int theme_drset_id)
         return NULL;
 
     // FIXME just in sys package
-    ResPackage *resPkg = GetResPackage(0);
+    ResPackage *resPkg = GetResPackageById(0);
 
     if(resPkg)
         return resPkg->getThemeDrawableSet(theme_drset_id);
@@ -309,7 +309,7 @@ DrawableSetGroup* GetDrawableSetGroupRes(HTResId id)
     if(!(RESTYPE(id) & R_TYPE_DRSETGROUP))
         return NULL;
 
-    ResPackage *resPkg = GetResPackage(RPKGID(id));
+    ResPackage *resPkg = GetResPackageById(RPKGID(id));
 
     if(resPkg)
         return resPkg->getDrawableSetGroup(id);
@@ -318,7 +318,7 @@ DrawableSetGroup* GetDrawableSetGroupRes(HTResId id)
 
 View* CreateViewFromRes(HTResId id, View *parent, ViewContext *viewContext, ContentProvider* provider /*= NULL*/)
 {
-    ResPackage * resPkg = GetResPackage(RPKGID(id));
+    ResPackage * resPkg = GetResPackageById(RPKGID(id));
 
     if(resPkg && (RESTYPE(id) & R_TYPE_UI))
         return resPkg->createView(id , parent, viewContext, provider);
@@ -328,7 +328,7 @@ View* CreateViewFromRes(HTResId id, View *parent, ViewContext *viewContext, Cont
 
 Menu* CreateMenuFromRes(HTResId id, Menu* parent, EventListener* listener)
 {
-    ResPackage* resPkg = GetResPackage(RPKGID(id));
+    ResPackage* resPkg = GetResPackageById(RPKGID(id));
 
     if(resPkg && (RESTYPE(id) & R_TYPE_MENU))
         return resPkg->createMenu(id , parent, listener);
@@ -338,7 +338,7 @@ Menu* CreateMenuFromRes(HTResId id, Menu* parent, EventListener* listener)
 
 HIDLanguage GetResourceLanguage (int pkgId)
 {
-    ResPackage* package = GetResPackage(pkgId);
+    ResPackage* package = GetResPackageById(pkgId);
     if (package)
         return package->getCurrentLanguage();
 
@@ -347,7 +347,7 @@ HIDLanguage GetResourceLanguage (int pkgId)
 
 HIDEncoding GetResourceEncoding (int pkgId)
 {
-    ResPackage* package = GetResPackage(pkgId);
+    ResPackage* package = GetResPackageById(pkgId);
     if (package)
         return package->getCurrentEncoding();
 
@@ -356,7 +356,7 @@ HIDEncoding GetResourceEncoding (int pkgId)
 
 bool SetResourceLanguage (HIDLanguage lang, HIDEncoding enc, int pkgId)
 {
-    ResPackage* package = GetResPackage(pkgId);
+    ResPackage* package = GetResPackageById(pkgId);
     if (package)
         return package->setCurrentLang(lang, enc);
 

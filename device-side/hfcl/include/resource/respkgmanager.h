@@ -83,9 +83,6 @@ ResPackage* GetResPackageById(int id);
 bool UnregisterResPackageByName(const char* name);
 bool UnregisterResPackageById(int id);
 
-#define GetResPackage(id)         GetResPackageById(id)
-#define UnregisterResPackage(id)  UnregisterResPackageById(id)
-
 void * GetRes(HTResId id);
 Logfont * GetFontRes(HTResId id);
 Style * GetStyleRes(HTResId id);
@@ -105,10 +102,7 @@ View * CreateViewFromRes(HTResId id, View *parent,
         ViewContext *viewContext, ContentProvider* provider = NULL);
 #define GetUITempl(id)   (CB_CREATE_VIEW)GetRes(id)
 
-// add the support for the menu, by wangxin 2011-08-05
 Menu * CreateMenuFromRes(HTResId id, Menu* parent, EventListener* listener);
-
-#define REGISTER_RESPKG(name) FRRegister_##name##_resource()
 
 bool SetResourceLanguage (HIDLanguage lang,
         HIDEncoding enc = R_ENCODING_utf8, int pkgId = 0);
@@ -122,6 +116,13 @@ void RegisterIncoreRes (const char* resname,
             const HFCL_INCORE_RES *incores, int count);
 
 } // namespace hfcl
+
+#define REGISTER_RESPKG(pkgname) __hfr_register_resource_##pkgname()
+
+#define RESPKGID_NAME(pkgname) RPKG_##pkgname
+
+#define RESID_PKG_TYPE(pkg, type, name) R_##pkg##_##type##_##name
+#define RESID_PKG(pkg, name) R_##pkg##_##name
 
 #endif /* HFCL_RESOURCE_RESPKGMANAGER_H_ */
 

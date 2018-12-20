@@ -19,22 +19,33 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-// package resource
+#undef RESDEFINES_NAME
+#undef RESDEFINES_HEAD
+#undef RESDEFINES_SOURCE
+#undef RESDEFINES_INIT
+
+#undef SYSRESID
+
+// resource package
 #undef begin_respkg
 #undef end_respkg
 
+// system package
 #undef begin_sys_respkg
 #undef end_sys_respkg
 
-// local package resource
-#undef def_name
+// static global array const variables
+#undef def_static_array_real
+#undef def_static_array_int
+#undef def_static_array_str
 
-#undef data_get
-#undef data_get_any
-#undef data_get_image
-#undef data_get_text
-#undef data_get_text_id
-#undef data_get_int
+// names of static global array const variables
+#undef array_real
+#undef array_int
+#undef array_str
+
+// id of variable
+#undef def_name
 
 // sys resource
 #undef sys_css
@@ -142,6 +153,13 @@
 #undef begin_ui_res
 #undef end_ui_res
 
+#undef data_get
+#undef data_get_any
+#undef data_get_image
+#undef data_get_text
+#undef data_get_text_id
+#undef data_get_int
+
 #undef begin_view
 #undef begin_theme_view
 #undef begin_view_ex
@@ -190,4 +208,3 @@
 #undef begin_resid
 #undef end_resid
 
-#undef SYSRESID

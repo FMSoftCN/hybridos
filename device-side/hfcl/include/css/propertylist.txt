@@ -249,11 +249,6 @@ list-style-type
     initial: disc
     inherited: yes
 
-margin
-    values: <array-length> <array-percentage> inherit
-    initial: <array-length-px>={0,0,0,0}
-    inherited: no
-
 margin-left
     values: <length> <percentage> auto inherit
     initial: <length-px>=0
@@ -323,11 +318,6 @@ outline-width
 overflow
     values: visible hidden scroll auto inherit
     initial: visible
-    inherited: no
-
-padding
-    values: <array-length> <array-percentage> inherit
-    initial: <array-length-px>={0,0,0,0}
     inherited: no
 
 padding-left

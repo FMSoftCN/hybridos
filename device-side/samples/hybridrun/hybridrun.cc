@@ -38,7 +38,7 @@ int main (int argc, const char** argv)
     Initialize (argc, argv);
 
     // register system resource
-    FRRegister_sys_resource();
+    REGISTER_RESPKG(sys);
 
     if (!SetResourceLanguage (R_LANG_zh_CN)) {
         _ERR_PRINTF ("cbplus: Failed when calling SetResourceLanguage with %d\n",
@@ -58,6 +58,8 @@ int main (int argc, const char** argv)
     Intent intent(boot_type, 0, 0);
     act_mgr->startActivity ("bootup", &intent);
     act_mgr->run();
+
+    UnregisterResPackageById(RES_PKG_SYS_ID);
 
     Terminate (0);
     return 0;

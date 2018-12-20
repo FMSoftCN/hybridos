@@ -22,10 +22,11 @@
 #ifndef HFCL_SAMPLES_SYS_RES_H__
 #define HFCL_SAMPLES_SYS_RES_H__
 
-#define RESPKGID      RPKG_sys
-#define RESID(name)   R_sys_##name
-
+#include <hfcl/resource/respkgmanager.h>
 #include <hfcl/css/stylesheetdeclared.h>
+
+#define RESPKGID     RESPKGID_NAME(sys)
+#define RESID(name)  RESID_PKG(sys, name)
 
 #include <hfcl/resource/resdefines.head.h>
 #include "sys-res.inc"
@@ -35,8 +36,8 @@
 #include "sys-res.inc"
 #include <hfcl/resource/resundefines.h>
 
-#undef RESID
 #undef RESPKGID
+#undef RESID
 
 #endif  /* HFCL_SAMPLES_SYS_RES_H__ */
 

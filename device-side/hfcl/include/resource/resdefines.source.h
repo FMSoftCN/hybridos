@@ -19,17 +19,37 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-//package resource
-#define SYSRESID(name) R_sys_##name
-#define begin_respkg(name, id)
+#define RESDEFINES_SOURCE
 
+// resource package
+#define SYSRESID(name) R_sys_##name
+
+#if !defined(RESPKGID) || !defined(RESID)
+#   error "Please define RESPKGID and RESID before including this file"
+#endif
+
+#define begin_respkg(name, id)
 #define end_respkg
 
-//package sys package
+// system package
 #define begin_sys_respkg  begin_respkg(sys, 0)
 #define end_sys_respkg  end_respkg
 
-//internal package resource
+// static global array const variables
+#define def_static_array_real(name, ...) \
+    static const HTReal _var_array_real_##name[] = { __VA_ARGS__ };
+
+#define def_static_array_int(name, ...) \
+    static const int _var_array_int_##name[] = { __VA_ARGS__ };
+
+#define def_static_array_str(name, ...) \
+    static const char *_var_array_str_##name[] = { __VA_ARGS__ };
+
+#define array_real(name)
+#define array_int(name)
+#define array_str(name)
+
+// id of variable
 #define def_name(name)
 
 // system HTResId by name
@@ -104,6 +124,18 @@
 #define self_bmpfont(name)      (RESID(bmpfont_##name))
 
 #define rgba(r, g, b, a)
+
+static HTReal* array_quad_real (HTReal a, HTReal b, HTReal c, HTReal d)
+{
+    static HTReal _array [] = {a, b, c, d};
+    return _array;
+}
+
+static int* array_quad_int (int a, int b, int c, int d)
+{
+    static int _array [] = {a, b, c, d};
+    return _array;
+}
 
 /////////////////////////////////
 // style sheet

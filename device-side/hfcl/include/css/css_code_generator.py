@@ -423,6 +423,12 @@ def write_class_stylesheetdeclared(fout, property_tokens):
         fout.write("    }\n")
         fout.write("\n")
 
+    fout.write("    // The helper functions for setting property margin in batches.\n")
+    fout.write("    bool setMargin (DWORD32 value, HTData addData = 0);\n")
+    fout.write("\n")
+    fout.write("    // The helper functions for setting property margin in batches.\n")
+    fout.write("    bool setPadding (DWORD32 value, HTData addData = 0);\n")
+    fout.write("\n")
     fout.write("    virtual bool getProperty (PropertyIds pid, DWORD32 *value,\n")
     fout.write("            HTData *data = NULL);\n")
     fout.write("    virtual bool setProperty (PropertyIds pid, DWORD32 value,\n")

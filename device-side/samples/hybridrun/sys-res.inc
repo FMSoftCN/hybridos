@@ -21,6 +21,8 @@
 
 begin_sys_respkg
 
+    def_static_array_real(zero, 0, 0, 0, 0)
+
     // L10N text resource
     begin_text_res()
         text_res_gnumsg (R_LANG_zh_CN, R_ENCODING_utf8, "res/messages/zh_CN/LC_MESSAGES/helloworld.mo")
@@ -66,12 +68,15 @@ begin_sys_respkg
             style(Display,  PV_DISPLAY_BLOCK, 0)
             style(Height,   PV_HEIGHT_LENGTH_PX, 28.0f)
             style(Width,    PV_WIDTH_AUTO, 0)
+            style(TextAlign,PV_TEXT_ALIGN_CENTER, 0)
             style(Color,    PV_BACKGROUND_COLOR_RGBA, rgba(0x64, 0x96, 0xc7, 0xFF))
+            style(Margin,   PV_MARGIN_LEFT_LENGTH_PX, array_real(zero))
         end_css
         begin_css(subtitle, "hvtext.subtitle")
             style(Display,  PV_DISPLAY_BLOCK, 0)
             style(Height,   PV_HEIGHT_LENGTH_PX, 20.0f)
             style(Width,    PV_WIDTH_AUTO, 0)
+            style(TextAlign,PV_TEXT_ALIGN_CENTER, 0)
             style(Color,    PV_BACKGROUND_COLOR_RGBA, rgba(0xDD, 0xDD, 0xDD, 0xFF))
             style(Font,     PV_FONT_SYSID, sysid_font(sm))
         end_css

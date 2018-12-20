@@ -35,7 +35,7 @@ BootupActivity::BootupActivity()
 
 BootupActivity::~BootupActivity()
 {
-    UnregisterResPackage(RES_PKG_BOOTUP_ID);
+    UnregisterResPackageById(RES_PKG_BOOTUP_ID);
 }
 
 void BootupActivity::onCreate(ContextStream* contextStream, Intent* intent)

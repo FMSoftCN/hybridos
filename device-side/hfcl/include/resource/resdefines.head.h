@@ -19,28 +19,36 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-//package resource
+#define RESDEFINES_HEAD
+
+// resource package
 #define SYSRESID(name) R_sys_##name
+
+#if !defined(RESPKGID) || !defined(RESID)
+#   error "Please define RESPKGID and RESID before including this file"
+#endif
+
 #define begin_respkg(name, id) \
     enum { RPKG_##name = id }; \
-    bool FRRegister_##name##_resource(void);
+    bool __hfr_register_resource_##name(void);
 
 #define end_respkg
 
-// system package
+// system resource package
 #define begin_sys_respkg  begin_respkg(sys, 0)
 #define end_sys_respkg  end_respkg
 
-// local package resource
-#define def_name(name)
+// static global array const variables
+#define def_static_array_real(name, ...)
+#define def_static_array_int(name, ...)
+#define def_static_array_str(name, ...)
 
-// get data from id
-#define data_get(id, type)
-#define data_get_any(id)
-#define data_get_image(id)
-#define data_get_text(id)
-#define data_get_text_id(id)
-#define data_get_int(id)
+#define array_real(name)
+#define array_int(name)
+#define array_str(name)
+
+// if of variable
+#define def_name(name)
 
 // system HTResId by name
 #define sysid_font(name)
@@ -173,10 +181,17 @@
 
 #define end_ui_res
 
+// get data from id
+#define data_get(id, type)
+#define data_get_any(id)
+#define data_get_image(id)
+#define data_get_text(id)
+#define data_get_text_id(id)
+#define data_get_int(id)
+
 #define begin_view(view_class)
 #define begin_theme_view(view_class, theme_drset_id)
 #define begin_view_ex(view_class, drid)
-//#define begin_view_id_ex(view_class, view_classname, setid)
 #define end_view
 #define begin_composite_view(view_class, drsetgrpid)
 #define end_composite_view

@@ -27,8 +27,8 @@
 
 using namespace hfcl;
 
-#define RESPKGID      RPKG_bootup
-#define RESID(name)   R_bootup_##name
+#define RESPKGID     RESPKGID_NAME(bootup)
+#define RESID(name)  RESID_PKG(bootup, name)
 
 #include <hfcl/resource/resdefines.source.h>
 #include "bootup-res.inc"
@@ -40,4 +40,3 @@ using namespace hfcl;
 
 #undef RESID
 #undef RESPKGID
-
