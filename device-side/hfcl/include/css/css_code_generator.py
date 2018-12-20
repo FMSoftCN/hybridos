@@ -54,6 +54,20 @@ def is_keyword(value):
         return True
     return False
 
+RE_IS_ARRAY = re.compile(r"^<array-\S+>")
+RE_IS_ARRAY_STRING = re.compile(r"^<array-string-\S+>")
+RE_IS_ARRAY_INTEGER = re.compile(r"^<array-integer-\S+>")
+def get_array_type(value):
+    if RE_IS_ARRAY.match(value):
+        if RE_IS_ARRAY_STRING.match(value):
+            return "const char*";
+        elif RE_IS_ARRAY_INTEGER.match(value):
+            return "int";
+        else:
+            # for other types (array-number, array-length, and array-percentage), returns HTReal
+            return "HTReal";
+    return None
+
 def do_subexpand(def_info, definition):
     values = definition.split()
     if len(values) > 0:
@@ -234,7 +248,7 @@ def make_value_macro(property_token, value_token, inherited):
 
 def make_initial_value(property_token, value_token, inherited):
     user_data = None
-    values = value_token.split(",")
+    values = value_token.split("=")
     if len(values) > 1:
         value_token = values[0]
         user_data = values[1]
@@ -480,11 +494,14 @@ def write_class_stylesheetinitial(fout, property_info):
         initial_value, user_data = make_initial_value (property_token, value_token, inherited)
         fout.write("    m_values[%s] = %s;\n" % (pid, initial_value, ))
         if user_data is not None:
-            # TODO: check the type of the user data more here.
-            if user_data.isnumeric():
+            array_type = get_array_type(value_token)
+            if array_type is None:
                 fout.write("    m_data[%s] = (HTData)%s;\n" % (pid, user_data, ))
             else:
-                fout.write("    m_data[%s] = (HTData)\"%s\";\n" % (pid, user_data, ))
+                fout.write("    {\n")
+                fout.write("        static %s _user_data[] = %s;\n" % (array_type, user_data, ))
+                fout.write("        m_data[PID_MARGIN] = (HTData)&_user_data;\n")
+                fout.write("    }\n")
         fout.write("\n")
 
     fout.write("}\n")

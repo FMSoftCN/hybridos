@@ -1,4 +1,5 @@
 <length>: <%-em> <%-ex> <%-cap> <%-ch> <%-ic> <%-rem> <%-lh> <%-rlh> <%-vm> <%-vh> <%-vi> <%-vb> <%-vmin> <%-vmax> <%-cm> <%-mm> <%-Q> <%-in> <%-pc> <%-pt> <%-px>
+<array-length>: <%-em> <%-ex> <%-cap> <%-ch> <%-ic> <%-rem> <%-lh> <%-rlh> <%-vm> <%-vh> <%-vi> <%-vb> <%-vmin> <%-vmax> <%-cm> <%-mm> <%-Q> <%-in> <%-pc> <%-pt> <%-px>
 
 <color>: color-aqua color-black color-blue color-fuchsia color-gray color-green color-lime color-maroon color-navy color-olive color-orange color-purple color-red color-silver color-teal color-white color-yellow color-aliceblue color-antiquewhite color-aquamarine color-azure color-beige color-bisque color-blanchedalmond color-blueviolet color-brown color-burlywood color-cadetblue color-chartreuse color-chocolate color-coral color-cornflowerblue color-cornsilk color-crimson color-cyan color-darkblue color-darkcyan color-darkgoldenrod color-darkgray color-darkgreen color-darkgrey color-darkkhaki color-darkmagenta color-darkolivegreen color-darkorange color-darkorchid color-darkred color-darksalmon color-darkseagreen color-darkslateblue color-darkslategray color-darkslategrey color-darkturquoise color-darkviolet color-deeppink color-deepskyblue color-dimgray color-dimgrey color-dodgerblue color-firebrick color-floralwhite color-forestgreen color-gainsboro color-ghostwhite color-gold color-goldenrod color-greenyellow color-grey color-honeydew color-hotpink color-indianred color-indigo color-ivory color-khaki color-lavender color-lavenderblush color-lawngreen color-lemonchiffon color-lightblue color-lightcoral color-lightcyan color-lightgoldenrodyellow color-lightgray color-lightgreen color-lightgrey color-lightpink color-lightsalmon color-lightseagreen color-lightskyblue color-lightslategray color-lightslategrey color-lightsteelblue color-lightyellow color-limegreen color-linen color-magenta color-mediumaquamarine color-mediumblue color-mediumorchid color-mediumpurple color-mediumseagreen color-mediumslateblue color-mediumspringgreen color-mediumturquoise color-mediumvioletred color-midnightblue color-mintcream color-mistyrose color-moccasin color-navajowhite color-oldlace color-olivedrab color-orangered color-orchid color-palegoldenrod color-palegreen color-paleturquoise color-palevioletred color-papayawhip color-peachpuff color-peru color-pink color-plum color-powderblue color-rosybrown color-royalblue color-saddlebrown color-salmon color-sandybrown color-seagreen color-seashell color-sienna color-skyblue color-slateblue color-slategray color-slategrey color-snow color-springgreen color-steelblue color-tan color-thistle color-tomato color-turquoise color-violet color-wheat color-whitesmoke color-yellowgreen current-color transparent <rgb> <rgba> <hsl> <hsla>
 
@@ -27,12 +28,12 @@ background-image
 
 background-position-x
     values: <percentage> <length> left center right inherit
-    initial: <percentage>,0
+    initial: <percentage>=0
     inherited: no
 
 background-position-y
     values: <percentage> <length> top center bottom inherit
-    initial: <percentage>,0
+    initial: <percentage>=0
     inherited: no
 
 background-repeat
@@ -48,28 +49,28 @@ border-collapse
 
 border-spacing
     values: <length> inherit
-    initial: <length-px>,0
+    initial: <length-px>=0
     inherited: yes
     appliesto: table
 
 border-left-color
     values: <color> inherit
-    initial: <rgb>,0
+    initial: <rgb>=0
     inherited: no
 
 border-top-color
     values: <color> inherit
-    initial: <rgb>,0
+    initial: <rgb>=0
     inherited: no
 
 border-right-color
     values: <color> inherit
-    initial: <rgb>,0
+    initial: <rgb>=0
     inherited: no
 
 border-bottom-color
     values: <color> inherit
-    initial: <rgb>,0
+    initial: <rgb>=0
     inherited: no
 
 border-left-style
@@ -93,7 +94,7 @@ border-bottom-style
     inherited: no
 
 border-left-width
-    values:  inherit
+    values: inherit
     initial: medium
     inherited: no
 
@@ -137,7 +138,7 @@ clip
 
 color
     values: <color> inherit
-    initial: <rgb>,0
+    initial: <rgb>=0
     inherited: yes
 
 content
@@ -184,7 +185,7 @@ float
 
 font-family
     values: serif sans-serif cursive fantasy monospace <family-name> inherit
-    initial: <string>,default
+    initial: <string>="default"
     inherited: yes
 
 font-size
@@ -208,7 +209,7 @@ font-weight
     inherited: yes
 
 font
-    values: default <sysid> inherit
+    values: default <string> <sysid> inherit
     initial: default
     inherited: yes
 
@@ -248,24 +249,29 @@ list-style-type
     initial: disc
     inherited: yes
 
-margin-right
-    values: <length> <percentage> auto inherit
-    initial: <length-px>,0
+margin
+    values: <array-length> <array-percentage> inherit
+    initial: <array-length-px>={0,0,0,0}
     inherited: no
 
 margin-left
     values: <length> <percentage> auto inherit
-    initial: <length-px>,0
+    initial: <length-px>=0
     inherited: no
 
 margin-top
     values: <length> <percentage> auto inherit
-    initial: <length-px>,0
+    initial: <length-px>=0
+    inherited: no
+
+margin-right
+    values: <length> <percentage> auto inherit
+    initial: <length-px>=0
     inherited: no
 
 margin-bottom
     values: <length> <percentage> auto inherit
-    initial: <length-px>,0
+    initial: <length-px>=0
     inherited: no
 
 max-height
@@ -280,22 +286,22 @@ max-width
 
 min-height
     values: <length> <percentage> inherit
-    initial: <length-px>,0
+    initial: <length-px>=0
     inherited: no
 
 min-width
     values: <length> <percentage> inherit
-    initial: <length-px>,0
+    initial: <length-px>=0
     inherited: no
 
 opacity
     values: <alphavalue> inherit
-    initial: <alphavalue>,1
+    initial: <alphavalue>=1
     inherited: no
 
 orphans
     values: <integer> inherit
-    initial: <integer>,2
+    initial: <integer>=2
     inherited: yes
     appliesto: block-container
 
@@ -319,24 +325,29 @@ overflow
     initial: visible
     inherited: no
 
-padding-top
-    values: <length> <percentage> inherit
-    initial: <length-px>,0
-    inherited: no
-
-padding-right
-    values: <length> <percentage> inherit
-    initial: <length-px>,0
-    inherited: no
-
-padding-bottom
-    values: <length> <percentage> inherit
-    initial: <length-px>,0
+padding
+    values: <array-length> <array-percentage> inherit
+    initial: <array-length-px>={0,0,0,0}
     inherited: no
 
 padding-left
     values: <length> <percentage> inherit
-    initial: <length-px>,0
+    initial: <length-px>=0
+    inherited: no
+
+padding-top
+    values: <length> <percentage> inherit
+    initial: <length-px>=0
+    inherited: no
+
+padding-right
+    values: <length> <percentage> inherit
+    initial: <length-px>=0
+    inherited: no
+
+padding-bottom
+    values: <length> <percentage> inherit
+    initial: <length-px>=0
     inherited: no
 
 page-break-after
@@ -363,7 +374,7 @@ position
     inherited: no
 
 quotes
-    values: <dual-string> none inherit
+    values: <array-string> none inherit
     initial: none
     inherited: yes
 
@@ -390,7 +401,7 @@ text-decoration
 
 text-indent
     values: <length> <percentage> inherit
-    initial: <length-px>,0
+    initial: <length-px>=0
     inherited: yes
 
 text-transform
@@ -427,7 +438,7 @@ white-space
 
 widows
     values: <integer> inherit
-    initial: <integer>,2
+    initial: <integer>=2
     inherited: yes
 
 width
