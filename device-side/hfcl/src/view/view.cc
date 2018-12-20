@@ -292,6 +292,18 @@ void View::onLostFocus()
     updateView();
 }
 
+void View::onClicked()
+{
+    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)VN_CLICKED, (HTData)this);
+    raiseEvent(&event);
+}
+
+void View::onDoubleClicked()
+{
+    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)VN_DBLCLICKED, (HTData)this);
+    raiseEvent(&event);
+}
+
 bool View::setFocus(View * view)
 {
     if(view == NULL)
