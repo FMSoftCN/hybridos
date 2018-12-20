@@ -21,7 +21,7 @@
 
 begin_sys_respkg
 
-    def_static_array_real(zero, 0, 0, 0, 0)
+    def_static_array_real(def_padding, 4, 2, 4, 2)
 
     // L10N text resource
     begin_text_res()
@@ -70,7 +70,7 @@ begin_sys_respkg
             style(Width,    PV_WIDTH_AUTO, 0)
             style(TextAlign,PV_TEXT_ALIGN_CENTER, 0)
             style(Color,    PV_BACKGROUND_COLOR_RGBA, rgba(0x64, 0x96, 0xc7, 0xFF))
-            style(Margin,   PV_MARGIN_LEFT_LENGTH_PX, array_real(zero))
+            style(Padding,  PV_PADDING_LEFT_LENGTH_PX, array_real(def_padding))
         end_css
         begin_css(subtitle, "hvtext.subtitle")
             style(Display,  PV_DISPLAY_BLOCK, 0)
