@@ -84,21 +84,21 @@ SlEditView::~SlEditView()
     }
 }
 
-void SlEditView::onGetFocus(void)
+void SlEditView::onGotFocus(void)
 {
     if (0 != m_timerId)
         removeTimer(m_timerId);
     m_timerId = registerTimer(500, "SlEditView");
     if(m_addword)
         imeEnable(true);
-    EditView::onGetFocus();
+    EditView::onGotFocus();
 
     if (m_bAutoOmitted){
         setOmittedStyle(false);
     }
 }
 
-void SlEditView::onLoseFocus(void)
+void SlEditView::onLostFocus(void)
 {
     if(m_timerId)
     {
@@ -113,7 +113,7 @@ void SlEditView::onLoseFocus(void)
         m_SlTimerId = 0;
     }
 
-    EditView::onLoseFocus();
+    EditView::onLostFocus();
     if (m_bAutoOmitted){
         setOmittedStyle(true);
     }
@@ -1178,7 +1178,7 @@ bool SlEditView::dispatchEvent(Event *event)
 void SlEditView::drawBackground(GraphicsContext* gc, IntRect &rc, int status)
 {
     if(m_drset) {
-        m_drset->draw(gc, DR_BKGND, isFocus() ? DRAWSTATE_HILIGHT : DRAWSTATE_NORMAL, rc);
+        m_drset->draw(gc, DR_BKGND, isFocused() ? DRAWSTATE_HILIGHT : DRAWSTATE_NORMAL, rc);
     }
 }
 
@@ -1437,7 +1437,7 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
     else
 #endif    //__MMI_T9__
         // draw caret
-        if (isFocus() && m_bCaretShown){
+        if (isFocused() && m_bCaretShown){
             int startx = 0;
             int starty = 0;
             //int careth = f != NULL ? f->size : gc->getFontHeight(m_font);
@@ -1550,7 +1550,7 @@ void SlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
     }
 
     // draw tip strings
-    if (!isFocus() && m_strings.size() == 0 && m_tipText.size() > 0){
+    if (!isFocused() && m_strings.size() == 0 && m_tipText.size() > 0){
        gc->drawText(m_tipText, irc, color, m_font, DT_LEFT);
        return;
     }
@@ -1601,7 +1601,7 @@ void SlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
             innerDrawText(gc, m_strings, irc, color, m_font, format);
         }
     }
-    else if (isFocus() && m_bCaretShown) {
+    else if (isFocused() && m_bCaretShown) {
         int startx = 0;
         int starty = 0;
         //int careth = m_font != NULL ? m_font->size : gc->getFontHeight(m_font);
@@ -1654,7 +1654,7 @@ bool SlEditView::handleEvent(Event* event)
 {
     if (event->eventType() == Event::TIMER
             && m_timerId == ((TimerEvent *)event)->timerID()
-            && isFocus())
+            && isFocused())
     {
         if(!getTextHighlight() && m_SlTimerId == 0)
             blinkCaret();

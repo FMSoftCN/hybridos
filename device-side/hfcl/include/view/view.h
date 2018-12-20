@@ -27,6 +27,8 @@
 #include "../common/intrect.h"
 #include "../drawable/drawable.h"
 
+#define MAX_VIEW_CLASSES    4
+
 namespace hfcl {
 
 class GraphicsContext;
@@ -46,22 +48,128 @@ typedef struct {
 
 class View : public Object {
 public:
-    View();
-    View(View* parent);
-    View(View* parent, DrawableSet* drset);
-    View(int id, int x, int y, int w, int h);
-    virtual ~View();
-
     enum {
-        NOTIFY_BEGIN = CustomEvent::CUS_MAX,
-        NOTIFY_GET_FOCUS,
-        NOTIFY_LOSE_FOCUS,
-        NOTIFY_ON_CLICK,
-        NOTIFY_VIEW_MAX
+        VN_BEGIN = CustomEvent::CUS_MAX,
+        VN_GOTFOCUS,
+        VN_LOSTFOCUS,
+        VN_CLICKED,
+        VN_DBLCLICKED,
+        VN_VIEW_MAX,
     };
 
-    int id(void) const { return m_id; }
-    void setId(int iid) { m_id = iid; }
+    View();
+    View(View* parent);
+    View(View* parent, const char* cssClass, const char* name, int id = 0);
+    virtual ~View();
+
+    int getId() const { return m_id; }
+    void setId(int id) { m_id = id; }
+
+    const char* getName() const { return m_name; }
+    void setName(const char* name);
+
+    bool applyClass(const char* cssClass);
+    bool includeClass(const char* cssClass);
+    bool excludeClass(const char* cssClass);
+
+    void getSize(int *w, int *h) {
+        if (w) *w = m_rect.width();
+        if (h) *h = m_rect.height();
+    }
+
+    virtual void show() {
+        setVisible(true);
+        updateView();
+    }
+    virtual void hide() {
+        setVisible(false);
+        updateView();
+    }
+    inline bool isVisible() { return visible(); }
+
+    void addEventListener(EventListener* listener);
+    void addEventListener(EventListener* listener, int event_type) { }
+    void removeEventListener(EventListener* listener);
+
+    virtual void paint(GraphicsContext* context, int status /*= Style::NORMAL*/);
+    virtual void onPaint(GraphicsContext* context, int status /*= Style::NORMAL*/);
+    virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
+    virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
+    virtual void drawScroll(GraphicsContext* context, IntRect &rc, int status /*=Style::NORMAL*/);
+
+    virtual void focusMe();
+    bool setFocus(View *view);
+    bool isFocused();
+
+    virtual void onGotFocus();
+    virtual void onLostFocus();
+    virtual void onClicked();
+    virtual void onDoubleClicked();
+
+    //return True if the event was handled, false otherwise.
+    virtual bool dispatchEvent(Event* event);
+
+    // x,y coordiat from view, e.g (0,0) is same as m_rect.left, m_rect.top
+    void updateView(int x, int y, int w, int h);
+    void updateView(const IntRect &rc);
+
+    virtual void onChildUpdateView(View *child, int x, int y, int w, int h, bool upBackGnd = true);
+    void updateViewRect(const IntRect &rc);
+    void updateViewRect();
+    void updateView(bool upBackGnd = true);
+
+    void setParent(ContainerView* view) { m_parent = view; }
+    void setPrevSlibling(View* view) { m_prev = view; }
+    void setNextSlibling(View* view) { m_next = view; }
+
+    const View* prevSibling() const { return m_prev; }
+    View* prevSibling() { return m_prev; }
+    const View* nextSibling() const { return m_next; }
+    View* nextSibling() { return m_next; }
+    const ContainerView* parent() const { return m_parent; }
+    ContainerView* parent() { return m_parent; }
+    ContainerView* rootView();
+
+    virtual bool isTopView() { return false; }
+    virtual bool isContainerView() { return false; }
+    virtual bool isWrapperView() { return false; }
+
+    virtual HWND getSysWindow() {
+        return m_parent ? ((View*)m_parent)->getSysWindow() : 0;
+    }
+
+    virtual void viewToWindow(int *x, int *y);
+    virtual void windowToView(int *x, int *y);
+
+    virtual bool raiseEvent(Event *event);
+
+    void setAddData(void *paddData) {m_addData = paddData;}
+    void *addData() {return m_addData;}
+
+    bool isDisabled() { return m_flags & DISABLED; }
+    void disable(bool b) { return setFlag(b, DISABLED); }
+
+    void setVisible(bool b) { setFlag(b, VISIBLE); }
+    bool visible() { return (m_flags & VISIBLE) == VISIBLE; }
+
+    void setFocusValid(bool b) { setFlag(b, FOCUSVALID); }
+    bool focusValid() { return (m_flags & FOCUSVALID) == FOCUSVALID; }
+    inline bool focusable() { return (isVisible() && !isDisabled()); }
+
+    void setFocusStop(bool b) { setFlag(b, FOCUSSTOP); }
+    bool isFocusStop() { return m_flags & FOCUSSTOP; }
+    bool focusStopable() { return focusable() && isFocusStop(); }
+
+    /* to be deprecated */
+    View(View* parent, DrawableSet* drset);
+    View(int id, int x, int y, int w, int h);
+
+    enum {
+        NORMAL,
+        PUSHDOWN,
+        DISABLE,
+        FOCUS
+    };
 
     bool setRect(int left, int top, int right, int bottom) {
         return setRect(IntRect(left, top, right, bottom));
@@ -104,7 +212,7 @@ public:
         }
         return true;
     }
-    inline const IntRect& getRect(void) const{ return m_rect; }
+    inline const IntRect& getRect() const{ return m_rect; }
 
     void setPosition(int x, int y, bool bupdate = true) {
         IntRect rc(x, y, m_rect.width()+x, m_rect.height()+y);
@@ -120,159 +228,38 @@ public:
         if(y) *y = m_rect.top();
     }
 
-    void getSize(int *w, int *h) {
-        if(w) *w = m_rect.width();
-        if(h) *h = m_rect.height();
-    }
-
-    virtual void show() {
-        setVisible(true);
-        updateView();
-    }
-    virtual void hide() {
-        setVisible(false);
-        updateView();
-    }
-    inline bool isVisible() { return visible(); }
-
-    void addEventListener(EventListener* listener);
-    void addEventListener(EventListener* listener, int event_type) { }
-    void removeEventListener(EventListener* listener);
-
-    virtual void paint(GraphicsContext* context, int status /*= Style::NORMAL*/);
-    virtual void onPaint(GraphicsContext* context, int status /*= Style::NORMAL*/);
-    virtual void changeTheme(void);
-    virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
-    virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
-    virtual void drawScroll(GraphicsContext* context, IntRect &rc, int status /*=Style::NORMAL*/);
-
-    virtual void onGetFocus();
-    virtual void onLoseFocus();
-    bool setFocus(View *view);
-
-    //return True if the event was handled, false otherwise.
-    virtual bool dispatchEvent(Event* event);
-
-    // x,y coordiat from view, e.g (0,0) is same as m_rect.left, m_rect.top
-    void updateView(int x, int y, int w, int h);
-    void updateView(const IntRect &rc);
-
-    virtual void onChildUpdateView(View *child, int x, int y, int w, int h, bool upBackGnd = true);
-    void updateViewRect(const IntRect &rc);
-    void updateViewRect(void);
-    void updateView(bool upBackGnd = true);
-
-    void setParent(ContainerView* view) { m_parent = view; }
-    void setPrevSlibling(View* view) { m_prev = view; }
-    void setNextSlibling(View* view) { m_next = view; }
-
-    const View* previousSibling(void) const { return m_prev; }
-    View* previousSibling(void) { return m_prev; }
-    const View* nextSibling(void) const { return m_next; }
-    View* nextSibling(void) { return m_next; }
-    const ContainerView* parent(void) const { return m_parent; }
-    ContainerView* parent(void) { return m_parent; }
-    ContainerView* rootView(void);
-
-    virtual void focusMe(void);
-    bool isFocus(void);
-
-    virtual bool isTopView(void) { return false; }
-    virtual bool isContainerView(void) { return false; }
-    virtual bool isWrapperView(void) { return false; }
-
     void setAlpha(unsigned char trans);
     unsigned char alpha();
 
-    virtual HWND getSysWindow() {
-        return m_parent ? ((View*)m_parent)->getSysWindow() : 0;
-    }
-
-    virtual void viewToWindow(int *x, int *y);
-    virtual void windowToView(int *x, int *y);
-
-    virtual bool raiseEvent(Event *event);
-
-    void setAddData(void *paddData) {m_addData = paddData;}
-    void *addData(void) {return m_addData;}
-
-    virtual void autoFitSize() { }
-
-    DrawableSet* getDrawableSet(void) const;
-    void setDrawableSet(DrawableSet* drset);
-
-    bool isDisabled() { return m_flags & DISABLED; }
-    void disable(bool b) { return setFlag(b, DISABLED); }
-
-    // theme related
+    virtual void changeTheme();
     bool isThemeAble() { return m_flags & THEMEABLE; }
     void themeAble(bool b) { return setFlag(b, THEMEABLE); }
-    int themeDrsetId(void) { return m_theme_drset_id; }
+    int themeDrsetId() { return m_theme_drset_id; }
     void setThemeDrsetId(int iid) { m_theme_drset_id = iid; }
 
-    enum {
-        NORMAL,
-        PUSHDOWN,
-        DISABLE,
-        FOCUS
-    };
-
     virtual void autoFitSize(bool auto_child_fit = false) {  }
+    virtual void autoFitSize() { }
 
-    void freezeUpdate () {
+    DrawableSet* getDrawableSet() const;
+    void setDrawableSet(DrawableSet* drset);
+
+    void freezeUpdate() {
         setFlag (true, FROZEN);
     }
     void unfreezeUpdate (bool update = true) {
         setFlag (false, FROZEN);
         if (update) {
-            updateView ();
+            updateView();
         }
     }
-    bool shouldUpdate () {
+    bool shouldUpdate() {
         return (m_flags & FROZEN) != FROZEN;
     }
 
-    void setVisible(bool b) { setFlag(b, VISIBLE); }
-    bool visible() { return (m_flags & VISIBLE) == VISIBLE; }
-
-    void setFocusValid(bool b) { setFlag(b, FOCUSVALID); }
-    bool focusValid() { return (m_flags & FOCUSVALID) == FOCUSVALID; }
-
-    inline bool focusable() { return (isVisible() && !isDisabled()); }
-
-    void setFocusStop(bool b) { setFlag(b, FOCUSSTOP); }
-    bool isFocusStop() { return m_flags & FOCUSSTOP; }
-    bool focusStopable() { return focusable() && isFocusStop(); }
-
     int setLayer(int layerNo) { int old = m_drawLayer; m_drawLayer = layerNo; return old; }
-    int layer () { return m_drawLayer; }
+    int layer() { return m_drawLayer; }
 
 protected:
-    bool performClick();
-
-    IntRect m_rect;
-    int m_id;
-    DrawableSet* m_drset;
-    unsigned char m_alpha;
-    DWORD m_flags;
-    View *m_prev;
-    View *m_next;
-    ContainerView *m_parent;
-    void *m_addData;
-    int m_theme_drset_id;
-    int m_drawLayer;
-
-    /* VincentWei: Whether the view is opaque; true by default.
-     * If it was opaque, the rectangle of the view will be excluded when erasing background of parent.
-    bool m_opaque;
-    bool isOpaque() { return m_opaque; }
-    void setOpaque(bool opaque) { m_opaque = opaque; }
-     */
-
-    LISTEX(EventListener *, EventListenerList, do{return *v1 == *v2;}while (0), do{(*n)->unref();} while (0));
-    EventListenerList m_listeners;
-    void releaseEventListeners();
-
     enum {
         VISIBLE     = (0x1 << 0),
         DISABLED    = (0x1 << 1),
@@ -283,6 +270,29 @@ protected:
         FLAG_SHIFT  = 6
     };
 
+    int m_id;
+    Uint32 m_flags;
+
+    const char* m_name;
+    const char* m_css_classes[MAX_VIEW_CLASSES];
+    void* m_addData;
+
+    ContainerView *m_parent;
+    View *m_prev;
+    View *m_next;
+
+    IntRect m_rect;
+
+    // to be deprecated
+    DrawableSet* m_drset;
+    unsigned char m_alpha;
+    int m_theme_drset_id;
+    int m_drawLayer;
+
+    LISTEX(EventListener *, EventListenerList, do{return *v1 == *v2;}while (0), do{(*n)->unref();} while (0));
+    EventListenerList m_listeners;
+    void releaseEventListeners();
+
     inline void setFlag(bool b, unsigned int flag) {
         if(b)
             m_flags |= flag;
@@ -292,6 +302,9 @@ protected:
 
     virtual void inner_updateView(int x, int y, int w, int h, bool upBackGnd = true);
     void inner_updateViewRect(int x, int y, int w, int h);
+
+    // to be deprecated
+    bool performClick();
 };
 
 } // namespace hfcl

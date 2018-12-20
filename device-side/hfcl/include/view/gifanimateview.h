@@ -49,7 +49,7 @@ public:
     } PlayType;
 
     enum {
-        NOTIFY_BEGIN = CustomEvent::CUS_MAX,
+        VN_BEGIN = CustomEvent::CUS_MAX,
         NOTIFY_GIFANIMATE_STOP = CustomEvent::CUS_GIFANIMATE_STOP,
     };
 

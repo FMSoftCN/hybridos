@@ -277,7 +277,7 @@ bool PageNavigateView::prev()
     return true;
 }
 
-void PageNavigateView::onGetFocus()
+void PageNavigateView::onGotFocus()
 {
     if(m_leftImageView)
         m_leftImageView->show();
@@ -286,7 +286,7 @@ void PageNavigateView::onGetFocus()
         m_rightImageView->show();
 }
 
-void PageNavigateView::onLoseFocus()
+void PageNavigateView::onLostFocus()
 {
     if(m_leftImageView)
         m_leftImageView->hide();

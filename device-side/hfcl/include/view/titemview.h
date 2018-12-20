@@ -66,13 +66,13 @@ public:
         }
     }
     void setFocus(bool focus) {
-        if(focus != isFocus())
+        if(focus != isFocused())
         {
             setFlag(focus, FOCUSED);
             updateView();
         }
     }
-    bool isFocus() { return m_flags & FOCUSED; }
+    bool isFocused() { return m_flags & FOCUSED; }
 
     void setPaintHilightFirst(bool b) { setFlag(b, HILIGHT_TOP); }
     bool isPaintHilightFirst()        { return m_flags & HILIGHT_TOP; }

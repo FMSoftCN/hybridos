@@ -35,8 +35,8 @@ public:
 
     virtual bool dispatchEvent (Event* event);
 
-    virtual void onGetFocus();
-    virtual void onLoseFocus();
+    virtual void onGotFocus();
+    virtual void onLostFocus();
 
     void setText(int strId) { m_stringId=strId; }
     void setText(const char* str);
@@ -66,7 +66,7 @@ protected:
 
     int getDrawStatus() {
         switch(getState()) {
-        case NORMAL:  return isFocus() ? DRAWSTATE_FOCUSED :DRAWSTATE_NORMAL;
+        case NORMAL:  return isFocused() ? DRAWSTATE_FOCUSED :DRAWSTATE_NORMAL;
         case HILIGHT: return DRAWSTATE_HILIGHT;
         case PUSHED:  return DRAWSTATE_PUSHED;
         }

@@ -29,34 +29,39 @@
 namespace hfcl {
 
 View::View()
-    : m_rect(0, 0, 0, 0)
-    , m_id(0)
-    , m_drset(NULL)
-    , m_alpha(HFCL_DEFAULT_OPACITY)
+    : m_id(0)
     , m_flags(0)
+    , m_name(0)
+    , m_addData(0)
+    , m_parent(0)
     , m_prev(0)
     , m_next(0)
-    , m_parent(0)
-    , m_addData(0)
+    , m_rect(0, 0, 0, 0)
+    , m_drset(NULL)
+    , m_alpha(HFCL_DEFAULT_OPACITY)
     , m_theme_drset_id(-1)
     , m_drawLayer(LAYER_MAXNUM - 1)
 {
+    memset (m_css_classes, 0, sizeof (m_css_classes));
     setVisible(true);
 }
 
 View::View(View* p_parent)
-    : m_rect(0, 0, 0, 0)
-    , m_id(0)
-    , m_drset(NULL)
-    , m_alpha(HFCL_DEFAULT_OPACITY)
+    : m_id(0)
     , m_flags(0)
+    , m_name(0)
+    , m_addData(0)
+    , m_parent(0)
     , m_prev(0)
     , m_next(0)
-    , m_parent(0)
-    , m_addData(0)
+    , m_rect(0, 0, 0, 0)
+    , m_drset(NULL)
+    , m_alpha(HFCL_DEFAULT_OPACITY)
     , m_theme_drset_id(-1)
     , m_drawLayer(LAYER_MAXNUM - 1)
 {
+    memset (m_css_classes, 0, sizeof (m_css_classes));
+
     setVisible(true);
     if (p_parent)
         ((ContainerView *)p_parent)->addChild(this);
@@ -64,18 +69,20 @@ View::View(View* p_parent)
 }
 
 View::View(View* p_parent, DrawableSet* drset)
-    : m_rect(0, 0, 0, 0)
-    , m_id(0)
-    , m_drset(drset)
-    , m_alpha(HFCL_DEFAULT_OPACITY)
+    : m_id(0)
     , m_flags(0)
+    , m_name(0)
+    , m_addData(0)
+    , m_parent(0)
     , m_prev(0)
     , m_next(0)
-    , m_parent(0)
-    , m_addData(0)
+    , m_rect(0, 0, 0, 0)
+    , m_drset(drset)
+    , m_alpha(HFCL_DEFAULT_OPACITY)
     , m_theme_drset_id(-1)
     , m_drawLayer(LAYER_MAXNUM - 1)
 {
+    memset (m_css_classes, 0, sizeof (m_css_classes));
     setVisible(true);
     if (p_parent)
         ((ContainerView *)p_parent)->addChild(this);
@@ -83,18 +90,20 @@ View::View(View* p_parent, DrawableSet* drset)
 }
 
 View::View(int i_id, int x, int y, int w, int h)
-    : m_rect(x, y, x + w, y + h)
-    , m_id(i_id)
-    , m_drset(NULL)
-    , m_alpha(HFCL_DEFAULT_OPACITY)
+    : m_id(i_id)
     , m_flags(0)
+    , m_name(0)
+    , m_addData(0)
+    , m_parent(0)
     , m_prev(0)
     , m_next(0)
-    , m_parent(0)
-    , m_addData(0)
+    , m_rect(x, y, x + w, y + h)
+    , m_drset(NULL)
+    , m_alpha(HFCL_DEFAULT_OPACITY)
     , m_theme_drset_id(-1)
     , m_drawLayer(LAYER_MAXNUM - 1)
 {
+    memset (m_css_classes, 0, sizeof (m_css_classes));
     setVisible(true);
 }
 
@@ -269,16 +278,16 @@ void View::releaseEventListeners()
     while (true);
 }
 
-void View::onGetFocus()
+void View::onGotFocus()
 {
-    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_GET_FOCUS, (HTData)this);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)VN_GOTFOCUS, (HTData)this);
     raiseEvent(&event);
     updateView();
 }
 
-void View::onLoseFocus()
+void View::onLostFocus()
 {
-    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_LOSE_FOCUS, (HTData)this);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)VN_LOSTFOCUS, (HTData)this);
     raiseEvent(&event);
     updateView();
 }
@@ -356,7 +365,7 @@ bool View::dispatchEvent(Event* event)
         s.view = this;
         s.x = ((MouseEvent *)event)->x();
         s.y = ((MouseEvent *)event)->y();
-        CustomEvent e(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_ON_CLICK, (HTData)&s);
+        CustomEvent e(Event::CUSTOM_NOTIFY, (HTData)VN_CLICKED, (HTData)&s);
         return raiseEvent(&e);
     }
 
@@ -408,7 +417,7 @@ void View::focusMe(void)
     }
 
     if (NULL != (p = parent())) {
-        if(p->isFocus()){
+        if(p->isFocused()){
             if(NULL != p->focusView() && this != p->focusView())
                 p->releaseFocusView();
         }
@@ -419,12 +428,12 @@ void View::focusMe(void)
     }
 
     /*
-    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_GET_FOCUS, (HTData)this);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)VN_GOTFOCUS, (HTData)this);
     raiseEvent(&event);
     */
 }
 
-bool View::isFocus(void)
+bool View::isFocused(void)
 {
     if(m_parent) {
         return ((m_parent->focusView() == this) && m_parent->focusValid());

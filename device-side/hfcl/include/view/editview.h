@@ -143,8 +143,8 @@ public:
 
     virtual int getTextMCharLen(void) { return 0; }
 
-    virtual void onGetFocus(void);
-    virtual void onLoseFocus(void);
+    virtual void onGotFocus(void);
+    virtual void onLostFocus(void);
     void setAddWordFlag(bool addflag) { m_addword = addflag;}
     bool getAddWordFlag(void) { return m_addword;}
 #ifdef __MMI_T9__
@@ -155,7 +155,7 @@ public:
     void setExchangeFlag(bool exchangeflag) { m_exchange = exchangeflag;}
     bool getExchangeFlag(void) { return m_exchange;}
     enum {
-        NOTIFY_BEGIN = CustomEvent::CUS_MAX,
+        VN_BEGIN = CustomEvent::CUS_MAX,
         NOTIFY_EDIT_CHANGED = 1000,
         NGTIFY_EDIT_LINE_CHANGED,
         NOTIFY_EDIT_ENTER,  // only in single-line edit

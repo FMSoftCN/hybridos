@@ -58,8 +58,8 @@ public:
     inline void setLineAboveHeight(unsigned int height) { m_lineAboveH = height; }
     inline void setLineBellowHeight(unsigned int height) { m_lineBellowH = height; }
 
-    void onGetFocus(void);
-    void onLoseFocus(void);
+    void onGotFocus(void);
+    void onLostFocus(void);
     void setFont (Logfont *f);
 
     int setCaretPosition(int pos);

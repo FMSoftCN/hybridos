@@ -83,7 +83,7 @@ void LineLayoutView::paint(GraphicsContext* context, int status)
     for (curNode = m_node; curNode; curNode = curNode->next) {
         if ((curNode->s_view)->isVisible()) {
             //FIXEDME : view should take the focus state by itself
-            if ((curNode->s_view)->isFocus())
+            if ((curNode->s_view)->isFocused())
                 (curNode->s_view)->onPaint(context, FOCUS);
             else
                 (curNode->s_view)->onPaint(context, NORMAL);

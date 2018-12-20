@@ -64,7 +64,7 @@ class BusyListView : public PanelView
         void hilight(int index);
         void hilight(int index, bool focus);
         int hilightItemIndex(void);
-        bool isFocus(void){return m_focus;}
+        bool isFocused(void){return m_focus;}
         View* hilightItem(void);
         View* itemFromIndex(int index);
         ////////////// dispatch event

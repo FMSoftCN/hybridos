@@ -46,8 +46,8 @@ public:
             bool disable=false, DrawableSet* drset = NULL);
     virtual ~MenuItem();
 
-    virtual void onGetFocus();
-    virtual void onLoseFocus();
+    virtual void onGotFocus();
+    virtual void onLostFocus();
 
     virtual Menu* getSubMenu() { return NULL; }
 
@@ -60,7 +60,7 @@ public:
     virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 
     inline void setOriginalText(const char* str)     { setText(str);  }
-     inline void setOriginalText(int strid)           { setText(strid);}
+    inline void setOriginalText(int strid)           { setText(strid);}
     inline void setOriginalText(const string& str)  { setText(str);  }
 
     char * originalText() { return getText(); }
@@ -315,7 +315,7 @@ public:
     int getCurMenuItemID(void)
     {
         MenuItem* mi = getCurMenuItem();
-        return mi ? mi->id() : -1;
+        return mi ? mi->getId() : -1;
     }
 
     void hilightFirstEnable(void);

@@ -69,8 +69,8 @@ class GridView : public PanelView
         int oldFocusItemIdx(void) { return m_oldFocusItem; }
         View * getOldFocusItem();
 
-        void onGetFocus();
-        void onLoseFocus();
+        void onGotFocus();
+        void onLostFocus();
 
         virtual bool setRect(const IntRect& irc);
         bool setRect(int left, int top, int right, int bottom){

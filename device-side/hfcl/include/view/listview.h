@@ -151,7 +151,7 @@ public:
 
         bool isEnd() { return m_current == NULL; }
         void prev() {
-            while(m_current && !check((m_current = (ItemView*)m_current->previousSibling()))) ;
+            while(m_current && !check((m_current = (ItemView*)m_current->prevSibling()))) ;
         }
         void next() {
             while(m_current && !check((m_current = (ItemView*)m_current->nextSibling()))) ;
@@ -209,7 +209,7 @@ public:
     bool hilightTop()          { return (m_flags&HILIGHT_TOP) == HILIGHT_TOP; }
 
     enum {
-        NOTIFY_BEGIN = CustomEvent::CUS_MAX,
+        VN_BEGIN = CustomEvent::CUS_MAX,
         NOTIFY_SELCHANGED = CustomEvent::CUS_SELCHANGED,
         NOTIFY_ITEMDELETED,
         NOTIFY_ITEMCREATED,

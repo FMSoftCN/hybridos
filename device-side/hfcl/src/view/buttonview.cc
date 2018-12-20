@@ -167,7 +167,7 @@ void ButtonView::lButtonClick(Event* event)
     setState(HILIGHT);
 }
 
-void ButtonView::onGetFocus()
+void ButtonView::onGotFocus()
 {
     if(isDisabled())
         return;
@@ -178,10 +178,10 @@ void ButtonView::onGetFocus()
     updateView();
 }
 
-void ButtonView::onLoseFocus()
+void ButtonView::onLostFocus()
 {
 
-//    LOGDEBUG("ButtonView::onLoseFocus!!!\n");
+//    LOGDEBUG("ButtonView::onLostFocus!!!\n");
     if(isDisabled())
         return ;
 

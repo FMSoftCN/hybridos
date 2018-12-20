@@ -177,7 +177,7 @@ void ListView::upFindItem(void)
     if (NULL == m_hilightItem)
         view = m_content->lastChild();
     else {
-        view = m_hilightItem->previousSibling();
+        view = m_hilightItem->prevSibling();
         if (NULL == view)
             view = m_content->lastChild(); //loop selection
     }
@@ -692,7 +692,7 @@ static View* get_prev_focus_from_focused(ContainerView* c)
             return t;
     }
 
-    view = view->previousSibling();
+    view = view->prevSibling();
 
     while (view) {
         if (view->focusStopable())
@@ -701,7 +701,7 @@ static View* get_prev_focus_from_focused(ContainerView* c)
             View *t = get_prev_focus_from_focused((ContainerView*)view);
             if (t) return t;
         }
-        view = view->previousSibling();
+        view = view->prevSibling();
     }
 
     return NULL;
@@ -725,7 +725,7 @@ static View* get_prev_focus(ContainerView* c)
             if (t)
                 return t;
         }
-        view = view->previousSibling();
+        view = view->prevSibling();
     }
 
     return NULL;
@@ -752,7 +752,7 @@ PREV:
         }
 
         while (!view && item) {
-            item = (ItemView*)item->previousSibling();
+            item = (ItemView*)item->prevSibling();
             if (!item)
                 break;
             view = get_prev_focus(item);

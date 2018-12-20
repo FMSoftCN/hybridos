@@ -582,7 +582,7 @@ void BusyListView::layoutDownToUp(int from_height, int hilight_index)
             }
         }
         ++n;
-        item = item->previousSibling();
+        item = item->prevSibling();
     }
     // mark dock status
     m_dock_top = false;

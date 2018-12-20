@@ -105,7 +105,7 @@ MlEditView::~MlEditView()
     }
 }
 
-void MlEditView::onGetFocus(void)
+void MlEditView::onGotFocus(void)
 {
     if (0 != m_timerId)
         removeTimer(m_timerId);
@@ -117,10 +117,10 @@ void MlEditView::onGetFocus(void)
         imeEnable(true);
 #endif
 
-    EditView::onGetFocus();
+    EditView::onGotFocus();
 }
 
-void MlEditView::onLoseFocus(void)
+void MlEditView::onLostFocus(void)
 {
     if(m_timerId != 0)
     {
@@ -134,7 +134,7 @@ void MlEditView::onLoseFocus(void)
         m_multapTimerId = 0;
     }
 
-    EditView::onLoseFocus();
+    EditView::onLostFocus();
 }
 
 void MlEditView::MultitapKeyupNoDraw(void)
@@ -1625,7 +1625,7 @@ bool MlEditView::switchLine(bool isUpLine)
 void MlEditView::drawBackground(GraphicsContext* gc, IntRect &rc, int status)
 {
     if(m_drset) {
-        m_drset->draw(gc, DR_BKGND, isFocus() ? DRAWSTATE_HILIGHT : DRAWSTATE_NORMAL, rc);
+        m_drset->draw(gc, DR_BKGND, isFocused() ? DRAWSTATE_HILIGHT : DRAWSTATE_NORMAL, rc);
     }
 }
 
@@ -2426,7 +2426,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
 
     caretPos.y += m_lineAboveH;
 
-    if (isFocus() && m_bCaretShown && !isReadOnly()){
+    if (isFocused() && m_bCaretShown && !isReadOnly()){
         int oldrop = 0;
         if(caretWidth) {
             oldrop = SetRasterOperation (gc->context(), ROP_XOR);
@@ -2459,7 +2459,7 @@ bool MlEditView::handleEvent(Event* event)
 {
     if (event->eventType() == Event::TIMER
             && m_timerId == ((TimerEvent *)event)->timerID()
-            && isFocus()) {
+            && isFocused()) {
 #ifdef __MMI_T9__
        if(m_bSelect==false && m_multapTimerId == 0)
 #endif

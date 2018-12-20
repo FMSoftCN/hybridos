@@ -98,8 +98,8 @@ class ArrowTextView : public View
 
     virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
 
-    void onGetFocus() { if(!m_roll) startRollText(); }
-    void onLoseFocus() { if(!m_roll) stopRollText(); }
+    void onGotFocus() { if(!m_roll) startRollText(); }
+    void onLostFocus() { if(!m_roll) stopRollText(); }
 
     void setRollProp(bool roll) { m_roll = roll; }
 

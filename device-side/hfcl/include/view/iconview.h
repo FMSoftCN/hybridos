@@ -95,7 +95,7 @@ class IconView : public ScrollView
         bool dispatchEvent(Event*);
 
     protected:
-        virtual void onGetFocus(){
+        virtual void onGotFocus(){
             if (m_gridView) m_gridView->focusMe();
         }
 

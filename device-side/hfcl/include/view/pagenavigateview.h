@@ -121,10 +121,10 @@ class PageNavigateView : public PanelView
         bool prev();
 
         /*get focus will show two arrows.*/
-        void onGetFocus();
+        void onGotFocus();
 
         /*lose focus will hide two arrows.*/
-        void onLoseFocus();
+        void onLostFocus();
 
         bool dispatchEvent(Event *event);
 

@@ -416,12 +416,12 @@ bool TableBarView::dispatchEvent(Event * event)
                 {
                     case KeyEvent::KEYCODE_CURSOR_UP :
                     case KeyEvent::KEYCODE_CURSOR_DOWN :
-                        if(!m_pages->getCurPage()->isFocus())
+                        if(!m_pages->getCurPage()->isFocused())
                             m_pages->setFocus(m_pages->getCurPage());
                         m_pages->dispatchEvent(event);
  //  add by xulei ; send event to GridView for focus, so that draw
  //  Bkg
-                        if(!m_tablesGrid->isFocus())
+                        if(!m_tablesGrid->isFocused())
                             m_tablesGrid->setFocus(m_tablesGrid);
 
                         item = (ItemView*)m_tablesGrid->focusView();
@@ -434,7 +434,7 @@ bool TableBarView::dispatchEvent(Event * event)
                     case KeyEvent::KEYCODE_CURSOR_RIGHT :
                         {
                             int code = ((KeyEvent *)event)->keyCode();
-                            if(!m_tablesGrid->isFocus())
+                            if(!m_tablesGrid->isFocused())
                                 m_tablesGrid->setFocus(m_tablesGrid);
 
                             item = (ItemView*)m_tablesGrid->focusView();
@@ -529,7 +529,7 @@ void TableItemView:: paint(GraphicsContext * context, int status)
 {
 
     IntRect rc = getRect();
-    if(itemSelect()||isFocus())
+    if(itemSelect()||isFocused())
     {
 #if 1
         if(NULL != getBkImage())

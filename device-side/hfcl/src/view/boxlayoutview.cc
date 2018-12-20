@@ -66,7 +66,7 @@ void BoxLayoutView::paint(GraphicsContext* context, int status)
     for (int i = 0; i < m_count; i++) {
         if (NULL != m_cells[i].s_view) {
                 //FIXEDME: View should take focus by itself
-            if ((m_cells[i].s_view)->isFocus())
+            if ((m_cells[i].s_view)->isFocused())
                 (m_cells[i].s_view)->onPaint(context, FOCUS);
             else
                 (m_cells[i].s_view)->onPaint(context, NORMAL);

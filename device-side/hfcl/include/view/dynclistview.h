@@ -63,7 +63,7 @@ class DyncListView : public PanelView
         void hilight(int index);
         int hilightItemIndex(void);
 
-        bool isFocus(void){return m_focus;}
+        bool isFocused(void){return m_focus;}
 
         View* hilightItem(void);
         View* itemFromIndex(int index);

@@ -298,7 +298,7 @@ bool WrapperView::handleEvent(Event* event)
 }
 #endif
 
-void WrapperView::onGetFocus(void)
+void WrapperView::onGotFocus(void)
 {
     ::SetFocus(m_wrapwnd);
     // FIXME (wangjian)
@@ -306,15 +306,15 @@ void WrapperView::onGetFocus(void)
     // but there is a bug in minigui textedit.
     // (when set focus the caret can not be show auto.)
     showCaret(true);
-    View::onGetFocus();
+    View::onGotFocus();
 }
 
-void WrapperView::onLoseFocus(void)
+void WrapperView::onLostFocus(void)
 {
 //    closeTimer();       // GT_jyseo rollback
     ::SetNullFocus (::GetParent(m_wrapwnd));
     showCaret(false);
-    View::onLoseFocus();
+    View::onLostFocus();
 }
 
 string WrapperView::getText(){

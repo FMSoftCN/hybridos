@@ -82,15 +82,15 @@ MenuItem::~MenuItem()
    stopRoll();
 }
 
-void MenuItem::onGetFocus()
+void MenuItem::onGotFocus()
 {
-   SimpleItemView::onGetFocus();
+   SimpleItemView::onGotFocus();
    startRoll();
 }
 
-void MenuItem::onLoseFocus()
+void MenuItem::onLostFocus()
 {
-   SimpleItemView::onLoseFocus();
+   SimpleItemView::onLostFocus();
    stopRoll();
 }
 
@@ -272,7 +272,7 @@ void SubMenuItem::onMenuRight(Menu * owner)
         stopRoll();
         m_subMenu->setMenuParent(owner);
         m_subMenu->showMenu();
-        owner->notifyToParent(Menu::CUSTOM_MENU_KEY_SL, id());
+        owner->notifyToParent(Menu::CUSTOM_MENU_KEY_SL, getId());
     }
 }
 
@@ -540,7 +540,7 @@ bool Menu::onKey(int keyCode, KeyEvent* event)
 void Menu::onMenuEnter(void)
 {
     MenuItem* mi = getCurMenuItem();
-    int miId = mi->id();
+    int miId = mi->getId();
     bool hasSub = mi->getSubMenu() != NULL;
 
     if (mi->isDisabled())

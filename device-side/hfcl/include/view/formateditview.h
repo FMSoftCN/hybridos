@@ -62,8 +62,8 @@ class FormatEditView : public View
                 /**
          * Focus Event Handle
          */
-        virtual void onGetFocus();
-        virtual void onLoseFocus();
+        virtual void onGotFocus();
+        virtual void onLostFocus();
         int getCurrentIndex(void) { return m_current_index; }
         int getAmPos();
         void setAlignMargin();

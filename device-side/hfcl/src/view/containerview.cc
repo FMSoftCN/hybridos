@@ -150,7 +150,7 @@ bool ContainerView::insertBefore(View *view, View* child)
     child->setNextSlibling(view);
     if(view)
     {
-        prev = view->previousSibling();
+        prev = view->prevSibling();
         view->setPrevSlibling(child);
     }
 
@@ -219,7 +219,7 @@ int ContainerView::detachChild(View* view)
     if(!view || view->parent() != this)
         return -1;
 
-    View * prev = view->previousSibling();
+    View * prev = view->prevSibling();
     View * next = view->nextSibling();
 
     if(prev)
@@ -262,7 +262,7 @@ int ContainerView::removeChild(View * view, bool bRelease)
 View* ContainerView::getChild(int i_id) const
 {
     for(View *view = firstChild(); view ; view = view->nextSibling()) {
-        if(view->id() == i_id)
+        if(view->getId() == i_id)
             return view;
     }
     return NULL;
@@ -275,7 +275,7 @@ View* ContainerView::getChildByIndex(int idx) const
         return lastChild();
 
     if(idx > (m_childCount>>1)) //from tail
-        for(view = lastChild(), idx = m_childCount - idx - 1; view  && idx > 0; view = view->previousSibling(), idx --);
+        for(view = lastChild(), idx = m_childCount - idx - 1; view  && idx > 0; view = view->prevSibling(), idx --);
     else
         for(view = firstChild(); view  && idx > 0; view = view->nextSibling(), idx --);
 
@@ -296,7 +296,7 @@ int ContainerView::getChildIndex(View *view) const {
 View* ContainerView::getView (int i_id) const
 {
     for(View *view = firstChild(); view ; view = view->nextSibling()) {
-        if(view->id() == i_id)
+        if(view->getId() == i_id)
             return view;
         else if(view->isContainerView())
         {
@@ -311,7 +311,7 @@ View* ContainerView::getView (int i_id) const
 
 View *ContainerView::getChildByPosition(int x_pos, int y_pos) const
 {
-    for(View *view = lastChild(); NULL != view ; view = view->previousSibling())
+    for(View *view = lastChild(); NULL != view ; view = view->prevSibling())
     {
         IntRect irc = view->getRect();
         if (irc.contains(x_pos, y_pos)){
@@ -461,11 +461,11 @@ void ContainerView::setFocusView(View* view)
     m_focusView = view;
 
     if(old_focusView)
-        old_focusView->onLoseFocus();
+        old_focusView->onLostFocus();
 
     setFocusValid(true);
 
-    m_focusView->onGetFocus();
+    m_focusView->onGotFocus();
 
     if (m_focusView->isContainerView()){
         View * focus = ((ContainerView *)m_focusView)->focusView();
@@ -484,7 +484,7 @@ void ContainerView::releaseFocusView(void)
     old_focusView = m_focusView;
     m_focusView = NULL;
 
-    old_focusView->onLoseFocus();
+    old_focusView->onLostFocus();
     if (old_focusView->isContainerView()){
         ((ContainerView *)old_focusView)->releaseFocusView();
     }
@@ -492,7 +492,7 @@ void ContainerView::releaseFocusView(void)
 
     // FIXME ylwang changed at 2012-04-06
     /*
-    CustomEvent event(Event::CUSTOM_NOTIFY, (int)NOTIFY_LOSE_FOCUS, (int)m_focusView);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (int)VN_LOSTFOCUS, (int)m_focusView);
     raiseEvent(&event);
     */
 }

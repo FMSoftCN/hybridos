@@ -90,7 +90,7 @@ EditView::~EditView()
 void EditView::adaptViewStyle(void)
 {
     setTextColor(m_drset->getDrawableElement(DR_CONTENT,
-                isFocus() ? SYS_SE_HILIGHTCOLOR : SYS_SE_COLOR));
+                isFocused() ? SYS_SE_HILIGHTCOLOR : SYS_SE_COLOR));
 }
 
 void EditView::changeTheme(void)
@@ -106,9 +106,9 @@ void EditView::raiseNotifyEvent(int notiCode, int exParam1, int exParam2)
     raiseEvent (&e);
 }
 
-void EditView::onGetFocus(void)
+void EditView::onGotFocus(void)
 {
-    View::onGetFocus();
+    View::onGotFocus();
     //adaptViewStyle();
     setImeTarget((int)this, 1);
 
@@ -142,11 +142,11 @@ void EditView::onGetFocus(void)
 #endif
 }
 
-void EditView::onLoseFocus(void)
+void EditView::onLostFocus(void)
 {
     showCaret (false);
 
-    View::onLoseFocus();
+    View::onLostFocus();
     //adaptViewStyle();
 
     setImeTarget((int)NULL, 1);

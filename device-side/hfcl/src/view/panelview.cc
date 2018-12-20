@@ -124,7 +124,7 @@ void PanelView::drawBackground(GraphicsContext* context, IntRect &rc, int status
         }
         else if (m_drset) {
             //_DBG_PRINTF("PanelView::drawBackground2>>>(%d,%d,%d,%d)",rc.left(),rc.right(),rc.top(),rc.bottom());
-            if(isFocus())
+            if(isFocused())
                 m_drset->draw(context, DR_BKGND, DRAWSTATE_HILIGHT, rc);
             else
                 m_drset->draw(context, DR_BKGND, DRAWSTATE_NORMAL, rc);

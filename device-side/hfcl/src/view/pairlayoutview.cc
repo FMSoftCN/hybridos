@@ -42,14 +42,14 @@ void PairLayoutView::paint(GraphicsContext* context, int status)
 {
     //FIXEME : View's onPaint should get the focus by it self
     if (NULL != m_firstView) {
-        if (m_firstView->isFocus())
+        if (m_firstView->isFocused())
             m_firstView->onPaint(context, FOCUS);
         else
             m_firstView->onPaint(context, NORMAL);
     }
 
     if (NULL != m_secondView) {
-        if (m_secondView->isFocus())
+        if (m_secondView->isFocused())
             m_secondView->onPaint(context, FOCUS);
         else
             m_secondView->onPaint(context, NORMAL);

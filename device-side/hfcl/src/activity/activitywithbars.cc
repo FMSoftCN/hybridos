@@ -256,7 +256,7 @@ bool ActivityWithBars::handleEvent(Event* event)
 {
     if (event->eventType() == Event::CUSTOM_NOTIFY) {
         //menu notify event
-        if (((CustomEvent *)event)->customWparam() == View::NOTIFY_ON_CLICK) {
+        if (((CustomEvent *)event)->customWparam() == View::VN_CLICKED) {
             MenuBarView *m = m_menuBar->getMenuBar();
             ViewClickEventStruct *s
                 = (ViewClickEventStruct*)(((CustomEvent*)event)->customLparam());

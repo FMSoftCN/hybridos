@@ -35,7 +35,7 @@ void ItemView::paint(GraphicsContext* context, int status)
         draw_hilite(context, rc, status);
     }
 
-    if(isFocus()) {
+    if(isFocused()) {
         cont_state = DRAWSTATE_HILIGHT;
     } else if(isSelected()) {
         cont_state = DRAWSTATE_SELECTED;
@@ -88,14 +88,14 @@ void ItemView::draw_select(GraphicsContext* context, IntRect &rc, int status)
     }
 
     if (isSelected()) {
-        if(isFocus()) {
+        if(isFocused()) {
             status = DRAWSTATE_HILIGHT_SEL;
         } else {
             status = DRAWSTATE_SELECTED;
         }
         m_drset->draw(context, DR_CHECK, status, rect);
     }
-    else if(isFocus()){
+    else if(isFocused()){
         status = DRAWSTATE_HILIGHT;
         m_drset->draw(context, DR_CHECK, status, rect);
     }else {
@@ -131,7 +131,7 @@ void ItemView::draw_hilite(GraphicsContext* context, IntRect &rc, int status)
 }
 
 int ItemView::getHilightDrawState() {
-    bool bfocused = isFocus();
+    bool bfocused = isFocused();
     if(bfocused)
         return DRAWSTATE_HILIGHT;
     /*

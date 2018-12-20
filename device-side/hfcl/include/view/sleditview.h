@@ -68,8 +68,8 @@ public:
 
     int getTextMCharLen(void);
 
-    void onGetFocus(void);
-    void onLoseFocus(void);
+    void onGotFocus(void);
+    void onLostFocus(void);
     void setFont(Logfont *f);
     void setFont (HTResId id);
     void SlKeyupNoDraw(void);

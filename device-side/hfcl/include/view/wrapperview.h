@@ -81,7 +81,7 @@ public:
         TEXT_MSG_CHAR = 0X11,
     };
     enum {
-        NOTIFY_BEGIN = CustomEvent::CUS_MAX,
+        VN_BEGIN = CustomEvent::CUS_MAX,
         NOTIFY_EDIT_CHANGED = 1000,
         NOTIFY_EDIT_ENTER,  // only in single-line edit
         NOTIFY_EDIT_MAXTEXT,
@@ -111,8 +111,8 @@ public:
 
     virtual bool dispatchEvent(Event *event);
 
-    virtual void onGetFocus(void);
-    virtual void onLoseFocus(void);
+    virtual void onGotFocus(void);
+    virtual void onLostFocus(void);
 
     bool isWrapperView() { return true;}
 

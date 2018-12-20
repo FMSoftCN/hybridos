@@ -144,7 +144,7 @@ void ArrowTextView::drawContent(GraphicsContext* context, IntRect& rc, int statu
 
     if (hasImage()) {
 
-        if (isFocus())
+        if (isFocused())
             state = DRAWSTATE_HILIGHT;
 
         // left image

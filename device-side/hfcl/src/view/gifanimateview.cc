@@ -265,7 +265,7 @@ bool GifAnimateView::handleEvent(Event* event)
             }
             else {
                 Sint32 cur_tick = GetTickCount();
-                m_elapsed_10ms = (Uint64) (cur_tick - m_start_ticks)*10;
+                m_elapsed_10ms = (Uint32) (cur_tick - m_start_ticks)*10;
             }
         }
     }

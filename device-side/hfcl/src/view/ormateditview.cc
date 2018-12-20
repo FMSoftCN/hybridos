@@ -455,7 +455,7 @@ bool FormatEditView::checkContent(void)
         return false;
 }
 
-void FormatEditView::onGetFocus()
+void FormatEditView::onGotFocus()
 {
     m_show_current_hilight = true;
     //if (-1 == m_current_index)
@@ -466,7 +466,7 @@ void FormatEditView::onGetFocus()
             m_current_index = 0;
 }
 
-void FormatEditView::onLoseFocus()
+void FormatEditView::onLostFocus()
 {
     updateZero();
     m_show_current_hilight = false;

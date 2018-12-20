@@ -59,7 +59,7 @@ begin_sys_respkg
 
     // CSS
     begin_css_res
-        begin_css(root, "hvroot")
+        begin_css(body, "hvbody")
             style(BackgroundColor, PV_BACKGROUND_COLOR_COLOR_BLACK, 0)
             style(Color,    PV_BACKGROUND_COLOR_RGBA, rgba(0x16, 0xF2, 0x23, 0xFF))
             style(Font,     PV_FONT_SYSID, sysid_font(nm))
@@ -85,7 +85,7 @@ begin_sys_respkg
     // CSS Group
     begin_css_group_res
         begin_css_group(global)
-            css(root)
+            css(body)
             css(title)
             css(subtitle)
         end_css_group

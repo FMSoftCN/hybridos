@@ -232,7 +232,7 @@ int GridView::remove(int row, int col)
     return -1;
 }
 
-void GridView::onGetFocus()
+void GridView::onGotFocus()
 {
 #if 0     // GT_jyseo rollback
     if (m_focusItem < 0) {
@@ -250,7 +250,7 @@ void GridView::onGetFocus()
 
 }
 
-void GridView::onLoseFocus()
+void GridView::onLostFocus()
 {
     #if 0   // GT_jyseo rollback
     if(m_timerId > 0)

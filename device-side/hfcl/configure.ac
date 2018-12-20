@@ -137,7 +137,8 @@ else
 fi
 
 if test "$ac_cv_prog_gcc" = "yes"; then
-    CFLAGS="$CFLAGS -Wstrict-prototypes -pipe"
+    CFLAGS="$CFLAGS -std=c++11 -Wstrict-prototypes -pipe"
+    CXXFLAGS="$CXXFLAGS -std=c++11 -pipe"
 fi
 
 dnl ========================================================================

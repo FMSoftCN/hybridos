@@ -542,7 +542,7 @@ void DyncListView::layoutDownToUp(int from_height, int hilight_index)
             h -= m_nm_height;
         }
         ++n;
-        item = item->previousSibling();
+        item = item->prevSibling();
     }
 }
 
