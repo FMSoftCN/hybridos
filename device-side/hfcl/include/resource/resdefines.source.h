@@ -103,11 +103,7 @@
 #define self_font(name)         GetFontRes(RESID(font_##name))
 #define self_bmpfont(name)      (RESID(bmpfont_##name))
 
-#define rgba(r, g, b, a)    \
-    (((r) & 0xFF) |         \
-    (((g) & 0xFF) << 8) |   \
-    (((b) & 0xFF) << 16) | \
-    (((a) & 0xFF) << 24))
+#define rgba(r, g, b, a)
 
 /////////////////////////////////
 // style sheet

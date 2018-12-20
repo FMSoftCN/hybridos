@@ -21,7 +21,7 @@ background-color
     inherited: no
 
 background-image
-    values: <url> none inherit
+    values: <url> <sysid> none inherit
     initial: none
     inherited: no
 
@@ -207,6 +207,11 @@ font-weight
     initial: normal
     inherited: yes
 
+font
+    values: default <sysid> inherit
+    initial: default
+    inherited: yes
+
 height
     values: <length> <percentage> auto inherit
     initial: auto
@@ -229,7 +234,7 @@ line-height
     inherited: yes
 
 list-style-image
-    values: <url> none inherit
+    values: <url> <sysid> none inherit
     initial: none
     inherited: yes
 

@@ -203,6 +203,11 @@ public:
         return setProperty (PID_FLOAT, value, addData);
     }
 
+    // Operator for property font
+    bool setFont (DWORD32 value, HTData addData = 0) {
+        return setProperty (PID_FONT, value, addData);
+    }
+
     // Operator for property font-family
     bool setFontFamily (DWORD32 value, HTData addData = 0) {
         return setProperty (PID_FONT_FAMILY, value, addData);
