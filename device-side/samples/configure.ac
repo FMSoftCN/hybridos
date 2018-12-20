@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.60)
 AC_INIT(hfcl-samples,0.1.0)
-AC_CONFIG_SRCDIR(cbplus/cbplus.cc)
+AC_CONFIG_SRCDIR(hybridrun/hybridrun.cc)
 
 dnl ========================================================================
 dnl Need for cross-compiling
@@ -83,6 +83,6 @@ AM_CONDITIONAL(MGRM_PROCESSES, test "x$minigui_runmode" = "xprocs")
 AC_OUTPUT(
     Makefile
     m4/Makefile
-    cbplus/Makefile
-    cbplus/res/Makefile
+    hybridrun/Makefile
+    hybridrun/res/Makefile
 )

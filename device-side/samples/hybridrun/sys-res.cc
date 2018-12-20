@@ -19,47 +19,24 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "cbplus.h"
-
-#include <cstdlib>
-
-#include <hfcl/hfcl.h>
-#include <hfcl/common.h>
-#include <hfcl/activity.h>
-#include <hfcl/view.h>
-#include <hfcl/drawable.h>
 #include <hfcl/resource.h>
 
-#include "bootupactivity.h"
+#include "hybridrun.h"
 #include "sys-res.h"
 
-int main (int argc, const char** argv)
-{
-    Initialize (argc, argv);
+using namespace hfcl;
 
-    // register system resource
-    FRRegister_sys_resource();
+#define RESPKGID      RPKG_sys
+#define RESID(name)   R_sys_##name
 
-    if (!SetResourceLanguage (R_LANG_zh_CN)) {
-        _ERR_PRINTF ("cbplus: Failed when calling SetResourceLanguage with %d\n",
-                R_LANG_zh_CN);
-        return 1;
-    }
+#include <hfcl/resource/resdefines.source.h>
+#include "sys-res.inc"
+#include <hfcl/resource/resundefines.h>
 
-    REGISTER_ACTIVITY("bootup", BootupActivity);
+#include <hfcl/resource/resdefines.init.h>
+#include "sys-res.inc"
+#include <hfcl/resource/resundefines.h>
 
-    ActivityManager* act_mgr = ActivityManager::getInstance();
-
-    int boot_type = 0;
-    if (argc > 1) {
-        boot_type = atoi (argv [1]);
-    }
-
-    Intent intent(boot_type, 0, 0);
-    act_mgr->startActivity ("bootup", &intent);
-    act_mgr->run();
-
-    Terminate (0);
-    return 0;
-}
+#undef RESID
+#undef RESPKGID
 

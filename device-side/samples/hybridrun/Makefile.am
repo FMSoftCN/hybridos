@@ -1,9 +1,9 @@
 SUBDIRS=res
-noinst_PROGRAMS=cbplus
+noinst_PROGRAMS=hybridrun
 
-cbplus_SOURCES= \
-    cbplus.cc \
-    cbplus.h \
+hybridrun_SOURCES= \
+    hybridrun.cc \
+    hybridrun.h \
     bootup-res.cc \
     bootup-res.inc \
     bootup-res.h \

@@ -19,42 +19,25 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "bootupactivity.h"
-
+#include <hfcl/view.h>
 #include <hfcl/resource.h>
 
-#include "cbplus.h"
+#include "hybridrun.h"
 #include "bootup-res.h"
-#include "bootuplogo.h"
-#include "bootupgreet.h"
 
-BootupActivity::BootupActivity()
-{
-    REGISTER_RESPKG(bootup);
-}
+using namespace hfcl;
 
-BootupActivity::~BootupActivity()
-{
-    UnregisterResPackage(RES_PKG_BOOTUP_ID);
-}
+#define RESPKGID      RPKG_bootup
+#define RESID(name)   R_bootup_##name
 
-void BootupActivity::onCreate(ContextStream* contextStream, Intent* intent)
-{
-    FullScreenActivity::onCreate(contextStream, intent);
+#include <hfcl/resource/resdefines.source.h>
+#include "bootup-res.inc"
+#include <hfcl/resource/resundefines.h>
 
-    if (intent->action ())
-        showView (BOOTUP_CLIENT_GREET, 0, 0);
-    else
-        showView (BOOTUP_CLIENT_LOGO, 0, 0);
-}
+#include <hfcl/resource/resdefines.init.h>
+#include "bootup-res.inc"
+#include <hfcl/resource/resundefines.h>
 
-BEGIN_CONTROLLER_CLIENTS(BootupActivity)
-    CONTROLLER_CLIENT(BOOTUP_CLIENT_GREET, BootupGreet)
-    CONTROLLER_CLIENT(BOOTUP_CLIENT_LOGO, BootupLogo)
-END_CONTROLLER_CLIENTS_EX(Activity)
-
-BEGIN_DEFINE_ACTIVITY(BootupActivity)
-    ACTIVITY_SET(name, "bootup")
-    ACTIVITY_SET(position, POS_HIDE)
-END_DEFINE_ACTIVITY
+#undef RESID
+#undef RESPKGID
 

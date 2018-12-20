@@ -1,3 +1,3 @@
-SUBDIRS=m4 cbplus
+SUBDIRS=m4 hybridrun
 
 EXTRA_DIST=README.md

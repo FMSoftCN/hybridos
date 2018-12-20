@@ -22,7 +22,7 @@
 #ifndef HFCL_SAMPLES_BOOTUP_RES_H__
 #define HFCL_SAMPLES_BOOTUP_RES_H__
 
-#include "cbplus.h"
+#include "hybridrun.h"
 #include "sys-res.h"
 
 #define RESPKGID      RPKG_bootup

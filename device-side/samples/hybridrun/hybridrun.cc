@@ -19,24 +19,47 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "hybridrun.h"
+
+#include <cstdlib>
+
+#include <hfcl/hfcl.h>
+#include <hfcl/common.h>
+#include <hfcl/activity.h>
+#include <hfcl/view.h>
+#include <hfcl/drawable.h>
 #include <hfcl/resource.h>
 
-#include "cbplus.h"
+#include "bootupactivity.h"
 #include "sys-res.h"
 
-using namespace hfcl;
+int main (int argc, const char** argv)
+{
+    Initialize (argc, argv);
 
-#define RESPKGID      RPKG_sys
-#define RESID(name)   R_sys_##name
+    // register system resource
+    FRRegister_sys_resource();
 
-#include <hfcl/resource/resdefines.source.h>
-#include "sys-res.inc"
-#include <hfcl/resource/resundefines.h>
+    if (!SetResourceLanguage (R_LANG_zh_CN)) {
+        _ERR_PRINTF ("cbplus: Failed when calling SetResourceLanguage with %d\n",
+                R_LANG_zh_CN);
+        return 1;
+    }
 
-#include <hfcl/resource/resdefines.init.h>
-#include "sys-res.inc"
-#include <hfcl/resource/resundefines.h>
+    REGISTER_ACTIVITY("bootup", BootupActivity);
 
-#undef RESID
-#undef RESPKGID
+    ActivityManager* act_mgr = ActivityManager::getInstance();
+
+    int boot_type = 0;
+    if (argc > 1) {
+        boot_type = atoi (argv [1]);
+    }
+
+    Intent intent(boot_type, 0, 0);
+    act_mgr->startActivity ("bootup", &intent);
+    act_mgr->run();
+
+    Terminate (0);
+    return 0;
+}
 
