@@ -30,7 +30,7 @@
 #include <hfcl/drawable.h>
 #include <hfcl/resource.h>
 
-#include "bootupactivity.h"
+#include "activities/bootup/bootupactivity.h"
 #include "sys-res.h"
 
 int main (int argc, const char** argv)
