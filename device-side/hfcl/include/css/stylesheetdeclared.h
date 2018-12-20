@@ -268,11 +268,6 @@ public:
         return setProperty (PID_LIST_STYLE_TYPE, value, addData);
     }
 
-    // Operator for property margin
-    bool setMargin (DWORD32 value, HTData addData = 0) {
-        return setProperty (PID_MARGIN, value, addData);
-    }
-
     // Operator for property margin-bottom
     bool setMarginBottom (DWORD32 value, HTData addData = 0) {
         return setProperty (PID_MARGIN_BOTTOM, value, addData);
@@ -341,11 +336,6 @@ public:
     // Operator for property overflow
     bool setOverflow (DWORD32 value, HTData addData = 0) {
         return setProperty (PID_OVERFLOW, value, addData);
-    }
-
-    // Operator for property padding
-    bool setPadding (DWORD32 value, HTData addData = 0) {
-        return setProperty (PID_PADDING, value, addData);
     }
 
     // Operator for property padding-bottom
@@ -467,6 +457,12 @@ public:
     bool setZIndex (DWORD32 value, HTData addData = 0) {
         return setProperty (PID_Z_INDEX, value, addData);
     }
+
+    // The helper functions for setting property margin in batches.
+    bool setMargin (DWORD32 value, HTData addData = 0);
+
+    // The helper functions for setting property margin in batches.
+    bool setPadding (DWORD32 value, HTData addData = 0);
 
     virtual bool getProperty (PropertyIds pid, DWORD32 *value,
             HTData *data = NULL);

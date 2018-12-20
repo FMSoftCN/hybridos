@@ -34,6 +34,80 @@ StyleSheetDeclared::~StyleSheetDeclared ()
     m_map.clear ();
 }
 
+bool StyleSheetDeclared::setMargin (DWORD32 value, HTData addData)
+{
+    if (addData) {
+
+        HTReal* data = (HTReal*)addData;
+        if (!setMarginLeft (value, data[0]))
+            goto error;
+
+        if (!setMarginTop (value, data[1]))
+            goto error;
+
+        if (!setMarginRight (value, data[2]))
+            goto error;
+
+        if (setMarginBottom (value, data[3]))
+            goto error;
+    }
+    else {
+        if (!setMarginLeft (value, 0))
+            goto error;
+
+        if (!setMarginTop (value, 0))
+            goto error;
+
+        if (!setMarginRight (value, 0))
+            goto error;
+
+        if (setMarginBottom (value, 0))
+            goto error;
+    }
+
+    return true;
+
+error:
+    return false;
+}
+
+bool StyleSheetDeclared::setPadding (DWORD32 value, HTData addData)
+{
+    if (addData) {
+
+        HTReal* data = (HTReal*)addData;
+        if (!setPaddingLeft (value, data[0]))
+            goto error;
+
+        if (!setPaddingTop (value, data[1]))
+            goto error;
+
+        if (!setPaddingRight (value, data[2]))
+            goto error;
+
+        if (setPaddingBottom (value, data[3]))
+            goto error;
+    }
+    else {
+        if (!setPaddingLeft (value, 0))
+            goto error;
+
+        if (!setPaddingTop (value, 0))
+            goto error;
+
+        if (!setPaddingRight (value, 0))
+            goto error;
+
+        if (setPaddingBottom (value, 0))
+            goto error;
+    }
+
+    return true;
+
+error:
+    return false;
+}
+
 bool StyleSheetDeclared::getProperty (PropertyIds pid, DWORD32 *value,
         HTData *data)
 {
