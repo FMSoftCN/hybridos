@@ -31,7 +31,7 @@ namespace hfcl {
 
 class CssBox : public Object {
 public:
-    CssBox(CssBox* parent);
+    CssBox();
     virtual ~CssBox() {};
 
 protected:
@@ -43,20 +43,23 @@ protected:
     };
 
     struct Box m_box;
-    CssBox* m_prev;
-    BOxNode* m_next;
 };
 
 class CssBoxPrincipal : public CssBox {
 public:
-    CssBoxPrincipal(View* view, int nr_children);
-    ~CssBoxPrincipal();
+    CssBoxPrincipal(View* view) : m_view(view) {}
+    virtual ~CssBoxPrincipal();
+
+protected:
+    bool appendChildBox(CssBox* child);
+    CssBox* getChild(int idx);
 
 private:
+    VECTOR(CssBox*, CssBoxVec);
+
     View* m_view;
-    CssBox* m_children;
-    int nr_children;
-}
+    CssBoxVec m_children;
+};
 
 namespace css {
 

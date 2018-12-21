@@ -19,38 +19,22 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "css/csscomputed.h"
+#include "css/cssbox.h"
 
 namespace hfcl {
 
-CssComputed::CssComputed (View* view) : m_view (view)
+CssBox::CssBox()
 {
-    memset(&m_values, 0, sizeof(m_values));
-    memset(&m_data, 0, sizeof(m_data));
+    memset (&m_box, 0, sizeof (m_box));
 }
 
-CssComputed::~CssComputed ()
+CssBoxPrincipal::~CssBoxPrincipal()
 {
-}
-
-bool CssComputed::getProperty (CssPropertyIds pid, DWORD32 *value,
-        HTData *data)
-{
-    if (value) {
-        *value = m_values[pid];
+    CssBoxVec::iterator it;
+    for (it = m_children.begin(); it != m_children.end(); ++it) {
+        CssBox* box = *it;
+        HFCL_DELETE(box);
     }
-    if (data) {
-        *data = m_data[pid];
-    }
-    return true;
-}
-
-bool CssComputed::setProperty (CssPropertyIds pid, DWORD32 value,
-    HTData data)
-{
-    m_values[pid] = value;
-    m_data[pid] = data;
-    return true;
 }
 
 } // namespace hfcl

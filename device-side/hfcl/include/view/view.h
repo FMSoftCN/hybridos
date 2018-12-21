@@ -22,7 +22,7 @@
 #ifndef HFCL_VIEW_VIEW_H_
 #define HFCL_VIEW_VIEW_H_
 
-#include "viewcontext.h"
+#include "../view/viewcontext.h"
 #include "../common/event.h"
 #include "../common/intrect.h"
 #include "../drawable/drawable.h"
@@ -33,6 +33,8 @@ namespace hfcl {
 
 class GraphicsContext;
 class ContainerView;
+class CssComputed;
+class CssBoxPrincipal;
 
 enum {
     PAINT_STATUS_SHIFT = 24,
@@ -91,11 +93,12 @@ public:
     void addEventListener(EventListener* listener, int event_type) { }
     void removeEventListener(EventListener* listener);
 
-    virtual void paint(GraphicsContext* context, int status /*= Style::NORMAL*/);
-    virtual void onPaint(GraphicsContext* context, int status /*= Style::NORMAL*/);
-    virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
-    virtual void drawContent(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
-    virtual void drawScroll(GraphicsContext* context, IntRect &rc, int status /*=Style::NORMAL*/);
+    virtual void paint(GraphicsContext* context, int status);
+    virtual void onPaint(GraphicsContext* context, int status);
+    virtual void drawBackground(GraphicsContext* context,
+            IntRect &rc, int status);
+    virtual void drawContent(GraphicsContext* context, IntRect &rc, int status);
+    virtual void drawScroll(GraphicsContext* context, IntRect &rc, int status);
 
     virtual void focusMe();
     bool setFocus(View *view);
@@ -113,7 +116,8 @@ public:
     void updateView(int x, int y, int w, int h);
     void updateView(const IntRect &rc);
 
-    virtual void onChildUpdateView(View *child, int x, int y, int w, int h, bool upBackGnd = true);
+    virtual void onChildUpdateView(View *child, \
+            int x, int y, int w, int h, bool upBackGnd = true);
     void updateViewRect(const IntRect &rc);
     void updateViewRect();
     void updateView(bool upBackGnd = true);
@@ -281,6 +285,9 @@ protected:
     View *m_prev;
     View *m_next;
 
+    CssComputed* m_css_computed;
+    CssBoxPrincipal* m_box_principal;
+
     IntRect m_rect;
 
     // to be deprecated
@@ -289,7 +296,8 @@ protected:
     int m_theme_drset_id;
     int m_drawLayer;
 
-    LISTEX(EventListener *, EventListenerList, do{return *v1 == *v2;}while (0), do{(*n)->unref();} while (0));
+    LISTEX(EventListener *, EventListenerList,
+            do{return *v1 == *v2;}while (0), do{(*n)->unref();} while (0));
     EventListenerList m_listeners;
     void releaseEventListeners();
 

@@ -33,7 +33,7 @@ namespace hfcl {
 
 class CssComputed : public Css {
 public:
-    CssComputed () {}
+    CssComputed (View* view);
     ~CssComputed ();
 
     virtual bool getProperty (CssPropertyIds pid, DWORD32 *value,
@@ -42,6 +42,7 @@ public:
             HTData data = 0);
 
 private:
+    View* m_view;
     DWORD32 m_values[MAX_CSS_PID];
     HTData m_data[MAX_CSS_PID];
 };
