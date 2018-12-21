@@ -19,11 +19,11 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "css/stylesheetdeclared.h"
+#include "css/cssdeclared.h"
 
 namespace hfcl {
 
-StyleSheetDeclared::~StyleSheetDeclared ()
+CssDeclared::~CssDeclared ()
 {
     PropertyValueMap::iterator it;
     for (it = m_map.begin(); it != m_map.end(); ++it) {
@@ -34,7 +34,7 @@ StyleSheetDeclared::~StyleSheetDeclared ()
     m_map.clear ();
 }
 
-bool StyleSheetDeclared::setMargin (DWORD32 value, HTData addData)
+bool CssDeclared::setMargin (DWORD32 value, HTData addData)
 {
     if (addData) {
 
@@ -71,7 +71,7 @@ error:
     return false;
 }
 
-bool StyleSheetDeclared::setPadding (DWORD32 value, HTData addData)
+bool CssDeclared::setPadding (DWORD32 value, HTData addData)
 {
     if (addData) {
 
@@ -108,7 +108,7 @@ error:
     return false;
 }
 
-bool StyleSheetDeclared::getProperty (PropertyIds pid, DWORD32 *value,
+bool CssDeclared::getProperty (PropertyIds pid, DWORD32 *value,
         HTData *data)
 {
     PropertyValueMap::iterator it = m_map.find (pid);
@@ -125,7 +125,7 @@ bool StyleSheetDeclared::getProperty (PropertyIds pid, DWORD32 *value,
     return true;
 }
 
-bool StyleSheetDeclared::setProperty (PropertyIds pid, DWORD32 value,
+bool CssDeclared::setProperty (PropertyIds pid, DWORD32 value,
     HTData data)
 {
     PropertyValue* pv;

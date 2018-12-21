@@ -19,28 +19,50 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "css/stylesheetdeclaredgroup.h"
+#ifndef HFCL_CSS_CSSBOX_H_
+#define HFCL_CSS_CSSBOX_H_
+
+#include "../common/common.h"
+#include "../common/object.h"
+#include "../common/stlalternative.h"
+#include "../view/view.h"
 
 namespace hfcl {
 
-StyleSheetDeclaredGroup::~StyleSheetDeclaredGroup()
-{
-    StyleSheetDeclaredVec::iterator it;
-    for (it = m_css_vec.begin(); it != m_css_vec.end(); ++it) {
-        StyleSheetDeclared* css = *it;
-        _DBG_PRINTF ("~StyleSheetDeclaredGroup: %p, %d\n", css, css->getRefCnt());
-        css->unref();
-    }
-    m_css_vec.clear();
+class CssBox : public Object {
+public:
+    CssBox(CssBox* parent);
+    virtual ~CssBox() {};
+
+protected:
+    struct CssBox {
+        int left;
+        int top;
+        int right;
+        int bottom;
+    };
+
+    struct Box m_box;
+    CssBox* m_prev;
+    BOxNode* m_next;
+};
+
+class CssBoxPrincipal : public CssBox {
+public:
+    CssBoxPrincipal(View* view, int nr_children);
+    ~CssBoxPrincipal();
+
+private:
+    View* m_view;
+    CssBox* m_children;
+    int nr_children;
 }
 
-bool StyleSheetDeclaredGroup::append(StyleSheetDeclared* css)
-{
-    css->ref();
-    _DBG_PRINTF ("StyleSheetDeclaredGroup::append: %p %d\n", css, css->getRefCnt());
-    m_css_vec.push_back(css);
-    return true;
-}
+namespace css {
+
+} // namespace css
 
 } // namespace hfcl
+
+#endif /* HFCL_CSS_CSSBOX_H_ */
 

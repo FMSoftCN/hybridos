@@ -229,7 +229,7 @@ Bitmap * GetBitmapRes(HTResId id)
     return NULL;
 }
 
-StyleSheetDeclared* GetCssRes(HTResId id)
+CssDeclared* GetCssRes(HTResId id)
 {
     ResPackage *resPkg = GetResPackageById(RPKGID(id));
 
@@ -239,7 +239,7 @@ StyleSheetDeclared* GetCssRes(HTResId id)
     return NULL;
 }
 
-StyleSheetDeclaredGroup* GetCssGroupRes(HTResId id)
+CssDeclaredGroup* GetCssGroupRes(HTResId id)
 {
     ResPackage *resPkg = GetResPackageById(RPKGID(id));
 

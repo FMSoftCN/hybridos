@@ -29,14 +29,14 @@
 #include "../common/common.h"
 #include "../common/stlalternative.h"
 #include "propertyvalue.h"
-#include "stylesheet.h"
+#include "css.h"
 
 namespace hfcl {
 
-class StyleSheetDeclared : public StyleSheet {
+class CssDeclared : public Css {
 public:
-    StyleSheetDeclared (const char* selector) : StyleSheet (selector) {}
-    ~StyleSheetDeclared ();
+    CssDeclared (const char* selector) : Css (selector) {}
+    ~CssDeclared ();
 
     // Operator for property background-attachment
     bool setBackgroundAttachment (DWORD32 value, HTData addData = 0) {

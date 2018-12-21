@@ -27,8 +27,8 @@
 #include "../view/viewcontext.h"
 #include "../resource/fontres.h"
 #include "../resource/imageres.h"
-#include "../css/stylesheetdeclared.h"
-#include "../css/stylesheetdeclaredgroup.h"
+#include "../css/cssdeclared.h"
+#include "../css/cssdeclaredgroup.h"
 
 namespace hfcl {
 
@@ -53,8 +53,8 @@ PAIR(DWORD, hfcl_const_str_t, TextResPair);
 MAP(DWORD, hfcl_const_str_t, TextResMap);
 VECTORCLASS(FontRes, FontResVec);
 VECTORCLASS(ImageRes, ImageResVec);
-VECTOR(StyleSheetDeclared*, StyleSheetResVec);
-VECTOR(StyleSheetDeclaredGroup*, StyleSheetGroupResVec);
+VECTOR(CssDeclared*, CssResVec);
+VECTOR(CssDeclaredGroup*, CssGroupResVec);
 VECTOR(CB_CREATE_VIEW, UiResVec);
 VECTOR(CB_CREATE_MENU, MenuResVec);
 
@@ -73,8 +73,8 @@ public:
     TextResMap &textRes(void);
     ImageResVec &imageRes(void);
     FontResVec &fontRes(void);
-    StyleSheetResVec &cssRes(void);
-    StyleSheetGroupResVec &cssGroupRes(void);
+    CssResVec &cssRes(void);
+    CssGroupResVec &cssGroupRes(void);
     UiResVec &uiRes(void);
     MenuResVec &menuRes(void);
 
@@ -112,8 +112,8 @@ public:
      */
     bool addImageResource(const ResourceEntry *images);
     bool addFontResource(const ResourceEntry *fonts);
-    bool addCssResource(StyleSheetDeclared* cssDeclared);
-    bool addCssGroupResource(StyleSheetDeclaredGroup* cssGroup);
+    bool addCssResource(CssDeclared* cssDeclared);
+    bool addCssGroupResource(CssDeclaredGroup* cssGroup);
     bool addUIResource(HTResId id, CB_CREATE_VIEW createView);
     bool addUIResource(UI_RES_ARRAY *pUIArray, int nUICount);
     bool addMenuResource(HTResId id, CB_CREATE_MENU createMenu);
@@ -139,8 +139,8 @@ public:
     Bitmap *getBitmap(HTResId id);
     GifAnimate *getGifAnimate(HTResId id);
     Logfont *getFont(HTResId id);
-    StyleSheetDeclared *getCss(HTResId id);
-    StyleSheetDeclaredGroup *getCssGroup(HTResId id);
+    CssDeclared *getCss(HTResId id);
+    CssDeclaredGroup *getCssGroup(HTResId id);
 
     CB_CREATE_VIEW getUi(HTResId id);
     CB_CREATE_MENU getMenu(HTResId id);

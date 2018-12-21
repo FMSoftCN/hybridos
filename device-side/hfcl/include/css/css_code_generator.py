@@ -14,9 +14,9 @@ import re
 
 TOOL_NAME="css_code_generator.py"
 SRC_FILE="propertylist.txt"
-PROPERTYVALUE_FILE="propertyvalue.h"
-STYLESHEETDECLARED_FILE="stylesheetdeclared.h"
-STYLESHEETINITIAL_FILE="../../src/css/stylesheetinitial.cc"
+PROPERTYVALUE_FILE="csspropertyvalue.h"
+STYLESHEETDECLARED_FILE="cssdeclared.h"
+STYLESHEETINITIAL_FILE="../../src/css/cssinitial.cc"
 
 RE_START_WITH_VALUES = re.compile(r"^\s+values:")
 def start_with_values(line):
@@ -237,14 +237,14 @@ def make_value_macro(property_token, value_token, inherited):
     value_id = value_id.upper()
 
     if inherited == "yes":
-        inherited = "PPT_FLAG_INHERITED, "
+        inherited = "CSS_PPT_FLAG_INHERITED, "
     else:
-        inherited = "PPT_FLAG_NOT_INHERITED, "
+        inherited = "CSS_PPT_FLAG_NOT_INHERITED, "
 
     if is_keyword(value_token):
-        return "MAKE_PROPERTY_VALUE(" + inherited + "PVT_KEYWORD, PVK_" + value_id + ")"
+        return "MAKE_CSS_PPT_VALUE(" + inherited + "PVT_KEYWORD, PVK_" + value_id + ")"
     else:
-        return "MAKE_PROPERTY_VALUE(" + inherited + "PVT_" + value_id + ", PVK_USER_DATA)"
+        return "MAKE_CSS_PPT_VALUE(" + inherited + "PVT_" + value_id + ", PVK_USER_DATA)"
 
 def make_initial_value(property_token, value_token, inherited):
     user_data = None
@@ -258,15 +258,15 @@ def make_initial_value(property_token, value_token, inherited):
     value_id = value_id.upper()
 
     if inherited == "yes":
-        inherited = "PPT_FLAG_INHERITED, "
+        inherited = "CSS_PPT_FLAG_INHERITED, "
     else:
-        inherited = "PPT_FLAG_NOT_INHERITED, "
+        inherited = "CSS_PPT_FLAG_NOT_INHERITED, "
 
     if is_keyword(value_token):
         user_data = None
-        return "MAKE_PROPERTY_VALUE(" + inherited + "PVT_KEYWORD, PVK_" + value_id + ")", user_data
+        return "MAKE_CSS_PPT_VALUE(" + inherited + "PVT_KEYWORD, PVK_" + value_id + ")", user_data
     else:
-        return "MAKE_PROPERTY_VALUE(" + inherited + "PVT_" + value_id + ", PVK_USER_DATA)", user_data
+        return "MAKE_CSS_PPT_VALUE(" + inherited + "PVT_" + value_id + ", PVK_USER_DATA)", user_data
 
 def make_operator_name(property_token):
     operator_name = ''.join(x for x in property_token.title() if x.isalnum())
@@ -304,10 +304,10 @@ def write_header(fout, header_guard):
     fout.write("#include \"../common/common.h\"\n")
     fout.write("#include \"../common/stlalternative.h\"\n")
 
-    if header_guard != "HFCL_CSS_PROPERTYVALUE_H_":
-        fout.write("#include \"propertyvalue.h\"\n")
-    if header_guard == "HFCL_CSS_STYLESHEETDECLARED_H_":
-        fout.write("#include \"stylesheet.h\"\n")
+    if header_guard != "HFCL_CSS_CSSPROPERTYVALUE_H_":
+        fout.write("#include \"csspropertyvalue.h\"\n")
+    if header_guard == "HFCL_CSS_CSSDECLARED_H_":
+        fout.write("#include \"css.h\"\n")
 
     fout.write("\n")
     fout.write("namespace hfcl {\n")
@@ -317,50 +317,50 @@ def write_values(fout, property_info, type_list, keyword_list):
     property_tokens = list(property_info.keys())
     property_tokens.sort()
 
-    fout.write("// The property identifiers\n")
-    fout.write("typedef enum _PropertyIds {\n")
+    fout.write("// The CSS property identifiers\n")
+    fout.write("typedef enum _CssPropertyIds {\n")
     for i in range(0, len(property_tokens)):
         fout.write("    // %s\n" %(property_tokens[i], ))
         fout.write("    %s,\n" %(make_property_id(property_tokens[i]), ))
     fout.write("    MAX_PID,\n")
-    fout.write("} PropertyIds;\n")
+    fout.write("} CssPropertyIds;\n")
     fout.write("\n")
 
-    fout.write("// The property value types\n")
-    fout.write("typedef enum _PropertyValueTypes {\n")
+    fout.write("// The CSS property value types\n")
+    fout.write("typedef enum _CssPropertyValueTypes {\n")
     fout.write("    PVT_NONE = 0,\n")
     fout.write("    PVT_KEYWORD,\n")
     for i in range(0, len(type_list)):
         fout.write("    %s,\n" %(make_value_type_id(type_list[i]), ))
     fout.write("    MAX_PVT,\n")
-    fout.write("} PropertyValueTypes;\n")
+    fout.write("} CssPropertyValueTypes;\n")
     fout.write("\n")
 
-    fout.write("// The property value keywords\n")
-    fout.write("typedef enum _PropertyValueKeywords {\n")
+    fout.write("// The CSS property value keywords\n")
+    fout.write("typedef enum _CssPropertyValueKeywords {\n")
     for i in range(0, len(keyword_list)):
         fout.write("    %s,\n" %(make_value_keyword_id(keyword_list[i]), ))
     fout.write("    PVK_USER_DATA,\n")
     fout.write("    MAX_PVK,\n")
-    fout.write("} PropertyValueKeywords;\n")
+    fout.write("} CssPropertyValueKeywords;\n")
     fout.write("\n")
 
-    fout.write("// The property values\n")
+    fout.write("// The CSS property values\n")
     fout.write("\n")
 
-    fout.write("#define PPT_FLAG_INHERITED     0x80000000\n")
-    fout.write("#define PPT_FLAG_NOT_INHERITED 0x00000000\n")
+    fout.write("#define CSS_PPT_FLAG_INHERITED     0x80000000\n")
+    fout.write("#define CSS_PPT_FLAG_NOT_INHERITED 0x00000000\n")
     fout.write("\n")
-    fout.write("#define MAKE_PROPERTY_VALUE(inherited, type, keyword)   \\\n")
+    fout.write("#define MAKE_CSS_CSS_PPT_VALUE(inherited, type, keyword)   \\\n")
     fout.write("    ((DWORD32)(                                         \\\n")
     fout.write("        ((DWORD32)((keyword) & 0xFFFF)) |               \\\n")
     fout.write("        ((DWORD32)((type) & 0x7FFF) << 16) |            \\\n")
     fout.write("        ((DWORD32)(inherited))                          \\\n")
     fout.write("    ))\n")
     fout.write("\n")
-    fout.write("#define PROPERTY_VALUE_INHERITED(value) ((value) & PPT_FLAG_INHERITED)\n")
-    fout.write("#define PROPERTY_VALUE_TYPE(value)      (((value) & 0x7FFF0000) >> 16)\n")
-    fout.write("#define PROPERTY_VALUE_KEYWORD(value)   ((value) & 0x0000FFFF)\n")
+    fout.write("#define CSS_PPT_VALUE_INHERITED(value) ((value) & CSS_PPT_FLAG_INHERITED)\n")
+    fout.write("#define CSS_PPT_VALUE_TYPE(value)      (((value) & 0x7FFF0000) >> 16)\n")
+    fout.write("#define CSS_PPT_VALUE_KEYWORD(value)   ((value) & 0x0000FFFF)\n")
     fout.write("\n")
 
     for i in range(0, len(property_tokens)):
@@ -369,7 +369,7 @@ def write_values(fout, property_info, type_list, keyword_list):
         value_list.sort()
         inherited = property_info[property_tokens[i]]['inherited']
 
-        fout.write("// Values for for property %s\n" % (property_tokens[i], ))
+        fout.write("// Values for property %s\n" % (property_tokens[i], ))
         for value in value_list:
             fout.write("#define %s \\\n" % (make_value_id (property_tokens[i], value), ))
             fout.write("    %s\n" % (make_value_macro (property_tokens[i], value, inherited), ))
@@ -380,18 +380,18 @@ def write_values(fout, property_info, type_list, keyword_list):
     return property_tokens
 
 def write_class_propertyvalue(fout, property_tokens, property_info):
-    fout.write("class PropertyValue {\n")
+    fout.write("class CssPropertyValue {\n")
     fout.write("public:\n")
-    fout.write("    PropertyValue();\n")
-    fout.write("    PropertyValue(DWORD32 value, HTData data = 0) {\n")
+    fout.write("    CssPropertyValue();\n")
+    fout.write("    CssPropertyValue(DWORD32 value, HTData data = 0) {\n")
     fout.write("        m_value = value; m_data = data;\n")
     fout.write("    }\n")
-    fout.write("    ~PropertyValue() {};\n")
+    fout.write("    ~CssPropertyValue() {};\n")
     fout.write("\n")
-    fout.write("    bool isInherited() const { return (bool)PROPERTY_VALUE_INHERITED(m_value); }\n")
+    fout.write("    bool isInherited() const { return (bool)CSS_PPT_VALUE_INHERITED(m_value); }\n")
     fout.write("    DWORD32 getValue() const { return m_value; }\n")
-    fout.write("    int getType() const { return PROPERTY_VALUE_TYPE(m_value); }\n")
-    fout.write("    int getKeyword() const { return PROPERTY_VALUE_KEYWORD(m_value); }\n")
+    fout.write("    int getType() const { return CSS_PPT_VALUE_TYPE(m_value); }\n")
+    fout.write("    int getKeyword() const { return CSS_PPT_VALUE_KEYWORD(m_value); }\n")
     fout.write("    HTData getData() const { return m_data; }\n")
     fout.write("    HTReal getDataAsNumber() const { return (HTReal)m_data; }\n")
     fout.write("    int getDataAsInteger() const { return (int)m_data; }\n")
@@ -405,11 +405,11 @@ def write_class_propertyvalue(fout, property_tokens, property_info):
     fout.write("    HTData m_data;\n")
     fout.write("};\n")
 
-def write_class_stylesheetdeclared(fout, property_tokens):
-    fout.write("class StyleSheetDeclared : public StyleSheet {\n")
+def write_class_cssdeclared(fout, property_tokens):
+    fout.write("class CssDeclared : public Css {\n")
     fout.write("public:\n")
-    fout.write("    StyleSheetDeclared (const char* selector) : StyleSheet (selector) {}\n")
-    fout.write("    ~StyleSheetDeclared ();\n")
+    fout.write("    CssDeclared (const char* selector) : Css (selector) {}\n")
+    fout.write("    ~CssDeclared ();\n")
     fout.write("\n")
 
     for i in range(0, len(property_tokens)):
@@ -423,10 +423,10 @@ def write_class_stylesheetdeclared(fout, property_tokens):
         fout.write("    }\n")
         fout.write("\n")
 
-    fout.write("    // The helper functions for setting property margin in batches.\n")
+    fout.write("    // The helper functions for setting margin-* properties in batches.\n")
     fout.write("    bool setMargin (DWORD32 value, HTData addData = 0);\n")
     fout.write("\n")
-    fout.write("    // The helper functions for setting property margin in batches.\n")
+    fout.write("    // The helper functions for setting padding-* properties in batches.\n")
     fout.write("    bool setPadding (DWORD32 value, HTData addData = 0);\n")
     fout.write("\n")
     fout.write("    virtual bool getProperty (PropertyIds pid, DWORD32 *value,\n")
@@ -439,9 +439,9 @@ def write_class_stylesheetdeclared(fout, property_tokens):
     fout.write("     * for map, the size of key type must be aligned at intptr_t.\n")
     fout.write("     * Or it->second cannot work correctly, you will get SEGV.\n")
     fout.write("     */\n")
-    fout.write("    MAP(intptr_t, PropertyValue*, PropertyValueMap);\n")
+    fout.write("    MAP(intptr_t, CssPropertyValue*, CssPropertyValueMap);\n")
     fout.write("\n")
-    fout.write("    PropertyValueMap m_map;\n")
+    fout.write("    CssPropertyValueMap m_map;\n")
     fout.write("};\n")
 
 def write_footer(fout, header_guard):
@@ -450,7 +450,7 @@ def write_footer(fout, header_guard):
     fout.write("\n")
     fout.write("#endif /* %s */\n" % (header_guard, ))
 
-def write_class_stylesheetinitial(fout, property_info):
+def write_class_cssinitial(fout, property_info):
     property_tokens = list(property_info.keys())
     property_tokens.sort()
 
@@ -479,13 +479,13 @@ def write_class_stylesheetinitial(fout, property_info):
     fout.write("// This file is auto-generated by using '%s'.\n" % (TOOL_NAME, ))
     fout.write("// Please take care when you modify this file mannually.\n")
     fout.write("\n")
-    fout.write("#include \"css/stylesheetinitial.h\"\n")
+    fout.write("#include \"css/cssinitial.h\"\n")
     fout.write("\n")
     fout.write("namespace hfcl {\n")
     fout.write("\n")
-    fout.write("StyleSheetInitial* StyleSheetInitial::s_singleton = NULL;\n")
+    fout.write("CssInitial* CssInitial::s_singleton = NULL;\n")
     fout.write("\n")
-    fout.write("StyleSheetInitial::StyleSheetInitial ()\n")
+    fout.write("CssInitial::CssInitial ()\n")
     fout.write("{\n")
 
     fout.write("\n")
@@ -552,7 +552,7 @@ if __name__ == "__main__":
 
     print("Writting header to dst file %s..." % PROPERTYVALUE_FILE)
     try:
-        write_header(fdst, "HFCL_CSS_PROPERTYVALUE_H_")
+        write_header(fdst, "HFCL_CSS_CSSPROPERTYVALUE_H_")
     except:
         print("FAILED")
         sys.exit(4)
@@ -576,7 +576,7 @@ if __name__ == "__main__":
 
     print("Writting footer to dst file %s..." % PROPERTYVALUE_FILE)
     try:
-        write_footer(fdst, "HFCL_CSS_PROPERTYVALUE_H_")
+        write_footer(fdst, "HFCL_CSS_CSSPROPERTYVALUE_H_")
     except:
         print("FAILED")
         sys.exit(7)
@@ -591,15 +591,15 @@ if __name__ == "__main__":
 
     print("Writting header to dst file %s..." % STYLESHEETDECLARED_FILE)
     try:
-        write_header(fdst, "HFCL_CSS_STYLESHEETDECLARED_H_")
+        write_header(fdst, "HFCL_CSS_CSSDECLARED_H_")
     except:
         print("FAILED")
         sys.exit(9)
     print("DONE")
 
-    print("Writting class StyleSheetDeclared to dst file %s..." % STYLESHEETDECLARED_FILE)
+    print("Writting class CssDeclared to dst file %s..." % STYLESHEETDECLARED_FILE)
     try:
-        write_class_stylesheetdeclared(fdst, property_tokens)
+        write_class_cssdeclared(fdst, property_tokens)
     except:
         print("FAILED")
         sys.exit(10)
@@ -607,7 +607,7 @@ if __name__ == "__main__":
 
     print("Writting footer to dst file %s..." % STYLESHEETDECLARED_FILE)
     try:
-        write_footer(fdst, "HFCL_CSS_STYLESHEETDECLARED_H_")
+        write_footer(fdst, "HFCL_CSS_CSSDECLARED_H_")
     except:
         print("FAILED")
         sys.exit(11)
@@ -620,9 +620,9 @@ if __name__ == "__main__":
         print("%s: failed to open output file %s" % (TOOL_NAME, STYLESHEETINITIAL_FILE, ))
         sys.exit(12)
 
-    print("Writting class StyleSheetInitial to dst file %s..." % STYLESHEETINITIAL_FILE)
+    print("Writting class CssInitial to dst file %s..." % STYLESHEETINITIAL_FILE)
     try:
-        write_class_stylesheetinitial(fdst, property_info)
+        write_class_cssinitial(fdst, property_info)
     except:
         print("FAILED")
         sys.exit(13)

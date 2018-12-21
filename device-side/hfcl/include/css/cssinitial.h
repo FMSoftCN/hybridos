@@ -25,14 +25,14 @@
 #include "../common/common.h"
 #include "../common/stlalternative.h"
 #include "propertyvalue.h"
-#include "stylesheet.h"
+#include "css.h"
 
 namespace hfcl {
 
-class StyleSheetInitial : public StyleSheet {
+class CssInitial : public Css {
 public:
-    StyleSheetInitial();
-    ~StyleSheetInitial() {}
+    CssInitial();
+    ~CssInitial() {}
 
     virtual bool getProperty(PropertyIds pid, DWORD32 *value,
             HTData *data = NULL) {
@@ -51,14 +51,14 @@ public:
         return true;
     }
 
-    static StyleSheetInitial* getSingleton(void) {
+    static CssInitial* getSingleton(void) {
         if (s_singleton == NULL)
-            s_singleton = HFCL_NEW_EX(StyleSheetInitial, ());
+            s_singleton = HFCL_NEW_EX(CssInitial, ());
         return s_singleton;
     }
 
 private:
-    static StyleSheetInitial* s_singleton;
+    static CssInitial* s_singleton;
 
     DWORD32 m_values[MAX_PID];
     HTData m_data[MAX_PID];

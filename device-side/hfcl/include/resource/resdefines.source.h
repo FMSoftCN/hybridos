@@ -109,14 +109,14 @@
     (HTResId)(img_id) },
 
 //sys resource
-#define sys_css(name)           GetStyleSheetRes(SYSRESID(css_##name))
+#define sys_css(name)           GetCssRes(SYSRESID(css_##name))
 #define sys_image(name)         GetImageRes(SYSRESID(img_##name))
 #define sys_font(name)          GetFontRes(SYSRESID(font_##name))
 #define sys_bmpfont_image(name) (SYSRESID(img_bmpfont_##name))
 #define sys_bmpfont(name)       (SYSRESID(bmpfont_##name))
 
 //style resource
-#define self_css(name)          GetStyleSheetRes(RESID(css_##name))
+#define self_css(name)          GetCssRes(RESID(css_##name))
 #define self_image(name)        GetImageRes(RESID(img_##name))
 #define self_gif(name)          GetGifAnimateRes(RESID(img_##name))
 #define self_bmpfont_image(name)    (RESID(img_bmpfont_##name))
@@ -312,14 +312,14 @@ static int* array_quad_int (int a, int b, int c, int d)
 #define begin_item_ex(view_class, ssid)  \
     do {    \
         view_class* __view  \
-            = HFCL_NEW_EX(view_class, (NULL, GetStyleSheetRes(ssid))); \
+            = HFCL_NEW_EX(view_class, (NULL, GetCssRes(ssid))); \
         ((ListView*)_parent)->addItem((ItemView*)__view);   \
         View *_parent = (View*)__view;
 
 #define begin_composite_view(view_class, ss_set_id) \
     do {                            \
         view_class* __view =        \
-            HFCL_NEW_EX(view_class, (_parent, GeStyleSheetSetRes(ss_set_id))); \
+            HFCL_NEW_EX(view_class, (_parent, GeCssSetRes(ss_set_id))); \
         View* _parent = (View*)__view;
 
 #define end_item end_view
@@ -401,8 +401,8 @@ static int* array_quad_int (int a, int b, int c, int d)
 #define setProperty(pid, value, user_data)   \
     __view->setProperty((pid), (value), (HTData)(user_data));
 
-#define addStyleSheet(style)    __view->addStyleSheet(style);
-#define removeStyleSheet(style) __view->removeStyleSheet(style);
+#define addCss(style)    __view->addCss(style);
+#define removeCss(style) __view->removeCss(style);
 #define _m(Name, args)          __view->Name args;
 
 #define map(name_id)                            \

@@ -19,9 +19,32 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "css/stylesheet.h"
+#ifndef HFCL_CSS_STYLESHEETDECLAREDGROUP_H_
+#define HFCL_CSS_STYLESHEETDECLAREDGROUP_H_
+
+#include "../css/cssdeclared.h"
+#include "../common/object.h"
 
 namespace hfcl {
 
+class CssDeclaredGroup : public RefCount {
+public:
+    CssDeclaredGroup() {}
+    ~CssDeclaredGroup();
+
+    bool append(CssDeclared* css);
+
+private:
+    VECTOR(CssDeclared*, CssDeclaredVec);
+
+    CssDeclaredVec m_css_vec;
+};
+
+namespace css {
+
+} // namespace css
+
 } // namespace hfcl
+
+#endif /* HFCL_CSS_STYLESHEETDECLAREDGROUP_H_ */
 

@@ -19,32 +19,28 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef HFCL_CSS_STYLESHEETDECLAREDGROUP_H_
-#define HFCL_CSS_STYLESHEETDECLAREDGROUP_H_
-
-#include "../css/stylesheetdeclared.h"
-#include "../common/object.h"
+#include "css/cssdeclaredgroup.h"
 
 namespace hfcl {
 
-class StyleSheetDeclaredGroup : public RefCount {
-public:
-    StyleSheetDeclaredGroup() {}
-    ~StyleSheetDeclaredGroup();
+CssDeclaredGroup::~CssDeclaredGroup()
+{
+    CssDeclaredVec::iterator it;
+    for (it = m_css_vec.begin(); it != m_css_vec.end(); ++it) {
+        CssDeclared* css = *it;
+        _DBG_PRINTF ("~CssDeclaredGroup: %p, %d\n", css, css->getRefCnt());
+        css->unref();
+    }
+    m_css_vec.clear();
+}
 
-    bool append(StyleSheetDeclared* css);
-
-private:
-    VECTOR(StyleSheetDeclared*, StyleSheetDeclaredVec);
-
-    StyleSheetDeclaredVec m_css_vec;
-};
-
-namespace css {
-
-} // namespace css
+bool CssDeclaredGroup::append(CssDeclared* css)
+{
+    css->ref();
+    _DBG_PRINTF ("CssDeclaredGroup::append: %p %d\n", css, css->getRefCnt());
+    m_css_vec.push_back(css);
+    return true;
+}
 
 } // namespace hfcl
-
-#endif /* HFCL_CSS_STYLESHEETDECLAREDGROUP_H_ */
 

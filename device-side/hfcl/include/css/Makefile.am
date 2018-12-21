@@ -4,10 +4,10 @@ myincludedir=$(includedir)/hfcl/css
 # Which header files to install
 myinclude_HEADERS= \
     propertyvalue.h \
-    stylesheet.h \
-    stylesheetinitial.h \
-    stylesheetdeclared.h \
-    stylesheetdeclaredgroup.h
+    css.h \
+    cssinitial.h \
+    cssdeclared.h \
+    cssdeclaredgroup.h
 
 EXTRA_DIST= \
     css_code_generator.py

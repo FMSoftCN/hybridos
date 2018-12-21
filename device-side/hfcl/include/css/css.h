@@ -29,11 +29,11 @@
 
 namespace hfcl {
 
-class StyleSheet : public RefCount {
+class Css : public RefCount {
 public:
-    StyleSheet() : m_selector (NULL) {}
-    StyleSheet(const char* selector) : m_selector (selector) {}
-    virtual ~StyleSheet() {}
+    Css() : m_selector (NULL) {}
+    Css(const char* selector) : m_selector (selector) {}
+    virtual ~Css() {}
 
     virtual bool getProperty(PropertyIds pid, DWORD32 *value,
             HTData *data = NULL) = 0;
