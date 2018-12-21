@@ -45,11 +45,12 @@ protected:
     int m_paddings[4];
 };
 
-// Block-level box
+// Block box
 //
-// A block-level box may contain only block-level boxes
+// A block box may contain only block-level boxes
 // or contain only inline-level boxes, or it is not a
 // container.
+//
 // HFCL dose not generate anonymous block boxes.
 //
 // Ref: https://www.w3.org/TR/CSS22/visuren.html#block-boxes
@@ -65,10 +66,9 @@ private:
     View* m_view;
 };
 
-// Inline-level boxes
+// Inline box
 //
-// In HFCL, all inline-level boxes are atomic inline-level boxes.
-// HFCL dose not generate anonymous inline boxes either.
+// HFCL dose not generate anonymous inline boxes.
 //
 // Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-boxes
 class CssBoxInline : public CssBox
@@ -98,7 +98,7 @@ protected:
 private:
 };
 
-// Block-level box acts as a line box container
+// Block box acts as a line box container
 //
 // Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
 class CssBoxLineBoxContainer : public CssBoxBlock
