@@ -23,7 +23,7 @@
 #define HFCL_SAMPLES_SYS_RES_H__
 
 #include <hfcl/resource/respkgmanager.h>
-#include <hfcl/css/stylesheetdeclared.h>
+#include <hfcl/css.h>
 
 #define RESPKGID     RESPKGID_NAME(sys)
 #define RESID(name)  RESID_PKG(sys, name)

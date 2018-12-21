@@ -25,9 +25,9 @@ namespace hfcl {
 
 CssDeclared::~CssDeclared ()
 {
-    PropertyValueMap::iterator it;
+    CssPropertyValueMap::iterator it;
     for (it = m_map.begin(); it != m_map.end(); ++it) {
-        PropertyValue* pv = it->second;
+        CssPropertyValue* pv = it->second;
         HFCL_DELETE(pv);
     }
 
@@ -108,15 +108,15 @@ error:
     return false;
 }
 
-bool CssDeclared::getProperty (PropertyIds pid, DWORD32 *value,
+bool CssDeclared::getProperty (CssPropertyIds pid, DWORD32 *value,
         HTData *data)
 {
-    PropertyValueMap::iterator it = m_map.find (pid);
+    CssPropertyValueMap::iterator it = m_map.find (pid);
     if (it == m_map.end ()) {
         return false;
     }
 
-    PropertyValue* pv = m_map [pid];
+    CssPropertyValue* pv = m_map [pid];
     if (value)
         *value = pv->getValue();
     if (data)
@@ -125,21 +125,21 @@ bool CssDeclared::getProperty (PropertyIds pid, DWORD32 *value,
     return true;
 }
 
-bool CssDeclared::setProperty (PropertyIds pid, DWORD32 value,
+bool CssDeclared::setProperty (CssPropertyIds pid, DWORD32 value,
     HTData data)
 {
-    PropertyValue* pv;
-    PropertyValueMap::iterator it = m_map.find(pid);
+    CssPropertyValue* pv;
+    CssPropertyValueMap::iterator it = m_map.find(pid);
 
     /* TODO: check validity of the value */
 
     if (it == m_map.end()) {
-        pv = HFCL_NEW_EX(PropertyValue, (value, data));
+        pv = HFCL_NEW_EX(CssPropertyValue, (value, data));
         m_map [pid] = pv;
         return true;
     }
     else {
-        PropertyValue* pv = (PropertyValue*)it->second;
+        CssPropertyValue* pv = (CssPropertyValue*)it->second;
         pv->setValue(value, data);
     }
 

@@ -9,6 +9,7 @@ myinclude_HEADERS= \
     hfcl.h \
     common.h \
     activity.h \
+    css.h \
     view.h \
     graphics.h \
     drawable.h \

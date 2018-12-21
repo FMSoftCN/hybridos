@@ -25,7 +25,7 @@
 #include "../common/common.h"
 #include "../common/object.h"
 #include "../common/stlalternative.h"
-#include "propertyvalue.h"
+#include "csspropertyvalue.h"
 
 namespace hfcl {
 
@@ -35,9 +35,9 @@ public:
     Css(const char* selector) : m_selector (selector) {}
     virtual ~Css() {}
 
-    virtual bool getProperty(PropertyIds pid, DWORD32 *value,
+    virtual bool getProperty(CssPropertyIds pid, DWORD32 *value,
             HTData *data = NULL) = 0;
-    virtual bool setProperty(PropertyIds pid, DWORD32 value,
+    virtual bool setProperty(CssPropertyIds pid, DWORD32 value,
             HTData data = 0) = 0;
 
 protected:
