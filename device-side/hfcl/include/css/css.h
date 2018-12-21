@@ -25,23 +25,19 @@
 #include "../common/common.h"
 #include "../common/object.h"
 #include "../common/stlalternative.h"
-#include "csspropertyvalue.h"
+#include "../css/csspropertyvalue.h"
 
 namespace hfcl {
 
 class Css : public RefCount {
 public:
-    Css() : m_selector (NULL) {}
-    Css(const char* selector) : m_selector (selector) {}
+    Css() {}
     virtual ~Css() {}
 
     virtual bool getProperty(CssPropertyIds pid, DWORD32 *value,
             HTData *data = NULL) = 0;
     virtual bool setProperty(CssPropertyIds pid, DWORD32 value,
             HTData data = 0) = 0;
-
-protected:
-    const char* m_selector;
 };
 
 namespace css {

@@ -28,14 +28,14 @@
 
 #include "../common/common.h"
 #include "../common/stlalternative.h"
-#include "csspropertyvalue.h"
-#include "css.h"
+#include "../css/csspropertyvalue.h"
+#include "../css/css.h"
 
 namespace hfcl {
 
 class CssDeclared : public Css {
 public:
-    CssDeclared (const char* selector) : Css (selector) {}
+    CssDeclared (const char* selector) : m_selector (selector) {}
     ~CssDeclared ();
 
     // Operator for property background-attachment
@@ -468,6 +468,9 @@ public:
             HTData *data = NULL);
     virtual bool setProperty (CssPropertyIds pid, DWORD32 value,
             HTData data = 0);
+
+protected:
+    const char* m_selector;
 
 private:
     /* VincentWei:

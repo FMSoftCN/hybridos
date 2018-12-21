@@ -24,8 +24,8 @@
 
 #include "../common/common.h"
 #include "../common/stlalternative.h"
-#include "csspropertyvalue.h"
-#include "css.h"
+#include "../css/csspropertyvalue.h"
+#include "../css/css.h"
 
 namespace hfcl {
 

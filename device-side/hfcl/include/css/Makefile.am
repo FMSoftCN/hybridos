@@ -7,6 +7,7 @@ myinclude_HEADERS= \
     css.h \
     cssinitial.h \
     cssdeclared.h \
+    csscomputed.h \
     cssdeclaredgroup.h
 
 EXTRA_DIST= \

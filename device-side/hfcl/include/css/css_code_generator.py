@@ -305,9 +305,9 @@ def write_header(fout, header_guard):
     fout.write("#include \"../common/stlalternative.h\"\n")
 
     if header_guard != "HFCL_CSS_CSSPROPERTYVALUE_H_":
-        fout.write("#include \"csspropertyvalue.h\"\n")
+        fout.write("#include \"../css/csspropertyvalue.h\"\n")
     if header_guard == "HFCL_CSS_CSSDECLARED_H_":
-        fout.write("#include \"css.h\"\n")
+        fout.write("#include \"../css/css.h\"\n")
 
     fout.write("\n")
     fout.write("namespace hfcl {\n")
@@ -408,7 +408,7 @@ def write_class_propertyvalue(fout, property_tokens, property_info):
 def write_class_cssdeclared(fout, property_tokens):
     fout.write("class CssDeclared : public Css {\n")
     fout.write("public:\n")
-    fout.write("    CssDeclared (const char* selector) : Css (selector) {}\n")
+    fout.write("    CssDeclared (const char* selector) : m_selector (selector) {}\n")
     fout.write("    ~CssDeclared ();\n")
     fout.write("\n")
 
@@ -433,6 +433,9 @@ def write_class_cssdeclared(fout, property_tokens):
     fout.write("            HTData *data = NULL);\n")
     fout.write("    virtual bool setProperty (CssPropertyIds pid, DWORD32 value,\n")
     fout.write("            HTData data = 0);\n")
+    fout.write("\n")
+    fout.write("protected:\n")
+    fout.write("    const char* m_selector;\n")
     fout.write("\n")
     fout.write("private:\n")
     fout.write("    /* VincentWei:\n")
