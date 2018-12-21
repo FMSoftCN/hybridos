@@ -25,18 +25,28 @@ namespace hfcl {
 
 CssComputed::~CssComputed ()
 {
+    memset(&m_values, 0, sizeof(m_values));
+    memset(&m_data, 0, sizeof(m_data));
 }
 
 bool CssComputed::getProperty (CssPropertyIds pid, DWORD32 *value,
         HTData *data)
 {
+    if (value) {
+        *value = m_values[pid];
+    }
+    if (data) {
+        *data = m_data[pid];
+    }
     return true;
 }
 
 bool CssComputed::setProperty (CssPropertyIds pid, DWORD32 value,
     HTData data)
 {
-    return false;
+    m_values[pid] = value;
+    m_data[pid] = data;
+    return true;
 }
 
 } // namespace hfcl

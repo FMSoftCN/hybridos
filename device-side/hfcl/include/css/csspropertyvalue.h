@@ -547,19 +547,31 @@ typedef enum _CssPropertyValueKeywords {
 
 // The CSS property values
 
-#define CSS_PPT_FLAG_INHERITED     0x80000000
-#define CSS_PPT_FLAG_NOT_INHERITED 0x00000000
+#define CSS_PPT_FLAG_INHERITED      0x80000000
+#define CSS_PPT_FLAG_NOT_INHERITED  0x00000000
+#define CSS_PPT_INHERITED(value)    ((value) & CSS_PPT_FLAG_INHERITED)
 
-#define MAKE_CSS_PPT_VALUE(inherited, type, keyword)   \
+#define MAKE_CSS_PPT_VALUE(inherited, type, keyword)    \
     ((DWORD32)(                                         \
         ((DWORD32)((keyword) & 0xFFFF)) |               \
-        ((DWORD32)((type) & 0x7FFF) << 16) |            \
+        ((DWORD32)((type) & 0x0FFF) << 16) |            \
         ((DWORD32)(inherited))                          \
     ))
 
-#define CSS_PPT_VALUE_INHERITED(value) ((value) & CSS_PPT_FLAG_INHERITED)
-#define CSS_PPT_VALUE_TYPE(value)      (((value) & 0x7FFF0000) >> 16)
-#define CSS_PPT_VALUE_KEYWORD(value)   ((value) & 0x0000FFFF)
+#define CSS_PPT_VALUE_TYPE(value)       (((value) & 0x0FFF0000) >> 16)
+#define CSS_PPT_VALUE_KEYWORD(value)    ((value) & 0x0000FFFF)
+
+#define CSS_PPT_VALUE_FLAG_INHERITED    0x40000000
+#define CSS_PPT_VALUE_INHERITED(value) \
+    ((value) & CSS_PPT_VALUE_FLAG_INHERITED)
+#define MARK_CSS_PPT_VALUE_INHERITED(value) \
+    ((value) |= CSS_PPT_VALUE_FLAG_INHERITED)
+
+#define CSS_PPT_VALUE_FLAG_COMPUTED     0x20000000
+#define CSS_PPT_VALUE_COMPUTED(value) \
+    ((value) & CSS_PPT_VALUE_FLAG_COMPUTED)
+#define MARK_CSS_PPT_VALUE_COMPUTED(value) \
+    ((value) |= CSS_PPT_VALUE_FLAG_COMPUTED)
 
 // Values for property background-attachment
 #define PV_BACKGROUND_ATTACHMENT_FIXED \
@@ -4946,14 +4958,13 @@ public:
     }
     ~CssPropertyValue() {};
 
+    bool isInheritable() const { return (bool)CSS_PPT_INHERITED(m_value); }
     bool isInherited() const { return (bool)CSS_PPT_VALUE_INHERITED(m_value); }
+    bool isComputed() const { return (bool)CSS_PPT_VALUE_COMPUTED(m_value); }
     DWORD32 getValue() const { return m_value; }
     int getType() const { return CSS_PPT_VALUE_TYPE(m_value); }
     int getKeyword() const { return CSS_PPT_VALUE_KEYWORD(m_value); }
     HTData getData() const { return m_data; }
-    HTReal getDataAsNumber() const { return (HTReal)m_data; }
-    int getDataAsInteger() const { return (int)m_data; }
-    const char* getDataAsCString() const { return (const char*)m_data; }
     void setValue(DWORD32 value, HTData data = 0) {
         m_value = value; m_data = data;
     }
