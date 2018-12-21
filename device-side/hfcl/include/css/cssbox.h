@@ -23,6 +23,7 @@
 #define HFCL_CSS_CSSBOX_H_
 
 #include "../common/common.h"
+#include "../common/intrect.h"
 #include "../common/object.h"
 #include "../common/stlalternative.h"
 #include "../view/view.h"
@@ -35,30 +36,82 @@ public:
     virtual ~CssBox() {};
 
 protected:
-    struct Box {
-        int left;
-        int top;
-        int right;
-        int bottom;
-    };
+    IntRect m_margin_box;
+    IntRect m_content_box;
 
-    struct Box m_box;
+    /* left, top, right, bottom */
+    int m_margins[4];
+    int m_borders[4];
+    int m_paddings[4];
 };
 
-class CssBoxPrincipal : public CssBox {
+// Block-level box
+//
+// A block-level box may contain only block-level boxes
+// or contain only inline-level boxes, or it is not a
+// container.
+// HFCL dose not generate anonymous block boxes.
+//
+// Ref: https://www.w3.org/TR/CSS22/visuren.html#block-boxes
+class CssBoxBlock : public CssBox
+{
 public:
-    CssBoxPrincipal(View* view) : m_view(view) {}
-    virtual ~CssBoxPrincipal();
+    CssBoxBlock(View* view);
+    virtual ~CssBoxBlock();
 
 protected:
-    bool appendChildBox(CssBox* child);
-    CssBox* getChild(int idx);
 
 private:
-    VECTOR(CssBox*, CssBoxVec);
-
     View* m_view;
-    CssBoxVec m_children;
+};
+
+// Inline-level boxes
+//
+// In HFCL, all inline-level boxes are atomic inline-level boxes.
+// HFCL dose not generate anonymous inline boxes either.
+//
+// Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-boxes
+class CssBoxInline : public CssBox
+{
+public:
+    CssBoxInline(View* view);
+    virtual ~CssBoxInline();
+
+protected:
+
+private:
+    View* m_view;
+};
+
+// Line box
+// The inline boxes in a line box will be referred by the view
+//
+// Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
+class CssBoxLine : public CssBoxBlock
+{
+public:
+    CssBoxLine(View* view);
+    virtual ~CssBoxLine();
+
+protected:
+
+private:
+};
+
+// Block-level box acts as a line box container
+//
+// Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
+class CssBoxLineBoxContainer : public CssBoxBlock
+{
+public:
+    CssBoxLineBoxContainer(View* view);
+    virtual ~CssBoxLineBoxContainer();
+
+protected:
+
+private:
+    VECTOR(CssBoxLine*, CssBoxLineVec);
+    CssBoxLineVec m_lines;
 };
 
 namespace css {

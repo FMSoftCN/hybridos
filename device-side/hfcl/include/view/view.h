@@ -34,7 +34,7 @@ namespace hfcl {
 class GraphicsContext;
 class ContainerView;
 class CssComputed;
-class CssBoxPrincipal;
+class CssBox;
 
 enum {
     PAINT_STATUS_SHIFT = 24,
@@ -285,12 +285,17 @@ protected:
     View *m_prev;
     View *m_next;
 
+    // CSS-related members
+    // The computed values of all CSS properties.
     CssComputed* m_css_computed;
-    CssBoxPrincipal* m_box_principal;
-
-    IntRect m_rect;
+    // The pricipal box of this view, either a CssBoxBlock,
+    // a CssBoxInline, or a CssBoxLineBoxContainer
+    CssBox* m_box_principal;
+    // The additional box of this view if Property display is list-item.
+    CssBox* m_box_additional;
 
     // to be deprecated
+    IntRect m_rect;
     DrawableSet* m_drset;
     unsigned char m_alpha;
     int m_theme_drset_id;

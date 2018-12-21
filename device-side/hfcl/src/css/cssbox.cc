@@ -25,14 +25,16 @@ namespace hfcl {
 
 CssBox::CssBox()
 {
-    memset (&m_box, 0, sizeof (m_box));
+    memset (&m_margins, 0, sizeof (m_margins));
+    memset (&m_borders, 0, sizeof (m_borders));
+    memset (&m_paddings, 0, sizeof (m_paddings));
 }
 
-CssBoxPrincipal::~CssBoxPrincipal()
+CssBoxLineBoxContainer::~CssBoxLineBoxContainer()
 {
-    CssBoxVec::iterator it;
-    for (it = m_children.begin(); it != m_children.end(); ++it) {
-        CssBox* box = *it;
+    CssBoxLineVec::iterator it;
+    for (it = m_lines.begin(); it != m_lines.end(); ++it) {
+        CssBoxLine* box = *it;
         HFCL_DELETE(box);
     }
 }
