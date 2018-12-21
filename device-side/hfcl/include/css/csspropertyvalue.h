@@ -201,7 +201,7 @@ typedef enum _CssPropertyIds {
     PID_WORD_SPACING,
     // z-index
     PID_Z_INDEX,
-    MAX_PID,
+    MAX_CSS_PID,
 } CssPropertyIds;
 
 // The CSS property value types
@@ -244,11 +244,12 @@ typedef enum _CssPropertyValueTypes {
     PVT_STRING,
     PVT_SYSID,
     PVT_URL,
-    MAX_PVT,
+    MAX_CSS_PVT,
 } CssPropertyValueTypes;
 
 // The CSS property value keywords
 typedef enum _CssPropertyValueKeywords {
+    PVK_UNDEFINED = 0,
     PVK_100,
     PVK_200,
     PVK_300,
@@ -541,7 +542,7 @@ typedef enum _CssPropertyValueKeywords {
     PVK_XX_LARGE,
     PVK_XX_SMALL,
     PVK_USER_DATA,
-    MAX_PVK,
+    MAX_CSS_PVK,
 } CssPropertyValueKeywords;
 
 // The CSS property values

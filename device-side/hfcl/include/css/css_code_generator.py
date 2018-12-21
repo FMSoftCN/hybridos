@@ -322,7 +322,7 @@ def write_values(fout, property_info, type_list, keyword_list):
     for i in range(0, len(property_tokens)):
         fout.write("    // %s\n" %(property_tokens[i], ))
         fout.write("    %s,\n" %(make_property_id(property_tokens[i]), ))
-    fout.write("    MAX_PID,\n")
+    fout.write("    MAX_CSS_PID,\n")
     fout.write("} CssPropertyIds;\n")
     fout.write("\n")
 
@@ -332,16 +332,17 @@ def write_values(fout, property_info, type_list, keyword_list):
     fout.write("    PVT_KEYWORD,\n")
     for i in range(0, len(type_list)):
         fout.write("    %s,\n" %(make_value_type_id(type_list[i]), ))
-    fout.write("    MAX_PVT,\n")
+    fout.write("    MAX_CSS_PVT,\n")
     fout.write("} CssPropertyValueTypes;\n")
     fout.write("\n")
 
     fout.write("// The CSS property value keywords\n")
     fout.write("typedef enum _CssPropertyValueKeywords {\n")
+    fout.write("    PVK_UNDEFINED = 0,\n")
     for i in range(0, len(keyword_list)):
         fout.write("    %s,\n" %(make_value_keyword_id(keyword_list[i]), ))
     fout.write("    PVK_USER_DATA,\n")
-    fout.write("    MAX_PVK,\n")
+    fout.write("    MAX_CSS_PVK,\n")
     fout.write("} CssPropertyValueKeywords;\n")
     fout.write("\n")
 

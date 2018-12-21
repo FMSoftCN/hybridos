@@ -42,8 +42,8 @@ public:
             HTData data = 0);
 
 private:
-    DWORD32 m_values[MAX_PID];
-    HTData m_data[MAX_PID];
+    DWORD32 m_values[MAX_CSS_PID];
+    HTData m_data[MAX_CSS_PID];
 };
 
 } // namespace hfcl
