@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef HFCL_CSS_STYLESHEETINITIAL_H_
-#define HFCL_CSS_STYLESHEETINITIAL_H_
+#ifndef HFCL_CSS_CSSINITIAL_H_
+#define HFCL_CSS_CSSINITIAL_H_
 
 #include "../common/common.h"
 #include "../common/stlalternative.h"
@@ -70,5 +70,5 @@ namespace css {
 
 } // namespace hfcl
 
-#endif /* HFCL_CSS_STYLESHEETINITIAL_H_ */
+#endif /* HFCL_CSS_CSSINITIAL_H_ */
 

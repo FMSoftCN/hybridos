@@ -35,7 +35,7 @@ public:
     virtual ~CssBox() {};
 
 protected:
-    struct CssBox {
+    struct Box {
         int left;
         int top;
         int right;

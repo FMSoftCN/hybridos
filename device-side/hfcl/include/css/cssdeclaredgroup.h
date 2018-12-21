@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef HFCL_CSS_STYLESHEETDECLAREDGROUP_H_
-#define HFCL_CSS_STYLESHEETDECLAREDGROUP_H_
+#ifndef HFCL_CSS_CSSDECLAREDGROUP_H_
+#define HFCL_CSS_CSSDECLAREDGROUP_H_
 
 #include "../css/cssdeclared.h"
 #include "../common/object.h"
@@ -46,5 +46,5 @@ namespace css {
 
 } // namespace hfcl
 
-#endif /* HFCL_CSS_STYLESHEETDECLAREDGROUP_H_ */
+#endif /* HFCL_CSS_CSSDECLAREDGROUP_H_ */
 
