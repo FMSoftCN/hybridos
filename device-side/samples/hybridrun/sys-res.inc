@@ -61,7 +61,7 @@ begin_sys_respkg
     begin_css_res
         begin_css(body, "hvbody")
             style(BackgroundColor, PV_COLOR_BLACK)
-            style(Color,    PV_RGBA, rgba(0x16, 0xF2, 0x23, 0xFF))
+            style(Color,    PV_RGBA, rgb(0x16, 0xF2, 0x23))
             style(Font,     PV_SYSID, sysid_font(nm))
         end_css
         begin_css(title, "hvtext.title")
@@ -77,7 +77,7 @@ begin_sys_respkg
             style(Height,   PV_LENGTH_PX, 20.0f)
             style(Width,    PV_AUTO)
             style(TextAlign,PV_CENTER)
-            style(Color,    PV_RGBA, rgba(0xDD, 0xDD, 0xDD, 0xFF))
+            style(Color,    PV_RGBA, rgb(0xDD, 0xDD, 0xDD))
             style(Font,     PV_SYSID, sysid_font(sm))
         end_css
     end_css_res

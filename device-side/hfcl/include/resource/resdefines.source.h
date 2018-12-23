@@ -124,6 +124,7 @@
 #define self_bmpfont(name)      (RESID(bmpfont_##name))
 
 #define rgba(r, g, b, a)
+#define rgb(r, g, b)
 
 static HTReal* array_quad_real (HTReal a, HTReal b, HTReal c, HTReal d)
 {

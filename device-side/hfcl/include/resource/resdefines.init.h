@@ -118,15 +118,19 @@
 #define end_devbmpfont
 #define devbmpfont(start_mchar, num_char, glyph_width, img_id)
 
-#define rgba(r, g, b, a)    \
-    (((r) & 0xFF) |         \
-    (((g) & 0xFF) << 8) |   \
-    (((b) & 0xFF) << 16) |  \
-    (((a) & 0xFF) << 24))
+#define rgba(r, g, b, a)                \
+    ((HTUint)(                          \
+        (((HTUint)(r) & 0xFF)) |        \
+        (((HTUint)(g) & 0xFF) << 8) |   \
+        (((HTUint)(b) & 0xFF) << 16) |  \
+        (((HTUint)(a) & 0xFF) << 24)    \
+    ))
+
+#define rgb(r, g, b)    rgba(r, g, b, 0xFF)
 
 #define begin_css_res
 
-#define begin_css(name, selector) {                     \
+#define begin_css(name, selector) {              \
     CssDeclared* curr_css =                      \
         HFCL_NEW_EX(CssDeclared, (selector));    \
     resPkg->addCssResource(curr_css);

@@ -106,6 +106,7 @@
 #undef devbmpfont
 
 #undef rgba
+#undef rgb
 
 #undef begin_css_res
 #undef begin_css

@@ -102,6 +102,7 @@
 #define self_font(name)
 
 #define rgba(r, g, b, a)
+#define rgb(r, g, b)
 
 #define begin_css_res
 #define begin_css(name, selector)
