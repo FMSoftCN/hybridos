@@ -28,14 +28,13 @@
 #include "activity/activityinfo.h"
 #include "activity/activityfactory.h"
 #include "activity/activitystack.h"
-#include "components/menu.h"
+#include "services/timerservice.h"
 
 #if 0
 #include "mgcl/mgcl.h"
 
 #include "common/log.h"
 #include "contextstream.h"
-#include "services/timerservice.h"
 #include "lcdservice.h"
 #include "multimedia.h"
 #include "actlication.h"
@@ -94,14 +93,9 @@ bool ActivityManager::exit(BaseActivity *p_act)
                 break;
             case BaseActivity::SLEEP:
             {
-                Menu *m = NULL;
                 Activity* act = (Activity*)(ai->getActivity());
                 act->setState(BaseActivity::RUNNING);
                 act->onWakeup();
-
-                if(strcmp(act->name(), "sudoku") != 0 && (m = act->menu()) != NULL && ! m->isProcessing()) {
-                    m->showMenu(act);
-                }
             }
                 break;
             case BaseActivity::SUSPEND:

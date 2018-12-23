@@ -27,7 +27,6 @@
 #include "baseactivity.h"
 #include "activitystack.h"
 #include "../common/event.h"
-#include "../components/menu.h"
 
 namespace hfcl {
 
@@ -44,8 +43,6 @@ public:
     virtual void onBack(void) { }
     virtual void onIdle(void) { }
     virtual void onMove2Top(void);
-    virtual void bindMenu(Menu* menuInstance){m_menu = menuInstance;}
-    virtual Menu* menu(void){ return m_menu ;}
     virtual HWND getSysWindow(void);
 
     void updateNow(void);
@@ -59,7 +56,6 @@ protected:
     View * getViewParent(int view_id) { return (View*)this; }
 
 private:
-    Menu * m_menu;
     IntRect m_old_rect;
 };
 

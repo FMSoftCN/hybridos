@@ -68,8 +68,8 @@ public:
     void setFocusView(View* view);
     void releaseFocusView(void);
     View* focusView(void) const { return m_focusView;}
-    virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
-    virtual void drawContent(GraphicsContext *context, IntRect &rc, int status/* = Style::NORMAL*/);
+    virtual void drawBackground(GraphicsContext* context, IntRect &rc);
+    virtual void drawContent(GraphicsContext *context, IntRect &rc);
     virtual bool dispatchEvent(Event* event);
 
     virtual void autoFitSize(bool auto_child_fit = false);

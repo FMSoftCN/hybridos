@@ -140,13 +140,13 @@ void Window::syncUpdateRect(int x, int y, int w, int h, bool upBackGnd)
     UpdateInvalidClient (m_viewWindow, FALSE);
 }
 
-void Window::drawScroll(GraphicsContext* context, IntRect &rc, int status)
+void Window::drawScroll(GraphicsContext* context, IntRect &rc)
 {
-    PanelView::drawScroll (context, rc, status);
+    PanelView::drawScroll (context, rc);
     m_keyLocked = false;
 }
 
-void Window::drawBackground(GraphicsContext* context, IntRect &rc, int status)
+void Window::drawBackground(GraphicsContext* context, IntRect &rc)
 {
     if (m_drawLayer == -1) {
         for (int i = 0; i < context->getLayers(); i++) {
@@ -347,8 +347,8 @@ LRESULT Window::defaultAppProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
                     if (window->layer() >= 0) {
                         gc.setLayer(window->layer());
                     }
-                    window->drawContent (&gc, rcView, 0);
-                    window->drawScroll (&gc, rcView, 0);
+                    window->drawContent (&gc, rcView);
+                    window->drawScroll (&gc, rcView);
 
                     if (!IsWindowEnabled (hWnd)) {
                         /* VincentWei: we need a new gc for overlay mask */

@@ -27,8 +27,8 @@
 #include "../common/common.h"
 #include "../common/event.h"
 #include "../common/stlalternative.h"
-#include "intent.h"
-#include "activitystack.h"
+#include "../activity/intent.h"
+#include "../activity/activitystack.h"
 
 namespace hfcl {
 

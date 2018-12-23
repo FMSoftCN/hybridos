@@ -1,4 +1,4 @@
-SUBDIRS=common css mgcl activity graphics drawable view animation components services resource
+SUBDIRS=common resource css view graphics activity animation services mgcl
 lib_LTLIBRARIES=libhfcl@LIB_SUFFIX@.la
 
 AM_CPPFLAGS=-I../include

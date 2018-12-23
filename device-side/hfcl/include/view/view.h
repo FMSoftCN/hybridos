@@ -64,20 +64,106 @@ public:
     View(View* parent, const char* cssClass, const char* name, int id = 0);
     virtual ~View();
 
+    /* pure virtual functions */
+    // return the HVML tag, e.g., hvpanel, hvlist, hvtext, hvimg, hvli, hvbuton, and so on
+    virtual const char* tag() const = 0;
+    virtual bool isRootView() { return false; }
+    virtual bool isContainerView() { return false; }
+    virtual bool isWrapperView() { return false; }
+
+    // draw view
+    virtual void drawBackground(GraphicsContext* context, IntRect &rc) = 0;
+    virtual void drawContent(GraphicsContext* context, IntRect &rc) = 0;
+    virtual void drawScroll(GraphicsContext* context, IntRect &rc) = 0;
+
+    /* callbacks to handle the events of Windowing system */
+    virtual void onPaint(GraphicsContext* context);
+    virtual void onClicked();
+    virtual void onDoubleClicked();
+    virtual void onViewportChanged();
+
+    /* methods to get/set attributes */
+    // identifier (integer) of this view
     int getId() const { return m_id; }
     void setId(int id) { m_id = id; }
 
+    // additional data
+    void setAddData(void *paddData) {m_addData = paddData;}
+    void *getAddData() {return m_addData;}
+
+    // name correspond to the id attribute of one HVML element
     const char* getName() const { return m_name; }
     void setName(const char* name);
 
+    // CSS class of one HVML element
     bool applyClass(const char* cssClass);
     bool includeClass(const char* cssClass);
     bool excludeClass(const char* cssClass);
+
+    virtual void onDisabled() = 0;
+    virtual void onEnabled() = 0;
+    bool isDisabled() { return m_flags & VA_DISABLED; }
+    void disable() {
+        bool old = setFlag(true, VA_DISABLED);
+        if (old)
+            onDisabled();
+    }
+
+    bool isEnabled() { return !(m_flags & VA_DISABLED); }
+    void enable() {
+        bool old = setFlag(false, VA_DISABLED);
+        if (!old)
+            onEnabled();
+    }
+
+    virtual void onChecked() = 0;
+    virtual void onUnchecked() = 0;
+    bool isChecked() { return m_flags & VA_CHECKED; }
+    void check() {
+        bool old = setFlag(true, VA_CHECKED);
+        if (!old)
+            onChecked();
+    }
+    void uncheck() {
+        bool old = setFlag(false, VA_CHECKED);
+        if (old)
+            onUnchecked();
+    }
+
+    virtual void onGotFocus() = 0;
+    virtual void onLostFocus() = 0;
+    bool isFocused() { return m_flags & VA_FOCUSED; }
+    void focus() {
+        bool old = setFlag(true, VA_FOCUSED);
+        if (!old)
+            onGotFocus();
+    }
+    void unfocus() {
+        bool old = setFlag(false, VA_FOCUSED);
+        if (!old)
+            onLostFocus();
+    }
+
+    bool isFocusable() { return isEnabled() && m_flags & VA_FOCUSABLE; }
+    bool setFocusable(bool b) { return setFlag(b, VA_FOCUSABLE); }
+
+    bool isFocusStoppable() {
+        return isFocusable() && m_flags & VA_FOCUSSTOPPABLE;
+    }
+    bool setFocusStoppable(bool b) { return setFlag(b, VA_FOCUSSTOPPABLE); }
+
+    virtual void focusMe();
+    bool setFocus(View *view);
+
+    bool isVisible();
 
     void getSize(int *w, int *h) {
         if (w) *w = m_rect.width();
         if (h) *h = m_rect.height();
     }
+
+    inline const IntRect& getRect() const { return m_rect; }
+    inline const IntRect& getViewportRect() const { return m_rc_viewport; }
 
     virtual void show() {
         setVisible(true);
@@ -87,27 +173,9 @@ public:
         setVisible(false);
         updateView();
     }
-    inline bool isVisible() { return visible(); }
-
     void addEventListener(EventListener* listener);
     void addEventListener(EventListener* listener, int event_type) { }
     void removeEventListener(EventListener* listener);
-
-    virtual void paint(GraphicsContext* context, int status);
-    virtual void onPaint(GraphicsContext* context, int status);
-    virtual void drawBackground(GraphicsContext* context,
-            IntRect &rc, int status);
-    virtual void drawContent(GraphicsContext* context, IntRect &rc, int status);
-    virtual void drawScroll(GraphicsContext* context, IntRect &rc, int status);
-
-    virtual void focusMe();
-    bool setFocus(View *view);
-    bool isFocused();
-
-    virtual void onGotFocus();
-    virtual void onLostFocus();
-    virtual void onClicked();
-    virtual void onDoubleClicked();
 
     //return True if the event was handled, false otherwise.
     virtual bool dispatchEvent(Event* event);
@@ -134,10 +202,6 @@ public:
     ContainerView* parent() { return m_parent; }
     ContainerView* rootView();
 
-    virtual bool isTopView() { return false; }
-    virtual bool isContainerView() { return false; }
-    virtual bool isWrapperView() { return false; }
-
     virtual HWND getSysWindow() {
         return m_parent ? ((View*)m_parent)->getSysWindow() : 0;
     }
@@ -146,23 +210,6 @@ public:
     virtual void windowToView(int *x, int *y);
 
     virtual bool raiseEvent(Event *event);
-
-    void setAddData(void *paddData) {m_addData = paddData;}
-    void *addData() {return m_addData;}
-
-    bool isDisabled() { return m_flags & DISABLED; }
-    void disable(bool b) { return setFlag(b, DISABLED); }
-
-    void setVisible(bool b) { setFlag(b, VISIBLE); }
-    bool visible() { return (m_flags & VISIBLE) == VISIBLE; }
-
-    void setFocusValid(bool b) { setFlag(b, FOCUSVALID); }
-    bool focusValid() { return (m_flags & FOCUSVALID) == FOCUSVALID; }
-    inline bool focusable() { return (isVisible() && !isDisabled()); }
-
-    void setFocusStop(bool b) { setFlag(b, FOCUSSTOP); }
-    bool isFocusStop() { return m_flags & FOCUSSTOP; }
-    bool focusStopable() { return focusable() && isFocusStop(); }
 
     /* to be deprecated */
     View(View* parent, DrawableSet* drset);
@@ -174,6 +221,8 @@ public:
         DISABLE,
         FOCUS
     };
+
+    bool setVisible(bool b) { return setFlag(b, VISIBLE); }
 
     bool setRect(int left, int top, int right, int bottom) {
         return setRect(IntRect(left, top, right, bottom));
@@ -216,7 +265,6 @@ public:
         }
         return true;
     }
-    inline const IntRect& getRect() const{ return m_rect; }
 
     void setPosition(int x, int y, bool bupdate = true) {
         IntRect rc(x, y, m_rect.width()+x, m_rect.height()+y);
@@ -237,7 +285,7 @@ public:
 
     virtual void changeTheme();
     bool isThemeAble() { return m_flags & THEMEABLE; }
-    void themeAble(bool b) { return setFlag(b, THEMEABLE); }
+    bool themeAble(bool b) { return setFlag(b, THEMEABLE); }
     int themeDrsetId() { return m_theme_drset_id; }
     void setThemeDrsetId(int iid) { m_theme_drset_id = iid; }
 
@@ -265,13 +313,19 @@ public:
 
 protected:
     enum {
-        VISIBLE     = (0x1 << 0),
-        DISABLED    = (0x1 << 1),
-        FOCUSVALID  = (0x1 << 2),
-        FOCUSSTOP   = (0x1 << 3),
-        THEMEABLE   = (0x1 << 4),
-        FROZEN      = (0x1 << 5),
-        FLAG_SHIFT  = 6
+        VA_DISABLED         = (0x1 << 0),
+        VA_CHECKED          = (0x1 << 1),
+        VA_FOCUSED          = (0x1 << 2),
+        VA_FOCUSABLE        = (0x1 << 3),
+        VA_FOCUSSTOPPABLE   = (0x1 << 4),
+
+        VISIBLE     = (0x1 << 5),
+        DISABLED    = (0x1 << 6),
+        FOCUSVALID  = (0x1 << 7),
+        FOCUSSTOP   = (0x1 << 8),
+        THEMEABLE   = (0x1 << 9),
+        FROZEN      = (0x1 << 10),
+        FLAG_SHIFT  = 16
     };
 
     int m_id;
@@ -294,6 +348,8 @@ protected:
     // The additional box of this view if Property display is list-item.
     CssBox* m_box_additional;
 
+    IntRect m_rc_viewport;
+
     // to be deprecated
     IntRect m_rect;
     DrawableSet* m_drset;
@@ -306,11 +362,13 @@ protected:
     EventListenerList m_listeners;
     void releaseEventListeners();
 
-    inline void setFlag(bool b, unsigned int flag) {
+    inline bool setFlag(bool b, unsigned int flag) {
+        bool old = m_flags & flag;
         if(b)
             m_flags |= flag;
         else
             m_flags &= (~flag);
+        return old;
     }
 
     virtual void inner_updateView(int x, int y, int w, int h, bool upBackGnd = true);

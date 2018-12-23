@@ -43,7 +43,6 @@ View::View()
     , m_drawLayer(LAYER_MAXNUM - 1)
 {
     memset (m_css_classes, 0, sizeof (m_css_classes));
-    setVisible(true);
 }
 
 View::View(View* p_parent)
@@ -61,8 +60,6 @@ View::View(View* p_parent)
     , m_drawLayer(LAYER_MAXNUM - 1)
 {
     memset (m_css_classes, 0, sizeof (m_css_classes));
-
-    setVisible(true);
     if (p_parent)
         ((ContainerView *)p_parent)->addChild(this);
     m_parent = (ContainerView*)p_parent;
@@ -83,7 +80,6 @@ View::View(View* p_parent, DrawableSet* drset)
     , m_drawLayer(LAYER_MAXNUM - 1)
 {
     memset (m_css_classes, 0, sizeof (m_css_classes));
-    setVisible(true);
     if (p_parent)
         ((ContainerView *)p_parent)->addChild(this);
     m_parent = (ContainerView*)p_parent;
@@ -104,75 +100,15 @@ View::View(int i_id, int x, int y, int w, int h)
     , m_drawLayer(LAYER_MAXNUM - 1)
 {
     memset (m_css_classes, 0, sizeof (m_css_classes));
-    setVisible(true);
 }
 
 View::~View()
 {
-    //releaseEventListeners();
-
-    if(m_drset && !(m_drset->isCommon())) {
-        HFCL_DELETE(m_drset);
-    }
 }
 
-/*void View::initDrawable(DrawableSelector* selector)
+void View::onPaint(GraphicsContext* context)
 {
-    if (NULL == selector) {
-        return;
-    }
-    m_drBkgnd = selector->getDrawable(DR_BACKGND);
-    if (NULL != m_drBkgnd)
-        m_drBkgnd->safeRef();
-}*/
-
-void View::setDrawableSet(DrawableSet* drset)
-{
-    if(m_drset != NULL)
-    {
-        if (m_drset == drset && !(drset->isCommon())) {
-            HFCL_DELETE(drset);
-            return;
-        }
-        if (m_drset != drset && !(m_drset->isCommon())) {
-            HFCL_DELETE(m_drset);
-        }
-    }
-    m_drset = drset;
-}
-
-DrawableSet* View::getDrawableSet(void) const
-{
-    return m_drset;
-}
-
-void View::drawBackground(GraphicsContext* context, IntRect &rc, int status)
-{
-    if (m_drset) {
-        m_drset->draw(context, DR_BKGND, DRAWSTATE_NORMAL, rc);
-    }
-}
-
-void View::drawContent(GraphicsContext* context, IntRect &rc, int status)
-{
-}
-
-void View::drawScroll(GraphicsContext* context, IntRect &rc, int status)
-{
-}
-
-void View::paint(GraphicsContext* context, int status)
-{
-    IntRect rc(0, 0, m_rect.width(), m_rect.height());
-    drawBackground(context, rc, status & PAINT_STATUS_MASK);
-    drawContent(context, rc, status);
-    drawScroll(context, rc, status & PAINT_STATUS_MASK);
-}
-
-void View::onPaint(GraphicsContext* context, int status)
-{
-    if (visible()) {
-        Window *_win = NULL;
+    if (isVisible()) {
         IntRect rc(0, 0, m_rect.width(), m_rect.height());
 
         if (rc.isEmpty())
@@ -182,57 +118,14 @@ void View::onPaint(GraphicsContext* context, int status)
         if (!context->rectVisible(rc))
             return;
 
-        if (m_alpha != HFCL_DEFAULT_OPACITY) {
-            context->beginTransparencyLayer(m_alpha);
-        }
-
-        _win = SAFE_CAST(Window*, rootView());
-        if (_win != NULL && _win->layer() == -1) {
-            context->setLayer(m_drawLayer);
-        }
-
         context->save();
         context->clip(rc);
-        paint(context, status);
+        drawBackground(context, rc);
+        drawContent(context, rc);
+        drawScroll(context, rc);
         context->restore();
-
-        if (m_alpha != HFCL_DEFAULT_OPACITY) {
-            context->endTransparencyLayer();
-        }
     }
 }
-
-void View::changeTheme(void)
-{
-    if (isThemeAble() && -1 != m_theme_drset_id) {
-        //FIXME we need system package here
-        /*
-        ResPackage* package = ResPkgManager::getResPkgManager()->getPackage(0);
-        */
-        DrawableSet* drset = NULL;
-        drset = GetSystemPackage()->getThemeDrawableSet(m_theme_drset_id);
-        if (drset) {
-            setDrawableSet(drset);
-        }
-    }
-}
-
-void View::setAlpha(unsigned char trans)
-{
-    m_alpha = trans;
-}
-
-unsigned char View::alpha()
-{
-    return m_alpha;
-}
-
-/*void View::setBkgndDrawable(Drawable* drawable)
-{
-    if (NULL != m_drBkgnd)
-        m_drBkgnd->safeUnref();
-    m_drBkgnd = drawable;
-}*/
 
 void View::addEventListener(EventListener* listener)
 {
@@ -359,7 +252,7 @@ void View::updateViewRect(const IntRect &rc)
     inner_updateViewRect(rc.left(), rc.top(), rc.width(), rc.height());
 }
 
-void View::updateViewRect(void)
+void View::updateViewRect()
 {
     inner_updateViewRect(0, 0, m_rect.width(), m_rect.height());
 }
@@ -420,7 +313,7 @@ void View::windowToView(int *x, int *y)
     }
 }
 
-void View::focusMe(void)
+void View::focusMe()
 {
     ContainerView *p = NULL;
 
@@ -445,28 +338,23 @@ void View::focusMe(void)
     */
 }
 
-bool View::isFocused(void)
+#if 0
+bool View::isFocused()
 {
-    if(m_parent) {
+    if (m_parent) {
         return ((m_parent->focusView() == this) && m_parent->focusValid());
     }
+
     return false;
 }
+#endif
 
-//it can play click sound, call approciate click listener.
-bool View::performClick()
-{
-    focusMe();
-    updateView();
-    return true;
-}
-
-ContainerView* View::rootView(void)
+ContainerView* View::rootView()
 {
     View *p = this;
 
     while (p != NULL){
-        if (p->isTopView())
+        if (p->isRootView())
             return (ContainerView *)p;
         p = p->parent();
     }

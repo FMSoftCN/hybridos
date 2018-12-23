@@ -1,5 +1,4 @@
-SUBDIRS=common css mgcl activity graphics drawable view animation components \
-    services resource
+SUBDIRS=common resource css view activity graphics animation services mgcl
 
 # The directory where the include files will be installed
 myincludedir=$(includedir)/hfcl

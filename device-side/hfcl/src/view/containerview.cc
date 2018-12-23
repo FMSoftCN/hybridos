@@ -227,13 +227,11 @@ int ContainerView::detachChild(View* view)
     if(next)
         next->setPrevSlibling(prev);
 
-    if(view == m_firstChild)
-    {
+    if(view == m_firstChild) {
         m_firstChild = next;
     }
 
-    if(view == m_lastChild)
-    {
+    if(view == m_lastChild) {
         m_lastChild = prev;
     }
 
@@ -241,8 +239,7 @@ int ContainerView::detachChild(View* view)
 
     view->setParent(NULL);
 
-    if(m_focusView == view)
-    {
+    if(m_focusView == view) {
         m_focusView = NULL;
     }
 
@@ -345,12 +342,12 @@ void ContainerView::markDirty(const IntRect& rc)
 
 #undef TRACE_DRAWVIEW
 
-void ContainerView::drawBackground(GraphicsContext* context, IntRect &rc, int status)
+void ContainerView::drawBackground(GraphicsContext* context, IntRect &rc)
 {
     return;
 }
 
-void ContainerView::drawContent(GraphicsContext* context, IntRect& rc, int status)
+void ContainerView::drawContent(GraphicsContext* context, IntRect& rc)
 {
 #ifdef TRACE_DRAWVIEW
     int depth = 1;
@@ -376,14 +373,14 @@ void ContainerView::drawContent(GraphicsContext* context, IntRect& rc, int statu
             IntRect rcView = view->getRect();
             printf ("ContainerView::drawContent: draw child %p (%d, %d, %d, %d)\n",
                     view, rcView.left(), rcView.top(), rcView.right(), rcView.bottom());
-            view->onPaint(context, status);
+            view->onPaint(context);
         }
         else {
             printf ("ContainerView::drawContent: skip child %p, visible (%s), unfrozen (%s)\n", view, view->isVisible()?"TRUE":"FALSE", view->shouldUpdate()?"TRUE":"FALSE");
         }
 #else
         if (view->isVisible() && view->shouldUpdate()) {
-            view->onPaint(context, status);
+            view->onPaint(context);
         }
 #endif
     }
@@ -463,7 +460,7 @@ void ContainerView::setFocusView(View* view)
     if(old_focusView)
         old_focusView->onLostFocus();
 
-    setFocusValid(true);
+    setFocusable(true);
 
     m_focusView->onGotFocus();
 
@@ -488,9 +485,9 @@ void ContainerView::releaseFocusView(void)
     if (old_focusView->isContainerView()){
         ((ContainerView *)old_focusView)->releaseFocusView();
     }
-    setFocusValid(false);
+    setFocusable(false);
 
-    // FIXME ylwang changed at 2012-04-06
+    // FIXME
     /*
     CustomEvent event(Event::CUSTOM_NOTIFY, (int)VN_LOSTFOCUS, (int)m_focusView);
     raiseEvent(&event);

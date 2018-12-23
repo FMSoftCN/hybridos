@@ -3,6 +3,9 @@ myincludedir=$(includedir)/hfcl/view
 
 # Which header files to install
 myinclude_HEADERS= \
+    viewcontext.h \
+    view.h \
+    scrollbar.h \
     animateimageview.h \
     arrowtextview.h \
     bitmark.h \
@@ -30,7 +33,6 @@ myinclude_HEADERS= \
     pageview.h \
     pairlayoutview.h \
     panelview.h \
-    scrollview.h \
     selectediconitemview.h \
     simpleitemview.h \
     sleditview.h \
@@ -42,6 +44,4 @@ myinclude_HEADERS= \
     titemview.h \
     trackbarview.h \
     transition.h \
-    viewcontext.h \
-    view.h \
     wrapperview.h

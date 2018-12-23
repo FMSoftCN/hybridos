@@ -25,7 +25,6 @@ namespace hfcl {
 
 Activity::Activity() : Window()
 {
-    m_menu = NULL;
 }
 
 Activity::~Activity()
@@ -49,11 +48,6 @@ void Activity::onWakeup(void)
 
 void Activity::onMove2Top(void)
 {
-    if (NULL != m_menu) {
-        //m_menu->closeMenu(m_menu);
-        m_menu->closeAllMenu();
-        m_menu = NULL;
-    }
     setActiveWindow (viewWindow());
     show();
 }

@@ -110,7 +110,7 @@ bool PanelView::setUpdate(bool update) {
     return true;
 }
 
-void PanelView::drawBackground(GraphicsContext* context, IntRect &rc, int status)
+void PanelView::drawBackground(GraphicsContext* context, IntRect &rc)
 {
     if(m_update) {
         if (m_bkImage != NULL) {

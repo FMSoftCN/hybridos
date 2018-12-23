@@ -47,9 +47,7 @@ public:
 
     bool isUpdate(void){ return m_update;};
 
-    virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
-
-    //bool setBkOpacity(unsigned char opacity);
+    virtual void drawBackground(GraphicsContext* context, IntRect &rc);
 
     void setImageDrawMode(int mode);
 
