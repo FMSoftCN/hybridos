@@ -124,7 +124,7 @@
 
 #define begin_css(name, selector)   RESID(css_##name),
 
-#define style(pid, value, user_data)
+#define style(pid, value, ...)
 
 #define end_css
 

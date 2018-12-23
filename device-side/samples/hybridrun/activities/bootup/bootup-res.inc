@@ -29,10 +29,10 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
     // CSS resource
     begin_css_res
         begin_css(def1, ".test")
-            style(BackgroundColor, PV_BACKGROUND_COLOR_COLOR_RED, 0)
+            style(BackgroundColor, PV_COLOR_RED)
         end_css
         begin_css(def2, ".test")
-            style(BackgroundColor, PV_BACKGROUND_COLOR_COLOR_RED, 0)
+            style(BackgroundColor, PV_COLOR_RED)
         end_css
     end_css_res
 

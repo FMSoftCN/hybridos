@@ -60,25 +60,25 @@ begin_sys_respkg
     // CSS
     begin_css_res
         begin_css(body, "hvbody")
-            style(BackgroundColor, PV_BACKGROUND_COLOR_COLOR_BLACK, 0)
-            style(Color,    PV_BACKGROUND_COLOR_RGBA, rgba(0x16, 0xF2, 0x23, 0xFF))
-            style(Font,     PV_FONT_SYSID, sysid_font(nm))
+            style(BackgroundColor, PV_COLOR_BLACK)
+            style(Color,    PV_RGBA, rgba(0x16, 0xF2, 0x23, 0xFF))
+            style(Font,     PV_SYSID, sysid_font(nm))
         end_css
         begin_css(title, "hvtext.title")
-            style(Display,  PV_DISPLAY_BLOCK, 0)
-            style(Height,   PV_HEIGHT_LENGTH_PX, 28.0f)
-            style(Width,    PV_WIDTH_AUTO, 0)
-            style(TextAlign,PV_TEXT_ALIGN_CENTER, 0)
-            style(Color,    PV_BACKGROUND_COLOR_RGBA, rgba(0x64, 0x96, 0xc7, 0xFF))
-            style(Padding,  PV_PADDING_LEFT_LENGTH_PX, array_real(def_padding))
+            style(Display,  PV_BLOCK)
+            style(Height,   PV_LENGTH_PX, 28.0f)
+            style(Width,    PV_AUTO)
+            style(TextAlign,PV_CENTER)
+            style(Color,    PV_RGBA, rgba(0x64, 0x96, 0xc7, 0xFF))
+            style(Padding,  PV_LENGTH_PX, array_real(def_padding))
         end_css
         begin_css(subtitle, "hvtext.subtitle")
-            style(Display,  PV_DISPLAY_BLOCK, 0)
-            style(Height,   PV_HEIGHT_LENGTH_PX, 20.0f)
-            style(Width,    PV_WIDTH_AUTO, 0)
-            style(TextAlign,PV_TEXT_ALIGN_CENTER, 0)
-            style(Color,    PV_BACKGROUND_COLOR_RGBA, rgba(0xDD, 0xDD, 0xDD, 0xFF))
-            style(Font,     PV_FONT_SYSID, sysid_font(sm))
+            style(Display,  PV_BLOCK)
+            style(Height,   PV_LENGTH_PX, 20.0f)
+            style(Width,    PV_AUTO)
+            style(TextAlign,PV_CENTER)
+            style(Color,    PV_RGBA, rgba(0xDD, 0xDD, 0xDD, 0xFF))
+            style(Font,     PV_SYSID, sysid_font(sm))
         end_css
     end_css_res
 

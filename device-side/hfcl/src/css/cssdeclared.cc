@@ -34,34 +34,52 @@ CssDeclared::~CssDeclared ()
     m_map.clear ();
 }
 
-bool CssDeclared::setMargin (DWORD32 value, HTData addData)
+bool CssDeclared::setMargin (Uint32 value)
 {
-    if (addData) {
+    if (!setMarginLeft (value))
+        goto error;
 
-        HTReal* data = (HTReal*)addData;
-        if (!setMarginLeft (value, data[0]))
+    if (!setMarginTop (value))
+        goto error;
+
+    if (!setMarginRight (value))
+        goto error;
+
+    if (setMarginBottom (value))
+        goto error;
+
+    return true;
+
+error:
+    return false;
+}
+
+bool CssDeclared::setMargin (Uint32 value, const HTReal* r)
+{
+    if (r) {
+        if (!setMarginLeft (value, r[0]))
             goto error;
 
-        if (!setMarginTop (value, data[1]))
+        if (!setMarginTop (value, r[1]))
             goto error;
 
-        if (!setMarginRight (value, data[2]))
+        if (!setMarginRight (value, r[2]))
             goto error;
 
-        if (setMarginBottom (value, data[3]))
+        if (setMarginBottom (value, r[3]))
             goto error;
     }
     else {
-        if (!setMarginLeft (value, 0))
+        if (!setMarginLeft (value))
             goto error;
 
-        if (!setMarginTop (value, 0))
+        if (!setMarginTop (value))
             goto error;
 
-        if (!setMarginRight (value, 0))
+        if (!setMarginRight (value))
             goto error;
 
-        if (setMarginBottom (value, 0))
+        if (setMarginBottom (value))
             goto error;
     }
 
@@ -71,34 +89,52 @@ error:
     return false;
 }
 
-bool CssDeclared::setPadding (DWORD32 value, HTData addData)
+bool CssDeclared::setPadding (Uint32 value)
 {
-    if (addData) {
+    if (!setPaddingLeft (value))
+        goto error;
 
-        HTReal* data = (HTReal*)addData;
-        if (!setPaddingLeft (value, data[0]))
+    if (!setPaddingTop (value))
+        goto error;
+
+    if (!setPaddingRight (value))
+        goto error;
+
+    if (setPaddingBottom (value))
+        goto error;
+
+    return true;
+
+error:
+    return false;
+}
+
+bool CssDeclared::setPadding (Uint32 value, const HTReal* r)
+{
+    if (r) {
+        if (!setPaddingLeft (value, r[0]))
             goto error;
 
-        if (!setPaddingTop (value, data[1]))
+        if (!setPaddingTop (value, r[1]))
             goto error;
 
-        if (!setPaddingRight (value, data[2]))
+        if (!setPaddingRight (value, r[2]))
             goto error;
 
-        if (setPaddingBottom (value, data[3]))
+        if (setPaddingBottom (value, r[3]))
             goto error;
     }
     else {
-        if (!setPaddingLeft (value, 0))
+        if (!setPaddingLeft (value))
             goto error;
 
-        if (!setPaddingTop (value, 0))
+        if (!setPaddingTop (value))
             goto error;
 
-        if (!setPaddingRight (value, 0))
+        if (!setPaddingRight (value))
             goto error;
 
-        if (setPaddingBottom (value, 0))
+        if (setPaddingBottom (value))
             goto error;
     }
 
@@ -108,8 +144,8 @@ error:
     return false;
 }
 
-bool CssDeclared::getProperty (CssPropertyIds pid, DWORD32 *value,
-        HTData *data)
+bool CssDeclared::getProperty (CssPropertyIds pid, Uint32 *value,
+        HTPVData *data)
 {
     CssPropertyValueMap::iterator it = m_map.find (pid);
     if (it == m_map.end ()) {
@@ -125,8 +161,8 @@ bool CssDeclared::getProperty (CssPropertyIds pid, DWORD32 *value,
     return true;
 }
 
-bool CssDeclared::setProperty (CssPropertyIds pid, DWORD32 value,
-    HTData data)
+bool CssDeclared::setProperty (CssPropertyIds pid, Uint32 value,
+    HTPVData data)
 {
     CssPropertyValue* pv;
     CssPropertyValueMap::iterator it = m_map.find(pid);

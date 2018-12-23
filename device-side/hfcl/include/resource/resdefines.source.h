@@ -143,7 +143,7 @@ static int* array_quad_int (int a, int b, int c, int d)
 
 #define begin_css(name, selector)
 
-#define style(id, value, user_data)
+#define style(id, value, ...)
 
 #define end_css
 

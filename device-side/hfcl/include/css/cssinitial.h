@@ -34,8 +34,8 @@ public:
     CssInitial();
     ~CssInitial() {}
 
-    virtual bool getProperty(CssPropertyIds pid, DWORD32 *value,
-            HTData *data = NULL) {
+    virtual bool getProperty(CssPropertyIds pid, Uint32 *value,
+            HTPVData *data) {
         if (value) {
             *value = m_values[pid];
         }
@@ -44,8 +44,8 @@ public:
         }
         return true;
     }
-    virtual bool setProperty(CssPropertyIds pid, DWORD32 value,
-            HTData data = 0) {
+    virtual bool setProperty(CssPropertyIds pid, Uint32 value,
+            HTPVData data) {
         m_values[pid] = value;
         m_data[pid] = data;
         return true;
@@ -60,8 +60,8 @@ public:
 private:
     static CssInitial* s_singleton;
 
-    DWORD32 m_values[MAX_CSS_PID];
-    HTData m_data[MAX_CSS_PID];
+    Uint32 m_values[MAX_CSS_PID];
+    HTPVData m_data[MAX_CSS_PID];
 };
 
 namespace css {

@@ -131,8 +131,8 @@
         HFCL_NEW_EX(CssDeclared, (selector));    \
     resPkg->addCssResource(curr_css);
 
-#define style(pid, value, user_data) \
-    curr_css->set##pid((value), (HTData)(user_data));
+#define style(pid, value, ...) \
+    curr_css->set##pid((value), ##__VA_ARGS__);
 
 #define end_css }
 

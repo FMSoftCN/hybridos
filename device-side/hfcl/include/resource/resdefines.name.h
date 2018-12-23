@@ -105,7 +105,7 @@
 
 #define begin_css_res
 #define begin_css(name, selector)
-#define style(pid, value, user_data)
+#define style(pid, value, ...)
 #define end_css
 #define end_css_res
 

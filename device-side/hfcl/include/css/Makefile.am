@@ -3,9 +3,11 @@ myincludedir=$(includedir)/hfcl/css
 
 # Which header files to install
 myinclude_HEADERS= \
+    csspropertyvalue.inc \
     csspropertyvalue.h \
     css.h \
     cssinitial.h \
+    cssdeclared.inc \
     cssdeclared.h \
     csscomputed.h \
     cssdeclaredgroup.h

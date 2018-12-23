@@ -34,10 +34,76 @@ public:
     Css() {}
     virtual ~Css() {}
 
-    virtual bool getProperty(CssPropertyIds pid, DWORD32 *value,
-            HTData *data = NULL) = 0;
-    virtual bool setProperty(CssPropertyIds pid, DWORD32 value,
-            HTData data = 0) = 0;
+    virtual bool getProperty(CssPropertyIds pid, Uint32 *value,
+            HTPVData* data) = 0;
+    virtual bool setProperty(CssPropertyIds pid, Uint32 value,
+            HTPVData data) = 0;
+
+    bool getProperty(CssPropertyIds pid, Uint32 *value) {
+        HTPVData data;
+        if (getProperty(pid, value, &data)) {
+            return true;
+        }
+        return false;
+    }
+    bool getProperty(CssPropertyIds pid, Uint32 *value, HTInt* i) {
+        HTPVData data;
+        if (getProperty(pid, value, &data)) {
+            if (i) *i = data.i;
+            return true;
+        }
+        return false;
+    }
+    bool getProperty(CssPropertyIds pid, Uint32 *value, HTUint* u) {
+        HTPVData data;
+        if (getProperty(pid, value, &data)) {
+            if (u) *u = data.u;
+            return true;
+        }
+        return false;
+    };
+    bool getProperty(CssPropertyIds pid, Uint32 *value, HTReal* r) {
+        HTPVData data;
+        if (getProperty(pid, value, &data)) {
+            if (r) *r = data.r;
+            return true;
+        }
+        return false;
+    }
+    bool getProperty(CssPropertyIds pid, Uint32 *value, HTPointer* p) {
+        HTPVData data;
+        if (getProperty(pid, value, &data)) {
+            if (p) *p = data.p;
+            return true;
+        }
+        return false;
+    }
+
+    bool setProperty(CssPropertyIds pid, Uint32 value) {
+        HTPVData data;
+        data.p = 0;
+        return setProperty(pid, value, data);
+    }
+    bool setProperty(CssPropertyIds pid, Uint32 value, HTInt i) {
+        HTPVData data;
+        data.i = i;
+        return setProperty(pid, value, data);
+    }
+    bool setProperty(CssPropertyIds pid, Uint32 value, HTUint u) {
+        HTPVData data;
+        data.u = u;
+        return setProperty(pid, value, data);
+    }
+    bool setProperty(CssPropertyIds pid, Uint32 value, HTReal r) {
+        HTPVData data;
+        data.r = r;
+        return setProperty(pid, value, data);
+    }
+    bool setProperty(CssPropertyIds pid, Uint32 value, HTPointer p) {
+        HTPVData data;
+        data.p = p;
+        return setProperty(pid, value, data);
+    }
 };
 
 namespace css {

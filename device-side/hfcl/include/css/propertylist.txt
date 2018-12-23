@@ -184,7 +184,7 @@ float
     inherited: no
 
 font-family
-    values: serif sans-serif cursive fantasy monospace <family-name> inherit
+    values: serif sans-serif cursive fantasy monospace <string> inherit
     initial: <string>="default"
     inherited: yes
 
