@@ -57,13 +57,12 @@ protected:
 class CssBoxBlock : public CssBox
 {
 public:
-    CssBoxBlock(View* view);
-    virtual ~CssBoxBlock();
+    CssBoxBlock() {};
+    virtual ~CssBoxBlock() {};
 
 protected:
 
 private:
-    View* m_view;
 };
 
 // Inline box
@@ -74,13 +73,12 @@ private:
 class CssBoxInline : public CssBox
 {
 public:
-    CssBoxInline(View* view);
-    virtual ~CssBoxInline();
+    CssBoxInline() {};
+    virtual ~CssBoxInline() {};
 
 protected:
 
 private:
-    View* m_view;
 };
 
 // Line box
@@ -90,8 +88,8 @@ private:
 class CssBoxLine : public CssBoxBlock
 {
 public:
-    CssBoxLine(View* view);
-    virtual ~CssBoxLine();
+    CssBoxLine() {};
+    virtual ~CssBoxLine() {};
 
 protected:
 
@@ -104,7 +102,7 @@ private:
 class CssBoxLineBoxContainer : public CssBoxBlock
 {
 public:
-    CssBoxLineBoxContainer(View* view);
+    CssBoxLineBoxContainer() {};
     virtual ~CssBoxLineBoxContainer();
 
 protected:

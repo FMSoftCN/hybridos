@@ -69,7 +69,7 @@ begin_sys_respkg
             style(Height,   PV_LENGTH_PX, 28.0f)
             style(Width,    PV_AUTO)
             style(TextAlign,PV_CENTER)
-            style(Color,    PV_RGBA, rgba(0x64, 0x96, 0xc7, 0xFF))
+            style(Color,    PV_RGBA, rgb(0x64, 0x96, 0xc7))
             style(Padding,  PV_LENGTH_PX, array_real(def_padding))
         end_css
         begin_css(subtitle, "hvtext.subtitle")
