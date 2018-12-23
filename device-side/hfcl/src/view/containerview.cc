@@ -379,7 +379,7 @@ void ContainerView::drawContent(GraphicsContext* context, IntRect& rc)
             printf ("ContainerView::drawContent: skip child %p, visible (%s), unfrozen (%s)\n", view, view->isVisible()?"TRUE":"FALSE", view->shouldUpdate()?"TRUE":"FALSE");
         }
 #else
-        if (view->isVisible() && view->shouldUpdate()) {
+        if (view->isVisible()) {
             view->onPaint(context);
         }
 #endif
@@ -390,15 +390,6 @@ void ContainerView::drawContent(GraphicsContext* context, IntRect& rc)
     printf ("ContainerView::drawContent: Stop to draw %p\n", this);
 #endif
 }
-
-void ContainerView::changeTheme(void)
-{
-    View::changeTheme();
-    for(View *view = firstChild(); view; view = view->nextSibling()) {
-        view->changeTheme();
-    }
-}
-
 
 bool ContainerView::dispatchEvent(Event* event)
 {
@@ -497,10 +488,7 @@ void ContainerView::releaseFocusView(void)
 void ContainerView::autoFitSize(bool auto_child_fit)
 {
     IntRect rc;
-    for(View *view = firstChild(); view ; view = view->nextSibling())
-    {
-        if(auto_child_fit)
-            view->autoFitSize(true);
+    for(View *view = firstChild(); view ; view = view->nextSibling()) {
         rc.join(0, 0, view->getRect().right(), view->getRect().bottom());
     }
     setRect(rc);

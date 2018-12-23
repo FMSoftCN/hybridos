@@ -386,8 +386,8 @@ ControllerClient* Controller::find(int view_id)
 void ControllerClient::active()
 {
     if (m_baseView) {
-        m_baseView->unfreezeUpdate();
-        m_baseView->focusMe(); //facusMe
+        m_baseView->unfreeze();
+        m_baseView->focus(); //facusMe
         if(m_currentList)
             m_owner->setMode(m_currentList);
     }
@@ -401,7 +401,7 @@ void ControllerClient::inactive()
         // the transparent view will show wrong when updata
         // if we do NOT hide old one,
         // we will waste a lot to paint all.
-        m_baseView->freezeUpdate();
+        m_baseView->freeze();
     }
     m_inactiveTimes++;
 }

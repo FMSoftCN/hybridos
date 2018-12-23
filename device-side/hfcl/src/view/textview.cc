@@ -138,20 +138,26 @@ void TextView::setText(int strId)
 
 void TextView::setTextColor(Color *c)
 {
+#if 0
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_COLOR, c->color()))
         updateView();
+#endif
 }
 
 void TextView::setTextColor(unsigned char r, unsigned char g, unsigned char b)
 {
+#if 0
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_COLOR, MakeRGB(r,g,b)))
         updateView();
+#endif
 }
 
 void TextView::setTextColor(DWORD color)
 {
+#if 0
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_COLOR, color))
         updateView();
+#endif
 }
 
 char* TextView::getText(void)
@@ -223,6 +229,7 @@ void TextView::drawContent(GraphicsContext* context, IntRect &rc, int status)
     if(isDisabled())
         status = DRAWSTATE_DISABLED;
 
+#if 0
     rc.inset(m_margin, 0);
     if (getRollProp() && isRolling()) {
         if(RollTextTransition::DrawRollText(this, context, m_drset,
@@ -234,63 +241,89 @@ void TextView::drawContent(GraphicsContext* context, IntRect &rc, int status)
     else {
         m_drset->draw(context, DR_CONTENT, status, rc, (DWORD)buf, DRDT_TEXT);
     }
+#endif
 
     context->setBiDiFirstChType (BIDI_TYPE_LTR);
 }
 
 void TextView::setTextOutMode(unsigned int mode)
 {
+#if 0
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTMODE, mode))
         updateView();
+#endif
 }
 
 void TextView::setTextOutLineMode(bool mode)
 {
+#if 0
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_TEXTOUTLINEMODE, mode))
         updateView();
+#endif
 }
 
 void TextView::setTextAlign(unsigned int align)
 {
+#if 0
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_TEXTALIGN, align))
         updateView();
+#endif
 }
 
 unsigned int TextView::getTextAlign()
 {
+#if 0
     return m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTALIGN);
+#else
+    return 0;
+#endif
 }
 
 unsigned int TextView::getTextValign()
 {
+#if 0
     return m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTVALIGN);
+#else
+    return 0;
+#endif
 }
 
 void TextView::setTextValign(unsigned int valign)
 {
+#if 0
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_TEXTVALIGN, valign))
         updateView();
+#endif
 }
 
 void TextView::setTextBreak(int tBreak)
 {
+#if 0
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_TEXTBREAK, tBreak))
         updateView();
+#endif
 }
 
 int TextView::getTextBreak(void)
 {
+#if 0
     return m_drset->getDrawableElement(DR_CONTENT, SYS_SE_TEXTBREAK);
+#else
+    return 0;
+#endif
 }
 
 void TextView::setTextFont(unsigned int font)
 {
+#if 0
     if (m_drset->setDrawableElement(DR_CONTENT, SYS_SE_FONT, (HTData)GetFontRes(font)))
         updateView();
+#endif
 }
 
 void TextView::autoFitSize(bool auto_child_fit)
 {
+#if 0
     char* buf = NULL;
     if (!isAutoSize())
         return ;
@@ -313,6 +346,7 @@ void TextView::autoFitSize(bool auto_child_fit)
         if (parent())
             parent()->onChildSizeChanged(this);
     }
+#endif
 }
 
 void TextView::startRoll()
@@ -341,6 +375,7 @@ void TextView::resetRoll()
 
 bool TextView::isNeedRoll()
 {
+#if 0
     char* buf = NULL;
     IntRect rc(0, 0, m_rect.width(), m_rect.height());
 
@@ -358,6 +393,9 @@ bool TextView::isNeedRoll()
         rc,
         (DWORD)buf,
         DRDT_TEXT);
+#else
+    return false;
+#endif
 }
 
 } // namespace hfcl

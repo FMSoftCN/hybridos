@@ -53,9 +53,7 @@ Window::Window()
 {
     m_updateLocked = false;
     m_bkg_alpha = 255;
-    setDrawableSet(NULL);
     setParent(NULL);
-    setLayer(-1);
 }
 
 Window::~Window()
@@ -148,39 +146,10 @@ void Window::drawScroll(GraphicsContext* context, IntRect &rc)
 
 void Window::drawBackground(GraphicsContext* context, IntRect &rc)
 {
-    if (m_drawLayer == -1) {
-        for (int i = 0; i < context->getLayers(); i++) {
-            context->setLayer(i);
-            context->fillRect(rc,
-                              GetRValue(Color::LAYER_COLOR_KEY),
-                              GetGValue(Color::LAYER_COLOR_KEY),
-                              GetBValue(Color::LAYER_COLOR_KEY), m_alpha);
-                              //the default value is 255
-                              //GetBValue(Color::LAYER_COLOR_KEY), 0xFF);
-            if (i != 0){
-                context->setLayerColorKey(i, TRUE,
-                        GetRValue(Color::LAYER_COLOR_KEY),
-                        GetGValue(Color::LAYER_COLOR_KEY),
-                        GetBValue(Color::LAYER_COLOR_KEY));
-            }
-        }
-    }
-    else {
-        context->setLayer(m_drawLayer);
-        context->fillRect(rc,
-                GetRValue(Color::LAYER_COLOR_KEY),
-                GetGValue(Color::LAYER_COLOR_KEY),
-                GetBValue(Color::LAYER_COLOR_KEY), m_alpha);
-                // the default value is 255
-                //GetBValue(Color::LAYER_COLOR_KEY), 0xFF);
-        if (m_drawLayer != 0){
-            context->setLayerColorKey(m_drawLayer, TRUE,
-                    GetRValue(Color::LAYER_COLOR_KEY),
-                    GetGValue(Color::LAYER_COLOR_KEY),
-                    GetBValue(Color::LAYER_COLOR_KEY));
-        }
-        //PanelView::drawBackground (context, rc, status);
-    }
+    context->fillRect(rc,
+            GetRValue(Color::LAYER_COLOR_KEY),
+            GetGValue(Color::LAYER_COLOR_KEY),
+            GetBValue(Color::LAYER_COLOR_KEY), 0xFF);
 }
 
 HWND Window::getSysWindow(void)
@@ -304,7 +273,6 @@ LRESULT Window::defaultAppProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
                 IntRect rc;
                 GetBoundsRect((HDC)wParam, (RECT*)&rc);
                 if (window->layer() >= 0) {
-                    gc.setLayer(window->layer());
                 }
                 window->drawBackground(&gc, rc, 0);
             }
@@ -344,9 +312,6 @@ LRESULT Window::defaultAppProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
                 IntRect rcView (0, 0, window->getRect().width(), window->getRect().height());
                 IntRect rcInv (rcBounds.left, rcBounds.top, rcBounds.right, rcBounds.bottom);
                 if (rcInv.intersect (rcView)) {
-                    if (window->layer() >= 0) {
-                        gc.setLayer(window->layer());
-                    }
                     window->drawContent (&gc, rcView);
                     window->drawScroll (&gc, rcView);
 

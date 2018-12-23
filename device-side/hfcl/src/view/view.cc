@@ -37,10 +37,6 @@ View::View()
     , m_prev(0)
     , m_next(0)
     , m_rect(0, 0, 0, 0)
-    , m_drset(NULL)
-    , m_alpha(HFCL_DEFAULT_OPACITY)
-    , m_theme_drset_id(-1)
-    , m_drawLayer(LAYER_MAXNUM - 1)
 {
     memset (m_css_classes, 0, sizeof (m_css_classes));
 }
@@ -54,30 +50,6 @@ View::View(View* p_parent)
     , m_prev(0)
     , m_next(0)
     , m_rect(0, 0, 0, 0)
-    , m_drset(NULL)
-    , m_alpha(HFCL_DEFAULT_OPACITY)
-    , m_theme_drset_id(-1)
-    , m_drawLayer(LAYER_MAXNUM - 1)
-{
-    memset (m_css_classes, 0, sizeof (m_css_classes));
-    if (p_parent)
-        ((ContainerView *)p_parent)->addChild(this);
-    m_parent = (ContainerView*)p_parent;
-}
-
-View::View(View* p_parent, DrawableSet* drset)
-    : m_id(0)
-    , m_flags(0)
-    , m_name(0)
-    , m_addData(0)
-    , m_parent(0)
-    , m_prev(0)
-    , m_next(0)
-    , m_rect(0, 0, 0, 0)
-    , m_drset(drset)
-    , m_alpha(HFCL_DEFAULT_OPACITY)
-    , m_theme_drset_id(-1)
-    , m_drawLayer(LAYER_MAXNUM - 1)
 {
     memset (m_css_classes, 0, sizeof (m_css_classes));
     if (p_parent)
@@ -94,10 +66,6 @@ View::View(int i_id, int x, int y, int w, int h)
     , m_prev(0)
     , m_next(0)
     , m_rect(x, y, x + w, y + h)
-    , m_drset(NULL)
-    , m_alpha(HFCL_DEFAULT_OPACITY)
-    , m_theme_drset_id(-1)
-    , m_drawLayer(LAYER_MAXNUM - 1)
 {
     memset (m_css_classes, 0, sizeof (m_css_classes));
 }

@@ -65,7 +65,7 @@ public:
     virtual ~View();
 
     /* pure virtual functions */
-    // return the HVML tag, e.g., hvpanel, hvlist, hvtext, hvimg, hvli, hvbuton, and so on
+    // return the HVML tag, e.g., hvroot, hvlist, hvimg, hvli, and so on
     virtual const char* tag() const = 0;
     virtual bool isRootView() { return false; }
     virtual bool isContainerView() { return false; }
@@ -88,7 +88,7 @@ public:
     void setId(int id) { m_id = id; }
 
     // additional data
-    void setAddData(void *paddData) {m_addData = paddData;}
+    void setAddData(void *paddData) { m_addData = paddData; }
     void *getAddData() {return m_addData;}
 
     // name correspond to the id attribute of one HVML element
@@ -130,6 +130,25 @@ public:
             onUnchecked();
     }
 
+    virtual void onFrozen() = 0;
+    virtual void onUnfrozen() = 0;
+    bool isFrozen() { return m_flags & VA_FROZEN; }
+    void freeze() {
+        bool old = setFlag (true, VA_FROZEN);
+        if (!old) {
+            onFrozen();
+        }
+    }
+    void unfreeze(bool update = true) {
+        bool old = setFlag (false, VA_FROZEN);
+        if (old) {
+            onUnfrozen();
+        }
+        if (update) {
+            updateView ();
+        }
+    }
+
     virtual void onGotFocus() = 0;
     virtual void onLostFocus() = 0;
     bool isFocused() { return m_flags & VA_FOCUSED; }
@@ -162,8 +181,22 @@ public:
         if (h) *h = m_rect.height();
     }
 
-    inline const IntRect& getRect() const { return m_rect; }
-    inline const IntRect& getViewportRect() const { return m_rc_viewport; }
+    const IntRect& getRect() const { return m_rect; }
+    const IntRect& getViewportRect() const { return m_rc_viewport; }
+
+    void setPosition(int x, int y, bool update) {
+        IntRect rc(x, y, m_rect.width() + x, m_rect.height() + y);
+
+        if (update)
+            setRect(rc);
+        else
+            m_rect = rc;
+    }
+
+    void getPosition(int *x, int *y) {
+        if (x) *x = m_rect.left();
+        if (y) *y = m_rect.top();
+    }
 
     virtual void show() {
         setVisible(true);
@@ -215,14 +248,7 @@ public:
     View(View* parent, DrawableSet* drset);
     View(int id, int x, int y, int w, int h);
 
-    enum {
-        NORMAL,
-        PUSHDOWN,
-        DISABLE,
-        FOCUS
-    };
-
-    bool setVisible(bool b) { return setFlag(b, VISIBLE); }
+    bool setVisible(bool b) { return setFlag(b, VA_VISIBLE); }
 
     bool setRect(int left, int top, int right, int bottom) {
         return setRect(IntRect(left, top, right, bottom));
@@ -266,51 +292,6 @@ public:
         return true;
     }
 
-    void setPosition(int x, int y, bool bupdate = true) {
-        IntRect rc(x, y, m_rect.width()+x, m_rect.height()+y);
-
-        if (bupdate)
-            setRect(rc);
-        else
-            m_rect = rc;
-    }
-
-    void getPosition(int *x, int *y) {
-        if(x) *x = m_rect.left();
-        if(y) *y = m_rect.top();
-    }
-
-    void setAlpha(unsigned char trans);
-    unsigned char alpha();
-
-    virtual void changeTheme();
-    bool isThemeAble() { return m_flags & THEMEABLE; }
-    bool themeAble(bool b) { return setFlag(b, THEMEABLE); }
-    int themeDrsetId() { return m_theme_drset_id; }
-    void setThemeDrsetId(int iid) { m_theme_drset_id = iid; }
-
-    virtual void autoFitSize(bool auto_child_fit = false) {  }
-    virtual void autoFitSize() { }
-
-    DrawableSet* getDrawableSet() const;
-    void setDrawableSet(DrawableSet* drset);
-
-    void freezeUpdate() {
-        setFlag (true, FROZEN);
-    }
-    void unfreezeUpdate (bool update = true) {
-        setFlag (false, FROZEN);
-        if (update) {
-            updateView();
-        }
-    }
-    bool shouldUpdate() {
-        return (m_flags & FROZEN) != FROZEN;
-    }
-
-    int setLayer(int layerNo) { int old = m_drawLayer; m_drawLayer = layerNo; return old; }
-    int layer() { return m_drawLayer; }
-
 protected:
     enum {
         VA_DISABLED         = (0x1 << 0),
@@ -318,14 +299,9 @@ protected:
         VA_FOCUSED          = (0x1 << 2),
         VA_FOCUSABLE        = (0x1 << 3),
         VA_FOCUSSTOPPABLE   = (0x1 << 4),
-
-        VISIBLE     = (0x1 << 5),
-        DISABLED    = (0x1 << 6),
-        FOCUSVALID  = (0x1 << 7),
-        FOCUSSTOP   = (0x1 << 8),
-        THEMEABLE   = (0x1 << 9),
-        FROZEN      = (0x1 << 10),
-        FLAG_SHIFT  = 16
+        VA_FROZEN           = (0x1 << 5),
+        VA_VISIBLE          = (0x1 << 6),
+        FLAG_SHIFT          = 8
     };
 
     int m_id;
@@ -349,13 +325,7 @@ protected:
     CssBox* m_box_additional;
 
     IntRect m_rc_viewport;
-
-    // to be deprecated
     IntRect m_rect;
-    DrawableSet* m_drset;
-    unsigned char m_alpha;
-    int m_theme_drset_id;
-    int m_drawLayer;
 
     LISTEX(EventListener *, EventListenerList,
             do{return *v1 == *v2;}while (0), do{(*n)->unref();} while (0));
@@ -371,11 +341,9 @@ protected:
         return old;
     }
 
-    virtual void inner_updateView(int x, int y, int w, int h, bool upBackGnd = true);
+    virtual void inner_updateView(int x, int y, int w, int h,
+            bool upBackGnd = true);
     void inner_updateViewRect(int x, int y, int w, int h);
-
-    // to be deprecated
-    bool performClick();
 };
 
 } // namespace hfcl

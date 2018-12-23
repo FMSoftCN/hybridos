@@ -122,6 +122,7 @@ void PanelView::drawBackground(GraphicsContext* context, IntRect &rc)
             //_DBG_PRINTF("PanelView::drawBackground1>>>(%d,%d,%d,%d)",rc.left(),rc.right(),rc.top(),rc.bottom());
             context->fillRect(rc, GetRValue(m_bkColor), GetGValue(m_bkColor), GetBValue(m_bkColor), GetAValue(m_bkColor));
         }
+#if 0
         else if (m_drset) {
             //_DBG_PRINTF("PanelView::drawBackground2>>>(%d,%d,%d,%d)",rc.left(),rc.right(),rc.top(),rc.bottom());
             if(isFocused())
@@ -129,6 +130,7 @@ void PanelView::drawBackground(GraphicsContext* context, IntRect &rc)
             else
                 m_drset->draw(context, DR_BKGND, DRAWSTATE_NORMAL, rc);
         }
+#endif
     }
 }
 

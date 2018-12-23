@@ -39,7 +39,7 @@ void AlphaViewAnimation::setProperty(int id, void* value)
     if (NULL == m_view) {
         return;
     }
-    m_view->setAlpha(*(int*)value);
+    //m_view->setAlpha(*(int*)value);
 
     m_view->updateView();
 }
@@ -47,8 +47,8 @@ void AlphaViewAnimation::setProperty(int id, void* value)
 void AlphaViewAnimation::onStart()
 {
     if (NULL != m_view) {
-        int opacity = m_view->alpha();
-        setStartValue(&opacity);
+        //int opacity = m_view->alpha();
+        //setStartValue(&opacity);
     }
 }
 
