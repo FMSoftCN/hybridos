@@ -62,7 +62,7 @@ bool Activity::onKey(int keyCode, KeyEvent* event)
     View* _focus = NULL;
     bool ret = true;
 
-    if ((View *)0 != (_focus = focusView())) {
+    if ((View *)0 != (_focus = getFocusedChild())) {
         ret = _focus->dispatchEvent(event);
         return ret;
     }

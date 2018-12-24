@@ -99,7 +99,7 @@ bool Window::onKey (int keyCode, KeyEvent* event)
 {
     View* _focus = NULL;
 
-    if ((View *)0 != (_focus = focusView())) {
+    if ((View *)0 != (_focus = getFocusedChild())) {
         _focus->dispatchEvent(event);
     }
 

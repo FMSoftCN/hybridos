@@ -39,10 +39,10 @@ ViewContainer::~ViewContainer()
     clean();
 }
 
-View* ViewContainer::firstEnableChild(void)
+View* ViewContainer::firstEnabledChild(void)
 {
     View* view = NULL;
-    if (viewCount() < 1)
+    if (childrenCount() < 1)
         return NULL;
     view = m_firstChild;
 
@@ -145,7 +145,7 @@ bool ViewContainer::insertBefore(View *view, View* child)
     return true;
 }
 
-int ViewContainer::detachChild(int index)
+int ViewContainer::detachChildByIndex(int index)
 {
     return detachChild(getChildByIndex(index));
 }
@@ -229,10 +229,10 @@ int ViewContainer::removeChild(View * view, bool bRelease)
     return -1;
 }
 
-View* ViewContainer::getChild(int i_id) const
+View* ViewContainer::getChildById(int id) const
 {
-    for(View *view = firstChild(); view ; view = view->nextSibling()) {
-        if(view->getId() == i_id)
+    for (View *view = firstChild(); view ; view = view->nextSibling()) {
+        if (view->getId() == id)
             return view;
     }
     return NULL;
@@ -241,52 +241,54 @@ View* ViewContainer::getChild(int i_id) const
 View* ViewContainer::getChildByIndex(int idx) const
 {
     View *view = NULL;
-    if(idx < 0)
+    if (idx < 0)
         return lastChild();
 
-    if(idx > (m_childCount>>1)) //from tail
-        for(view = lastChild(), idx = m_childCount - idx - 1; view  && idx > 0; view = view->prevSibling(), idx --);
+    if (idx > (m_childCount >> 1))
+        for (view = lastChild(), idx = m_childCount - idx - 1;
+                view && idx > 0; view = view->prevSibling(), idx --);
     else
-        for(view = firstChild(); view  && idx > 0; view = view->nextSibling(), idx --);
+        for(view = firstChild();
+                view && idx > 0; view = view->nextSibling(), idx --);
 
     return view;
 }
 
-int ViewContainer::getChildIndex(View *view) const {
-    if(!isChild(view))
+int ViewContainer::getChildIndex(View *view) const
+{
+    if (!isChild (view))
         return -1;
 
     int idx = 0;
-    for(View *c = firstChild(); c && c != view; c = c->nextSibling(), idx++);
+    for (View *c = firstChild(); c && c != view; c = c->nextSibling(), idx++);
 
     return idx;
 }
 
 
-View* ViewContainer::getView (int i_id) const
+View* ViewContainer::findDescendant(int id) const
 {
-    for(View *view = firstChild(); view ; view = view->nextSibling()) {
-        if(view->getId() == i_id)
+    for (View *view = firstChild(); view ; view = view->nextSibling()) {
+        if (view->getId() == id)
             return view;
-        else if(view->isContainer())
-        {
-            View *c = ((ViewContainer*)view)->getView(i_id);
-            if(c)
+        else if (view->isContainer()) {
+            View *c = ((ViewContainer*)view)->getChildById(id);
+            if (c)
                 return c;
         }
-
     }
+
     return NULL;
 }
 
 View *ViewContainer::getChildByPosition(int x_pos, int y_pos) const
 {
-    for(View *view = lastChild(); NULL != view ; view = view->prevSibling())
-    {
+    for(View *view = lastChild(); NULL != view ; view = view->prevSibling()) {
         IntRect irc = view->getRect();
         if (irc.contains(x_pos, y_pos)){
             if(view->isContainer()) {
-                return ((ViewContainer*)view)->getChildByPosition(x_pos - irc.left(), y_pos - irc.top());
+                return ((ViewContainer*)view)->getChildByPosition (
+                        x_pos - irc.left(), y_pos - irc.top());
             }
             else {
                 return view;
@@ -406,7 +408,7 @@ bool ViewContainer::dispatchEvent(Event* event)
     return GOON_DISPATCH;
 }
 
-void ViewContainer::setFocusView(View* view)
+void ViewContainer::focusChild(View* view)
 {
     View* old_focusView = NULL;
     if(view == NULL)
@@ -426,13 +428,13 @@ void ViewContainer::setFocusView(View* view)
     m_focusView->onGotFocus();
 
     if (m_focusView->isContainer()){
-        View * focus = ((ViewContainer *)m_focusView)->focusView();
+        View * focus = ((ViewContainer *)m_focusView)->getFocusedChild();
         if(focus)
             m_focusView->setFocus(focus);
     }
 }
 
-void ViewContainer::releaseFocusView(void)
+void ViewContainer::unfocusChild(void)
 {
     View* old_focusView = NULL;
     if (m_focusView == (View *)0){
@@ -444,7 +446,7 @@ void ViewContainer::releaseFocusView(void)
 
     old_focusView->onLostFocus();
     if (old_focusView->isContainer()){
-        ((ViewContainer *)old_focusView)->releaseFocusView();
+        ((ViewContainer *)old_focusView)->unfocusChild();
     }
     setFocusable(false);
 

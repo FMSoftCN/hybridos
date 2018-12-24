@@ -33,15 +33,14 @@ public:
             const char* name = NULL);
     virtual ~ViewContainer();
 
-    /* pure virtual functions */
-    virtual void onChildAttached(View* view) = 0;
-    virtual void onChildDetached(View* view) = 0;
-
+    /* methods specfic to ViewContainer */
     bool isChild(View* view) const;
     bool insertBefore(View *view, View *child);
     bool insertAfter(View *view, View *child);
     bool insertBefore(int idx, View* child);
-    bool insertAfter(int idx, View* child) { return (child) ? insertAfter(getChildByIndex(idx), child) : false; }
+    bool insertAfter(int idx, View* child) {
+        return child ? insertAfter(getChildByIndex(idx), child) : false;
+    }
 
     bool addChild(View* child) { return insertAfter(m_lastChild, child); }
     bool addChildHead(View* child) { return insertBefore(m_firstChild, child); }
@@ -51,41 +50,43 @@ public:
     int  removeChild(int index, bool bRelease = true);
     int  removeAll();
     int  detachChild(View* child);
-    int  detachChild(int child);
+    int  detachChildByIndex(int idx);
     void clean();
 
-    View* getChild(int id) const;
+    View* getChildById(int id) const;
     View* getChildByIndex(int idx) const;
-    View* getView (int id) const;
-    int   getChildIndex(View *view) const;
     View *getChildByPosition(int x_pos, int y_pos) const;
 
-    View* firstChild(void) const { return m_firstChild;}
-    View* firstEnableChild(void);
-    View* lastChild(void) const { return m_lastChild;}
-    int  viewCount(void) const { return m_childCount;}
+    int   getChildIndex(View *view) const;
 
-    virtual void changeTheme(void);
-    bool isContainer(void) { return true; }
-    void setFocusView(View* view);
-    void releaseFocusView(void);
-    View* focusView(void) const { return m_focusView;}
+    View* findDescendant(int id) const;
+
+    View* firstChild() const { return m_firstChild; }
+    View* firstEnabledChild();
+    View* lastChild() const { return m_lastChild; }
+    int  childrenCount() const { return m_childCount; }
+
+    void focusChild(View* view);
+    void unfocusChild();
+    View* getFocusedChild() const { return m_focusView; }
+
+    /* overloaded virtual functions */
+    virtual bool isContainer() { return true; }
     virtual void drawBackground(GraphicsContext* context, IntRect &rc);
     virtual void drawContent(GraphicsContext *context, IntRect &rc);
     virtual bool dispatchEvent(Event* event);
 
     virtual void autoFitSize(bool auto_child_fit = false);
 
-    virtual void onChildSizeChanged(View* child) {
-        if(isAutoSize()) {
-            autoFitSize();
-            if (getParent())
-                getParent()->onChildSizeChanged(this);
-        }
-    }
+    /* new virtual functions for ViewContainer */
+    virtual void onChildAttached(View* view);
+    virtual void onChildDetached(View* view);
+    virtual void onChildStyleChanged(View* view);
+    virtual void onChildSizeChanged(View* child);
 
+    /* to be deprecated */
     void setAutoSize(bool b) { setFlag(b, AUTOSIZE); }
-    bool isAutoSize(void) { return m_flags & AUTOSIZE; }
+    bool isAutoSize() { return m_flags & AUTOSIZE; }
 
 protected:
     View *m_focusView;
@@ -102,3 +103,4 @@ protected:
 } // namespace hfcl
 
 #endif /* HFCL_VIEW_VIEWCONTAINER_H_ */
+

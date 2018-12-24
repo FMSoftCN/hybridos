@@ -371,13 +371,13 @@ void View::focusMe()
 
     if (NULL != (p = getParent())) {
         if (p->isFocused()){
-            if(NULL != p->focusView() && this != p->focusView())
-                p->releaseFocusView();
+            if(NULL != p->getFocusedChild() && this != p->getFocusedChild())
+                p->unfocusChild();
         }
         else {
             p->focusMe();
         }
-        p->setFocusView(this);
+        p->focusChild(this);
     }
 
     /*
@@ -390,7 +390,8 @@ void View::focusMe()
 bool View::isFocused()
 {
     if (m_parent) {
-        return ((m_parent->focusView() == this) && m_parent->focusValid());
+        return ((m_parent->getFocusedChild() == this)
+                && m_parent->focusValid());
     }
 
     return false;

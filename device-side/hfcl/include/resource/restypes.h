@@ -190,10 +190,10 @@ typedef struct UI_RES_ARRAY
 
 ///// BMPFont information
 typedef struct TRBMPDevFontItemInfo {
-    const char *      start_mchar;
-    unsigned int       num_char;
-    unsigned int       glyph_width;
-    HTResId        bmp_id;
+    const char *    start_mchar;
+    unsigned int    num_char;
+    unsigned int    glyph_width;
+    HTResId         bmp_id;
 } TRBMPDevFontItemInfo;
 
 typedef struct TRStyleElement {

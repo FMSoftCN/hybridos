@@ -26,8 +26,7 @@
 
 namespace hfcl {
 
-RootView::RootView()
-    : ViewContainer(0, NULL, NULL)
+RootView::RootView() : ViewContainer(0, NULL, NULL)
 {
     m_hwnd = HWND_INVALID;
     m_old_proc = NULL;
@@ -43,11 +42,11 @@ RootView::~RootView()
 bool RootView::attachToSysWindow(HWND hwnd)
 {
     if (m_hwnd != HWND_INVALID && hwnd != HWND_INVALID) {
-        m_old_proc = SetWindowCallbackProc (hwnd, rootViewProc);
-        SetWindowAdditionalData (hwnd, (DWORD)this);
+        m_old_proc = SetWindowCallbackProc(hwnd, rootViewProc);
+        SetWindowAdditionalData(hwnd, (DWORD)this);
         m_hwnd = hwnd;
 
-        InvalidateRect (hwnd, NULL, true);
+        InvalidateRect(hwnd, NULL, true);
         return true;
     }
 
@@ -59,8 +58,10 @@ bool RootView::detachFromSysWindow()
     if (m_hwnd == HWND_INVALID)
         return false;
 
-    SetWindowCallbackProc (m_hwnd, m_old_proc);
-    SetWindowAdditionalData (m_hwnd, 0);
+    SetWindowCallbackProc(m_hwnd, m_old_proc);
+    SetWindowAdditionalData(m_hwnd, 0);
+    InvalidateRect(m_hwnd, NULL, true);
+
     m_hwnd = HWND_INVALID;
     m_old_proc = NULL;
     return true;
@@ -76,7 +77,7 @@ LRESULT RootView::rootViewProc(HWND hWnd, UINT message,
 {
     RootView* _view = RootView::hwndToView(hWnd);
     if (_view == NULL) {
-        _DBG_PRINTF ("RootView::rootViewProc: _view is NULL\n");
+        _DBG_PRINTF("RootView::rootViewProc: _view is NULL\n");
         return 0;
     }
 
@@ -211,6 +212,7 @@ int RootView::onKeyMessage(Event::EventType keytype,
 {
     int keycode = scancode2keycode(wParam);
     KeyEvent event(keytype, keycode, wParam, lParam);
+
     dispatchEvent(&event);
     return 0;
 }
@@ -220,10 +222,20 @@ int RootView::onMouseMessage(Event::EventType mouseType,
 {
     int x_pos = LOSWORD (lParam);
     int y_pos = HISWORD (lParam);
+    MouseEvent ev(mouseType, x_pos, y_pos, wParam);
 
-    MouseEvent ev(mouseType, x_pos, y_pos, lParam);
     dispatchEvent(&ev);
     return 0;
+}
+
+bool RootView::applyCss (const CssDeclared* css)
+{
+    return true;
+}
+
+bool RootView::applyCssGroup (HTResId cssgId)
+{
+    return true;
 }
 
 } // namespace hfcl

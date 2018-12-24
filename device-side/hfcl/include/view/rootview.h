@@ -28,7 +28,9 @@
 #include <minigui/window.h>
 
 #include "../view/viewcontainer.h"
+#include "../css/cssdeclared.h"
 #include "../graphics/graphicscontext.h"
+#include "../resource/restypes.h"
 
 namespace hfcl {
 
@@ -38,8 +40,11 @@ public:
     RootView();
     virtual ~RootView();
 
+    /* methods specific to RootView */
     bool attachToSysWindow (HWND hwnd);
     bool detachFromSysWindow ();
+    bool applyCss (const CssDeclared* css);
+    bool applyCssGroup (HTResId cssgId);
 
     /* overloaded virtual functions */
     virtual const char* tag() { return "htroot"; }
@@ -48,15 +53,14 @@ public:
 
     virtual void onPaint(GraphicsContext* context);
 
-    /* new virtual functions of RootView */
-    // subclass can overload the methods
+    /* new virtual functions for RootView */
+    // you can overload the method to define customized keycode.
     virtual int scancode2keycode(int scancode);
-    virtual int onKeyMessage(Event::EventType keytype,
-        WPARAM wParam, LPARAM lParam);
-    virtual int onMouseMessage(Event::EventType mouseType,
-        WPARAM wParam, LPARAM lParam);
 
-    virtual bool dispatchEvent(Event* event);
+    int onKeyMessage(Event::EventType keytype,
+        WPARAM wParam, LPARAM lParam);
+    int onMouseMessage(Event::EventType mouseType,
+        WPARAM wParam, LPARAM lParam);
 
     /* static methods */
     static RootView* hwndToView(HWND hwnd);
