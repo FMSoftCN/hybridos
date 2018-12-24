@@ -464,7 +464,7 @@ bool Menu::onKey(int keyCode, KeyEvent* event)
     if(keyCode == KeyEvent::KEYCODE_CURSOR_UP
             || keyCode == KeyEvent::KEYCODE_CURSOR_DOWN) {
         m_menuItemList->dispatchEvent(event);
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
     }
 
     if (event->eventType() == Event::KEY_UP) {
@@ -490,7 +490,7 @@ bool Menu::onKey(int keyCode, KeyEvent* event)
             if (!m_isProcessing) {
                    onMenuEnter();
             }
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
 
         case KeyEvent::KEYCODE_SOFTKEY_LEFT:
         case KeyEvent::KEYCODE_CURSOR_LEFT:
@@ -534,7 +534,7 @@ bool Menu::onKey(int keyCode, KeyEvent* event)
         }
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 void Menu::onMenuEnter(void)

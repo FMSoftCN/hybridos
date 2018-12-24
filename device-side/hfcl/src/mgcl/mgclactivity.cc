@@ -88,7 +88,7 @@ DWORD mgclDoModal(HWND hWnd, BOOL bAutoDestroy)
                || Msg.message == MSG_KEYALWAYSPRESS))
         {
             // stop process
-            if(DISPATCH_STOP_MSG == ActivityManager::getInstance()->processKeyHook(&Msg))
+            if(STOP_DISPATCH == ActivityManager::getInstance()->processKeyHook(&Msg))
                 continue;
         }
         if (Msg.hwnd == hwnd) {
@@ -180,7 +180,7 @@ DWORD mgclDoModalView(HWND hwnd)
                || Msg.message == MSG_KEYALWAYSPRESS))
         {
             // stop process
-            if(DISPATCH_STOP_MSG == ActivityManager::getInstance()->processKeyHook(&Msg))
+            if(STOP_DISPATCH == ActivityManager::getInstance()->processKeyHook(&Msg))
                 continue;
         }
         if (Msg.hwnd == hwnd) {

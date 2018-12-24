@@ -228,11 +228,11 @@ void GifAnimateView::onPaint(GraphicsContext* context, int status)
 bool GifAnimateView::handleEvent(Event* event)
 {
     if (NULL == m_animate)
-        return DISPATCH_CONTINUE_MSG;
+        return GOON_DISPATCH;
 
     // check state
     if (Stop == m_state)
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
 
     if (event->eventType() == Event::TIMER
             && m_timer_id == ((TimerEvent *)event)->timerID())
@@ -270,7 +270,7 @@ bool GifAnimateView::handleEvent(Event* event)
         }
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 bool GifAnimateView::dispatchEvent(Event* event)

@@ -127,7 +127,7 @@ bool ButtonView::dispatchEvent(Event* event)
     }
 
     updateView();
-    return DISPATCH_STOP_MSG;
+    return STOP_DISPATCH;
 }
 
 

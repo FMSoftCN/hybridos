@@ -5,8 +5,9 @@ myincludedir=$(includedir)/hfcl/view
 myinclude_HEADERS= \
     view.h \
     viewcontainer.h \
-    viewcontext.h \
     scrollbar.h \
+    rootview.h \
+    viewcontext.h \
     animateimageview.h \
     arrowtextview.h \
     bitmark.h \

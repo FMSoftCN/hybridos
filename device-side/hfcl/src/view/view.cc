@@ -25,7 +25,8 @@
 #include <string>
 
 #include "view/viewcontainer.h"
-#include "activity/window.h"
+#include "view/rootview.h"
+
 #include "graphics/graphicscontext.h"
 #include "resource/respackage.h"
 #include "resource/respkgmanager.h"
@@ -311,7 +312,7 @@ void View::updateView(bool upBackGnd)
 //return True if the event was handled, false otherwise.
 bool View::dispatchEvent(Event* event)
 {
-    if (event->eventType() == Event::MOTION_CLICK) {
+    if (event->eventType() == Event::MOUSE_CLICKED) {
         ViewClickEventStruct s;
         s.view = this;
         s.x = ((MouseEvent *)event)->x();
@@ -327,10 +328,11 @@ bool View::raiseEvent(Event *event)
 {
     EventListenerList::iterator i;
 
-    for (i = m_listeners.begin(); i != m_listeners.end(); ++i){
-        if((*i)->handleEvent(event))
+    for (i = m_listeners.begin(); i != m_listeners.end(); ++i) {
+        if ((*i)->handleEvent(event))
             return true;
     }
+
     return false;
 }
 
@@ -395,17 +397,27 @@ bool View::isFocused()
 }
 #endif
 
-ViewContainer* View::getRoot()
+RootView* View::getRoot()
 {
     View *p = this;
 
-    while (p != NULL){
+    while (p != NULL) {
         if (p->isRoot())
-            return (ViewContainer *)p;
+            return (RootView *)p;
         p = p->getParent();
     }
 
     return NULL;
+}
+
+HWND View::getSysWindow()
+{
+    RootView* root = getRoot();
+    if (root) {
+        return root->getSysWindow();
+    }
+
+    return HWND_INVALID;
 }
 
 } // namespace hfcl

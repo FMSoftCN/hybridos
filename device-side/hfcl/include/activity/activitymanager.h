@@ -39,7 +39,7 @@ class ActivityFactory;
  * hook key msg from actManager
  *
  * @param MSG *msg - msg we get from msg queue
- * @return bool - DISPATCH_CONTINUE_MSG continue message loop, DISPATCH_STOP_MSG stop for process this msg.
+ * @return bool - GOON_DISPATCH continue message loop, STOP_DISPATCH stop for process this msg.
  */
 typedef bool (*KeyHookCallback)(MSG *msg);
 
@@ -95,8 +95,8 @@ public:
      *
      * @param MSG *msg - msg we get from msg queue.
      *
-     * @return bool - DISPATCH_CONTINUE_MSG continue message loop,
-     *                - DISPATCH_STOP_MSG stop for process this msg.
+     * @return bool - GOON_DISPATCH continue message loop,
+     *                - STOP_DISPATCH stop for process this msg.
      ***/
     bool processKeyHook(MSG* msg);
 

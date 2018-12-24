@@ -117,7 +117,7 @@ bool LineLayoutView::dispatchEvent(Event* event)
             break;
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 bool LineLayoutView::setRect(const IntRect& irc)

@@ -22,7 +22,6 @@
 #ifndef HFCL_COMMON_EVENT_H_
 #define HFCL_COMMON_EVENT_H_
 
-//return True if the event was handled, false otherwise.
 #define EVENT_HANDLED      1
 #define EVENT_NOT_HANDLED  0
 
@@ -30,8 +29,10 @@
 #include "../common/stlalternative.h"
 #include "../common/object.h"
 
-#define DISPATCH_CONTINUE_MSG  false
-#define DISPATCH_STOP_MSG      true
+// GOON_DISPATCHING to continue dispatching the event;
+// STOP_DISPATCHING to stop dispatching the event.
+#define GOON_DISPATCH   false
+#define STOP_DISPATCH       true
 
 namespace hfcl {
 
@@ -43,12 +44,13 @@ public:
         KEY_LONGPRESSED,
         KEY_ALWAYSPRESS,
         KEY_CHAR,
-        MOTION_DOWN,
-        MOTION_UP,
-        MOTION_MOVE,
-        MOTION_MOVEIN,
-        MOTION_MOVEOUT,
-        MOTION_CLICK,
+        MOUSE_DOWN,
+        MOUSE_UP,
+        MOUSE_MOVE,
+        MOUSE_MOVEIN,
+        MOUSE_MOVEOUT,
+        MOUSE_CLICKED,
+        MOUSE_DBLCLICKED,
         TIMER,
         CUSTOM_NOTIFY,
     };
@@ -80,7 +82,7 @@ private:
 
 class CustomEvent : public Event {
 public:
-    enum CustomParam{
+    enum CustomParam {
         CUS_BOUNDARY_LEFT,
         CUS_BOUNDARY_RIGHT,
         CUS_BOUNDARY_UP,
@@ -115,11 +117,11 @@ public:
         m_exParam2 = exParam2;
     }
 
-    inline HTData customWparam () const {
+    inline HTData customWParam () const {
         return m_wParam;
     }
 
-    inline HTData customLparam () const {
+    inline HTData customLParam () const {
         return m_lParam;
     }
 
@@ -141,67 +143,67 @@ private:
 class KeyEvent : public Event {
 public:
     enum KeyCode {
-        KEYCODE_0 = 0,
-        KEYCODE_1,
-        KEYCODE_2,
-        KEYCODE_3,
-        KEYCODE_4,
-        KEYCODE_5,
-        KEYCODE_6,
-        KEYCODE_7,
-        KEYCODE_8,
-        KEYCODE_9,
+        KEYCODE_0 = 0,  // SCANCODE_1
+        KEYCODE_1,      // SCANCODE_2
+        KEYCODE_2,      // SCANCODE_3
+        KEYCODE_3,      // SCANCODE_4
+        KEYCODE_4,      // SCANCODE_5
+        KEYCODE_5,      // SCANCODE_6
+        KEYCODE_6,      // SCANCODE_7
+        KEYCODE_7,      // SCANCODE_8
+        KEYCODE_8,      // SCANCODE_9
+        KEYCODE_9,      // SCANCODE_0
 
-        KEYCODE_SPACE,
+        KEYCODE_STAR,   // SCANCODE_F1: "*"
+        KEYCODE_POUND,  // SCANCODE_F2: "#"
+        KEYCODE_SOFTKEY_LEFT,   // SCANCODE_F3: left soft key
+        KEYCODE_SOFTKEY_RIGHT,  // SCANCODE_F4: right soft key
+        KEYCODE_CALL,   // SCANCODE_F5:
+        KEYCODE_MUSIC,  // SCANCODE_F6:
+        KEYCODE_CALL2,  // SCANCODE_F7:
+        KEYCODE_CAMERA, // SCANCODE_F8:
+        KEYCODE_FM,     // SCANCODE_F9:
+        KEYCODE_SMS,    // SCANCODE_F10:
 
-        KEYCODE_F1,
-        KEYCODE_F2,
-        KEYCODE_F3,
-        KEYCODE_F4,
-        KEYCODE_F5,
-        KEYCODE_F6,
-        KEYCODE_F7,
-        KEYCODE_F8,
-        KEYCODE_F9,
+        KEYCODE_START,  // SCANCODE_F11:
+        KEYCODE_STOP,   // SCANCODE_F12:
+        KEYCODE_PAUSE,  // SCANCODE_PAUSE
 
-        KEYCODE_ESCAPE,
+        KEYCODE_HOME,           // SCANCODE_HOME
+        KEYCODE_CURSOR_UP,      // SCANCODE_CURSORBLOCKUP
+        KEYCODE_VOL_UP,         // SCANCODE_PAGEUP
+        KEYCODE_CURSOR_LEFT,    // SCANCODE_CURSORBLOCKLEFT
+        KEYCODE_CURSOR_RIGHT,   // SCANCODE_CURSORBLOCKRIGHT
+        KEYCODE_END,            // SCANCODE_END
+        KEYCODE_CURSOR_DOWN,    // SCANCODE_CURSORBLOCKDOWN
+        KEYCODE_VOL_DOWN,       // SCANCODE_PAGEDOWN
 
-        KEYCODE_SOFTKEY_LEFT,
-        KEYCODE_SOFTKEY_CENTER,
-        KEYCODE_SOFTKEY_RIGHT,
-        KEYCODE_START,
-        KEYCODE_PAUSE,
-        KEYCODE_STOP,
+        KEYCODE_SPACE,      // SCANCODE_SPACE
+        KEYCODE_BACK,       // SCANCODE_ESCAPE
 
-        KEYCODE_CURSOR_LEFT,
-        KEYCODE_CURSOR_UP,
-        KEYCODE_CURSOR_RIGHT,
-        KEYCODE_CURSOR_DOWN,
+        KEYCODE_ENTER,      // SCANCODE_ENTER
+        KEYCODE_POWER,      // SCANCODE_POWER
 
-        KEYCODE_HOME,
-        KEYCODE_END,
-        KEYCODE_PAGE_UP,
-        KEYCODE_PAGE_DOWN,
+        KEYCODE_BACKSPACE,  // SCANCODE_BACKSPACE
+        KEYCODE_REMOVE,     // SCANCODE_REMOVE
 
-        KEYCODE_VOL_UP,
-        KEYCODE_VOL_DOWN,
+        KEYCODE_SOFTKEY_CENTER = KEYCODE_ENTER,
 
-        KEYCODE_ENTER,
-        KEYCODE_POWER,
-
-        KEYCODE_BACKSPACE,
-        KEYCODE_DELETE,
-
-        MAX_SYS_KEYCODE = 255,
+        KEYCODE_UNKNOWN,
     };
 
-    KeyEvent (EventType type, int keyCode, unsigned int keyStatus)
-        : Event (type)
-        , m_keyCode (keyCode)
-        , m_keyStatus (keyStatus) {
+    KeyEvent (EventType type, int keyCode, int scanCode, unsigned int keyStatus)
+        : Event(type)
+        , m_keyCode(keyCode)
+        , m_scanCode(scanCode)
+        , m_keyStatus(keyStatus) {
     }
 
     virtual ~KeyEvent() {
+    }
+
+    inline int scanCode() const {
+        return m_scanCode;
     }
 
     inline int keyCode() const {
@@ -218,6 +220,7 @@ public:
 
 private:
     int m_keyCode;
+    int m_scanCode;
     unsigned int m_keyStatus;
 };
 
@@ -266,14 +269,12 @@ private:
 
 class EventListener : public RefCount {
 public:
-    EventListener() : RefCount (0) {
-    }
+    EventListener() : RefCount (0) { }
 
     virtual bool handleEvent(Event* event) = 0;
 
 protected:
-    EventListener(int start_ref) : RefCount(start_ref) {
-    }
+    EventListener(int start_ref) : RefCount(start_ref) { }
 };
 
 class EventBroadcaster {
@@ -307,3 +308,4 @@ protected:
 } // namespace hfcl
 
 #endif /* HFCL_COMMON_EVENT_H_ */
+

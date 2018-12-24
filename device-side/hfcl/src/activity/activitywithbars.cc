@@ -166,7 +166,7 @@ bool ActivityWithBars::onKey(int keyCode, KeyEvent* event)
     lcd_service->reset (true);
 
     if (ActivityManager::getInstance()->getCurrentActivity() != this) {
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
     }
 
     ActivityClient* top_app = (ActivityClient*)getTop(0);
@@ -193,20 +193,20 @@ bool ActivityWithBars::onKey(int keyCode, KeyEvent* event)
             if (m_keyDownTarget != top_app || keyCode != m_keyDownCode) {
                 m_keyDownTarget = NULL;
                 m_keyDownCode = -1;
-                return DISPATCH_STOP_MSG;
+                return STOP_DISPATCH;
             }
             m_keyDownTarget = NULL;
         }
 
-        if (top_app->onKey(keyCode, event) == DISPATCH_STOP_MSG) {
-            return DISPATCH_STOP_MSG;
+        if (top_app->onKey(keyCode, event) == STOP_DISPATCH) {
+            return STOP_DISPATCH;
         }
     }
 
     if (event->eventType() == Event::KEY_DOWN
             && keyCode == KeyEvent::KEYCODE_STOP) {
         exitHome();
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
     }
 
     if (m_menuBar && !isImeOpen()
@@ -242,11 +242,11 @@ bool ActivityWithBars::onKey(int keyCode, KeyEvent* event)
 
     ret = Activity::onKey(keyCode, event);
 #ifdef __SUPPORT_MANUAL_KEYPAD_LOCK_IN_ALLSCREEN__
-    if (ret == DISPATCH_CONTINUE_MSG
+    if (ret == GOON_DISPATCH
             && event->eventType() == Event::KEY_LONGPRESSED
             && keyCode == KeyEvent::KEYCODE_STAR) {
         enterLockFrame(true, true);
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
     }
 #endif
     return ret;
@@ -275,14 +275,14 @@ bool ActivityWithBars::handleEvent(Event* event)
                 }
             }
 
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         }
 
         ActivityClient *client = getTopActivityClient();
         if (client)
             client->onMenuCommand((CustomEvent*)event);
 
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
     }
     else if (event->eventType() == Event::TIMER
             && m_timerId == ((TimerEvent*)event)->timerID()) {
@@ -295,10 +295,10 @@ bool ActivityWithBars::handleEvent(Event* event)
             Activity::onKey(127, &event);
         }
 
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 void ActivityWithBars::openTimer()
@@ -474,7 +474,7 @@ bool ActivityWithBars::doCommand(int cmd)
             break;
         }
     }
-    return DISPATCH_STOP_MSG;
+    return STOP_DISPATCH;
 }
 
 unsigned int ActivityWithBars::showView (int view_id,

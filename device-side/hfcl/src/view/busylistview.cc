@@ -1037,14 +1037,14 @@ bool BusyListView::dispatchEvent(Event* event)
             {
                 int code = ((KeyEvent *)event)->keyCode();
                 if ( onKeyPressed (code) ) {
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                 }
             }
         default:
             return PanelView::dispatchEvent(event);
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 bool BusyListView::onKeyPressed(int keyCode)

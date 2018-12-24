@@ -228,10 +228,10 @@ bool ScrollBar::handleEvent(Event* event)
         setAutoShowBar(false);
         m_owner->updateView();
 
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 void ScrollBar::updateContentRect()
@@ -310,8 +310,8 @@ void ScrollBar::moveOffsetV(int y)
 #if 0
 bool ScrollBar::dispatchEvent(Event* event)
 {
-    if (DISPATCH_STOP_MSG == PanelView::dispatchEvent(event))
-        return DISPATCH_STOP_MSG;
+    if (STOP_DISPATCH == PanelView::dispatchEvent(event))
+        return STOP_DISPATCH;
 
     switch(event->eventType()) {
     case Event::KEY_DOWN:
@@ -331,15 +331,15 @@ bool ScrollBar::dispatchEvent(Event* event)
             moveOffsetH(m_hStep);
             break;
         default:
-            return DISPATCH_CONTINUE_MSG;
+            return GOON_DISPATCH;
         }
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
 
     default:
-        return DISPATCH_CONTINUE_MSG;
+        return GOON_DISPATCH;
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 #endif
 

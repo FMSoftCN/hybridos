@@ -428,14 +428,14 @@ bool MenuBarView::dispatchEvent(Event* event)
             item = SEL_MIDDLE;
             break;
         default:
-            return DISPATCH_CONTINUE_MSG;
+            return GOON_DISPATCH;
         }
 
         pressItem (item, t == Event::KEY_DOWN);
 
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
     }
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 

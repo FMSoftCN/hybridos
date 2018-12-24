@@ -736,7 +736,7 @@ bool SlEditView::dispatchEvent(Event *event)
         {
             insertText(ch);
         }
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         }
 #endif
 #ifdef __MMI_T9__
@@ -758,7 +758,7 @@ bool SlEditView::dispatchEvent(Event *event)
             m_SlTimerId = 0;
             blinkCaret();
             if(code == KeyEvent::KEYCODE_CURSOR_RIGHT)
-                return DISPATCH_STOP_MSG;
+                return STOP_DISPATCH;
         }
 
         switch(code)
@@ -776,7 +776,7 @@ bool SlEditView::dispatchEvent(Event *event)
                         deleteAllCharacters();
                         raiseNotifyEvent(NOTIFY_EDIT_CHANGED);
                         updateView();
-                        return DISPATCH_STOP_MSG;
+                        return STOP_DISPATCH;
                     }
                     else
                     {
@@ -794,14 +794,14 @@ bool SlEditView::dispatchEvent(Event *event)
                     {
                         replacePrevChar(NULL);
                     }
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
 #else //__MMI_T9__
                     replacePrevChar(NULL);
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
 #endif //__MMI_T9__
                     }
                 }
-                return DISPATCH_CONTINUE_MSG;
+                return GOON_DISPATCH;
             case KeyEvent::KEYCODE_CURSOR_LEFT :
                 if(getTextHighlight())
                 {
@@ -809,7 +809,7 @@ bool SlEditView::dispatchEvent(Event *event)
                     m_caretPos = 0;
                     showCaret(true);
                     updateView();
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                 }
 #ifdef __MMI_T9__
                 if(imeGetInputModeFlag() == INPUT_MODE_SMART)
@@ -830,7 +830,7 @@ bool SlEditView::dispatchEvent(Event *event)
                         imeSetSwitch();
                     }
                     updateView();
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                 }
                 else
 #endif    //__MMI_T9__
@@ -839,16 +839,16 @@ bool SlEditView::dispatchEvent(Event *event)
                     m_caretPos -= lastChLen;
                     showCaret(true);
                     updateView();
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                 }
-                return DISPATCH_CONTINUE_MSG;
+                return GOON_DISPATCH;
             case KeyEvent::KEYCODE_CURSOR_RIGHT :
                 if(getTextHighlight())
                 {
                     setTextHighlight(false);
                     showCaret(true);
                     updateView();
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                 }
 #ifdef __MMI_T9__
                 if(imeGetInputModeFlag() == INPUT_MODE_SMART)
@@ -887,22 +887,22 @@ bool SlEditView::dispatchEvent(Event *event)
                         }
                         updateView();
                     }
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                 }
                 else
 #endif    //__MMI_T9__
                 if (!(m_style & EDVS_PSWD) && !m_AddWord && m_bInsertSpace && m_caretPos == getTextLength()){
                     insertText(" ");
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                 } else if (m_caretPos < getTextLength()) {
                     string sub = m_strings.substr(m_caretPos, -1);
                     int firstChLen = GetFirstUTF8CharLen(sub.c_str(), getTextLength() - m_caretPos);
                     m_caretPos += firstChLen;
                     showCaret(true);
                     updateView();
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                 }
-                return DISPATCH_CONTINUE_MSG;
+                return GOON_DISPATCH;
             case KeyEvent::KEYCODE_CURSOR_UP :
 #ifdef __MMI_T9__
                 if(imeGetInputModeFlag() == INPUT_MODE_SMART)
@@ -912,7 +912,7 @@ bool SlEditView::dispatchEvent(Event *event)
                     {
                         imeT9KeyArrowUpHandlerMultilineInputBox(m_caretPos);
                         imeRefreshString();
-                        return DISPATCH_STOP_MSG;
+                        return STOP_DISPATCH;
                     }
                 }
 #endif    //__MMI_T9__
@@ -929,7 +929,7 @@ bool SlEditView::dispatchEvent(Event *event)
 
                         if(imeT9IsAddwordByArrowkey())
                             entryAddWordMode();
-                        return DISPATCH_STOP_MSG;
+                        return STOP_DISPATCH;
                     }
                 }
 #endif    //__MMI_T9__
@@ -946,7 +946,7 @@ bool SlEditView::dispatchEvent(Event *event)
 
         if ((ch[0] = _charactor(code)) > 0){
             if(m_prevEventType == Event::KEY_LONGPRESSED)
-                return DISPATCH_CONTINUE_MSG;
+                return GOON_DISPATCH;
 
             ch[1] = '\0';
 
@@ -972,12 +972,12 @@ bool SlEditView::dispatchEvent(Event *event)
                     {
                         unsigned int maxcount =  GetUTF8CharCount(m_strings.c_str(),m_strings.size());
                         if(maxcount >=m_txtLimit)
-                            return DISPATCH_STOP_MSG;
+                            return STOP_DISPATCH;
                     }
                     else
                     {
                         if(getTextLength()>=m_txtLimit)
-                            return DISPATCH_STOP_MSG;
+                            return STOP_DISPATCH;
                     }
                     if(m_bSelect == false)
                     {
@@ -1091,10 +1091,10 @@ bool SlEditView::dispatchEvent(Event *event)
         if (code == KeyEvent::KEYCODE_0 && m_bAutoTrans) {
             if(getText().find('+') == string::npos)
                 replacePrevChar("+");
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         } else if (code == KeyEvent::KEYCODE_STAR && m_bAutoTrans) {
             replacePrevChar("P");
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         } else if (code == KeyEvent::KEYCODE_CURSOR_LEFT) {
             setCaretPosition(0);
             showCaret(true);
@@ -1105,7 +1105,7 @@ bool SlEditView::dispatchEvent(Event *event)
             }
 #endif    //__MMI_T9__
             updateView();
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         } else if (code == KeyEvent::KEYCODE_CURSOR_RIGHT) {
             if(getTextHighlight())
                 setTextHighlight(false);
@@ -1118,7 +1118,7 @@ bool SlEditView::dispatchEvent(Event *event)
             }
 #endif    //__MMI_T9__
             updateView();
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         }
         else if(code >= KeyEvent::KEYCODE_0 && code <= KeyEvent::KEYCODE_9 && imeGetInputModeFlag() != INPUT_MODE_NUMBER)
         {
@@ -1140,15 +1140,15 @@ bool SlEditView::dispatchEvent(Event *event)
                 blinkCaret();
             }
 #endif
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         }
 #ifdef __SUPPORT_MANUAL_KEYPAD_LOCK_IN_ALLSCREEN__
         else if(code == KeyEvent::KEYCODE_STAR)
         {
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         }
 #endif
-        return DISPATCH_CONTINUE_MSG;
+        return GOON_DISPATCH;
     }
     else if(event->eventType() == Event::KEY_ALWAYSPRESS)
     {
@@ -1164,15 +1164,15 @@ bool SlEditView::dispatchEvent(Event *event)
             }else{
                 replacePrevChar(NULL);
             }
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         }
-        return DISPATCH_CONTINUE_MSG;
+        return GOON_DISPATCH;
     }
     else if(event->eventType() == Event::MOTION_DOWN)
     {
         //TODO mouse support
     }
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 void SlEditView::drawBackground(GraphicsContext* gc, IntRect &rc, int status)

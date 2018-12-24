@@ -356,7 +356,7 @@ bool FormatEditView::dispatchEvent(Event* event)
                     case KeyEvent::KEYCODE_9:
                         {
                             processNumberKey(((KeyEvent *)event)->keyCode());
-                            return DISPATCH_STOP_MSG;
+                            return STOP_DISPATCH;
                         }
                         break;
                     default:
@@ -369,7 +369,7 @@ bool FormatEditView::dispatchEvent(Event* event)
         default:
             return View::dispatchEvent(event);
     }
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 const char * FormatEditView::getAlignZero(int count)

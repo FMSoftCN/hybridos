@@ -432,7 +432,7 @@ bool ActivityManager::processKeyHook(MSG* msg)
         return m_key_hook(msg);
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 void ActivityManager::run(void)
@@ -447,7 +447,7 @@ void ActivityManager::run(void)
                    || Msg.message == MSG_KEYLONGPRESS
                    || Msg.message == MSG_KEYALWAYSPRESS)) {
                 // stop process
-                if(DISPATCH_STOP_MSG == processKeyHook(&Msg))
+                if(STOP_DISPATCH == processKeyHook(&Msg))
                     continue;
             }
 

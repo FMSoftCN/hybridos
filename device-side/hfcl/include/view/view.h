@@ -34,6 +34,8 @@ namespace hfcl {
 
 class GraphicsContext;
 class ViewContainer;
+class RootView;
+class ScrollBar;
 class CssComputed;
 class CssBox;
 
@@ -79,7 +81,7 @@ public:
     const char* getName() const { return m_name.c_str(); }
     bool setName(const char* name);
 
-    // CSS class of one HVML element
+    // CSS class of this view
     bool applyClass(const char* cssClass);
     bool includeClass(const char* cssClass);
     bool excludeClass(const char* cssClass);
@@ -106,12 +108,29 @@ public:
     virtual void drawBackground(GraphicsContext* context, IntRect &rc) = 0;
     virtual void drawContent(GraphicsContext* context, IntRect &rc) = 0;
     virtual void drawScrollBar(GraphicsContext* context, IntRect &rc) = 0;
+    virtual void onPaint(GraphicsContext* context);
+
+    // return True if the event was handled, false otherwise.
+    virtual bool dispatchEvent(Event* event);
+    virtual bool raiseEvent(Event *event);
 
     /* callbacks to handle the interaction events */
-    virtual void onPaint(GraphicsContext* context);
+    virtual bool onKeyDown(int keyCode, KeyEvent* event) { return false; }
+    virtual bool onChar(const char* mchar) { return false; }
+    virtual bool onKeyUp(int keyCode, KeyEvent* event) { return false; }
+
+    virtual bool onMouseDown(int x, int y, DWORD keyStatus) { return false; }
+    virtual bool onMouseUp(int x, int y, DWORD keyStatus) { return false; }
+    virtual bool onMouseIn(int x, int y, DWORD keyStatus) { return false; }
+    virtual bool onMouseMove(int x, int y, DWORD keyStatus) { return false; }
+    virtual bool onMouseOut(int x, int y, DWORD keyStatus) { return false; }
+
+    /* high-level events */
     virtual void onClicked();
     virtual void onDoubleClicked();
+    virtual void onIdle();
 
+    /* method to get/set attributes (flags) of the view */
     bool isDisabled() { return m_flags & VA_DISABLED; }
     void disable() {
         bool old = setFlag(true, VA_DISABLED);
@@ -178,16 +197,25 @@ public:
     /* methods for silbing travelling */
     const View* prevSibling() const { return m_prev; }
     View* prevSibling() { return m_prev; }
+    void setPrevSlibling(View* view) { m_prev = view; }
+
     const View* nextSibling() const { return m_next; }
     View* nextSibling() { return m_next; }
+    void setNextSlibling(View* view) { m_next = view; }
 
     const ViewContainer* getParent() const { return m_parent; }
     ViewContainer* getParent() { return m_parent; }
-    ViewContainer* getRoot();
-
-    virtual HWND getSysWindow() {
-        return m_parent ? ((View*)m_parent)->getSysWindow() : 0;
+    void setParent(ViewContainer* view) {
+        if (m_parent && m_parent != view) {
+            detach();
+        }
+        if (view) {
+            attach(view);
+        }
     }
+
+    RootView* getRoot();
+    virtual HWND getSysWindow();
 
     virtual void viewToWindow(int *x, int *y);
     virtual void windowToView(int *x, int *y);
@@ -204,15 +232,6 @@ public:
     void updateViewRect(const IntRect &rc);
     void updateViewRect();
     void updateView(bool upBackGnd = true);
-
-    virtual bool raiseEvent(Event *event);
-
-    void setParent(ViewContainer* view) { m_parent = view; }
-    void setPrevSlibling(View* view) { m_prev = view; }
-    void setNextSlibling(View* view) { m_next = view; }
-
-    // return True if the event was handled, false otherwise.
-    virtual bool dispatchEvent(Event* event);
 
     /* to be deprecated */
     virtual bool isWrapperView() { return false; }
@@ -252,6 +271,7 @@ public:
         setVisible(false);
         updateView();
     }
+
     /* to be deprecated */
     View(View* parent, DrawableSet* drset);
     View(int id, int x, int y, int w, int h);
@@ -333,6 +353,8 @@ protected:
 
     IntRect m_rc_viewport;
     IntRect m_rect;
+    ScrollBar* m_vsb;
+    ScrollBar* m_hsb;
 
     LISTEX(EventListener *, EventListenerList,
             do{return *v1 == *v2;}while (0), do{(*n)->unref();} while (0));

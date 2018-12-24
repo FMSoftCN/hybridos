@@ -341,7 +341,7 @@ bool PageNavigateView::dispatchEvent(Event *event)
         }
     }
 
-    return DISPATCH_STOP_MSG;
+    return STOP_DISPATCH;
 }
 
 

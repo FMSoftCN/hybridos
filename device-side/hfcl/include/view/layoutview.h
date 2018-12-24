@@ -51,7 +51,7 @@ class LayoutView : public ContainerView {
         virtual ~LayoutView();
 
         void paint(GraphicsContext* context, int status/* = Style::NORMAL*/) { }
-        bool dispatchEvent(Event* event) { return DISPATCH_CONTINUE_MSG; }
+        bool dispatchEvent(Event* event) { return GOON_DISPATCH; }
 
         void setHorzVertDirection(int direction = LVDST_HORZ)
         {

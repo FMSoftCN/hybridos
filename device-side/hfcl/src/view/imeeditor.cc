@@ -330,7 +330,7 @@ bool TimeEditor::dispatchEvent(Event* event)
         setAlignMargin();
         updateView();
 
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
     }
     else
         return FormatEditView::dispatchEvent(event);

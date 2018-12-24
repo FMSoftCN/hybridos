@@ -1129,7 +1129,7 @@ bool MlEditView::dispatchEvent(Event *event)
             {
                 insertText(ch);
             }
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         }
 #endif
         m_prevEventType = event->eventType();
@@ -1141,7 +1141,7 @@ bool MlEditView::dispatchEvent(Event *event)
             m_multapTimerId = 0;
             blinkCaret();
             if(code == KeyEvent::KEYCODE_CURSOR_RIGHT)
-                return DISPATCH_STOP_MSG;
+                return STOP_DISPATCH;
         }
 
         switch(code)
@@ -1165,13 +1165,13 @@ bool MlEditView::dispatchEvent(Event *event)
                     {
                         replacePrevChar(NULL);
                     }
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
 #else
                     replacePrevChar(NULL);
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
 #endif
                 }
-                return DISPATCH_CONTINUE_MSG;
+                return GOON_DISPATCH;
 //#if 0
             case KeyEvent::KEYCODE_CURSOR_LEFT :
 #ifdef __MMI_T9__
@@ -1194,7 +1194,7 @@ bool MlEditView::dispatchEvent(Event *event)
                         imeSetSwitch();
                     }
                     updateView();
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                 }
                 else
 #endif
@@ -1204,9 +1204,9 @@ bool MlEditView::dispatchEvent(Event *event)
                     refreshCaretPos(false);
                     showCaret(true);
                     updateView();
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                    }
-                return DISPATCH_CONTINUE_MSG;
+                return GOON_DISPATCH;
             case KeyEvent::KEYCODE_CURSOR_RIGHT :
 #ifdef __MMI_T9__
                    if(imeGetInputModeFlag() == INPUT_MODE_SMART)
@@ -1245,13 +1245,13 @@ bool MlEditView::dispatchEvent(Event *event)
                         }
                     }
                     updateView();
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                    }
                    else
 #endif
                 if (m_bInsertSpace && m_caretPos == (int)getTextLength()){
                     insertText(" ");
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                 } else if (m_caretPos < (int)getTextLength()) {
                     string sub = m_strings.substr(m_caretPos, -1);
                     int firstChLen = GetFirstUTF8CharLen(sub.c_str(), (int)getTextLength() - m_caretPos);
@@ -1259,10 +1259,10 @@ bool MlEditView::dispatchEvent(Event *event)
                     refreshCaretPos(false);
                     showCaret(true);
                     updateView();
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                 }
 
-                return DISPATCH_CONTINUE_MSG;
+                return GOON_DISPATCH;
             case KeyEvent::KEYCODE_CURSOR_UP :
                 if(m_urlNumberParseEnable)
                 {
@@ -1280,7 +1280,7 @@ bool MlEditView::dispatchEvent(Event *event)
                             int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
                             imeT9KeyArrowUpHandlerMultilineInputBox(count);
                             imeRefreshString();
-                            return DISPATCH_STOP_MSG;
+                            return STOP_DISPATCH;
                         }
                          else
                         {
@@ -1319,7 +1319,7 @@ bool MlEditView::dispatchEvent(Event *event)
 
                             if(imeT9IsAddwordByArrowkey())
                                 entryAddWordMode();
-                            return DISPATCH_STOP_MSG;
+                            return STOP_DISPATCH;
                         }
                         else
                         {
@@ -1348,7 +1348,7 @@ bool MlEditView::dispatchEvent(Event *event)
 
         if ((ch[0] = _charactor(code)) > 0){
             if(m_prevEventType == Event::KEY_LONGPRESSED)
-                return DISPATCH_CONTINUE_MSG;
+                return GOON_DISPATCH;
 
             ch[1] = '\0';
             if(imeGetInputModeFlag() == INPUT_MODE_SMART && ch[0] != '0')
@@ -1368,12 +1368,12 @@ bool MlEditView::dispatchEvent(Event *event)
                     {
                         unsigned int maxcount = GetUTF8CharCount(m_strings.c_str(),m_strings.size());
                         if(maxcount >= m_txtLimit)
-                            return DISPATCH_STOP_MSG;
+                            return STOP_DISPATCH;
                     }
                     else
                     {
                         if(getTextLength()>=m_txtLimit)
-                            return DISPATCH_STOP_MSG;
+                            return STOP_DISPATCH;
                     }
                     if(m_bSelect == false)
                     {
@@ -1481,10 +1481,10 @@ bool MlEditView::dispatchEvent(Event *event)
 
         if (code == KeyEvent::KEYCODE_0 && m_bAutoTrans) {
             replacePrevChar("+");
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         } else if (code == KeyEvent::KEYCODE_STAR && m_bAutoTrans) {
             replacePrevChar("P");
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         } else if (code == KeyEvent::KEYCODE_CURSOR_LEFT) {
             setCaretPosition(0);
             showCaret(true);
@@ -1496,7 +1496,7 @@ bool MlEditView::dispatchEvent(Event *event)
             }
 #endif
             updateView();
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         } else if (code == KeyEvent::KEYCODE_CURSOR_RIGHT) {
             setCaretPosition(getTextLength());
             showCaret(true);
@@ -1508,7 +1508,7 @@ bool MlEditView::dispatchEvent(Event *event)
             }
 #endif
             updateView();
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         }else if(code == KeyEvent::KEYCODE_SOFTKEY_RIGHT && m_strings.size() > 0){
             if(imeGetInputModeFlag() == INPUT_MODE_SMART){
                 if(m_caretPos <0)
@@ -1522,7 +1522,7 @@ bool MlEditView::dispatchEvent(Event *event)
                 replacePrevChar(NULL);
             }
 
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         }
         else if(code >= KeyEvent::KEYCODE_0 && code <= KeyEvent::KEYCODE_9 && imeGetInputModeFlag() != INPUT_MODE_NUMBER)
         {
@@ -1546,9 +1546,9 @@ bool MlEditView::dispatchEvent(Event *event)
             }
 #endif
 
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         }
-        return DISPATCH_CONTINUE_MSG;
+        return GOON_DISPATCH;
     }
     else if (event->eventType() == Event::KEY_ALWAYSPRESS) {
         if (code == KeyEvent::KEYCODE_SOFTKEY_RIGHT && m_strings.size() > 0) {
@@ -1565,7 +1565,7 @@ bool MlEditView::dispatchEvent(Event *event)
                 replacePrevChar(NULL);
             }
 
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
         }
         else if (code == KeyEvent::KEYCODE_CURSOR_DOWN) {
             return switchLine(false);
@@ -1573,13 +1573,13 @@ bool MlEditView::dispatchEvent(Event *event)
         else if (code == KeyEvent::KEYCODE_CURSOR_UP) {
             return switchLine(true);
         }
-        return DISPATCH_CONTINUE_MSG;
+        return GOON_DISPATCH;
     }
     else if(event->eventType() == Event::MOTION_DOWN) {
         //TODO mouse support
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 bool MlEditView::switchLine(bool isUpLine)
@@ -1587,14 +1587,14 @@ bool MlEditView::switchLine(bool isUpLine)
     if (isUpLine) //goto prev line
     {
         if (m_caretPos <= 0)
-            return DISPATCH_CONTINUE_MSG;
+            return GOON_DISPATCH;
 
         if (m_caretPosY > 0) {
             m_caretPosY--;
             refreshCaretPos(true);
         } else {
 #ifdef __MMI_SPREADSPECTRUM_STYLE__
-            return DISPATCH_CONTINUE_MSG;
+            return GOON_DISPATCH;
 #else
             m_caretPosX = 0;
             m_caretPosY = 0;
@@ -1605,7 +1605,7 @@ bool MlEditView::switchLine(bool isUpLine)
     else {
         // goto next line
         if (m_caretPos >= (int)getTextLength())
-            return DISPATCH_CONTINUE_MSG;
+            return GOON_DISPATCH;
 
         if (m_caretPosY < m_lineCout - 1) {
             m_caretPosY++;
@@ -1619,7 +1619,7 @@ bool MlEditView::switchLine(bool isUpLine)
     raiseNotifyEvent(NGTIFY_EDIT_LINE_CHANGED, m_caretPosY, 0);
     showCaret(true);
     updateView();
-    return DISPATCH_STOP_MSG;
+    return STOP_DISPATCH;
 }
 
 void MlEditView::drawBackground(GraphicsContext* gc, IntRect &rc, int status)

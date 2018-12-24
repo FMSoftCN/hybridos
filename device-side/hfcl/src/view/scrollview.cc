@@ -279,10 +279,10 @@ bool ScrollView::handleEvent(Event* event)
         setAutoShowBar(false);
         updateView();
 
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 void ScrollView::setContent(ContainerView* p_content)
@@ -465,8 +465,8 @@ void ScrollView::moveOffsetV(int y)
 
 bool ScrollView::dispatchEvent(Event* event)
 {
-    if (DISPATCH_STOP_MSG == PanelView::dispatchEvent(event))
-        return DISPATCH_STOP_MSG;
+    if (STOP_DISPATCH == PanelView::dispatchEvent(event))
+        return STOP_DISPATCH;
 
     switch(event->eventType()) {
     case Event::KEY_DOWN:
@@ -486,15 +486,15 @@ bool ScrollView::dispatchEvent(Event* event)
             moveOffsetH(m_hStep);
             break;
         default:
-            return DISPATCH_CONTINUE_MSG;
+            return GOON_DISPATCH;
         }
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
 
     default:
-        return DISPATCH_CONTINUE_MSG;
+        return GOON_DISPATCH;
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 DEFINE_CLASS_NAME(ScrollView)

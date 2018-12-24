@@ -353,13 +353,13 @@ bool SlideSwitcher::dispatchEvent(Event* event)
             int code = ((KeyEvent *)event)->keyCode();
             if ( onKeyPressed (code) ) {
 
-                return DISPATCH_STOP_MSG;
+                return STOP_DISPATCH;
             }
         }
         default:
             return View::dispatchEvent(event);
     }
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 bool SlideSwitcher::onKeyPressed(int keyCode)

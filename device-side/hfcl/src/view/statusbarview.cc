@@ -54,7 +54,7 @@ void StatusBarView::updateStatusBarView(void)
 
 bool StatusBarView::dispatchEvent(Event* event)
 {
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 bool StatusBarView::setSBView(int loca, View* v)

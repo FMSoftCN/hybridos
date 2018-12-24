@@ -91,7 +91,7 @@ bool PairLayoutView::dispatchEvent(Event* event)
             break;
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 bool PairLayoutView::setRect(const IntRect& pirc)

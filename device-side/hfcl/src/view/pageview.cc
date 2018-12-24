@@ -115,7 +115,7 @@ bool PageView::dispatchEvent(Event *event)
 
     PanelView::dispatchEvent(event);
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 
 }
 

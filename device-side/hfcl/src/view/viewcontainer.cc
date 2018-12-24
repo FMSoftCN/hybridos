@@ -368,45 +368,42 @@ bool ViewContainer::dispatchEvent(Event* event)
 {
     View::dispatchEvent(event);
 
-    switch(event->eventType())
-    {
-        case Event::MOTION_UP:
-        case Event::MOTION_DOWN:
-        case Event::MOTION_MOVE:
-            {
-                View *view = firstChild();
-                int x = ((MouseEvent *)event)->x();
-                int y = ((MouseEvent *)event)->y();
-                focusMe();
-                windowToView(&x, &y);
-                while (view != (View *)0)
-                {
-                    if(view->getRect().isIn(x, y))
-                    {
-                        view->focusMe();
-                        view->dispatchEvent(event);
-                        return DISPATCH_STOP_MSG;
-                    }
-                    view = view->nextSibling();
-                }
-
-                break;
+    switch (event->eventType()) {
+    case Event::MOUSE_UP:
+    case Event::MOUSE_DOWN:
+    case Event::MOUSE_MOVE: {
+        View *view = firstChild();
+        int x = ((MouseEvent *)event)->x();
+        int y = ((MouseEvent *)event)->y();
+        focusMe();
+        windowToView(&x, &y);
+        while (view != (View *)0) {
+            if(view->getRect().isIn(x, y)) {
+                view->focusMe();
+                view->dispatchEvent(event);
+                return STOP_DISPATCH;
             }
-        case Event::KEY_DOWN:
-        case Event::KEY_LONGPRESSED:
-        case Event::KEY_ALWAYSPRESS:        // GT_yhkang add longpress event
-        case Event::KEY_UP:
-        case Event::KEY_CHAR:
-            {
-                if (m_focusView) {
-                    return m_focusView->dispatchEvent(event);
-                }
-            }
-            break;
-        default:
-            break;
+            view = view->nextSibling();
+        }
+        break;
     }
-    return DISPATCH_CONTINUE_MSG;
+
+    case Event::KEY_DOWN:
+    case Event::KEY_LONGPRESSED:
+    case Event::KEY_ALWAYSPRESS:
+    case Event::KEY_UP:
+    case Event::KEY_CHAR: {
+        if (m_focusView) {
+            return m_focusView->dispatchEvent(event);
+        }
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    return GOON_DISPATCH;
 }
 
 void ViewContainer::setFocusView(View* view)

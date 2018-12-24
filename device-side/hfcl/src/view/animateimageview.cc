@@ -190,7 +190,7 @@ bool AnimateImageView::handleEvent(Event* event)
 {
     // check state
     if (Stop == m_state)
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
 
     if (event->eventType() == Event::TIMER
             && m_timer_id == ((TimerEvent *)event)->timerID())
@@ -211,7 +211,7 @@ bool AnimateImageView::handleEvent(Event* event)
         m_elapsed_10ms = m_elapsed_10ms + 10;
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 DEFINE_CLASS_NAME(AnimateImageView)

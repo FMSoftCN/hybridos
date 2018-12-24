@@ -230,7 +230,7 @@ void WrapperView::closeTimer(void)
 bool WrapperView::dispatchEvent(Event *event)
 {
     if(!::IsWindow(m_wrapwnd))
-        return DISPATCH_STOP_MSG;
+        return STOP_DISPATCH;
 
     switch(event->eventType())
     {
@@ -239,7 +239,7 @@ bool WrapperView::dispatchEvent(Event *event)
             SendMessage(m_wrapwnd, MSG_KEYDOWN,
                     ((KeyEvent*)event)->keyCode(),
                     ((KeyEvent*)event)->keyStatus());
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
          case Event::KEY_LONGPRESSED:
          case Event::KEY_ALWAYSPRESS:
             {
@@ -250,12 +250,12 @@ bool WrapperView::dispatchEvent(Event *event)
                     m_timerId = TimerService::getInstance()->addTimerListener(_EDIT_LOOP_RATE_, this);
                     m_pressedKey = code;
                     m_timerCount = 0;
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                 }
 #else
                 m_pressedKey = ((KeyEvent *)event)->keyCode();
                 if ( onKeyPressed (m_pressedKey) ) {
-                    return DISPATCH_STOP_MSG;
+                    return STOP_DISPATCH;
                 }
 #endif
                 break;
@@ -273,15 +273,15 @@ bool WrapperView::dispatchEvent(Event *event)
             SendMessage(m_wrapwnd, MSG_KEYUP,
                     ((KeyEvent*)event)->keyCode(),
                     ((KeyEvent*)event)->keyStatus());
-            return DISPATCH_STOP_MSG;
+            return STOP_DISPATCH;
          case Event::KEY_CHAR:
             SendMessage(m_wrapwnd, MSG_CHAR, (WPARAM)127, 0);
             break;
          default:
-            return DISPATCH_CONTINUE_MSG;
+            return GOON_DISPATCH;
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 #if 0 // GT_jyseo rollback
@@ -294,7 +294,7 @@ bool WrapperView::handleEvent(Event* event)
             onKeyPressed(m_pressedKey);
         }
     }
-    return DISPATCH_STOP_MSG;
+    return STOP_DISPATCH;
 }
 #endif
 

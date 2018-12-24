@@ -366,15 +366,15 @@ bool ListView::dispatchEvent(Event* event)
         case Event::KEY_DOWN:
         {
             int code = ((KeyEvent *)event)->keyCode();
-            if ( DISPATCH_STOP_MSG == onKeyPressed (code) ) {
-                return DISPATCH_STOP_MSG;
+            if ( STOP_DISPATCH == onKeyPressed (code) ) {
+                return STOP_DISPATCH;
             }
         }
         default:
             return PanelView::dispatchEvent(event);
     }
 
-    return DISPATCH_STOP_MSG;
+    return STOP_DISPATCH;
 }
 
 void ListView::updateContent()
@@ -776,7 +776,7 @@ bool ListView::onKeyPressed(int keyCode)
 {
     if (NULL == m_content
             || m_content->viewCount() < 1) {
-        return DISPATCH_CONTINUE_MSG;
+        return GOON_DISPATCH;
     }
 
     if (keyCode ==  KeyEvent::KEYCODE_CURSOR_UP) {
@@ -800,7 +800,7 @@ bool ListView::onKeyPressed(int keyCode)
         }
     }
     else {
-        return DISPATCH_CONTINUE_MSG;
+        return GOON_DISPATCH;
     }
 
     if (!autoShowBar()) {
@@ -808,7 +808,7 @@ bool ListView::onKeyPressed(int keyCode)
         updateView();
     }
 
-    return DISPATCH_STOP_MSG;
+    return STOP_DISPATCH;
 }
 
 ////////////////////////////////////////////////////////////////////

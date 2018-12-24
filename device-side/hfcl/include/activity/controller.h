@@ -165,7 +165,7 @@ public:
     virtual void onSleep() {} //when the view is destoried
     virtual void onWakeup() {}
 
-    virtual bool onKey(int keyCode, KeyEvent* event){ return DISPATCH_CONTINUE_MSG; }
+    virtual bool onKey(int keyCode, KeyEvent* event) { return GOON_DISPATCH; }
     virtual void onBackView(unsigned int endcode) { }
     virtual void onPopView(unsigned int endcode) { }
 

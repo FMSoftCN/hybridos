@@ -181,7 +181,7 @@ int Window::sendKeyMessage(Event::EventType keytype,
         WPARAM wParam, LPARAM lParam)
 {
     if (!m_keyLocked) {
-        KeyEvent event(keytype, wParam, lParam);
+        KeyEvent event(keytype, wParam, wParam, lParam);
         onKey (event.keyCode(), &event);
     }
     return 0;
@@ -204,21 +204,21 @@ int Window::sendMouseMessage(Event::EventType mouseType,
     f->dispatchEvent(&evt);
 
     //FIXME, haven't be tested.
-    if (mouseType == Event::MOTION_DOWN) {
+    if (mouseType == Event::MOUSE_DOWN) {
         m_mouseDownView = f;
-    } else if (mouseType == Event::MOTION_UP) {
+    } else if (mouseType == Event::MOUSE_UP) {
         if (m_mouseDownView == f){
-            MouseEvent ev(Event::MOTION_CLICK, x_pos, y_pos);
+            MouseEvent ev(Event::MOUSE_CLICKED, x_pos, y_pos);
             f->dispatchEvent(&ev);
         }
         m_mouseDownView = NULL;
-    } else if (mouseType == Event::MOTION_MOVE) {
+    } else if (mouseType == Event::MOUSE_MOVE) {
         if (m_mouseMoveView == NULL) {
             m_mouseMoveView = f;
         } else if (m_mouseMoveView != f) {
-            MouseEvent e(Event::MOTION_MOVEOUT, x_pos, y_pos);
+            MouseEvent e(Event::MOUSE_MOVEOUT, x_pos, y_pos);
             m_mouseMoveView->dispatchEvent(&e);
-            MouseEvent ev(Event::MOTION_MOVEIN, x_pos, y_pos);
+            MouseEvent ev(Event::MOUSE_MOVEIN, x_pos, y_pos);
             m_mouseMoveView->dispatchEvent(&ev);
             m_mouseMoveView = f;
         }
@@ -250,13 +250,13 @@ LRESULT Window::defaultAppProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 
         // VincentWei: disable mouse events.
         case MSG_LBUTTONDOWN:
-            return 0; //window ? window->sendMouseMessage(Event::MOTION_DOWN, wParam, lParam) : 0;
+            return 0; //window ? window->sendMouseMessage(Event::MOUSE_DOWN, wParam, lParam) : 0;
 
         case MSG_LBUTTONUP:
-            return 0; //window ? window->sendMouseMessage(Event::MOTION_UP, wParam, lParam) : 0;
+            return 0; //window ? window->sendMouseMessage(Event::MOUSE_UP, wParam, lParam) : 0;
 
         case MSG_MOUSEMOVE:
-            return 0; //window ? window->sendMouseMessage(Event::MOTION_MOVE, wParam, lParam) : 0;
+            return 0; //window ? window->sendMouseMessage(Event::MOUSE_MOVE, wParam, lParam) : 0;
 
         case MSG_USER:
             return window ? window->sendKeyMessage(Event::CUSTOM_NOTIFY, wParam, lParam) : 0;

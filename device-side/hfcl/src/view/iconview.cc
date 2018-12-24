@@ -94,7 +94,7 @@ bool IconView::dispatchEvent(Event *e)
     if (NULL != m_gridView)
         return m_gridView->dispatchEvent(e);
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 } // namespace hfcl

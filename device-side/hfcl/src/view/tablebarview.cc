@@ -460,7 +460,7 @@ bool TableBarView::dispatchEvent(Event * event)
         default:
             break;
     }
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 #if 0

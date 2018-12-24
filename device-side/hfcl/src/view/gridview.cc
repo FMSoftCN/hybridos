@@ -454,13 +454,13 @@ bool GridView::dispatchEvent(Event* event)
             int code = ((KeyEvent *)event)->keyCode();
             if ( onKeyPressed (code) ) {
 
-                return DISPATCH_STOP_MSG;
+                return STOP_DISPATCH;
             }
         }
         default:
             return View::dispatchEvent(event);
     }
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 View * GridView::getOldFocusItem()
@@ -500,7 +500,7 @@ bool GridView::handleEvent(Event* event)
             onKeyPressed(m_pressedKey);
         }
     }
-    return DISPATCH_STOP_MSG;
+    return STOP_DISPATCH;
 }
 #endif
 
