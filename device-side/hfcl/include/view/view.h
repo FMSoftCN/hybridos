@@ -25,14 +25,15 @@
 #include "../view/viewcontext.h"
 #include "../common/event.h"
 #include "../common/intrect.h"
+
 #include "../drawable/drawable.h"
 
-#define MAX_VIEW_CLASSES    4
+#include <string>
 
 namespace hfcl {
 
 class GraphicsContext;
-class ContainerView;
+class ViewContainer;
 class CssComputed;
 class CssBox;
 
@@ -59,28 +60,11 @@ public:
         VN_VIEW_MAX,
     };
 
-    View();
-    View(View* parent);
-    View(View* parent, const char* cssClass, const char* name, int id = 0);
+    View(int id = 0, const char* cssClass = NULL, const char* name = NULL);
     virtual ~View();
 
-    /* pure virtual functions */
-    // return the HVML tag, e.g., hvroot, hvlist, hvimg, hvli, and so on
-    virtual const char* tag() const = 0;
-    virtual bool isRootView() { return false; }
-    virtual bool isContainerView() { return false; }
-    virtual bool isWrapperView() { return false; }
-
-    // draw view
-    virtual void drawBackground(GraphicsContext* context, IntRect &rc) = 0;
-    virtual void drawContent(GraphicsContext* context, IntRect &rc) = 0;
-    virtual void drawScroll(GraphicsContext* context, IntRect &rc) = 0;
-
-    /* callbacks to handle the events of Windowing system */
-    virtual void onPaint(GraphicsContext* context);
-    virtual void onClicked();
-    virtual void onDoubleClicked();
-    virtual void onViewportChanged();
+    bool attach(ViewContainer* parent);
+    bool detach();
 
     /* methods to get/set attributes */
     // identifier (integer) of this view
@@ -88,20 +72,46 @@ public:
     void setId(int id) { m_id = id; }
 
     // additional data
-    void setAddData(void *paddData) { m_addData = paddData; }
-    void *getAddData() {return m_addData;}
+    void setAddData(const void *addData) { m_addData = addData; }
+    const void *getAddData() const { return m_addData; }
 
     // name correspond to the id attribute of one HVML element
-    const char* getName() const { return m_name; }
-    void setName(const char* name);
+    const char* getName() const { return m_name.c_str(); }
+    bool setName(const char* name);
 
     // CSS class of one HVML element
     bool applyClass(const char* cssClass);
     bool includeClass(const char* cssClass);
     bool excludeClass(const char* cssClass);
 
+    /* virtual functions for rendering */
+    // return the HVML tag, e.g., hvroot, hvlist, hvimg, hvli, and so on
+    virtual const char* tag() const = 0;
+    virtual void onNameChanged() = 0;
+    virtual void onClassChanged() = 0;
     virtual void onDisabled() = 0;
     virtual void onEnabled() = 0;
+    virtual void onChecked() = 0;
+    virtual void onUnchecked() = 0;
+    virtual void onFrozen() = 0;
+    virtual void onUnfrozen() = 0;
+    virtual void onGotFocus() = 0;
+    virtual void onLostFocus() = 0;
+    virtual void onViewportSizeChanged();
+
+    virtual bool isContainer() { return false; }
+    virtual bool isRoot() { return false; }
+
+    // virtual functions for drawing the view
+    virtual void drawBackground(GraphicsContext* context, IntRect &rc) = 0;
+    virtual void drawContent(GraphicsContext* context, IntRect &rc) = 0;
+    virtual void drawScrollBar(GraphicsContext* context, IntRect &rc) = 0;
+
+    /* callbacks to handle the interaction events */
+    virtual void onPaint(GraphicsContext* context);
+    virtual void onClicked();
+    virtual void onDoubleClicked();
+
     bool isDisabled() { return m_flags & VA_DISABLED; }
     void disable() {
         bool old = setFlag(true, VA_DISABLED);
@@ -116,8 +126,6 @@ public:
             onEnabled();
     }
 
-    virtual void onChecked() = 0;
-    virtual void onUnchecked() = 0;
     bool isChecked() { return m_flags & VA_CHECKED; }
     void check() {
         bool old = setFlag(true, VA_CHECKED);
@@ -130,8 +138,6 @@ public:
             onUnchecked();
     }
 
-    virtual void onFrozen() = 0;
-    virtual void onUnfrozen() = 0;
     bool isFrozen() { return m_flags & VA_FROZEN; }
     void freeze() {
         bool old = setFlag (true, VA_FROZEN);
@@ -149,8 +155,6 @@ public:
         }
     }
 
-    virtual void onGotFocus() = 0;
-    virtual void onLostFocus() = 0;
     bool isFocused() { return m_flags & VA_FOCUSED; }
     void focus() {
         bool old = setFlag(true, VA_FOCUSED);
@@ -170,6 +174,48 @@ public:
         return isFocusable() && m_flags & VA_FOCUSSTOPPABLE;
     }
     bool setFocusStoppable(bool b) { return setFlag(b, VA_FOCUSSTOPPABLE); }
+
+    /* methods for silbing travelling */
+    const View* prevSibling() const { return m_prev; }
+    View* prevSibling() { return m_prev; }
+    const View* nextSibling() const { return m_next; }
+    View* nextSibling() { return m_next; }
+
+    const ViewContainer* getParent() const { return m_parent; }
+    ViewContainer* getParent() { return m_parent; }
+    ViewContainer* getRoot();
+
+    virtual HWND getSysWindow() {
+        return m_parent ? ((View*)m_parent)->getSysWindow() : 0;
+    }
+
+    virtual void viewToWindow(int *x, int *y);
+    virtual void windowToView(int *x, int *y);
+
+    void addEventListener(EventListener* listener);
+    void removeEventListener(EventListener* listener);
+
+    // x,y coordiat from view, e.g (0,0) is same as m_rect.left, m_rect.top
+    void updateView(int x, int y, int w, int h);
+    void updateView(const IntRect &rc);
+
+    virtual void onChildUpdateView(View *child,
+            int x, int y, int w, int h, bool upBackGnd = true);
+    void updateViewRect(const IntRect &rc);
+    void updateViewRect();
+    void updateView(bool upBackGnd = true);
+
+    virtual bool raiseEvent(Event *event);
+
+    void setParent(ViewContainer* view) { m_parent = view; }
+    void setPrevSlibling(View* view) { m_prev = view; }
+    void setNextSlibling(View* view) { m_next = view; }
+
+    // return True if the event was handled, false otherwise.
+    virtual bool dispatchEvent(Event* event);
+
+    /* to be deprecated */
+    virtual bool isWrapperView() { return false; }
 
     virtual void focusMe();
     bool setFocus(View *view);
@@ -206,44 +252,6 @@ public:
         setVisible(false);
         updateView();
     }
-    void addEventListener(EventListener* listener);
-    void addEventListener(EventListener* listener, int event_type) { }
-    void removeEventListener(EventListener* listener);
-
-    //return True if the event was handled, false otherwise.
-    virtual bool dispatchEvent(Event* event);
-
-    // x,y coordiat from view, e.g (0,0) is same as m_rect.left, m_rect.top
-    void updateView(int x, int y, int w, int h);
-    void updateView(const IntRect &rc);
-
-    virtual void onChildUpdateView(View *child, \
-            int x, int y, int w, int h, bool upBackGnd = true);
-    void updateViewRect(const IntRect &rc);
-    void updateViewRect();
-    void updateView(bool upBackGnd = true);
-
-    void setParent(ContainerView* view) { m_parent = view; }
-    void setPrevSlibling(View* view) { m_prev = view; }
-    void setNextSlibling(View* view) { m_next = view; }
-
-    const View* prevSibling() const { return m_prev; }
-    View* prevSibling() { return m_prev; }
-    const View* nextSibling() const { return m_next; }
-    View* nextSibling() { return m_next; }
-    const ContainerView* parent() const { return m_parent; }
-    ContainerView* parent() { return m_parent; }
-    ContainerView* rootView();
-
-    virtual HWND getSysWindow() {
-        return m_parent ? ((View*)m_parent)->getSysWindow() : 0;
-    }
-
-    virtual void viewToWindow(int *x, int *y);
-    virtual void windowToView(int *x, int *y);
-
-    virtual bool raiseEvent(Event *event);
-
     /* to be deprecated */
     View(View* parent, DrawableSet* drset);
     View(int id, int x, int y, int w, int h);
@@ -305,13 +313,12 @@ protected:
     };
 
     int m_id;
+    std::string m_cssCls;
+    std::string m_name;
+    const void* m_addData;
     Uint32 m_flags;
 
-    const char* m_name;
-    const char* m_css_classes[MAX_VIEW_CLASSES];
-    void* m_addData;
-
-    ContainerView *m_parent;
+    ViewContainer *m_parent;
     View *m_prev;
     View *m_next;
 

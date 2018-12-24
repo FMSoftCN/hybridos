@@ -111,12 +111,21 @@ detail_debug=$enableval)
 
 libsuffix=""
 AC_ARG_WITH(libsuffix,
-  [  --with-libsuffix=ARG    configure the suffix of the library name.])
+  [  --with-libsuffix=ARG   configure the suffix of the library name.])
 
 if test "x$with_libsuffix" = "x"; then
   LIB_SUFFIX=""
 else
   LIB_SUFFIX="_$with_libsuffix"
+fi
+
+use_stl="no"
+AC_ARG_ENABLE(use_stl,
+[  --enable-stl             use STL for vector, list, and map <default=no>],
+use_stl=$enableval)
+
+if test "x$use_stl" = "xyes"; then
+    AC_DEFINE(_HFCL_USE_STL, 1, [Define if use STL for vector, list, and map])
 fi
 
 AC_SUBST(LIB_SUFFIX)

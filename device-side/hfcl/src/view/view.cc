@@ -21,6 +21,10 @@
 
 #include "view/view.h"
 
+#include <string.h>
+#include <string>
+
+#include "view/viewcontainer.h"
 #include "activity/window.h"
 #include "graphics/graphicscontext.h"
 #include "resource/respackage.h"
@@ -28,50 +32,124 @@
 
 namespace hfcl {
 
-View::View()
-    : m_id(0)
-    , m_flags(0)
-    , m_name(0)
-    , m_addData(0)
-    , m_parent(0)
-    , m_prev(0)
-    , m_next(0)
-    , m_rect(0, 0, 0, 0)
+/* add a space to the tail */
+static void append_space (std::string& str)
 {
-    memset (m_css_classes, 0, sizeof (m_css_classes));
+    if (str.empty ()) {
+        str = ' ';
+    }
+    else if (str.back() != ' ') {
+        str += ' ';
+    }
 }
 
-View::View(View* p_parent)
-    : m_id(0)
-    , m_flags(0)
-    , m_name(0)
+View::View(int id, const char* cssClass, const char* name)
+    : m_id(id)
+    , m_cssCls(cssClass)
+    , m_name(name)
     , m_addData(0)
+    , m_flags(0)
     , m_parent(0)
     , m_prev(0)
     , m_next(0)
-    , m_rect(0, 0, 0, 0)
 {
-    memset (m_css_classes, 0, sizeof (m_css_classes));
-    if (p_parent)
-        ((ContainerView *)p_parent)->addChild(this);
-    m_parent = (ContainerView*)p_parent;
-}
-
-View::View(int i_id, int x, int y, int w, int h)
-    : m_id(i_id)
-    , m_flags(0)
-    , m_name(0)
-    , m_addData(0)
-    , m_parent(0)
-    , m_prev(0)
-    , m_next(0)
-    , m_rect(x, y, x + w, y + h)
-{
-    memset (m_css_classes, 0, sizeof (m_css_classes));
+    append_space (m_cssCls);
 }
 
 View::~View()
 {
+}
+
+bool View::attach(ViewContainer* parent)
+{
+    if (parent) {
+        if (parent->addChild(this)) {
+            m_parent = parent;
+            m_parent->onChildAttached(this);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool View::detach()
+{
+    if (m_parent) {
+        if (m_parent->removeChild(this, false)) {
+            m_parent = NULL;
+            m_parent->onChildDetached(this);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool View::setName(const char* name)
+{
+    if (name && m_name.length() > 0) {
+        if (strcasecmp (name, m_name.c_str())) {
+            goto ok;
+        }
+    }
+    else if (m_name.length() == 0 && name) {
+        goto ok;
+    }
+
+    return false;
+
+ok:
+    m_name = name;
+    onNameChanged();
+    return true;
+}
+
+bool View::applyClass(const char* cssClass)
+{
+    std::string tmp = cssClass;
+    append_space (tmp);
+
+    if (strcasecmp (tmp.c_str(), m_cssCls.c_str()) == 0) {
+        return false;
+    }
+
+    m_cssCls = cssClass;
+    onClassChanged();
+    return true;
+}
+
+bool View::includeClass(const char* cssClass)
+{
+    std::string tmp = cssClass;
+    append_space (tmp);
+
+    if (strcasestr (m_cssCls.c_str(), tmp.c_str())) {
+        return false;
+    }
+
+    m_cssCls += cssClass;
+    m_cssCls += ' ';
+    onClassChanged();
+    return true;
+}
+
+bool View::excludeClass(const char* cssClass)
+{
+    std::string tmp = cssClass;
+    append_space (tmp);
+
+    const char* full = m_cssCls.c_str();
+    const char* found;
+    found = strcasestr (full, tmp.c_str());
+    if (found == NULL) {
+        return false;
+    }
+
+    size_t pos = (size_t)(found - full);
+    m_cssCls.erase (pos, tmp.length());
+    onClassChanged();
+    return true;
 }
 
 void View::onPaint(GraphicsContext* context)
@@ -90,7 +168,7 @@ void View::onPaint(GraphicsContext* context)
         context->clip(rc);
         drawBackground(context, rc);
         drawContent(context, rc);
-        drawScroll(context, rc);
+        drawScrollBar(context, rc);
         context->restore();
     }
 }
@@ -176,7 +254,7 @@ bool View::setFocus(View * view)
 
 void View::inner_updateView(int x, int y, int w, int h, bool upBackGnd)
 {
-    ContainerView *p = parent();
+    ViewContainer *p = getParent();
     if (p == NULL)
         return;
 
@@ -189,7 +267,7 @@ void View::inner_updateView(int x, int y, int w, int h, bool upBackGnd)
 
 void View::inner_updateViewRect(int x, int y, int w, int h)
 {
-    ContainerView *p = parent();
+    ViewContainer *p = getParent();
     if (p == NULL)
         return;
 
@@ -283,14 +361,14 @@ void View::windowToView(int *x, int *y)
 
 void View::focusMe()
 {
-    ContainerView *p = NULL;
+    ViewContainer *p = NULL;
 
-    if (rootView() == this) {
+    if (getRoot() == this) {
         return;
     }
 
-    if (NULL != (p = parent())) {
-        if(p->isFocused()){
+    if (NULL != (p = getParent())) {
+        if (p->isFocused()){
             if(NULL != p->focusView() && this != p->focusView())
                 p->releaseFocusView();
         }
@@ -317,14 +395,14 @@ bool View::isFocused()
 }
 #endif
 
-ContainerView* View::rootView()
+ViewContainer* View::getRoot()
 {
     View *p = this;
 
     while (p != NULL){
-        if (p->isRootView())
-            return (ContainerView *)p;
-        p = p->parent();
+        if (p->isRoot())
+            return (ViewContainer *)p;
+        p = p->getParent();
     }
 
     return NULL;

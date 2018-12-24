@@ -23,6 +23,8 @@
 
 namespace hfcl {
 
+#ifndef _HFCL_USE_STL
+
 string::string(const char* str, int n)
 {
     _str_buff = NULL;
@@ -443,6 +445,8 @@ list_base::iterator_base list_base::_insert(const list_base::iterator_base& it,
 
     return list_base::iterator_base(this, node);
 }
+
+#endif /* !_HFCL_USE_STL */
 
 } // namespace hfcl
 

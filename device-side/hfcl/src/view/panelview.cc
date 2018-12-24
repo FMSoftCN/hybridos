@@ -25,30 +25,11 @@
 
 namespace hfcl {
 
-PanelView::PanelView(View *p_parent)
-    : ContainerView(p_parent, DEFAULT_VIEW_DRAWABLESET(PanelView))
+PanelView::PanelView(int id, const char* cssClass, const char* name)
+    : ViewContainer(id, cssClass, name)
     , m_bkImage(NULL)
     , m_imageDrawMode(DRAWMODE_NORMAL)
     , m_bkColorBeSet(false)
-{
-    m_update = true;
-}
-
-PanelView::PanelView(View* p_parent, DrawableSet* drset)
-    : ContainerView(p_parent, drset)
-    , m_bkImage(NULL)
-    , m_imageDrawMode(DRAWMODE_NORMAL)
-    , m_bkColorBeSet(false)
-{
-    m_update = true;
-}
-
-PanelView::PanelView(int i_id, int x, int y, int w, int h)
-    : ContainerView(i_id, x, y, w, h)
-    , m_bkImage(NULL)
-    , m_imageDrawMode(DRAWMODE_NORMAL)
-    , m_bkColorBeSet(false)
-
 {
     m_update = true;
 }
@@ -79,7 +60,6 @@ bool PanelView::setBkImageEx(Image* image)
         HFCL_DELETE(m_bkImage);
     }
     m_bkImage = image;
-
     m_bkColorBeSet = false;
     updateView();
 

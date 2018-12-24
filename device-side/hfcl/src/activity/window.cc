@@ -44,7 +44,7 @@ namespace hfcl {
 bool Window::m_updateLocked = false;
 
 Window::Window()
-    : PanelView(NULL)
+    : PanelView(0, NULL, NULL)
     , m_viewWindow(HWND_INVALID)
     , m_context(0)
     , m_keyLockable(false)
@@ -138,9 +138,9 @@ void Window::syncUpdateRect(int x, int y, int w, int h, bool upBackGnd)
     UpdateInvalidClient (m_viewWindow, FALSE);
 }
 
-void Window::drawScroll(GraphicsContext* context, IntRect &rc)
+void Window::drawScrollBar(GraphicsContext* context, IntRect &rc)
 {
-    PanelView::drawScroll (context, rc);
+    PanelView::drawScrollBar (context, rc);
     m_keyLocked = false;
 }
 
@@ -313,7 +313,7 @@ LRESULT Window::defaultAppProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
                 IntRect rcInv (rcBounds.left, rcBounds.top, rcBounds.right, rcBounds.bottom);
                 if (rcInv.intersect (rcView)) {
                     window->drawContent (&gc, rcView);
-                    window->drawScroll (&gc, rcView);
+                    window->drawScrollBar (&gc, rcView);
 
                     if (!IsWindowEnabled (hWnd)) {
                         /* VincentWei: we need a new gc for overlay mask */

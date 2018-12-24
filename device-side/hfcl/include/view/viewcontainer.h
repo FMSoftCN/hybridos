@@ -20,20 +20,22 @@
 */
 
 
-#ifndef _HFCL_VIEW_CONTAINERVIEW_H_
-#define _HFCL_VIEW_CONTAINERVIEW_H_
+#ifndef HFCL_VIEW_VIEWCONTAINER_H_
+#define HFCL_VIEW_VIEWCONTAINER_H_
 
 #include "view.h"
 
 namespace hfcl {
 
-class ContainerView : public View {
+class ViewContainer : public View {
 public:
-    ContainerView();
-    ContainerView(View* parent);
-    ContainerView(View* parent, DrawableSet* dr);
-    ContainerView(int id, int x, int y, int w, int h);
-    virtual ~ContainerView();
+    ViewContainer(int id = 0, const char* cssClass = NULL,
+            const char* name = NULL);
+    virtual ~ViewContainer();
+
+    /* pure virtual functions */
+    virtual void onChildAttached(View* view) = 0;
+    virtual void onChildDetached(View* view) = 0;
 
     bool isChild(View* view) const;
     bool insertBefore(View *view, View *child);
@@ -64,7 +66,7 @@ public:
     int  viewCount(void) const { return m_childCount;}
 
     virtual void changeTheme(void);
-    bool isContainerView(void) { return true; }
+    bool isContainer(void) { return true; }
     void setFocusView(View* view);
     void releaseFocusView(void);
     View* focusView(void) const { return m_focusView;}
@@ -77,8 +79,8 @@ public:
     virtual void onChildSizeChanged(View* child) {
         if(isAutoSize()) {
             autoFitSize();
-            if(parent())
-                parent()->onChildSizeChanged(this);
+            if (getParent())
+                getParent()->onChildSizeChanged(this);
         }
     }
 
@@ -95,10 +97,8 @@ protected:
         AUTOSIZE = (1 << View::FLAG_SHIFT),
         FLAG_SHIFT = (View::FLAG_SHIFT + 1)
     };
-
-    DECLARE_CLASS_NAME(ContainerView)
 };
 
 } // namespace hfcl
 
-#endif /* _HFCL_VIEW_CONTAINERVIEW_H_ */
+#endif /* HFCL_VIEW_VIEWCONTAINER_H_ */

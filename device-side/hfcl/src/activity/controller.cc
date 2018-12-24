@@ -133,7 +133,7 @@ unsigned int Controller::showModalView(int view_id, HTData param1, HTData param2
         if(!client || !(view = client->baseView()))
             return 1;
 
-        Window *window = SAFE_CAST(Window*, view->rootView());
+        Window *window = SAFE_CAST(Window*, view->getRoot());
         if(window) {
             m_modalCount ++;
             client->setModal(true);
@@ -165,7 +165,7 @@ unsigned int Controller::backView(unsigned int endcode)
 
     if(m_modalCount > 0) {
         if(client && client->isModal()) {
-            Window* window = SAFE_CAST(Window*, client->baseView()->rootView());
+            Window* window = SAFE_CAST(Window*, client->baseView()->getRoot());
             window->endDlg(endcode);
             m_modalCount --;
         }
@@ -344,7 +344,7 @@ void Controller::deleteView(int view_id, bool bExit)
 
     if(m_modalCount > 0) {
         if(_client && _client->isModal()) {
-            Window* window = SAFE_CAST(Window*, _client->baseView()->rootView());
+            Window* window = SAFE_CAST(Window*, _client->baseView()->getRoot());
             window->endDlg(0);
             m_modalCount --;
         }
@@ -420,7 +420,7 @@ void ControllerClient::cleanBaseView()
     _DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- clear client <%p>", this);
 
     if(m_baseView) {
-        ContainerView *p = m_baseView->parent();
+        ViewContainer *p = m_baseView->getParent();
         if(p != NULL){
             p->removeChild(m_baseView);
         } else {

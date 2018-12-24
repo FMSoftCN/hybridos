@@ -19,14 +19,14 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "view/containerview.h"
+#include "view/viewcontainer.h"
 
 #include "graphics/graphicscontext.h"
 
 namespace hfcl {
 
-ContainerView::ContainerView()
-    : View()
+ViewContainer::ViewContainer(int id, const char* cssClass, const char* name)
+    : View(id, cssClass, name)
     , m_focusView(0)
     , m_firstChild(NULL)
     , m_lastChild(NULL)
@@ -34,39 +34,12 @@ ContainerView::ContainerView()
 {
 }
 
-ContainerView::ContainerView(View* p_parent)
-    : View(p_parent)
-    , m_focusView(0)
-    , m_firstChild(NULL)
-    , m_lastChild(NULL)
-    , m_childCount(0)
-{
-}
-
-ContainerView::ContainerView(View* p_parent, DrawableSet* drset)
-    : View(p_parent, drset)
-    , m_focusView(0)
-    , m_firstChild(NULL)
-    , m_lastChild(NULL)
-    , m_childCount(0)
-{
-}
-
-ContainerView::ContainerView(int i_id, int x, int y, int w, int h)
-    : View(i_id, x, y, w, h)
-    , m_focusView(0)
-    , m_firstChild(NULL)
-    , m_lastChild(NULL)
-    , m_childCount(0)
-{
-}
-
-ContainerView::~ContainerView()
+ViewContainer::~ViewContainer()
 {
     clean();
 }
 
-View* ContainerView::firstEnableChild(void)
+View* ViewContainer::firstEnableChild(void)
 {
     View* view = NULL;
     if (viewCount() < 1)
@@ -82,10 +55,10 @@ View* ContainerView::firstEnableChild(void)
     return view;
 }
 
-bool ContainerView::insertAfter(View* view, View *child)
+bool ViewContainer::insertAfter(View* view, View *child)
 {
     View *next = NULL;
-    if(view && view->parent() != this)
+    if(view && view->getParent() != this)
         return false;
 
     if(!child)
@@ -94,8 +67,8 @@ bool ContainerView::insertAfter(View* view, View *child)
     if(isChild(child) || view == child)
         return true;
 
-    if(child->parent())
-        child->parent()->detachChild(child);
+    if(child->getParent())
+        child->getParent()->detachChild(child);
 
     child->setPrevSlibling(view);
     if(view)
@@ -122,7 +95,7 @@ bool ContainerView::insertAfter(View* view, View *child)
     return true;
 }
 
-bool ContainerView::insertBefore(int idx, View* child)
+bool ViewContainer::insertBefore(int idx, View* child)
 {
     if(!child)
         return false;
@@ -132,10 +105,10 @@ bool ContainerView::insertBefore(int idx, View* child)
         return insertBefore(getChildByIndex(idx), child);
 }
 
-bool ContainerView::insertBefore(View *view, View* child)
+bool ViewContainer::insertBefore(View *view, View* child)
 {
     View *prev = NULL;
-    if(view && view->parent() != this)
+    if(view && view->getParent() != this)
         return false;
 
     if(!child)
@@ -144,8 +117,8 @@ bool ContainerView::insertBefore(View *view, View* child)
     if(isChild(child) || view == child)
         return true;
 
-    if(child->parent())
-        child->parent()->detachChild(child);
+    if(child->getParent())
+        child->getParent()->detachChild(child);
 
     child->setNextSlibling(view);
     if(view)
@@ -172,22 +145,22 @@ bool ContainerView::insertBefore(View *view, View* child)
     return true;
 }
 
-int ContainerView::detachChild(int index)
+int ViewContainer::detachChild(int index)
 {
     return detachChild(getChildByIndex(index));
 }
 
-bool ContainerView::isChild(View* view) const
+bool ViewContainer::isChild(View* view) const
 {
-    return view && view->parent() == this;
+    return view && view->getParent() == this;
 }
 
-int ContainerView::removeChild(int index, bool bRelease)
+int ViewContainer::removeChild(int index, bool bRelease)
 {
     return removeChild(getChildByIndex(index), bRelease);
 }
 
-int ContainerView::removeAll()
+int ViewContainer::removeAll()
 {
     View *  view = m_firstChild;
     while(view)
@@ -209,14 +182,14 @@ int ContainerView::removeAll()
    return 0;
 }
 
-void ContainerView::clean()
+void ViewContainer::clean()
 {
     removeAll();
 }
 
-int ContainerView::detachChild(View* view)
+int ViewContainer::detachChild(View* view)
 {
-    if(!view || view->parent() != this)
+    if(!view || view->getParent() != this)
         return -1;
 
     View * prev = view->prevSibling();
@@ -246,7 +219,7 @@ int ContainerView::detachChild(View* view)
     return 0;
 }
 
-int ContainerView::removeChild(View * view, bool bRelease)
+int ViewContainer::removeChild(View * view, bool bRelease)
 {
     if(detachChild(view) == 0) {
         if (bRelease)
@@ -256,7 +229,7 @@ int ContainerView::removeChild(View * view, bool bRelease)
     return -1;
 }
 
-View* ContainerView::getChild(int i_id) const
+View* ViewContainer::getChild(int i_id) const
 {
     for(View *view = firstChild(); view ; view = view->nextSibling()) {
         if(view->getId() == i_id)
@@ -265,7 +238,7 @@ View* ContainerView::getChild(int i_id) const
     return NULL;
 }
 
-View* ContainerView::getChildByIndex(int idx) const
+View* ViewContainer::getChildByIndex(int idx) const
 {
     View *view = NULL;
     if(idx < 0)
@@ -279,7 +252,7 @@ View* ContainerView::getChildByIndex(int idx) const
     return view;
 }
 
-int ContainerView::getChildIndex(View *view) const {
+int ViewContainer::getChildIndex(View *view) const {
     if(!isChild(view))
         return -1;
 
@@ -290,14 +263,14 @@ int ContainerView::getChildIndex(View *view) const {
 }
 
 
-View* ContainerView::getView (int i_id) const
+View* ViewContainer::getView (int i_id) const
 {
     for(View *view = firstChild(); view ; view = view->nextSibling()) {
         if(view->getId() == i_id)
             return view;
-        else if(view->isContainerView())
+        else if(view->isContainer())
         {
-            View *c = ((ContainerView*)view)->getView(i_id);
+            View *c = ((ViewContainer*)view)->getView(i_id);
             if(c)
                 return c;
         }
@@ -306,14 +279,14 @@ View* ContainerView::getView (int i_id) const
     return NULL;
 }
 
-View *ContainerView::getChildByPosition(int x_pos, int y_pos) const
+View *ViewContainer::getChildByPosition(int x_pos, int y_pos) const
 {
     for(View *view = lastChild(); NULL != view ; view = view->prevSibling())
     {
         IntRect irc = view->getRect();
         if (irc.contains(x_pos, y_pos)){
-            if(view->isContainerView()) {
-                return ((ContainerView*)view)->getChildByPosition(x_pos - irc.left(), y_pos - irc.top());
+            if(view->isContainer()) {
+                return ((ViewContainer*)view)->getChildByPosition(x_pos - irc.left(), y_pos - irc.top());
             }
             else {
                 return view;
@@ -324,7 +297,7 @@ View *ContainerView::getChildByPosition(int x_pos, int y_pos) const
 }
 
 #if 0
-void ContainerView::markDirty(const IntRect& rc)
+void ViewContainer::markDirty(const IntRect& rc)
 {
     for (View *view = firstChild(); view; view = view->nextSibling()) {
         if (view->isVisible()) {
@@ -342,18 +315,18 @@ void ContainerView::markDirty(const IntRect& rc)
 
 #undef TRACE_DRAWVIEW
 
-void ContainerView::drawBackground(GraphicsContext* context, IntRect &rc)
+void ViewContainer::drawBackground(GraphicsContext* context, IntRect &rc)
 {
     return;
 }
 
-void ContainerView::drawContent(GraphicsContext* context, IntRect& rc)
+void ViewContainer::drawContent(GraphicsContext* context, IntRect& rc)
 {
 #ifdef TRACE_DRAWVIEW
     int depth = 1;
-    View* _p = (View*)parent();
+    View* _p = (View*)getParent();
     while (_p) {
-        _p = _p->parent();
+        _p = _p->getParent();
         printf ("\t");
         depth ++;
     }
@@ -362,8 +335,8 @@ void ContainerView::drawContent(GraphicsContext* context, IntRect& rc)
     IntRect rcBounds;
     GetBoundsRect(hdc, (RECT*)&rcBounds);
 
-    printf ("ContainerView::drawContent: Start to draw %p (parent: %p), %d, %d, %d, %d\n",
-                this, parent(), rcBounds.left(), rcBounds.top(), rcBounds.right(), rcBounds.bottom());
+    printf ("ViewContainer::drawContent: Start to draw %p (parent: %p), %d, %d, %d, %d\n",
+                this, getParent(), rcBounds.left(), rcBounds.top(), rcBounds.right(), rcBounds.bottom());
 #endif
 
     for (View *view = firstChild(); view; view = view->nextSibling()) {
@@ -371,12 +344,12 @@ void ContainerView::drawContent(GraphicsContext* context, IntRect& rc)
         for (int i = 0; i < depth; i++) printf ("\t");
         if (view->isVisible() && view->shouldUpdate()) {
             IntRect rcView = view->getRect();
-            printf ("ContainerView::drawContent: draw child %p (%d, %d, %d, %d)\n",
+            printf ("ViewContainer::drawContent: draw child %p (%d, %d, %d, %d)\n",
                     view, rcView.left(), rcView.top(), rcView.right(), rcView.bottom());
             view->onPaint(context);
         }
         else {
-            printf ("ContainerView::drawContent: skip child %p, visible (%s), unfrozen (%s)\n", view, view->isVisible()?"TRUE":"FALSE", view->shouldUpdate()?"TRUE":"FALSE");
+            printf ("ViewContainer::drawContent: skip child %p, visible (%s), unfrozen (%s)\n", view, view->isVisible()?"TRUE":"FALSE", view->shouldUpdate()?"TRUE":"FALSE");
         }
 #else
         if (view->isVisible()) {
@@ -387,11 +360,11 @@ void ContainerView::drawContent(GraphicsContext* context, IntRect& rc)
 
 #ifdef TRACE_DRAWVIEW
     for (int i = 0; i < depth - 1; i++) printf ("\t");
-    printf ("ContainerView::drawContent: Stop to draw %p\n", this);
+    printf ("ViewContainer::drawContent: Stop to draw %p\n", this);
 #endif
 }
 
-bool ContainerView::dispatchEvent(Event* event)
+bool ViewContainer::dispatchEvent(Event* event)
 {
     View::dispatchEvent(event);
 
@@ -436,7 +409,7 @@ bool ContainerView::dispatchEvent(Event* event)
     return DISPATCH_CONTINUE_MSG;
 }
 
-void ContainerView::setFocusView(View* view)
+void ViewContainer::setFocusView(View* view)
 {
     View* old_focusView = NULL;
     if(view == NULL)
@@ -455,14 +428,14 @@ void ContainerView::setFocusView(View* view)
 
     m_focusView->onGotFocus();
 
-    if (m_focusView->isContainerView()){
-        View * focus = ((ContainerView *)m_focusView)->focusView();
+    if (m_focusView->isContainer()){
+        View * focus = ((ViewContainer *)m_focusView)->focusView();
         if(focus)
             m_focusView->setFocus(focus);
     }
 }
 
-void ContainerView::releaseFocusView(void)
+void ViewContainer::releaseFocusView(void)
 {
     View* old_focusView = NULL;
     if (m_focusView == (View *)0){
@@ -473,8 +446,8 @@ void ContainerView::releaseFocusView(void)
     m_focusView = NULL;
 
     old_focusView->onLostFocus();
-    if (old_focusView->isContainerView()){
-        ((ContainerView *)old_focusView)->releaseFocusView();
+    if (old_focusView->isContainer()){
+        ((ViewContainer *)old_focusView)->releaseFocusView();
     }
     setFocusable(false);
 
@@ -485,7 +458,7 @@ void ContainerView::releaseFocusView(void)
     */
 }
 
-void ContainerView::autoFitSize(bool auto_child_fit)
+void ViewContainer::autoFitSize(bool auto_child_fit)
 {
     IntRect rc;
     for(View *view = firstChild(); view ; view = view->nextSibling()) {
@@ -494,5 +467,4 @@ void ContainerView::autoFitSize(bool auto_child_fit)
     setRect(rc);
 }
 
-DEFINE_CLASS_NAME(ContainerView)
 } // namespace hfcl

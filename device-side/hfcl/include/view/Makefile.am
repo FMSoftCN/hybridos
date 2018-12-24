@@ -3,8 +3,9 @@ myincludedir=$(includedir)/hfcl/view
 
 # Which header files to install
 myinclude_HEADERS= \
-    viewcontext.h \
     view.h \
+    viewcontainer.h \
+    viewcontext.h \
     scrollbar.h \
     animateimageview.h \
     arrowtextview.h \
@@ -13,7 +14,6 @@ myinclude_HEADERS= \
     busylistview.h \
     buttonview.h \
     compositeview.h \
-    containerview.h \
     dynclistview.h \
     editview.h \
     formateditview.h \

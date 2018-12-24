@@ -85,7 +85,7 @@ public:
     void endDlg(int endCode);
 
     void lockKeyOnPainting (bool bLockable) { m_keyLockable = bLockable; }
-    virtual void drawScroll(GraphicsContext* context, IntRect &rc);
+    virtual void drawScrollBar(GraphicsContext* context, IntRect &rc);
     virtual void drawBackground(GraphicsContext* context, IntRect &rc);
 
 protected:

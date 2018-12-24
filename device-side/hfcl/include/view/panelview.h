@@ -25,18 +25,16 @@
 
 #define FILE_NAME_LEN 256
 
-#include "containerview.h"
+#include "viewcontainer.h"
 #include "../graphics/graphicscontext.h"
 
 namespace hfcl {
 class Image;
 
-class PanelView : public ContainerView
+class PanelView : public ViewContainer
 {
 public:
-    PanelView(View* parent, DrawableSet* drset);
-    PanelView(View* parent);
-    PanelView(int id, int x, int y, int w, int h);
+    PanelView(int id, const char* cssClass, const char* name);
     virtual ~PanelView();
 
     //Image* getBkImage();
@@ -53,7 +51,7 @@ public:
 
 protected:
     enum {
-        FLAG_SHIFT = ContainerView::FLAG_SHIFT
+        FLAG_SHIFT = ViewContainer::FLAG_SHIFT
     };
 
 private:

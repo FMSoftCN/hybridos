@@ -23,7 +23,6 @@
 
 #include "common/helpers.h"
 #include "graphics/textmode.h"
-#include "view/containerview.h"
 #include "view/transition.h"
 
 namespace hfcl {
