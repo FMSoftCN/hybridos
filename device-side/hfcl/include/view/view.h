@@ -26,6 +26,9 @@
 #include "../common/event.h"
 #include "../common/intrect.h"
 
+#include "../css/cssdeclared.h"
+#include "../css/cssdeclaredgroup.h"
+#include "../css/cssselector.h"
 #include "../drawable/drawable.h"
 
 #include <string>
@@ -68,7 +71,7 @@ public:
     bool attach(ViewContainer* parent);
     bool detach();
 
-    /* methods to get/set attributes */
+    /* public methods to get/set attributes */
     // identifier (integer) of this view
     int getId() const { return m_id; }
     void setId(int id) { m_id = id; }
@@ -82,19 +85,25 @@ public:
     bool setName(const char* name);
 
     // CSS class of this view
-    bool applyClass(const char* cssClass);
+    const char* getClass() { return m_cssCls.c_str(); }
+    bool setClass(const char* cssClass);
     bool includeClass(const char* cssClass);
     bool excludeClass(const char* cssClass);
 
     /* virtual functions for rendering */
     // return the HVML tag, e.g., hvroot, hvlist, hvimg, hvli, and so on
     virtual const char* tag() const = 0;
+    virtual void applyCss(CssDeclared* css,
+            const CssSelectorGroup& selector);
+    virtual void computeCss(int w, int h);
     virtual void onNameChanged() = 0;
     virtual void onClassChanged() = 0;
     virtual void onDisabled() = 0;
     virtual void onEnabled() = 0;
     virtual void onChecked() = 0;
     virtual void onUnchecked() = 0;
+    virtual void onActive() = 0;
+    virtual void onInactive() = 0;
     virtual void onFrozen() = 0;
     virtual void onUnfrozen() = 0;
     virtual void onGotFocus() = 0;
@@ -155,6 +164,20 @@ public:
         bool old = setFlag(false, VA_CHECKED);
         if (old)
             onUnchecked();
+    }
+
+    bool isActive() { return m_flags & VA_ACTIVE; }
+    void activate() {
+        bool old = setFlag (true, VA_ACTIVE);
+        if (!old) {
+            onActive();
+        }
+    }
+    void deactivate(bool update = true) {
+        bool old = setFlag (false, VA_ACTIVE);
+        if (old) {
+            onInactive();
+        }
     }
 
     bool isFrozen() { return m_flags & VA_FROZEN; }
@@ -322,14 +345,16 @@ public:
 
 protected:
     enum {
-        VA_DISABLED         = (0x1 << 0),
-        VA_CHECKED          = (0x1 << 1),
-        VA_FOCUSED          = (0x1 << 2),
-        VA_FOCUSABLE        = (0x1 << 3),
-        VA_FOCUSSTOPPABLE   = (0x1 << 4),
-        VA_FROZEN           = (0x1 << 5),
-        VA_VISIBLE          = (0x1 << 6),
-        FLAG_SHIFT          = 8
+        VA_DISABLED         = (0x01 << 0),
+        VA_HOVER            = (0X01 << 1),
+        VA_ACTIVE           = (0x01 << 2),
+        VA_CHECKED          = (0x01 << 3),
+        VA_FOCUSED          = (0x01 << 4),
+        VA_FOCUSABLE        = (0x01 << 5),
+        VA_FOCUSSTOPPABLE   = (0x01 << 6),
+        VA_FROZEN           = (0x01 << 7),
+        VA_VISIBLE          = (0x01 << 8),
+        FLAG_SHIFT          = 9
     };
 
     int m_id;
@@ -342,7 +367,12 @@ protected:
     View *m_prev;
     View *m_next;
 
-    // CSS-related members
+    /* CSS-related members */
+    // user-defined CSS (properties specified on the fly)
+    CssDeclared* m_cssd_user;
+    // All selected CssDeclared objects for this view
+    CssDeclaredGroup m_cssdg_static;
+    CssDeclaredGroup m_cssdg_dynamic;
     // The computed values of all CSS properties.
     CssComputed* m_css_computed;
     // The pricipal box of this view, either a CssBoxBlock,
@@ -373,6 +403,9 @@ protected:
     virtual void inner_updateView(int x, int y, int w, int h,
             bool upBackGnd = true);
     void inner_updateViewRect(int x, int y, int w, int h);
+
+private:
+    int matchCssSelector (const char* selector);
 };
 
 } // namespace hfcl

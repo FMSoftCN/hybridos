@@ -10,4 +10,5 @@ libhfcl_css_la_SOURCES = \
     cssdeclared.cc \
     cssinitial.cc \
     csscomputed.cc \
-    cssdeclaredgroup.cc
+    cssdeclaredgroup.cc \
+    cssselector.cc

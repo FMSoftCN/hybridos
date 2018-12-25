@@ -55,10 +55,12 @@ View::View(int id, const char* cssClass, const char* name)
     , m_next(0)
 {
     append_space (m_cssCls);
+    m_cssd_user = HFCL_NEW_EX(CssDeclared, (""));
 }
 
 View::~View()
 {
+    m_cssd_user->unref();
 }
 
 bool View::attach(ViewContainer* parent)
@@ -106,7 +108,7 @@ ok:
     return true;
 }
 
-bool View::applyClass(const char* cssClass)
+bool View::setClass(const char* cssClass)
 {
     std::string tmp = cssClass;
     append_space (tmp);
@@ -419,6 +421,20 @@ HWND View::getSysWindow()
     }
 
     return HWND_INVALID;
+}
+
+void View::applyCss(CssDeclared* css, const CssSelectorGroup& selector)
+{
+    switch (selector.match(this)) {
+    case CssSelectorGroup::CSS_STATIC:
+        m_cssdg_static.append(css);
+        break;
+    case CssSelectorGroup::CSS_DYNAMIC:
+        m_cssdg_dynamic.append(css);
+        break;
+    default:
+        break;
+    }
 }
 
 } // namespace hfcl

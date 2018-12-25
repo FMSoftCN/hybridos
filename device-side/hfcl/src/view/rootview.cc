@@ -21,8 +21,9 @@
 
 #include "view/rootview.h"
 
-#include "graphics/image.h"
-#include "drawable/imagedrawable.h"
+#include "resource/respkgmanager.h"
+#include "css/cssdeclaredgroup.h"
+#include "css/cssselector.h"
 
 namespace hfcl {
 
@@ -46,7 +47,9 @@ bool RootView::attachToSysWindow(HWND hwnd)
         SetWindowAdditionalData(hwnd, (DWORD)this);
         m_hwnd = hwnd;
 
-        InvalidateRect(hwnd, NULL, true);
+        RECT rc;
+        GetClientRect(hwnd, &rc);
+        computeCss(RECTW(rc), RECTH(rc));
         return true;
     }
 
@@ -64,6 +67,24 @@ bool RootView::detachFromSysWindow()
 
     m_hwnd = HWND_INVALID;
     m_old_proc = NULL;
+    return true;
+}
+
+bool RootView::applyCssGroup(HTResId cssgId)
+{
+    CssDeclaredGroup* cssdg = GetCssGroupRes(cssgId);
+    if (cssdg == NULL) {
+        return false;
+    }
+
+    CssDeclaredVec::iterator it;
+    for (it = cssdg->m_css_vec.begin(); it != cssdg->m_css_vec.end(); ++it) {
+        CssDeclared* css = *it;
+        CssSelectorGroup selector;
+        selector.compile(css->getSelector());
+        applyCss(css, selector);
+    }
+
     return true;
 }
 
@@ -226,16 +247,6 @@ int RootView::onMouseMessage(Event::EventType mouseType,
 
     dispatchEvent(&ev);
     return 0;
-}
-
-bool RootView::applyCss (const CssDeclared* css)
-{
-    return true;
-}
-
-bool RootView::applyCssGroup (HTResId cssgId)
-{
-    return true;
 }
 
 } // namespace hfcl

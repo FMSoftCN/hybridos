@@ -27,6 +27,10 @@
 
 namespace hfcl {
 
+class Rootview;
+
+VECTOR(CssDeclared*, CssDeclaredVec);
+
 class CssDeclaredGroup : public RefCount {
 public:
     CssDeclaredGroup() {}
@@ -34,9 +38,9 @@ public:
 
     bool append(CssDeclared* css);
 
-private:
-    VECTOR(CssDeclared*, CssDeclaredVec);
+    friend class RootView;
 
+protected:
     CssDeclaredVec m_css_vec;
 };
 

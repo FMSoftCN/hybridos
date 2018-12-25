@@ -104,6 +104,14 @@ public:
         data.p = p;
         return setProperty(pid, value, data);
     }
+
+    enum {
+        CSS_KW_UNKNOWN = 0,
+        CSS_KW_PSEUDO_ELEMENT,
+        CSS_KW_PSEUDO_CLASS,
+    };
+
+    static int getKeywordType(string& name);
 };
 
 namespace css {

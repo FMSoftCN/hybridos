@@ -33,6 +33,12 @@
 
 namespace hfcl {
 
+/* VincentWei:
+ * for map, the size of key type must be aligned at intptr_t.
+ * Or it->second cannot work correctly, you will get SEGV.
+ */
+MAP(intptr_t, CssPropertyValue*, CssPropertyValueMap);
+
 class CssDeclared : public Css {
 public:
     CssDeclared (const char* selector) : m_selector (selector) {}
@@ -53,16 +59,12 @@ public:
     virtual bool setProperty(CssPropertyIds pid, Uint32 value,
             HTPVData data);
 
-protected:
-    const char* m_selector;
+    const char* getSelector() const { return m_selector; }
+
+    friend class View;
 
 private:
-    /* VincentWei:
-     * for map, the size of key type must be aligned at intptr_t.
-     * Or it->second cannot work correctly, you will get SEGV.
-     */
-    MAP(intptr_t, CssPropertyValue*, CssPropertyValueMap);
-
+    const char* m_selector;
     CssPropertyValueMap m_map;
 };
 

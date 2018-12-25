@@ -10,7 +10,8 @@ myinclude_HEADERS= \
     cssdeclared.inc \
     cssdeclared.h \
     csscomputed.h \
-    cssdeclaredgroup.h
+    cssdeclaredgroup.h \
+    cssselector.h
 
 EXTRA_DIST= \
     css_code_generator.py

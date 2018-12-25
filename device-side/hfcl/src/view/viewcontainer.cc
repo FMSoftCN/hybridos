@@ -466,4 +466,16 @@ void ViewContainer::autoFitSize(bool auto_child_fit)
     setRect(rc);
 }
 
+void ViewContainer::applyCss(CssDeclared* css,
+        const CssSelectorGroup& selector)
+{
+    View* child = m_firstChild;
+    while (child) {
+        child->applyCss(css, selector);
+        child = child->nextSibling();
+    }
+
+    View::applyCss(css, selector);
+}
+
 } // namespace hfcl

@@ -41,10 +41,9 @@ public:
     virtual ~RootView();
 
     /* methods specific to RootView */
-    bool attachToSysWindow (HWND hwnd);
-    bool detachFromSysWindow ();
-    bool applyCss (const CssDeclared* css);
-    bool applyCssGroup (HTResId cssgId);
+    bool attachToSysWindow(HWND hwnd);
+    bool detachFromSysWindow();
+    bool applyCssGroup(HTResId cssgId);
 
     /* overloaded virtual functions */
     virtual const char* tag() { return "htroot"; }
@@ -57,17 +56,17 @@ public:
     // you can overload the method to define customized keycode.
     virtual int scancode2keycode(int scancode);
 
-    int onKeyMessage(Event::EventType keytype,
-        WPARAM wParam, LPARAM lParam);
-    int onMouseMessage(Event::EventType mouseType,
-        WPARAM wParam, LPARAM lParam);
-
     /* static methods */
     static RootView* hwndToView(HWND hwnd);
     static LRESULT rootViewProc(HWND hWnd, UINT message,
             WPARAM wParam, LPARAM lParam);
 
 protected:
+    /* helpers to handle event */
+    int onKeyMessage(Event::EventType keytype,
+        WPARAM wParam, LPARAM lParam);
+    int onMouseMessage(Event::EventType mouseType,
+        WPARAM wParam, LPARAM lParam);
 
 private:
     HWND m_hwnd;

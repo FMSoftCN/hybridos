@@ -23,5 +23,77 @@
 
 namespace hfcl {
 
+MAPCLASSKEY(string, int, CssKeywordTypeMap);
+
+static CssKeywordTypeMap _map;
+
+int Css::getKeywordType(string& name)
+{
+    if (_map.size() == 0) {
+        string* str;
+
+        str = HFCL_NEW_EX(string, ("first-child"));
+        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+
+        str = HFCL_NEW_EX(string, ("only-child"));
+        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+
+        str = HFCL_NEW_EX(string, ("last-child"));
+        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+
+        str = HFCL_NEW_EX(string, ("nth-child"));
+        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+
+        str = HFCL_NEW_EX(string, ("link"));
+        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+
+        str = HFCL_NEW_EX(string, ("visited"));
+        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+
+        str = HFCL_NEW_EX(string, ("hover"));
+        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+
+        str = HFCL_NEW_EX(string, ("active"));
+        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+
+        str = HFCL_NEW_EX(string, ("focus"));
+        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+
+        str = HFCL_NEW_EX(string, ("disabled"));
+        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+
+        str = HFCL_NEW_EX(string, ("enabled"));
+        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+
+        str = HFCL_NEW_EX(string, ("checked"));
+        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+
+        str = HFCL_NEW_EX(string, ("root"));
+        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+
+        str = HFCL_NEW_EX(string, ("empty"));
+        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+
+        str = HFCL_NEW_EX(string, ("first-line"));
+        _map[*str] = Css::CSS_KW_PSEUDO_ELEMENT;
+
+        str = HFCL_NEW_EX(string, ("first-letter"));
+        _map[*str] = Css::CSS_KW_PSEUDO_ELEMENT;
+
+        str = HFCL_NEW_EX(string, ("before"));
+        _map[*str] = Css::CSS_KW_PSEUDO_ELEMENT;
+
+        str = HFCL_NEW_EX(string, ("after"));
+        _map[*str] = Css::CSS_KW_PSEUDO_ELEMENT;
+    }
+
+    CssKeywordTypeMap::iterator it = _map.find(name);
+    if (it == _map.end()) {
+        return CSS_KW_UNKNOWN;
+    }
+
+    return _map[name];
+}
+
 } // namespace hfcl
 

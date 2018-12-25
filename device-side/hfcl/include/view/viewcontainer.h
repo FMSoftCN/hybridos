@@ -23,7 +23,8 @@
 #ifndef HFCL_VIEW_VIEWCONTAINER_H_
 #define HFCL_VIEW_VIEWCONTAINER_H_
 
-#include "view.h"
+#include "../view/view.h"
+#include "../css/cssselector.h"
 
 namespace hfcl {
 
@@ -71,6 +72,9 @@ public:
     View* getFocusedChild() const { return m_focusView; }
 
     /* overloaded virtual functions */
+    virtual void applyCss(CssDeclared* css,
+            const CssSelectorGroup& selector);
+    virtual void computeCss(int w, int h);
     virtual bool isContainer() { return true; }
     virtual void drawBackground(GraphicsContext* context, IntRect &rc);
     virtual void drawContent(GraphicsContext *context, IntRect &rc);
