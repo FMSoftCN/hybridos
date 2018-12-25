@@ -36,23 +36,33 @@ public:
     CssSelector() {}
     ~CssSelector() {}
 
-    void setTag(string& tag) {
-        m_tag = tag;
+    const string& getType() const { return m_tag; }
+    void setType(string& type) {
+        m_tag = type;
     }
+
     void addIdentifier(string& str) {
         m_identifiers.push_back(str);
     }
+
     void addClass(string& str) {
         m_classes.push_back(str);
     }
+
     void addAttribute(string& str) {
         m_attributes.push_back(str);
     }
-    void addPseudoElements(string& str) {
+
+    void addPseudoElement(string& str) {
         m_pseudo_elements.push_back(str);
     }
-    void addPseudoClasses(string& str) {
+
+    void addPseudoClass(string& str) {
         m_pseudo_classes.push_back(str);
+    }
+
+    void addDynamicPseudoClass(string& str) {
+        m_dynamic_pseudo_classes.push_back(str);
     }
 
 friend class CssSelectorGroup;
@@ -64,6 +74,7 @@ private:
     CssSelectorPieceVec m_attributes;
     CssSelectorPieceVec m_pseudo_elements;
     CssSelectorPieceVec m_pseudo_classes;
+    CssSelectorPieceVec m_dynamic_pseudo_classes;
 };
 
 VECTOR(CssSelector*, CssSelectorVec);
@@ -80,7 +91,7 @@ public:
     };
 
     bool compile(const char* selector);
-    int match(const View* view) const;
+    int match(const View* view);
     void clear();
 
 private:

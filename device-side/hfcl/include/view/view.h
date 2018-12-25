@@ -90,11 +90,16 @@ public:
     bool includeClass(const char* cssClass);
     bool excludeClass(const char* cssClass);
 
+    bool checkClass(const string& cls) const;
+    bool checkAttribute(const string& attr) const;
+    bool checkPseudoElement(const string& pseudoEle) const;
+    bool checkPseudoClass(const string& pseudoCls) const;
+
     /* virtual functions for rendering */
-    // return the HVML tag, e.g., hvroot, hvlist, hvimg, hvli, and so on
-    virtual const char* tag() const = 0;
+    // return the HVML type, e.g., hvroot, hvlist, hvimg, hvli, and so on
+    virtual const char* type() const = 0;
     virtual void applyCss(CssDeclared* css,
-            const CssSelectorGroup& selector);
+            CssSelectorGroup& selector);
     virtual void computeCss(int w, int h);
     virtual void onNameChanged() = 0;
     virtual void onClassChanged() = 0;

@@ -423,7 +423,7 @@ HWND View::getSysWindow()
     return HWND_INVALID;
 }
 
-void View::applyCss(CssDeclared* css, const CssSelectorGroup& selector)
+void View::applyCss(CssDeclared* css, CssSelectorGroup& selector)
 {
     switch (selector.match(this)) {
     case CssSelectorGroup::CSS_STATIC:

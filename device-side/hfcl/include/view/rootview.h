@@ -46,7 +46,7 @@ public:
     bool applyCssGroup(HTResId cssgId);
 
     /* overloaded virtual functions */
-    virtual const char* tag() { return "htroot"; }
+    virtual const char* type() { return "hvroot"; }
     virtual bool isRoot() { return true; }
     virtual HWND getSysWindow() { return m_hwnd; }
 

@@ -109,6 +109,7 @@ public:
         CSS_KW_UNKNOWN = 0,
         CSS_KW_PSEUDO_ELEMENT,
         CSS_KW_PSEUDO_CLASS,
+        CSS_KW_DYNAMIC_PSEUDO_CLASS,
     };
 
     static int getKeywordType(string& name);

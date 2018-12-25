@@ -466,8 +466,7 @@ void ViewContainer::autoFitSize(bool auto_child_fit)
     setRect(rc);
 }
 
-void ViewContainer::applyCss(CssDeclared* css,
-        const CssSelectorGroup& selector)
+void ViewContainer::applyCss(CssDeclared* css, CssSelectorGroup& selector)
 {
     View* child = m_firstChild;
     while (child) {

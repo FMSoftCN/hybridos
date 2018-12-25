@@ -48,25 +48,25 @@ int Css::getKeywordType(string& name)
         _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
 
         str = HFCL_NEW_EX(string, ("visited"));
-        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+        _map[*str] = Css::CSS_KW_DYNAMIC_PSEUDO_CLASS;
 
         str = HFCL_NEW_EX(string, ("hover"));
-        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+        _map[*str] = Css::CSS_KW_DYNAMIC_PSEUDO_CLASS;
 
         str = HFCL_NEW_EX(string, ("active"));
-        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+        _map[*str] = Css::CSS_KW_DYNAMIC_PSEUDO_CLASS;
 
         str = HFCL_NEW_EX(string, ("focus"));
-        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+        _map[*str] = Css::CSS_KW_DYNAMIC_PSEUDO_CLASS;
 
         str = HFCL_NEW_EX(string, ("disabled"));
-        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+        _map[*str] = Css::CSS_KW_DYNAMIC_PSEUDO_CLASS;
 
         str = HFCL_NEW_EX(string, ("enabled"));
-        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+        _map[*str] = Css::CSS_KW_DYNAMIC_PSEUDO_CLASS;
 
         str = HFCL_NEW_EX(string, ("checked"));
-        _map[*str] = Css::CSS_KW_PSEUDO_CLASS;
+        _map[*str] = Css::CSS_KW_DYNAMIC_PSEUDO_CLASS;
 
         str = HFCL_NEW_EX(string, ("root"));
         _map[*str] = Css::CSS_KW_PSEUDO_CLASS;

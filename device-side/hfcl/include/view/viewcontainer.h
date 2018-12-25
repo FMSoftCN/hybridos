@@ -73,7 +73,7 @@ public:
 
     /* overloaded virtual functions */
     virtual void applyCss(CssDeclared* css,
-            const CssSelectorGroup& selector);
+            CssSelectorGroup& selector);
     virtual void computeCss(int w, int h);
     virtual bool isContainer() { return true; }
     virtual void drawBackground(GraphicsContext* context, IntRect &rc);
