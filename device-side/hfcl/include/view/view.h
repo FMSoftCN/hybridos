@@ -84,19 +84,19 @@ public:
     const char* getName() const { return m_name.c_str(); }
     bool setName(const char* name);
 
-    // CSS class of this view
+    // Operators for CSS class of this view
     const char* getClass() { return m_cssCls.c_str(); }
-    bool setClass(const char* cssClass);
+    bool setClasses(const char* cssClasses);
     bool includeClass(const char* cssClass);
     bool excludeClass(const char* cssClass);
 
     bool checkClass(const char* cls) const;
     bool checkAttribute(const char* attr) const;
     bool checkPseudoElement(const char* pseudoEle) const;
-    bool checkPseudoClass(const char* pseudoCls) const;
+    virtual bool checkPseudoClass(const char* pseudoCls) const;
 
     /* virtual functions for rendering */
-    // return the HVML type, e.g., hvroot, hvlist, hvimg, hvli, and so on
+    // return the HVML type, e.g., hvroot, hvtext, hvimg, hvli, and so on
     virtual const char* type() const = 0;
     virtual void applyCss(CssDeclared* css,
             CssSelectorGroup& selector);
@@ -115,8 +115,8 @@ public:
     virtual void onLostFocus() = 0;
     virtual void onViewportSizeChanged();
 
-    virtual bool isContainer() { return false; }
-    virtual bool isRoot() { return false; }
+    virtual bool isContainer() const { return false; }
+    virtual bool isRoot() const { return false; }
 
     // virtual functions for drawing the view
     virtual void drawBackground(GraphicsContext* context, IntRect &rc) = 0;

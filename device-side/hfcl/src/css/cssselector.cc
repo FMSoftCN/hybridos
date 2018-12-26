@@ -336,17 +336,17 @@ bool CssSelectorGroup::compileSingle(char* token, CssSelector& one)
             scan++;
             str = get_token(scan);
             if (str) {
-                switch (Css::getKeywordType (*str)) {
-                case Css::CSS_KW_PSEUDO_ELEMENT:
+                Uint32 kw_type = Css::getKeywordType (str->c_str());
+                if (kw_type & Css::CSS_KW_PSEUDO_ELEMENT) {
                     one.addPseudoElement(*str);
-                    break;
-                case Css::CSS_KW_PSEUDO_CLASS:
+                }
+                else if (kw_type & Css::CSS_KW_PSEUDO_CLASS) {
                     one.addPseudoClass(*str);
-                    break;
-                case Css::CSS_KW_DYNAMIC_PSEUDO_CLASS:
+                }
+                else if (kw_type & Css::CSS_KW_DYNAMIC_PSEUDO_CLASS) {
                     one.addDynamicPseudoClass(*str);
-                    break;
-                default:
+                }
+                else {
                     goto error;
                 }
 

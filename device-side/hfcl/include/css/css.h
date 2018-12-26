@@ -105,14 +105,38 @@ public:
         return setProperty(pid, value, data);
     }
 
+    // Keyword type (bitmask)
     enum {
         CSS_KW_UNKNOWN = 0,
-        CSS_KW_PSEUDO_ELEMENT,
-        CSS_KW_PSEUDO_CLASS,
-        CSS_KW_DYNAMIC_PSEUDO_CLASS,
+        CSS_KW_PSEUDO_ELEMENT       = (0x00010000 << 0),
+        CSS_KW_PSEUDO_CLASS         = (0x00010000 << 1),
+        CSS_KW_DYNAMIC_PSEUDO_CLASS = (0x00010000 << 2),
     };
 
-    static int getKeywordType(string& name);
+    // Keyword subtype
+    enum {
+        CSS_KWST_FIRST_CHILD,
+        CSS_KWST_ONLY_CHILD,
+        CSS_KWST_LAST_CHILD,
+        CSS_KWST_NTH_CHILD,
+        CSS_KWST_NTH_LAST_CHILD,
+        CSS_KWST_LINK,
+        CSS_KWST_VISITED,
+        CSS_KWST_HOVER,
+        CSS_KWST_ACTIVE,
+        CSS_KWST_FOCUS,
+        CSS_KWST_DISABLED,
+        CSS_KWST_ENABLED,
+        CSS_KWST_CHECKED,
+        CSS_KWST_ROOT,
+        CSS_KWST_EMPTY,
+        CSS_KWST_FIRST_LINE,
+        CSS_KWST_FIRST_LETTER,
+        CSS_KWST_BEFORE,
+        CSS_KWST_AFTER,
+    };
+
+    static Uint32 getKeywordType(const char* name);
 };
 
 namespace css {

@@ -115,9 +115,9 @@ ok:
     return true;
 }
 
-bool View::setClass(const char* cssClass)
+bool View::setClasses(const char* cssClasses)
 {
-    std::string tmp = cssClass;
+    std::string tmp = cssClasses;
     add_spaces (tmp);
 
     if (strcasecmp (tmp.c_str(), m_cssCls.c_str()) == 0) {
@@ -125,7 +125,7 @@ bool View::setClass(const char* cssClass)
     }
 
     m_cssCls = ' ';
-    m_cssCls += cssClass;
+    m_cssCls += cssClasses;
     m_cssCls += ' ';
     onClassChanged();
     return true;
@@ -162,6 +162,108 @@ bool View::excludeClass(const char* cssClass)
     m_cssCls.erase (pos, tmp.length() - 1);
     onClassChanged();
     return true;
+}
+
+bool View::checkClass(const char* cssClass) const
+{
+    std::string tmp = cssClass;
+    add_spaces (tmp);
+
+    const char* full = m_cssCls.c_str();
+    if (strcasestr (full, tmp.c_str()))
+        return true;
+
+    return false;
+}
+
+bool View::checkAttribute(const char* attr) const
+{
+    /* TODO */
+    _DBG_PRINTF("View::checkAttribute: NOT IMPLEMENTED\n");
+    return false;
+}
+
+bool View::checkPseudoElement(const char* pseudoEle) const
+{
+    /* TODO */
+    _DBG_PRINTF("View::checkPseudoElement: NOT IMPLEMENTED\n");
+    return false;
+}
+
+bool View::checkPseudoClass(const char* pseudoCls) const
+{
+    std::string tmp = pseudoCls;
+    tolower(tmp);
+
+    Uint32 type = Css::getKeywordType(tmp.c_str());
+    Uint16 subtype = type & 0xFFFF;
+    if (type & Css::CSS_KW_DYNAMIC_PSEUDO_CLASS) {
+        switch (subtype) {
+        case Css::CSS_KWST_HOVER:
+            return m_flags & VA_HOVER;
+        case Css::CSS_KWST_ACTIVE:
+            return m_flags & VA_ACTIVE;
+        case Css::CSS_KWST_FOCUS:
+            return m_flags & VA_FOCUSED;
+        case Css::CSS_KWST_DISABLED:
+            return m_flags & VA_DISABLED;
+        case Css::CSS_KWST_ENABLED:
+            return !(m_flags & VA_DISABLED);
+        case Css::CSS_KWST_CHECKED:
+            return m_flags & VA_CHECKED;
+        default:
+            break;
+        }
+    }
+    else if (type & Css::CSS_KW_PSEUDO_CLASS) {
+        switch (subtype) {
+        case Css::CSS_KWST_FIRST_CHILD:
+            if (m_parent && m_parent->firstChild() == this)
+                return true;
+            break;
+
+        case Css::CSS_KWST_ONLY_CHILD:
+            if (m_parent && m_parent->firstChild() == this &&
+                    m_parent->lastChild() == this)
+                return true;
+            break;
+
+        case Css::CSS_KWST_LAST_CHILD:
+            if (m_parent && m_parent->lastChild() == this)
+                return true;
+            break;
+
+        case Css::CSS_KWST_NTH_CHILD:
+            break;
+
+        case Css::CSS_KWST_NTH_LAST_CHILD:
+            break;
+
+        case Css::CSS_KWST_ROOT:
+            if (isRoot())
+                return true;
+            break;
+
+        case Css::CSS_KWST_EMPTY:
+            if (isContainer()) {
+                const ViewContainer* cnt
+                    = static_cast<const ViewContainer*>(this);
+                if (cnt->childrenCount() == 0)
+                    return true;
+            }
+            else {
+                return true;
+            }
+            break;
+
+        case Css::CSS_KWST_LINK:
+        case Css::CSS_KWST_VISITED:
+        default:
+            break;
+        }
+    }
+
+    return false;
 }
 
 void View::onPaint(GraphicsContext* context)
