@@ -113,6 +113,26 @@ border-bottom-width
     initial: medium
     inherited: no
 
+border-top-left-radius
+    values: <length> <percentage> <array-length> <array-percentage>
+    initial: <length-px>=0
+    inherited: no
+
+border-top-right-radius
+    values: <length> <percentage> <array-length> <array-percentage>
+    initial: <length-px>=0
+    inherited: no
+
+border-bottom-right-radius
+    values: <length> <percentage> <array-length> <array-percentage>
+    initial: <length-px>=0
+    inherited: no
+
+border-bottom-left-radius
+    values: <length> <percentage> <array-length> <array-percentage>
+    initial: <length-px>=0
+    inherited: no
+
 bottom
     values: <length> <percentage> auto inherit
     initial: auto

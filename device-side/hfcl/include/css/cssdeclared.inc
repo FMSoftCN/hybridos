@@ -85,6 +85,28 @@
         return Css::setProperty (PID_BORDER_BOTTOM_COLOR, value, data);
     }
 
+    // Operators for property border-bottom-left-radius
+    bool setBorderBottomLeftRadius(Uint32 value) {
+        return Css::setProperty(PID_BORDER_BOTTOM_LEFT_RADIUS, value);
+    }
+    bool setBorderBottomLeftRadius(Uint32 value, HTPointer data) {
+        return Css::setProperty (PID_BORDER_BOTTOM_LEFT_RADIUS, value, data);
+    }
+    bool setBorderBottomLeftRadius(Uint32 value, HTReal data) {
+        return Css::setProperty (PID_BORDER_BOTTOM_LEFT_RADIUS, value, data);
+    }
+
+    // Operators for property border-bottom-right-radius
+    bool setBorderBottomRightRadius(Uint32 value) {
+        return Css::setProperty(PID_BORDER_BOTTOM_RIGHT_RADIUS, value);
+    }
+    bool setBorderBottomRightRadius(Uint32 value, HTPointer data) {
+        return Css::setProperty (PID_BORDER_BOTTOM_RIGHT_RADIUS, value, data);
+    }
+    bool setBorderBottomRightRadius(Uint32 value, HTReal data) {
+        return Css::setProperty (PID_BORDER_BOTTOM_RIGHT_RADIUS, value, data);
+    }
+
     // Operators for property border-bottom-style
     bool setBorderBottomStyle(Uint32 value) {
         return Css::setProperty(PID_BORDER_BOTTOM_STYLE, value);
@@ -165,6 +187,28 @@
     }
     bool setBorderTopColor(Uint32 value, HTUint data) {
         return Css::setProperty (PID_BORDER_TOP_COLOR, value, data);
+    }
+
+    // Operators for property border-top-left-radius
+    bool setBorderTopLeftRadius(Uint32 value) {
+        return Css::setProperty(PID_BORDER_TOP_LEFT_RADIUS, value);
+    }
+    bool setBorderTopLeftRadius(Uint32 value, HTPointer data) {
+        return Css::setProperty (PID_BORDER_TOP_LEFT_RADIUS, value, data);
+    }
+    bool setBorderTopLeftRadius(Uint32 value, HTReal data) {
+        return Css::setProperty (PID_BORDER_TOP_LEFT_RADIUS, value, data);
+    }
+
+    // Operators for property border-top-right-radius
+    bool setBorderTopRightRadius(Uint32 value) {
+        return Css::setProperty(PID_BORDER_TOP_RIGHT_RADIUS, value);
+    }
+    bool setBorderTopRightRadius(Uint32 value, HTPointer data) {
+        return Css::setProperty (PID_BORDER_TOP_RIGHT_RADIUS, value, data);
+    }
+    bool setBorderTopRightRadius(Uint32 value, HTReal data) {
+        return Css::setProperty (PID_BORDER_TOP_RIGHT_RADIUS, value, data);
     }
 
     // Operators for property border-top-style

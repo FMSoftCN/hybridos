@@ -42,6 +42,10 @@ typedef enum _CssPropertyIds {
     PID_BACKGROUND_REPEAT,
     // border-bottom-color
     PID_BORDER_BOTTOM_COLOR,
+    // border-bottom-left-radius
+    PID_BORDER_BOTTOM_LEFT_RADIUS,
+    // border-bottom-right-radius
+    PID_BORDER_BOTTOM_RIGHT_RADIUS,
     // border-bottom-style
     PID_BORDER_BOTTOM_STYLE,
     // border-bottom-width
@@ -64,6 +68,10 @@ typedef enum _CssPropertyIds {
     PID_BORDER_SPACING,
     // border-top-color
     PID_BORDER_TOP_COLOR,
+    // border-top-left-radius
+    PID_BORDER_TOP_LEFT_RADIUS,
+    // border-top-right-radius
+    PID_BORDER_TOP_RIGHT_RADIUS,
     // border-top-style
     PID_BORDER_TOP_STYLE,
     // border-top-width
@@ -204,6 +212,28 @@ typedef enum _CssPropertyValueTypes {
     PVT_NONE = 0,
     PVT_KEYWORD,
     PVT_ALPHAVALUE,
+    PVT_ARRAY_LENGTH_Q,
+    PVT_ARRAY_LENGTH_CAP,
+    PVT_ARRAY_LENGTH_CH,
+    PVT_ARRAY_LENGTH_CM,
+    PVT_ARRAY_LENGTH_EM,
+    PVT_ARRAY_LENGTH_EX,
+    PVT_ARRAY_LENGTH_IC,
+    PVT_ARRAY_LENGTH_IN,
+    PVT_ARRAY_LENGTH_LH,
+    PVT_ARRAY_LENGTH_MM,
+    PVT_ARRAY_LENGTH_PC,
+    PVT_ARRAY_LENGTH_PT,
+    PVT_ARRAY_LENGTH_PX,
+    PVT_ARRAY_LENGTH_REM,
+    PVT_ARRAY_LENGTH_RLH,
+    PVT_ARRAY_LENGTH_VB,
+    PVT_ARRAY_LENGTH_VH,
+    PVT_ARRAY_LENGTH_VI,
+    PVT_ARRAY_LENGTH_VM,
+    PVT_ARRAY_LENGTH_VMAX,
+    PVT_ARRAY_LENGTH_VMIN,
+    PVT_ARRAY_PERCENTAGE,
     PVT_ARRAY_STRING,
     PVT_COUNTER,
     PVT_HSL,
@@ -1117,6 +1147,120 @@ typedef enum _CssPropertyValueKeywords {
 // PV_INHERIT has been defined
 // PV_TRANSPARENT has been defined
 
+// Values for property border-bottom-left-radius
+#define PV_ARRAY_LENGTH_Q \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_Q, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_CAP \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_CAP, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_CH \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_CH, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_CM \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_CM, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_EM \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_EM, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_EX \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_EX, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_IC \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_IC, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_IN \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_IN, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_LH \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_LH, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_MM \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_MM, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_PC \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_PC, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_PT \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_PT, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_PX \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_PX, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_REM \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_REM, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_RLH \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_RLH, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_VB \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_VB, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_VH \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_VH, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_VI \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_VI, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_VM \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_VM, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_VMAX \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_VMAX, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_VMIN \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_VMIN, PVK_USER_DATA)
+#define PV_ARRAY_PERCENTAGE \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_PERCENTAGE, PVK_USER_DATA)
+// PV_LENGTH_Q has been defined
+// PV_LENGTH_CAP has been defined
+// PV_LENGTH_CH has been defined
+// PV_LENGTH_CM has been defined
+// PV_LENGTH_EM has been defined
+// PV_LENGTH_EX has been defined
+// PV_LENGTH_IC has been defined
+// PV_LENGTH_IN has been defined
+// PV_LENGTH_LH has been defined
+// PV_LENGTH_MM has been defined
+// PV_LENGTH_PC has been defined
+// PV_LENGTH_PT has been defined
+// PV_LENGTH_PX has been defined
+// PV_LENGTH_REM has been defined
+// PV_LENGTH_RLH has been defined
+// PV_LENGTH_VB has been defined
+// PV_LENGTH_VH has been defined
+// PV_LENGTH_VI has been defined
+// PV_LENGTH_VM has been defined
+// PV_LENGTH_VMAX has been defined
+// PV_LENGTH_VMIN has been defined
+// PV_PERCENTAGE has been defined
+
+// Values for property border-bottom-right-radius
+// PV_ARRAY_LENGTH_Q has been defined
+// PV_ARRAY_LENGTH_CAP has been defined
+// PV_ARRAY_LENGTH_CH has been defined
+// PV_ARRAY_LENGTH_CM has been defined
+// PV_ARRAY_LENGTH_EM has been defined
+// PV_ARRAY_LENGTH_EX has been defined
+// PV_ARRAY_LENGTH_IC has been defined
+// PV_ARRAY_LENGTH_IN has been defined
+// PV_ARRAY_LENGTH_LH has been defined
+// PV_ARRAY_LENGTH_MM has been defined
+// PV_ARRAY_LENGTH_PC has been defined
+// PV_ARRAY_LENGTH_PT has been defined
+// PV_ARRAY_LENGTH_PX has been defined
+// PV_ARRAY_LENGTH_REM has been defined
+// PV_ARRAY_LENGTH_RLH has been defined
+// PV_ARRAY_LENGTH_VB has been defined
+// PV_ARRAY_LENGTH_VH has been defined
+// PV_ARRAY_LENGTH_VI has been defined
+// PV_ARRAY_LENGTH_VM has been defined
+// PV_ARRAY_LENGTH_VMAX has been defined
+// PV_ARRAY_LENGTH_VMIN has been defined
+// PV_ARRAY_PERCENTAGE has been defined
+// PV_LENGTH_Q has been defined
+// PV_LENGTH_CAP has been defined
+// PV_LENGTH_CH has been defined
+// PV_LENGTH_CM has been defined
+// PV_LENGTH_EM has been defined
+// PV_LENGTH_EX has been defined
+// PV_LENGTH_IC has been defined
+// PV_LENGTH_IN has been defined
+// PV_LENGTH_LH has been defined
+// PV_LENGTH_MM has been defined
+// PV_LENGTH_PC has been defined
+// PV_LENGTH_PT has been defined
+// PV_LENGTH_PX has been defined
+// PV_LENGTH_REM has been defined
+// PV_LENGTH_RLH has been defined
+// PV_LENGTH_VB has been defined
+// PV_LENGTH_VH has been defined
+// PV_LENGTH_VI has been defined
+// PV_LENGTH_VM has been defined
+// PV_LENGTH_VMAX has been defined
+// PV_LENGTH_VMIN has been defined
+// PV_PERCENTAGE has been defined
+
 // Values for property border-bottom-style
 #define PV_BS_DASHED \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_DASHED)
@@ -1724,6 +1868,98 @@ typedef enum _CssPropertyValueKeywords {
 // PV_CURRENT_COLOR has been defined
 // PV_INHERIT has been defined
 // PV_TRANSPARENT has been defined
+
+// Values for property border-top-left-radius
+// PV_ARRAY_LENGTH_Q has been defined
+// PV_ARRAY_LENGTH_CAP has been defined
+// PV_ARRAY_LENGTH_CH has been defined
+// PV_ARRAY_LENGTH_CM has been defined
+// PV_ARRAY_LENGTH_EM has been defined
+// PV_ARRAY_LENGTH_EX has been defined
+// PV_ARRAY_LENGTH_IC has been defined
+// PV_ARRAY_LENGTH_IN has been defined
+// PV_ARRAY_LENGTH_LH has been defined
+// PV_ARRAY_LENGTH_MM has been defined
+// PV_ARRAY_LENGTH_PC has been defined
+// PV_ARRAY_LENGTH_PT has been defined
+// PV_ARRAY_LENGTH_PX has been defined
+// PV_ARRAY_LENGTH_REM has been defined
+// PV_ARRAY_LENGTH_RLH has been defined
+// PV_ARRAY_LENGTH_VB has been defined
+// PV_ARRAY_LENGTH_VH has been defined
+// PV_ARRAY_LENGTH_VI has been defined
+// PV_ARRAY_LENGTH_VM has been defined
+// PV_ARRAY_LENGTH_VMAX has been defined
+// PV_ARRAY_LENGTH_VMIN has been defined
+// PV_ARRAY_PERCENTAGE has been defined
+// PV_LENGTH_Q has been defined
+// PV_LENGTH_CAP has been defined
+// PV_LENGTH_CH has been defined
+// PV_LENGTH_CM has been defined
+// PV_LENGTH_EM has been defined
+// PV_LENGTH_EX has been defined
+// PV_LENGTH_IC has been defined
+// PV_LENGTH_IN has been defined
+// PV_LENGTH_LH has been defined
+// PV_LENGTH_MM has been defined
+// PV_LENGTH_PC has been defined
+// PV_LENGTH_PT has been defined
+// PV_LENGTH_PX has been defined
+// PV_LENGTH_REM has been defined
+// PV_LENGTH_RLH has been defined
+// PV_LENGTH_VB has been defined
+// PV_LENGTH_VH has been defined
+// PV_LENGTH_VI has been defined
+// PV_LENGTH_VM has been defined
+// PV_LENGTH_VMAX has been defined
+// PV_LENGTH_VMIN has been defined
+// PV_PERCENTAGE has been defined
+
+// Values for property border-top-right-radius
+// PV_ARRAY_LENGTH_Q has been defined
+// PV_ARRAY_LENGTH_CAP has been defined
+// PV_ARRAY_LENGTH_CH has been defined
+// PV_ARRAY_LENGTH_CM has been defined
+// PV_ARRAY_LENGTH_EM has been defined
+// PV_ARRAY_LENGTH_EX has been defined
+// PV_ARRAY_LENGTH_IC has been defined
+// PV_ARRAY_LENGTH_IN has been defined
+// PV_ARRAY_LENGTH_LH has been defined
+// PV_ARRAY_LENGTH_MM has been defined
+// PV_ARRAY_LENGTH_PC has been defined
+// PV_ARRAY_LENGTH_PT has been defined
+// PV_ARRAY_LENGTH_PX has been defined
+// PV_ARRAY_LENGTH_REM has been defined
+// PV_ARRAY_LENGTH_RLH has been defined
+// PV_ARRAY_LENGTH_VB has been defined
+// PV_ARRAY_LENGTH_VH has been defined
+// PV_ARRAY_LENGTH_VI has been defined
+// PV_ARRAY_LENGTH_VM has been defined
+// PV_ARRAY_LENGTH_VMAX has been defined
+// PV_ARRAY_LENGTH_VMIN has been defined
+// PV_ARRAY_PERCENTAGE has been defined
+// PV_LENGTH_Q has been defined
+// PV_LENGTH_CAP has been defined
+// PV_LENGTH_CH has been defined
+// PV_LENGTH_CM has been defined
+// PV_LENGTH_EM has been defined
+// PV_LENGTH_EX has been defined
+// PV_LENGTH_IC has been defined
+// PV_LENGTH_IN has been defined
+// PV_LENGTH_LH has been defined
+// PV_LENGTH_MM has been defined
+// PV_LENGTH_PC has been defined
+// PV_LENGTH_PT has been defined
+// PV_LENGTH_PX has been defined
+// PV_LENGTH_REM has been defined
+// PV_LENGTH_RLH has been defined
+// PV_LENGTH_VB has been defined
+// PV_LENGTH_VH has been defined
+// PV_LENGTH_VI has been defined
+// PV_LENGTH_VM has been defined
+// PV_LENGTH_VMAX has been defined
+// PV_LENGTH_VMIN has been defined
+// PV_PERCENTAGE has been defined
 
 // Values for property border-top-style
 // PV_BS_DASHED has been defined
