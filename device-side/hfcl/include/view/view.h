@@ -65,89 +65,55 @@ public:
         VN_VIEW_MAX,
     };
 
-    View(int id = 0, const char* cssClass = NULL, const char* name = NULL);
+    View(int id = 0, const char* cssCls = NULL, const char* name = NULL);
     virtual ~View();
 
     bool attach(ViewContainer* parent);
     bool detach();
 
-    /* public methods to get/set attributes */
-    // identifier (integer) of this view
+    /* operators for view relationship */
+    const View* getPrev() const { return m_prev; }
+    View* getPrev() { return m_prev; }
+    void setPrev(View* view) { m_prev = view; }
+
+    const View* getNext() const { return m_next; }
+    View* getNext() { return m_next; }
+    void setNext(View* view) { m_next = view; }
+
+    const ViewContainer* getParent() const { return m_parent; }
+    ViewContainer* getParent() { return m_parent; }
+    void setParent(ViewContainer* view) {
+        if (m_parent && m_parent != view) {
+            detach();
+        }
+        if (view) {
+            attach(view);
+        }
+    }
+
+    const RootView* getRoot() const;
+    virtual HWND getSysWindow() const;
+
+    // methods to get/set identifier (integer) of the view
     int getId() const { return m_id; }
     void setId(int id) { m_id = id; }
 
-    // additional data
+    // methods to get/set additional data of the view
     void setAddData(const void *addData) { m_addData = addData; }
     const void *getAddData() const { return m_addData; }
 
+    // methods to get/set name of the view
     // name correspond to the id attribute of one HVML element
     const char* getName() const { return m_name.c_str(); }
     bool setName(const char* name);
 
-    // Operators for CSS class of this view
-    const char* getClass() { return m_cssCls.c_str(); }
-    bool setClasses(const char* cssClasses);
-    bool includeClass(const char* cssClass);
-    bool excludeClass(const char* cssClass);
+    // Operators for CSS class of the view
+    const char* getClasses() { return m_cssCls.c_str(); }
+    bool setClasses(const char* cssClses);
+    bool includeClass(const char* cssCls);
+    bool excludeClass(const char* cssCls);
 
-    const char* getAttribute(const char* attrKey) const;
-    bool setAttribute(const char* attrKey, const char* attrValue);
-
-    bool checkAttribute(const char* attrKey, const char* attrValue) const;
-    bool checkAttribute(const char* attrPair) const;
-    bool checkClass(const char* cls) const;
-    bool checkPseudoElement(const char* pseudoEle) const;
-    virtual bool checkPseudoClass(const char* pseudoCls) const;
-
-    /* virtual functions for rendering */
-    // return the HVML type, e.g., hvroot, hvtext, hvimg, hvli, and so on
-    virtual const char* type() const = 0;
-    virtual void applyCss(CssDeclared* css, const CssSelectorGroup& selector);
-    virtual void computeCss(int w, int h);
-    virtual void onNameChanged() = 0;
-    virtual void onClassChanged() = 0;
-    virtual void onDisabled() = 0;
-    virtual void onEnabled() = 0;
-    virtual void onChecked() = 0;
-    virtual void onUnchecked() = 0;
-    virtual void onActive() = 0;
-    virtual void onInactive() = 0;
-    virtual void onFrozen() = 0;
-    virtual void onUnfrozen() = 0;
-    virtual void onGotFocus() = 0;
-    virtual void onLostFocus() = 0;
-    virtual void onViewportSizeChanged();
-
-    virtual bool isContainer() const { return false; }
-    virtual bool isRoot() const { return false; }
-
-    // virtual functions for drawing the view
-    virtual void drawBackground(GraphicsContext* context, IntRect &rc) = 0;
-    virtual void drawContent(GraphicsContext* context, IntRect &rc) = 0;
-    virtual void drawScrollBar(GraphicsContext* context, IntRect &rc) = 0;
-    virtual void onPaint(GraphicsContext* context);
-
-    // return True if the event was handled, false otherwise.
-    virtual bool dispatchEvent(Event* event);
-    virtual bool raiseEvent(Event *event);
-
-    /* callbacks to handle the interaction events */
-    virtual bool onKeyDown(int keyCode, KeyEvent* event) { return false; }
-    virtual bool onChar(const char* mchar) { return false; }
-    virtual bool onKeyUp(int keyCode, KeyEvent* event) { return false; }
-
-    virtual bool onMouseDown(int x, int y, DWORD keyStatus) { return false; }
-    virtual bool onMouseUp(int x, int y, DWORD keyStatus) { return false; }
-    virtual bool onMouseIn(int x, int y, DWORD keyStatus) { return false; }
-    virtual bool onMouseMove(int x, int y, DWORD keyStatus) { return false; }
-    virtual bool onMouseOut(int x, int y, DWORD keyStatus) { return false; }
-
-    /* high-level events */
-    virtual void onClicked();
-    virtual void onDoubleClicked();
-    virtual void onIdle();
-
-    /* method to get/set attributes (flags) of the view */
+    /* Operators to get/set flags (intrinsic attributes) of the view */
     bool isDisabled() { return m_flags & VA_DISABLED; }
     void disable() {
         bool old = setFlag(true, VA_DISABLED);
@@ -225,28 +191,65 @@ public:
     }
     bool setFocusStoppable(bool b) { return setFlag(b, VA_FOCUSSTOPPABLE); }
 
-    /* methods for silbing travelling */
-    const View* prevSibling() const { return m_prev; }
-    View* prevSibling() { return m_prev; }
-    void setPrevSlibling(View* view) { m_prev = view; }
+    // Operators for user-defined attributes of the view
+    const char* getAttribute(const char* attrKey) const;
+    bool setAttribute(const char* attrKey, const char* attrValue);
 
-    const View* nextSibling() const { return m_next; }
-    View* nextSibling() { return m_next; }
-    void setNextSlibling(View* view) { m_next = view; }
+    // Operators to check various attributes
+    bool checkClass(const char* cssCls) const;
+    bool checkPseudoElement(const char* pseudoEle) const;
+    bool checkPseudoClass(const char* pseudoCls) const;
+    bool checkAttribute(const char* attrKey, const char* attrValue) const;
+    bool checkAttribute(const char* attrPair) const;
 
-    const ViewContainer* getParent() const { return m_parent; }
-    ViewContainer* getParent() { return m_parent; }
-    void setParent(ViewContainer* view) {
-        if (m_parent && m_parent != view) {
-            detach();
-        }
-        if (view) {
-            attach(view);
-        }
-    }
+    virtual const char* type() const = 0;
+    virtual bool isContainer() const { return false; }
+    virtual bool isRoot() const { return false; }
 
-    RootView* getRoot();
-    virtual HWND getSysWindow();
+    /* virtual functions for rendering */
+    // return the HVML type, e.g., hvroot, hvtext, hvimg, hvli, and so on
+    virtual void applyCss(CssDeclared* css, const CssSelectorGroup& selector);
+    virtual void computeCss(const IntRect& viewportRc);
+
+    /* virtual functions for events and attribute changes */
+    virtual void onNameChanged() = 0;
+    virtual void onClassChanged() = 0;
+    virtual void onDisabled() = 0;
+    virtual void onEnabled() = 0;
+    virtual void onChecked() = 0;
+    virtual void onUnchecked() = 0;
+    virtual void onActive() = 0;
+    virtual void onInactive() = 0;
+    virtual void onFrozen() = 0;
+    virtual void onUnfrozen() = 0;
+    virtual void onGotFocus() = 0;
+    virtual void onLostFocus() = 0;
+    virtual void onClicked();
+    virtual void onDoubleClicked();
+    virtual void onIdle();
+
+    virtual void onViewportSizeChanged();
+
+    // virtual functions for drawing the view
+    virtual void drawBackground(GraphicsContext* context, IntRect &rc) = 0;
+    virtual void drawContent(GraphicsContext* context, IntRect &rc) = 0;
+    virtual void drawScrollBar(GraphicsContext* context, IntRect &rc) = 0;
+    virtual void onPaint(GraphicsContext* context);
+
+    // return True if the event was handled, false otherwise.
+    virtual bool dispatchEvent(Event* event);
+    virtual bool raiseEvent(Event *event);
+
+    /* virtual callbacks to handle the interaction events */
+    virtual bool onKeyDown(int keyCode, KeyEvent* event) { return false; }
+    virtual bool onChar(const char* mchar) { return false; }
+    virtual bool onKeyUp(int keyCode, KeyEvent* event) { return false; }
+
+    virtual bool onMouseDown(int x, int y, DWORD keyStatus) { return false; }
+    virtual bool onMouseUp(int x, int y, DWORD keyStatus) { return false; }
+    virtual bool onMouseIn(int x, int y, DWORD keyStatus) { return false; }
+    virtual bool onMouseMove(int x, int y, DWORD keyStatus) { return false; }
+    virtual bool onMouseOut(int x, int y, DWORD keyStatus) { return false; }
 
     virtual void viewToWindow(int *x, int *y);
     virtual void windowToView(int *x, int *y);
@@ -378,15 +381,15 @@ protected:
     /* CSS-related members */
     // user-defined CSS (properties specified on the fly)
     CssDeclared* m_cssd_user;
-    // All selected CssDeclared objects for this view
+    // All selected CssDeclared objects for the view
     CssDeclaredGroup m_cssdg_static;
     CssDeclaredGroup m_cssdg_dynamic;
     // The computed values of all CSS properties.
     CssComputed* m_css_computed;
-    // The pricipal box of this view, either a CssBoxBlock,
+    // The pricipal box of the view, either a CssBoxBlock,
     // a CssBoxInline, or a CssBoxLineBoxContainer
     CssBox* m_box_principal;
-    // The additional box of this view if Property display is list-item.
+    // The additional box of the view if Property display is list-item.
     CssBox* m_box_additional;
 
     IntRect m_rc_viewport;
@@ -416,7 +419,6 @@ protected:
     void inner_updateViewRect(int x, int y, int w, int h);
 
 private:
-    int matchCssSelector (const char* selector);
 };
 
 } // namespace hfcl

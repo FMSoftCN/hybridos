@@ -31,7 +31,7 @@ View *PageView::nextPage(void)
         setCurPage(firstChild());
     else
     {
-        next = next->nextSibling();
+        next = next->getNext();
         if(!next && isLoopAble())
             next = firstChild();
         if(next)
@@ -49,7 +49,7 @@ View *PageView::prevPage(void)
     if(!prev)
         setCurPage(firstChild());
     else {
-        prev = prev->prevSibling();
+        prev = prev->getPrev();
         if(!prev && isLoopAble())
             prev = lastChild();
         if(prev)

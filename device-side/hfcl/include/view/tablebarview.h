@@ -122,7 +122,7 @@ class TableBarView : public CompositeView{
                 if(drset)
                 {
                     for(View* view = m_tablesGrid->firstChild();
-                            view != NULL; view = view->nextSibling())
+                            view != NULL; view = view->getNext())
                     {
                         view->setDrawableSet(drset);
                     }

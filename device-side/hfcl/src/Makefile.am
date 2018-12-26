@@ -11,7 +11,6 @@ MYLIBADD= \
     drawable/libhfcl_drawable.la \
     view/libhfcl_view.la \
     animation/libhfcl_animation.la \
-    components/libhfcl_components.la \
     services/libhfcl_services.la \
     resource/libhfcl_resource.la
 

@@ -72,14 +72,12 @@ public:
     View* getFocusedChild() const { return m_focusView; }
 
     /* overloaded virtual functions */
+    virtual bool isContainer() const { return true; }
     virtual void applyCss(CssDeclared* css, const CssSelectorGroup& selector);
-    virtual void computeCss(int w, int h);
-    virtual bool isContainer() { return true; }
+    virtual void computeCss(const IntRect& viewportRc);
     virtual void drawBackground(GraphicsContext* context, IntRect &rc);
     virtual void drawContent(GraphicsContext *context, IntRect &rc);
     virtual bool dispatchEvent(Event* event);
-
-    virtual void autoFitSize(bool auto_child_fit = false);
 
     /* new virtual functions for ViewContainer */
     virtual void onChildAttached(View* view);
@@ -88,6 +86,7 @@ public:
     virtual void onChildSizeChanged(View* child);
 
     /* to be deprecated */
+    virtual void autoFitSize(bool auto_child_fit = false);
     void setAutoSize(bool b) { setFlag(b, AUTOSIZE); }
     bool isAutoSize() { return m_flags & AUTOSIZE; }
 

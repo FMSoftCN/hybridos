@@ -49,7 +49,7 @@ View* ViewContainer::firstEnabledChild(void)
     while(view) {
         if (!view->isDisabled())
             break;;
-        view = view->nextSibling();
+        view = view->getNext();
     }
 
     return view;
@@ -70,18 +70,18 @@ bool ViewContainer::insertAfter(View* view, View *child)
     if(child->getParent())
         child->getParent()->detachChild(child);
 
-    child->setPrevSlibling(view);
+    child->setPrev(view);
     if(view)
     {
-        next = view->nextSibling();
-        view->setNextSlibling(child);
+        next = view->getNext();
+        view->setNext(child);
     }
 
     if(next)
     {
-        next->setPrevSlibling(child);
+        next->setPrev(child);
     }
-    child->setNextSlibling(next);
+    child->setNext(next);
 
     if(view == m_lastChild)
         m_lastChild = child;
@@ -120,18 +120,18 @@ bool ViewContainer::insertBefore(View *view, View* child)
     if(child->getParent())
         child->getParent()->detachChild(child);
 
-    child->setNextSlibling(view);
+    child->setNext(view);
     if(view)
     {
-        prev = view->prevSibling();
-        view->setPrevSlibling(child);
+        prev = view->getPrev();
+        view->setPrev(child);
     }
 
     if(prev)
     {
-        prev->setNextSlibling(child);
+        prev->setNext(child);
     }
-    child->setPrevSlibling(prev);
+    child->setPrev(prev);
 
     if(view == m_firstChild)
         m_firstChild = child;
@@ -166,7 +166,7 @@ int ViewContainer::removeAll()
     while(view)
     {
         View *tmp = view;
-        view = view->nextSibling();
+        view = view->getNext();
         //FIXED ME: should call the release method
         // delete tmp;
         HFCL_DELETE(tmp);
@@ -192,13 +192,13 @@ int ViewContainer::detachChild(View* view)
     if(!view || view->getParent() != this)
         return -1;
 
-    View * prev = view->prevSibling();
-    View * next = view->nextSibling();
+    View * prev = view->getPrev();
+    View * next = view->getNext();
 
     if(prev)
-        prev->setNextSlibling(next);
+        prev->setNext(next);
     if(next)
-        next->setPrevSlibling(prev);
+        next->setPrev(prev);
 
     if(view == m_firstChild) {
         m_firstChild = next;
@@ -231,7 +231,7 @@ int ViewContainer::removeChild(View * view, bool bRelease)
 
 View* ViewContainer::getChildById(int id) const
 {
-    for (View *view = firstChild(); view ; view = view->nextSibling()) {
+    for (View *view = firstChild(); view ; view = view->getNext()) {
         if (view->getId() == id)
             return view;
     }
@@ -246,10 +246,10 @@ View* ViewContainer::getChildByIndex(int idx) const
 
     if (idx > (m_childCount >> 1))
         for (view = lastChild(), idx = m_childCount - idx - 1;
-                view && idx > 0; view = view->prevSibling(), idx --);
+                view && idx > 0; view = view->getPrev(), idx --);
     else
         for(view = firstChild();
-                view && idx > 0; view = view->nextSibling(), idx --);
+                view && idx > 0; view = view->getNext(), idx --);
 
     return view;
 }
@@ -260,7 +260,7 @@ int ViewContainer::getChildIndex(View *view) const
         return -1;
 
     int idx = 0;
-    for (View *c = firstChild(); c && c != view; c = c->nextSibling(), idx++);
+    for (View *c = firstChild(); c && c != view; c = c->getNext(), idx++);
 
     return idx;
 }
@@ -268,7 +268,7 @@ int ViewContainer::getChildIndex(View *view) const
 
 View* ViewContainer::findDescendant(int id) const
 {
-    for (View *view = firstChild(); view ; view = view->nextSibling()) {
+    for (View *view = firstChild(); view ; view = view->getNext()) {
         if (view->getId() == id)
             return view;
         else if (view->isContainer()) {
@@ -283,7 +283,7 @@ View* ViewContainer::findDescendant(int id) const
 
 View *ViewContainer::getChildByPosition(int x_pos, int y_pos) const
 {
-    for(View *view = lastChild(); NULL != view ; view = view->prevSibling()) {
+    for(View *view = lastChild(); NULL != view ; view = view->getPrev()) {
         IntRect irc = view->getRect();
         if (irc.contains(x_pos, y_pos)){
             if(view->isContainer()) {
@@ -301,7 +301,7 @@ View *ViewContainer::getChildByPosition(int x_pos, int y_pos) const
 #if 0
 void ViewContainer::markDirty(const IntRect& rc)
 {
-    for (View *view = firstChild(); view; view = view->nextSibling()) {
+    for (View *view = firstChild(); view; view = view->getNext()) {
         if (view->isVisible()) {
             IntRect rcView = view->getRect();
             IntRect rcInv = rcView;
@@ -341,7 +341,7 @@ void ViewContainer::drawContent(GraphicsContext* context, IntRect& rc)
                 this, getParent(), rcBounds.left(), rcBounds.top(), rcBounds.right(), rcBounds.bottom());
 #endif
 
-    for (View *view = firstChild(); view; view = view->nextSibling()) {
+    for (View *view = firstChild(); view; view = view->getNext()) {
 #ifdef TRACE_DRAWVIEW
         for (int i = 0; i < depth; i++) printf ("\t");
         if (view->isVisible() && view->shouldUpdate()) {
@@ -385,7 +385,7 @@ bool ViewContainer::dispatchEvent(Event* event)
                 view->dispatchEvent(event);
                 return STOP_DISPATCH;
             }
-            view = view->nextSibling();
+            view = view->getNext();
         }
         break;
     }
@@ -460,7 +460,7 @@ void ViewContainer::unfocusChild(void)
 void ViewContainer::autoFitSize(bool auto_child_fit)
 {
     IntRect rc;
-    for(View *view = firstChild(); view ; view = view->nextSibling()) {
+    for(View *view = firstChild(); view ; view = view->getNext()) {
         rc.join(0, 0, view->getRect().right(), view->getRect().bottom());
     }
     setRect(rc);
@@ -471,7 +471,7 @@ void ViewContainer::applyCss(CssDeclared* css, const CssSelectorGroup& selector)
     View* child = m_firstChild;
     while (child) {
         child->applyCss(css, selector);
-        child = child->nextSibling();
+        child = child->getNext();
     }
 
     View::applyCss(css, selector);

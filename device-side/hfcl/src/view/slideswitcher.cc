@@ -72,8 +72,8 @@ View* SlideSwitcher::getItem(int offindex, bool forward)
     // Forward
     if (forward) {
         while(offindex--) {
-            if (NULL != tmp->nextSibling())
-                tmp = tmp->nextSibling();
+            if (NULL != tmp->getNext())
+                tmp = tmp->getNext();
             else
                 tmp = firstChild();
         }
@@ -83,8 +83,8 @@ View* SlideSwitcher::getItem(int offindex, bool forward)
     // Backward
     else {
         while(offindex--) {
-            if (NULL != tmp->prevSibling())
-                tmp = tmp->prevSibling();
+            if (NULL != tmp->getPrev())
+                tmp = tmp->getPrev();
             else
                 tmp = lastChild();
         }
@@ -244,8 +244,8 @@ void SlideSwitcher::focusNextItem()
     if (NULL == m_curr_focus_view)
         return;
 
-    if (NULL != m_curr_focus_view->nextSibling()) {
-        setFocusItem(m_curr_focus_view->nextSibling());
+    if (NULL != m_curr_focus_view->getNext()) {
+        setFocusItem(m_curr_focus_view->getNext());
     }
     else {
         setFocusItem(firstChild());
@@ -257,8 +257,8 @@ void SlideSwitcher::focusPrevItem()
     if (NULL == m_curr_focus_view)
         return;
 
-    if (NULL != m_curr_focus_view->prevSibling()) {
-        setFocusItem(m_curr_focus_view->prevSibling());
+    if (NULL != m_curr_focus_view->getPrev()) {
+        setFocusItem(m_curr_focus_view->getPrev());
     }
     else {
         setFocusItem(lastChild());
@@ -310,7 +310,7 @@ bool SlideSwitcher::removeItem(View *item)
     View* _tmp_item = NULL, *_tmp_next = NULL;
     if (NULL != item) {
         _tmp_item = item;
-        _tmp_next = item->nextSibling();
+        _tmp_next = item->getNext();
         removeChild(item);
 
         //adjust focus

@@ -114,7 +114,7 @@ int BusyListView::reLoadData(void)
         return 0;
 
     item = firstChild();
-    for(i = m_up_index; i <= m_down_index && item; ++i, item = item->nextSibling()) {
+    for(i = m_up_index; i <= m_down_index && item; ++i, item = item->getNext()) {
         onLoadItemData(i, item);
     }
     return 0;
@@ -280,7 +280,7 @@ bool BusyListView::addItemByIndex(int index)
     // load
     if (!m_freeze) {
         item = firstChild();
-        for(i = m_up_index; i <= m_down_index && item; ++i, item = item->nextSibling()) {
+        for(i = m_up_index; i <= m_down_index && item; ++i, item = item->getNext()) {
             onLoadItemData(i, item);
         }
 
@@ -359,7 +359,7 @@ void BusyListView::reLayout(void)
         }
         view->setRect(rc);
 
-        view = view->nextSibling();
+        view = view->getNext();
     }
 }
 
@@ -387,7 +387,7 @@ bool BusyListView::addItem(void)
     // load
     if (!m_freeze) {
         item = firstChild();
-        for(i = m_up_index; i <= m_down_index && item; ++i, item = item->nextSibling()) {
+        for(i = m_up_index; i <= m_down_index && item; ++i, item = item->getNext()) {
             onLoadItemData(i, item);
         }
 
@@ -448,7 +448,7 @@ bool BusyListView::removeItem(int index)
             layoutUpToDown(0, m_hi_index-m_up_index+1);
             // 6. load data
             item = firstChild();
-            for(i = m_up_index; i <= m_down_index && item; ++i, item = item->nextSibling()) {
+            for(i = m_up_index; i <= m_down_index && item; ++i, item = item->getNext()) {
                 onLoadItemData(i, item);
             }
 
@@ -469,7 +469,7 @@ bool BusyListView::removeItem(int index)
 
             // load data FIXME we can optimize this.
             item = firstChild();
-            for(i = m_up_index; i <= m_down_index && item; ++i, item = item->nextSibling()) {
+            for(i = m_up_index; i <= m_down_index && item; ++i, item = item->getNext()) {
                 onLoadItemData(i, item);
             }
         }
@@ -484,7 +484,7 @@ bool BusyListView::removeItem(int index)
 
             // load data and non-need to layout item
             item = firstChild();
-            for(i = m_up_index; i <= m_down_index && item; ++i, item = item->nextSibling()) {
+            for(i = m_up_index; i <= m_down_index && item; ++i, item = item->getNext()) {
                 onLoadItemData(i, item);
             }
         }
@@ -582,7 +582,7 @@ void BusyListView::layoutDownToUp(int from_height, int hilight_index)
             }
         }
         ++n;
-        item = item->prevSibling();
+        item = item->getPrev();
     }
     // mark dock status
     m_dock_top = false;
@@ -619,7 +619,7 @@ void BusyListView::layoutUpToDown(int from_height, int hilight_index)
             }
         }
         ++n;
-        item = item->nextSibling();
+        item = item->getNext();
     }
     // mark dock status
     m_dock_top = true;
@@ -726,7 +726,7 @@ void BusyListView::hilight(int index)
         // item = getChildByIndex(m_up_index);
         item = firstChild();
         // request all data
-        for(i = m_up_index; i <= m_down_index && item; ++i, item = item->nextSibling()) {
+        for(i = m_up_index; i <= m_down_index && item; ++i, item = item->getNext()) {
             onLoadItemData(i, item);
         }
 
@@ -886,7 +886,7 @@ void BusyListView::hilight(int index, bool focus)
         // item = getChildByIndex(m_up_index);
         item = firstChild();
         // request all data
-        for(i = m_up_index; i <= m_down_index && item; ++i, item = item->nextSibling()) {
+        for(i = m_up_index; i <= m_down_index && item; ++i, item = item->getNext()) {
             onLoadItemData(i, item);
         }
 

@@ -438,7 +438,7 @@ void ScrollView::drawScrollContent(GraphicsContext *gc, int status)
 
 void ScrollView::drawContent(GraphicsContext* context, IntRect &rc, int status)
 {
-    for (View *view = firstChild(); view; view = view->nextSibling()) {
+    for (View *view = firstChild(); view; view = view->getNext()) {
         if(!view->isVisible() || view->getRect().isEmpty())
             continue;
 

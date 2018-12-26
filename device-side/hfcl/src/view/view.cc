@@ -52,9 +52,9 @@ static void add_spaces (std::string& str)
     }
 }
 
-View::View(int id, const char* cssClass, const char* name)
+View::View(int id, const char* cssCls, const char* name)
     : m_id(id)
-    , m_cssCls(cssClass)
+    , m_cssCls(cssCls)
     , m_name(name)
     , m_addData(0)
     , m_flags(0)
@@ -116,9 +116,9 @@ ok:
     return true;
 }
 
-bool View::setClasses(const char* cssClasses)
+bool View::setClasses(const char* cssClses)
 {
-    std::string tmp = cssClasses;
+    std::string tmp = cssClses;
     add_spaces (tmp);
 
     if (strcasecmp (tmp.c_str(), m_cssCls.c_str()) == 0) {
@@ -126,30 +126,30 @@ bool View::setClasses(const char* cssClasses)
     }
 
     m_cssCls = ' ';
-    m_cssCls += cssClasses;
+    m_cssCls += cssClses;
     m_cssCls += ' ';
     onClassChanged();
     return true;
 }
 
-bool View::includeClass(const char* cssClass)
+bool View::includeClass(const char* cssCls)
 {
-    std::string tmp = cssClass;
+    std::string tmp = cssCls;
     add_spaces (tmp);
 
     if (strcasestr (m_cssCls.c_str(), tmp.c_str())) {
         return false;
     }
 
-    m_cssCls += cssClass;
+    m_cssCls += cssCls;
     m_cssCls += ' ';
     onClassChanged();
     return true;
 }
 
-bool View::excludeClass(const char* cssClass)
+bool View::excludeClass(const char* cssCls)
 {
-    std::string tmp = cssClass;
+    std::string tmp = cssCls;
     add_spaces (tmp);
 
     const char* full = m_cssCls.c_str();
@@ -181,9 +181,9 @@ bool View::setAttribute(const char* attrKey, const char* attrValue)
     return true;
 }
 
-bool View::checkClass(const char* cssClass) const
+bool View::checkClass(const char* cssCls) const
 {
-    std::string tmp = cssClass;
+    std::string tmp = cssCls;
     add_spaces (tmp);
 
     const char* full = m_cssCls.c_str();
@@ -531,7 +531,7 @@ void View::focusMe()
 {
     ViewContainer *p = NULL;
 
-    if (getRoot() == this) {
+    if (isRoot()) {
         return;
     }
 
@@ -564,22 +564,22 @@ bool View::isFocused()
 }
 #endif
 
-RootView* View::getRoot()
+const RootView* View::getRoot() const
 {
-    View *p = this;
+    const View *p = this;
 
     while (p != NULL) {
         if (p->isRoot())
-            return (RootView *)p;
+            return (const RootView *)p;
         p = p->getParent();
     }
 
     return NULL;
 }
 
-HWND View::getSysWindow()
+HWND View::getSysWindow() const
 {
-    RootView* root = getRoot();
+    const RootView* root = getRoot();
     if (root) {
         return root->getSysWindow();
     }

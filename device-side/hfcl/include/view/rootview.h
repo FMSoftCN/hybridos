@@ -46,9 +46,9 @@ public:
     bool applyCssGroup(HTResId cssgId);
 
     /* overloaded virtual functions */
-    virtual const char* type() { return "hvroot"; }
-    virtual bool isRoot() { return true; }
-    virtual HWND getSysWindow() { return m_hwnd; }
+    virtual const char* type() const { return "hvroot"; }
+    virtual bool isRoot() const { return true; }
+    virtual HWND getSysWindow() const { return m_hwnd; }
 
     virtual void onPaint(GraphicsContext* context);
 

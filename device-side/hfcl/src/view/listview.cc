@@ -177,7 +177,7 @@ void ListView::upFindItem(void)
     if (NULL == m_hilightItem)
         view = m_content->lastChild();
     else {
-        view = m_hilightItem->prevSibling();
+        view = m_hilightItem->getPrev();
         if (NULL == view)
             view = m_content->lastChild(); //loop selection
     }
@@ -199,7 +199,7 @@ void ListView::downFindItem(void)
     if (NULL == m_hilightItem)
         view = m_content->firstChild();
     else {
-        view = m_hilightItem->nextSibling();
+        view = m_hilightItem->getNext();
         if (NULL == view)
             view = m_content->firstChild();
     }
@@ -253,7 +253,7 @@ void ListView::selectAll(bool bselect)
     if (!m_content)
         return;
 
-    for (View *view = m_content->firstChild(); view ; view = view->nextSibling()) {
+    for (View *view = m_content->firstChild(); view ; view = view->getNext()) {
         ((ItemView*)view)->setSelected(bselect);
     }
 
@@ -285,7 +285,7 @@ void ListView::drawSeparator(GraphicsContext* context, int status)
     int bottom = getRect().height();
 
     IntRect rcSpec( m_hGap, 0, getRect().width(), m_rect.width() - m_hGap);
-    for (view = m_content->firstChild(); view; view = view->nextSibling()) {
+    for (view = m_content->firstChild(); view; view = view->getNext()) {
         int top = view->getRect().bottom() + ((m_vGap) - (m_vGap >> 1)) - m_offy;
         if (top < 0)
             continue;
@@ -316,7 +316,7 @@ void ListView::drawSeparator(GraphicsContext* context, int status)
             if (rcSpec.top() >= bottom)
                 break;
 
-            view = view->nextSibling();
+            view = view->getNext();
         }
     }
 }
@@ -407,7 +407,7 @@ void ListView::relayout(bool isScrollGap)
     //contw = itofix(m_content->getRect().width());
     conth = itofix(m_content->getRect().height());
 
-    for (View* view = m_content->firstChild(); view; view = view->nextSibling()) {
+    for (View* view = m_content->firstChild(); view; view = view->getNext()) {
         /*
          * Every Item has the same height:
          *   item.height() + m_vGap + separatorw
@@ -528,7 +528,7 @@ ItemView* ListView::itemAt(int x, int y, int* pidx) const
         return NULL;
 
     int idx = 0;
-    for (View* view = m_content->firstChild(); view; view = view->nextSibling(), idx++) {
+    for (View* view = m_content->firstChild(); view; view = view->getNext(), idx++) {
         if (view->getRect().isIn(x, y)) {
             if (pidx)
                 *pidx = idx;
@@ -551,7 +551,7 @@ ItemView* ListView::selectedItem(int* pidx) const
         return NULL;
 
     int idx = 0;
-    for (ItemView* view = firstItem(); view; view = (ItemView*)view->nextSibling(), idx++) {
+    for (ItemView* view = firstItem(); view; view = (ItemView*)view->getNext(), idx++) {
         if (view->isSelected()) {
             if (pidx)
                 *pidx = idx;
@@ -583,7 +583,7 @@ static View* get_next_focus_from_focused(ContainerView* c)
             return t;
     }
 
-    view = view->nextSibling();
+    view = view->getNext();
 
     while (view) {
         if (view->focusStopable())
@@ -592,7 +592,7 @@ static View* get_next_focus_from_focused(ContainerView* c)
             View* t = get_next_focus_from_focused((ContainerView*)view);
             if (t) return t;
         }
-        view = view->nextSibling();
+        view = view->getNext();
     }
 
     return NULL;
@@ -614,7 +614,7 @@ static View* get_next_focus(ContainerView* c)
             View* t = get_next_focus((ContainerView*)view);
             if (t) return t;
         }
-        view = view->nextSibling();
+        view = view->getNext();
     }
 
     return NULL;
@@ -642,7 +642,7 @@ Next:
         }
         //   _DBG_PRINTF("ListView::nextFocus  m_hilightItem %p  %p  ",view,item)
         while(!view && item) {
-            item = (ItemView*)item->nextSibling();
+            item = (ItemView*)item->getNext();
             if (!item)
                 break;
             view = get_next_focus(item);
@@ -692,7 +692,7 @@ static View* get_prev_focus_from_focused(ContainerView* c)
             return t;
     }
 
-    view = view->prevSibling();
+    view = view->getPrev();
 
     while (view) {
         if (view->focusStopable())
@@ -701,7 +701,7 @@ static View* get_prev_focus_from_focused(ContainerView* c)
             View *t = get_prev_focus_from_focused((ContainerView*)view);
             if (t) return t;
         }
-        view = view->prevSibling();
+        view = view->getPrev();
     }
 
     return NULL;
@@ -725,7 +725,7 @@ static View* get_prev_focus(ContainerView* c)
             if (t)
                 return t;
         }
-        view = view->prevSibling();
+        view = view->getPrev();
     }
 
     return NULL;
@@ -752,7 +752,7 @@ PREV:
         }
 
         while (!view && item) {
-            item = (ItemView*)item->prevSibling();
+            item = (ItemView*)item->getPrev();
             if (!item)
                 break;
             view = get_prev_focus(item);

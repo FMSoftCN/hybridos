@@ -149,7 +149,7 @@ void GridView::reLayout (void)
             }
             y = m_gap_h * (i + 1) + m_grid_h * i;
             view->setRect(x, y, x + m_grid_w, y + m_grid_h);
-            view = view->nextSibling();
+            view = view->getNext();
         }
     }
 

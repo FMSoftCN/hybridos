@@ -59,7 +59,7 @@ void ItemView::drawContent(GraphicsContext* context, IntRect& rc, int status)
         int w = rc.width();
         //int h = rc.height();
 
-        for(View *view = firstChild(); view; view = view->nextSibling()) {
+        for(View *view = firstChild(); view; view = view->getNext()) {
             IntRect vrc = view->getRect();
             view->setRect(w - vrc.right(), vrc.top(), w - vrc.left(), vrc.bottom());
         }

@@ -199,7 +199,7 @@ int DyncListView::reLoadData(void)
     }
 
     item = firstChild();
-    for(i = m_up_index; i <= m_down_index && item; ++i, item = item->nextSibling()) {
+    for(i = m_up_index; i <= m_down_index && item; ++i, item = item->getNext()) {
         onLoadItemData(i, item);
     }
     return 0;
@@ -386,7 +386,7 @@ void DyncListView::reLayout(void)
         }
         if(view->setRectNoUpdate(rc.m_left,rc.m_top,rc.m_right,rc.m_bottom))
             bupdate = TRUE;
-        view = view->nextSibling();
+        view = view->getNext();
     }
     if(bupdate)
         updateListView();
@@ -542,7 +542,7 @@ void DyncListView::layoutDownToUp(int from_height, int hilight_index)
             h -= m_nm_height;
         }
         ++n;
-        item = item->prevSibling();
+        item = item->getPrev();
     }
 }
 
@@ -563,7 +563,7 @@ void DyncListView::layoutUpToDown(int from_height, int hilight_index)
             h += m_nm_height;
         }
         ++n;
-        item = item->nextSibling();
+        item = item->getNext();
     }
 }
 void DyncListView::onLoadItemData(int index, View* view)

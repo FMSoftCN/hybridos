@@ -93,7 +93,7 @@ void Activity::onClick(POINT pt, Event::EventType type)
             break;
         }
 
-        child = child->nextSibling();
+        child = child->getNext();
     }
 }
 

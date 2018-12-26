@@ -872,7 +872,7 @@ void Menu::uncheckRadioItemExcept(RadioMenuItem* item)
         return;
 
     for (MenuItem* subitem = (MenuItem*)m_menuItemList->firstItem();
-            subitem; subitem = (MenuItem*)subitem->nextSibling()) {
+            subitem; subitem = (MenuItem*)subitem->getNext()) {
         if (subitem != item
                 && subitem->getTag() == tag
                 && subitem->getCheck()) {

@@ -151,10 +151,10 @@ public:
 
         bool isEnd() { return m_current == NULL; }
         void prev() {
-            while(m_current && !check((m_current = (ItemView*)m_current->prevSibling()))) ;
+            while(m_current && !check((m_current = (ItemView*)m_current->getPrev()))) ;
         }
         void next() {
-            while(m_current && !check((m_current = (ItemView*)m_current->nextSibling()))) ;
+            while(m_current && !check((m_current = (ItemView*)m_current->getNext()))) ;
         }
 
         ItemView* operator->() { return m_current; }
