@@ -603,5 +603,5 @@ int main ()
     return 0;
 }
 
-#endif
+#endif /* _UNIT_TEST */
 
