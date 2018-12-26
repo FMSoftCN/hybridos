@@ -92,7 +92,7 @@ bool TextView::isBidiCheck(void)
     return m_bidicheck;
 }
 
-void TextView::setText(const string text)
+void TextView::setText(const std::string& text)
 {
     setText(text.c_str());
 }

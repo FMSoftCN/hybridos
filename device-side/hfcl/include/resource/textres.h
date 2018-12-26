@@ -104,8 +104,8 @@ public:
     virtual const char* getText (const char* str);
 
 private:
-    MAPCLASSKEY(string, string, TextMsgMap);
-    PAIR(string, string, TextMsgPair);
+    MAPCLASSKEY(utf8string, utf8string, TextMsgMap);
+    PAIR(utf8string, utf8string, TextMsgPair);
 
     TextMsgMap m_text_map;
 };

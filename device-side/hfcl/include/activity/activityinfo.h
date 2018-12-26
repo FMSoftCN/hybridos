@@ -31,20 +31,20 @@ namespace hfcl {
 class ActivityInfo {
 public:
     ActivityInfo();
-    ActivityInfo(string name, BaseActivity* act, ContextStream* cs);
+    ActivityInfo(utf8string name, BaseActivity* act, ContextStream* cs);
     virtual ~ActivityInfo();
 
     BaseActivity* getActivity(void);
     void setActivity(BaseActivity* act);
 
-    string getName(void);
-    void setName(string name);
+    utf8string getName(void);
+    void setName(utf8string name);
 
     //ContextStream* getContextStream(void);
     //void setContextStream(ContextStream* cs);
 
 private:
-    string          m_actname;
+    utf8string      m_actname;
     BaseActivity*   m_act;
     //ContextStream* m_stream;
 };

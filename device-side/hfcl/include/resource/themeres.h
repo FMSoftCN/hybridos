@@ -39,7 +39,7 @@ public:
 
 private:
     TRThemeItem* m_maptable;
-    string m_theme_name;
+    utf8string m_theme_name;
 };
 
 } // namespace hfcl

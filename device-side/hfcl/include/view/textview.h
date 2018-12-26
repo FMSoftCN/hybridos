@@ -23,6 +23,8 @@
 #ifndef HFCL_VIEW_TEXTVIEW_H_
 #define HFCL_VIEW_TEXTVIEW_H_
 
+#include <string>
+
 #include "view.h"
 #include "../graphics/color.h"
 #include "../resource/respkgmanager.h"
@@ -37,7 +39,7 @@ public:
     virtual ~TextView();
 
     void setText(const char *text);
-    void setText(const string text);
+    void setText(const std::string& text);
     void setText(int strId);
     int getTextId(void) { return m_stringId; }
     char* getText(void);
@@ -98,8 +100,8 @@ protected:
     };
 
     bool  m_isLongText;
-    string  m_textString;
-    char    m_textBuf[TEXT_BUFFER_LEN_OF_DEFAULT+1];
+    std::string  m_textString;
+    char  m_textBuf[TEXT_BUFFER_LEN_OF_DEFAULT+1];
     int   m_stringId;
     int   m_lineAboveH;
     int   m_lineBellowH;

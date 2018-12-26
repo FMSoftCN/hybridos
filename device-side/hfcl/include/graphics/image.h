@@ -56,7 +56,7 @@ protected:
 
 protected:
     bool    m_bLoadOnPainting;
-    string  m_filePath;
+    utf8string  m_filePath;
     Bitmap* m_pBitmap;
     Uint32  m_replaceColor;
 };

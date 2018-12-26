@@ -461,7 +461,7 @@ bool ResPkgManager::setCurrentLang (int langId)
 
         m_raw_strings = (const char**)malloc (sizeof (char*) * (m_max_text_id + 1));
         if (m_string_bucket == NULL) {
-            _ERR_PRINTF ("ResPkgManager::setCurrentLang: failed to allocate memory for string table.\n");
+            _ERR_PRINTF ("ResPkgManager::setCurrentLang: failed to allocate memory for utf8string table.\n");
             return false;
         }
     }

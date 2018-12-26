@@ -39,37 +39,41 @@ class ActivityFactory;
  * hook key msg from actManager
  *
  * @param MSG *msg - msg we get from msg queue
- * @return bool - GOON_DISPATCH continue message loop, STOP_DISPATCH stop for process this msg.
+ * @return bool
+ *      - GOON_DISPATCH continue message loop;
+ *      - STOP_DISPATCH stop for process this msg.
  */
 typedef bool (*KeyHookCallback)(MSG *msg);
 
 class ActivityManager
 {
 public:
-    MAPCLASSKEY(string, ActivityFactory*, ActivityFactoryMap);
-    PAIR(string, ActivityFactory*, ActivityFactoryPair);
+    MAPCLASSKEY(utf8string, ActivityFactory*, ActivityFactoryMap);
+    PAIR(utf8string, ActivityFactory*, ActivityFactoryPair);
 
     ActivityManager() : m_hostingWnd(HWND_INVALID) { init(); }
     ~ActivityManager();
 
-    static ActivityManager* getInstance(void);
-    void run(void);
+    static ActivityManager* getInstance();
+    void run();
 
-    BaseActivity* getCurrentActivity(void);
+    BaseActivity* getCurrentActivity();
     BaseActivity* getTopActivity(unsigned int top = 0);
     BaseActivity* getActivityByName(const char * name);
-    BaseActivity* getActivityFromFactory(string name);
-    inline ActivityFactory* getActivityFactory(string name) { return m_acts[name]; }
-    inline int actNumOnRun(void) { return m_actstack.size(); }
+    BaseActivity* getActivityFromFactory(utf8string name);
+    ActivityFactory* getActivityFactory(utf8string name) {
+        return m_acts[name];
+    }
+    int actNumOnRun() { return m_actstack.size(); }
     const ActivityFactoryMap& actlications() const { return m_acts; }
 
-    void registerActivity(string name, ActivityFactory *actFactory);
+    void registerActivity(utf8string name, ActivityFactory *actFactory);
 
     bool actIsExist(BaseActivity *obj);
     bool actIsExist(const char * actName);
 
     void onBoot();
-    BaseActivity* startActivity(string act_name, Intent *intent);
+    BaseActivity* startActivity(utf8string act_name, Intent *intent);
     bool exit(BaseActivity* act);
     bool isExist(BaseActivity *act) { return m_actstack.isExist(act); }
     bool moveActivity2Top(const char * name);
@@ -79,12 +83,18 @@ public:
     BaseActivity* popActivityRunningToFrontdesk(const char * name);
 
     void changeSysLanguage(int langId);
-    void addDisableLockFrameTick(void) { m_disableLockTick ++; }
-    void subDisableLockFrameTick(void) { m_disableLockTick --; if(m_disableLockTick<0) m_disableLockTick = 0;}
+    void addDisableLockFrameTick() { m_disableLockTick ++; }
+    void subDisableLockFrameTick() {
+        m_disableLockTick--;
+        if (m_disableLockTick < 0)
+            m_disableLockTick = 0;
+    }
     int disableLockFrameTicks() { return m_disableLockTick; }
 
-    inline HWND hosting(void) { return m_hostingWnd; }
-    inline bool ActivityBeStarted(BaseActivity* act) { return m_actstack.isExist(act); }
+    HWND hosting() { return m_hostingWnd; }
+    bool ActivityBeStarted(BaseActivity* act) {
+        return m_actstack.isExist(act);
+    }
     int broadcastMessage(int msg, int wParam, int lParam);
 
     void registerKeyMsgHook(KeyHookCallback callback) {
@@ -100,8 +110,8 @@ public:
      ***/
     bool processKeyHook(MSG* msg);
 
-    void startTimerService(void);
-    void stopTimerService(void);
+    void startTimerService();
+    void stopTimerService();
 
     void freezeChar(bool f) { m_charFreezon = f; }
     bool isCharFreezon() {return m_charFreezon; }
@@ -110,7 +120,7 @@ public:
     bool m_standby;
 
 private:
-    bool init(void);
+    bool init();
     static LRESULT defaultHostingProc(HWND hWnd, UINT message,
             WPARAM wParam, LPARAM lParam);
 

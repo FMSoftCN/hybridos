@@ -164,7 +164,7 @@ void CssSelectorGroup::clear()
     m_group.clear();
 }
 
-static string* get_token (char* scan)
+static utf8string* get_token (char* scan)
 {
     char* tmp = scan;
 
@@ -181,77 +181,15 @@ static string* get_token (char* scan)
         return NULL;
 
     int n = (int)(tmp - scan);
-    string* str = new string(scan, n);
+    utf8string* str = new utf8string(scan, n);
     return str;
 }
-
-#if 0
-static string* get_type (char* scan)
-{
-    char* token;
-    char* saveptr;
-    token = strtok_r(scan, " .#[]:", &saveptr);
-    if (token == NULL)
-        return NULL;
-
-    string* str = new string(token);
-    return str;
-}
-
-static string* get_class (char* scan)
-{
-    char* token;
-    char* saveptr;
-    token = strtok_r(scan, " .#[]:", &saveptr);
-    if (token == NULL)
-        return NULL;
-
-    string* str = new string(token);
-    return str;
-}
-
-static string* get_id (char* scan)
-{
-    char* token;
-    char* saveptr;
-    token = strtok_r(scan, " .#[]:", &saveptr);
-    if (token == NULL)
-        return NULL;
-
-    string* str = new string(token);
-    return str;
-}
-
-static string* get_attr (char* scan)
-{
-    char* token;
-    char* saveptr;
-    token = strtok_r(scan, " .#[]:", &saveptr);
-    if (token == NULL)
-        return NULL;
-
-    string* str = new string(token);
-    return str;
-}
-
-static string* get_pseudo_name (char* scan)
-{
-    char* token;
-    char* saveptr;
-    token = strtok_r(scan, " .#[]:", &saveptr);
-    if (token == NULL)
-        return NULL;
-
-    string* str = new string(token);
-    return str;
-}
-#endif
 
 bool CssSelectorGroup::compileSingle(char* token, CssSelector& one)
 {
     char* scan = token;
     bool tag_set = false;
-    string* str;
+    utf8string* str;
 
     while (*scan) {
         while (isspace (*scan)) {
@@ -262,7 +200,7 @@ bool CssSelectorGroup::compileSingle(char* token, CssSelector& one)
 
         switch (*scan) {
         case '*':
-            str = new string("");
+            str = new utf8string("");
             one.setType(*str);
             tag_set = true;
             scan++;
@@ -270,7 +208,7 @@ bool CssSelectorGroup::compileSingle(char* token, CssSelector& one)
 
         case '.':
             if (!tag_set) {
-                str = new string("");
+                str = new utf8string("");
                 one.setType(*str);
                 tag_set = true;
             }
@@ -288,7 +226,7 @@ bool CssSelectorGroup::compileSingle(char* token, CssSelector& one)
 
         case '#':
             if (!tag_set) {
-                str = new string("");
+                str = new utf8string("");
                 one.setType(*str);
                 tag_set = true;
             }
@@ -306,7 +244,7 @@ bool CssSelectorGroup::compileSingle(char* token, CssSelector& one)
 
         case '[':
             if (!tag_set) {
-                str = new string("");
+                str = new utf8string("");
                 one.setType(*str);
                 tag_set = true;
             }
@@ -328,7 +266,7 @@ bool CssSelectorGroup::compileSingle(char* token, CssSelector& one)
 
         case ':':
             if (!tag_set) {
-                str = new string("");
+                str = new utf8string("");
                 one.setType(*str);
                 tag_set = true;
             }
@@ -429,7 +367,7 @@ int CssSelectorGroup::match(const View* view)
     for (it = m_group.begin(); it != m_group.end(); ++it) {
         CssSelector* one = *it;
 
-        const string& type = one->getType();
+        const utf8string& type = one->getType();
         if (type.compare("") && type.compare(view->type()))
             continue;
 
@@ -439,7 +377,7 @@ int CssSelectorGroup::match(const View* view)
             CssSelectorPieceVec::iterator it;
             bool matched = false;
             for (it = pieces.begin(); it != pieces.end(); ++it) {
-                string& str = *it;
+                utf8string& str = *it;
                 if (str.compare (view->getName()) == 0) {
                     matched = true;
                     break;
@@ -455,7 +393,7 @@ int CssSelectorGroup::match(const View* view)
         if (pieces.size() > 0) {
             CssSelectorPieceVec::iterator it;
             for (it = pieces.begin(); it != pieces.end(); ++it) {
-                string& str = *it;
+                utf8string& str = *it;
                 if (!view->checkClass(str.c_str())) {
                     continue;
                 }
@@ -467,7 +405,7 @@ int CssSelectorGroup::match(const View* view)
         if (pieces.size() > 0) {
             CssSelectorPieceVec::iterator it;
             for (it = pieces.begin(); it != pieces.end(); ++it) {
-                string& str = *it;
+                utf8string& str = *it;
                 if (!view->checkAttribute(str.c_str())) {
                     continue;
                 }
@@ -479,7 +417,7 @@ int CssSelectorGroup::match(const View* view)
         if (pieces.size() > 0) {
             CssSelectorPieceVec::iterator it;
             for (it = pieces.begin(); it != pieces.end(); ++it) {
-                string& str = *it;
+                utf8string& str = *it;
                 if (!view->checkPseudoElement(str.c_str())) {
                     continue;
                 }
@@ -491,7 +429,7 @@ int CssSelectorGroup::match(const View* view)
         if (pieces.size() > 0) {
             CssSelectorPieceVec::iterator it;
             for (it = pieces.begin(); it != pieces.end(); ++it) {
-                string& str = *it;
+                utf8string& str = *it;
                 if (!view->checkPseudoClass(str.c_str())) {
                     continue;
                 }
@@ -530,7 +468,7 @@ void CssSelectorGroup::_print()
         if (pieces.size() > 0) {
             CssSelectorPieceVec::iterator it;
             for (it = pieces.begin(); it != pieces.end(); ++it) {
-                string& str = *it;
+                utf8string& str = *it;
                 printf ("   Identifier: %s\n", str.c_str());
             }
         }
@@ -543,7 +481,7 @@ void CssSelectorGroup::_print()
         if (pieces.size() > 0) {
             CssSelectorPieceVec::iterator it;
             for (it = pieces.begin(); it != pieces.end(); ++it) {
-                string& str = *it;
+                utf8string& str = *it;
                 printf ("   Class: %s\n", str.c_str());
             }
         }
@@ -556,7 +494,7 @@ void CssSelectorGroup::_print()
         if (pieces.size() > 0) {
             CssSelectorPieceVec::iterator it;
             for (it = pieces.begin(); it != pieces.end(); ++it) {
-                string& str = *it;
+                utf8string& str = *it;
                 printf ("   Attribute: %s\n", str.c_str());
             }
         }
@@ -569,7 +507,7 @@ void CssSelectorGroup::_print()
         if (pieces.size() > 0) {
             CssSelectorPieceVec::iterator it;
             for (it = pieces.begin(); it != pieces.end(); ++it) {
-                string& str = *it;
+                utf8string& str = *it;
                 printf ("   Pseudo Element: %s\n", str.c_str());
             }
         }
@@ -582,7 +520,7 @@ void CssSelectorGroup::_print()
         if (pieces.size() > 0) {
             CssSelectorPieceVec::iterator it;
             for (it = pieces.begin(); it != pieces.end(); ++it) {
-                string& str = *it;
+                utf8string& str = *it;
                 printf ("   Pseudo Class: %s\n", str.c_str());
             }
         }
@@ -595,7 +533,7 @@ void CssSelectorGroup::_print()
         if (pieces.size() > 0) {
             CssSelectorPieceVec::iterator it;
             for (it = pieces.begin(); it != pieces.end(); ++it) {
-                string& str = *it;
+                utf8string& str = *it;
                 printf ("   Dynamic Pseudo Class: %s\n", str.c_str());
             }
         }

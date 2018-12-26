@@ -25,7 +25,7 @@ namespace hfcl {
 
 #ifndef _HFCL_USE_STL
 
-string::string(const char* str, int n)
+utf8string::utf8string(const char* str, int n)
 {
     _str_buff = NULL;
     if (str == NULL) return;
@@ -41,7 +41,7 @@ string::string(const char* str, int n)
     }
 }
 
-string::string(const string& str)
+utf8string::utf8string(const utf8string& str)
 {
      int n;
      _str_buff = NULL;
@@ -56,7 +56,7 @@ string::string(const string& str)
      }
 }
 
-const string & string::operator=(const string &str) {
+const utf8string & utf8string::operator=(const utf8string &str) {
     int n;
     if (this == &str)     return *this;
 
@@ -76,7 +76,7 @@ const string & string::operator=(const string &str) {
     return *this;
 }
 
-const string & string::operator=(const char* str) {
+const utf8string & utf8string::operator=(const char* str) {
     int n;
     if (_str_buff != NULL)  HFCL_FREE(_str_buff);
     _str_buff = NULL;
@@ -94,7 +94,7 @@ const string & string::operator=(const char* str) {
     return *this;
 }
 
-string& string::append(const char* str) {
+utf8string& utf8string::append(const char* str) {
     int n;
     char * new_str;
 
@@ -121,6 +121,47 @@ string& string::append(const char* str) {
     check_utf8_str(_str_buff, -1);
 
     return *this;
+}
+
+int utf8string::check_utf8_str(char* _buff, int _len)
+{
+    int _tail_utf8_len = 1;
+    int _tail_real_len = 1;
+
+    if (_buff == NULL)
+        return 0;
+
+    if (_len <= 0) {
+        _len = strlen(_buff);
+    }
+    char *_tail = _buff + _len - 1;
+
+    if (!((*_tail) & 0x80)) {
+        // tail is assic charater
+        return _len;
+    }
+
+    while(((*_tail) & 0x80) && !((*_tail) & 0x40)) {
+        _tail_real_len++;
+        _tail--;
+    }
+
+    if (!((*_tail) & 0x80)) {
+        *(_tail + 1) = '\0';
+        return _len - (_tail_real_len - 1);
+    }
+
+    while ((*_tail)  & (0x80 >> _tail_utf8_len)) {
+        _tail_utf8_len++;
+    }
+
+    if (_tail_utf8_len != _tail_real_len) {
+        // cut the error tail
+        *_tail = '\0';
+        return _len - _tail_real_len;
+    }
+
+    return _len;
 }
 
 void vector_base::resize(int sz)

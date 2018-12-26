@@ -26,95 +26,25 @@
 #   error "alternativestl.h: C++ only."
 #endif
 
-#include "../common/common.h"
-
-// configure option: use STL or not
-#ifdef _HFCL_USE_STL
-
-#include <string>
-#include <list>
-#include <map>
-#include <vector>
-
-#define string std::string
-
-#define LIST(type, name) typedef std::list<type> name;
-
-#define MAP(type1, type2, name) typedef std::map<type1, type2> name;
-#define MAPCLASS(type1, type2, name) MAP(type1, type2, name)
-#define MAPCLASSVALUE(type1, type2, name) MAP(type1, type2, name)
-#define MAPCLASSKEY(type1, type2, name) MAP(type1, type2, name)
-#define MAPEX(TKey, TValue, ClassName,  cmp_key, del_key, del_value) \
-        MAP(TKey, TValue, ClassName)
-
-#define PAIR(type1, type2, name) typedef std::pair<type1, type2> name;
-
-#define VECTOR(type, name) typedef std::vector<type> name;
-#define VECTOREX(type, name, delete_code) VECTOR(type, name)
-#define VECTORCLASS(type, name) VECTOR(type, name)
-
-#else /* _HFCL_USE_STL */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <minigui/common.h>
 
+#include "../common/common.h"
+
 #undef _HFCL_TRACE_LIST
 
 namespace hfcl {
 
-/*
-** VW: no need to check UTF8 validation for string.
-**/
-inline int check_utf8_str (char *_buff, int _len)
-{
-    return _len;
-}
-
-class StrBuffer {
-    char  buf[1];
-    StrBuffer() { buf[0] = 0; }
+class utf8string {
 public:
-    static StrBuffer* NewStrBuffer(int len) {
-        void *p = HFCL_MALLOC(len + sizeof(short));
-        StrBuffer *buff = (StrBuffer*)p;
-        buff->buf[0] = 0;
-        return buff;
-    }
+    utf8string() { _str_buff = NULL; }
+    utf8string(const char* str, int n = -1);
+    utf8string(const utf8string& str);
 
-    static StrBuffer* NewStrBuffer(const char* str, int n = -1) {
-        if (!str)
-            return NULL;
-        if (n <= 0)
-            n = strlen(str);
-
-        StrBuffer* strbuf = NewStrBuffer(n + 1);
-        if (strbuf)
-        {
-            strncpy(strbuf->str(), str, n);
-            strbuf->str()[n] = 0;
-        }
-
-        return strbuf;
-    }
-
-    char* str() { return buf; }
-    const char* str() const { return buf; }
-
-    void release() {
-        if(this != NULL) HFCL_FREE((void*)this);
-    }
-};
-
-class string {
-public:
-    string() { _str_buff = NULL; }
-    string(const char* str, int n = -1);
-    string(const string& str);
-
-    ~string() {
+    ~utf8string() {
         if (_str_buff != NULL)
             HFCL_FREE(_str_buff);
         _str_buff = NULL;
@@ -124,15 +54,15 @@ public:
         return _str_buff ;
     }
 
-    const string & operator=(const string &str);
-    const string & operator=(const char* str);
-    friend int operator-(const string &s1, const string &s2) {
+    const utf8string & operator=(const utf8string &str);
+    const utf8string & operator=(const char* str);
+    friend int operator-(const utf8string &s1, const utf8string &s2) {
         const char* str1 = s1.c_str();
         const char* str2 = s2.c_str();
         return str1 == str2 ? 0 : strcmp(str1, str2);
     }
 
-    int compare(const string & str) const {
+    int compare(const utf8string & str) const {
         if (c_str() && str.c_str())
             return strcmp(c_str(), str.c_str());
         return c_str() ? 1 : (str.c_str() ? -1 : 0 );
@@ -157,13 +87,13 @@ public:
             return -1;
     }
 
-    string& append(const char* str);
+    utf8string& append(const char* str);
 
-    string& operator+=(const char* str) {
+    utf8string& operator+=(const char* str) {
         return append(str);
     }
 
-    string& operator+=(const string& s) {
+    utf8string& operator+=(const utf8string& s) {
         return append(s.c_str());
     }
 
@@ -176,20 +106,20 @@ public:
 
     unsigned int size() const { return length(); }
 
-    friend bool operator==(const string &s1, const char* s2) {
+    friend bool operator==(const utf8string &s1, const char* s2) {
         return s1.compare(s2) == 0;
     }
-    friend bool operator==(const string &s1, const string& s2) {
+    friend bool operator==(const utf8string &s1, const utf8string& s2) {
         return s1.compare(s2) == 0;
     }
 
-    friend string operator+(const string& s1, const char* s) {
-        string news = s1;
+    friend utf8string operator+(const utf8string& s1, const char* s) {
+        utf8string news = s1;
         news += s;
         return news;
     }
-    friend string operator+(const string& s1, const string& s2) {
-        string news = s1;
+    friend utf8string operator+(const utf8string& s1, const utf8string& s2) {
+        utf8string news = s1;
         news += s2;
         return news;
     }
@@ -203,16 +133,18 @@ public:
         return fd ? fd - s : npos;
     }
 
-    string substr(unsigned int pos = 0, unsigned int n = npos) const {
+    utf8string substr(unsigned int pos = 0, unsigned int n = npos) const {
         const char* s = c_str();
         unsigned int len = length();
         if (!s || pos >= len)
-            return string();
+            return utf8string();
 
         if (n == npos || pos + n > len)
             n = len - pos;
-        return string(s + pos, n);
+        return utf8string(s + pos, n);
     }
+
+    static int check_utf8_str(char* _buff, int _len);
 
 private:
     char * _str_buff;
@@ -893,8 +825,6 @@ protected: \
     MAPEX(TKey, TValue, ClassName, do { return (*k1)-(*k2); } while (0), do { } while (0), do { } while (0))
 
 } // namespace hfcl
-
-#endif /* !_HFCL_USE_STL */
 
 #endif /* HFCL_COMMON_STLALTERNATIVE_H_ */
 

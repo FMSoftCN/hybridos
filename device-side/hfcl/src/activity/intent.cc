@@ -25,7 +25,7 @@
 
 namespace hfcl {
 
-Intent::Intent(int i_action, string s_data, int i_tag)
+Intent::Intent(int i_action, utf8string s_data, int i_tag)
     : m_action(i_action)
     , m_data(s_data)
     , m_tag(i_tag)
@@ -40,12 +40,12 @@ Intent::Intent(Intent *intent)
     setDataEx((void*)(intent->dataEx()));
 }
 
-void Intent::putValue(string& key, void* value)
+void Intent::putValue(utf8string& key, void* value)
 {
     m_intentStore[key] = value;
 }
 
-void *Intent::getValue(string key)
+void *Intent::getValue(utf8string key)
 {
     IntentMap::iterator it;
     it = m_intentStore.find(key);

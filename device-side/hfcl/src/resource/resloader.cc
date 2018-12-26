@@ -42,7 +42,7 @@ ResLoader* ResLoader::getInstance()
 
 Logfont* ResLoader::getFont(const char* fontname)
 {
-    string fontName(fontname);
+    utf8string fontName(fontname);
     FontResMap::iterator it = m_fontRes.find(fontName);
 
     if (it == m_fontRes.end()) {
@@ -58,7 +58,7 @@ Logfont* ResLoader::getFont(const char* fontname)
 
 bool ResLoader::releaseFont(const char* fontname)
 {
-    string st(fontname);
+    utf8string st(fontname);
     FontResMap::iterator it = m_fontRes.find(st);
 
     if (it == m_fontRes.end())

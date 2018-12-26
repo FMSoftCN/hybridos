@@ -301,7 +301,7 @@ void ActivityManager::onBoot()
     }
 }
 
-BaseActivity* ActivityManager::startActivity(string act_name, Intent *intent)
+BaseActivity* ActivityManager::startActivity(utf8string act_name, Intent *intent)
 {
     ActivityInfo* _top = NULL;
     ActivityInfo* _curTopActivityInfo = NULL;
@@ -343,12 +343,12 @@ BaseActivity* ActivityManager::startActivity(string act_name, Intent *intent)
     return _newActivity;
 }
 
-void ActivityManager::registerActivity(string name, ActivityFactory *actfactory)
+void ActivityManager::registerActivity(utf8string name, ActivityFactory *actfactory)
 {
     m_acts[name] = actfactory;
 }
 
-BaseActivity* ActivityManager::getActivityFromFactory(string name)
+BaseActivity* ActivityManager::getActivityFromFactory(utf8string name)
 {
     ActivityFactoryMap::iterator it;
     for (it = m_acts.begin(); it != m_acts.end(); ++it) {

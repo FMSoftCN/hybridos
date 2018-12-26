@@ -23,70 +23,70 @@
 
 namespace hfcl {
 
-MAPCLASSKEY(string, Uint32, CssKeywordTypeMap);
+MAPCLASSKEY(utf8string, Uint32, CssKeywordTypeMap);
 
 static CssKeywordTypeMap _map;
 
 Uint32 Css::getKeywordType(const char* name)
 {
     if (_map.size() == 0) {
-        string* str;
+        utf8string* str;
 
-        str = HFCL_NEW_EX(string, ("first-child"));
+        str = HFCL_NEW_EX(utf8string, ("first-child"));
         _map[*str] = Css::CSS_KW_PSEUDO_CLASS | Css::CSS_KWST_FIRST_CHILD;
 
-        str = HFCL_NEW_EX(string, ("only-child"));
+        str = HFCL_NEW_EX(utf8string, ("only-child"));
         _map[*str] = Css::CSS_KW_PSEUDO_CLASS | Css::CSS_KWST_ONLY_CHILD;
 
-        str = HFCL_NEW_EX(string, ("last-child"));
+        str = HFCL_NEW_EX(utf8string, ("last-child"));
         _map[*str] = Css::CSS_KW_PSEUDO_CLASS | Css::CSS_KWST_LAST_CHILD;
 
-        str = HFCL_NEW_EX(string, ("nth-child"));
+        str = HFCL_NEW_EX(utf8string, ("nth-child"));
         _map[*str] = Css::CSS_KW_PSEUDO_CLASS | Css::CSS_KWST_NTH_CHILD;
 
-        str = HFCL_NEW_EX(string, ("nth-last-child"));
+        str = HFCL_NEW_EX(utf8string, ("nth-last-child"));
         _map[*str] = Css::CSS_KW_PSEUDO_CLASS | Css::CSS_KWST_NTH_LAST_CHILD;
 
-        str = HFCL_NEW_EX(string, ("link"));
+        str = HFCL_NEW_EX(utf8string, ("link"));
         _map[*str] = Css::CSS_KW_PSEUDO_CLASS | Css::CSS_KWST_LINK;
 
-        str = HFCL_NEW_EX(string, ("visited"));
+        str = HFCL_NEW_EX(utf8string, ("visited"));
         _map[*str] = Css::CSS_KW_PSEUDO_CLASS | Css::CSS_KWST_VISITED;
 
-        str = HFCL_NEW_EX(string, ("hover"));
+        str = HFCL_NEW_EX(utf8string, ("hover"));
         _map[*str] = Css::CSS_KW_DYNAMIC_PSEUDO_CLASS | Css::CSS_KWST_HOVER;
 
-        str = HFCL_NEW_EX(string, ("active"));
+        str = HFCL_NEW_EX(utf8string, ("active"));
         _map[*str] = Css::CSS_KW_DYNAMIC_PSEUDO_CLASS | Css::CSS_KWST_ACTIVE;
 
-        str = HFCL_NEW_EX(string, ("focus"));
+        str = HFCL_NEW_EX(utf8string, ("focus"));
         _map[*str] = Css::CSS_KW_DYNAMIC_PSEUDO_CLASS | Css::CSS_KWST_FOCUS;
 
-        str = HFCL_NEW_EX(string, ("disabled"));
+        str = HFCL_NEW_EX(utf8string, ("disabled"));
         _map[*str] = Css::CSS_KW_DYNAMIC_PSEUDO_CLASS | Css::CSS_KWST_DISABLED;
 
-        str = HFCL_NEW_EX(string, ("enabled"));
+        str = HFCL_NEW_EX(utf8string, ("enabled"));
         _map[*str] = Css::CSS_KW_DYNAMIC_PSEUDO_CLASS | Css::CSS_KWST_ENABLED;
 
-        str = HFCL_NEW_EX(string, ("checked"));
+        str = HFCL_NEW_EX(utf8string, ("checked"));
         _map[*str] = Css::CSS_KW_DYNAMIC_PSEUDO_CLASS | Css::CSS_KWST_CHECKED;
 
-        str = HFCL_NEW_EX(string, ("root"));
+        str = HFCL_NEW_EX(utf8string, ("root"));
         _map[*str] = Css::CSS_KW_PSEUDO_CLASS | Css::CSS_KWST_ROOT;
 
-        str = HFCL_NEW_EX(string, ("empty"));
+        str = HFCL_NEW_EX(utf8string, ("empty"));
         _map[*str] = Css::CSS_KW_PSEUDO_CLASS | Css::CSS_KWST_EMPTY;
 
-        str = HFCL_NEW_EX(string, ("first-line"));
+        str = HFCL_NEW_EX(utf8string, ("first-line"));
         _map[*str] = Css::CSS_KW_PSEUDO_ELEMENT | Css::CSS_KWST_FIRST_LINE;
 
-        str = HFCL_NEW_EX(string, ("first-letter"));
+        str = HFCL_NEW_EX(utf8string, ("first-letter"));
         _map[*str] = Css::CSS_KW_PSEUDO_ELEMENT | Css::CSS_KWST_FIRST_LETTER;
 
-        str = HFCL_NEW_EX(string, ("before"));
+        str = HFCL_NEW_EX(utf8string, ("before"));
         _map[*str] = Css::CSS_KW_PSEUDO_ELEMENT | Css::CSS_KWST_BEFORE;
 
-        str = HFCL_NEW_EX(string, ("after"));
+        str = HFCL_NEW_EX(utf8string, ("after"));
         _map[*str] = Css::CSS_KW_PSEUDO_ELEMENT | Css::CSS_KWST_AFTER;
     }
 

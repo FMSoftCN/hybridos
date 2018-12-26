@@ -22,6 +22,8 @@
 #ifndef HFCL_GRAPHICS_GRAPHICSCONTEXT_H_
 #define HFCL_GRAPHICS_GRAPHICSCONTEXT_H_
 
+#include <string>
+
 #include "../common/stlalternative.h"
 #include "../common/object.h"
 #include "../common/intrect.h"
@@ -109,7 +111,7 @@ public:
     void drawPolygonLine(Point *pts, int nums, int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
     void fillPolygon(const Point* pts, int vertices, Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
 
-    void getTextDrawSize (const string text, Logfont *f, int *w, int *h);
+    void getTextDrawSize (const std::string text, Logfont *f, int *w, int *h);
     void getTextDrawSize (const char *text, Logfont *f, int *w, int *h);
 
     bool getBiDiFlag (void);
@@ -119,36 +121,36 @@ public:
 
     void textOut(int x, int y, const char * text, int len,
             unsigned int color, Logfont * logfont = NULL);
-    void textOut(int x, int y, string text, unsigned int color, Logfont * logfont){
+    void textOut(int x, int y, std::string text, unsigned int color, Logfont * logfont){
             textOut(x, y, text.c_str(), text.size(), color, logfont);
     }
 
     void textOutOmitted(int x, int y, const char * text, int len, int max_extent);
     void textOutOmitted(int x, int y, const char * text, int len,
             int max_extent, unsigned int color, Logfont * logfont);
-    void textOutOmitted(int x, int y, const string& text, int max_extent){
+    void textOutOmitted(int x, int y, const std::string& text, int max_extent){
         textOutOmitted(x, y, text.c_str(), text.size(), max_extent);
     }
-    void textOutOmitted(int x, int y, const string& text,
+    void textOutOmitted(int x, int y, const std::string& text,
             int max_extent, unsigned int color, Logfont * logfont) {
         textOutOmitted(x, y, text.c_str(), text.size(), max_extent, color, logfont);
     }
 
-    void drawText(const string& text, const IntRect& rc);
+    void drawText(const std::string& text, const IntRect& rc);
     void drawText(const char * text, const IntRect& rc, \
             unsigned int color, Logfont * logfont, unsigned int format);
-    void drawText(const string& text, const IntRect& rc, \
+    void drawText(const std::string& text, const IntRect& rc, \
             unsigned int color, Logfont * logfont, unsigned int format) {
         drawText(text.c_str(), rc, color, logfont, format);
     }
-    int drawTextToCalcRect(const string& text, IntRect& rect, unsigned int format, Logfont *font = NULL);
+    int drawTextToCalcRect(const std::string& text, IntRect& rect, unsigned int format, Logfont *font = NULL);
     int calcTextRectOnDrawing(const char *text, Logfont *f,
             unsigned int format, IntRect *rect, DTFIRSTLINE *firstline = NULL, Point *txtPos = NULL);
-    int calcTextRectOnDrawing(const string& text, Logfont *f,
+    int calcTextRectOnDrawing(const std::string& text, Logfont *f,
             unsigned int format, IntRect *rect, DTFIRSTLINE *firstline = NULL, Point *txtPos = NULL) {
         return calcTextRectOnDrawing(text.c_str(), f, format, rect, firstline, txtPos);
     }
-    int drawTextToGetLenght(const string& text);
+    int drawTextToGetLenght(const std::string& text);
     int getFontHeight(Logfont *f = NULL);
     int getFontWidth(Logfont *f = NULL);
 

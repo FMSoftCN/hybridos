@@ -290,7 +290,7 @@ ResPackage::ResPackage(const char *name, int id,
 {
     int i = 0;
     m_id = id;
-    m_name= string(name);
+    m_name= utf8string(name);
     m_packagePath = "";
 
     /*
@@ -324,12 +324,12 @@ ResPackage::~ResPackage()
     }
 }
 
-const string &ResPackage::getPackagePath(void)
+const utf8string &ResPackage::getPackagePath(void)
 {
     return m_packagePath;
 }
 
-void ResPackage::setPackagePath(string &packagePath)
+void ResPackage::setPackagePath(utf8string &packagePath)
 {
     m_packagePath = packagePath;
 }
@@ -876,22 +876,22 @@ static inline bool is_special_dir(const char* str) {
                 (str[1] == '/' || (str[1] == '.' && str[2] == '/')));
 }
 
-string GetResRealPath(const char *packagePath, const char *resFilename)
+utf8string GetResRealPath(const char *packagePath, const char *resFilename)
 {
     int len;
     if(NULL == resFilename)
-        return string("");
+        return utf8string("");
     if(is_special_dir(resFilename))
-        return string(resFilename);
+        return utf8string(resFilename);
 
     if(packagePath == NULL)
-        return string(resFilename);
+        return utf8string(resFilename);
 
     len = strlen(packagePath);
     if(len == 0)
-        return string(resFilename);
+        return utf8string(resFilename);
 
-    string str = packagePath;
+    utf8string str = packagePath;
     if(packagePath[len-1] == '/' || packagePath[len-1] =='\\')
         str += "/";
     return str + resFilename;

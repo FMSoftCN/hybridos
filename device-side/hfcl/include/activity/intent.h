@@ -34,26 +34,26 @@ namespace hfcl {
  */
 class Intent {
 public:
-    Intent(int action = 0, string data = "", int tag = 0);
+    Intent(int action = 0, utf8string data = "", int tag = 0);
     Intent(Intent * intent);
 
     const int action() const {return m_action;}
-    const string data() const {return m_data;}
+    const utf8string data() const {return m_data;}
     const void* dataEx() const {return m_dataEx;}
     const int tag() const {return m_tag;}
 
     void setAction(int iaction) {m_action = iaction;}
-    void setData(string sdata) {m_data = sdata;}
+    void setData(utf8string sdata) {m_data = sdata;}
     void setDataEx(void* sdata) {m_dataEx = sdata;}
     void settag(int itag) {m_tag = itag;}
    /////////////////////////////////////////
-    void putValue(string& key, void* value);
-    void *getValue(string key);
+    void putValue(utf8string& key, void* value);
+    void *getValue(utf8string key);
 #if 0
-    void putInt(string key, int value);
-    int getInt(string key);
-    void putString(string key, string& value);
-    string& getString(string key);
+    void putInt(utf8string key, int value);
+    int getInt(utf8string key);
+    void putString(utf8string key, utf8string& value);
+    utf8string& getString(utf8string key);
 #endif
 
 protected:
@@ -67,7 +67,7 @@ protected:
      * m_date is transfer data.
      * e.g. "13800138000" or "zhang san" etc.
      */
-    string m_data;
+    utf8string m_data;
     void* m_dataEx;
 
     /*
@@ -77,7 +77,7 @@ protected:
      */
     int m_tag;
 private:
-    MAPCLASSKEY(string, void*, IntentMap);
+    MAPCLASSKEY(utf8string, void*, IntentMap);
     IntentMap m_intentStore;
 };
 

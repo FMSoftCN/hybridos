@@ -64,7 +64,7 @@ public:
 
     void registerInnerRes(int res_type, INNER_RES_INFO *resources, int count);
 
-    MAPCLASS(string, InnerImage, InnerImageResMap);
+    MAPCLASS(utf8string, InnerImage, InnerImageResMap);
     InnerImageResMap m_innerImageRes;
 #endif /* VM: deprecated code */
 
@@ -75,13 +75,13 @@ public:
 private:
     ResLoader();
 
-    MAPCLASSKEY(string, Font*, FontResMap);
-    MAPCLASSKEY(string, Image*, ImageResMap);
-    MAPCLASSKEY(string, Bitmap*, BitmapResMap);
+    MAPCLASSKEY(utf8string, Font*, FontResMap);
+    MAPCLASSKEY(utf8string, Image*, ImageResMap);
+    MAPCLASSKEY(utf8string, Bitmap*, BitmapResMap);
     MAPCLASSKEY(HTData, HTData, NameIncoresMap);
-    PAIR(string, Font*, FontResPair);
-    PAIR(string, Image*, ImageResPair);
-    PAIR(string, Bitmap*, BitmapResPair);
+    PAIR(utf8string, Font*, FontResPair);
+    PAIR(utf8string, Image*, ImageResPair);
+    PAIR(utf8string, Bitmap*, BitmapResPair);
     PAIR(HTData, HTData, NameIncoresPair);
 
     FontResMap   m_fontRes;

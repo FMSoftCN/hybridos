@@ -27,7 +27,7 @@
 
 namespace hfcl {
 
-VECTORCLASS(string, CssSelectorPieceVec);
+VECTORCLASS(utf8string, CssSelectorPieceVec);
 
 class CssSelectorGroup;
 
@@ -36,39 +36,39 @@ public:
     CssSelector() {}
     ~CssSelector() {}
 
-    const string& getType() const { return m_type; }
-    void setType(string& type) {
+    const utf8string& getType() const { return m_type; }
+    void setType(utf8string& type) {
         m_type = type;
     }
 
-    void addIdentifier(string& str) {
+    void addIdentifier(utf8string& str) {
         m_identifiers.push_back(str);
     }
 
-    void addClass(string& str) {
+    void addClass(utf8string& str) {
         m_classes.push_back(str);
     }
 
-    void addAttribute(string& str) {
+    void addAttribute(utf8string& str) {
         m_attributes.push_back(str);
     }
 
-    void addPseudoElement(string& str) {
+    void addPseudoElement(utf8string& str) {
         m_pseudo_elements.push_back(str);
     }
 
-    void addPseudoClass(string& str) {
+    void addPseudoClass(utf8string& str) {
         m_pseudo_classes.push_back(str);
     }
 
-    void addDynamicPseudoClass(string& str) {
+    void addDynamicPseudoClass(utf8string& str) {
         m_dynamic_pseudo_classes.push_back(str);
     }
 
 friend class CssSelectorGroup;
 
 private:
-    string m_type;
+    utf8string m_type;
     CssSelectorPieceVec m_identifiers;
     CssSelectorPieceVec m_classes;
     CssSelectorPieceVec m_attributes;

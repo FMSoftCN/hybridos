@@ -98,8 +98,8 @@ public:
     /*
      * res path related
      */
-    const string &getPackagePath(void);
-    void setPackagePath(string &packagePath);
+    const utf8string &getPackagePath(void);
+    void setPackagePath(utf8string &packagePath);
 
     /*
      * res package related
@@ -198,13 +198,13 @@ private:
     // ---------------- /|\ -----------------
     unsigned int m_ImagReseSize;
 
-    string m_packagePath;
+    utf8string m_packagePath;
     ThemeRes* m_theme;
     HTResId m_theme_id;
 
 protected:
     int m_id;
-    string m_name;
+    utf8string m_name;
 
 private:
     HIDLanguage m_languageId;
@@ -214,7 +214,7 @@ private:
     TextRes*    m_textRes;
 };
 
-string GetResRealPath(const char *packagePath, const char *resFilename);
+utf8string GetResRealPath(const char *packagePath, const char *resFilename);
 
 bool RegisterCommonDrawableFromRes(int dr_id, const char* basename,
         const TRStyleElement *elements, int super_id);

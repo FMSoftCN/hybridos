@@ -263,7 +263,7 @@ void GraphicsContext::textOut(int x, int y, const char * text, int len,
     TextOutLen (hdc, outx, outy, text, len);
 }
 
-void GraphicsContext::getTextDrawSize (const string text, Logfont *f, int *w, int *h)
+void GraphicsContext::getTextDrawSize (const std::string text, Logfont *f, int *w, int *h)
 {
     getTextDrawSize (text.c_str(), f, w, h);
 }
@@ -297,7 +297,7 @@ END:
     *h = cz.cy;
 }
 
-int GraphicsContext::drawTextToCalcRect(const string& text, IntRect& rect, unsigned int format, Logfont *font)
+int GraphicsContext::drawTextToCalcRect(const std::string& text, IntRect& rect, unsigned int format, Logfont *font)
 {
     RECT rc = { rect.left(), rect.top(), rect.right(), rect.bottom() };
 
@@ -325,7 +325,7 @@ int GraphicsContext::calcTextRectOnDrawing(const char *text,
     return RECTH(rc);
 }
 
-int GraphicsContext::drawTextToGetLenght(const string& text)
+int GraphicsContext::drawTextToGetLenght(const std::string& text)
 {
     RECT rc = {0, 0, 100, 30};
 
@@ -359,7 +359,7 @@ int GraphicsContext::getFontWidth(Logfont *f)
     return m.ave_width;
 }
 
-void GraphicsContext::drawText(const string& text, const IntRect& rect)
+void GraphicsContext::drawText(const std::string& text, const IntRect& rect)
 {
     RECT rc = RECT(rect);
     HDC hdc = m_data->m_context;

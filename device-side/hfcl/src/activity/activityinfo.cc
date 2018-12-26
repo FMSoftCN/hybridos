@@ -31,7 +31,7 @@ ActivityInfo::ActivityInfo()
 {
 }
 
-ActivityInfo::ActivityInfo(string name, BaseActivity* act, ContextStream* cs)
+ActivityInfo::ActivityInfo(utf8string name, BaseActivity* act, ContextStream* cs)
     : m_actname(name)
     , m_act(act)
     //, m_stream(cs)
@@ -62,12 +62,12 @@ void ActivityInfo::setActivity(BaseActivity* act)
     m_act = act;
 }
 
-string ActivityInfo::getName(void)
+utf8string ActivityInfo::getName(void)
 {
     return m_actname;
 }
 
-void ActivityInfo::setName(string name)
+void ActivityInfo::setName(utf8string name)
 {
     m_actname = name;
 }
