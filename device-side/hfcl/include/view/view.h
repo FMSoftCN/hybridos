@@ -90,10 +90,10 @@ public:
     bool includeClass(const char* cssClass);
     bool excludeClass(const char* cssClass);
 
-    bool checkClass(const string& cls) const;
-    bool checkAttribute(const string& attr) const;
-    bool checkPseudoElement(const string& pseudoEle) const;
-    bool checkPseudoClass(const string& pseudoCls) const;
+    bool checkClass(const char* cls) const;
+    bool checkAttribute(const char* attr) const;
+    bool checkPseudoElement(const char* pseudoEle) const;
+    bool checkPseudoClass(const char* pseudoCls) const;
 
     /* virtual functions for rendering */
     // return the HVML type, e.g., hvroot, hvlist, hvimg, hvli, and so on

@@ -86,7 +86,7 @@ public:
     ~CssSelectorGroup();
 
     enum {
-        CSS_NOMATCHED   = 0,
+        CSS_NOT_MATCHED = 0,
         CSS_STATIC,
         CSS_DYNAMIC,
     };

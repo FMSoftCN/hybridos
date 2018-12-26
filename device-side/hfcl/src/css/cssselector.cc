@@ -419,17 +419,10 @@ bool CssSelectorGroup::compile(const char* selector)
 
 /*
  * returns:
- *  0: not matched
+ *  CSS_NOT_MATCHED: not matched
  *  CSS_STATIC: static css
  *  CSS_DYNAMIC: dynamic css, for pseudo classes
  */
-#define MATCH_TYPE              0x00000001
-#define MATCH_ID                0x00000002
-#define MATCH_CLASSES           0x00000004
-#define MATCH_ATTRIBUTES        0x00000008
-#define MATCH_PSEUDO_ELEMENTS   0x00000010
-#define MATCH_PSEUDO_CLASSES    0x00000020
-
 int CssSelectorGroup::match(const View* view)
 {
     CssSelectorVec::iterator it;
@@ -514,7 +507,7 @@ int CssSelectorGroup::match(const View* view)
         return CSS_STATIC;
     }
 
-    return 0;
+    return CSS_NOT_MATCHED;
 }
 
 } // namespace hfcl

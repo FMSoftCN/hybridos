@@ -24,7 +24,9 @@
 
 #include <minigui/common.h>
 
+#include <algorithm>
 #include <string>
+#include <cctype>
 
 namespace hfcl {
 
@@ -46,6 +48,18 @@ inline std::string& trim(std::string& str,
         const std::string& chars = "\t\n\v\f\r ")
 {
     return ltrim(rtrim(str, chars), chars);
+}
+
+inline std::string& tolower(std::string& str)
+{
+    std::transform(str.begin(), str.end(), str.begin(), static_cast<int(*)(int)>(std::tolower));
+    return str;
+}
+
+inline std::string& toupper(std::string& str)
+{
+    std::transform(str.begin(), str.end(), str.begin(), static_cast<int(*)(int)>(std::toupper));
+    return str;
 }
 
 int GetFirstUTF8CharLen (const char *str, int len);
