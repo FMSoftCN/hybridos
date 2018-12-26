@@ -24,6 +24,7 @@
 #include "common/helpers.h"
 
 #include <string.h>
+
 #include <string>
 
 #include "view/viewcontainer.h"
@@ -164,6 +165,22 @@ bool View::excludeClass(const char* cssClass)
     return true;
 }
 
+const char* View::getAttribute(const char* attrKey) const
+{
+    AttributesMap::const_iterator it = m_attrs.find(attrKey);
+    if (it != m_attrs.end()) {
+        it->second.c_str();
+    }
+
+    return NULL;
+}
+
+bool View::setAttribute(const char* attrKey, const char* attrValue)
+{
+    m_attrs[attrKey] = attrValue;
+    return true;
+}
+
 bool View::checkClass(const char* cssClass) const
 {
     std::string tmp = cssClass;
@@ -176,10 +193,46 @@ bool View::checkClass(const char* cssClass) const
     return false;
 }
 
-bool View::checkAttribute(const char* attr) const
+template <class Container>
+static void split_attribute(const std::string& str, Container& cont,
+              char delim = '=')
 {
-    /* TODO */
-    _DBG_PRINTF("View::checkAttribute: NOT IMPLEMENTED\n");
+    std::size_t current, previous = 0;
+    current = str.find(delim);
+    while (current != std::string::npos) {
+        cont.push_back(str.substr(previous, current - previous));
+        previous = current + 1;
+        current = str.find(delim, previous);
+    }
+    cont.push_back(str.substr(previous, current - previous));
+}
+
+bool View::checkAttribute(const char* attrPair) const
+{
+    std::string str(attrPair);
+
+    std::vector<std::string> words;
+    split_attribute(str, words);
+    if (words.size() == 2) {
+        AttributesMap::const_iterator it = m_attrs.find(words[0].c_str());
+        if (it != m_attrs.end()) {
+            return strcmp(words[1].c_str(), it->second.c_str()) == 0;
+        }
+    }
+    else {
+        _DBG_PRINTF("View::checkAttribute: bad attribute: %s\n", attrPair);
+    }
+
+    return false;
+}
+
+bool View::checkAttribute(const char* attrKey, const char* attrValue) const
+{
+    AttributesMap::const_iterator it = m_attrs.find(attrKey);
+    if (it != m_attrs.end()) {
+        return strcmp(attrValue, it->second.c_str()) == 0;
+    }
+
     return false;
 }
 
@@ -534,7 +587,7 @@ HWND View::getSysWindow()
     return HWND_INVALID;
 }
 
-void View::applyCss(CssDeclared* css, CssSelectorGroup& selector)
+void View::applyCss(CssDeclared* css, const CssSelectorGroup& selector)
 {
     switch (selector.match(this)) {
     case CssSelectorGroup::CSS_STATIC:

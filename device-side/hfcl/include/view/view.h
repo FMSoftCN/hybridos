@@ -90,16 +90,19 @@ public:
     bool includeClass(const char* cssClass);
     bool excludeClass(const char* cssClass);
 
+    const char* getAttribute(const char* attrKey) const;
+    bool setAttribute(const char* attrKey, const char* attrValue);
+
+    bool checkAttribute(const char* attrKey, const char* attrValue) const;
+    bool checkAttribute(const char* attrPair) const;
     bool checkClass(const char* cls) const;
-    bool checkAttribute(const char* attr) const;
     bool checkPseudoElement(const char* pseudoEle) const;
     virtual bool checkPseudoClass(const char* pseudoCls) const;
 
     /* virtual functions for rendering */
     // return the HVML type, e.g., hvroot, hvtext, hvimg, hvli, and so on
     virtual const char* type() const = 0;
-    virtual void applyCss(CssDeclared* css,
-            CssSelectorGroup& selector);
+    virtual void applyCss(CssDeclared* css, const CssSelectorGroup& selector);
     virtual void computeCss(int w, int h);
     virtual void onNameChanged() = 0;
     virtual void onClassChanged() = 0;
@@ -390,6 +393,9 @@ protected:
     IntRect m_rect;
     ScrollBar* m_vsb;
     ScrollBar* m_hsb;
+
+    MAPCLASSKEY(utf8string, utf8string, AttributesMap);
+    AttributesMap m_attrs;
 
     LISTEX(EventListener *, EventListenerList,
             do{return *v1 == *v2;}while (0), do{(*n)->unref();} while (0));

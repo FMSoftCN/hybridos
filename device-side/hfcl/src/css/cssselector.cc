@@ -361,7 +361,7 @@ bool CssSelectorGroup::compile(const char* selector)
  *  CSS_STATIC: static css
  *  CSS_DYNAMIC: dynamic css, for pseudo classes
  */
-int CssSelectorGroup::match(const View* view)
+int CssSelectorGroup::match(const View* view) const
 {
     CssSelectorVec::const_iterator it;
     for (it = m_group.begin(); it != m_group.end(); ++it) {

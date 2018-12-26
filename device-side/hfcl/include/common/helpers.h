@@ -52,13 +52,15 @@ inline std::string& trim(std::string& str,
 
 inline std::string& tolower(std::string& str)
 {
-    std::transform(str.begin(), str.end(), str.begin(), static_cast<int(*)(int)>(std::tolower));
+    std::transform(str.begin(), str.end(), str.begin(),
+            static_cast<int(*)(int)>(std::tolower));
     return str;
 }
 
 inline std::string& toupper(std::string& str)
 {
-    std::transform(str.begin(), str.end(), str.begin(), static_cast<int(*)(int)>(std::toupper));
+    std::transform(str.begin(), str.end(), str.begin(),
+            static_cast<int(*)(int)>(std::toupper));
     return str;
 }
 

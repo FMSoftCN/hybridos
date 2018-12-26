@@ -72,8 +72,7 @@ public:
     View* getFocusedChild() const { return m_focusView; }
 
     /* overloaded virtual functions */
-    virtual void applyCss(CssDeclared* css,
-            CssSelectorGroup& selector);
+    virtual void applyCss(CssDeclared* css, const CssSelectorGroup& selector);
     virtual void computeCss(int w, int h);
     virtual bool isContainer() { return true; }
     virtual void drawBackground(GraphicsContext* context, IntRect &rc);
