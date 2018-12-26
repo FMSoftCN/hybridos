@@ -167,11 +167,11 @@ protected:
         _buffer = (unsigned char*)HFCL_CALLOC(isize, count);
     }
 
-    void *_get(int idx){
+    void *_get(int idx) {
         return _buffer + idx * _size;
     }
 
-    const void* _get(int idx) const{
+    const void* _get(int idx) const {
         return _buffer + idx * _size;
     }
 
@@ -212,11 +212,11 @@ public:
     class iterator_base {
         friend class vector_base;
     protected:
-        vector_base *_owner;
+        const vector_base *_owner;
         int _cur;
     public:
         iterator_base() : _owner(NULL), _cur(0) { }
-        iterator_base(vector_base* owner, int cur) {
+        iterator_base(const vector_base* owner, int cur) {
             _owner = owner;
             _cur = cur;
         }
@@ -247,7 +247,13 @@ public:
                 _cur = 0;
         }
 
+#if 0
         void *_value() {
+            return _owner->_get(_cur);
+        }
+#endif
+
+        const void *_value() const {
             return _owner->_get(_cur);
         }
 
@@ -274,6 +280,8 @@ public:
 
     iterator_base _begin() { return iterator_base(this, 0); }
     iterator_base _end() { return iterator_base(this, size()); }
+    iterator_base _begin() const { return iterator_base(this, 0); }
+    iterator_base _end()  const { return iterator_base(this, size()); }
 
     void* _insert(const iterator_base& it, void* data);
     void _erase(const iterator_base &it);
@@ -635,7 +643,7 @@ public:
             iterator& operator=(const iterator& it) { _init_by((const vector_base::iterator_base&)it); return *this; } \
             Type& operator*() { return *(Type*)_value(); } \
             iterator& operator+(int idx) { _goto(idx); return *this; } \
-            bool operator!=(const iterator& it) {  \
+            bool operator!=(const iterator& it) { \
                 return !iseq((const vector_base::iterator_base*)this, (const vector_base::iterator_base*)&it); \
             } \
             bool operator==(const iterator &it) { \
@@ -646,6 +654,27 @@ public:
         iterator end() { return vector_base::iterator_base(_end()); } \
         void insert(const iterator& it, Type& t) { _insert((const iterator_base)it, (void*)&t); }\
         void erase(const iterator& it) { _erase((const iterator_base)it); } \
+        class const_iterator : public vector_base::iterator_base { \
+        public: \
+            const_iterator() { } \
+            const_iterator(const iterator& it) : vector_base::iterator_base((const vector_base::iterator_base)it) { } \
+            const_iterator(const vector_base::iterator_base&it) : vector_base::iterator_base(it) { } \
+            const_iterator& operator++() { _next(); return *this; } \
+            const_iterator& operator++(int) { _next(); return *this; } \
+            const_iterator& operator--() { _prev(); return *this; } \
+            const_iterator& operator--(int) { _prev(); return *this; } \
+            const_iterator& operator=(const iterator& it) { _init_by((const vector_base::iterator_base&)it); return *this; } \
+            const Type& operator*() { return *(const Type*)_value(); } \
+            const_iterator& operator+(int idx) { _goto(idx); return *this; } \
+            bool operator!=(const const_iterator& it) { \
+                return !iseq((const vector_base::iterator_base*)this, (const vector_base::iterator_base*)&it); \
+            } \
+            bool operator==(const const_iterator &it) { \
+                return iseq((const vector_base::iterator_base*)this, (const vector_base::iterator_base*)&it); \
+            } \
+        }; \
+        const_iterator begin() const { return vector_base::iterator_base(_begin()); } \
+        const_iterator end() const { return vector_base::iterator_base(_end()); } \
     };
 
 #define VECTOR(Type, ClassName) VECTOREX(Type, ClassName, do{}while (0))
@@ -694,6 +723,11 @@ public:
             return !iseq((const list_base::iterator_base*)this, (const list_base::iterator_base*)&it); \
         } \
         }; \
+        iterator begin() { return iterator(_begin()); } \
+        iterator end() { return iterator(_end()); } \
+        iterator insert(const iterator& it, Type& t) { return iterator(_insert((const iterator_base)it, (void*)&t)); }\
+        iterator erase(const iterator& it) { return iterator(_erase((const list_base::iterator_base)it)); } \
+        iterator erase(const iterator& itb, const iterator& ite) { return iterator(_erase((const list_base::iterator_base)itb, (const list_base::iterator_base)ite)); } \
         class const_iterator : public list_base::iterator_base { \
         public: \
             const_iterator() { } \
@@ -711,13 +745,8 @@ public:
                 return !iseq((const list_base::iterator_base*)this, (const list_base::iterator_base*)&it); \
             } \
         }; \
-        iterator begin() { return iterator(_begin()); } \
-        iterator end() { return iterator(_end()); } \
-        iterator begin() const { return iterator(_begin()); } \
-        iterator end() const { return iterator(_end()); } \
-        iterator insert(const iterator& it, Type& t) { return iterator(_insert((const iterator_base)it, (void*)&t)); }\
-        iterator erase(const iterator& it) { return iterator(_erase((const list_base::iterator_base)it)); } \
-        iterator erase(const iterator& itb, const iterator& ite) { return iterator(_erase((const list_base::iterator_base)itb, (const list_base::iterator_base)ite)); } \
+        const_iterator begin() const { return iterator(_begin()); } \
+        const_iterator end() const { return iterator(_end()); } \
     };
 #define LIST(Type, ClassName) LISTEX(Type, ClassName, do{return (*v1) == (*v2);}while (0),do{} while (0))
 #define LISTCLASS(Type, ClassName) LISTEX(Type, ClassName, do{return (*v1) == (*v2); }while (0), do{n->~Type(); } while (0))

@@ -363,21 +363,21 @@ bool CssSelectorGroup::compile(const char* selector)
  */
 int CssSelectorGroup::match(const View* view)
 {
-    CssSelectorVec::iterator it;
+    CssSelectorVec::const_iterator it;
     for (it = m_group.begin(); it != m_group.end(); ++it) {
-        CssSelector* one = *it;
+        const CssSelector* one = *it;
 
         const utf8string& type = one->getType();
         if (type.compare("") && type.compare(view->type()))
             continue;
 
         // check id: once an id matched
-        CssSelectorPieceVec& pieces = one->m_identifiers;
-        if (pieces.size() > 0) {
-            CssSelectorPieceVec::iterator it;
+        const CssSelectorPieceVec& ids = one->m_identifiers;
+        if (ids.size() > 0) {
+            CssSelectorPieceVec::const_iterator it;
             bool matched = false;
-            for (it = pieces.begin(); it != pieces.end(); ++it) {
-                utf8string& str = *it;
+            for (it = ids.begin(); it != ids.end(); ++it) {
+                const utf8string& str = *it;
                 if (str.compare (view->getName()) == 0) {
                     matched = true;
                     break;
@@ -389,11 +389,11 @@ int CssSelectorGroup::match(const View* view)
         }
 
         // check classes: all class should be matched
-        pieces = one->m_classes;
-        if (pieces.size() > 0) {
+        const CssSelectorPieceVec& clses = one->m_classes;
+        if (clses.size() > 0) {
             CssSelectorPieceVec::iterator it;
-            for (it = pieces.begin(); it != pieces.end(); ++it) {
-                utf8string& str = *it;
+            for (it = clses.begin(); it != clses.end(); ++it) {
+                const utf8string& str = *it;
                 if (!view->checkClass(str.c_str())) {
                     continue;
                 }
@@ -401,11 +401,11 @@ int CssSelectorGroup::match(const View* view)
         }
 
         // check attributes: all attributes should be matched
-        pieces = one->m_attributes;
-        if (pieces.size() > 0) {
-            CssSelectorPieceVec::iterator it;
-            for (it = pieces.begin(); it != pieces.end(); ++it) {
-                utf8string& str = *it;
+        const CssSelectorPieceVec& attrs = one->m_attributes;
+        if (attrs.size() > 0) {
+            CssSelectorPieceVec::const_iterator it;
+            for (it = attrs.begin(); it != attrs.end(); ++it) {
+                const utf8string& str = *it;
                 if (!view->checkAttribute(str.c_str())) {
                     continue;
                 }
@@ -413,11 +413,11 @@ int CssSelectorGroup::match(const View* view)
         }
 
         // check pseudo elements: all pseudo elements should be matched
-        pieces = one->m_pseudo_elements;
-        if (pieces.size() > 0) {
-            CssSelectorPieceVec::iterator it;
-            for (it = pieces.begin(); it != pieces.end(); ++it) {
-                utf8string& str = *it;
+        const CssSelectorPieceVec& pes = one->m_pseudo_elements;
+        if (pes.size() > 0) {
+            CssSelectorPieceVec::const_iterator it;
+            for (it = pes.begin(); it != pes.end(); ++it) {
+                const utf8string& str = *it;
                 if (!view->checkPseudoElement(str.c_str())) {
                     continue;
                 }
@@ -425,11 +425,11 @@ int CssSelectorGroup::match(const View* view)
         }
 
         // check pseudo classes: all pseudo classes should be matched
-        pieces = one->m_pseudo_classes;
-        if (pieces.size() > 0) {
-            CssSelectorPieceVec::iterator it;
-            for (it = pieces.begin(); it != pieces.end(); ++it) {
-                utf8string& str = *it;
+        const CssSelectorPieceVec& pcs = one->m_pseudo_classes;
+        if (pcs.size() > 0) {
+            CssSelectorPieceVec::const_iterator it;
+            for (it = pcs.begin(); it != pcs.end(); ++it) {
+                const utf8string& str = *it;
                 if (!view->checkPseudoClass(str.c_str())) {
                     continue;
                 }
@@ -437,8 +437,8 @@ int CssSelectorGroup::match(const View* view)
         }
 
         // check dynamic pseudo classes: once defined
-        pieces = one->m_dynamic_pseudo_classes;
-        if (pieces.size() > 0) {
+        const CssSelectorPieceVec& dpcs = one->m_dynamic_pseudo_classes;
+        if (dpcs.size() > 0) {
             return CSS_DYNAMIC;
         }
 
@@ -456,89 +456,101 @@ namespace hfcl {
 
 void CssSelectorGroup::_print()
 {
-    CssSelectorVec::iterator it;
+    CssSelectorVec::const_iterator it;
     for (it = m_group.begin(); it != m_group.end(); ++it) {
-        CssSelector* one = *it;
+        const CssSelector* one = *it;
 
         printf ("One selector: \n");
         printf ("   Type: %s\n", one->getType().c_str());
 
-        // check id: once an id matched
-        CssSelectorPieceVec& pieces = one->m_identifiers;
-        if (pieces.size() > 0) {
-            CssSelectorPieceVec::iterator it;
-            for (it = pieces.begin(); it != pieces.end(); ++it) {
-                utf8string& str = *it;
-                printf ("   Identifier: %s\n", str.c_str());
+        {
+            // check id: once an id matched
+            const CssSelectorPieceVec& pieces = one->m_identifiers;
+            if (pieces.size() > 0) {
+                CssSelectorPieceVec::const_iterator it;
+                for (it = pieces.begin(); it != pieces.end(); ++it) {
+                    const utf8string& str = *it;
+                    printf ("   Identifier: %s\n", str.c_str());
+                }
             }
-        }
-        else {
-            printf ("   Identifier: <NONE>\n");
+            else {
+                printf ("   Identifier: <NONE>\n");
+            }
         }
 
-        // check classes: all class should be matched
-        pieces = one->m_classes;
-        if (pieces.size() > 0) {
-            CssSelectorPieceVec::iterator it;
-            for (it = pieces.begin(); it != pieces.end(); ++it) {
-                utf8string& str = *it;
-                printf ("   Class: %s\n", str.c_str());
+        {
+            // check classes: all class should be matched
+            const CssSelectorPieceVec& pieces = one->m_classes;
+            if (pieces.size() > 0) {
+                CssSelectorPieceVec::const_iterator it;
+                for (it = pieces.begin(); it != pieces.end(); ++it) {
+                    const utf8string& str = *it;
+                    printf ("   Class: %s\n", str.c_str());
+                }
             }
-        }
-        else {
-            printf ("   Class: <NONE>\n");
+            else {
+                printf ("   Class: <NONE>\n");
+            }
         }
 
-        // check attributes: all attributes should be matched
-        pieces = one->m_attributes;
-        if (pieces.size() > 0) {
-            CssSelectorPieceVec::iterator it;
-            for (it = pieces.begin(); it != pieces.end(); ++it) {
-                utf8string& str = *it;
-                printf ("   Attribute: %s\n", str.c_str());
+        {
+            // check attributes: all attributes should be matched
+            const CssSelectorPieceVec& pieces = one->m_attributes;
+            if (pieces.size() > 0) {
+                CssSelectorPieceVec::const_iterator it;
+                for (it = pieces.begin(); it != pieces.end(); ++it) {
+                    const utf8string& str = *it;
+                    printf ("   Attribute: %s\n", str.c_str());
+                }
             }
-        }
-        else {
-            printf ("   Attribute: <NONE>\n");
+            else {
+                printf ("   Attribute: <NONE>\n");
+            }
         }
 
-        // check pseudo elements: all pseudo elements should be matched
-        pieces = one->m_pseudo_elements;
-        if (pieces.size() > 0) {
-            CssSelectorPieceVec::iterator it;
-            for (it = pieces.begin(); it != pieces.end(); ++it) {
-                utf8string& str = *it;
-                printf ("   Pseudo Element: %s\n", str.c_str());
+        {
+            // check pseudo elements: all pseudo elements should be matched
+            const CssSelectorPieceVec& pieces = one->m_pseudo_elements;
+            if (pieces.size() > 0) {
+                CssSelectorPieceVec::const_iterator it;
+                for (it = pieces.begin(); it != pieces.end(); ++it) {
+                    const utf8string& str = *it;
+                    printf ("   Pseudo Element: %s\n", str.c_str());
+                }
             }
-        }
-        else {
-            printf ("   Pseudo Element: <NONE>\n");
+            else {
+                printf ("   Pseudo Element: <NONE>\n");
+            }
         }
 
-        // check pseudo classes: all pseudo classes should be matched
-        pieces = one->m_pseudo_classes;
-        if (pieces.size() > 0) {
-            CssSelectorPieceVec::iterator it;
-            for (it = pieces.begin(); it != pieces.end(); ++it) {
-                utf8string& str = *it;
-                printf ("   Pseudo Class: %s\n", str.c_str());
+        {
+            // check pseudo classes: all pseudo classes should be matched
+            const CssSelectorPieceVec& pieces = one->m_pseudo_classes;
+            if (pieces.size() > 0) {
+                CssSelectorPieceVec::const_iterator it;
+                for (it = pieces.begin(); it != pieces.end(); ++it) {
+                    const utf8string& str = *it;
+                    printf ("   Pseudo Class: %s\n", str.c_str());
+                }
             }
-        }
-        else {
-            printf ("   Pseudo Class: <NONE>\n");
+            else {
+                printf ("   Pseudo Class: <NONE>\n");
+            }
         }
 
-        // check dynamic pseudo classes: once defined
-        pieces = one->m_dynamic_pseudo_classes;
-        if (pieces.size() > 0) {
-            CssSelectorPieceVec::iterator it;
-            for (it = pieces.begin(); it != pieces.end(); ++it) {
-                utf8string& str = *it;
-                printf ("   Dynamic Pseudo Class: %s\n", str.c_str());
+        {
+            // check dynamic pseudo classes: once defined
+            const CssSelectorPieceVec& pieces = one->m_dynamic_pseudo_classes;
+            if (pieces.size() > 0) {
+                CssSelectorPieceVec::const_iterator it;
+                for (it = pieces.begin(); it != pieces.end(); ++it) {
+                    const utf8string& str = *it;
+                    printf ("   Dynamic Pseudo Class: %s\n", str.c_str());
+                }
             }
-        }
-        else {
-            printf ("   Dynamic Pseudo Class: <NONE>\n");
+            else {
+                printf ("   Dynamic Pseudo Class: <NONE>\n");
+            }
         }
     }
 }
