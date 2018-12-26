@@ -36,9 +36,9 @@ public:
     CssSelector() {}
     ~CssSelector() {}
 
-    const string& getType() const { return m_tag; }
+    const string& getType() const { return m_type; }
     void setType(string& type) {
-        m_tag = type;
+        m_type = type;
     }
 
     void addIdentifier(string& str) {
@@ -68,7 +68,7 @@ public:
 friend class CssSelectorGroup;
 
 private:
-    string m_tag;
+    string m_type;
     CssSelectorPieceVec m_identifiers;
     CssSelectorPieceVec m_classes;
     CssSelectorPieceVec m_attributes;
@@ -86,13 +86,18 @@ public:
     ~CssSelectorGroup();
 
     enum {
-        CSS_STATIC  = 0,
+        CSS_NOMATCHED   = 0,
+        CSS_STATIC,
         CSS_DYNAMIC,
     };
 
     bool compile(const char* selector);
     int match(const View* view);
     void clear();
+
+#ifdef _UNIT_TEST
+    void _print();
+#endif
 
 private:
     bool compileSingle(char* token, CssSelector& one);

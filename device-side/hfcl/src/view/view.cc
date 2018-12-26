@@ -21,6 +21,8 @@
 
 #include "view/view.h"
 
+#include "common/helpers.h"
+
 #include <string.h>
 #include <string>
 
@@ -33,14 +35,19 @@
 
 namespace hfcl {
 
-/* add a space to the tail */
-static void append_space (std::string& str)
+/* make sure there is a space at the head and the tail */
+static void add_spaces (std::string& str)
 {
     if (str.empty ()) {
         str = ' ';
     }
-    else if (str.back() != ' ') {
-        str += ' ';
+    else {
+        if (str.front() != ' ') {
+            str = ' ' + str;
+        }
+        if (str.back() != ' ') {
+            str += ' ';
+        }
     }
 }
 
@@ -54,7 +61,7 @@ View::View(int id, const char* cssClass, const char* name)
     , m_prev(0)
     , m_next(0)
 {
-    append_space (m_cssCls);
+    add_spaces (m_cssCls);
     m_cssd_user = HFCL_NEW_EX(CssDeclared, (""));
 }
 
@@ -111,13 +118,15 @@ ok:
 bool View::setClass(const char* cssClass)
 {
     std::string tmp = cssClass;
-    append_space (tmp);
+    add_spaces (tmp);
 
     if (strcasecmp (tmp.c_str(), m_cssCls.c_str()) == 0) {
         return false;
     }
 
-    m_cssCls = cssClass;
+    m_cssCls = ' ';
+    m_cssCls += cssClass;
+    m_cssCls += ' ';
     onClassChanged();
     return true;
 }
@@ -125,7 +134,7 @@ bool View::setClass(const char* cssClass)
 bool View::includeClass(const char* cssClass)
 {
     std::string tmp = cssClass;
-    append_space (tmp);
+    add_spaces (tmp);
 
     if (strcasestr (m_cssCls.c_str(), tmp.c_str())) {
         return false;
@@ -140,7 +149,7 @@ bool View::includeClass(const char* cssClass)
 bool View::excludeClass(const char* cssClass)
 {
     std::string tmp = cssClass;
-    append_space (tmp);
+    add_spaces (tmp);
 
     const char* full = m_cssCls.c_str();
     const char* found;
@@ -150,7 +159,7 @@ bool View::excludeClass(const char* cssClass)
     }
 
     size_t pos = (size_t)(found - full);
-    m_cssCls.erase (pos, tmp.length());
+    m_cssCls.erase (pos, tmp.length() - 1);
     onClassChanged();
     return true;
 }
