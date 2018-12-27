@@ -38,6 +38,9 @@ namespace hfcl {
 
 #define CSS_PPT_VALUE_FLAG_INHERITED        0x80000000
 #define CSS_PPT_VALUE_FLAG_NOT_INHERITED    0x00000000
+#define CSS_PPT_VALUE_FLAG_COMPUTED         0x40000000
+#define CSS_PPT_VALUE_FLAG_IMPORTANT        0x20000000
+
 #define MAKE_CSS_PPT_INITIAL_VALUE(inherited, type, keyword)    \
     ((Uint32)(                                                  \
         ((Uint32)((keyword) & 0xFFFF)) |                        \
@@ -45,16 +48,20 @@ namespace hfcl {
         (inherited)                                             \
     ))
 
-#define CSS_PPT_VALUE_INHERITED(value) \
+#define IS_CSS_PPT_VALUE_INHERITED(value) \
     ((value) & CSS_PPT_VALUE_FLAG_INHERITED)
 #define MARK_CSS_PPT_VALUE_INHERITED(value) \
     ((value) |= CSS_PPT_VALUE_FLAG_INHERITED)
 
-#define CSS_PPT_VALUE_FLAG_COMPUTED     0x40000000
-#define CSS_PPT_VALUE_COMPUTED(value) \
+#define IS_CSS_PPT_VALUE_COMPUTED(value) \
     ((value) & CSS_PPT_VALUE_FLAG_COMPUTED)
 #define MARK_CSS_PPT_VALUE_COMPUTED(value) \
     ((value) |= CSS_PPT_VALUE_FLAG_COMPUTED)
+
+#define IS_CSS_PPT_VALUE_IMPORTANT(value) \
+    ((value) & CSS_PPT_VALUE_FLAG_IMPORTANT)
+#define MARK_CSS_PPT_VALUE_IMPORTANT(value) \
+    ((value) |= CSS_PPT_VALUE_FLAG_IMPORTANT)
 
 #include "csspropertyvalue.inc"
 
@@ -93,8 +100,16 @@ public:
     }
     ~CssPropertyValue() {};
 
-    bool isInherited() const { return (bool)CSS_PPT_VALUE_INHERITED(m_value); }
-    bool isComputed() const { return (bool)CSS_PPT_VALUE_COMPUTED(m_value); }
+    bool isInherited() const {
+        return (bool)IS_CSS_PPT_VALUE_INHERITED(m_value);
+    }
+    bool isComputed() const {
+        return (bool)IS_CSS_PPT_VALUE_COMPUTED(m_value);
+    }
+    bool isImportant() const {
+        return (bool)IS_CSS_PPT_VALUE_IMPORTANT(m_value);
+    }
+
     Uint32 getValue() const { return m_value; }
     int getType() const { return CSS_PPT_VALUE_TYPE(m_value); }
     int getKeyword() const { return CSS_PPT_VALUE_KEYWORD(m_value); }

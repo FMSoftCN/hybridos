@@ -361,7 +361,7 @@ bool CssSelectorGroup::compile(const char* selector)
  *  CSS_STATIC: static css
  *  CSS_DYNAMIC: dynamic css, for pseudo classes
  */
-int CssSelectorGroup::match(const View* view) const
+int CssSelectorGroup::match(const View* view, DWORD& specif) const
 {
     CssSelectorVec::const_iterator it;
     for (it = m_group.begin(); it != m_group.end(); ++it) {
@@ -577,6 +577,8 @@ int main ()
     View view_a ("hvtext", "active", "foo", "foo=bar", "first-child", "focus");
 
     for (size_t i = 0; i < TABLESIZE(selectors); i++) {
+        DWORD specif;
+
         printf("Compiling \"%s\"\n", selectors[i]);
         csg.compile(selectors[i]);
 
@@ -585,7 +587,7 @@ int main ()
 
         std::string selector;
         view_a.genSelector(selector);
-        switch (csg.match(&view_a)) {
+        switch (csg.match(&view_a, specif)) {
         case CssSelectorGroup::CSS_STATIC:
             printf("View (%s) matches staticly\n", selector.c_str());
             break;

@@ -61,6 +61,7 @@ View::View(int id, const char* cssCls, const char* name)
     , m_parent(0)
     , m_prev(0)
     , m_next(0)
+    , m_css_computed(0)
 {
     add_spaces (m_cssCls);
     m_cssd_user = HFCL_NEW_EX(CssDeclared, (""));
@@ -589,16 +590,23 @@ HWND View::getSysWindow() const
 
 void View::applyCss(CssDeclared* css, const CssSelectorGroup& selector)
 {
-    switch (selector.match(this)) {
+    DWORD specif;
+
+    switch (selector.match(this, specif)) {
     case CssSelectorGroup::CSS_STATIC:
-        m_cssdg_static.append(css);
+        m_cssdg_static.append(css, specif);
         break;
     case CssSelectorGroup::CSS_DYNAMIC:
-        m_cssdg_dynamic.append(css);
+        m_cssdg_dynamic.append(css, specif);
         break;
     default:
         break;
     }
+}
+
+
+void View::computeCss(const IntRect& viewportRc)
+{
 }
 
 } // namespace hfcl

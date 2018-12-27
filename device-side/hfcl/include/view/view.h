@@ -209,7 +209,6 @@ public:
     /* virtual functions for rendering */
     // return the HVML type, e.g., hvroot, hvtext, hvimg, hvli, and so on
     virtual void applyCss(CssDeclared* css, const CssSelectorGroup& selector);
-    virtual void computeCss(const IntRect& viewportRc);
 
     /* virtual functions for events and attribute changes */
     virtual void onNameChanged() = 0;
@@ -368,6 +367,15 @@ protected:
         FLAG_SHIFT          = 9
     };
 
+    inline bool setFlag(bool b, unsigned int flag) {
+        bool old = m_flags & flag;
+        if(b)
+            m_flags |= flag;
+        else
+            m_flags &= (~flag);
+        return old;
+    }
+
     int m_id;
     std::string m_cssCls;
     std::string m_name;
@@ -378,14 +386,22 @@ protected:
     View *m_prev;
     View *m_next;
 
+    MAPCLASSKEY(utf8string, utf8string, AttributesMap);
+    AttributesMap m_attrs;
+
     /* CSS-related members */
+    // compute CSS property values
+    virtual void computeCss(const IntRect& viewportRc);
     // user-defined CSS (properties specified on the fly)
     CssDeclared* m_cssd_user;
     // All selected CssDeclared objects for the view
-    CssDeclaredGroup m_cssdg_static;
-    CssDeclaredGroup m_cssdg_dynamic;
+    CssDeclaredGroupWithSpecificity m_cssdg_static;
+    CssDeclaredGroupWithSpecificity m_cssdg_dynamic;
     // The computed values of all CSS properties.
     CssComputed* m_css_computed;
+
+    /* Visual formatting */
+    virtual void layout();
     // The pricipal box of the view, either a CssBoxBlock,
     // a CssBoxInline, or a CssBoxLineBoxContainer
     CssBox* m_box_principal;
@@ -394,31 +410,23 @@ protected:
 
     IntRect m_rc_viewport;
     IntRect m_rect;
-    ScrollBar* m_vsb;
-    ScrollBar* m_hsb;
-
-    MAPCLASSKEY(utf8string, utf8string, AttributesMap);
-    AttributesMap m_attrs;
 
     LISTEX(EventListener *, EventListenerList,
-            do{return *v1 == *v2;}while (0), do{(*n)->unref();} while (0));
+            do { return *v1 == *v2; } while (0),
+            do { (*n)->unref(); } while (0));
     EventListenerList m_listeners;
     void releaseEventListeners();
 
-    inline bool setFlag(bool b, unsigned int flag) {
-        bool old = m_flags & flag;
-        if(b)
-            m_flags |= flag;
-        else
-            m_flags &= (~flag);
-        return old;
-    }
-
+    /* Members related to rendering */
     virtual void inner_updateView(int x, int y, int w, int h,
             bool upBackGnd = true);
     void inner_updateViewRect(int x, int y, int w, int h);
 
 private:
+
+    /* Members for scroll bars */
+    ScrollBar* m_vsb;
+    ScrollBar* m_hsb;
 };
 
 } // namespace hfcl

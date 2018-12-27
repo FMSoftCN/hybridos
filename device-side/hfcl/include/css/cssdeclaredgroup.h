@@ -34,7 +34,7 @@ VECTOR(CssDeclared*, CssDeclaredVec);
 class CssDeclaredGroup : public RefCount {
 public:
     CssDeclaredGroup() {}
-    ~CssDeclaredGroup();
+    virtual ~CssDeclaredGroup();
 
     bool append(CssDeclared* css);
 
@@ -42,6 +42,21 @@ public:
 
 protected:
     CssDeclaredVec m_css_vec;
+};
+
+VECTOR(DWORD, CssSpecificityVec);
+
+class CssDeclaredGroupWithSpecificity : public CssDeclaredGroup {
+public:
+    CssDeclaredGroupWithSpecificity() {}
+    ~CssDeclaredGroupWithSpecificity() {};
+
+    bool append(CssDeclared* css, DWORD spec);
+
+    friend class RootView;
+
+protected:
+    CssSpecificityVec m_spec_vec;
 };
 
 namespace css {

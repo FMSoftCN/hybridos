@@ -42,5 +42,15 @@ bool CssDeclaredGroup::append(CssDeclared* css)
     return true;
 }
 
+bool CssDeclaredGroupWithSpecificity::append(CssDeclared* css, DWORD selectorSpecif)
+{
+    if (!CssDeclaredGroup::append(css)) {
+        return false;
+    }
+
+    m_spec_vec.push_back(selectorSpecif);
+    return true;
+}
+
 } // namespace hfcl
 

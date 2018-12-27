@@ -74,7 +74,6 @@ public:
     /* overloaded virtual functions */
     virtual bool isContainer() const { return true; }
     virtual void applyCss(CssDeclared* css, const CssSelectorGroup& selector);
-    virtual void computeCss(const IntRect& viewportRc);
     virtual void drawBackground(GraphicsContext* context, IntRect &rc);
     virtual void drawContent(GraphicsContext *context, IntRect &rc);
     virtual bool dispatchEvent(Event* event);
@@ -100,6 +99,8 @@ protected:
         AUTOSIZE = (1 << View::FLAG_SHIFT),
         FLAG_SHIFT = (View::FLAG_SHIFT + 1)
     };
+
+    virtual void computeCss(const IntRect& viewportRc);
 };
 
 } // namespace hfcl

@@ -92,7 +92,7 @@ public:
     };
 
     bool compile(const char* selector);
-    int match(const View* view) const;
+    int match(const View* view, DWORD& specif) const;
     void clear();
 
 #ifdef _UNIT_TEST
