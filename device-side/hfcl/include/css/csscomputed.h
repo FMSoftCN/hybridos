@@ -23,6 +23,7 @@
 #define HFCL_CSS_CSSCOMPUTED_H_
 
 #include "../common/common.h"
+#include "../common/realrect.h"
 #include "../css/css.h"
 #include "../css/csspropertyvalue.h"
 
@@ -47,6 +48,10 @@ public:
 private:
     Uint32 m_values[MAX_CSS_PID];
     HTPVData m_data[MAX_CSS_PID];
+
+    bool convertArray(int pid, int t);
+    bool convertArray(int pid, int t, const RealRect& viewport);
+    bool convertArray(int pid, int t, const View& view);
 };
 
 } // namespace hfcl

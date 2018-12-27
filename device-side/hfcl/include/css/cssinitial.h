@@ -66,6 +66,7 @@ private:
 
     Uint32 m_values[MAX_CSS_PID];
     HTPVData m_data[MAX_CSS_PID];
+    Uint8 m_arraysize[MAX_CSS_PID];
 };
 
 namespace css {

@@ -117,21 +117,25 @@ border-top-left-radius
     values: <length> <percentage> <array-length> <array-percentage>
     initial: <length-px>=0
     inherited: no
+    arraysize: 2
 
 border-top-right-radius
     values: <length> <percentage> <array-length> <array-percentage>
     initial: <length-px>=0
     inherited: no
+    arraysize: 2
 
 border-bottom-right-radius
     values: <length> <percentage> <array-length> <array-percentage>
     initial: <length-px>=0
     inherited: no
+    arraysize: 2
 
 border-bottom-left-radius
     values: <length> <percentage> <array-length> <array-percentage>
     initial: <length-px>=0
     inherited: no
+    arraysize: 2
 
 bottom
     values: <length> <percentage> auto inherit
@@ -466,3 +470,4 @@ z-index
     initial: auto
     inherited: no
     appliesto: positioned
+

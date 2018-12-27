@@ -41,6 +41,7 @@ namespace hfcl {
 #define CSS_PPT_VALUE_FLAG_NOT_INHERITED    0x00000000
 #define CSS_PPT_VALUE_FLAG_COMPUTED         0x40000000
 #define CSS_PPT_VALUE_FLAG_IMPORTANT        0x20000000
+#define CSS_PPT_VALUE_FLAG_ALLOCATED        0x10000000
 
 #define MAKE_CSS_PPT_INITIAL_VALUE(inherited, type, keyword)    \
     ((Uint32)(                                                  \
@@ -63,6 +64,11 @@ namespace hfcl {
     ((value) & CSS_PPT_VALUE_FLAG_IMPORTANT)
 #define MARK_CSS_PPT_VALUE_IMPORTANT(value) \
     ((value) |= CSS_PPT_VALUE_FLAG_IMPORTANT)
+
+#define IS_CSS_PPT_VALUE_ALLOCATED(value) \
+    ((value) & CSS_PPT_VALUE_FLAG_ALLOCATED)
+#define MARK_CSS_PPT_VALUE_ALLOCATED(value) \
+    ((value) |= CSS_PPT_VALUE_FLAG_ALLOCATED)
 
 #include "csspropertyvalue.inc"
 

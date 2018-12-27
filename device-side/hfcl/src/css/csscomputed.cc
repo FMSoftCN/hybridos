@@ -44,6 +44,112 @@ void CssComputed::reset()
     memcpy(&m_data, initial->m_values, sizeof(m_data));
 }
 
+/* absolute lengths */
+bool CssComputed::convertArray (int pid, int t)
+{
+    CssInitial* initial = CssInitial::getSingleton();
+    Uint8 n = initial->m_arraysize[pid];
+    if (n == 0)
+        return false;
+
+    HTReal* p = new HTReal[n];
+    HTReal* old = (HTReal*)m_data[pid].p;
+    for (int i = 0; i < n; i++) {
+        switch(t) {
+        /* absolute lengths */
+        case PVT_ARRAY_LENGTH_CM:
+            p[i] = (old[i] * 96.0/2.54);
+            break;
+        case PVT_ARRAY_LENGTH_IN:
+            p[i] = (old[i] * 96.0);
+            break;
+        case PVT_ARRAY_LENGTH_MM:
+            p[i] = (old[i] * 96.0/2.54/10.0);
+            break;
+        case PVT_ARRAY_LENGTH_PC:
+            p[i] = (old[i] * 96.0/6.0);
+            break;
+        case PVT_ARRAY_LENGTH_PT:
+            p[i] = (old[i] * 96.0/72.0);
+            break;
+        case PVT_ARRAY_LENGTH_Q:
+            p[i] = (old[i] * 96.0/2.54/40);
+            break;
+        default:
+            delete [] p;
+            return false;
+        }
+
+        p++;
+    }
+
+    m_values[pid] = CSS_PPT_VALUE_FLAG_ALLOCATED | PV_ARRAY_LENGTH_PX;
+    m_data[pid].p = p;
+    return true;
+}
+
+/* viewport-relative lengths */
+bool CssComputed::convertArray (int pid, int t, const RealRect& viewport)
+{
+    CssInitial* initial = CssInitial::getSingleton();
+    Uint8 n = initial->m_arraysize[pid];
+    if (n == 0)
+        return false;
+
+    HTReal* p = new HTReal[n];
+    HTReal* old = (HTReal*)m_data[pid].p;
+    for (int i = 0; i < n; i++) {
+        switch(t) {
+        case PVT_ARRAY_LENGTH_VW:
+            p[i] = (old[i] * viewport.width()/100.0);
+            break;
+        case PVT_ARRAY_LENGTH_VH:
+            p[i] = (old[i] * viewport.height()/100.0);
+            break;
+        case PVT_ARRAY_LENGTH_VMAX:
+            p[i] = (old[i] * viewport.maxWH()/100.0);
+            break;
+        case PVT_ARRAY_LENGTH_VMIN:
+            p[i] = (old[i] * viewport.minWH()/100.0);
+            break;
+        default:
+            delete [] p;
+            return false;
+        }
+    }
+
+    m_values[pid] = CSS_PPT_VALUE_FLAG_ALLOCATED | PV_ARRAY_LENGTH_PX;
+    m_data[pid].p = p;
+    return true;
+}
+
+/* font-relative lengths */
+bool CssComputed::convertArray (int pid, int t, const View& view)
+{
+    CssInitial* initial = CssInitial::getSingleton();
+    Uint8 n = initial->m_arraysize[pid];
+    if (n == 0)
+        return false;
+
+    HTReal* p = new HTReal[n];
+    //HTReal* old = (HTReal*)m_data[pid].p;
+    for (int i = 0; i < n; i++) {
+        switch(t) {
+        case PVT_ARRAY_LENGTH_EM:
+        case PVT_ARRAY_LENGTH_EX:
+        case PVT_ARRAY_LENGTH_CH:
+        case PVT_ARRAY_LENGTH_REM:
+            break;
+        default:
+            delete [] p;
+            return false;
+        }
+    }
+
+    m_values[pid] = CSS_PPT_VALUE_FLAG_ALLOCATED | PV_ARRAY_LENGTH_PX;
+    m_data[pid].p = p;
+    return true;
+}
 /*
  * A specified value can be either absolute (i.e., not relative to
  * another value, as in red or 2mm) or relative (i.e., relative to
@@ -104,19 +210,19 @@ bool CssComputed::makeAbsolute(const View& view)
         /* viewport-relative lengths */
         case PVT_LENGTH_VW:
             m_values[i] = PV_LENGTH_PX;
-            m_data[i].r = (viewport.width()/100.0);
+            m_data[i].r = (m_data[i].r * viewport.width()/100.0);
             break;
         case PVT_LENGTH_VH:
             m_values[i] = PV_LENGTH_PX;
-            m_data[i].r = (viewport.height()/100.0);
+            m_data[i].r = (m_data[i].r * viewport.height()/100.0);
             break;
         case PVT_LENGTH_VMAX:
             m_values[i] = PV_LENGTH_PX;
-            m_data[i].r = (viewport.maxWH()/100.0);
+            m_data[i].r = (m_data[i].r * viewport.maxWH()/100.0);
             break;
         case PVT_LENGTH_VMIN:
             m_values[i] = PV_LENGTH_PX;
-            m_data[i].r = (viewport.minWH()/100.0);
+            m_data[i].r = (m_data[i].r * viewport.minWH()/100.0);
             break;
 
         /* font-relative lengths */
@@ -135,36 +241,28 @@ bool CssComputed::makeAbsolute(const View& view)
 
         /* absolute lengths */
         case PVT_ARRAY_LENGTH_CM:
-            break;
         case PVT_ARRAY_LENGTH_MM:
-            break;
         case PVT_ARRAY_LENGTH_IN:
-            break;
         case PVT_ARRAY_LENGTH_PC:
-            break;
         case PVT_ARRAY_LENGTH_PT:
-            break;
         case PVT_ARRAY_LENGTH_Q:
+            convertArray (i, type);
             break;
 
         /* viewport-relative lengths */
         case PVT_ARRAY_LENGTH_VW:
-            break;
         case PVT_ARRAY_LENGTH_VH:
-            break;
         case PVT_ARRAY_LENGTH_VMAX:
-            break;
         case PVT_ARRAY_LENGTH_VMIN:
+            convertArray (i, type, viewport);
             break;
 
         /* font-relative lengths */
         case PVT_ARRAY_LENGTH_EM:
-            break;
         case PVT_ARRAY_LENGTH_EX:
-            break;
         case PVT_ARRAY_LENGTH_CH:
-            break;
         case PVT_ARRAY_LENGTH_REM:
+            convertArray (i, type, view);
             break;
 
         case PVT_ARRAY_LENGTH_PX:

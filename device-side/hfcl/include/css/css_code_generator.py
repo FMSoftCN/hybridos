@@ -64,6 +64,12 @@ def start_with_appliesto(line):
         return False
     return True
 
+RE_START_WITH_ARRAYSIZE = re.compile(r"^\s+arraysize:")
+def start_with_arraysize(line):
+    if RE_START_WITH_ARRAYSIZE.match(line) == None:
+        return False
+    return True
+
 RE_START_WITH_SPACE = re.compile(r"^\s")
 def start_with_space(line):
     if RE_START_WITH_SPACE.match(line) == None:
@@ -260,6 +266,14 @@ def scan_src_file(fsrc):
                     return None
                 else:
                     property_info[property_token]['appliesto'] = appliesto_value
+
+            elif start_with_arraysize (org_line):
+                arraysize_value = get_value(stripped_line)
+                if arraysize_value is None:
+                    print("scan_src_file (Line %d): arraysize value expected (%s)" % (line_no, stripped_line, ))
+                    return None
+                else:
+                    property_info[property_token]['arraysize'] = arraysize_value
 
             elif not start_with_space (org_line):
                 property_token = stripped_line
@@ -548,9 +562,8 @@ def write_class_cssinitial(fout, property_info):
     fout.write("\n")
     fout.write("CssInitial::CssInitial ()\n")
     fout.write("{\n")
-
-    fout.write("\n")
     fout.write("    memset(&m_data, 0, sizeof(m_data));\n")
+    fout.write("    memset(&m_arraysize, 0, sizeof(m_arraysize));\n")
     fout.write("\n")
 
     fout.write("    // Initial values\n")
@@ -558,6 +571,10 @@ def write_class_cssinitial(fout, property_info):
         pid = make_property_id(property_token);
         value_token = property_info[property_token]['initial']
         inherited = property_info[property_token]['inherited']
+        if 'arraysize' in property_info[property_token]:
+            arraysize = property_info[property_token]['arraysize']
+        else:
+            arraysize = None
         initial_value, user_data = make_initial_value (property_token, value_token, inherited)
         fout.write("    m_values[%s] = %s;\n" % (pid, initial_value, ))
         if user_data is not None:
@@ -571,7 +588,9 @@ def write_class_cssinitial(fout, property_info):
             elif value_type == "HTPointer":
                 fout.write("    m_data[%s].p = %s;\n" % (pid, user_data, ))
             else:
-                fout.write("    m_data[%s].p = 0;\n")
+                fout.write("    m_data[%s].p = 0;\n" % (pid, ))
+        if arraysize is not None:
+            fout.write("    m_arraysize[%s] = %s;\n" % (pid, arraysize, ))
         fout.write("\n")
 
     fout.write("}\n")
@@ -691,6 +710,7 @@ if __name__ == "__main__":
         write_class_cssinitial(fdst, property_info)
     except:
         print("FAILED")
+        traceback.print_exc()
         sys.exit(13)
     fdst.close()
     print("DONE")
