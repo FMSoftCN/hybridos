@@ -27,10 +27,10 @@ namespace hfcl {
 
 ViewContainer::ViewContainer(int id, const char* cssClass, const char* name)
     : View(id, cssClass, name)
-    , m_focusView(0)
-    , m_firstChild(NULL)
-    , m_lastChild(NULL)
-    , m_childCount(0)
+    , m_focused(0)
+    , m_first(NULL)
+    , m_last(NULL)
+    , m_nr_children(0)
 {
 }
 
@@ -44,7 +44,7 @@ View* ViewContainer::firstEnabledChild(void)
     View* view = NULL;
     if (childrenCount() < 1)
         return NULL;
-    view = m_firstChild;
+    view = m_first;
 
     while(view) {
         if (!view->isDisabled())
@@ -83,15 +83,15 @@ bool ViewContainer::insertAfter(View* view, View *child)
     }
     child->setNext(next);
 
-    if(view == m_lastChild)
-        m_lastChild = child;
+    if(view == m_last)
+        m_last = child;
 
-    if(!m_firstChild)
-        m_firstChild = child;
+    if(!m_first)
+        m_first = child;
 
     child->setParent(this);
 
-    m_childCount ++;
+    m_nr_children ++;
     return true;
 }
 
@@ -133,15 +133,15 @@ bool ViewContainer::insertBefore(View *view, View* child)
     }
     child->setPrev(prev);
 
-    if(view == m_firstChild)
-        m_firstChild = child;
+    if(view == m_first)
+        m_first = child;
 
-    if(!m_lastChild)
-        m_lastChild = child;
+    if(!m_last)
+        m_last = child;
 
     child->setParent(this);
 
-    m_childCount ++;
+    m_nr_children ++;
     return true;
 }
 
@@ -162,7 +162,7 @@ int ViewContainer::removeChild(int index, bool bRelease)
 
 int ViewContainer::removeAll()
 {
-    View *  view = m_firstChild;
+    View *  view = m_first;
     while(view)
     {
         View *tmp = view;
@@ -172,12 +172,12 @@ int ViewContainer::removeAll()
         HFCL_DELETE(tmp);
     }
 
-    m_firstChild = NULL;
-    m_lastChild = NULL;
-    m_childCount = 0;
+    m_first = NULL;
+    m_last = NULL;
+    m_nr_children = 0;
 
-    if(m_focusView)
-        m_focusView = NULL;
+    if(m_focused)
+        m_focused = NULL;
 
    return 0;
 }
@@ -200,20 +200,20 @@ int ViewContainer::detachChild(View* view)
     if(next)
         next->setPrev(prev);
 
-    if(view == m_firstChild) {
-        m_firstChild = next;
+    if(view == m_first) {
+        m_first = next;
     }
 
-    if(view == m_lastChild) {
-        m_lastChild = prev;
+    if(view == m_last) {
+        m_last = prev;
     }
 
-    m_childCount --;
+    m_nr_children --;
 
     view->setParent(NULL);
 
-    if(m_focusView == view) {
-        m_focusView = NULL;
+    if(m_focused == view) {
+        m_focused = NULL;
     }
 
     return 0;
@@ -244,8 +244,8 @@ View* ViewContainer::getChildByIndex(int idx) const
     if (idx < 0)
         return lastChild();
 
-    if (idx > (m_childCount >> 1))
-        for (view = lastChild(), idx = m_childCount - idx - 1;
+    if (idx > (m_nr_children >> 1))
+        for (view = lastChild(), idx = m_nr_children - idx - 1;
                 view && idx > 0; view = view->getPrev(), idx --);
     else
         for(view = firstChild();
@@ -395,8 +395,8 @@ bool ViewContainer::dispatchEvent(Event* event)
     case Event::KEY_ALWAYSPRESS:
     case Event::KEY_UP:
     case Event::KEY_CHAR: {
-        if (m_focusView) {
-            return m_focusView->dispatchEvent(event);
+        if (m_focused) {
+            return m_focused->dispatchEvent(event);
         }
         break;
     }
@@ -414,35 +414,35 @@ void ViewContainer::focusChild(View* view)
     if(view == NULL)
         return ;
 
-    if(m_focusView == view)
+    if(m_focused == view)
         return ;
 
-    old_focusView = m_focusView;
-    m_focusView = view;
+    old_focusView = m_focused;
+    m_focused = view;
 
     if(old_focusView)
         old_focusView->onLostFocus();
 
     setFocusable(true);
 
-    m_focusView->onGotFocus();
+    m_focused->onGotFocus();
 
-    if (m_focusView->isContainer()){
-        View * focus = ((ViewContainer *)m_focusView)->getFocusedChild();
+    if (m_focused->isContainer()){
+        View * focus = ((ViewContainer *)m_focused)->getFocusedChild();
         if(focus)
-            m_focusView->setFocus(focus);
+            m_focused->setFocus(focus);
     }
 }
 
 void ViewContainer::unfocusChild(void)
 {
     View* old_focusView = NULL;
-    if (m_focusView == (View *)0){
+    if (m_focused == (View *)0){
         return;
     }
 
-    old_focusView = m_focusView;
-    m_focusView = NULL;
+    old_focusView = m_focused;
+    m_focused = NULL;
 
     old_focusView->onLostFocus();
     if (old_focusView->isContainer()){
@@ -452,7 +452,7 @@ void ViewContainer::unfocusChild(void)
 
     // FIXME
     /*
-    CustomEvent event(Event::CUSTOM_NOTIFY, (int)VN_LOSTFOCUS, (int)m_focusView);
+    CustomEvent event(Event::CUSTOM_NOTIFY, (int)VN_LOSTFOCUS, (int)m_focused);
     raiseEvent(&event);
     */
 }
@@ -468,13 +468,24 @@ void ViewContainer::autoFitSize(bool auto_child_fit)
 
 void ViewContainer::applyCss(CssDeclared* css, const CssSelectorGroup& selector)
 {
-    View* child = m_firstChild;
+    View* child = m_first;
     while (child) {
         child->applyCss(css, selector);
         child = child->getNext();
     }
 
     View::applyCss(css, selector);
+}
+
+void ViewContainer::computeCss()
+{
+    View::computeCss();
+
+    View* child = m_first;
+    while (child) {
+        child->computeCss();
+        child = child->getNext();
+    }
 }
 
 } // namespace hfcl

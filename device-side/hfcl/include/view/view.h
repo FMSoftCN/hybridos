@@ -202,12 +202,12 @@ public:
     bool checkAttribute(const char* attrKey, const char* attrValue) const;
     bool checkAttribute(const char* attrPair) const;
 
+    // return the HVML type, e.g., hvroot, hvtext, hvimg, hvli, and so on
     virtual const char* type() const = 0;
     virtual bool isContainer() const { return false; }
     virtual bool isRoot() const { return false; }
 
     /* virtual functions for rendering */
-    // return the HVML type, e.g., hvroot, hvtext, hvimg, hvli, and so on
     virtual void applyCss(CssDeclared* css, const CssSelectorGroup& selector);
 
     /* virtual functions for events and attribute changes */
@@ -353,6 +353,8 @@ public:
         return true;
     }
 
+    friend class ViewContainer;
+
 protected:
     enum {
         VA_DISABLED         = (0x01 << 0),
@@ -390,8 +392,6 @@ protected:
     AttributesMap m_attrs;
 
     /* CSS-related members */
-    // compute CSS property values
-    virtual void computeCss(const IntRect& viewportRc);
     // user-defined CSS (properties specified on the fly)
     CssDeclared* m_cssd_user;
     // All selected CssDeclared objects for the view
@@ -399,6 +399,9 @@ protected:
     CssDeclaredGroupWithSpecificity m_cssdg_dynamic;
     // The computed values of all CSS properties.
     CssComputed* m_css_computed;
+
+    // compute CSS property values
+    virtual void computeCss();
 
     /* Visual formatting */
     virtual void layout();

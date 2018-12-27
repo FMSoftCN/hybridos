@@ -27,6 +27,7 @@
 #include <minigui/gdi.h>
 #include <minigui/window.h>
 
+#include "../common/realrect.h"
 #include "../view/viewcontainer.h"
 #include "../css/cssdeclared.h"
 #include "../graphics/graphicscontext.h"
@@ -44,6 +45,7 @@ public:
     bool attachToSysWindow(HWND hwnd);
     bool detachFromSysWindow();
     bool applyCssGroup(HTResId cssgId);
+    const RealRect& viewport() const { return m_viewport; }
 
     /* overloaded virtual functions */
     virtual const char* type() const { return "hvroot"; }
@@ -70,6 +72,7 @@ protected:
 
 private:
     HWND m_hwnd;
+    RealRect m_viewport;
     WNDPROC m_old_proc;
 };
 

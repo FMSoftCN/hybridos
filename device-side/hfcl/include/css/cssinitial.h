@@ -29,6 +29,8 @@
 
 namespace hfcl {
 
+class CssComputed;
+
 class CssInitial : public Css {
 public:
     CssInitial();
@@ -56,6 +58,8 @@ public:
             s_singleton = HFCL_NEW_EX(CssInitial, ());
         return s_singleton;
     }
+
+    friend class CssComputed;
 
 private:
     static CssInitial* s_singleton;

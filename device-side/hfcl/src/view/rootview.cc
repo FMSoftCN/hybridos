@@ -49,8 +49,8 @@ bool RootView::attachToSysWindow(HWND hwnd)
 
         RECT rc;
         GetClientRect(hwnd, &rc);
-        IntRect rcViewport(rc);
-        computeCss(rcViewport);
+        m_viewport = rc;
+        computeCss();
         return true;
     }
 

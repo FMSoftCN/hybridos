@@ -22,6 +22,7 @@
 #include "css/cssselector.h"
 
 #include <string.h>
+#include <minigui/common.h>
 
 #ifdef _UNIT_TEST
 
@@ -361,26 +362,6 @@ bool CssSelectorGroup::compile(const char* selector)
  *  CSS_STATIC: static css
  *  CSS_DYNAMIC: dynamic css, for pseudo classes
  */
-#if SIZEOF_PTR == 8
-typedef unsigned short QDWORD;
-#define MAKEDWORD(q1, q2, q3, q4) \
-    ((DWORD)( \
-        (((DWORD)(QDWORD)(q1))) | \
-        (((DWORD)((QDWORD)(q2))) << 16) | \
-        (((DWORD)((QDWORD)(q3))) << 32) | \
-        (((DWORD)((QDWORD)(q4))) << 48) \
-    ))
-#else
-typedef unsigned char  QDWORD;
-#define MAKEDWORD(q1, q2, q3, q4) \
-    ((DWORD)( \
-        (((DWORD)(QDWORD)(q1))) | \
-        (((DWORD)((QDWORD)(q2))) << 8) | \
-        (((DWORD)((QDWORD)(q3))) << 16) | \
-        (((DWORD)((QDWORD)(q4))) << 24) \
-    ))
-#endif
-
 int CssSelectorGroup::match(const View* view, DWORD& specif) const
 {
     CssSelectorVec::const_iterator it;

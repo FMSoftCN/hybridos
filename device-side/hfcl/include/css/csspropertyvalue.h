@@ -33,6 +33,7 @@ namespace hfcl {
         ((Uint32)((type) & 0x0FFF) << 16)    \
     ))
 
+#define CSS_PPT_VALUE_NOFLAGS(value)    ((value) & 0x0FFFFFFF)
 #define CSS_PPT_VALUE_TYPE(value)       (((value) & 0x0FFF0000) >> 16)
 #define CSS_PPT_VALUE_KEYWORD(value)    ((value) & 0x0000FFFF)
 

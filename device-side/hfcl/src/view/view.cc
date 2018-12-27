@@ -27,6 +27,7 @@
 
 #include <string>
 
+#include "css/csscomputed.h"
 #include "view/viewcontainer.h"
 #include "view/rootview.h"
 
@@ -70,6 +71,8 @@ View::View(int id, const char* cssCls, const char* name)
 View::~View()
 {
     m_cssd_user->unref();
+    if (m_css_computed)
+        delete m_css_computed;
 }
 
 bool View::attach(ViewContainer* parent)
@@ -288,9 +291,11 @@ bool View::checkPseudoClass(const char* pseudoCls) const
             break;
 
         case Css::CSS_KWST_NTH_CHILD:
+            /* TODO */
             break;
 
         case Css::CSS_KWST_NTH_LAST_CHILD:
+            /* TODO */
             break;
 
         case Css::CSS_KWST_ROOT:
@@ -604,8 +609,46 @@ void View::applyCss(CssDeclared* css, const CssSelectorGroup& selector)
     }
 }
 
-void View::computeCss(const IntRect& viewportRc)
+void View::computeCss()
 {
+    if (m_css_computed) {
+        m_css_computed->reset();
+    }
+    else {
+        m_css_computed = new CssComputed();
+    }
+
+    const std::vector<CssWithSpecificity>& vec = m_cssdg_static.getVec();
+    std::vector<CssWithSpecificity>::const_iterator it;
+    for (it = vec.begin(); it != vec.end(); ++it) {
+        const CssWithSpecificity& css_specif = *it;
+        const CssPropertyValueMap& pv_map = css_specif.css->getMap();
+
+        CssPropertyValueMap::const_iterator pv_it;
+        for (pv_it = pv_map.begin(); pv_it != pv_map.end(); ++pv_it) {
+            CssPropertyIds pid = (CssPropertyIds)(pv_it->first);
+            const CssPropertyValue* pv = pv_it->second;
+
+            // check inherit
+            Uint32 value = pv->getValue();
+            HTPVData data = pv->getData();
+            if (CSS_PPT_VALUE_NOFLAGS(value) == PV_INHERIT && m_parent) {
+                if (m_parent->m_css_computed == NULL) {
+                    _ERR_PRINTF("View::computeCss: No parent CssComputed\n");
+                }
+                else {
+                    m_parent->m_css_computed->getProperty(pid, &value, &data);
+                    m_css_computed->setProperty(pid, value, data);
+                }
+            }
+            else {
+                m_css_computed->setProperty(pid, value, data);
+            }
+        }
+    }
+
+    // make length/URI and others to be absolute here
+    m_css_computed->makeAbsolute(*this);
 }
 
 } // namespace hfcl

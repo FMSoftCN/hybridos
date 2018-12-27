@@ -60,6 +60,7 @@ public:
             HTPVData data);
 
     const char* getSelector() const { return m_selector; }
+    const CssPropertyValueMap& getMap() const { return m_map; }
 
     friend class View;
 

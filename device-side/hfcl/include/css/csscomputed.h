@@ -23,7 +23,6 @@
 #define HFCL_CSS_CSSCOMPUTED_H_
 
 #include "../common/common.h"
-#include "../common/stlalternative.h"
 #include "../css/css.h"
 #include "../css/csspropertyvalue.h"
 
@@ -33,18 +32,21 @@ namespace hfcl {
 
 class CssComputed : public Css {
 public:
-    CssComputed (View* view);
-    ~CssComputed ();
+    CssComputed ();
+    CssComputed (const CssComputed& init);
+    ~CssComputed () {};
 
-    virtual bool getProperty (CssPropertyIds pid, DWORD32 *value,
-            HTData *data = NULL);
-    virtual bool setProperty (CssPropertyIds pid, DWORD32 value,
-            HTData data = 0);
+    void reset();
+    bool makeAbsolute(const View& view);
+
+    virtual bool getProperty (CssPropertyIds pid, Uint32 *value,
+            HTPVData *data);
+    virtual bool setProperty (CssPropertyIds pid, Uint32 value,
+            HTPVData data);
 
 private:
-    View* m_view;
-    DWORD32 m_values[MAX_CSS_PID];
-    HTData m_data[MAX_CSS_PID];
+    Uint32 m_values[MAX_CSS_PID];
+    HTPVData m_data[MAX_CSS_PID];
 };
 
 } // namespace hfcl

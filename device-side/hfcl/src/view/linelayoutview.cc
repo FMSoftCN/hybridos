@@ -216,8 +216,8 @@ void LineLayoutView::removeAll(void)
 
     m_node = NULL;
     m_tailNode = NULL;
-    m_lastChild = m_firstChild = NULL;
-    m_childCount = 0;
+    m_last = m_first = NULL;
+    m_nr_children = 0;
 }
 
 int LineLayoutView::getNodeCount(void)

@@ -21,20 +21,131 @@
 
 #include "css/csscomputed.h"
 
+#include "css/cssinitial.h"
+#include "view/rootview.h"
+
 namespace hfcl {
 
-CssComputed::CssComputed (View* view) : m_view (view)
+CssComputed::CssComputed()
 {
-    memset(&m_values, 0, sizeof(m_values));
-    memset(&m_data, 0, sizeof(m_data));
+    reset();
 }
 
-CssComputed::~CssComputed ()
+CssComputed::CssComputed(const CssComputed& init)
 {
+    memcpy(&m_values, init.m_values, sizeof(m_values));
+    memcpy(&m_data, init.m_data, sizeof(m_data));
 }
 
-bool CssComputed::getProperty (CssPropertyIds pid, DWORD32 *value,
-        HTData *data)
+void CssComputed::reset()
+{
+    CssInitial* initial = CssInitial::getSingleton();
+    memcpy(&m_values, initial->m_values, sizeof(m_values));
+    memcpy(&m_data, initial->m_values, sizeof(m_data));
+}
+
+bool CssComputed::makeAbsolute(const View& view)
+{
+    const RootView* root = view.getRoot();
+    /* viewport should be defined in px */
+    const RealRect& viewport = root->viewport();
+
+    for (int i = 0; i < MAX_CSS_PID; i++) {
+
+        Uint32 type = CSS_PPT_VALUE_TYPE(m_values[i]);
+        switch (type) {
+        case PVT_LENGTH_Q:
+            m_values[i] = PV_LENGTH_PX;
+            m_data[i].r = (m_data[i].r * 96.0/2.54/40);
+            break;
+        case PVT_LENGTH_CH:
+            break;
+        case PVT_LENGTH_CM:
+            m_values[i] = PV_LENGTH_PX;
+            m_data[i].r = (m_data[i].r * 96.0/2.54);
+            break;
+        case PVT_LENGTH_EM:
+            break;
+        case PVT_LENGTH_EX:
+            break;
+        case PVT_LENGTH_IN:
+            m_values[i] = PV_LENGTH_PX;
+            m_data[i].r = (m_data[i].r * 96.0);
+            break;
+        case PVT_LENGTH_MM:
+            m_values[i] = PV_LENGTH_PX;
+            m_data[i].r = (m_data[i].r * 96.0/2.54/10.0);
+            break;
+        case PVT_LENGTH_PC:
+            m_values[i] = PV_LENGTH_PX;
+            m_data[i].r = (m_data[i].r * 96.0/6.0);
+            break;
+        case PVT_LENGTH_PT:
+            m_values[i] = PV_LENGTH_PX;
+            m_data[i].r = (m_data[i].r * 96.0/72.0);
+            break;
+        case PVT_LENGTH_PX:
+            break;
+        case PVT_LENGTH_REM:
+            break;
+        case PVT_LENGTH_VW:
+            m_values[i] = PV_LENGTH_PX;
+            m_data[i].r = (viewport.width()/100.0);
+            break;
+        case PVT_LENGTH_VH:
+            m_values[i] = PV_LENGTH_PX;
+            m_data[i].r = (viewport.height()/100.0);
+            break;
+        case PVT_LENGTH_VMAX:
+            m_values[i] = PV_LENGTH_PX;
+            m_data[i].r = (viewport.maxWH()/100.0);
+            break;
+        case PVT_LENGTH_VMIN:
+            m_values[i] = PV_LENGTH_PX;
+            m_data[i].r = (viewport.minWH()/100.0);
+            break;
+
+        case PVT_ARRAY_LENGTH_Q:
+            break;
+
+        case PVT_ARRAY_LENGTH_CH:
+            break;
+        case PVT_ARRAY_LENGTH_CM:
+            break;
+        case PVT_ARRAY_LENGTH_EM:
+            break;
+        case PVT_ARRAY_LENGTH_EX:
+            break;
+        case PVT_ARRAY_LENGTH_IN:
+            break;
+        case PVT_ARRAY_LENGTH_MM:
+            break;
+        case PVT_ARRAY_LENGTH_PC:
+            break;
+        case PVT_ARRAY_LENGTH_PT:
+            break;
+        case PVT_ARRAY_LENGTH_PX:
+            break;
+        case PVT_ARRAY_LENGTH_REM:
+            break;
+        case PVT_ARRAY_LENGTH_VW:
+            break;
+        case PVT_ARRAY_LENGTH_VH:
+            break;
+        case PVT_ARRAY_LENGTH_VMAX:
+            break;
+        case PVT_ARRAY_LENGTH_VMIN:
+            break;
+        default:
+            break;
+        }
+    }
+
+    return true;
+}
+
+bool CssComputed::getProperty(CssPropertyIds pid, Uint32 *value,
+        HTPVData *data)
 {
     if (value) {
         *value = m_values[pid];
@@ -45,8 +156,8 @@ bool CssComputed::getProperty (CssPropertyIds pid, DWORD32 *value,
     return true;
 }
 
-bool CssComputed::setProperty (CssPropertyIds pid, DWORD32 value,
-    HTData data)
+bool CssComputed::setProperty (CssPropertyIds pid, Uint32 value,
+    HTPVData data)
 {
     m_values[pid] = value;
     m_data[pid] = data;

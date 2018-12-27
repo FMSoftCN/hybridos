@@ -43,8 +43,8 @@ public:
         return child ? insertAfter(getChildByIndex(idx), child) : false;
     }
 
-    bool addChild(View* child) { return insertAfter(m_lastChild, child); }
-    bool addChildHead(View* child) { return insertBefore(m_firstChild, child); }
+    bool addChild(View* child) { return insertAfter(m_last, child); }
+    bool addChildHead(View* child) { return insertBefore(m_first, child); }
     // by default , we delete the child, but NOT when bRelease = false
     int  removeChild(View* child, bool bRelease = true);
     // by default , we delete the child, but NOT when bRelease = false
@@ -62,14 +62,14 @@ public:
 
     View* findDescendant(int id) const;
 
-    View* firstChild() const { return m_firstChild; }
+    View* firstChild() const { return m_first; }
     View* firstEnabledChild();
-    View* lastChild() const { return m_lastChild; }
-    int  childrenCount() const { return m_childCount; }
+    View* lastChild() const { return m_last; }
+    int  childrenCount() const { return m_nr_children; }
 
     void focusChild(View* view);
     void unfocusChild();
-    View* getFocusedChild() const { return m_focusView; }
+    View* getFocusedChild() const { return m_focused; }
 
     /* overloaded virtual functions */
     virtual bool isContainer() const { return true; }
@@ -90,17 +90,17 @@ public:
     bool isAutoSize() { return m_flags & AUTOSIZE; }
 
 protected:
-    View *m_focusView;
-    View *m_firstChild;
-    View *m_lastChild;
-    int   m_childCount;
+    View *m_focused;
+    View *m_first;
+    View *m_last;
+    int   m_nr_children;
 
     enum {
         AUTOSIZE = (1 << View::FLAG_SHIFT),
         FLAG_SHIFT = (View::FLAG_SHIFT + 1)
     };
 
-    virtual void computeCss(const IntRect& viewportRc);
+    virtual void computeCss();
 };
 
 } // namespace hfcl

@@ -30,6 +30,7 @@
 
 namespace hfcl {
 
+class View;
 class Rootview;
 
 VECTOR(CssDeclared*, CssDeclaredVec);
@@ -59,6 +60,10 @@ public:
 
     bool append(CssDeclared* css, DWORD specif);
     void sort();
+
+    const std::vector<CssWithSpecificity>& getVec() const {
+        return m_css_specif_vec;
+    }
 
     friend class RootView;
 

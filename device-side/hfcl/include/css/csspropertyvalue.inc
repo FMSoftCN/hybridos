@@ -213,26 +213,20 @@ typedef enum _CssPropertyValueTypes {
     PVT_KEYWORD,
     PVT_ALPHAVALUE,
     PVT_ARRAY_LENGTH_Q,
-    PVT_ARRAY_LENGTH_CAP,
     PVT_ARRAY_LENGTH_CH,
     PVT_ARRAY_LENGTH_CM,
     PVT_ARRAY_LENGTH_EM,
     PVT_ARRAY_LENGTH_EX,
-    PVT_ARRAY_LENGTH_IC,
     PVT_ARRAY_LENGTH_IN,
-    PVT_ARRAY_LENGTH_LH,
     PVT_ARRAY_LENGTH_MM,
     PVT_ARRAY_LENGTH_PC,
     PVT_ARRAY_LENGTH_PT,
     PVT_ARRAY_LENGTH_PX,
     PVT_ARRAY_LENGTH_REM,
-    PVT_ARRAY_LENGTH_RLH,
-    PVT_ARRAY_LENGTH_VB,
     PVT_ARRAY_LENGTH_VH,
-    PVT_ARRAY_LENGTH_VI,
-    PVT_ARRAY_LENGTH_VM,
     PVT_ARRAY_LENGTH_VMAX,
     PVT_ARRAY_LENGTH_VMIN,
+    PVT_ARRAY_LENGTH_VW,
     PVT_ARRAY_PERCENTAGE,
     PVT_ARRAY_STRING,
     PVT_COUNTER,
@@ -240,26 +234,20 @@ typedef enum _CssPropertyValueTypes {
     PVT_HSLA,
     PVT_INTEGER,
     PVT_LENGTH_Q,
-    PVT_LENGTH_CAP,
     PVT_LENGTH_CH,
     PVT_LENGTH_CM,
     PVT_LENGTH_EM,
     PVT_LENGTH_EX,
-    PVT_LENGTH_IC,
     PVT_LENGTH_IN,
-    PVT_LENGTH_LH,
     PVT_LENGTH_MM,
     PVT_LENGTH_PC,
     PVT_LENGTH_PT,
     PVT_LENGTH_PX,
     PVT_LENGTH_REM,
-    PVT_LENGTH_RLH,
-    PVT_LENGTH_VB,
     PVT_LENGTH_VH,
-    PVT_LENGTH_VI,
-    PVT_LENGTH_VM,
     PVT_LENGTH_VMAX,
     PVT_LENGTH_VMIN,
+    PVT_LENGTH_VW,
     PVT_NUMBER,
     PVT_PERCENTAGE,
     PVT_RGB,
@@ -900,8 +888,6 @@ typedef enum _CssPropertyValueKeywords {
 // Values for property background-position-x
 #define PV_LENGTH_Q \
     MAKE_CSS_PPT_VALUE(PVT_LENGTH_Q, PVK_USER_DATA)
-#define PV_LENGTH_CAP \
-    MAKE_CSS_PPT_VALUE(PVT_LENGTH_CAP, PVK_USER_DATA)
 #define PV_LENGTH_CH \
     MAKE_CSS_PPT_VALUE(PVT_LENGTH_CH, PVK_USER_DATA)
 #define PV_LENGTH_CM \
@@ -910,12 +896,8 @@ typedef enum _CssPropertyValueKeywords {
     MAKE_CSS_PPT_VALUE(PVT_LENGTH_EM, PVK_USER_DATA)
 #define PV_LENGTH_EX \
     MAKE_CSS_PPT_VALUE(PVT_LENGTH_EX, PVK_USER_DATA)
-#define PV_LENGTH_IC \
-    MAKE_CSS_PPT_VALUE(PVT_LENGTH_IC, PVK_USER_DATA)
 #define PV_LENGTH_IN \
     MAKE_CSS_PPT_VALUE(PVT_LENGTH_IN, PVK_USER_DATA)
-#define PV_LENGTH_LH \
-    MAKE_CSS_PPT_VALUE(PVT_LENGTH_LH, PVK_USER_DATA)
 #define PV_LENGTH_MM \
     MAKE_CSS_PPT_VALUE(PVT_LENGTH_MM, PVK_USER_DATA)
 #define PV_LENGTH_PC \
@@ -926,20 +908,14 @@ typedef enum _CssPropertyValueKeywords {
     MAKE_CSS_PPT_VALUE(PVT_LENGTH_PX, PVK_USER_DATA)
 #define PV_LENGTH_REM \
     MAKE_CSS_PPT_VALUE(PVT_LENGTH_REM, PVK_USER_DATA)
-#define PV_LENGTH_RLH \
-    MAKE_CSS_PPT_VALUE(PVT_LENGTH_RLH, PVK_USER_DATA)
-#define PV_LENGTH_VB \
-    MAKE_CSS_PPT_VALUE(PVT_LENGTH_VB, PVK_USER_DATA)
 #define PV_LENGTH_VH \
     MAKE_CSS_PPT_VALUE(PVT_LENGTH_VH, PVK_USER_DATA)
-#define PV_LENGTH_VI \
-    MAKE_CSS_PPT_VALUE(PVT_LENGTH_VI, PVK_USER_DATA)
-#define PV_LENGTH_VM \
-    MAKE_CSS_PPT_VALUE(PVT_LENGTH_VM, PVK_USER_DATA)
 #define PV_LENGTH_VMAX \
     MAKE_CSS_PPT_VALUE(PVT_LENGTH_VMAX, PVK_USER_DATA)
 #define PV_LENGTH_VMIN \
     MAKE_CSS_PPT_VALUE(PVT_LENGTH_VMIN, PVK_USER_DATA)
+#define PV_LENGTH_VW \
+    MAKE_CSS_PPT_VALUE(PVT_LENGTH_VW, PVK_USER_DATA)
 #define PV_PERCENTAGE \
     MAKE_CSS_PPT_VALUE(PVT_PERCENTAGE, PVK_USER_DATA)
 #define PV_CENTER \
@@ -952,26 +928,20 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property background-position-y
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 #define PV_BOTTOM \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BOTTOM)
@@ -1150,8 +1120,6 @@ typedef enum _CssPropertyValueKeywords {
 // Values for property border-bottom-left-radius
 #define PV_ARRAY_LENGTH_Q \
     MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_Q, PVK_USER_DATA)
-#define PV_ARRAY_LENGTH_CAP \
-    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_CAP, PVK_USER_DATA)
 #define PV_ARRAY_LENGTH_CH \
     MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_CH, PVK_USER_DATA)
 #define PV_ARRAY_LENGTH_CM \
@@ -1160,12 +1128,8 @@ typedef enum _CssPropertyValueKeywords {
     MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_EM, PVK_USER_DATA)
 #define PV_ARRAY_LENGTH_EX \
     MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_EX, PVK_USER_DATA)
-#define PV_ARRAY_LENGTH_IC \
-    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_IC, PVK_USER_DATA)
 #define PV_ARRAY_LENGTH_IN \
     MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_IN, PVK_USER_DATA)
-#define PV_ARRAY_LENGTH_LH \
-    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_LH, PVK_USER_DATA)
 #define PV_ARRAY_LENGTH_MM \
     MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_MM, PVK_USER_DATA)
 #define PV_ARRAY_LENGTH_PC \
@@ -1176,89 +1140,65 @@ typedef enum _CssPropertyValueKeywords {
     MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_PX, PVK_USER_DATA)
 #define PV_ARRAY_LENGTH_REM \
     MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_REM, PVK_USER_DATA)
-#define PV_ARRAY_LENGTH_RLH \
-    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_RLH, PVK_USER_DATA)
-#define PV_ARRAY_LENGTH_VB \
-    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_VB, PVK_USER_DATA)
 #define PV_ARRAY_LENGTH_VH \
     MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_VH, PVK_USER_DATA)
-#define PV_ARRAY_LENGTH_VI \
-    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_VI, PVK_USER_DATA)
-#define PV_ARRAY_LENGTH_VM \
-    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_VM, PVK_USER_DATA)
 #define PV_ARRAY_LENGTH_VMAX \
     MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_VMAX, PVK_USER_DATA)
 #define PV_ARRAY_LENGTH_VMIN \
     MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_VMIN, PVK_USER_DATA)
+#define PV_ARRAY_LENGTH_VW \
+    MAKE_CSS_PPT_VALUE(PVT_ARRAY_LENGTH_VW, PVK_USER_DATA)
 #define PV_ARRAY_PERCENTAGE \
     MAKE_CSS_PPT_VALUE(PVT_ARRAY_PERCENTAGE, PVK_USER_DATA)
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 
 // Values for property border-bottom-right-radius
 // PV_ARRAY_LENGTH_Q has been defined
-// PV_ARRAY_LENGTH_CAP has been defined
 // PV_ARRAY_LENGTH_CH has been defined
 // PV_ARRAY_LENGTH_CM has been defined
 // PV_ARRAY_LENGTH_EM has been defined
 // PV_ARRAY_LENGTH_EX has been defined
-// PV_ARRAY_LENGTH_IC has been defined
 // PV_ARRAY_LENGTH_IN has been defined
-// PV_ARRAY_LENGTH_LH has been defined
 // PV_ARRAY_LENGTH_MM has been defined
 // PV_ARRAY_LENGTH_PC has been defined
 // PV_ARRAY_LENGTH_PT has been defined
 // PV_ARRAY_LENGTH_PX has been defined
 // PV_ARRAY_LENGTH_REM has been defined
-// PV_ARRAY_LENGTH_RLH has been defined
-// PV_ARRAY_LENGTH_VB has been defined
 // PV_ARRAY_LENGTH_VH has been defined
-// PV_ARRAY_LENGTH_VI has been defined
-// PV_ARRAY_LENGTH_VM has been defined
 // PV_ARRAY_LENGTH_VMAX has been defined
 // PV_ARRAY_LENGTH_VMIN has been defined
+// PV_ARRAY_LENGTH_VW has been defined
 // PV_ARRAY_PERCENTAGE has been defined
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 
 // Values for property border-bottom-style
@@ -1286,26 +1226,20 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property border-bottom-width
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 #define PV_BW_MEDIUM \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BW_MEDIUM)
 #define PV_BW_THIN \
@@ -1664,26 +1598,20 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property border-right-width
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_BW_MEDIUM has been defined
 // PV_BW_THIN has been defined
 // PV_BW_THINK has been defined
@@ -1691,26 +1619,20 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property border-spacing
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_INHERIT has been defined
 
 // Values for property border-top-color
@@ -1871,94 +1793,70 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property border-top-left-radius
 // PV_ARRAY_LENGTH_Q has been defined
-// PV_ARRAY_LENGTH_CAP has been defined
 // PV_ARRAY_LENGTH_CH has been defined
 // PV_ARRAY_LENGTH_CM has been defined
 // PV_ARRAY_LENGTH_EM has been defined
 // PV_ARRAY_LENGTH_EX has been defined
-// PV_ARRAY_LENGTH_IC has been defined
 // PV_ARRAY_LENGTH_IN has been defined
-// PV_ARRAY_LENGTH_LH has been defined
 // PV_ARRAY_LENGTH_MM has been defined
 // PV_ARRAY_LENGTH_PC has been defined
 // PV_ARRAY_LENGTH_PT has been defined
 // PV_ARRAY_LENGTH_PX has been defined
 // PV_ARRAY_LENGTH_REM has been defined
-// PV_ARRAY_LENGTH_RLH has been defined
-// PV_ARRAY_LENGTH_VB has been defined
 // PV_ARRAY_LENGTH_VH has been defined
-// PV_ARRAY_LENGTH_VI has been defined
-// PV_ARRAY_LENGTH_VM has been defined
 // PV_ARRAY_LENGTH_VMAX has been defined
 // PV_ARRAY_LENGTH_VMIN has been defined
+// PV_ARRAY_LENGTH_VW has been defined
 // PV_ARRAY_PERCENTAGE has been defined
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 
 // Values for property border-top-right-radius
 // PV_ARRAY_LENGTH_Q has been defined
-// PV_ARRAY_LENGTH_CAP has been defined
 // PV_ARRAY_LENGTH_CH has been defined
 // PV_ARRAY_LENGTH_CM has been defined
 // PV_ARRAY_LENGTH_EM has been defined
 // PV_ARRAY_LENGTH_EX has been defined
-// PV_ARRAY_LENGTH_IC has been defined
 // PV_ARRAY_LENGTH_IN has been defined
-// PV_ARRAY_LENGTH_LH has been defined
 // PV_ARRAY_LENGTH_MM has been defined
 // PV_ARRAY_LENGTH_PC has been defined
 // PV_ARRAY_LENGTH_PT has been defined
 // PV_ARRAY_LENGTH_PX has been defined
 // PV_ARRAY_LENGTH_REM has been defined
-// PV_ARRAY_LENGTH_RLH has been defined
-// PV_ARRAY_LENGTH_VB has been defined
 // PV_ARRAY_LENGTH_VH has been defined
-// PV_ARRAY_LENGTH_VI has been defined
-// PV_ARRAY_LENGTH_VM has been defined
 // PV_ARRAY_LENGTH_VMAX has been defined
 // PV_ARRAY_LENGTH_VMIN has been defined
+// PV_ARRAY_LENGTH_VW has been defined
 // PV_ARRAY_PERCENTAGE has been defined
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 
 // Values for property border-top-style
@@ -1976,26 +1874,20 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property border-top-width
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_BW_MEDIUM has been defined
 // PV_BW_THIN has been defined
 // PV_BW_THINK has been defined
@@ -2003,26 +1895,20 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property bottom
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 #define PV_AUTO \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)
@@ -2343,26 +2229,20 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property font-size
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_INHERIT has been defined
 #define PV_LARGE \
@@ -2428,103 +2308,79 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property height
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_AUTO has been defined
 // PV_INHERIT has been defined
 
 // Values for property left
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_AUTO has been defined
 // PV_INHERIT has been defined
 
 // Values for property letter-spacing
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_INHERIT has been defined
 // PV_NORMAL has been defined
 
 // Values for property line-height
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 #define PV_NUMBER \
     MAKE_CSS_PPT_VALUE(PVT_NUMBER, PVK_USER_DATA)
 // PV_PERCENTAGE has been defined
@@ -2578,207 +2434,159 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property margin-bottom
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_AUTO has been defined
 // PV_INHERIT has been defined
 
 // Values for property margin-left
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_AUTO has been defined
 // PV_INHERIT has been defined
 
 // Values for property margin-right
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_AUTO has been defined
 // PV_INHERIT has been defined
 
 // Values for property margin-top
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_AUTO has been defined
 // PV_INHERIT has been defined
 
 // Values for property max-height
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_INHERIT has been defined
 // PV_NONE has been defined
 
 // Values for property max-width
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_INHERIT has been defined
 // PV_NONE has been defined
 
 // Values for property min-height
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_INHERIT has been defined
 
 // Values for property min-width
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_INHERIT has been defined
 
@@ -2965,26 +2773,20 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property outline-width
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_BW_MEDIUM has been defined
 // PV_BW_THIN has been defined
 // PV_BW_THINK has been defined
@@ -3001,101 +2803,77 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property padding-bottom
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_INHERIT has been defined
 
 // Values for property padding-left
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_INHERIT has been defined
 
 // Values for property padding-right
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_INHERIT has been defined
 
 // Values for property padding-top
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_INHERIT has been defined
 
@@ -3140,26 +2918,20 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property right
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_AUTO has been defined
 // PV_INHERIT has been defined
@@ -3191,26 +2963,20 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property text-indent
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_INHERIT has been defined
 
@@ -3226,26 +2992,20 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property top
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_AUTO has been defined
 // PV_INHERIT has been defined
@@ -3260,26 +3020,20 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property vertical-align
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 #define PV_BASELINE \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BASELINE)
@@ -3321,52 +3075,40 @@ typedef enum _CssPropertyValueKeywords {
 
 // Values for property width
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_PERCENTAGE has been defined
 // PV_AUTO has been defined
 // PV_INHERIT has been defined
 
 // Values for property word-spacing
 // PV_LENGTH_Q has been defined
-// PV_LENGTH_CAP has been defined
 // PV_LENGTH_CH has been defined
 // PV_LENGTH_CM has been defined
 // PV_LENGTH_EM has been defined
 // PV_LENGTH_EX has been defined
-// PV_LENGTH_IC has been defined
 // PV_LENGTH_IN has been defined
-// PV_LENGTH_LH has been defined
 // PV_LENGTH_MM has been defined
 // PV_LENGTH_PC has been defined
 // PV_LENGTH_PT has been defined
 // PV_LENGTH_PX has been defined
 // PV_LENGTH_REM has been defined
-// PV_LENGTH_RLH has been defined
-// PV_LENGTH_VB has been defined
 // PV_LENGTH_VH has been defined
-// PV_LENGTH_VI has been defined
-// PV_LENGTH_VM has been defined
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
 // PV_INHERIT has been defined
 // PV_NORMAL has been defined
 
