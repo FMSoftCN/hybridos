@@ -42,14 +42,38 @@ bool CssDeclaredGroup::append(CssDeclared* css)
     return true;
 }
 
-bool CssDeclaredGroupWithSpecificity::append(CssDeclared* css, DWORD selectorSpecif)
+CssDeclaredGroupWithSpecificity::~CssDeclaredGroupWithSpecificity()
 {
-    if (!CssDeclaredGroup::append(css)) {
-        return false;
+    std::vector<CssWithSpecificity>::iterator it;
+    for (it = m_css_specif_vec.begin(); it != m_css_specif_vec.end(); ++it) {
+        CssWithSpecificity& css_specif = *it;
+        _DBG_PRINTF ("~CssDeclaredGroupWithSpecificity: %p, %d\n",
+                css_specif.css, css_specif.css->getRefCnt());
+        css_specif.css->unref();
     }
 
-    m_spec_vec.push_back(selectorSpecif);
+    m_css_specif_vec.clear();
+}
+
+bool CssDeclaredGroupWithSpecificity::append(CssDeclared* css, DWORD specif)
+{
+    CssWithSpecificity tmp = {css, specif};
+
+    css->ref();
+    m_css_specif_vec.push_back(tmp);
     return true;
+}
+
+static bool _sort_by_specificity (const CssWithSpecificity &v1,
+        const CssWithSpecificity &v2)
+{
+    return v1.specif < v2.specif;
+}
+
+void CssDeclaredGroupWithSpecificity::sort()
+{
+    std::sort(m_css_specif_vec.begin(), m_css_specif_vec.end(),
+            _sort_by_specificity);
 }
 
 } // namespace hfcl

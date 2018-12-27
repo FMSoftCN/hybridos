@@ -22,6 +22,9 @@
 #ifndef HFCL_CSS_CSSDECLAREDGROUP_H_
 #define HFCL_CSS_CSSDECLAREDGROUP_H_
 
+#include <vector>
+#include <algorithm>
+
 #include "../css/cssdeclared.h"
 #include "../common/object.h"
 
@@ -44,19 +47,23 @@ protected:
     CssDeclaredVec m_css_vec;
 };
 
-VECTOR(DWORD, CssSpecificityVec);
+typedef struct _CssWithSpecificity {
+    CssDeclared*    css;
+    DWORD           specif;
+} CssWithSpecificity;
 
-class CssDeclaredGroupWithSpecificity : public CssDeclaredGroup {
+class CssDeclaredGroupWithSpecificity {
 public:
     CssDeclaredGroupWithSpecificity() {}
-    ~CssDeclaredGroupWithSpecificity() {};
+    ~CssDeclaredGroupWithSpecificity();
 
-    bool append(CssDeclared* css, DWORD spec);
+    bool append(CssDeclared* css, DWORD specif);
+    void sort();
 
     friend class RootView;
 
 protected:
-    CssSpecificityVec m_spec_vec;
+    std::vector<CssWithSpecificity> m_css_specif_vec;
 };
 
 namespace css {

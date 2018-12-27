@@ -164,13 +164,13 @@ void CssSelectorGroup::clear()
     m_group.clear();
 }
 
-static utf8string* get_token (char* scan)
+static utf8string* get_token (char* scan, const char* delims = " .#[]:")
 {
     char* tmp = scan;
 
     do {
         int c = *tmp;
-        if (c && strchr (" .#[]:", c)) {
+        if (c && strchr (delims, c)) {
             break;
         }
 
@@ -250,7 +250,7 @@ bool CssSelectorGroup::compileSingle(char* token, CssSelector& one)
             }
 
             scan++;
-            str = get_token(scan);
+            str = get_token(scan, "]");
             if (str) {
                 one.addAttribute(*str);
                 scan += str->length();
@@ -361,15 +361,39 @@ bool CssSelectorGroup::compile(const char* selector)
  *  CSS_STATIC: static css
  *  CSS_DYNAMIC: dynamic css, for pseudo classes
  */
+#if SIZEOF_PTR == 8
+typedef unsigned short QDWORD;
+#define MAKEDWORD(q1, q2, q3, q4) \
+    ((DWORD)( \
+        (((DWORD)(QDWORD)(q1))) | \
+        (((DWORD)((QDWORD)(q2))) << 16) | \
+        (((DWORD)((QDWORD)(q3))) << 32) | \
+        (((DWORD)((QDWORD)(q4))) << 48) \
+    ))
+#else
+typedef unsigned char  QDWORD;
+#define MAKEDWORD(q1, q2, q3, q4) \
+    ((DWORD)( \
+        (((DWORD)(QDWORD)(q1))) | \
+        (((DWORD)((QDWORD)(q2))) << 8) | \
+        (((DWORD)((QDWORD)(q3))) << 16) | \
+        (((DWORD)((QDWORD)(q4))) << 24) \
+    ))
+#endif
+
 int CssSelectorGroup::match(const View* view, DWORD& specif) const
 {
     CssSelectorVec::const_iterator it;
     for (it = m_group.begin(); it != m_group.end(); ++it) {
         const CssSelector* one = *it;
+        // specificity
+        // Ref: https://www.w3.org/TR/CSS22/cascade.html#specificity
+        QDWORD a = 0, b = 0, c = 0, d = 0;
 
         const utf8string& type = one->getType();
         if (type.compare("") && type.compare(view->type()))
             continue;
+        d++;
 
         // check id: once an id matched
         const CssSelectorPieceVec& ids = one->m_identifiers;
@@ -380,6 +404,7 @@ int CssSelectorGroup::match(const View* view, DWORD& specif) const
                 const utf8string& str = *it;
                 if (str.compare (view->getName()) == 0) {
                     matched = true;
+                    b++;
                     break;
                 }
             }
@@ -397,6 +422,7 @@ int CssSelectorGroup::match(const View* view, DWORD& specif) const
                 if (!view->checkClass(str.c_str())) {
                     continue;
                 }
+                c++;
             }
         }
 
@@ -409,6 +435,7 @@ int CssSelectorGroup::match(const View* view, DWORD& specif) const
                 if (!view->checkAttribute(str.c_str())) {
                     continue;
                 }
+                c++;
             }
         }
 
@@ -421,6 +448,7 @@ int CssSelectorGroup::match(const View* view, DWORD& specif) const
                 if (!view->checkPseudoElement(str.c_str())) {
                     continue;
                 }
+                d++;
             }
         }
 
@@ -433,9 +461,11 @@ int CssSelectorGroup::match(const View* view, DWORD& specif) const
                 if (!view->checkPseudoClass(str.c_str())) {
                     continue;
                 }
+                c++;
             }
         }
 
+        specif = MAKEDWORD(d, c, b, a);
         // check dynamic pseudo classes: once defined
         const CssSelectorPieceVec& dpcs = one->m_dynamic_pseudo_classes;
         if (dpcs.size() > 0) {
@@ -445,6 +475,7 @@ int CssSelectorGroup::match(const View* view, DWORD& specif) const
         return CSS_STATIC;
     }
 
+    specif = 0;
     return CSS_NOT_MATCHED;
 }
 
@@ -565,7 +596,7 @@ static const char* selectors [] = {
     "hvtext#foo",
     "hvtext.active.vip:focus",
     "hvtext#bar:focus:hover",
-    "hvtext[foo=bar][copyright='FMSoft Technologies']",
+    "hvtext[foo=bar][copyright=FMSoft Technologies]",
     "hvtext:active[foo=bar], hvimg.active.vip:focus, hvli#foo",
 };
 
@@ -589,10 +620,12 @@ int main ()
         view_a.genSelector(selector);
         switch (csg.match(&view_a, specif)) {
         case CssSelectorGroup::CSS_STATIC:
-            printf("View (%s) matches staticly\n", selector.c_str());
+            printf("View (%s) matches staticly (%lx)\n",
+                    selector.c_str(), specif);
             break;
         case CssSelectorGroup::CSS_DYNAMIC:
-            printf("View (%s) matches dynamicly\n", selector.c_str());
+            printf("View (%s) matches dynamicly (%lx)\n",
+                    selector.c_str(), specif);
             break;
         default:
             printf("View (%s) does not match\n", selector.c_str());

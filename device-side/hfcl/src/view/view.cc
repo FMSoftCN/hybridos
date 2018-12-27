@@ -604,7 +604,6 @@ void View::applyCss(CssDeclared* css, const CssSelectorGroup& selector)
     }
 }
 
-
 void View::computeCss(const IntRect& viewportRc)
 {
 }
