@@ -23,6 +23,7 @@
 
 #include "common/helpers.h"
 
+#include <stdlib.h>
 #include <string.h>
 
 #include <string>
@@ -247,6 +248,16 @@ bool View::checkPseudoElement(const char* pseudoEle) const
     return false;
 }
 
+static std::string get_value (const char* scan)
+{
+    const char* start = strchr (scan, '(');
+    const char* end = strrchr (scan, ')');
+    if (start == end)
+        return std::string();
+
+    return std::string(start, end - start);
+}
+
 bool View::checkPseudoClass(const char* pseudoCls) const
 {
     std::string tmp = pseudoCls;
@@ -291,11 +302,44 @@ bool View::checkPseudoClass(const char* pseudoCls) const
             break;
 
         case Css::CSS_KWST_NTH_CHILD:
-            /* TODO */
+            if (m_parent) {
+                int my_idx = m_parent->getChildIndex(this) + 1;
+                std::string value = get_value(pseudoCls);
+                if (value == "odd") {
+                    if (my_idx % 2 != 0)
+                        return true;
+                }
+                else if (value == "even") {
+                    if (my_idx % 2 == 0)
+                        return true;
+                }
+                else {
+                    int idx = atoi (value.c_str());
+                    if (idx == my_idx)
+                        return true;
+                }
+            }
             break;
 
         case Css::CSS_KWST_NTH_LAST_CHILD:
-            /* TODO */
+            if (m_parent) {
+                std::string value = get_value(pseudoCls);
+                int my_last_idx = m_parent->childrenCount() -
+                                    m_parent->getChildIndex(this);
+                if (value == "odd") {
+                    if (my_last_idx % 2 != 0)
+                        return true;
+                }
+                else if (value == "even") {
+                    if (my_last_idx % 2 == 0)
+                        return true;
+                }
+                else {
+                    int idx = atoi (value.c_str());
+                    if (idx == my_last_idx)
+                        return true;
+                }
+            }
             break;
 
         case Css::CSS_KWST_ROOT:

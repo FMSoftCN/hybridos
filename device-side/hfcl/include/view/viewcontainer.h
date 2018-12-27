@@ -35,7 +35,7 @@ public:
     virtual ~ViewContainer();
 
     /* methods specfic to ViewContainer */
-    bool isChild(View* view) const;
+    bool isChild(const View* view) const;
     bool insertBefore(View *view, View *child);
     bool insertAfter(View *view, View *child);
     bool insertBefore(int idx, View* child);
@@ -54,22 +54,30 @@ public:
     int  detachChildByIndex(int idx);
     void clean();
 
-    View* getChildById(int id) const;
-    View* getChildByIndex(int idx) const;
-    View *getChildByPosition(int x_pos, int y_pos) const;
+    const View* getChildById(int id) const;
+    View* getChildById(int id);
+    const View* getChildByIndex(int idx) const;
+    View* getChildByIndex(int idx);
+    const View *getChildByPosition(int x_pos, int y_pos) const;
+    View *getChildByPosition(int x_pos, int y_pos);
 
-    int   getChildIndex(View *view) const;
+    int   getChildIndex(const View *view) const;
 
-    View* findDescendant(int id) const;
+    const View* findDescendant(int id) const;
+    View* findDescendant(int id);
 
-    View* firstChild() const { return m_first; }
+    const View* firstChild() const { return m_first; }
+    View* firstChild() { return m_first; }
+    const View* lastChild() const { return m_last; }
+    View* lastChild() { return m_last; }
+    const View* firstEnabledChild() const;
     View* firstEnabledChild();
-    View* lastChild() const { return m_last; }
     int  childrenCount() const { return m_nr_children; }
 
     void focusChild(View* view);
     void unfocusChild();
-    View* getFocusedChild() const { return m_focused; }
+    const View* getFocusedChild() const { return m_focused; }
+    View* getFocusedChild() { return m_focused; }
 
     /* overloaded virtual functions */
     virtual bool isContainer() const { return true; }

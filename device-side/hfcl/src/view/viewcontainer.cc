@@ -150,7 +150,7 @@ int ViewContainer::detachChildByIndex(int index)
     return detachChild(getChildByIndex(index));
 }
 
-bool ViewContainer::isChild(View* view) const
+bool ViewContainer::isChild(const View* view) const
 {
     return view && view->getParent() == this;
 }
@@ -229,16 +229,43 @@ int ViewContainer::removeChild(View * view, bool bRelease)
     return -1;
 }
 
-View* ViewContainer::getChildById(int id) const
+const View* ViewContainer::getChildById(int id) const
 {
-    for (View *view = firstChild(); view ; view = view->getNext()) {
+    const View* view;
+    for (view = firstChild(); view ; view = view->getNext()) {
         if (view->getId() == id)
             return view;
     }
     return NULL;
 }
 
-View* ViewContainer::getChildByIndex(int idx) const
+View* ViewContainer::getChildById(int id)
+{
+    View* view;
+    for (view = firstChild(); view ; view = view->getNext()) {
+        if (view->getId() == id)
+            return view;
+    }
+    return NULL;
+}
+
+const View* ViewContainer::getChildByIndex(int idx) const
+{
+    const View *view = NULL;
+    if (idx < 0)
+        return lastChild();
+
+    if (idx > (m_nr_children >> 1))
+        for (view = lastChild(), idx = m_nr_children - idx - 1;
+                view && idx > 0; view = view->getPrev(), idx --);
+    else
+        for(view = firstChild();
+                view && idx > 0; view = view->getNext(), idx --);
+
+    return view;
+}
+
+View* ViewContainer::getChildByIndex(int idx)
 {
     View *view = NULL;
     if (idx < 0)
@@ -254,19 +281,33 @@ View* ViewContainer::getChildByIndex(int idx) const
     return view;
 }
 
-int ViewContainer::getChildIndex(View *view) const
+int ViewContainer::getChildIndex(const View *view) const
 {
     if (!isChild (view))
         return -1;
 
     int idx = 0;
-    for (View *c = firstChild(); c && c != view; c = c->getNext(), idx++);
+    for (const View *c = firstChild(); c && c != view; c = c->getNext(), idx++);
 
     return idx;
 }
 
+const View* ViewContainer::findDescendant(int id) const
+{
+    for (const View *view = firstChild(); view ; view = view->getNext()) {
+        if (view->getId() == id)
+            return view;
+        else if (view->isContainer()) {
+            const View *c = ((ViewContainer*)view)->getChildById(id);
+            if (c)
+                return c;
+        }
+    }
 
-View* ViewContainer::findDescendant(int id) const
+    return NULL;
+}
+
+View* ViewContainer::findDescendant(int id)
 {
     for (View *view = firstChild(); view ; view = view->getNext()) {
         if (view->getId() == id)
@@ -281,12 +322,32 @@ View* ViewContainer::findDescendant(int id) const
     return NULL;
 }
 
-View *ViewContainer::getChildByPosition(int x_pos, int y_pos) const
+const View *ViewContainer::getChildByPosition(int x_pos, int y_pos) const
 {
-    for(View *view = lastChild(); NULL != view ; view = view->getPrev()) {
+    const View* view;
+    for (view = lastChild(); NULL != view ; view = view->getPrev()) {
         IntRect irc = view->getRect();
-        if (irc.contains(x_pos, y_pos)){
-            if(view->isContainer()) {
+        if (irc.contains (x_pos, y_pos)){
+            if (view->isContainer()) {
+                return ((const ViewContainer*)view)->getChildByPosition (
+                        x_pos - irc.left(), y_pos - irc.top());
+            }
+            else {
+                return view;
+            }
+        }
+    }
+
+    return (const View *)this;
+}
+
+View *ViewContainer::getChildByPosition(int x_pos, int y_pos)
+{
+    View* view;
+    for (view = lastChild(); NULL != view ; view = view->getPrev()) {
+        IntRect irc = view->getRect();
+        if (irc.contains (x_pos, y_pos)){
+            if (view->isContainer()) {
                 return ((ViewContainer*)view)->getChildByPosition (
                         x_pos - irc.left(), y_pos - irc.top());
             }
@@ -295,6 +356,7 @@ View *ViewContainer::getChildByPosition(int x_pos, int y_pos) const
             }
         }
     }
+
     return (View *)this;
 }
 
@@ -428,8 +490,8 @@ void ViewContainer::focusChild(View* view)
     m_focused->onGotFocus();
 
     if (m_focused->isContainer()){
-        View * focus = ((ViewContainer *)m_focused)->getFocusedChild();
-        if(focus)
+        View* focus = ((ViewContainer *)m_focused)->getFocusedChild();
+        if (focus)
             m_focused->setFocus(focus);
     }
 }
