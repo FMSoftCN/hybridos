@@ -44,29 +44,41 @@ void CssComputed::reset()
     memcpy(&m_data, initial->m_values, sizeof(m_data));
 }
 
+/*
+ * A specified value can be either absolute (i.e., not relative to
+ * another value, as in red or 2mm) or relative (i.e., relative to
+ * another value, as in auto, 2em). Computing a relative value
+ * generally absolutizes it:
+ *  - values with relative units (em, ex, vh, vw) must be made absolute
+ *    by multiplying with the appropriate reference size.
+ *  - certain keywords (e.g., smaller, bolder) must be replaced according to
+ *    their definitions.
+ *  - percentages on some properties must be multiplied by a reference value
+ *    (defined by the property).
+ *  - valid relative URLs must be resolved to become absolute.
+ *
+ * REF: https://www.w3.org/TR/css-cascade-3/
+ */
 bool CssComputed::makeAbsolute(const View& view)
 {
     const RootView* root = view.getRoot();
     /* viewport should be defined in px */
     const RealRect& viewport = root->viewport();
 
+    /* handle special properties here: e.g., font-size */
+
+    /* handle length and percentage values */
     for (int i = 0; i < MAX_CSS_PID; i++) {
 
         Uint32 type = CSS_PPT_VALUE_TYPE(m_values[i]);
         switch (type) {
-        case PVT_LENGTH_Q:
-            m_values[i] = PV_LENGTH_PX;
-            m_data[i].r = (m_data[i].r * 96.0/2.54/40);
+        case PVT_PERCENTAGE:
             break;
-        case PVT_LENGTH_CH:
-            break;
+
+        /* absolute lengths */
         case PVT_LENGTH_CM:
             m_values[i] = PV_LENGTH_PX;
             m_data[i].r = (m_data[i].r * 96.0/2.54);
-            break;
-        case PVT_LENGTH_EM:
-            break;
-        case PVT_LENGTH_EX:
             break;
         case PVT_LENGTH_IN:
             m_values[i] = PV_LENGTH_PX;
@@ -84,10 +96,12 @@ bool CssComputed::makeAbsolute(const View& view)
             m_values[i] = PV_LENGTH_PX;
             m_data[i].r = (m_data[i].r * 96.0/72.0);
             break;
-        case PVT_LENGTH_PX:
+        case PVT_LENGTH_Q:
+            m_values[i] = PV_LENGTH_PX;
+            m_data[i].r = (m_data[i].r * 96.0/2.54/40);
             break;
-        case PVT_LENGTH_REM:
-            break;
+
+        /* viewport-relative lengths */
         case PVT_LENGTH_VW:
             m_values[i] = PV_LENGTH_PX;
             m_data[i].r = (viewport.width()/100.0);
@@ -105,29 +119,35 @@ bool CssComputed::makeAbsolute(const View& view)
             m_data[i].r = (viewport.minWH()/100.0);
             break;
 
-        case PVT_ARRAY_LENGTH_Q:
+        /* font-relative lengths */
+        case PVT_LENGTH_CH:
+            break;
+        case PVT_LENGTH_EM:
+            break;
+        case PVT_LENGTH_EX:
+            break;
+        case PVT_LENGTH_REM:
             break;
 
-        case PVT_ARRAY_LENGTH_CH:
+        /* percentages */
+        case PVT_ARRAY_PERCENTAGE:
             break;
+
+        /* absolute lengths */
         case PVT_ARRAY_LENGTH_CM:
             break;
-        case PVT_ARRAY_LENGTH_EM:
-            break;
-        case PVT_ARRAY_LENGTH_EX:
+        case PVT_ARRAY_LENGTH_MM:
             break;
         case PVT_ARRAY_LENGTH_IN:
-            break;
-        case PVT_ARRAY_LENGTH_MM:
             break;
         case PVT_ARRAY_LENGTH_PC:
             break;
         case PVT_ARRAY_LENGTH_PT:
             break;
-        case PVT_ARRAY_LENGTH_PX:
+        case PVT_ARRAY_LENGTH_Q:
             break;
-        case PVT_ARRAY_LENGTH_REM:
-            break;
+
+        /* viewport-relative lengths */
         case PVT_ARRAY_LENGTH_VW:
             break;
         case PVT_ARRAY_LENGTH_VH:
@@ -136,6 +156,19 @@ bool CssComputed::makeAbsolute(const View& view)
             break;
         case PVT_ARRAY_LENGTH_VMIN:
             break;
+
+        /* font-relative lengths */
+        case PVT_ARRAY_LENGTH_EM:
+            break;
+        case PVT_ARRAY_LENGTH_EX:
+            break;
+        case PVT_ARRAY_LENGTH_CH:
+            break;
+        case PVT_ARRAY_LENGTH_REM:
+            break;
+
+        case PVT_ARRAY_LENGTH_PX:
+        case PVT_LENGTH_PX:
         default:
             break;
         }

@@ -49,6 +49,8 @@ bool RootView::attachToSysWindow(HWND hwnd)
 
         RECT rc;
         GetClientRect(hwnd, &rc);
+
+        /* FIXME: viewport should be defined in px */
         m_viewport = rc;
         computeCss();
         return true;
