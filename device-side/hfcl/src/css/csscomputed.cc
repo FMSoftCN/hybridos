@@ -28,7 +28,9 @@ namespace hfcl {
 
 CssComputed::CssComputed()
 {
-    reset();
+    CssInitial* initial = CssInitial::getSingleton();
+    memcpy(&m_values, initial->m_values, sizeof(m_values));
+    memcpy(&m_data, initial->m_values, sizeof(m_data));
 }
 
 CssComputed::CssComputed(const CssComputed& init)
@@ -39,9 +41,26 @@ CssComputed::CssComputed(const CssComputed& init)
 
 void CssComputed::reset()
 {
+    freeArray();
+
     CssInitial* initial = CssInitial::getSingleton();
     memcpy(&m_values, initial->m_values, sizeof(m_values));
     memcpy(&m_data, initial->m_values, sizeof(m_data));
+}
+
+void CssComputed::freeArray()
+{
+    for (int i = 0; i < MAX_CSS_PID; i++) {
+        if (CSS_PPT_VALUE_TYPE(m_values[i]) == PVT_ARRAY_LENGTH_PX &&
+            IS_CSS_PPT_VALUE_ALLOCATED(m_values[i])) {
+            if (m_data[i].p) {
+                delete [] (HTReal*)(m_data[i].p);
+                m_data[i].p = NULL;
+            }
+
+            CLEAR_CSS_PPT_VALUE_ALLOCATED(m_values[i]);
+        }
+    }
 }
 
 /* absolute lengths */
@@ -49,38 +68,46 @@ bool CssComputed::convertArray (int pid, int t)
 {
     CssInitial* initial = CssInitial::getSingleton();
     Uint8 n = initial->m_arraysize[pid];
-    if (n == 0)
+    const HTReal* old = (const HTReal*)m_data[pid].p;
+    if (n == 0 || old == NULL)
         return false;
 
     HTReal* p = new HTReal[n];
-    HTReal* old = (HTReal*)m_data[pid].p;
-    for (int i = 0; i < n; i++) {
-        switch(t) {
-        /* absolute lengths */
-        case PVT_ARRAY_LENGTH_CM:
+    switch (t) {
+    /* absolute lengths */
+    case PVT_ARRAY_LENGTH_CM:
+        for (int i = 0; i < n; i++) {
             p[i] = (old[i] * 96.0/2.54);
-            break;
-        case PVT_ARRAY_LENGTH_IN:
-            p[i] = (old[i] * 96.0);
-            break;
-        case PVT_ARRAY_LENGTH_MM:
-            p[i] = (old[i] * 96.0/2.54/10.0);
-            break;
-        case PVT_ARRAY_LENGTH_PC:
-            p[i] = (old[i] * 96.0/6.0);
-            break;
-        case PVT_ARRAY_LENGTH_PT:
-            p[i] = (old[i] * 96.0/72.0);
-            break;
-        case PVT_ARRAY_LENGTH_Q:
-            p[i] = (old[i] * 96.0/2.54/40);
-            break;
-        default:
-            delete [] p;
-            return false;
         }
-
-        p++;
+        break;
+    case PVT_ARRAY_LENGTH_IN:
+        for (int i = 0; i < n; i++) {
+            p[i] = (old[i] * 96.0);
+        }
+        break;
+    case PVT_ARRAY_LENGTH_MM:
+        for (int i = 0; i < n; i++) {
+            p[i] = (old[i] * 96.0/2.54/10.0);
+        }
+        break;
+    case PVT_ARRAY_LENGTH_PC:
+        for (int i = 0; i < n; i++) {
+            p[i] = (old[i] * 96.0/6.0);
+        }
+        break;
+    case PVT_ARRAY_LENGTH_PT:
+        for (int i = 0; i < n; i++) {
+            p[i] = (old[i] * 96.0/72.0);
+        }
+        break;
+    case PVT_ARRAY_LENGTH_Q:
+        for (int i = 0; i < n; i++) {
+            p[i] = (old[i] * 96.0/2.54/40);
+        }
+        break;
+    default:
+        delete [] p;
+        return false;
     }
 
     m_values[pid] = CSS_PPT_VALUE_FLAG_ALLOCATED | PV_ARRAY_LENGTH_PX;
@@ -93,29 +120,35 @@ bool CssComputed::convertArray (int pid, int t, const RealRect& viewport)
 {
     CssInitial* initial = CssInitial::getSingleton();
     Uint8 n = initial->m_arraysize[pid];
-    if (n == 0)
+    const HTReal* old = (const HTReal*)m_data[pid].p;
+    if (n == 0 || old == NULL)
         return false;
 
     HTReal* p = new HTReal[n];
-    HTReal* old = (HTReal*)m_data[pid].p;
-    for (int i = 0; i < n; i++) {
-        switch(t) {
-        case PVT_ARRAY_LENGTH_VW:
+    switch (t) {
+    case PVT_ARRAY_LENGTH_VW:
+        for (int i = 0; i < n; i++) {
             p[i] = (old[i] * viewport.width()/100.0);
-            break;
-        case PVT_ARRAY_LENGTH_VH:
-            p[i] = (old[i] * viewport.height()/100.0);
-            break;
-        case PVT_ARRAY_LENGTH_VMAX:
-            p[i] = (old[i] * viewport.maxWH()/100.0);
-            break;
-        case PVT_ARRAY_LENGTH_VMIN:
-            p[i] = (old[i] * viewport.minWH()/100.0);
-            break;
-        default:
-            delete [] p;
-            return false;
         }
+        break;
+    case PVT_ARRAY_LENGTH_VH:
+        for (int i = 0; i < n; i++) {
+            p[i] = (old[i] * viewport.height()/100.0);
+        }
+        break;
+    case PVT_ARRAY_LENGTH_VMAX:
+        for (int i = 0; i < n; i++) {
+            p[i] = (old[i] * viewport.maxWH()/100.0);
+        }
+        break;
+    case PVT_ARRAY_LENGTH_VMIN:
+        for (int i = 0; i < n; i++) {
+            p[i] = (old[i] * viewport.minWH()/100.0);
+        }
+        break;
+    default:
+        delete [] p;
+        return false;
     }
 
     m_values[pid] = CSS_PPT_VALUE_FLAG_ALLOCATED | PV_ARRAY_LENGTH_PX;
@@ -128,22 +161,27 @@ bool CssComputed::convertArray (int pid, int t, const View& view)
 {
     CssInitial* initial = CssInitial::getSingleton();
     Uint8 n = initial->m_arraysize[pid];
-    if (n == 0)
+    const HTReal* old = (const HTReal*)m_data[pid].p;
+    if (n == 0 || old == NULL)
         return false;
 
     HTReal* p = new HTReal[n];
-    //HTReal* old = (HTReal*)m_data[pid].p;
-    for (int i = 0; i < n; i++) {
-        switch(t) {
-        case PVT_ARRAY_LENGTH_EM:
-        case PVT_ARRAY_LENGTH_EX:
-        case PVT_ARRAY_LENGTH_CH:
-        case PVT_ARRAY_LENGTH_REM:
-            break;
-        default:
-            delete [] p;
-            return false;
+    switch(t) {
+    case PVT_ARRAY_LENGTH_EM:
+        for (int i = 0; i < n; i++) {
         }
+    case PVT_ARRAY_LENGTH_EX:
+        for (int i = 0; i < n; i++) {
+        }
+    case PVT_ARRAY_LENGTH_CH:
+        for (int i = 0; i < n; i++) {
+        }
+    case PVT_ARRAY_LENGTH_REM:
+        for (int i = 0; i < n; i++) {
+        }
+    default:
+        delete [] p;
+        return false;
     }
 
     m_values[pid] = CSS_PPT_VALUE_FLAG_ALLOCATED | PV_ARRAY_LENGTH_PX;

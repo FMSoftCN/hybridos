@@ -35,7 +35,7 @@ class CssComputed : public Css {
 public:
     CssComputed ();
     CssComputed (const CssComputed& init);
-    ~CssComputed () {};
+    ~CssComputed () { freeArray(); }
 
     void reset();
     bool makeAbsolute(const View& view);
@@ -52,6 +52,8 @@ private:
     bool convertArray(int pid, int t);
     bool convertArray(int pid, int t, const RealRect& viewport);
     bool convertArray(int pid, int t, const View& view);
+
+    void freeArray();
 };
 
 } // namespace hfcl

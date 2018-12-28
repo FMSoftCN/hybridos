@@ -69,13 +69,15 @@ namespace hfcl {
     ((value) & CSS_PPT_VALUE_FLAG_ALLOCATED)
 #define MARK_CSS_PPT_VALUE_ALLOCATED(value) \
     ((value) |= CSS_PPT_VALUE_FLAG_ALLOCATED)
+#define CLEAR_CSS_PPT_VALUE_ALLOCATED(value) \
+    ((value) &= ~CSS_PPT_VALUE_FLAG_ALLOCATED)
 
 #include "csspropertyvalue.inc"
 
 // Data types for property value
 typedef int             HTInt;
 typedef unsigned int    HTUint;
-typedef const void*     HTPointer;
+typedef const void*           HTPointer;
 
 typedef union _HTPVData {
     HTInt       i;
