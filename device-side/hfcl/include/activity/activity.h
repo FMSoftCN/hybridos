@@ -39,15 +39,16 @@ public:
     virtual void onCreate(ContextStream* contextStream, Intent* intent);
     virtual void onWakeup(void);
 
-    virtual bool onKey(int keyCode, KeyEvent* event);
-    virtual void onClick(POINT pt, Event::EventType type);
     virtual void onBack(void) { }
-    virtual void onIdle(void) { }
     virtual void onMove2Top(void);
     virtual HWND getSysWindow(void);
 
     void updateNow(void);
     static Activity* activity(HWND hwnd);
+
+    virtual bool onKeyEvent(const KeyEvent* event);
+    virtual bool onMouseEvent(const MouseEvent* event);
+    virtual bool onMouseWheelEvent(const MouseWheelEvent* event);
 
     virtual EventListener* getEventHandle() { return NULL; };
 

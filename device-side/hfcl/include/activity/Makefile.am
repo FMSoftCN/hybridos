@@ -3,6 +3,7 @@ myincludedir=$(includedir)/hfcl/activity
 
 # Which header files to install
 myinclude_HEADERS= \
+    window.h \
     baseactivity.h \
     activity.h \
     activityfactory.h \
@@ -11,5 +12,4 @@ myinclude_HEADERS= \
     activitystack.h \
     activitywithclients.h \
     controller.h \
-    intent.h \
-    window.h
+    intent.h

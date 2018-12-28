@@ -28,6 +28,7 @@
 #include <minigui/gdi.h>
 #include <minigui/window.h>
 
+#include "view/rootview.h"
 #include "mgcl/mgcl.h"
 #include "activity/activitymanager.h"
 #include "graphics/color.h"
@@ -41,140 +42,15 @@
 
 namespace hfcl {
 
-bool Window::m_updateLocked = false;
-
 Window::Window()
-    : PanelView(0, NULL, NULL)
-    , m_sysWnd(HWND_INVALID)
-    , m_context(0)
-    , m_keyLockable(false)
-    , m_keyLocked(false)
-    , m_freezePaint(false)
+    : m_sysWnd(HWND_INVALID)
+    , m_rootView(0)
 {
-    m_updateLocked = false;
-    m_bkg_alpha = 255;
-    setParent(NULL);
 }
 
 Window::~Window()
 {
     destroy();
-}
-
-void Window::show(bool bUpdateBack)
-{
-    ShowWindow(m_sysWnd, SW_SHOWNORMAL);
-    InvalidateRect(m_sysWnd, NULL, bUpdateBack);
-}
-
-void Window::getClientRect(IntRect& irc)
-{
-    RECT rc;
-
-    GetClientRect(m_sysWnd, &rc);
-    irc.setRect(rc.left, rc.top, rc.right, rc.bottom);
-}
-
-void Window::setWindowRect(const IntRect& irc)
-{
-    MoveWindow(m_sysWnd, irc.left(), irc.top(), irc.width(), irc.height(),
-               TRUE);
-}
-
-void Window::hide(void)
-{
-    ShowWindow(m_sysWnd, SW_HIDE);
-}
-
-// destroy view window and other resources
-void Window::destroy(void)
-{
-    if(GetWindowAdditionalData(m_sysWnd) == (DWORD)this) {
-        SetWindowAdditionalData(m_sysWnd, 0);
-        DestroyMainWindow(m_sysWnd);
-    }
-}
-
-bool Window::onKey (int keyCode, KeyEvent* event)
-{
-    View* _focus = NULL;
-
-    if ((View *)0 != (_focus = getFocusedChild())) {
-        _focus->dispatchEvent(event);
-    }
-
-    return true;
-}
-
-void Window::onClick(POINT pt, Event::EventType type)
-{
-    // nothing...
-}
-
-void Window::inner_updateView(int x, int y, int w, int h, bool upBackGnd)
-{
-    asyncUpdateRect(x, y, w, h, upBackGnd);
-}
-
-void Window::asyncUpdateRect(int x, int y, int w, int h, bool upBackGnd)
-{
-    RECT rc = {x, y, x + w, y + h};
-    if (m_keyLockable) {
-        m_keyLocked = true;
-    }
-
-    if (!m_updateLocked) {
-        _DBG_PRINTF ("Window::asyncUpdateRect called with (%d, %d, %d, %d)",
-                     rc.left, rc.top, rc.right, rc.bottom);
-        InvalidateRect(m_sysWnd, &rc, FALSE);
-    }
-}
-
-void Window::syncUpdateRect(int x, int y, int w, int h, bool upBackGnd)
-{
-    RECT rc = {x, y, x + w, y + h};
-
-    InvalidateRect (m_sysWnd, &rc, FALSE);
-    UpdateInvalidClient (m_sysWnd, FALSE);
-}
-
-void Window::drawScrollBar(GraphicsContext* context, IntRect &rc)
-{
-    PanelView::drawScrollBar (context, rc);
-    m_keyLocked = false;
-}
-
-void Window::drawBackground(GraphicsContext* context, IntRect &rc)
-{
-    context->fillRect(rc,
-            GetRValue(Color::LAYER_COLOR_KEY),
-            GetGValue(Color::LAYER_COLOR_KEY),
-            GetBValue(Color::LAYER_COLOR_KEY), 0xFF);
-}
-
-HWND Window::getSysWindow(void)
-{
-    return m_sysWnd;
-}
-
-HWND Window::viewWindow(void) const
-{
-    return m_sysWnd;
-}
-
-Window* Window::window(HWND hwnd)
-{
-    return reinterpret_cast<Window*>(GetWindowAdditionalData(hwnd));
-}
-
-HWND Window::setActiveWindow(HWND hMainWnd)
-{
-    return SetActiveWindow(hMainWnd);
-}
-
-HWND Window::getActiveWindow(void)
-{
-    return GetActiveWindow();
 }
 
 HWND Window::createMainWindow (const char* caption, WNDPROC proc,
@@ -201,19 +77,18 @@ HWND Window::createMainWindow (const char* caption, WNDPROC proc,
 }
 
 //create main window and set m_sysWnd. only need call once in onCreate.
-bool Window::createMainWindow(int x, int y, int w, int h, bool visible)
+bool Window::doCreate(int x, int y, int w, int h, bool visible)
 {
     //has valid window
     if (m_sysWnd != HWND_INVALID)
         return false;
 
-    m_sysWnd = createMainWindow ("window", defaultAppProc,
+    m_sysWnd = createMainWindow ("window", defaultMainWindowProc,
             x, y, w, h, (DWORD)this, visible);
 
     if (m_sysWnd == HWND_INVALID)
         return false;
 
-    setRect(0, 0, w, h);
     SetWindowAdditionalData(m_sysWnd, (DWORD)this);
 
     if (visible)
@@ -222,11 +97,84 @@ bool Window::createMainWindow(int x, int y, int w, int h, bool visible)
     return true;
 }
 
-bool Window::createMainWindow(void)
+bool Window::create()
 {
-    return createMainWindow(0, 0,
+    return doCreate(0, 0,
             GetGDCapability(HDC_SCREEN, GDCAP_HPIXEL),
             GetGDCapability(HDC_SCREEN, GDCAP_VPIXEL));
+}
+
+// destroy view window and other resources
+void Window::destroy()
+{
+    if(GetWindowAdditionalData(m_sysWnd) == (DWORD)this) {
+        SetWindowAdditionalData(m_sysWnd, 0);
+        DestroyMainWindow(m_sysWnd);
+    }
+}
+
+Window* Window::getObject(HWND hwnd)
+{
+    return reinterpret_cast<Window*>(GetWindowAdditionalData(hwnd));
+}
+
+void Window::show(bool updateBg)
+{
+    ShowWindow(m_sysWnd, SW_SHOWNORMAL);
+    InvalidateRect(m_sysWnd, NULL, updateBg);
+}
+
+void Window::getClientRect(IntRect& irc) const
+{
+    RECT rc;
+
+    GetClientRect(m_sysWnd, &rc);
+    irc.setRect(rc.left, rc.top, rc.right, rc.bottom);
+}
+
+void Window::setWindowRect(const IntRect& irc)
+{
+    MoveWindow(m_sysWnd, irc.left(), irc.top(), irc.width(), irc.height(),
+               TRUE);
+}
+
+void Window::hide()
+{
+    ShowWindow(m_sysWnd, SW_HIDE);
+}
+
+void Window::asyncUpdateRect(int x, int y, int w, int h, bool upBackGnd)
+{
+    RECT rc = {x, y, x + w, y + h};
+    _DBG_PRINTF ("Window::asyncUpdateRect called with (%d, %d, %d, %d)",
+                 rc.left, rc.top, rc.right, rc.bottom);
+    InvalidateRect(m_sysWnd, &rc, FALSE);
+}
+
+void Window::syncUpdateRect(int x, int y, int w, int h, bool upBackGnd)
+{
+    RECT rc = {x, y, x + w, y + h};
+
+    InvalidateRect (m_sysWnd, &rc, FALSE);
+    UpdateInvalidClient (m_sysWnd, FALSE);
+}
+
+void Window::drawBackground(GraphicsContext* context, IntRect &rc)
+{
+    context->fillRect(rc,
+            GetRValue(Color::LAYER_COLOR_KEY),
+            GetGValue(Color::LAYER_COLOR_KEY),
+            GetBValue(Color::LAYER_COLOR_KEY), 0xFF);
+}
+
+HWND Window::setActiveWindow(HWND hMainWnd)
+{
+    return SetActiveWindow(hMainWnd);
+}
+
+HWND Window::getActiveWindow()
+{
+    return GetActiveWindow();
 }
 
 void Window::updateWindow(bool isUpdateBkg)
@@ -248,6 +196,191 @@ void Window::endDlg(int endCode)
 {
     SendNotifyMessage(m_sysWnd, MGCL_MSG_MNWND_ENDDIALOG,
             0, (LPARAM)endCode);
+}
+
+KeyEvent::KeyCode Window::scancode2keycode(int scancode)
+{
+    int keycode = KeyEvent::KEYCODE_UNKNOWN;
+    if (scancode >= SCANCODE_1 && scancode <= SCANCODE_9) {
+        keycode = KeyEvent::KEYCODE_1 + (scancode - SCANCODE_1);
+    }
+    else if (scancode >= SCANCODE_F1 && scancode <= SCANCODE_F10) {
+        keycode = KeyEvent::KEYCODE_STAR + (scancode - SCANCODE_F10);
+    }
+    else if (scancode >= SCANCODE_HOME && scancode <= SCANCODE_PAGEDOWN) {
+        keycode = KeyEvent::KEYCODE_HOME + (scancode - SCANCODE_HOME);
+    }
+    else {
+        switch (scancode) {
+        case SCANCODE_0:
+            keycode = KeyEvent::KEYCODE_0;
+            break;
+
+        case SCANCODE_SPACE:
+            keycode = KeyEvent::KEYCODE_SPACE;
+            break;
+
+        case SCANCODE_ESCAPE:
+            keycode = KeyEvent::KEYCODE_BACK;
+            break;
+
+        case SCANCODE_F11:
+            keycode = KeyEvent::KEYCODE_START;
+            break;
+
+        case SCANCODE_F12:
+            keycode = KeyEvent::KEYCODE_STOP;
+            break;
+
+        case SCANCODE_PAUSE:
+            keycode = KeyEvent::KEYCODE_PAUSE;
+            break;
+
+        case SCANCODE_ENTER:
+            keycode = KeyEvent::KEYCODE_ENTER;
+            break;
+
+        case SCANCODE_POWER:
+            keycode = KeyEvent::KEYCODE_POWER;
+            break;
+
+        case SCANCODE_BACKSPACE:
+            keycode = KeyEvent::KEYCODE_BACKSPACE;
+            break;
+
+        case SCANCODE_REMOVE:
+            keycode = KeyEvent::KEYCODE_REMOVE;
+            break;
+        }
+    }
+
+    return (KeyEvent::KeyCode)keycode;
+}
+
+bool Window::onKeyEvent(const KeyEvent* event)
+{
+    return true;
+}
+
+bool Window::onMouseEvent(const MouseEvent* event)
+{
+    return true;
+}
+
+bool Window::onMouseWheelEvent(const MouseWheelEvent* event)
+{
+    return true;
+}
+
+int Window::onKeyMessage(KeyEvent::KeyEventType keytype,
+        WPARAM wParam, LPARAM lParam)
+{
+    KeyEvent::KeyCode keycode = scancode2keycode(wParam);
+    KeyEvent event(keytype, keycode, wParam, lParam);
+    onKeyEvent(&event);
+    return 0;
+}
+
+int Window::onMouseMessage(MouseEvent::MouseEventType mouseType,
+        WPARAM wParam, LPARAM lParam)
+{
+    int x_pos = LOSWORD (lParam);
+    int y_pos = HISWORD (lParam);
+    MouseEvent event(mouseType, x_pos, y_pos, wParam);
+    onMouseEvent(&event);
+    return 0;
+}
+
+LRESULT Window::defaultMainWindowProc(HWND hWnd, UINT message,
+        WPARAM wParam, LPARAM lParam)
+{
+    Window* mainwnd = Window::getObject(hWnd);
+    if (mainwnd == NULL) {
+        _DBG_PRINTF("Window::defaultMainWindowProc: mainwnd is NULL\n");
+        return 0;
+    }
+
+    switch (message) {
+    case MSG_KEYDOWN:
+        return mainwnd->onKeyMessage(KeyEvent::KEY_DOWN, wParam, lParam);
+
+    case MSG_KEYUP:
+        return mainwnd->onKeyMessage(KeyEvent::KEY_UP, wParam, lParam);
+
+    case MSG_KEYLONGPRESS:
+        return mainwnd->onKeyMessage(KeyEvent::KEY_LONGPRESSED, wParam, lParam);
+
+    case MSG_KEYALWAYSPRESS:
+        return mainwnd->onKeyMessage(KeyEvent::KEY_ALWAYSPRESS, wParam, lParam);
+
+    case MSG_LBUTTONDOWN:
+        return mainwnd->onMouseMessage(MouseEvent::MOUSE_L_DOWN, wParam, lParam);
+
+    case MSG_LBUTTONUP:
+        return mainwnd->onMouseMessage(MouseEvent::MOUSE_L_UP, wParam, lParam);
+
+    case MSG_MOUSEMOVE:
+        return mainwnd->onMouseMessage(MouseEvent::MOUSE_MOVE, wParam, lParam);
+
+    case MSG_IDLE:
+        mainwnd->onIdle();
+        return 0;
+
+    case MSG_ERASEBKGND:
+        return 0;
+
+    case MSG_PAINT: {
+        HDC hdc = BeginPaint(hWnd);
+        if (mainwnd && IsWindowVisible(hWnd)) {
+            RECT rcBounds;
+            GetBoundsRect(hdc, &rcBounds);
+            IntRect rcInv(rcBounds);
+
+            GraphicsContext gc(hdc);
+            RootView* root = mainwnd->getRootView();
+            if (root) {
+                root->onPaint(&gc);
+
+                if (!IsWindowEnabled(hWnd)) {
+                    GraphicsContext overlay_gc (hdc);
+                    overlay_gc.fillRect(rcInv, 0, 0, 0, 256*3/10);
+                }
+            }
+            else {
+                gc.fillRect(rcInv, 0xFF, 0xFF, 0xFF, 0xFF);
+            }
+        }
+
+        EndPaint(hWnd, hdc);
+        SyncUpdateDC(HDC_SCREEN);
+        return 0;
+    }
+
+    default:
+        break;
+    }
+
+    return DefaultMainWinProc(hWnd, message, wParam, lParam);
+}
+
+bool Window::setRootView(RootView* root)
+{
+    if (m_rootView) {
+        m_rootView->freeze();
+    }
+
+    if (root) {
+        if (root->attachToSysWindow(this)) {
+            m_rootView = root;
+            root->unfreeze();
+            return true;
+        }
+        else
+            return false;
+    }
+
+    m_rootView = NULL;
+    return true;
 }
 
 } // namespace hfcl

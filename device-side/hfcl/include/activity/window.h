@@ -31,6 +31,7 @@
 #include "../common/object.h"
 #include "../common/intrect.h"
 #include "../common/event.h"
+#include "../graphics/graphicscontext.h"
 
 namespace hfcl {
 
@@ -41,39 +42,63 @@ public:
     Window();
     virtual ~Window();
 
+    /* public methods */
     void setWindowRect(const IntRect& rc);
-    void getClientRect(IntRect& rc);
+    void getClientRect(IntRect& rc) const;
 
-    void show(bool bUpdateBack = true);
-    void hide(void);
-    void destroy(void);
+    void show(bool updateBg = true);
+    void hide();
+    void destroy();
+    bool create();
 
-    // Synchronous
-    void updateWindow(bool isUpdateBkg = TRUE);
-
-    HWND viewWindow(void) const;
-    static Window* window(HWND hwnd);
+    HWND getSysWindow() const { return m_sysWnd; }
+    static Window* getObject(HWND hwnd);
 
     HWND setActiveWindow(HWND hMainWnd);
-    HWND getActiveWindow(void);
+    HWND getActiveWindow();
 
-    // Asynchronous
-    void asyncUpdateRect(int x, int y, int w, int h, bool upBackGnd = true);
-    // Synchronous
-    void syncUpdateRect(int x, int y, int w, int h, bool upBackGnd = true);
+    void updateWindow(bool updateBg = true);
+    void asyncUpdateRect(int x, int y, int w, int h, bool updateBg = true);
+    void syncUpdateRect(int x, int y, int w, int h, bool updateBg = true);
 
-    int doModal(bool bAutoDestory = false);
     unsigned int doModalView();
+
+    int doModal(bool bAutoDestory = true);
     void endDlg(int endCode);
 
-    RootView* getRootView(int view_id);
+    RootView* getRootView() { return m_rootView; }
+    bool setRootView(RootView* root);
+
+    /* event handlers */
+    virtual void drawBackground(GraphicsContext* gc, IntRect &rc);
+
+    virtual bool onKeyEvent(const KeyEvent* event);
+    virtual bool onMouseEvent(const MouseEvent* event);
+    virtual bool onMouseWheelEvent(const MouseWheelEvent* event);
+    virtual bool onIdle() { return false; }
+
+    // you can overload the method to define customized keycode.
+    virtual KeyEvent::KeyCode scancode2keycode(int scancode);
 
 protected:
     HWND m_sysWnd;
-    bool createMainWindow(void);
-    virtual bool createMainWindow(int x, int y, int w, int h, bool visible = true);
+    RootView* m_rootView;
+
+    static LRESULT defaultMainWindowProc(HWND hWnd, UINT message,
+            WPARAM wParam, LPARAM lParam);
     static HWND createMainWindow(const char* caption, WNDPROC proc,
-            int x, int y, int width, int height, DWORD addData, bool visible = true);
+            int x, int y, int width, int height, DWORD addData,
+            bool visible = true);
+
+    /* helpers to handle event */
+    int onKeyMessage(KeyEvent::KeyEventType keytype,
+        WPARAM wParam, LPARAM lParam);
+    int onMouseMessage(MouseEvent::MouseEventType mouseType,
+        WPARAM wParam, LPARAM lParam);
+
+    // overloaded this function to change the default position of main window
+    virtual bool doCreate(int x, int y, int w, int h, bool visible = true);
+
 };
 
 } // namespace hfcl

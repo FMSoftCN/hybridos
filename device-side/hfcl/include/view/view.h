@@ -83,7 +83,6 @@ public:
     }
 
     const RootView* getRoot() const;
-    virtual HWND getSysWindow() const;
 
     // methods to get/set identifier (integer) of the view
     int getId() const { return m_id; }

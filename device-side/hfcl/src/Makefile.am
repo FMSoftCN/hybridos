@@ -8,7 +8,6 @@ MYLIBADD= \
     mgcl/libhfcl_mgcl.la \
     activity/libhfcl_activity.la \
     graphics/libhfcl_graphics.la \
-    drawable/libhfcl_drawable.la \
     view/libhfcl_view.la \
     animation/libhfcl_animation.la \
     services/libhfcl_services.la \

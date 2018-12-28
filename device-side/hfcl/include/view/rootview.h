@@ -35,14 +35,15 @@
 
 namespace hfcl {
 
-class RootView : public ViewContainer
-{
+class Window;
+
+class RootView : public ViewContainer {
 public:
     RootView();
     virtual ~RootView();
 
     /* methods specific to RootView */
-    bool attachToSysWindow(HWND hwnd);
+    bool attachToSysWindow(Window* window);
     bool detachFromSysWindow();
     bool applyCssGroup(HTResId cssgId);
     const RealRect& viewport() const { return m_viewport; }
@@ -50,30 +51,13 @@ public:
     /* overloaded virtual functions */
     virtual const char* type() const { return "hvroot"; }
     virtual bool isRoot() const { return true; }
-    virtual HWND getSysWindow() const { return m_hwnd; }
-
-    virtual void onPaint(GraphicsContext* context);
-
-    /* new virtual functions for RootView */
-    // you can overload the method to define customized keycode.
-    virtual KeyEvent::KeyCode scancode2keycode(int scancode);
-
-    /* static methods */
-    static RootView* hwndToView(HWND hwnd);
-    static LRESULT rootViewProc(HWND hWnd, UINT message,
-            WPARAM wParam, LPARAM lParam);
+    virtual Window* getSysWindow() const { return m_window; }
 
 protected:
-    /* helpers to handle event */
-    int onKeyMessage(KeyEvent::KeyEventType keytype,
-        WPARAM wParam, LPARAM lParam);
-    int onMouseMessage(MouseEvent::MouseEventType mouseType,
-        WPARAM wParam, LPARAM lParam);
 
 private:
-    HWND m_hwnd;
+    Window* m_window;
     RealRect m_viewport;
-    WNDPROC m_old_proc;
 };
 
 } // namespace hfcl

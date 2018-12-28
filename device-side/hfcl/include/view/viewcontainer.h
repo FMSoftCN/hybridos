@@ -97,6 +97,11 @@ public:
     void setAutoSize(bool b) { setFlag(b, AUTOSIZE); }
     bool isAutoSize() { return m_flags & AUTOSIZE; }
 
+    virtual bool onKeyEvent(const KeyEvent* event);
+    virtual bool onMouseEvent(const MouseEvent* event);
+    virtual bool onMouseWheelEvent(const MouseWheelEvent* event);
+    virtual void onPaint(GraphicsContext* context);
+
 protected:
     View *m_focused;
     View *m_first;

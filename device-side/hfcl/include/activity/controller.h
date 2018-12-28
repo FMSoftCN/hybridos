@@ -26,14 +26,14 @@
 #include "../common/log.h"
 #include "../common/event.h"
 #include "../view/viewcontext.h"
+#include "../view/rootview.h"
 #include "activitymanager.h"
 
 namespace hfcl {
 
 class ControllerClient;
 
-class Controller
-{
+class Controller {
 public:
     Controller();
     virtual ~Controller();
@@ -58,7 +58,7 @@ public:
     ControllerClient* find(int view_id);
     void deleteView(int view_id, bool bExit = true);
     int getClientCount() { return m_list.size();}
-    int getTopViewId(void);
+    int getTopViewId();
 
 protected:
     LIST(ControllerClient*, ControllerClientList)
@@ -101,11 +101,10 @@ protected:
 
 //////////////////////////////////////////////////////////////
 
-class ControllerClient : public ViewContext
-{
+class ControllerClient : public ViewContext {
 protected:
     Controller* m_owner;
-    View*       m_baseView;
+    RootView*   m_rootView;
     int         m_id;
     int         m_inactiveTimes;
     bool        m_bModal;
@@ -115,24 +114,24 @@ protected:
 public:
     ControllerClient(Controller* owner)
         : m_owner(owner)
-        , m_baseView(NULL)
+        , m_rootView(NULL)
         , m_id(0)
         , m_inactiveTimes(0)
         , m_modeManager(NULL)
         , m_currentList(NULL) {}
 
-    ControllerClient(Controller* owner, int id, View *p_baseView)
+    ControllerClient(Controller* owner, int id, RootView *rootView)
         : m_owner(owner)
-        , m_baseView(p_baseView)
+        , m_rootView(rootView)
         , m_id(id)
         , m_inactiveTimes(0)
         , m_modeManager(NULL)
         , m_currentList(NULL) {}
 
-    ControllerClient(Controller* owner, int id, View * parent,
+    ControllerClient(Controller* owner, int id, RootView * parent,
             HTData param1, HTData param2)
         : m_owner(owner)
-        , m_baseView(NULL)
+        , m_rootView(NULL)
         , m_id(id)
         , m_inactiveTimes(0)
         , m_modeManager(NULL)
@@ -153,16 +152,16 @@ public:
     }
 
     void setModal(bool bModal ) { m_bModal = bModal; }
-    bool isModal(void) const { return m_bModal; }
+    bool isModal() const { return m_bModal; }
 
-    View *baseView() { return m_baseView; }
-    const View *baseView() const { return m_baseView; }
+    RootView *rootView() { return m_rootView; }
+    const RootView *rootView() const { return m_rootView; }
     void cleanBaseView();
 
-    unsigned int sendCommand (unsigned int cmd_id,
+    unsigned int sendCommand(unsigned int cmd_id,
             HTData param1, HTData param2) {
         if (m_owner)
-            return m_owner->onClientCommand (getId(), cmd_id, param1, param2);
+            return m_owner->onClientCommand(getId(), cmd_id, param1, param2);
         return 0;
     }
 
@@ -189,7 +188,7 @@ public:
     }
 
     unsigned int backView(unsigned int end_code = 0) {
-        if(m_owner)
+        if (m_owner)
             return m_owner->backView(end_code);
         return 0;
     }
@@ -247,7 +246,7 @@ protected:
             m_currentList = NULL;
     }
 
-    void setView(int view_id, View* view) { }
+    void setView(int view_id, RootView* view) { }
     EventListener* getHandle(int handle_id, int event_type) {
         return NULL;
     }

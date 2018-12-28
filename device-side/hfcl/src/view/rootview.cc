@@ -19,6 +19,7 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "activity/window.h"
 #include "view/rootview.h"
 
 #include "resource/respkgmanager.h"
@@ -27,28 +28,29 @@
 
 namespace hfcl {
 
-RootView::RootView() : ViewContainer(0, NULL, NULL)
+RootView::RootView()
+    : ViewContainer(0, NULL, NULL)
+    , m_window(0)
 {
-    m_hwnd = HWND_INVALID;
-    m_old_proc = NULL;
 }
 
 RootView::~RootView()
 {
-    if (m_hwnd != HWND_INVALID) {
+    if (m_window) {
         detachFromSysWindow();
     }
 }
 
-bool RootView::attachToSysWindow(HWND hwnd)
+bool RootView::attachToSysWindow(Window* window)
 {
-    if (m_hwnd != HWND_INVALID && hwnd != HWND_INVALID) {
-        m_old_proc = SetWindowCallbackProc(hwnd, rootViewProc);
-        SetWindowAdditionalData(hwnd, (DWORD)this);
-        m_hwnd = hwnd;
+    if (m_window) {
+        detachFromSysWindow();
+    }
+    else if (window && m_window != window) {
+        m_window = window;
 
-        RECT rc;
-        GetClientRect(hwnd, &rc);
+        IntRect rc;
+        window->getClientRect(rc);
 
         /* FIXME: viewport should be defined in px */
         m_viewport = rc;
@@ -61,15 +63,10 @@ bool RootView::attachToSysWindow(HWND hwnd)
 
 bool RootView::detachFromSysWindow()
 {
-    if (m_hwnd == HWND_INVALID)
+    if (m_window == NULL)
         return false;
 
-    SetWindowCallbackProc(m_hwnd, m_old_proc);
-    SetWindowAdditionalData(m_hwnd, 0);
-    InvalidateRect(m_hwnd, NULL, true);
-
-    m_hwnd = HWND_INVALID;
-    m_old_proc = NULL;
+    m_window = NULL;
     return true;
 }
 
@@ -89,167 +86,6 @@ bool RootView::applyCssGroup(HTResId cssgId)
     }
 
     return true;
-}
-
-RootView* RootView::hwndToView(HWND hwnd)
-{
-    return reinterpret_cast<RootView*>(GetWindowAdditionalData(hwnd));
-}
-
-LRESULT RootView::rootViewProc(HWND hWnd, UINT message,
-        WPARAM wParam, LPARAM lParam)
-{
-    RootView* _view = RootView::hwndToView(hWnd);
-    if (_view == NULL) {
-        _DBG_PRINTF("RootView::rootViewProc: _view is NULL\n");
-        return 0;
-    }
-
-    switch (message) {
-    case MSG_KEYDOWN:
-        return _view->onKeyMessage(KeyEvent::KEY_DOWN, wParam, lParam);
-
-    case MSG_KEYUP:
-        return _view->onKeyMessage(KeyEvent::KEY_UP, wParam, lParam);
-
-    case MSG_KEYLONGPRESS:
-        return _view->onKeyMessage(KeyEvent::KEY_LONGPRESSED, wParam, lParam);
-
-    case MSG_KEYALWAYSPRESS:
-        return _view->onKeyMessage(KeyEvent::KEY_ALWAYSPRESS, wParam, lParam);
-
-    case MSG_LBUTTONDOWN:
-        return _view->onMouseMessage(MouseEvent::MOUSE_L_DOWN, wParam, lParam);
-
-    case MSG_LBUTTONUP:
-        return _view->onMouseMessage(MouseEvent::MOUSE_L_UP, wParam, lParam);
-
-    case MSG_MOUSEMOVE:
-        return _view->onMouseMessage(MouseEvent::MOUSE_MOVE, wParam, lParam);
-
-    case MSG_IDLE:
-        _view->onIdle();
-        return 0;
-
-    case MSG_ERASEBKGND:
-        return 0;
-
-    case MSG_PAINT: {
-        HDC hdc = BeginPaint(hWnd);
-        if (_view && !_view->isFrozen() && IsWindowVisible(hWnd)) {
-            RECT rcBounds;
-            GetBoundsRect(hdc, &rcBounds);
-
-            GraphicsContext gc(hdc);
-            IntRect rcView(0, 0, _view->getRect().width(),
-                            _view->getRect().height());
-            IntRect rcInv(rcBounds.left, rcBounds.top,
-                            rcBounds.right, rcBounds.bottom);
-            if (rcInv.intersect(rcView)) {
-                _view->drawContent(&gc, rcView);
-                _view->drawScrollBar(&gc, rcView);
-
-                if (!IsWindowEnabled(hWnd)) {
-                    GraphicsContext overlay_gc (hdc);
-                    overlay_gc.fillRect(rcView, 0, 0, 0, 256*3/10);
-                }
-            }
-        }
-
-        EndPaint(hWnd, hdc);
-        SyncUpdateDC(HDC_SCREEN);
-        return 0;
-    }
-
-    case MSG_CLOSE:
-        _view->detachFromSysWindow();
-        return 0;
-
-    default:
-        break;
-    }
-
-    return _view->m_old_proc(hWnd, message, wParam, lParam);
-}
-
-KeyEvent::KeyCode RootView::scancode2keycode(int scancode)
-{
-    int keycode = KeyEvent::KEYCODE_UNKNOWN;
-    if (scancode >= SCANCODE_1 && scancode <= SCANCODE_9) {
-        keycode = KeyEvent::KEYCODE_1 + (scancode - SCANCODE_1);
-    }
-    else if (scancode >= SCANCODE_F1 && scancode <= SCANCODE_F10) {
-        keycode = KeyEvent::KEYCODE_STAR + (scancode - SCANCODE_F10);
-    }
-    else if (scancode >= SCANCODE_HOME && scancode <= SCANCODE_PAGEDOWN) {
-        keycode = KeyEvent::KEYCODE_HOME + (scancode - SCANCODE_HOME);
-    }
-    else {
-        switch (scancode) {
-        case SCANCODE_0:
-            keycode = KeyEvent::KEYCODE_0;
-            break;
-
-        case SCANCODE_SPACE:
-            keycode = KeyEvent::KEYCODE_SPACE;
-            break;
-
-        case SCANCODE_ESCAPE:
-            keycode = KeyEvent::KEYCODE_BACK;
-            break;
-
-        case SCANCODE_F11:
-            keycode = KeyEvent::KEYCODE_START;
-            break;
-
-        case SCANCODE_F12:
-            keycode = KeyEvent::KEYCODE_STOP;
-            break;
-
-        case SCANCODE_PAUSE:
-            keycode = KeyEvent::KEYCODE_PAUSE;
-            break;
-
-        case SCANCODE_ENTER:
-            keycode = KeyEvent::KEYCODE_ENTER;
-            break;
-
-        case SCANCODE_POWER:
-            keycode = KeyEvent::KEYCODE_POWER;
-            break;
-
-        case SCANCODE_BACKSPACE:
-            keycode = KeyEvent::KEYCODE_BACKSPACE;
-            break;
-
-        case SCANCODE_REMOVE:
-            keycode = KeyEvent::KEYCODE_REMOVE;
-            break;
-        }
-    }
-
-    return (KeyEvent::KeyCode)keycode;
-}
-
-int RootView::onKeyMessage(KeyEvent::KeyEventType keytype,
-        WPARAM wParam, LPARAM lParam)
-{
-    KeyEvent::KeyCode keycode = scancode2keycode(wParam);
-    KeyEvent event(keytype, keycode, wParam, lParam);
-
-    dispatchEvent(&event);
-    return 0;
-}
-
-int RootView::onMouseMessage(MouseEvent::MouseEventType mouseType,
-        WPARAM wParam, LPARAM lParam)
-{
-    int x_pos = LOSWORD (lParam);
-    int y_pos = HISWORD (lParam);
-    MouseEvent ev(mouseType, x_pos, y_pos, wParam);
-
-    dispatchEvent(&ev);
-    return 0;
 }
 
 } // namespace hfcl

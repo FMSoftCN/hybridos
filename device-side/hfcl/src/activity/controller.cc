@@ -130,7 +130,7 @@ unsigned int Controller::showModalView(int view_id, HTData param1, HTData param2
         ControllerClient * client = getTop(0);
         View* view;
 
-        if(!client || !(view = client->baseView()))
+        if(!client || !(view = client->rootView()))
             return 1;
 
         Window *window = SAFE_CAST(Window*, view->getRoot());
@@ -165,7 +165,7 @@ unsigned int Controller::backView(unsigned int endcode)
 
     if(m_modalCount > 0) {
         if(client && client->isModal()) {
-            Window* window = SAFE_CAST(Window*, client->baseView()->getRoot());
+            Window* window = SAFE_CAST(Window*, client->rootView()->getRoot());
             window->endDlg(endcode);
             m_modalCount --;
         }
@@ -344,7 +344,7 @@ void Controller::deleteView(int view_id, bool bExit)
 
     if(m_modalCount > 0) {
         if(_client && _client->isModal()) {
-            Window* window = SAFE_CAST(Window*, _client->baseView()->getRoot());
+            Window* window = SAFE_CAST(Window*, _client->rootView()->getRoot());
             window->endDlg(0);
             m_modalCount --;
         }
@@ -385,9 +385,9 @@ ControllerClient* Controller::find(int view_id)
 
 void ControllerClient::active()
 {
-    if (m_baseView) {
-        m_baseView->unfreeze();
-        m_baseView->focus(); //facusMe
+    if (m_rootView) {
+        m_rootView->unfreeze();
+        m_rootView->focus(); //facusMe
         if(m_currentList)
             m_owner->setMode(m_currentList);
     }
@@ -395,13 +395,13 @@ void ControllerClient::active()
 
 void ControllerClient::inactive()
 {
-    if (m_baseView) {
+    if (m_rootView) {
         // VincentWei: Use freezeUpdate/unfreezeUpdate instead of hide/show.
         // if we hide old one,
         // the transparent view will show wrong when updata
         // if we do NOT hide old one,
         // we will waste a lot to paint all.
-        m_baseView->freeze();
+        m_rootView->freeze();
     }
     m_inactiveTimes++;
 }
@@ -419,14 +419,14 @@ void ControllerClient::cleanBaseView()
 {
     _DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- clear client <%p>", this);
 
-    if(m_baseView) {
-        ViewContainer *p = m_baseView->getParent();
+    if(m_rootView) {
+        ViewContainer *p = m_rootView->getParent();
         if(p != NULL){
-            p->removeChild(m_baseView);
+            p->removeChild(m_rootView);
         } else {
-            HFCL_DELETE(m_baseView);
+            HFCL_DELETE(m_rootView);
         }
-        m_baseView = NULL;
+        m_rootView = NULL;
     }
 }
 

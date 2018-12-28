@@ -685,15 +685,17 @@ const RootView* View::getRoot() const
     return NULL;
 }
 
-HWND View::getSysWindow() const
+#if 0
+Window* View::getSysWindow() const
 {
     const RootView* root = getRoot();
     if (root) {
         return root->getSysWindow();
     }
 
-    return HWND_INVALID;
+    return NULL;
 }
+#endif
 
 void View::applyCss(CssDeclared* css, const CssSelectorGroup& selector)
 {

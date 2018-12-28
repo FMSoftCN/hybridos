@@ -5,6 +5,7 @@ noinst_LTLIBRARIES=libhfcl_activity.la
 
 AM_CPPFLAGS=-D__HFCL_LIB__ -I../../include
 libhfcl_activity_la_SOURCES = \
+    window.cc \
     baseactivity.cc \
     activity.cc \
     activityinfo.cc \
@@ -12,5 +13,4 @@ libhfcl_activity_la_SOURCES = \
     activitystack.cc \
     activitywithclients.cc \
     controller.cc \
-    intent.cc \
-    window.cc
+    intent.cc

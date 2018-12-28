@@ -35,55 +35,36 @@ class ActivityWithClients;
 
 class ActivityClient : public ControllerClient {
 public:
-    ActivityClient(Controller* owner, int view_id, View* parent)
-        : ControllerClient(owner, view_id, parent, 0, 0) { }
+    ActivityClient(Controller* owner, int view_id, RootView* root)
+        : ControllerClient(owner, view_id, root, 0, 0) { }
 
     /* overloaded virtual functions */
     virtual bool isTip() { return false; }
-
-    /* public operators */
-    unsigned int showTipView (int view_id, HTData param1, HTData param2) {
-        if(m_owner)
-            return ((ActivityWithClients *)m_owner)->showTipView (view_id,
-                    param1, param2);
-        return 0;
-    }
-    void exitTip(int endCode = TipDlg::TIP_DESTROY) {
-        if (m_owner)
-            ((ActivityWithClients *)m_owner)->exitTip(endCode);
-    }
-
-    void exitHome() {
-        if (m_owner)
-            ((ActivityWithClients *)m_owner)->exitHome();
-    }
 };
 
 class TipClient : public ActivityClient {
 public:
-    TipClient(Controller* owner, int view_id, View*parent)
-        : ActivityClient(owner, view_id, parent) { }
+    TipClient(Controller* owner, int view_id, RootView* root)
+        : ActivityClient(owner, view_id, root) { }
     virtual ~TipClient() {}
 
     /* overloaded virtual functions */
     virtual bool isTip() { return true; }
 
-    virtual void active() {
-        if (m_owner->getClientCount() == 0) {
-            ActivityManager* act_mgr = ActivityManager::getInstance();
-            Activity *act = (Activity *)(act_mgr->getTopActivity(1));
-            if (act != NULL) {
-                act->show();
-                act->updateWindow();
-            }
-        }
-        ActivityClient::active();
-    }
+    virtual void active();
 };
 
 class ActivityWithClients : public FullScreenActivity,
                             public TimerEventListener {
 public:
+    enum ActCmd {
+        ACT_CMD_EXIT,
+        ACT_CMD_BACK,
+        ACT_CMD_OPTIONS,
+        ACT_CMD_OK,
+        ACT_CMD_CANCEL,
+    };
+
     ActivityWithClients ();
     ActivityWithClients (bool fullscreen);
     virtual ~ActivityWithClients();
@@ -101,7 +82,6 @@ public:
 
         FullScreenActivity::onWakeup();
     }
-
     virtual void onSleep() {
         closeTimer();
     }
@@ -110,24 +90,33 @@ public:
         return NULL;
     }
 
+    virtual unsigned int onClientCommand(int sender,
+            unsigned int cmd_id, HTData param1, HTData param2) {
+        return 0;
+    }
+
+    /* new virtual functions specific to ActivityWithClients */
+    virtual void onCmdOk() { }
+    virtual void onCmdCancel() { }
+    virtual void onCmdOptions() { }
+
     // when open pop, this function will be call.
     virtual void hold() {}
 
     // when close(exit) pop, this function will be call.
     virtual void resume() {}
 
-    virtual unsigned int onClientCommand(int sender,
-            unsigned int cmd_id, HTData param1, HTData param2);
-
+    virtual void drawBackground(GraphicsContext* gc, IntRect &rc);
     bool handleEvent(Event * event);
     virtual bool onKey(int keyCode, KeyEvent* event);
 
     /* public operators */
     virtual unsigned int showView(int view_id, HTData param1, HTData param2);
     virtual unsigned int backView(unsigned int endcode = 0);
+
     unsigned int showModalView(int view_id, HTData param1, HTData param2);
     unsigned int showTipView(int view_id, HTData param1, HTData param2);
-    virtual void exitTip(int endCode = TipDlg::TIP_DESTROY);
+    virtual void exitTip(int endCode);
 
     bool isFullScreen() { return m_isFullScreen; }
     virtual void setFullScreen(bool bfullScreen);
@@ -155,9 +144,9 @@ protected:
 
 protected:
     bool            m_isFullScreen;
-    int             m_timerId;
     ActivityClient *m_keyDownTarget;
     bool            m_tipShown;
+    int             m_timerId;
 };
 
 } // namespace hfcl
