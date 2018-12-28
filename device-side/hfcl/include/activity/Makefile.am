@@ -9,6 +9,7 @@ myinclude_HEADERS= \
     activityinfo.h \
     activitymanager.h \
     activitystack.h \
+    activitywithclients.h \
     controller.h \
     intent.h \
     window.h

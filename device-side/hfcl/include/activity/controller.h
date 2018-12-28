@@ -16,8 +16,7 @@
 ** GNU General Public License for more details.
 **
 ** You should have received a copy of the GNU General Public License
-** along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+** along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 
 #ifndef HFCL_ACTIVITY_CONTROLLER_H_
@@ -105,8 +104,8 @@ protected:
 class ControllerClient : public ViewContext
 {
 protected:
-    Controller* m_owner; //the controller onwer
-    View*       m_baseView; //the view of ui
+    Controller* m_owner;
+    View*       m_baseView;
     int         m_id;
     int         m_inactiveTimes;
     bool        m_bModal;
@@ -116,105 +115,118 @@ protected:
 public:
     ControllerClient(Controller* owner)
         : m_owner(owner)
-         , m_baseView(NULL)
-         , m_id(0)
-         , m_inactiveTimes(0)
-         , m_modeManager(NULL)
-         , m_currentList(NULL)
-    {}
+        , m_baseView(NULL)
+        , m_id(0)
+        , m_inactiveTimes(0)
+        , m_modeManager(NULL)
+        , m_currentList(NULL) {}
 
     ControllerClient(Controller* owner, int id, View *p_baseView)
         : m_owner(owner)
-          , m_baseView(p_baseView)
-          , m_id(id)
-          , m_inactiveTimes(0)
-          , m_modeManager(NULL)
-          , m_currentList(NULL)
-    { }
+        , m_baseView(p_baseView)
+        , m_id(id)
+        , m_inactiveTimes(0)
+        , m_modeManager(NULL)
+        , m_currentList(NULL) {}
 
-    ControllerClient(Controller* owner, int id, View * parent, HTData param1, HTData param2)
+    ControllerClient(Controller* owner, int id, View * parent,
+            HTData param1, HTData param2)
         : m_owner(owner)
-          , m_baseView(NULL)
-          , m_id(id)
-          , m_inactiveTimes(0)
-          , m_modeManager(NULL)
-          , m_currentList(NULL)
-    { }
+        , m_baseView(NULL)
+        , m_id(id)
+        , m_inactiveTimes(0)
+        , m_modeManager(NULL)
+        , m_currentList(NULL) {}
 
     virtual ~ControllerClient();
 
+    /* public methods */
     void setId(int id) { m_id = id; }
-    int getId() { return m_id; }
-    int getInActiveTimes() { return m_inactiveTimes; }
+    int getId() const { return m_id; }
+    int getInActiveTimes() const { return m_inactiveTimes; }
 
-    bool isTop() {
-        return ((m_owner->getTop() == this) &&(ActivityManager::getInstance()->getCurrentActivity() == (BaseActivity *)m_owner));
+    bool isTop() const {
+        ActivityManager* act_mgr = ActivityManager::getInstance();
+
+        return ((m_owner->getTop() == this) &&
+                (act_mgr->getCurrentActivity() == (BaseActivity *)m_owner));
     }
-    void setModal(bool bModal ) { m_bModal = bModal;}
-    bool isModal (void) {return m_bModal;}
 
-    virtual void active();
-    virtual void inactive();
+    void setModal(bool bModal ) { m_bModal = bModal; }
+    bool isModal(void) const { return m_bModal; }
 
-    virtual unsigned int onControllerCommand(unsigned int cmd_id,HTData param1, HTData param2) {
+    View *baseView() { return m_baseView; }
+    const View *baseView() const { return m_baseView; }
+    void cleanBaseView();
+
+    unsigned int sendCommand (unsigned int cmd_id,
+            HTData param1, HTData param2) {
+        if (m_owner)
+            return m_owner->onClientCommand (getId(), cmd_id, param1, param2);
         return 0;
     }
 
-    virtual void onActive(void* param) { } //when a view is put into the front
-    virtual void onLostActive() { }
-    virtual void onSleep() {} //when the view is destoried
-    virtual void onWakeup() {}
-
-    virtual bool onKey(int keyCode, KeyEvent* event) { return GOON_DISPATCH; }
-    virtual void onBackView(unsigned int endcode) { }
-    virtual void onPopView(unsigned int endcode) { }
-
-    virtual bool setCurrentMode(int mode_id) {
-        if(!m_modeManager)
-            return false;
-
-        ControllerModeList* modeList = m_modeManager->getModeById(mode_id);
-        if(!modeList)
-            return false;
-
-        m_currentList = modeList;
-        if(isTop())
-            m_owner->setMode(m_currentList);
-        return true;
-    }
-
-    virtual int GetValueFromCurrentMode(int mode_id,int sub_id);
-
-    unsigned int getCurrentModeId() {
+    unsigned int getCurrentModeId() const {
         return m_currentList ? m_currentList->mode_id : 0;
     }
 
-    unsigned int showView(int view_id, HTData param1, HTData param2){
-        if(m_owner)
+    unsigned int showView(int view_id, HTData param1, HTData param2) {
+        if (m_owner)
             return m_owner->showView(view_id, param1, param2);
         return 0;
     }
 
-    unsigned int switchView(int view_id, HTData param1, HTData param2) //switch a view with stack
-    {
-        if(m_owner)
+    unsigned int switchView(int view_id, HTData param1, HTData param2) {
+        if (m_owner)
             return m_owner->switchView(view_id, param1, param2);
         return 0;
     }
 
-    unsigned int showModalView(int view_id, HTData param1, HTData param2)
-    {
-        if(m_owner)
+    unsigned int showModalView(int view_id, HTData param1, HTData param2) {
+        if (m_owner)
             return m_owner->showModalView(view_id, param1, param2);
         return 0;
     }
 
-    unsigned int backView(unsigned int end_code = 0)
-    {
+    unsigned int backView(unsigned int end_code = 0) {
         if(m_owner)
             return m_owner->backView(end_code);
         return 0;
     }
+
+    /* virtual functions */
+    virtual void active();
+    virtual void inactive();
+
+    virtual unsigned int onControllerCommand(unsigned int cmd_id,
+            HTData param1, HTData param2) {
+        return 0;
+    }
+
+    virtual void onActive(void* param) { }
+    virtual void onInactive() { }
+    virtual void onSleep() {}
+    virtual void onWakeup() {}
+
+    virtual bool onKey(const KeyEvent* event) { return GOON_DISPATCH; }
+    virtual void onBackView(unsigned int endcode) { }
+    virtual void onPopView(unsigned int endcode) { }
+
+    virtual bool setCurrentMode(int mode_id) {
+        if (!m_modeManager)
+            return false;
+
+        ControllerModeList* modeList = m_modeManager->getModeById(mode_id);
+        if (!modeList)
+            return false;
+
+        m_currentList = modeList;
+        if (isTop())
+            m_owner->setMode(m_currentList);
+        return true;
+    }
+
+    virtual int GetValueFromCurrentMode(int mode_id, int sub_id);
 
     virtual void exit() {
         if(m_owner) {
@@ -225,32 +237,20 @@ public:
         }
     }
 
-    View *baseView() { return m_baseView; }
-
-    void cleanBaseView();
-
-    unsigned int sendCommand(unsigned int cmd_id, HTData param1, HTData param2) {
-        if(m_owner)
-            return m_owner->onClientCommand(getId(), cmd_id, param1, param2);
-        return 0;
-    }
-
 protected:
-    //virtual View* createView() = 0;
-    //virtual void  onViewCreated() = 0;
-
-    virtual void setControllerModeManager(ControllerModeManager* mangers)
-    {
-        m_modeManager = mangers;
-        if(m_modeManager)
-            m_currentList = m_modeManager->getModeById(m_modeManager->def_mode_id);
+    virtual void setControllerModeManager(ControllerModeManager* managers) {
+        m_modeManager = managers;
+        if (m_modeManager)
+            m_currentList = m_modeManager->getModeById (
+                m_modeManager->def_mode_id);
         else
             m_currentList = NULL;
     }
 
     void setView(int view_id, View* view) { }
-
-    EventListener* getHandle(int handle_id, int event_type) { return NULL; }
+    EventListener* getHandle(int handle_id, int event_type) {
+        return NULL;
+    }
 };
 
 } // namespace hfcl

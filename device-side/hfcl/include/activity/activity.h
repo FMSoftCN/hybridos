@@ -22,10 +22,11 @@
 #ifndef HFCL_ACTIVITY_ACTIVITY_H_
 #define HFCL_ACTIVITY_ACTIVITY_H_
 
-#include "window.h"
-#include "intent.h"
-#include "baseactivity.h"
-#include "activitystack.h"
+#include "../activity/window.h"
+#include "../activity/intent.h"
+#include "../activity/baseactivity.h"
+#include "../activity/activitystack.h"
+
 #include "../common/event.h"
 
 namespace hfcl {
@@ -53,7 +54,6 @@ public:
     virtual void setFullScreen(bool isFullScreen);
 
 protected:
-    View * getViewParent(int view_id) { return (View*)this; }
 
 private:
     IntRect m_old_rect;

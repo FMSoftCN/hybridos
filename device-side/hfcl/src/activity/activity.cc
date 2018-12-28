@@ -54,49 +54,7 @@ void Activity::onMove2Top(void)
 
 HWND Activity::getSysWindow(void)
 {
-    return m_viewWindow;
-}
-
-bool Activity::onKey(int keyCode, KeyEvent* event)
-{
-    View* _focus = NULL;
-    bool ret = true;
-
-    if ((View *)0 != (_focus = getFocusedChild())) {
-        ret = _focus->dispatchEvent(event);
-        return ret;
-    }
-
-    return ret;
-}
-
-void Activity::onClick(POINT pt, Event::EventType type)
-{
-#if 0
-    RECT rc;
-    View* child = firstChild();
-
-    while (child != (View *)0) {
-        IntRect irc = child->getRect();
-        rc.left   = irc.left();
-        rc.top    = irc.top();
-        child->viewToWindow(&rc.left, &rc.top);
-        rc.right = rc.left + irc.width();
-        rc.bottom = rc.top + irc.height();
-
-        //current cursor pos is related with screen.
-        ScreenToClient(m_viewWindow, &pt.x, &pt.y);
-
-        if (PtInRect(&rc, pt.x, pt.y)) {
-            //Event::EventType eventType = Event::MOTION_CLICK;
-            MouseEvent event(type, pt.x - rc.left, pt.y - rc.top);
-            child->dispatchEvent(&event);
-            break;
-        }
-
-        child = child->getNext();
-    }
-#endif
+    return m_sysWnd;
 }
 
 Activity* Activity::activity(HWND hwnd)

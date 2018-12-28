@@ -10,6 +10,7 @@ libhfcl_activity_la_SOURCES = \
     activityinfo.cc \
     activitymanager.cc \
     activitystack.cc \
+    activitywithclients.cc \
     controller.cc \
     intent.cc \
     window.cc

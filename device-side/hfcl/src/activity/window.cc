@@ -45,7 +45,7 @@ bool Window::m_updateLocked = false;
 
 Window::Window()
     : PanelView(0, NULL, NULL)
-    , m_viewWindow(HWND_INVALID)
+    , m_sysWnd(HWND_INVALID)
     , m_context(0)
     , m_keyLockable(false)
     , m_keyLocked(false)
@@ -63,35 +63,35 @@ Window::~Window()
 
 void Window::show(bool bUpdateBack)
 {
-    ShowWindow(m_viewWindow, SW_SHOWNORMAL);
-    InvalidateRect(m_viewWindow, NULL, bUpdateBack);
+    ShowWindow(m_sysWnd, SW_SHOWNORMAL);
+    InvalidateRect(m_sysWnd, NULL, bUpdateBack);
 }
 
 void Window::getClientRect(IntRect& irc)
 {
     RECT rc;
 
-    GetClientRect(m_viewWindow, &rc);
+    GetClientRect(m_sysWnd, &rc);
     irc.setRect(rc.left, rc.top, rc.right, rc.bottom);
 }
 
 void Window::setWindowRect(const IntRect& irc)
 {
-    MoveWindow(m_viewWindow, irc.left(), irc.top(), irc.width(), irc.height(),
+    MoveWindow(m_sysWnd, irc.left(), irc.top(), irc.width(), irc.height(),
                TRUE);
 }
 
 void Window::hide(void)
 {
-    ShowWindow(m_viewWindow, SW_HIDE);
+    ShowWindow(m_sysWnd, SW_HIDE);
 }
 
 // destroy view window and other resources
 void Window::destroy(void)
 {
-    if(GetWindowAdditionalData(m_viewWindow) == (DWORD)this) {
-        SetWindowAdditionalData(m_viewWindow, 0);
-        DestroyMainWindow(m_viewWindow);
+    if(GetWindowAdditionalData(m_sysWnd) == (DWORD)this) {
+        SetWindowAdditionalData(m_sysWnd, 0);
+        DestroyMainWindow(m_sysWnd);
     }
 }
 
@@ -126,7 +126,7 @@ void Window::asyncUpdateRect(int x, int y, int w, int h, bool upBackGnd)
     if (!m_updateLocked) {
         _DBG_PRINTF ("Window::asyncUpdateRect called with (%d, %d, %d, %d)",
                      rc.left, rc.top, rc.right, rc.bottom);
-        InvalidateRect(m_viewWindow, &rc, FALSE);
+        InvalidateRect(m_sysWnd, &rc, FALSE);
     }
 }
 
@@ -134,8 +134,8 @@ void Window::syncUpdateRect(int x, int y, int w, int h, bool upBackGnd)
 {
     RECT rc = {x, y, x + w, y + h};
 
-    InvalidateRect (m_viewWindow, &rc, FALSE);
-    UpdateInvalidClient (m_viewWindow, FALSE);
+    InvalidateRect (m_sysWnd, &rc, FALSE);
+    UpdateInvalidClient (m_sysWnd, FALSE);
 }
 
 void Window::drawScrollBar(GraphicsContext* context, IntRect &rc)
@@ -154,12 +154,12 @@ void Window::drawBackground(GraphicsContext* context, IntRect &rc)
 
 HWND Window::getSysWindow(void)
 {
-    return m_viewWindow;
+    return m_sysWnd;
 }
 
 HWND Window::viewWindow(void) const
 {
-    return m_viewWindow;
+    return m_sysWnd;
 }
 
 Window* Window::window(HWND hwnd)
@@ -200,24 +200,24 @@ HWND Window::createMainWindow (const char* caption, WNDPROC proc,
     return CreateMainWindow(&CreateInfo);
 }
 
-//create main window and set m_viewWindow. only need call once in onCreate.
+//create main window and set m_sysWnd. only need call once in onCreate.
 bool Window::createMainWindow(int x, int y, int w, int h, bool visible)
 {
     //has valid window
-    if (m_viewWindow != HWND_INVALID)
+    if (m_sysWnd != HWND_INVALID)
         return false;
 
-    m_viewWindow = createMainWindow ("window", defaultAppProc,
+    m_sysWnd = createMainWindow ("window", defaultAppProc,
             x, y, w, h, (DWORD)this, visible);
 
-    if (m_viewWindow == HWND_INVALID)
+    if (m_sysWnd == HWND_INVALID)
         return false;
 
     setRect(0, 0, w, h);
-    SetWindowAdditionalData(m_viewWindow, (DWORD)this);
+    SetWindowAdditionalData(m_sysWnd, (DWORD)this);
 
     if (visible)
-        setActiveWindow(m_viewWindow);
+        setActiveWindow(m_sysWnd);
 
     return true;
 }
@@ -231,22 +231,22 @@ bool Window::createMainWindow(void)
 
 void Window::updateWindow(bool isUpdateBkg)
 {
-    UpdateWindow(m_viewWindow, isUpdateBkg);
+    UpdateWindow(m_sysWnd, isUpdateBkg);
 }
 
 int Window::doModal(bool bAutoDestory)
 {
-    return mgclDoModal(m_viewWindow, bAutoDestory);
+    return mgclDoModal(m_sysWnd, bAutoDestory);
 }
 
 unsigned int Window::doModalView()
 {
-    return mgclDoModalView(m_viewWindow);
+    return mgclDoModalView(m_sysWnd);
 }
 
 void Window::endDlg(int endCode)
 {
-    SendNotifyMessage(m_viewWindow, MGCL_MSG_MNWND_ENDDIALOG,
+    SendNotifyMessage(m_sysWnd, MGCL_MSG_MNWND_ENDDIALOG,
             0, (LPARAM)endCode);
 }
 

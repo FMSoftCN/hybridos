@@ -27,34 +27,26 @@
 #include <minigui/gdi.h>
 #include <minigui/window.h>
 
+#include "../common/common.h"
+#include "../common/object.h"
+#include "../common/intrect.h"
 #include "../common/event.h"
-#include "../view/panelview.h"
 
 namespace hfcl {
 
-class Window : public PanelView {
+class RootView;
+
+class Window : public Object {
 public:
-    enum {
-        HFCL_WS_EX_TRANSPARENT = WS_EX_TRANSPARENT,
-    };
     Window();
     virtual ~Window();
 
-    void setWindowRect(const IntRect& irc);
-    void getClientRect(IntRect& irc);
+    void setWindowRect(const IntRect& rc);
+    void getClientRect(IntRect& rc);
 
     void show(bool bUpdateBack = true);
     void hide(void);
     void destroy(void);
-
-    virtual bool onKey(int keyCode, KeyEvent* event);
-    virtual void onClick(POINT pt, Event::EventType type);
-    virtual void onBack(void) { }
-    virtual void onIdle(void) { }
-
-    //void paint(void);
-    void freezePaint(bool bFreeze) { m_freezePaint = bFreeze; }
-    bool isPaintFrozen(void) { return m_freezePaint; }
 
     // Synchronous
     void updateWindow(bool isUpdateBkg = TRUE);
@@ -70,49 +62,18 @@ public:
     // Synchronous
     void syncUpdateRect(int x, int y, int w, int h, bool upBackGnd = true);
 
-    bool isTopView(void) { return true; }
-
-    virtual HWND getSysWindow(void);
-
-    void setBkgAlpha(unsigned char a){ m_bkg_alpha = a;}
-    unsigned char bkgAlpha(){return m_bkg_alpha ;}
-
-    static bool updateLocked(void) { return m_updateLocked; }
-    static void setUpdateLock(bool lock) { m_updateLocked = lock; }
-
     int doModal(bool bAutoDestory = false);
     unsigned int doModalView();
     void endDlg(int endCode);
 
-    void lockKeyOnPainting (bool bLockable) { m_keyLockable = bLockable; }
-    virtual void drawScrollBar(GraphicsContext* context, IntRect &rc);
-    virtual void drawBackground(GraphicsContext* context, IntRect &rc);
+    RootView* getRootView(int view_id);
 
 protected:
+    HWND m_sysWnd;
     bool createMainWindow(void);
     virtual bool createMainWindow(int x, int y, int w, int h, bool visible = true);
-
-    int sendKeyMessage(Event::EventType ketype, WPARAM wParam, LPARAM lParam);
-    int sendMouseMessage(Event::EventType Mousetype, WPARAM wParam, LPARAM lParam);
-    int sendIdleMessage();
-
-    HWND m_viewWindow;
-    HDC m_context;
-
-    static LRESULT defaultAppProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     static HWND createMainWindow(const char* caption, WNDPROC proc,
             int x, int y, int width, int height, DWORD addData, bool visible = true);
-
-private:
-    unsigned char m_bkg_alpha;   //default the value is 0, window is transparent
-    bool m_keyLockable;
-    bool m_keyLocked;
-    bool m_freezePaint;
-    View *m_mouseDownView;
-    View *m_mouseMoveView;
-    static bool m_updateLocked;
-
-    virtual void inner_updateView(int x, int y, int w, int h, bool upBackGnd = true);
 };
 
 } // namespace hfcl

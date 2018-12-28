@@ -19,16 +19,13 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "activity/activitywithbars.h"
+#include "activity/activitywithclients.h"
 
 namespace hfcl {
 
-ActivityWithBars::ActivityWithBars ()
+ActivityWithClients::ActivityWithClients ()
     : TimerEventListener (1)
     , m_isFullScreen(false)
-#ifdef __SUPPORT_MANUAL_KEYPAD_LOCK_IN_ALLSCREEN__
-    , m_isShowLockPopup(false)
-#endif
     , m_menuBarShown(true)
     , m_menuId(0)
     , m_keyDownTarget(NULL)
@@ -41,7 +38,7 @@ ActivityWithBars::ActivityWithBars ()
     m_usedLang = GetResourceLanguage();
 }
 
-ActivityWithBars::ActivityWithBars (bool fullscreen)
+ActivityWithClients::ActivityWithClients (bool fullscreen)
     : TimerEventListener(1)
     , m_isFullScreen(fullscreen)
     , m_menuBarShown(true)
@@ -56,19 +53,19 @@ ActivityWithBars::ActivityWithBars (bool fullscreen)
     m_usedLang = GetResourceLanguage();
 }
 
-ActivityWithBars::~ActivityWithBars()
+ActivityWithClients::~ActivityWithClients()
 {
     closeTimer();
     m_indicator->detachFromeViewTree(this);
     m_menuBar->detachFromeViewTree(this);
 }
 
-void ActivityWithBars::onCreate(ContextStream* contextStream, Intent* intent)
+void ActivityWithClients::onCreate(ContextStream* contextStream, Intent* intent)
 {
     FullScreenActivity::onCreate(contextStream, intent);
 }
 
-void ActivityWithBars::showMenuBar(bool show)
+void ActivityWithClients::showMenuBar(bool show)
 {
     m_menuBarShown = show;
     if (ActivityManager::getInstance()->getCurrentActivity() == this) {
@@ -76,7 +73,7 @@ void ActivityWithBars::showMenuBar(bool show)
     }
 }
 
-void ActivityWithBars::showIndicator(bool show)
+void ActivityWithClients::showIndicator(bool show)
 {
     m_isFullScreen = !show;
     if (ActivityManager::getInstance()->getCurrentActivity() == this) {
@@ -84,7 +81,7 @@ void ActivityWithBars::showIndicator(bool show)
     }
 }
 
-unsigned int ActivityWithBars::onClientCommand(int sender,
+unsigned int ActivityWithClients::onClientCommand(int sender,
         unsigned int cmd_id, HTData param1, HTData param2)
 {
     switch (cmd_id) {
@@ -98,7 +95,7 @@ unsigned int ActivityWithBars::onClientCommand(int sender,
     return 0;
 }
 
-unsigned int ActivityWithBars::setMode(ControllerModeList* modelist)
+unsigned int ActivityWithClients::setMode(ControllerModeList* modelist)
 {
     bool bsetphonebar = false;
 
@@ -160,7 +157,7 @@ unsigned int ActivityWithBars::setMode(ControllerModeList* modelist)
     return 0;
 }
 
-bool ActivityWithBars::onKey(int keyCode, KeyEvent* event)
+bool ActivityWithClients::onKey(int keyCode, KeyEvent* event)
 {
     LcdService *lcd_service = LcdService::getInstance();
     lcd_service->reset (true);
@@ -241,18 +238,10 @@ bool ActivityWithBars::onKey(int keyCode, KeyEvent* event)
     }
 
     ret = Activity::onKey(keyCode, event);
-#ifdef __SUPPORT_MANUAL_KEYPAD_LOCK_IN_ALLSCREEN__
-    if (ret == GOON_DISPATCH
-            && event->eventType() == Event::KEY_LONGPRESSED
-            && keyCode == KeyEvent::KEYCODE_STAR) {
-        enterLockFrame(true, true);
-        return STOP_DISPATCH;
-    }
-#endif
     return ret;
 }
 
-bool ActivityWithBars::handleEvent(Event* event)
+bool ActivityWithClients::handleEvent(Event* event)
 {
     if (event->eventType() == Event::CUSTOM_NOTIFY) {
         //menu notify event
@@ -301,15 +290,15 @@ bool ActivityWithBars::handleEvent(Event* event)
     return GOON_DISPATCH;
 }
 
-void ActivityWithBars::openTimer()
+void ActivityWithClients::openTimer()
 {
     if(m_timerId == 0) {
-        m_timerId = registerTimer(50, "ActivityWithBars");
+        m_timerId = registerTimer(50, "ActivityWithClients");
     }
     m_keyUp = false;
 }
 
-void ActivityWithBars::closeTimer()
+void ActivityWithClients::closeTimer()
 {
     m_keyUp = true;
     if (m_timerId != 0)
@@ -317,7 +306,7 @@ void ActivityWithBars::closeTimer()
     m_timerId = 0;
 }
 
-void ActivityWithBars::showMenu()
+void ActivityWithClients::showMenu()
 {
     if(!m_menuId)
         return ;
@@ -362,7 +351,7 @@ void ActivityWithBars::showMenu()
  *
  */
 
-void ActivityWithBars::setFullScreen(bool bfullScreen)
+void ActivityWithClients::setFullScreen(bool bfullScreen)
 {
     ActivityClient* clt = getTopActivityClient();
 
@@ -384,13 +373,13 @@ void ActivityWithBars::setFullScreen(bool bfullScreen)
     refreshIndicator();
 }
 
-void ActivityWithBars::setFullScreen(bool bfullScreen, bool bhidemenubar)
+void ActivityWithClients::setFullScreen(bool bfullScreen, bool bhidemenubar)
 {
     m_menuBarShown = !bhidemenubar;
     setFullScreen(bfullScreen);
 }
 
-void ActivityWithBars::exitHome(void)
+void ActivityWithClients::exitHome(void)
 {
     BaseActivity *app = NULL;
     ActivityManager *am = ActivityManager::getInstance();
@@ -401,14 +390,14 @@ void ActivityWithBars::exitHome(void)
         }
 
         while ( (app = am->getCurrentActivity()) != NULL && app != launcher) {
-            if(((ActivityWithBars *)app)->onEndKeyHome())
+            if(((ActivityWithClients *)app)->onEndKeyHome())
                 app->exit();
             else
                 break;
         }
 
         if((am->getCurrentActivity()) == launcher)
-            ((ActivityWithBars *)launcher)->onEndKeyHome();
+            ((ActivityWithClients *)launcher)->onEndKeyHome();
 
         return;
     }
@@ -416,7 +405,7 @@ void ActivityWithBars::exitHome(void)
     return;
 }
 
-void ActivityWithBars::exitCall(void)
+void ActivityWithClients::exitCall(void)
 {
     BaseActivity *app = NULL;
     ActivityManager *am = ActivityManager::getInstance();
@@ -429,7 +418,7 @@ void ActivityWithBars::exitCall(void)
         }
 
         while ( (app = am->getCurrentActivity()) != NULL && app != call) {
-            if(((ActivityWithBars *)app)->onEndKeyHome())
+            if(((ActivityWithClients *)app)->onEndKeyHome())
                 app->exit();
             else
                 break;
@@ -441,7 +430,7 @@ void ActivityWithBars::exitCall(void)
     return;
 }
 
-bool ActivityWithBars::doCommand(int cmd)
+bool ActivityWithClients::doCommand(int cmd)
 {
     switch(cmd) {
         case APP_CMD_EXIT:
@@ -477,7 +466,7 @@ bool ActivityWithBars::doCommand(int cmd)
     return STOP_DISPATCH;
 }
 
-unsigned int ActivityWithBars::showView (int view_id,
+unsigned int ActivityWithClients::showView (int view_id,
         HTData param1, HTData param2)
 {
     unsigned int ret = Activity::showView(view_id, param1, param2);
@@ -522,7 +511,7 @@ unsigned int ActivityWithBars::showView (int view_id,
     return ret;
 }
 
-unsigned int ActivityWithBars::backView (unsigned int endCode)
+unsigned int ActivityWithClients::backView (unsigned int endCode)
 {
     int ret;
     bool isExitFromLock = false;
@@ -574,13 +563,13 @@ unsigned int ActivityWithBars::backView (unsigned int endCode)
     return ret;
 }
 
-void ActivityWithBars::refreshBars (void)
+void ActivityWithClients::refreshBars (void)
 {
     refreshIndicator();
     refreshMenubar();
 }
 
-void ActivityWithBars::refreshIndicator (void)
+void ActivityWithClients::refreshIndicator (void)
 {
     if (m_indicator != NULL) {
         m_indicator->detachFromeViewTree(this);
@@ -590,7 +579,7 @@ void ActivityWithBars::refreshIndicator (void)
     }
 }
 
-void ActivityWithBars::refreshMenubar (void)
+void ActivityWithClients::refreshMenubar (void)
 {
     if (m_menuBar != NULL) {
         m_menuBar->detachFromeViewTree(this);
@@ -601,7 +590,7 @@ void ActivityWithBars::refreshMenubar (void)
 }
 
 
-void ActivityWithBars::onLanguageChanged(int langId)
+void ActivityWithClients::onLanguageChanged(int langId)
 {
     ControllerClientList::iterator it = m_list.begin();
 
@@ -614,7 +603,7 @@ void ActivityWithBars::onLanguageChanged(int langId)
     }
 }
 
-unsigned int ActivityWithBars::showTipView(int view_id, HTData param1, HTData param2)
+unsigned int ActivityWithClients::showTipView(int view_id, HTData param1, HTData param2)
 {
     unsigned int ret = (unsigned int)-1;
 
@@ -624,13 +613,13 @@ unsigned int ActivityWithBars::showTipView(int view_id, HTData param1, HTData pa
         m_tipShown = false;
     }
     else {
-        _ERR_PRINTF ("ActivityWithBars::showTipView: TipView re-entrance occurred\n");
+        _ERR_PRINTF ("ActivityWithClients::showTipView: TipView re-entrance occurred\n");
     }
 
     return ret;
 }
 
-void ActivityWithBars::exitTip(int endCode)
+void ActivityWithClients::exitTip(int endCode)
 {
     ActivityClient *_ctop = (ActivityClient *)getTop(0);
 
@@ -644,7 +633,7 @@ void ActivityWithBars::exitTip(int endCode)
     }
 }
 
-ActivityClient *ActivityWithBars::getTopClient(bool bPop)
+ActivityClient *ActivityWithClients::getTopClient(bool bPop)
 {
     int count = getClientCount();
 
@@ -658,7 +647,7 @@ ActivityClient *ActivityWithBars::getTopClient(bool bPop)
     return NULL;
 }
 
-unsigned int ActivityWithBars::showMsgTipDlg(NGCPStr text_info, unsigned int type, int second)
+unsigned int ActivityWithClients::showMsgTipDlg(NGCPStr text_info, unsigned int type, int second)
 {
     MsgTipDlgCreateInfo dlgcreate = {
         text_info,
@@ -669,7 +658,7 @@ unsigned int ActivityWithBars::showMsgTipDlg(NGCPStr text_info, unsigned int typ
     return showTipView(TIPDLGAPP_CLIENT_ID_TIPDLG, (HTData )&dlgcreate, 0);
 }
 
-unsigned int ActivityWithBars::showMsgTextDlg(NGCPStr text_info, unsigned int type, int icon_id, int text_style, int second)
+unsigned int ActivityWithClients::showMsgTextDlg(NGCPStr text_info, unsigned int type, int icon_id, int text_style, int second)
 {
     MsgTextDlgCreateInfo dlgcreate = {
         text_info,
@@ -681,7 +670,7 @@ unsigned int ActivityWithBars::showMsgTextDlg(NGCPStr text_info, unsigned int ty
     return showTipView(TIPDLGAPP_CLIENT_ID_TEXTDLG, (HTData )&dlgcreate, 0);
 }
 
-void ActivityWithBars::drawBackground(GraphicsContext* gc, IntRect &rc, int status)
+void ActivityWithClients::drawBackground(GraphicsContext* gc, IntRect &rc, int status)
 {
     for (int i = 0; i < getClientCount(); i++) {
         ActivityClient *clt = (ActivityClient *)getTop(i);
@@ -706,30 +695,7 @@ void ActivityWithBars::drawBackground(GraphicsContext* gc, IntRect &rc, int stat
     }
 }
 
-void ActivityWithBars::onLockingShow(void)
-{
-    Menu *_m = menu();
-    if (_m != NULL){
-        _m->hideMenu();
-        SetActiveWindow(viewWindow());
-    }
-}
-
-void ActivityWithBars::onLockingExit(void)
-{
-    Menu *_m = menu();
-    if (_m != NULL){
-        _m->showMenu(this);
-        SetActiveWindow(_m->viewWindow());
-    }
-}
-
-bool ActivityWithBars::beInLockFrame(void)
-{
-    return find (APP_CLIENT_LOCKFRAME) != NULL;
-}
-
-unsigned int ActivityWithBars::showModalView(int view_id, HTData param1, HTData param2)
+unsigned int ActivityWithClients::showModalView(int view_id, HTData param1, HTData param2)
 {
     if(view_id == APP_CLIENT_DELETE_CONFIRM) {
         MsgDlgCreateInfo dlgcreate = {
@@ -743,28 +709,6 @@ unsigned int ActivityWithBars::showModalView(int view_id, HTData param1, HTData 
         return Activity::showModalView (view_id, param1, param2);
     }
 }
-
-MenuBarView* ActivityWithBars::getMenuBar()
-{
-    return m_menuBar->getMenuBar();
-}
-
-void ActivityWithBars::setCursor(int cursor_index, int current_value)
-{
-    common_menu_cursor[cursor_index] = current_value;
-}
-
-int ActivityWithBars::getCursor(int cursor_index)
-{
-    return common_menu_cursor[cursor_index];
-}
-
-#ifdef __SUPPORT_MANUAL_KEYPAD_LOCK_IN_ALLSCREEN__
-void ActivityWithBars::setShowLockPopup (bool lockShow)
-{
-    m_isShowLockPopup = lockShow;
-}
-#endif
 
 } // namespace hfcl
 
