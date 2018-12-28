@@ -6,6 +6,7 @@ myinclude_HEADERS= \
     common.h \
     stlalternative.h \
     intrect.h \
+    realrect.h \
     object.h \
     event.h \
     contextstream.h \
