@@ -107,25 +107,25 @@ LRESULT RootView::rootViewProc(HWND hWnd, UINT message,
 
     switch (message) {
     case MSG_KEYDOWN:
-        return _view->onKeyMessage(Event::KEY_DOWN, wParam, lParam);
+        return _view->onKeyMessage(KeyEvent::KEY_DOWN, wParam, lParam);
 
     case MSG_KEYUP:
-        return _view->onKeyMessage(Event::KEY_UP, wParam, lParam);
+        return _view->onKeyMessage(KeyEvent::KEY_UP, wParam, lParam);
 
     case MSG_KEYLONGPRESS:
-        return _view->onKeyMessage(Event::KEY_LONGPRESSED, wParam, lParam);
+        return _view->onKeyMessage(KeyEvent::KEY_LONGPRESSED, wParam, lParam);
 
     case MSG_KEYALWAYSPRESS:
-        return _view->onKeyMessage(Event::KEY_ALWAYSPRESS, wParam, lParam);
+        return _view->onKeyMessage(KeyEvent::KEY_ALWAYSPRESS, wParam, lParam);
 
     case MSG_LBUTTONDOWN:
-        return _view->onMouseMessage(Event::MOUSE_DOWN, wParam, lParam);
+        return _view->onMouseMessage(MouseEvent::MOUSE_L_DOWN, wParam, lParam);
 
     case MSG_LBUTTONUP:
-        return _view->onMouseMessage(Event::MOUSE_UP, wParam, lParam);
+        return _view->onMouseMessage(MouseEvent::MOUSE_L_UP, wParam, lParam);
 
     case MSG_MOUSEMOVE:
-        return _view->onMouseMessage(Event::MOUSE_MOVE, wParam, lParam);
+        return _view->onMouseMessage(MouseEvent::MOUSE_MOVE, wParam, lParam);
 
     case MSG_IDLE:
         _view->onIdle();
@@ -172,7 +172,7 @@ LRESULT RootView::rootViewProc(HWND hWnd, UINT message,
     return _view->m_old_proc(hWnd, message, wParam, lParam);
 }
 
-int RootView::scancode2keycode(int scancode)
+KeyEvent::KeyCode RootView::scancode2keycode(int scancode)
 {
     int keycode = KeyEvent::KEYCODE_UNKNOWN;
     if (scancode >= SCANCODE_1 && scancode <= SCANCODE_9) {
@@ -228,20 +228,20 @@ int RootView::scancode2keycode(int scancode)
         }
     }
 
-    return keycode;
+    return (KeyEvent::KeyCode)keycode;
 }
 
-int RootView::onKeyMessage(Event::EventType keytype,
+int RootView::onKeyMessage(KeyEvent::KeyEventType keytype,
         WPARAM wParam, LPARAM lParam)
 {
-    int keycode = scancode2keycode(wParam);
+    KeyEvent::KeyCode keycode = scancode2keycode(wParam);
     KeyEvent event(keytype, keycode, wParam, lParam);
 
     dispatchEvent(&event);
     return 0;
 }
 
-int RootView::onMouseMessage(Event::EventType mouseType,
+int RootView::onMouseMessage(MouseEvent::MouseEventType mouseType,
         WPARAM wParam, LPARAM lParam)
 {
     int x_pos = LOSWORD (lParam);

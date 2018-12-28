@@ -39,109 +39,42 @@ namespace hfcl {
 class Event {
 public:
     enum EventType {
-        KEY_DOWN,
-        KEY_UP,
-        KEY_LONGPRESSED,
-        KEY_ALWAYSPRESS,
-        KEY_CHAR,
-        MOUSE_DOWN,
-        MOUSE_UP,
-        MOUSE_MOVE,
-        MOUSE_MOVEIN,
-        MOUSE_MOVEOUT,
-        MOUSE_CLICKED,
-        MOUSE_DBLCLICKED,
-        TIMER,
-        CUSTOM_NOTIFY,
+        ET_KEY,
+        ET_MOUSE,
+        ET_MOUSE_WHEEL,
+        ET_TIMER,
+        ET_VIEW,
+        ET_USER,
     };
 
-    Event (EventType type, HTData eventSource = 0)
+    Event(EventType type, HTData eventSource = 0)
         : m_eventType (type)
         , m_eventSource (eventSource) {
     }
+    virtual ~Event() { }
 
-    virtual ~Event() {
-    }
-
-    inline HTData getSource() const {
-        return m_eventSource;
-    }
-
-    inline void setSource (HTData eventSource) {
+    HTData getSource() const { return m_eventSource; }
+    void setSource(HTData eventSource) {
         m_eventSource = eventSource;
     }
 
-    EventType eventType() {
-        return m_eventType;
-    }
+    EventType eventType() { return m_eventType; }
 
 private:
     EventType m_eventType;
     HTData m_eventSource;
 };
 
-class CustomEvent : public Event {
-public:
-    enum CustomParam {
-        CUS_BOUNDARY_LEFT,
-        CUS_BOUNDARY_RIGHT,
-        CUS_BOUNDARY_UP,
-        CUS_BOUNDARY_DOWN,
-        CUS_DLG_KEY_SL,
-        CUS_DLG_KEY_SR,
-        CUS_DLG_SHOW,
-        CUS_DLG_HIDE,
-        CUS_SELCHANGED,
-        CUS_GIFANIMATE_STOP,
-        CUS_PAGECHANGED,
-        CUS_FREQCHANGED,
-        // BusyListView use for load data from user.
-        CUS_LOAD_DATA,
-        CUS_MAX,
-    };
-
-    CustomEvent (EventType type, HTData wparam, HTData lparam,
-            HTData exParam1 = 0, HTData exParam2 = 0)
-        : Event (type)
-        , m_wParam (wparam)
-        , m_lParam (lparam)
-        , m_exParam1 (exParam1)
-        , m_exParam2 (exParam2) {
-    }
-
-    virtual ~CustomEvent () {
-    }
-
-    void setExParam (HTData exParam1, HTData exParam2) {
-        m_exParam1 = exParam1;
-        m_exParam2 = exParam2;
-    }
-
-    inline HTData customWParam () const {
-        return m_wParam;
-    }
-
-    inline HTData customLParam () const {
-        return m_lParam;
-    }
-
-    inline HTData customExParam1 () const {
-        return m_exParam1;
-    }
-
-    inline HTData customExParam2 () const {
-        return m_exParam2;
-    }
-
-private:
-    HTData m_wParam;
-    HTData m_lParam;
-    HTData m_exParam1;
-    HTData m_exParam2;
-};
-
 class KeyEvent : public Event {
 public:
+    enum KeyEventType {
+        KEY_DOWN,
+        KEY_UP,
+        KEY_LONGPRESSED,
+        KEY_ALWAYSPRESS,
+        KEY_CHAR,
+    };
+
     enum KeyCode {
         KEYCODE_0 = 0,  // SCANCODE_1
         KEYCODE_1,      // SCANCODE_2
@@ -192,42 +125,55 @@ public:
         KEYCODE_UNKNOWN,
     };
 
-    KeyEvent (EventType type, int keyCode, int scanCode, unsigned int keyStatus)
-        : Event(type)
+    KeyEvent (KeyEventType type, KeyCode keyCode, int scanCode, unsigned int keyStatus)
+        : Event(ET_KEY)
+        , m_subType(type)
         , m_keyCode(keyCode)
         , m_scanCode(scanCode)
         , m_keyStatus(keyStatus) {
     }
 
-    virtual ~KeyEvent() {
-    }
+    virtual ~KeyEvent() { }
 
-    inline int scanCode() const {
-        return m_scanCode;
-    }
+    KeyEventType subType() { return m_subType; }
+    KeyCode keyCode() const { return m_keyCode; }
+    int scanCode() const { return m_scanCode; }
+    unsigned int keyStatus() const { return m_keyStatus; }
 
-    inline int keyCode() const {
-        return m_keyCode;
-    }
-
-    inline unsigned int keyStatus() const {
-        return m_keyStatus;
-    }
-
-    inline void setKeyStatus (unsigned int keyStatus) {
+    void setKeyStatus (unsigned int keyStatus) {
         m_keyStatus = keyStatus;
     }
 
 private:
-    int m_keyCode;
+    KeyEventType m_subType;
+    KeyCode m_keyCode;
     int m_scanCode;
     unsigned int m_keyStatus;
 };
 
 class MouseEvent : public Event {
 public:
-    MouseEvent (EventType type, int x, int y, unsigned int keyStatus = 0)
-        : Event(type)
+    enum MouseEventType {
+        MOUSE_MOVE_IN,
+        MOUSE_MOVE,
+        MOUSE_MOVE_OUT,
+        MOUSE_L_DOWN,
+        MOUSE_L_UP,
+        MOUSE_L_CLICKED,
+        MOUSE_L_DBLCLICKED,
+        MOUSE_M_DOWN,
+        MOUSE_M_UP,
+        MOUSE_M_CLICKED,
+        MOUSE_M_DBLCLICKED,
+        MOUSE_R_DOWN,
+        MOUSE_R_UP,
+        MOUSE_R_CLICKED,
+        MOUSE_R_DBLCLICKED,
+    };
+
+    MouseEvent(MouseEventType type, int x, int y, unsigned int keyStatus = 0)
+        : Event(ET_MOUSE)
+        , m_subType(type)
         , m_x(x)
         , m_y(y)
         , m_keyStatus(keyStatus) {
@@ -236,35 +182,97 @@ public:
     virtual ~MouseEvent() {
     }
 
-    inline int x() const {
-        return m_x;
-    }
-    inline int y() const {
-        return m_y;
-    }
+    MouseEventType subType() const { return m_subType; }
+    int x() const { return m_x; }
+    int y() const { return m_y; }
+    unsigned int keyStatus() const { return m_keyStatus; }
 
 private:
-    int m_x;
-    int m_y;
+    MouseEventType m_subType;
+    int m_x, m_y;
+    unsigned int m_keyStatus;
+};
+
+class MouseWheelEvent : public Event {
+public:
+    MouseWheelEvent(int delta, int x, int y, unsigned int keyStatus = 0)
+        : Event(ET_MOUSE_WHEEL)
+        , m_delta(delta)
+        , m_x(x)
+        , m_y(y)
+        , m_keyStatus(keyStatus) {
+    }
+
+    virtual ~MouseWheelEvent() { }
+
+    int delta() const { return m_delta; }
+    int x() const { return m_x; }
+    int y() const { return m_y; }
+    unsigned int keyStatus() const { return m_keyStatus; }
+
+private:
+    int m_delta;
+    int m_x, m_y;
     unsigned int m_keyStatus;
 };
 
 class TimerEvent : public Event {
 public:
-    TimerEvent (EventType type, int timerId)
-        : Event(type)
+    TimerEvent (int timerId)
+        : Event(ET_TIMER)
         , m_timerId(timerId) {
     }
 
-    virtual ~TimerEvent() {
-    }
+    virtual ~TimerEvent() { }
 
-    inline int timerID() const {
-        return m_timerId;
-    }
+    int timerID() const { return m_timerId; }
 
 private:
     int m_timerId;
+};
+
+class View;
+
+class ViewEvent : public Event {
+public:
+    ViewEvent (int nc, const View* view)
+        : Event(ET_VIEW)
+        , m_nc(nc)
+        , m_view(view) {
+    }
+    virtual ~ViewEvent() { }
+
+    int nc() const { return m_nc; }
+    const View* view() const { return m_view; }
+
+private:
+    int m_nc;
+    const View* m_view;
+};
+
+class UserEvent : public Event {
+public:
+    UserEvent(int type, HTData param, HTData exParam = 0)
+        : Event(ET_USER)
+        , m_type(type)
+        , m_param(param)
+        , m_exParam(exParam) {
+    }
+
+    virtual ~UserEvent() { }
+
+    void setParams(HTData param, HTData exParam) {
+        m_param = param;
+        m_exParam = exParam;
+    }
+
+    HTData param() const { return m_param; }
+    HTData exParam() const { return m_exParam; }
+
+private:
+    int m_type;
+    HTData m_param;
+    HTData m_exParam;
 };
 
 class EventListener : public RefCount {

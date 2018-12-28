@@ -218,7 +218,7 @@ void ScrollBar::draw(GraphicsContext* context, IntRect &rc)
 
 bool ScrollBar::handleEvent(Event* event)
 {
-    if (event->eventType() == Event::TIMER
+    if (event->eventType() == Event::ET_TIMER
             && m_timerId > 0
             && m_timerId == ((TimerEvent *)event)->timerID())
     {

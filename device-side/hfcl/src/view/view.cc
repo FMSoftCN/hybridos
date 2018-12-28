@@ -438,29 +438,85 @@ void View::releaseEventListeners()
     while (true);
 }
 
+void View::onContainingBlockChanged()
+{
+}
+
+void View::onNameChanged()
+{
+}
+
+void View::onClassChanged()
+{
+}
+
+void View::onDisabled()
+{
+}
+
+void View::onEnabled()
+{
+}
+
+void View::onChecked()
+{
+}
+
+void View::onUnchecked()
+{
+}
+
+void View::onFrozen()
+{
+}
+
+void View::onUnfrozen()
+{
+}
+
+void View::onHovered()
+{
+}
+
+void View::onLeft()
+{
+}
+
+void View::onActive()
+{
+    ViewEvent event(VN_ACTIVE, this);
+    raiseEvent(&event);
+}
+
+void View::onInactive()
+{
+    ViewEvent event(VN_INACTIVE, this);
+    raiseEvent(&event);
+}
+
 void View::onGotFocus()
 {
-    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)VN_GOTFOCUS, (HTData)this);
+    ViewEvent event(VN_GOTFOCUS, this);
     raiseEvent(&event);
     updateView();
 }
 
 void View::onLostFocus()
 {
-    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)VN_LOSTFOCUS, (HTData)this);
+    ViewEvent event(VN_LOSTFOCUS, this);
     raiseEvent(&event);
     updateView();
 }
 
 void View::onClicked()
 {
-    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)VN_CLICKED, (HTData)this);
+    ViewEvent event(VN_CLICKED, this);
     raiseEvent(&event);
 }
 
 void View::onDoubleClicked()
 {
-    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)VN_DBLCLICKED, (HTData)this);
+    ViewEvent event(VN_DBLCLICKED, this);
     raiseEvent(&event);
 }
 
@@ -532,14 +588,12 @@ void View::updateView(bool upBackGnd)
 //return True if the event was handled, false otherwise.
 bool View::dispatchEvent(Event* event)
 {
-    if (event->eventType() == Event::MOUSE_CLICKED) {
-        ViewClickEventStruct s;
-        s.view = this;
-        s.x = ((MouseEvent *)event)->x();
-        s.y = ((MouseEvent *)event)->y();
-        CustomEvent e(Event::CUSTOM_NOTIFY, (HTData)VN_CLICKED, (HTData)&s);
+/*
+    if (event->eventType() == Event::ET_VIEW) {
+        ViewEvent e(VN_CLICKED, this);
         return raiseEvent(&e);
     }
+*/
 
     return raiseEvent(event);
 }
@@ -601,7 +655,7 @@ void View::focusMe()
     }
 
     /*
-    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)VN_GOTFOCUS, (HTData)this);
+    ViewEvent event(Event::CUSTOM_NOTIFY, (HTData)VN_GOTFOCUS, (HTData)this);
     raiseEvent(&event);
     */
 }

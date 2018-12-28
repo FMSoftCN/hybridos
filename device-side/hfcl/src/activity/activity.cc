@@ -72,6 +72,7 @@ bool Activity::onKey(int keyCode, KeyEvent* event)
 
 void Activity::onClick(POINT pt, Event::EventType type)
 {
+#if 0
     RECT rc;
     View* child = firstChild();
 
@@ -95,6 +96,7 @@ void Activity::onClick(POINT pt, Event::EventType type)
 
         child = child->getNext();
     }
+#endif
 }
 
 Activity* Activity::activity(HWND hwnd)

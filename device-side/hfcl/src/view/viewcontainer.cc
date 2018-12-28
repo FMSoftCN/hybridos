@@ -430,6 +430,7 @@ void ViewContainer::drawContent(GraphicsContext* context, IntRect& rc)
 
 bool ViewContainer::dispatchEvent(Event* event)
 {
+#if 0
     View::dispatchEvent(event);
 
     switch (event->eventType()) {
@@ -466,6 +467,7 @@ bool ViewContainer::dispatchEvent(Event* event)
     default:
         break;
     }
+#endif
 
     return GOON_DISPATCH;
 }

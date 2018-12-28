@@ -56,15 +56,6 @@ typedef struct {
 
 class View : public Object {
 public:
-    enum {
-        VN_BEGIN = CustomEvent::CUS_MAX,
-        VN_GOTFOCUS,
-        VN_LOSTFOCUS,
-        VN_CLICKED,
-        VN_DBLCLICKED,
-        VN_VIEW_MAX,
-    };
-
     View(int id = 0, const char* cssCls = NULL, const char* name = NULL);
     virtual ~View();
 
@@ -210,45 +201,56 @@ public:
     /* virtual functions for rendering */
     virtual void applyCss(CssDeclared* css, const CssSelectorGroup& selector);
 
-    /* virtual functions for events and attribute changes */
-    virtual void onNameChanged() = 0;
-    virtual void onClassChanged() = 0;
-    virtual void onDisabled() = 0;
-    virtual void onEnabled() = 0;
-    virtual void onChecked() = 0;
-    virtual void onUnchecked() = 0;
-    virtual void onActive() = 0;
-    virtual void onInactive() = 0;
-    virtual void onFrozen() = 0;
-    virtual void onUnfrozen() = 0;
-    virtual void onGotFocus() = 0;
-    virtual void onLostFocus() = 0;
+    enum {
+        VN_GOTFOCUS,
+        VN_LOSTFOCUS,
+        VN_HOVERED,
+        VN_LEFT,
+        VN_ACTIVE,
+        VN_INACTIVE,
+        VN_CLICKED,
+        VN_DBLCLICKED,
+        VN_VIEW_MAX,
+    };
+
+    /* virtual functions for attribute changes */
+    virtual void onContainingBlockChanged();
+    virtual void onNameChanged();
+    virtual void onClassChanged();
+    virtual void onDisabled();
+    virtual void onEnabled();
+    virtual void onChecked();
+    virtual void onUnchecked();
+    virtual void onFrozen();
+    virtual void onUnfrozen();
+    virtual void onGotFocus();
+    virtual void onLostFocus();
+    virtual void onHovered();
+    virtual void onLeft();
+    virtual void onActive();
+    virtual void onInactive();
     virtual void onClicked();
     virtual void onDoubleClicked();
     virtual void onIdle();
 
-    virtual void onViewportSizeChanged();
-
     // virtual functions for drawing the view
-    virtual void drawBackground(GraphicsContext* context, IntRect &rc) = 0;
-    virtual void drawContent(GraphicsContext* context, IntRect &rc) = 0;
-    virtual void drawScrollBar(GraphicsContext* context, IntRect &rc) = 0;
+    virtual void drawBackground(GraphicsContext* context, IntRect &rc);
+    virtual void drawContent(GraphicsContext* context, IntRect &rc);
+    virtual void drawScrollBar(GraphicsContext* context, IntRect &rc);
     virtual void onPaint(GraphicsContext* context);
 
-    // return True if the event was handled, false otherwise.
+    // virtual functions for event handling.
     virtual bool dispatchEvent(Event* event);
     virtual bool raiseEvent(Event *event);
 
-    /* virtual callbacks to handle the interaction events */
-    virtual bool onKeyDown(int keyCode, KeyEvent* event) { return false; }
+    /*
+     * virtual callbacks to handle the interaction events
+     * Return false if the view is not intersted in the event.
+     */
+    virtual bool onKeyEvent(const KeyEvent& evt) { return false; }
+    virtual bool onMouseEvent(const MouseEvent& evt) { return false; }
+    virtual bool onMouseWheel(const MouseWheelEvent& evt) { return false; }
     virtual bool onChar(const char* mchar) { return false; }
-    virtual bool onKeyUp(int keyCode, KeyEvent* event) { return false; }
-
-    virtual bool onMouseDown(int x, int y, DWORD keyStatus) { return false; }
-    virtual bool onMouseUp(int x, int y, DWORD keyStatus) { return false; }
-    virtual bool onMouseIn(int x, int y, DWORD keyStatus) { return false; }
-    virtual bool onMouseMove(int x, int y, DWORD keyStatus) { return false; }
-    virtual bool onMouseOut(int x, int y, DWORD keyStatus) { return false; }
 
     virtual void viewToWindow(int *x, int *y);
     virtual void windowToView(int *x, int *y);

@@ -19,13 +19,10 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef _HFCL_VIEW_PANELVIEW_H_
 #define _HFCL_VIEW_PANELVIEW_H_
 
-#define FILE_NAME_LEN 256
-
-#include "viewcontainer.h"
+#include "../view/viewcontainer.h"
 #include "../graphics/graphicscontext.h"
 
 namespace hfcl {
@@ -36,6 +33,9 @@ class PanelView : public ViewContainer
 public:
     PanelView(int id, const char* cssClass, const char* name);
     virtual ~PanelView();
+
+    /* overloaded virtual functions */
+    virtual const char* type() const { return "hvpanel"; }
 
     //Image* getBkImage();
     bool setBkColor(const DWORD color);
@@ -55,11 +55,11 @@ protected:
     };
 
 private:
-    bool     m_update;
-    Image     *m_bkImage;
-    int     m_imageDrawMode;
-    bool     m_bkColorBeSet;
-    DWORD     m_bkColor;
+    bool  m_update;
+    Image *m_bkImage;
+    int   m_imageDrawMode;
+    bool  m_bkColorBeSet;
+    DWORD m_bkColor;
 
     DECLARE_CLASS_NAME(PanelView)
 };

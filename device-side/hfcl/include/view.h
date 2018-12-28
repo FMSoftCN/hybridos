@@ -23,16 +23,9 @@
 #define HFCL_VIEW_H_
 
 #include "view/view.h"
-#include "view/containerview.h"
-#include "view/scrollview.h"
+#include "view/viewcontainer.h"
 #include "view/panelview.h"
-#include "view/listview.h"
-#include "view/itemview.h"
 #include "view/textview.h"
-#include "view/buttonview.h"
-#include "view/imageview.h"
-#include "view/gifanimateview.h"
-#include "view/animateimageview.h"
 #include "view/transition.h"
 
 #endif // HFCL_VIEW_H_

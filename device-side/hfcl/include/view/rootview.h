@@ -56,7 +56,7 @@ public:
 
     /* new virtual functions for RootView */
     // you can overload the method to define customized keycode.
-    virtual int scancode2keycode(int scancode);
+    virtual KeyEvent::KeyCode scancode2keycode(int scancode);
 
     /* static methods */
     static RootView* hwndToView(HWND hwnd);
@@ -65,9 +65,9 @@ public:
 
 protected:
     /* helpers to handle event */
-    int onKeyMessage(Event::EventType keytype,
+    int onKeyMessage(KeyEvent::KeyEventType keytype,
         WPARAM wParam, LPARAM lParam);
-    int onMouseMessage(Event::EventType mouseType,
+    int onMouseMessage(MouseEvent::MouseEventType mouseType,
         WPARAM wParam, LPARAM lParam);
 
 private:
