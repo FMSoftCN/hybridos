@@ -74,11 +74,11 @@ bool ActivityManager::exit(BaseActivity *p_act)
     // check the actlication is exist ?
     if ( NULL == (ai = m_actstack.top())
             || ( ! m_actstack.isExist(p_act))
-            || strcmp(p_act->name(), "launcher") == 0 )
+            || strcmp(p_act->getName(), "launcher") == 0 )
     {
         return false;
     }
-    _DBG_PRINTF ("Activitymanager :: exit () ---- exit act [%s]", p_act->name());
+    _DBG_PRINTF ("Activitymanager :: exit () ---- exit act [%s]", p_act->getName());
     // exit the actlication
     p_act->onDestroy(NULL);
     m_actstack.remove(p_act);
@@ -86,8 +86,9 @@ bool ActivityManager::exit(BaseActivity *p_act)
     // restore another actlication
     if (NULL != (ai = m_actstack.top()))
     {
-        _DBG_PRINTF ("Activitymanager :: exit () ---- restore the pop act [%s] ", ai->getActivity()->name());
-        switch (ai->getActivity()->state()) {
+        _DBG_PRINTF ("Activitymanager :: exit () ---- restore the pop act [%s] ",
+            ai->getActivity()->getName());
+        switch (ai->getActivity()->getState()) {
             case BaseActivity::RUNNING:
                 // Do nothing
                 break;
@@ -141,7 +142,7 @@ bool ActivityManager::moveActivity2Top(const char * name)
         return true;
     }
 
-    if (curActivity->getActivity()->state() == BaseActivity::RUNNING)
+    if (curActivity->getActivity()->getState() == BaseActivity::RUNNING)
     {
         curActivity->getActivity()->setState(BaseActivity::SLEEP);
         curActivity->getActivity()->onSleep();
@@ -151,7 +152,7 @@ bool ActivityManager::moveActivity2Top(const char * name)
     {
         act->onMove2Top();
 
-        if (act->state() == BaseActivity::SLEEP)
+        if (act->getState() == BaseActivity::SLEEP)
         {
             act->setState(BaseActivity::RUNNING);
             act->onWakeup();
@@ -177,7 +178,7 @@ bool ActivityManager::moveActivity2Bottom(const char * name)
         return true;
     }
 
-    if (act->state() == BaseActivity::RUNNING)
+    if (act->getState() == BaseActivity::RUNNING)
     {
         act->setState(BaseActivity::SLEEP);
         act->onSleep();
@@ -193,7 +194,7 @@ bool ActivityManager::moveActivity2Bottom(const char * name)
         }
         act->onMove2Top();
 
-        if (act->state() == BaseActivity::SLEEP)
+        if (act->getState() == BaseActivity::SLEEP)
         {
             act->setState(BaseActivity::RUNNING);
               act->onWakeup();
@@ -218,7 +219,7 @@ bool ActivityManager::pushActivityRunningInBackground(const char * name)
         return true;
     }
 
-    if (act->state() == BaseActivity::RUNNING)
+    if (act->getState() == BaseActivity::RUNNING)
     {
         act->setState(BaseActivity::SLEEP);
         act->onSleep();
@@ -234,7 +235,7 @@ bool ActivityManager::pushActivityRunningInBackground(const char * name)
         }
         act->onMove2Top();
 
-        if (act->state() == BaseActivity::SLEEP)
+        if (act->getState() == BaseActivity::SLEEP)
         {
             act->setState(BaseActivity::RUNNING);
               act->onWakeup();
@@ -257,7 +258,7 @@ BaseActivity* ActivityManager::popActivityRunningToFrontdesk(const char * name)
     if(NULL == (act = curActivity->getActivity())) {
         return NULL;
     }
-    if (act->state() == BaseActivity::RUNNING)
+    if (act->getState() == BaseActivity::RUNNING)
     {
         act->setState(BaseActivity::SLEEP);
         act->onSleep();
@@ -273,7 +274,7 @@ BaseActivity* ActivityManager::popActivityRunningToFrontdesk(const char * name)
         }
         act->onMove2Top();
 
-        if (act->state() == BaseActivity::SLEEP)
+        if (act->getState() == BaseActivity::SLEEP)
         {
             act->setState(BaseActivity::RUNNING);
               act->onWakeup();
@@ -318,7 +319,7 @@ BaseActivity* ActivityManager::startActivity(utf8string act_name, Intent *intent
         if (_newActivity == NULL /*|| _newActivity->priority() < _tact->priority()*/)
             return NULL;
 
-        if (_tact->state() == BaseActivity::RUNNING) {
+        if (_tact->getState() == BaseActivity::RUNNING) {
             _tact->setState(BaseActivity::SLEEP);
             _tact->onSleep();
         }

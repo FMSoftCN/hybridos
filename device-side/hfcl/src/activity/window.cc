@@ -53,43 +53,35 @@ Window::~Window()
     destroy();
 }
 
-HWND Window::createMainWindow (const char* caption, WNDPROC proc,
-        int x, int y, int width, int height, DWORD addData, bool visible)
+bool Window::create(HWND hosting, int x, int y, int w, int h, bool visible)
 {
+    // has valid window
+    if (m_sysWnd != HWND_INVALID)
+        return false;
+
     MAINWINCREATE CreateInfo;
 
     CreateInfo.dwStyle = visible?WS_VISIBLE:WS_NONE;
     CreateInfo.dwExStyle = WS_EX_NONE;
-    CreateInfo.spCaption = caption;
+    CreateInfo.spCaption = "HVRoot Main Window";
     CreateInfo.hMenu = 0;
     CreateInfo.hCursor = GetSystemCursor(0);
     CreateInfo.hIcon = 0;
-    CreateInfo.MainWindowProc = proc;
+    CreateInfo.MainWindowProc = defaultMainWindowProc;
     CreateInfo.lx = x;
     CreateInfo.ty = y;
-    CreateInfo.rx = x + width;
-    CreateInfo.by = y + height;
+    CreateInfo.rx = x + w;
+    CreateInfo.by = y + h;
     CreateInfo.iBkColor = COLOR_black;
-    CreateInfo.dwAddData = addData;
-    CreateInfo.hHosting = ActivityManager::getInstance()->hosting();
+    CreateInfo.dwAddData = (DWORD)this;
+    if (hosting == HWND_DESKTOP)
+        CreateInfo.hHosting = ActivityManager::getInstance()->hosting();
+    else
+        CreateInfo.hHosting = hosting;
 
-    return CreateMainWindow(&CreateInfo);
-}
-
-//create main window and set m_sysWnd. only need call once in onCreate.
-bool Window::doCreate(int x, int y, int w, int h, bool visible)
-{
-    //has valid window
-    if (m_sysWnd != HWND_INVALID)
-        return false;
-
-    m_sysWnd = createMainWindow ("window", defaultMainWindowProc,
-            x, y, w, h, (DWORD)this, visible);
-
+    m_sysWnd = CreateMainWindow (&CreateInfo);
     if (m_sysWnd == HWND_INVALID)
         return false;
-
-    SetWindowAdditionalData(m_sysWnd, (DWORD)this);
 
     if (visible)
         setActiveWindow(m_sysWnd);
@@ -97,19 +89,54 @@ bool Window::doCreate(int x, int y, int w, int h, bool visible)
     return true;
 }
 
-bool Window::create()
+#define HVROOT_CLASS_NAME   "hvroot"
+
+bool Window::RegisterHVRootControl()
 {
-    return doCreate(0, 0,
-            GetGDCapability(HDC_SCREEN, GDCAP_HPIXEL),
-            GetGDCapability(HDC_SCREEN, GDCAP_VPIXEL));
+    WNDCLASS MyClass;
+
+    MyClass.spClassName = HVROOT_CLASS_NAME;
+    MyClass.dwStyle     = WS_NONE;
+    MyClass.dwExStyle   = WS_EX_NONE;
+    MyClass.hCursor     = GetSystemCursor (IDC_ARROW);
+    MyClass.iBkColor    = COLOR_lightwhite;
+    MyClass.WinProc     = defaultControlProc;
+
+    return RegisterWindowClass (&MyClass);
 }
 
-// destroy view window and other resources
+bool Window::UnregisterHVRootControl()
+{
+    return UnregisterWindowClass (HVROOT_CLASS_NAME);
+}
+
+bool Window::create(HWND parent, int x, int y, int w, int h,
+        bool visible, int id)
+{
+    // has valid window
+    if (m_sysWnd != HWND_INVALID)
+        return false;
+
+    m_sysWnd = CreateWindow (HVROOT_CLASS_NAME, "HVRoot window",
+            visible?WS_VISIBLE:WS_NONE, id,
+            x, y, x + w, y + h, parent, (DWORD)this);
+
+    if (m_sysWnd == HWND_INVALID)
+        return false;
+
+    return true;
+}
+
+// destroy system window
 void Window::destroy()
 {
-    if(GetWindowAdditionalData(m_sysWnd) == (DWORD)this) {
+    if (GetWindowAdditionalData(m_sysWnd) == (DWORD)this) {
         SetWindowAdditionalData(m_sysWnd, 0);
-        DestroyMainWindow(m_sysWnd);
+        if (IsMainWindow(m_sysWnd))
+            DestroyMainWindow(m_sysWnd);
+        else
+            DestroyWindow(m_sysWnd);
+        m_sysWnd = HWND_INVALID;
     }
 }
 
@@ -291,39 +318,32 @@ int Window::onMouseMessage(MouseEvent::MouseEventType mouseType,
     return 0;
 }
 
-LRESULT Window::defaultMainWindowProc(HWND hWnd, UINT message,
-        WPARAM wParam, LPARAM lParam)
+LRESULT Window::commWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    Window* mainwnd = Window::getObject(hWnd);
-    if (mainwnd == NULL) {
-        _DBG_PRINTF("Window::defaultMainWindowProc: mainwnd is NULL\n");
-        return 0;
-    }
-
     switch (message) {
     case MSG_KEYDOWN:
-        return mainwnd->onKeyMessage(KeyEvent::KEY_DOWN, wParam, lParam);
+        return onKeyMessage(KeyEvent::KEY_DOWN, wParam, lParam);
 
     case MSG_KEYUP:
-        return mainwnd->onKeyMessage(KeyEvent::KEY_UP, wParam, lParam);
+        return onKeyMessage(KeyEvent::KEY_UP, wParam, lParam);
 
     case MSG_KEYLONGPRESS:
-        return mainwnd->onKeyMessage(KeyEvent::KEY_LONGPRESSED, wParam, lParam);
+        return onKeyMessage(KeyEvent::KEY_LONGPRESSED, wParam, lParam);
 
     case MSG_KEYALWAYSPRESS:
-        return mainwnd->onKeyMessage(KeyEvent::KEY_ALWAYSPRESS, wParam, lParam);
+        return onKeyMessage(KeyEvent::KEY_ALWAYSPRESS, wParam, lParam);
 
     case MSG_LBUTTONDOWN:
-        return mainwnd->onMouseMessage(MouseEvent::MOUSE_L_DOWN, wParam, lParam);
+        return onMouseMessage(MouseEvent::MOUSE_L_DOWN, wParam, lParam);
 
     case MSG_LBUTTONUP:
-        return mainwnd->onMouseMessage(MouseEvent::MOUSE_L_UP, wParam, lParam);
+        return onMouseMessage(MouseEvent::MOUSE_L_UP, wParam, lParam);
 
     case MSG_MOUSEMOVE:
-        return mainwnd->onMouseMessage(MouseEvent::MOUSE_MOVE, wParam, lParam);
+        return onMouseMessage(MouseEvent::MOUSE_MOVE, wParam, lParam);
 
     case MSG_IDLE:
-        mainwnd->onIdle();
+        onIdle();
         return 0;
 
     case MSG_ERASEBKGND:
@@ -331,13 +351,13 @@ LRESULT Window::defaultMainWindowProc(HWND hWnd, UINT message,
 
     case MSG_PAINT: {
         HDC hdc = BeginPaint(hWnd);
-        if (mainwnd && IsWindowVisible(hWnd)) {
+        if (IsWindowVisible(hWnd)) {
             RECT rcBounds;
             GetBoundsRect(hdc, &rcBounds);
             IntRect rcInv(rcBounds);
 
             GraphicsContext gc(hdc);
-            RootView* root = mainwnd->getRootView();
+            RootView* root = getRootView();
             if (root) {
                 root->onPaint(&gc);
 
@@ -360,7 +380,37 @@ LRESULT Window::defaultMainWindowProc(HWND hWnd, UINT message,
         break;
     }
 
-    return DefaultMainWinProc(hWnd, message, wParam, lParam);
+    return 1;
+}
+
+LRESULT Window::defaultControlProc(HWND hWnd, UINT message,
+        WPARAM wParam, LPARAM lParam)
+{
+    Window* wnd = Window::getObject(hWnd);
+    if (wnd == NULL) {
+        _DBG_PRINTF("Window::defaultControlProc: wnd is NULL\n");
+        return DefaultControlProc(hWnd, message, wParam, lParam);
+    }
+
+    if (wnd->commWindowProc(hWnd, message, wParam, lParam))
+        return DefaultControlProc(hWnd, message, wParam, lParam);
+
+    return 0;
+}
+
+LRESULT Window::defaultMainWindowProc(HWND hWnd, UINT message,
+        WPARAM wParam, LPARAM lParam)
+{
+    Window* wnd = Window::getObject(hWnd);
+    if (wnd == NULL) {
+        _DBG_PRINTF("Window::defaultMainWindowProc: wnd is NULL\n");
+        return DefaultMainWinProc(hWnd, message, wParam, lParam);
+    }
+
+    if (wnd->commWindowProc(hWnd, message, wParam, lParam))
+        return DefaultMainWinProc(hWnd, message, wParam, lParam);
+
+    return 0;
 }
 
 bool Window::setRootView(RootView* root)

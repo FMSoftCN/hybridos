@@ -30,6 +30,7 @@
 #include "../common/common.h"
 #include "../common/object.h"
 #include "../common/intrect.h"
+#include "../common/realrect.h"
 #include "../common/event.h"
 #include "../graphics/graphicscontext.h"
 
@@ -43,18 +44,27 @@ public:
     virtual ~Window();
 
     /* public methods */
+    // create a main window for HybridOS View document
+    bool create(HWND hosting, int x, int y, int w, int h,
+        bool visible = true);
+    // create a control for HybridOS View document
+    bool create(HWND parent, int x, int y, int w, int h,
+        bool visible, int id);
+
     void setWindowRect(const IntRect& rc);
+    // get client rect in physical pixels
     void getClientRect(IntRect& rc) const;
+    // get client rect in logical pixels
+    void getClientRect(RealRect& rc) const;
 
     void show(bool updateBg = true);
     void hide();
     void destroy();
-    bool create();
 
     HWND getSysWindow() const { return m_sysWnd; }
     static Window* getObject(HWND hwnd);
 
-    HWND setActiveWindow(HWND hMainWnd);
+    HWND setActiveWindow(HWND hwnd);
     HWND getActiveWindow();
 
     void updateWindow(bool updateBg = true);
@@ -70,8 +80,6 @@ public:
     bool setRootView(RootView* root);
 
     /* event handlers */
-    virtual void drawBackground(GraphicsContext* gc, IntRect &rc);
-
     virtual bool onKeyEvent(const KeyEvent* event);
     virtual bool onMouseEvent(const MouseEvent* event);
     virtual bool onMouseWheelEvent(const MouseWheelEvent* event);
@@ -80,25 +88,28 @@ public:
     // you can overload the method to define customized keycode.
     virtual KeyEvent::KeyCode scancode2keycode(int scancode);
 
+    static bool RegisterHVRootControl();
+    static bool UnregisterHVRootControl();
+
+    /* to be deprecated */
+    virtual void drawBackground(GraphicsContext* gc, IntRect &rc);
+
 protected:
     HWND m_sysWnd;
     RootView* m_rootView;
 
+    LRESULT commWindowProc(HWND hWnd, UINT message,
+            WPARAM wParam, LPARAM lParam);
     static LRESULT defaultMainWindowProc(HWND hWnd, UINT message,
             WPARAM wParam, LPARAM lParam);
-    static HWND createMainWindow(const char* caption, WNDPROC proc,
-            int x, int y, int width, int height, DWORD addData,
-            bool visible = true);
+    static LRESULT defaultControlProc(HWND hWnd, UINT message,
+            WPARAM wParam, LPARAM lParam);
 
     /* helpers to handle event */
     int onKeyMessage(KeyEvent::KeyEventType keytype,
         WPARAM wParam, LPARAM lParam);
     int onMouseMessage(MouseEvent::MouseEventType mouseType,
         WPARAM wParam, LPARAM lParam);
-
-    // overloaded this function to change the default position of main window
-    virtual bool doCreate(int x, int y, int w, int h, bool visible = true);
-
 };
 
 } // namespace hfcl

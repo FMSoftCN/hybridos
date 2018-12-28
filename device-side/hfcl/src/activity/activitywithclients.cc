@@ -158,7 +158,7 @@ unsigned int ActivityWithClients::backView (unsigned int endCode)
             }
         }
 
-        _clt_top->cleanBaseView();
+        _clt_top->cleanRootView();
         pop(1);
         return 0;
     }

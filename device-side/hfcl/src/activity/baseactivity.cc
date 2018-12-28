@@ -25,30 +25,20 @@ namespace hfcl {
 
 BaseActivity::~BaseActivity()
 {
-    if(m_name)
+    if (m_name)
        free(m_name);
-}
-
-const char * BaseActivity::name(void)
-{
-    return m_name;
 }
 
 void BaseActivity::setName(const char * p_name)
 {
     if (m_name != NULL)
-        free(m_name);
+        free (m_name);
     m_name = strdup(p_name);
 }
 
-BaseActivity::ACT_STATE BaseActivity::state(void)
+void BaseActivity::setState(ActState state)
 {
-    return m_state;
-}
-
-void BaseActivity::setState(ACT_STATE i_state)
-{
-    m_state = i_state;
+    m_state = state;
 }
 
 void BaseActivity::close(void)

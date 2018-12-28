@@ -27,7 +27,7 @@
 #include "../common/event.h"
 #include "../view/viewcontext.h"
 #include "../view/rootview.h"
-#include "activitymanager.h"
+#include "../activity/activitymanager.h"
 
 namespace hfcl {
 
@@ -38,18 +38,22 @@ public:
     Controller();
     virtual ~Controller();
 
-    virtual unsigned int showView(int view_id, HTData param1, HTData param2); //show a view in the stack
-    virtual unsigned int switchView(int view_id, HTData param1, HTData param2); //switch a view with stack
-    virtual    unsigned int showModalView(int view_id, HTData param1, HTData param2);
+    virtual unsigned int showView(int view_id, HTData param1, HTData param2);
+    virtual unsigned int switchView(int view_id, HTData param1, HTData param2);
+    virtual unsigned int showModalView(int view_id,
+            HTData param1, HTData param2);
     virtual unsigned int backView(unsigned int endcode = 0);
 
     virtual unsigned int setMode(ControllerModeList* modeList) { return 0; }
 
-    virtual unsigned int onClientCommand(int sender, unsigned int cmd_id, HTData param1, HTData param2) { return 0; }
-
-    void cleanAllClient();
+    virtual unsigned int onClientCommand(int sender, unsigned int cmd_id,
+            HTData param1, HTData param2) {
+        return 0;
+    }
 
     virtual void exit() { HFCL_DELETE(this); }
+
+    void cleanAllClients();
 
     ControllerClient* getTop(int index = 0);
     void moveClientToTop(int view_id);
@@ -62,29 +66,27 @@ public:
 
 protected:
     LIST(ControllerClient*, ControllerClientList)
-
     ControllerClientList m_list;
+    int m_modalCount;
 
+    virtual ControllerClient* createClient(int view_id,
+            HTData param1, HTData param2) { return NULL; }
     virtual void animationSwitch(ControllerClient* prev, ControllerClient* cur);
 
     void push(ControllerClient* client);
     void setTop(ControllerClient* client,  int index = 0);
 
-    unsigned int passCommandToClient(int client_id, unsigned int cmd_id, HTData param1, HTData param);
-
-
-    virtual ControllerClient*  createClient(int view_id, HTData param1, HTData param2) { return NULL; }
-
-    virtual View * getViewParent(int view_id) = 0;
-
-    int m_modalCount;
+    unsigned int passCommandToClient(int client_id, unsigned int cmd_id,
+            HTData param1, HTData param);
 };
 
 #define DECLARE_CONTROLLER_CLIENTS \
-    protected: virtual ControllerClient* createClient(int view_id, HTData param1, HTData param2);
+    protected: virtual ControllerClient* createClient(int view_id, \
+            HTData param1, HTData param2);
 
 #define BEGIN_CONTROLLER_CLIENTS(clss) \
-    ControllerClient* clss::createClient(int view_id, HTData param1, HTData param2) { switch(view_id) {
+    ControllerClient* clss::createClient(int view_id, \
+        HTData param1, HTData param2) { switch(view_id) {
 
 #define END_CONTROLLER_CLIENTS \
     } return NULL;}
@@ -156,7 +158,7 @@ public:
 
     RootView *rootView() { return m_rootView; }
     const RootView *rootView() const { return m_rootView; }
-    void cleanBaseView();
+    void cleanRootView();
 
     unsigned int sendCommand(unsigned int cmd_id,
             HTData param1, HTData param2) {

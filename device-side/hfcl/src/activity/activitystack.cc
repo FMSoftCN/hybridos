@@ -70,7 +70,7 @@ BaseActivity* ActivityStack::getExistActivityByName(const char * name)
     {
         BaseActivity *rt = (*item)->getActivity();
         if (rt != NULL) {
-            const char* pname = rt->name();
+            const char* pname = rt->getName();
             if(pname != NULL && strcmp(name, pname) == 0) {
                 return rt;
             }
@@ -88,7 +88,7 @@ BaseActivity* ActivityStack::getExistActivityRunBackgroundByName(const char * na
     {
         BaseActivity *rt = (*item)->getActivity();
         if (rt != NULL) {
-            const char* pname = rt->name();
+            const char* pname = rt->getName();
             if(pname != NULL && strcmp(pname, name) == 0) {
                 return rt;
             }

@@ -40,7 +40,7 @@ Controller::Controller(): m_modalCount(0) {
 }
 
 Controller::~Controller() {
-    cleanAllClient();
+    cleanAllClients();
 }
 
 unsigned int Controller::showView(int view_id, HTData param1, HTData param2) //show a view in the stack
@@ -128,13 +128,13 @@ unsigned int Controller::showModalView(int view_id, HTData param1, HTData param2
     if(( ret = showView(view_id, param1, param2)) == 0)
     {
         ControllerClient * client = getTop(0);
-        View* view;
+        RootView* view;
 
         if(!client || !(view = client->rootView()))
             return 1;
 
-        Window *window = SAFE_CAST(Window*, view->getRoot());
-        if(window) {
+        Window *window = view->getSysWindow();
+        if (window) {
             m_modalCount ++;
             client->setModal(true);
 
@@ -165,14 +165,14 @@ unsigned int Controller::backView(unsigned int endcode)
 
     if(m_modalCount > 0) {
         if(client && client->isModal()) {
-            Window* window = SAFE_CAST(Window*, client->rootView()->getRoot());
+            Window* window = client->rootView()->getSysWindow();
             window->endDlg(endcode);
             m_modalCount --;
         }
     }
 
     if(client)
-        client->cleanBaseView();
+        client->cleanRootView();
 
     pop(1);
 
@@ -289,7 +289,7 @@ void Controller::setTop(ControllerClient* client, int index)
     ControllerClient *_clt = *it;
     if (_clt != NULL)
     {
-        _clt->cleanBaseView();
+        _clt->cleanRootView();
         _DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- delete client <%p>", _clt);
         HFCL_DELETE(_clt);
         *it = client;
@@ -316,7 +316,7 @@ void Controller::pop(int pop_count)
     }
 }
 
-void Controller::cleanAllClient()
+void Controller::cleanAllClients()
 {
     // Attention :
     // All the view will be deleted by the view tree (NGUXWindow).
@@ -337,14 +337,14 @@ void Controller::deleteView(int view_id, bool bExit)
 {
     ControllerClient* _client = find(view_id);
 
-    if(NULL == _client)
+    if (NULL == _client)
         return;
 
     _DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- remove client <%p>", _client);
 
-    if(m_modalCount > 0) {
-        if(_client && _client->isModal()) {
-            Window* window = SAFE_CAST(Window*, _client->rootView()->getRoot());
+    if (m_modalCount > 0) {
+        if (_client && _client->isModal()) {
+            Window* window = _client->rootView()->getSysWindow();
             window->endDlg(0);
             m_modalCount --;
         }
@@ -353,7 +353,7 @@ void Controller::deleteView(int view_id, bool bExit)
 
     m_list.remove(_client);
 
-    _client->cleanBaseView();
+    _client->cleanRootView();
     HFCL_DELETE(_client);
     _DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- delete client <%p>", _client);
 
@@ -415,13 +415,13 @@ ControllerClient::~ControllerClient()
     m_inactiveTimes = 0;
 }
 
-void ControllerClient::cleanBaseView()
+void ControllerClient::cleanRootView()
 {
     _DBG_PRINTF ("HFCL_CONT_TRACE -- controller -- clear client <%p>", this);
 
-    if(m_rootView) {
+    if (m_rootView) {
         ViewContainer *p = m_rootView->getParent();
-        if(p != NULL){
+        if(p != NULL) {
             p->removeChild(m_rootView);
         } else {
             HFCL_DELETE(m_rootView);

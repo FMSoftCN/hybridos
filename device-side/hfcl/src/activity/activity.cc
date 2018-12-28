@@ -29,13 +29,12 @@ Activity::Activity() : Window()
 
 Activity::~Activity()
 {
-
 }
 
 void Activity::onCreate(ContextStream* contextStream, Intent* intent)
 {
     // TODO: create main window according to POS property
-    doCreate(0, 0,
+    create(HWND_DESKTOP, 0, 0,
             GetGDCapability(HDC_SCREEN, GDCAP_HPIXEL),
             GetGDCapability(HDC_SCREEN, GDCAP_VPIXEL));
 }
@@ -81,7 +80,9 @@ void Activity::setFullScreen(bool isFullScreen)
 
 void FullScreenActivity::onCreate(ContextStream* contextStream, Intent* intent)
 {
-    create();
+    create(HWND_DESKTOP, 0, 0,
+            GetGDCapability(HDC_SCREEN, GDCAP_HPIXEL),
+            GetGDCapability(HDC_SCREEN, GDCAP_VPIXEL));
 }
 
 } // namespace hfcl

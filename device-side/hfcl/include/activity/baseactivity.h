@@ -26,45 +26,22 @@
 #include "../common/common.h"
 #include "../common/stlalternative.h"
 #include "../common/contextstream.h"
-#include "intent.h"
-#include "controller.h"
+#include "../activity/intent.h"
+#include "../activity/controller.h"
 
 namespace hfcl {
 
 class BaseActivity : public Controller {
 public:
-    typedef enum _ACT_STATE
-    {
+    enum ActState {
         ORIGIN = 0,
         INIT,
         RUNNING,
         SLEEP,
         SUSPEND,
-    } ACT_STATE;
+    };
 
-    BaseActivity():m_priority(PRIORITY_HIGH), m_name(NULL), m_state(INIT){};
-    virtual ~BaseActivity();
-
-    const char * name(void);
-    void setName(const char * name);
-    ACT_STATE state(void);
-    void setState(ACT_STATE state);
-    void close(void);
-
-    virtual void onCreate(ContextStream *contextStream, Intent *intent){}
-    virtual void onStart(void){}
-    virtual void onSleep(void){}
-    virtual void onWakeup(void){}
-    virtual void onMove2Top(void) {}
-    virtual Intent *onDestroy(ContextStream *contextStream){return NULL;}
-    virtual bool isSuspendable(void);
-
-    /* VincentWei: add this method as virtual */
-    virtual bool beInLockFrame(void) {return false;};
-
-    virtual void exit() { close(); }
-
-    enum {
+    enum ActPriority {
         PRIORITY_LOWEST,
         PRIORITY_LOW,
         PRIORITY_MIDDLE,
@@ -72,15 +49,40 @@ public:
         PRIORITY_HIGHEST,
     };
 
-    void setPriority(int i_priority) { m_priority = i_priority; }
-    int priority(void) { return m_priority; }
+    BaseActivity()
+        : m_name(NULL)
+        , m_priority(PRIORITY_HIGH)
+        , m_state(INIT) {};
+
+    virtual ~BaseActivity();
+
+    const char* getName() const { return m_name; }
+    void setName(const char* name);
+
+    int getState() const { return m_state; }
+    void setState(ActState state);
+
+    int getPriority() const { return m_priority; }
+    void setPriority(ActPriority priority) { m_priority = priority; }
+
+    void close();
+
+    virtual void onCreate(ContextStream *contextStream, Intent *intent){}
+    virtual void onStart(){}
+    virtual void onSleep(){}
+    virtual void onWakeup(){}
+    virtual void onMove2Top() {}
+    virtual Intent *onDestroy(ContextStream *contextStream) {
+        return NULL;
+    }
+    virtual bool isSuspendable();
+
+    virtual void exit() { close(); }
 
 protected:
-    int m_priority;
     char * m_name;
-    ACT_STATE m_state;
-
-    View* getViewParent(int view_id) { return NULL; }
+    ActPriority m_priority;
+    ActState m_state;
 };
 
 } // namespace hfcl
