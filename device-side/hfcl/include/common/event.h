@@ -220,17 +220,17 @@ private:
 
 class TimerEvent : public Event {
 public:
-    TimerEvent(intptr_t timerId)
+    TimerEvent(int timerId)
         : Event(ET_TIMER)
         , m_timerId(timerId) {
     }
 
     virtual ~TimerEvent() { }
 
-    intptr_t timerID() const { return m_timerId; }
+    int timerID() const { return m_timerId; }
 
 private:
-    intptr_t m_timerId;
+    int m_timerId;
 };
 
 class Window;
