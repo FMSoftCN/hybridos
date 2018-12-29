@@ -43,6 +43,7 @@ public:
         ET_MOUSE,
         ET_MOUSE_WHEEL,
         ET_TIMER,
+        ET_WINDOW,
         ET_VIEW,
         ET_USER,
     };
@@ -218,35 +219,71 @@ private:
 
 class TimerEvent : public Event {
 public:
-    TimerEvent (int timerId)
+    TimerEvent(intptr_t timerId)
         : Event(ET_TIMER)
         , m_timerId(timerId) {
     }
 
     virtual ~TimerEvent() { }
 
-    int timerID() const { return m_timerId; }
+    intptr_t timerID() const { return m_timerId; }
 
 private:
-    int m_timerId;
+    intptr_t m_timerId;
+};
+
+class Window;
+
+class WindowEvent : public Event {
+public:
+    enum WindowEventCode {
+        WND_GOTFOCUS,
+        WND_LOSTFOCUS,
+        WND_SHOWN,
+        WND_HIDDEN,
+        WND_ENABLED,
+        WND_DISABLED,
+        WND_SIZECHANGED,
+        WND_MAXIMIZED,
+        WND_MINIMIZED,
+        WND_RESTORED,
+    };
+
+    WindowEvent(WindowEventCode code, const Window* window,
+            const Window* other = NULL)
+        : Event(ET_WINDOW)
+        , m_code(code)
+        , m_window(window)
+        , m_other(other) {
+    }
+    virtual ~WindowEvent() { }
+
+    WindowEventCode code() const { return m_code; }
+    const Window* window() const { return m_window; }
+    const Window* other() const { return m_other; }
+
+private:
+    WindowEventCode m_code;
+    const Window* m_window;
+    const Window* m_other;
 };
 
 class View;
 
 class ViewEvent : public Event {
 public:
-    ViewEvent (int nc, const View* view)
+    ViewEvent(int code, const View* view)
         : Event(ET_VIEW)
-        , m_nc(nc)
+        , m_code(code)
         , m_view(view) {
     }
     virtual ~ViewEvent() { }
 
-    int nc() const { return m_nc; }
+    int code() const { return m_code; }
     const View* view() const { return m_view; }
 
 private:
-    int m_nc;
+    int m_code;
     const View* m_view;
 };
 
