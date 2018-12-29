@@ -157,6 +157,10 @@ public:
     void setModal(bool bModal ) { m_bModal = bModal; }
     bool isModal() const { return m_bModal; }
 
+    Window* getWindow() { return m_window; }
+    const Window* getWindow() const { return m_window; }
+    void setWindow(Window* window) { m_window = window; }
+
     RootView *getRootView() { return m_rootView; }
     const RootView *getRootView() const { return m_rootView; }
     void setRootView(RootView* root) {
@@ -168,9 +172,6 @@ public:
     void cleanRootView() {
         setRootView(NULL);
     }
-
-    Window* getWindow() { return m_window; }
-    const Window* getWindow() const { return m_window; }
 
     unsigned int sendCommand(unsigned int cmd_id,
             HTData param1, HTData param2) {
