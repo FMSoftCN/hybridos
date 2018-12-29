@@ -27,6 +27,8 @@
 #include "view/rootview.h"
 #include "view/panelview.h"
 #include "view/textview.h"
+#include "view/imageview.h"
+#include "view/gifview.h"
 #include "view/transition.h"
 
 #endif // HFCL_VIEW_H_

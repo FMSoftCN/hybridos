@@ -11,4 +11,5 @@ libhfcl_view_la_SOURCES = \
     rootview.cc \
     panelview.cc \
     textview.cc \
+    gifview.cc \
     transition.cc

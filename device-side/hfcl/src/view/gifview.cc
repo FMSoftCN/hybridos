@@ -19,7 +19,7 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "view/gifanimateview.h"
+#include "view/gifview.h"
 
 #include "graphics/graphicscontext.h"
 #include "graphics/gifanimate.h"
@@ -27,51 +27,18 @@
 
 namespace hfcl {
 
-GifAnimateView::GifAnimateView()
-    :View() ,m_elapsed_10ms(0)
+GifView::GifView(const char* cssClass, const char* name, int id)
+    : View(cssClass, name, id)
+    , m_elapsed_10ms(0)
 {
     m_animate = NULL;
     m_timer_id = 0;
     m_state = Stop;
     m_loopType = NoLoop;
     m_playType = AutoPlay;
-    m_drawLayer = (LAYER_MAXNUM - 1);
 }
 
-GifAnimateView::GifAnimateView(View* p_parent)
-    :View(p_parent)
-{
-    m_animate = NULL;
-    m_timer_id = 0;
-    m_state = Stop;
-    m_loopType = NoLoop;
-    m_playType = AutoPlay;
-    m_drawLayer = (LAYER_MAXNUM - 1);
-}
-
-GifAnimateView::GifAnimateView(View* p_parent, DrawableSet* drset)
-    :View(p_parent, drset)
-{
-    m_animate = NULL;
-    m_timer_id = 0;
-    m_state = Stop;
-    m_loopType = NoLoop;
-    m_playType = AutoPlay;
-    m_drawLayer = (LAYER_MAXNUM - 1);
-}
-
-GifAnimateView::GifAnimateView(int i_id, int x, int y, int w, int h)
-    :View(i_id, x, y, w, h)
-{
-    m_animate = NULL;
-    m_timer_id = 0;
-    m_state = Stop;
-    m_loopType = NoLoop;
-    m_playType = AutoPlay;
-    m_drawLayer = (LAYER_MAXNUM - 1);
-}
-
-GifAnimateView::~GifAnimateView()
+GifView::~GifView()
 {
     stop();
     if (m_timer_id != 0)
@@ -84,7 +51,7 @@ GifAnimateView::~GifAnimateView()
     }
 }
 
-bool GifAnimateView::start(void)
+bool GifView::start(void)
 {
     if (NULL == m_animate)
         return false;
@@ -92,7 +59,7 @@ bool GifAnimateView::start(void)
     if (Play == m_state)
         return false;
 
-    m_timer_id = registerTimer(10, "GifAnimateView");
+    m_timer_id = registerTimer(10, "GifView");
 
     if (m_timer_id == 0)
         return false;
@@ -102,7 +69,7 @@ bool GifAnimateView::start(void)
     return true;
 }
 
-bool GifAnimateView::pause(void)
+bool GifView::pause(void)
 {
     if (Play != m_state)
         return false;
@@ -117,7 +84,7 @@ bool GifAnimateView::pause(void)
     return true;
 }
 
-bool GifAnimateView::resume(void)
+bool GifView::resume(void)
 {
     if (NULL == m_animate)
         return false;
@@ -129,7 +96,7 @@ bool GifAnimateView::resume(void)
     {
         removeTimer(m_timer_id);
     }
-    m_timer_id = registerTimer(10, "GifAnimateView");
+    m_timer_id = registerTimer(10, "GifView");
 
     if (m_timer_id == 0)
         return false;
@@ -139,7 +106,7 @@ bool GifAnimateView::resume(void)
     return true;
 }
 
-bool GifAnimateView::stop(void)
+bool GifView::stop(void)
 {
     if (m_timer_id != 0)
     {
@@ -152,13 +119,13 @@ bool GifAnimateView::stop(void)
     if(m_animate== NULL) return false;
     m_animate->firstFrame();
     // stop notity event
-    CustomEvent event(Event::CUSTOM_NOTIFY, (HTData)NOTIFY_GIFANIMATE_STOP, (HTData)this);
+    ViewEvent event(NOTIFY_GIFANIMATE_STOP, this);
     raiseEvent(&event);
 
     return true;
 }
 
-bool GifAnimateView::reset(void)
+bool GifView::reset(void)
 {
     if (NULL == m_animate)
         return false;
@@ -172,7 +139,7 @@ bool GifAnimateView::reset(void)
 }
 
 
-void GifAnimateView::setGifFile(const char* animateFile)
+void GifView::setGifFile(const char* animateFile)
 {
     if (NULL != m_animate) {
         HFCL_DELETE(m_animate);
@@ -195,7 +162,7 @@ void GifAnimateView::setGifFile(const char* animateFile)
     }
 }
 
-void GifAnimateView::setGifAnimate(GifAnimate* animate)
+void GifView::setGifAnimate(GifAnimate* animate)
 {
     if (NULL != m_animate && m_animate != animate) {
         HFCL_DELETE(m_animate);
@@ -211,7 +178,7 @@ void GifAnimateView::setGifAnimate(GifAnimate* animate)
     }
 }
 
-void GifAnimateView::onPaint(GraphicsContext* context, int status)
+void GifView::onPaint(GraphicsContext* context)
 {
     IntRect rc = getRect();
     RECT mapRc(rc);
@@ -219,13 +186,12 @@ void GifAnimateView::onPaint(GraphicsContext* context, int status)
         return;
     }
 
-    context->setLayer(m_drawLayer);
     context->mapRect(mapRc);
 
     m_animate->drawOneFrame(context, mapRc);
 }
 
-bool GifAnimateView::handleEvent(Event* event)
+bool GifView::handleEvent(Event* event)
 {
     if (NULL == m_animate)
         return GOON_DISPATCH;
@@ -234,20 +200,15 @@ bool GifAnimateView::handleEvent(Event* event)
     if (Stop == m_state)
         return STOP_DISPATCH;
 
-    if (event->eventType() == Event::TIMER
-            && m_timer_id == ((TimerEvent *)event)->timerID())
-    {
-        if(m_animate->frameCount() == 1)
-        {
+    if (event->eventType() == Event::ET_TIMER
+            && m_timer_id == ((TimerEvent *)event)->timerID()) {
+        if(m_animate->frameCount() == 1) {
             updateView(false);
             stop();
         }
-        else
-        {
-            if (m_elapsed_10ms >= m_animate->currentFrameDelay())
-            {
-                if (!(m_animate->isLastFrame()) || Loop == m_loopType)
-                {
+        else {
+            if (m_elapsed_10ms >= m_animate->currentFrameDelay()) {
+                if (!(m_animate->isLastFrame()) || Loop == m_loopType) {
                     if((Loop == m_loopType)&&(m_animate->isLastFrame())) {
                          m_animate->firstFrame();
                     }
@@ -273,7 +234,7 @@ bool GifAnimateView::handleEvent(Event* event)
     return GOON_DISPATCH;
 }
 
-bool GifAnimateView::dispatchEvent(Event* event)
+bool GifView::dispatchEvent(Event* event)
 {
     return View::dispatchEvent(event);
 }

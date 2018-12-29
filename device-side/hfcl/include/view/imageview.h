@@ -19,25 +19,17 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef HFCL_VIEW_IMAGEVIEW_H_
 #define HFCL_VIEW_IMAGEVIEW_H_
 
-#include "view.h"
+#include "../view/view.h"
 #include "../graphics/image.h"
 
 namespace hfcl {
 
 class ImageView : public View {
 public:
-    ImageView(View* parent);
-    ImageView(View* parent, DrawableSet* drset);
-    ImageView(Image* pImage, int id, int x, int y, int w, int h);
-    ImageView(const char * filePath, int id, int x, int y, int w, int h,
-            int mode = DRAWMODE_NORMAL,
-            int align = ALIGN_CENTER,
-            int valign = VALIGN_MIDDLE);
-
+    ImageView(const char* cssClass, const char* name, int id = 0);
     virtual ~ImageView();
 
     bool setImage(Image* pImg);
@@ -56,11 +48,6 @@ public:
         m_format.rotationAngle = RotationAngle;
     }
 
-    virtual void drawContent(GraphicsContext* context,
-            IntRect &rc, int status/*= Style::NORMAL*/);
-
-    virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
-
     void setPartBoxXoYo(int xo = 0, int yo = 0);
     void getPartBoxXoYo(int& xo, int& yo);
 
@@ -68,6 +55,10 @@ public:
     int getImageWidth(void);
     int getImageHeight(void);
     bool setReplaceColor(Uint32 color);
+
+    /* overloaded virtual functions */
+    virtual const char* type() const { return "hvimg"; }
+    virtual void drawContent(GraphicsContext* context, IntRect &rc);
 
 protected:
     Image*    m_image;

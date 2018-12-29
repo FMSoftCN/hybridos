@@ -20,54 +20,40 @@
 */
 
 
-#ifndef HFCL_VIEW_GIFANIMATIONVIEW_H_
-#define HFCL_VIEW_GIFANIMATIONVIEW_H_
+#ifndef HFCL_VIEW_GIFVIEW_H_
+#define HFCL_VIEW_GIFVIEW_H_
 
-#include "view.h"
+#include "../view/view.h"
 #include "../services/timerservice.h"
 
 namespace hfcl {
 
 class GifAnimate;
 
-class GifAnimateView : public View, TimerEventListener {
+class GifView : public View, TimerEventListener {
 public:
     typedef enum _tagPlayState {
         Play = 0,
         Pause,
-        Stop
+        Stop,
     } PlayState;
 
     typedef enum _tagLoopType {
         Loop = 0,
-        NoLoop
+        NoLoop,
     } LoopType;
 
     typedef enum _tagPlayType {
         AutoPlay,
-        NoAutoPlay
+        NoAutoPlay,
     } PlayType;
 
     enum {
-        VN_BEGIN = CustomEvent::CUS_MAX,
-        NOTIFY_GIFANIMATE_STOP = CustomEvent::CUS_GIFANIMATE_STOP,
+        NOTIFY_GIFANIMATE_STOP,
     };
 
-    GifAnimateView();
-    GifAnimateView(View* parent);
-    GifAnimateView(View* parent, DrawableSet* drset);
-    GifAnimateView(int id, int x, int y, int w, int h);
-    virtual ~GifAnimateView();
-
-    void setPlayType(PlayType type) {m_playType = type;}
-    PlayType playType(void) {return m_playType;}
-    void setLoopType(LoopType type) {m_loopType = type;}
-    LoopType loopType(void) {return m_loopType;}
-
-    virtual void onPaint(GraphicsContext* context, int status /*= Style::NORMAL*/);
-    virtual bool handleEvent(Event* event);
-    //return True if the event was handled, false otherwise.
-    virtual bool dispatchEvent(Event* event);
+    GifView(const char* cssClass, const char* name, int id = 0);
+    virtual ~GifView();
 
     bool start(void);
     bool pause(void);
@@ -78,9 +64,18 @@ public:
 
     void setGifAnimate(GifAnimate* animate);
     void setGifFile(const char* animate);
-    GifAnimate *gifAnimate(void){return m_animate;}
-    void setLayer(int layerNo) { m_drawLayer = layerNo; }
-    int layer () { return m_drawLayer; }
+    GifAnimate *gifAnimate(void) { return m_animate; }
+
+    void setPlayType(PlayType type) { m_playType = type; }
+    PlayType playType(void) { return m_playType; }
+    void setLoopType(LoopType type) { m_loopType = type; }
+    LoopType loopType(void) { return m_loopType; }
+
+    /* overloaded virtual functions */
+    virtual const char* type() const { return "hvgif"; }
+    virtual void onPaint(GraphicsContext* context);
+    virtual bool handleEvent(Event* event);
+    virtual bool dispatchEvent(Event* event);
 
 private:
     GifAnimate* m_animate;
@@ -90,9 +85,9 @@ private:
     PlayType    m_playType;
     LoopType    m_loopType;
     Uint32      m_start_ticks;
-    int         m_drawLayer;
 };
 
 } // namespace hfcl
 
-#endif /* HFCL_VIEW_GIFANIMATIONVIEW_H_ */
+#endif /* HFCL_VIEW_GIFVIEW_H_ */
+

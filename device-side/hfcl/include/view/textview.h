@@ -19,13 +19,12 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef HFCL_VIEW_TEXTVIEW_H_
 #define HFCL_VIEW_TEXTVIEW_H_
 
 #include <string>
 
-#include "view.h"
+#include "../view/view.h"
 #include "../graphics/color.h"
 #include "../resource/respkgmanager.h"
 

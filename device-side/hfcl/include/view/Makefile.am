@@ -5,44 +5,45 @@ myincludedir=$(includedir)/hfcl/view
 myinclude_HEADERS= \
     view.h \
     viewcontainer.h \
-    scrollbar.h \
-    rootview.h \
     viewcontext.h \
-    animateimageview.h \
-    arrowtextview.h \
-    bitmark.h \
-    boxlayoutview.h \
-    busylistview.h \
-    buttonview.h \
-    compositeview.h \
-    dynclistview.h \
-    editview.h \
-    formateditview.h \
-    gifanimateview.h \
-    gridview.h \
-    iconitemview.h \
-    iconview.h \
-    imageview.h \
-    itemview.h \
-    layoutview.h \
-    linelayoutview.h \
-    listview.h \
-    menubarview.h \
-    mleditview.h \
-    multifieldeditor.h \
-    pagenavigateview.h \
-    pageview.h \
-    pairlayoutview.h \
-    panelview.h \
-    selectediconitemview.h \
-    simpleitemview.h \
-    sleditview.h \
-    slideswitcher.h \
-    statusbarview.h \
-    tablebarview.h \
-    textview.h \
-    timeeditor.h \
-    titemview.h \
-    trackbarview.h \
+    scrollbar.h \
     transition.h \
-    wrapperview.h
+    rootview.h \
+    panelview.h \
+    textview.h \
+    imageview.h \
+    gifview.h
+
+#    animateimageview.h \
+#    arrowtextview.h \
+#    bitmark.h \
+#    boxlayoutview.h \
+#    busylistview.h \
+#    buttonview.h \
+#    compositeview.h \
+#    dynclistview.h \
+#    editview.h \
+#    formateditview.h \
+#    gridview.h \
+#    iconitemview.h \
+#    iconview.h \
+#    itemview.h \
+#    layoutview.h \
+#    linelayoutview.h \
+#    listview.h \
+#    menubarview.h \
+#    mleditview.h \
+#    multifieldeditor.h \
+#    pagenavigateview.h \
+#    pageview.h \
+#    pairlayoutview.h \
+#    selectediconitemview.h \
+#    simpleitemview.h \
+#    sleditview.h \
+#    slideswitcher.h \
+#    statusbarview.h \
+#    tablebarview.h \
+#    timeeditor.h \
+#    titemview.h \
+#    trackbarview.h \
+#    wrapperview.h

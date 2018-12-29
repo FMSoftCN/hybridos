@@ -23,40 +23,10 @@
 
 namespace hfcl {
 
-ImageView::ImageView(View* p_parent)
-    : View(p_parent, NULL)
+ImageView::ImageView(const char* cssClass, const char* name, int id)
+    : View(cssClass, name, id)
 {
     init();
-}
-
-ImageView::ImageView(View* p_parent, DrawableSet* drset)
-    : View(p_parent,drset)
-{
-    init();
-}
-
-ImageView::ImageView(Image* pImage,
-                     int i_id,
-                     int x, int y, int w, int h)
-    : View(i_id, x, y, w, h)
-{
-    init();
-    m_image = pImage;
-}
-
-ImageView::ImageView(const char * filePath,
-                     int i_id,
-                     int x, int y, int w, int h,
-                     int mode,
-                     int align,
-                     int valign)
-    : View(i_id, x, y, w, h)
-{
-    init();
-    m_image = Image::loadImage(filePath);
-    setImageDrawMode(mode);
-    setImageAlign(align);
-    setImageVAlign(valign);
 }
 
 ImageView::~ImageView()
@@ -66,12 +36,7 @@ ImageView::~ImageView()
     }
 }
 
-void ImageView::drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/)
-{
-    View::drawBackground(context, rc, status);
-}
-
-void ImageView::drawContent(GraphicsContext* context, IntRect &rc, int status)
+void ImageView::drawContent(GraphicsContext* context, IntRect &rc)
 {
     if(m_format.rotationAngle != 0){
         m_format.drawMode = DRAWMODE_ROTATIONANGLE;
