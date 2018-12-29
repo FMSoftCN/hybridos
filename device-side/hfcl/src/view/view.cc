@@ -373,6 +373,18 @@ bool View::checkPseudoClass(const char* pseudoCls) const
     return false;
 }
 
+void View::drawBackground(GraphicsContext* context, IntRect &rc)
+{
+}
+
+void View::drawContent(GraphicsContext* context, IntRect &rc)
+{
+}
+
+void View::drawScrollBar(GraphicsContext* context, IntRect &rc)
+{
+}
+
 void View::onPaint(GraphicsContext* context)
 {
     if (isVisible()) {
@@ -436,88 +448,6 @@ void View::releaseEventListeners()
         }
     }
     while (true);
-}
-
-void View::onContainingBlockChanged()
-{
-}
-
-void View::onNameChanged()
-{
-}
-
-void View::onClassChanged()
-{
-}
-
-void View::onDisabled()
-{
-}
-
-void View::onEnabled()
-{
-}
-
-void View::onChecked()
-{
-}
-
-void View::onUnchecked()
-{
-}
-
-void View::onFrozen()
-{
-}
-
-void View::onUnfrozen()
-{
-}
-
-void View::onHovered()
-{
-}
-
-void View::onLeft()
-{
-}
-
-void View::onActive()
-{
-    ViewEvent event(VN_ACTIVE, this);
-    raiseEvent(&event);
-}
-
-void View::onInactive()
-{
-    ViewEvent event(VN_INACTIVE, this);
-    raiseEvent(&event);
-}
-
-void View::onGotFocus()
-{
-    ViewEvent event(VN_GOTFOCUS, this);
-    raiseEvent(&event);
-    updateView();
-}
-
-void View::onLostFocus()
-{
-    ViewEvent event(VN_LOSTFOCUS, this);
-    raiseEvent(&event);
-    updateView();
-}
-
-void View::onClicked()
-{
-    ViewEvent event(VN_CLICKED, this);
-    raiseEvent(&event);
-}
-
-void View::onDoubleClicked()
-{
-    ViewEvent event(VN_DBLCLICKED, this);
-    raiseEvent(&event);
 }
 
 bool View::setFocus(View * view)
@@ -585,20 +515,20 @@ void View::updateView(bool upBackGnd)
     inner_updateView(0, 0, m_rect.width(), m_rect.height(), upBackGnd);
 }
 
+#if 0
 //return True if the event was handled, false otherwise.
 bool View::dispatchEvent(Event* event)
 {
-/*
     if (event->eventType() == Event::ET_VIEW) {
         ViewEvent e(VN_CLICKED, this);
-        return raiseEvent(&e);
+        return raiseViewEvent(&e);
     }
-*/
 
     return raiseEvent(event);
 }
+#endif
 
-bool View::raiseEvent(Event *event)
+bool View::raiseViewEvent(ViewEvent *event)
 {
     EventListenerList::iterator i;
 
@@ -654,10 +584,10 @@ void View::focusMe()
         p->focusChild(this);
     }
 
-    /*
-    ViewEvent event(Event::CUSTOM_NOTIFY, (HTData)VN_GOTFOCUS, (HTData)this);
-    raiseEvent(&event);
-    */
+#if 0
+    ViewEvent event(VN_GOTFOCUS, (HTData)this);
+    raiseViewEvent(&event);
+#endif
 }
 
 #if 0
@@ -753,6 +683,96 @@ void View::computeCss()
 
     // make length/URI and others to be absolute here
     m_css_computed->makeAbsolute(*this);
+}
+
+void View::layout()
+{
+}
+
+void View::onContainingBlockChanged()
+{
+}
+
+void View::onNameChanged()
+{
+}
+
+void View::onClassChanged()
+{
+}
+
+void View::onDisabled()
+{
+}
+
+void View::onEnabled()
+{
+}
+
+void View::onChecked()
+{
+}
+
+void View::onUnchecked()
+{
+}
+
+void View::onFrozen()
+{
+}
+
+void View::onUnfrozen()
+{
+}
+
+void View::onHovered()
+{
+}
+
+void View::onLeft()
+{
+}
+
+void View::onActive()
+{
+    ViewEvent event(VN_ACTIVE, this);
+    raiseViewEvent(&event);
+}
+
+void View::onInactive()
+{
+    ViewEvent event(VN_INACTIVE, this);
+    raiseViewEvent(&event);
+}
+
+void View::onGotFocus()
+{
+    ViewEvent event(VN_GOTFOCUS, this);
+    raiseViewEvent(&event);
+    updateView();
+}
+
+void View::onLostFocus()
+{
+    ViewEvent event(VN_LOSTFOCUS, this);
+    raiseViewEvent(&event);
+    updateView();
+}
+
+void View::onClicked()
+{
+    ViewEvent event(VN_CLICKED, this);
+    raiseViewEvent(&event);
+}
+
+void View::onDoubleClicked()
+{
+    ViewEvent event(VN_DBLCLICKED, this);
+    raiseViewEvent(&event);
+}
+
+void View::onIdle()
+{
 }
 
 } // namespace hfcl

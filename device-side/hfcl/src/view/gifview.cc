@@ -120,7 +120,7 @@ bool GifView::stop(void)
     m_animate->firstFrame();
     // stop notity event
     ViewEvent event(NOTIFY_GIFANIMATE_STOP, this);
-    raiseEvent(&event);
+    raiseViewEvent(&event);
 
     return true;
 }
@@ -232,11 +232,6 @@ bool GifView::handleEvent(Event* event)
     }
 
     return GOON_DISPATCH;
-}
-
-bool GifView::dispatchEvent(Event* event)
-{
-    return View::dispatchEvent(event);
 }
 
 } // namespace hfcl

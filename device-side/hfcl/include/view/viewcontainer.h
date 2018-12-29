@@ -82,9 +82,12 @@ public:
     /* overloaded virtual functions */
     virtual bool isContainer() const { return true; }
     virtual void applyCss(CssDeclared* css, const CssSelectorGroup& selector);
-    virtual void drawBackground(GraphicsContext* context, IntRect &rc);
     virtual void drawContent(GraphicsContext *context, IntRect &rc);
-    virtual bool dispatchEvent(Event* event);
+
+    virtual bool onKeyEvent(const KeyEvent* event);
+    virtual bool onMouseEvent(const MouseEvent* event);
+    virtual bool onMouseWheelEvent(const MouseWheelEvent* event);
+    virtual bool onChar(const char* mchar);
 
     /* new virtual functions for ViewContainer */
     virtual void onChildAttached(View* view);
@@ -96,11 +99,6 @@ public:
     virtual void autoFitSize(bool auto_child_fit = false);
     void setAutoSize(bool b) { setFlag(b, AUTOSIZE); }
     bool isAutoSize() { return m_flags & AUTOSIZE; }
-
-    virtual bool onKeyEvent(const KeyEvent* event);
-    virtual bool onMouseEvent(const MouseEvent* event);
-    virtual bool onMouseWheelEvent(const MouseWheelEvent* event);
-    virtual void onPaint(GraphicsContext* context);
 
 protected:
     View *m_focused;

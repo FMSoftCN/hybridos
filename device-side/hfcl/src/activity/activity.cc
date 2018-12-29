@@ -51,11 +51,6 @@ void Activity::onMove2Top(void)
     show();
 }
 
-HWND Activity::getSysWindow(void)
-{
-    return m_sysWnd;
-}
-
 Activity* Activity::activity(HWND hwnd)
 {
     return reinterpret_cast<Activity*>(getObject(hwnd));
@@ -76,6 +71,21 @@ void Activity::setFullScreen(bool isFullScreen)
         // TODO: Restore old rectangle
         setWindowRect(m_old_rect);
     }
+}
+
+bool Activity::onKeyEvent(const KeyEvent* event)
+{
+    return Window::onKeyEvent(event);
+}
+
+bool Activity::onMouseEvent(const MouseEvent* event)
+{
+    return Window::onMouseEvent(event);
+}
+
+bool Activity::onMouseWheelEvent(const MouseWheelEvent* event)
+{
+    return Window::onMouseWheelEvent(event);
 }
 
 void FullScreenActivity::onCreate(ContextStream* contextStream, Intent* intent)

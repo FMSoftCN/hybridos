@@ -24,6 +24,7 @@
 
 #include "activity/activityfactory.h"
 #include "activity/activity.h"
+#include "activity/activitywithclients.h"
 #include "activity/activityinfo.h"
 #include "activity/activitymanager.h"
 #include "activity/activitystack.h"

@@ -220,14 +220,15 @@ public:
     virtual void onEnabled();
     virtual void onChecked();
     virtual void onUnchecked();
-    virtual void onFrozen();
-    virtual void onUnfrozen();
     virtual void onGotFocus();
     virtual void onLostFocus();
     virtual void onHovered();
     virtual void onLeft();
     virtual void onActive();
     virtual void onInactive();
+
+    virtual void onFrozen();
+    virtual void onUnfrozen();
     virtual void onClicked();
     virtual void onDoubleClicked();
     virtual void onIdle();
@@ -238,17 +239,13 @@ public:
     virtual void drawScrollBar(GraphicsContext* context, IntRect &rc);
     virtual void onPaint(GraphicsContext* context);
 
-    // virtual functions for event handling.
-    virtual bool dispatchEvent(Event* event);
-    virtual bool raiseEvent(Event *event);
-
     /*
      * virtual callbacks to handle the interaction events
      * Return false if the view is not intersted in the event.
      */
     virtual bool onKeyEvent(const KeyEvent& evt) { return false; }
     virtual bool onMouseEvent(const MouseEvent& evt) { return false; }
-    virtual bool onMouseWheel(const MouseWheelEvent& evt) { return false; }
+    virtual bool onMouseWheelEvent(const MouseWheelEvent& evt) { return false; }
     virtual bool onChar(const char* mchar) { return false; }
 
     virtual void viewToWindow(int *x, int *y);
@@ -267,13 +264,13 @@ public:
     void updateViewRect();
     void updateView(bool upBackGnd = true);
 
-    /* to be deprecated */
-    virtual bool isWrapperView() { return false; }
-
     virtual void focusMe();
     bool setFocus(View *view);
 
-    bool isVisible();
+    /* to be deprecated */
+    virtual bool isWrapperView() { return false; }
+
+    bool isVisible() { return m_flags & VA_VISIBLE; }
 
     void getSize(int *w, int *h) {
         if (w) *w = m_rect.width();
@@ -420,6 +417,8 @@ protected:
             do { (*n)->unref(); } while (0));
     EventListenerList m_listeners;
     void releaseEventListeners();
+
+    bool raiseViewEvent(ViewEvent *event);
 
     /* Members related to rendering */
     virtual void inner_updateView(int x, int y, int w, int h,

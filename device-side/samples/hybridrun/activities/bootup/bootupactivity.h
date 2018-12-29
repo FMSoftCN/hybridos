@@ -28,7 +28,7 @@ using namespace hfcl;
 
 DECLARE_ACTIVITY_FACTORY(BootupActivity)
 
-class BootupActivity : public FullScreenActivity {
+class BootupActivity : public ActivityWithClients {
 public:
     BootupActivity();
     ~BootupActivity();

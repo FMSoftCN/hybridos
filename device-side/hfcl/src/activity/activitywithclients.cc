@@ -236,9 +236,35 @@ void ActivityWithClients::drawBackground(GraphicsContext* gc, IntRect &rc)
     }
 }
 
+bool ActivityWithClients::onKeyEvent(const KeyEvent* event)
+{
+    return Window::onKeyEvent(event);
+}
+
+bool ActivityWithClients::onMouseEvent(const MouseEvent* event)
+{
+    return Window::onMouseEvent(event);
+}
+
+bool ActivityWithClients::onMouseWheelEvent(const MouseWheelEvent* event)
+{
+    return Window::onMouseWheelEvent(event);
+}
+
 unsigned int ActivityWithClients::showModalView(int view_id, HTData param1, HTData param2)
 {
     return Activity::showModalView (view_id, param1, param2);
+}
+
+bool ActivityWithClients::handleEvent(Event* event)
+{
+    if (event->eventType() == Event::ET_TIMER
+                && m_timerId == ((TimerEvent*)event)->timerID()) {
+            closeTimer();
+        return STOP_DISPATCH;
+    }
+
+    return GOON_DISPATCH;
 }
 
 } // namespace hfcl

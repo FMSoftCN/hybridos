@@ -82,18 +82,24 @@ protected:
 };
 
 #define DECLARE_CONTROLLER_CLIENTS \
-    protected: virtual ControllerClient* createClient(int view_id, \
+    protected: \
+        virtual ControllerClient* createClient(int view_id, \
             HTData param1, HTData param2);
 
 #define BEGIN_CONTROLLER_CLIENTS(clss) \
     ControllerClient* clss::createClient(int view_id, \
-        HTData param1, HTData param2) { switch(view_id) {
+            HTData param1, HTData param2) { \
+        switch (view_id) {
 
 #define END_CONTROLLER_CLIENTS \
-    } return NULL;}
+        } \
+        return NULL; \
+    }
 
 #define END_CONTROLLER_CLIENTS_EX(super) \
-    } return super::createClient(view_id, param1, param2); }
+        } \
+        return super::createClient(view_id, param1, param2); \
+    }
 
 #define CONTROLLER_CLIENT(view_id, ClientClass) \
     case view_id:  \

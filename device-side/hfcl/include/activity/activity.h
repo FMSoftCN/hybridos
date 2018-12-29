@@ -36,23 +36,24 @@ public:
     Activity();
     virtual ~Activity();
 
+    /* public methods */
+    void updateNow(void);
+    static Activity* activity(HWND hwnd);
+    HWND getSysWindow(void) { return m_sysWnd; }
+    void setFullScreen(bool isFullScreen);
+
+    /* overloaded virtual functions */
     virtual void onCreate(ContextStream* contextStream, Intent* intent);
     virtual void onWakeup(void);
 
     virtual void onBack(void) { }
     virtual void onMove2Top(void);
-    virtual HWND getSysWindow(void);
-
-    void updateNow(void);
-    static Activity* activity(HWND hwnd);
 
     virtual bool onKeyEvent(const KeyEvent* event);
     virtual bool onMouseEvent(const MouseEvent* event);
     virtual bool onMouseWheelEvent(const MouseWheelEvent* event);
 
-    virtual EventListener* getEventHandle() { return NULL; };
-
-    virtual void setFullScreen(bool isFullScreen);
+    virtual EventListener* getEventHandle() { return NULL; }
 
 protected:
     virtual Window *getWindow() { return this; }

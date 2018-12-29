@@ -379,11 +379,6 @@ void ViewContainer::markDirty(const IntRect& rc)
 
 #undef TRACE_DRAWVIEW
 
-void ViewContainer::drawBackground(GraphicsContext* context, IntRect &rc)
-{
-    return;
-}
-
 void ViewContainer::drawContent(GraphicsContext* context, IntRect& rc)
 {
 #ifdef TRACE_DRAWVIEW
@@ -426,50 +421,6 @@ void ViewContainer::drawContent(GraphicsContext* context, IntRect& rc)
     for (int i = 0; i < depth - 1; i++) printf ("\t");
     printf ("ViewContainer::drawContent: Stop to draw %p\n", this);
 #endif
-}
-
-bool ViewContainer::dispatchEvent(Event* event)
-{
-#if 0
-    View::dispatchEvent(event);
-
-    switch (event->eventType()) {
-    case Event::MOUSE_UP:
-    case Event::MOUSE_DOWN:
-    case Event::MOUSE_MOVE: {
-        View *view = firstChild();
-        int x = ((MouseEvent *)event)->x();
-        int y = ((MouseEvent *)event)->y();
-        focusMe();
-        windowToView(&x, &y);
-        while (view != (View *)0) {
-            if(view->getRect().isIn(x, y)) {
-                view->focusMe();
-                view->dispatchEvent(event);
-                return STOP_DISPATCH;
-            }
-            view = view->getNext();
-        }
-        break;
-    }
-
-    case Event::KEY_DOWN:
-    case Event::KEY_LONGPRESSED:
-    case Event::KEY_ALWAYSPRESS:
-    case Event::KEY_UP:
-    case Event::KEY_CHAR: {
-        if (m_focused) {
-            return m_focused->dispatchEvent(event);
-        }
-        break;
-    }
-
-    default:
-        break;
-    }
-#endif
-
-    return GOON_DISPATCH;
 }
 
 void ViewContainer::focusChild(View* view)
@@ -550,6 +501,86 @@ void ViewContainer::computeCss()
         child->computeCss();
         child = child->getNext();
     }
+}
+
+void ViewContainer::onChildAttached(View* view)
+{
+}
+
+void ViewContainer::onChildDetached(View* view)
+{
+}
+
+void ViewContainer::onChildStyleChanged(View* view)
+{
+}
+
+void ViewContainer::onChildSizeChanged(View* child)
+{
+}
+
+#if 0
+bool ViewContainer::dispatchEvent(Event* event)
+{
+    View::dispatchEvent(event);
+
+    switch (event->eventType()) {
+    case Event::MOUSE_UP:
+    case Event::MOUSE_DOWN:
+    case Event::MOUSE_MOVE: {
+        View *view = firstChild();
+        int x = ((MouseEvent *)event)->x();
+        int y = ((MouseEvent *)event)->y();
+        focusMe();
+        windowToView(&x, &y);
+        while (view != (View *)0) {
+            if(view->getRect().isIn(x, y)) {
+                view->focusMe();
+                view->dispatchEvent(event);
+                return STOP_DISPATCH;
+            }
+            view = view->getNext();
+        }
+        break;
+    }
+
+    case Event::KEY_DOWN:
+    case Event::KEY_LONGPRESSED:
+    case Event::KEY_ALWAYSPRESS:
+    case Event::KEY_UP:
+    case Event::KEY_CHAR: {
+        if (m_focused) {
+            return m_focused->dispatchEvent(event);
+        }
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    return GOON_DISPATCH;
+}
+#endif
+
+bool ViewContainer::onKeyEvent(const KeyEvent* event)
+{
+    return false;
+}
+
+bool ViewContainer::onMouseEvent(const MouseEvent* event)
+{
+    return false;
+}
+
+bool ViewContainer::onMouseWheelEvent(const MouseWheelEvent* event)
+{
+    return false;
+}
+
+bool ViewContainer::onChar(const char* mchar)
+{
+    return false;
 }
 
 } // namespace hfcl

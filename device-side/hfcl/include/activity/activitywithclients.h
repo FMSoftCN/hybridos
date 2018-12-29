@@ -54,8 +54,7 @@ public:
     virtual void active();
 };
 
-class ActivityWithClients : public FullScreenActivity,
-                            public TimerEventListener {
+class ActivityWithClients : public FullScreenActivity, TimerEventListener {
 public:
     enum ActCmd {
         ACT_CMD_EXIT,
@@ -68,6 +67,23 @@ public:
     ActivityWithClients ();
     ActivityWithClients (bool fullscreen);
     virtual ~ActivityWithClients();
+
+    /* public methods */
+    unsigned int showView(int view_id, HTData param1, HTData param2);
+    unsigned int backView(unsigned int endcode = 0);
+
+    unsigned int showModalView(int view_id, HTData param1, HTData param2);
+    unsigned int showTipView(int view_id, HTData param1, HTData param2);
+    virtual void exitTip(int endCode);
+
+    ActivityClient *getTopClient(bool isTip);
+    ActivityClient *getTopActivityClient() {
+        return getTopClient(false);
+    }
+
+    TipClient *getTopTipClient() {
+        return (TipClient *)getTopClient(true);
+    }
 
     /* overloaded virtual functions */
     virtual void onCreate (ContextStream* contextstream, Intent* intent);
@@ -95,6 +111,13 @@ public:
         return 0;
     }
 
+    virtual void drawBackground(GraphicsContext* gc, IntRect &rc);
+    virtual bool onKeyEvent(const KeyEvent* event);
+    virtual bool onMouseEvent(const MouseEvent* event);
+    virtual bool onMouseWheelEvent(const MouseWheelEvent* event);
+
+    virtual bool handleEvent(Event* event);
+
     /* new virtual functions specific to ActivityWithClients */
     virtual void onCmdOk() { }
     virtual void onCmdCancel() { }
@@ -102,45 +125,14 @@ public:
 
     // when open pop, this function will be call.
     virtual void hold() {}
-
     // when close(exit) pop, this function will be call.
     virtual void resume() {}
-
-    virtual void drawBackground(GraphicsContext* gc, IntRect &rc);
-    bool handleEvent(Event * event);
-    virtual bool onKey(int keyCode, KeyEvent* event);
-
-    /* public operators */
-    virtual unsigned int showView(int view_id, HTData param1, HTData param2);
-    virtual unsigned int backView(unsigned int endcode = 0);
-
-    unsigned int showModalView(int view_id, HTData param1, HTData param2);
-    unsigned int showTipView(int view_id, HTData param1, HTData param2);
-    virtual void exitTip(int endCode);
-
-    bool isFullScreen() { return m_isFullScreen; }
-    virtual void setFullScreen(bool bfullScreen);
-    void setFullScreen(bool bfullScreen, bool bhidemenubar);
-
-    virtual void exitHome();
-    virtual void exitCall();
-
-    ActivityClient *getTopClient(bool isTip);
-    ActivityClient *getTopActivityClient() {
-        return getTopClient(false);
-    }
-
-    TipClient *getTopTipClient() {
-        return (TipClient *)getTopClient(true);
-    }
 
 protected:
     void openTimer();
     void closeTimer();
 
     virtual bool doCommand(int cmd);
-
-    DECLARE_CONTROLLER_CLIENTS
 
 protected:
     bool            m_isFullScreen;
