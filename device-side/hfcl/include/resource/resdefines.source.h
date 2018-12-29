@@ -118,8 +118,16 @@
 #define self_font(name)         GetFontRes(RESID(font_##name))
 #define self_bmpfont(name)      (RESID(bmpfont_##name))
 
-#define rgba(r, g, b, a)
-#define rgb(r, g, b)
+#define rgba(r, g, b, a)                \
+    ((HTUint)(                          \
+        (((HTUint)(r) & 0xFF)) |        \
+        (((HTUint)(g) & 0xFF) << 8) |   \
+        (((HTUint)(b) & 0xFF) << 16) |  \
+        (((HTUint)(a) & 0xFF) << 24)    \
+    ))
+
+#define rgb(r, g, b)    rgba(r, g, b, 0xFF)
+
 
 static HTReal* array_quad_real (HTReal a, HTReal b, HTReal c, HTReal d)
 {
@@ -237,7 +245,7 @@ static int* array_quad_int (int a, int b, int c, int d)
             if (__view && __view->isContainer()) \
                 _parent = dynamic_cast<ViewContainer*>(__view); \
             else \
-                _DBG_PRINTF("begin_import_view: the imported view is not a container\n"); \
+                _DBG_PRINTF("begin_import_view: the imported view is not a container\n");
 
 #define end_import_view \
             _view_created = __view; \
@@ -255,7 +263,7 @@ static int* array_quad_int (int a, int b, int c, int d)
 
 // set CSS style
 #define mystyle(pid, value, ...) \
-    __view->set##pid((value), ##__VA_ARGS__);
+    __view->myCss()->set##pid((value), ##__VA_ARGS__);
 
 #define map(name_id) \
     if (viewCtxt) { \

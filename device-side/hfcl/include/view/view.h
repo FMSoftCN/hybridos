@@ -254,6 +254,15 @@ public:
     void addEventListener(EventListener* listener);
     void removeEventListener(EventListener* listener);
 
+    // use in initialization stage
+    CssDeclared* myCss() { return m_cssd_user; }
+
+    // Change style on the fly
+    bool getProperty(CssPropertyIds pid, Uint32 *value,
+            HTPVData* data);
+    bool setProperty(CssPropertyIds pid, Uint32 value,
+            HTPVData data);
+
     // x,y coordiat from view, e.g (0,0) is same as m_rect.left, m_rect.top
     void updateView(int x, int y, int w, int h);
     void updateView(const IntRect &rc);
@@ -303,7 +312,6 @@ public:
         updateView();
     }
 
-    /* to be deprecated */
     View(View* parent, DrawableSet* drset);
     View(int id, int x, int y, int w, int h);
 

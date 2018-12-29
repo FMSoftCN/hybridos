@@ -41,18 +41,18 @@ MAP(intptr_t, CssPropertyValue*, CssPropertyValueMap);
 
 class CssDeclared : public Css {
 public:
-    CssDeclared (const char* selector) : m_selector (selector) {}
-    ~CssDeclared ();
+    CssDeclared(const char* selector) : m_selector (selector) {}
+    ~CssDeclared();
 
 #include "cssdeclared.inc"
 
     // The helper functions for setting margin-* properties in batches.
-    bool setMargin (DWORD32 value);
-    bool setMargin (DWORD32 value, const HTReal* r);
+    bool setMargin(Uint32 value);
+    bool setMargin(Uint32 value, const HTReal* r);
 
     // The helper functions for setting padding-* properties in batches.
-    bool setPadding (DWORD32 value);
-    bool setPadding (DWORD32 value, const HTReal* r);
+    bool setPadding(Uint32 value);
+    bool setPadding(Uint32 value, const HTReal* r);
 
     virtual bool getProperty(CssPropertyIds pid, Uint32 *value,
             HTPVData* data);

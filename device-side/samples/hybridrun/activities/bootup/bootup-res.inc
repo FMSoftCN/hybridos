@@ -51,7 +51,8 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
             def_name(event_animation_logo)
             // back panel
             begin_view(PanelView)
-                mystyle(BkColor, MakeRGBA (255, 255, 255, 0))
+                set(Id, 100)
+                mystyle(BackgroundColor, rgba(255, 255, 255, 255))
                 // animate view
                 begin_view(GifView)
                     map(my_var(view_animation_logo))
@@ -67,8 +68,8 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
             def_name(view_greet_text)
             // back panel
             begin_view(PanelView)
-                set(BkColor, Color::LAYER_COLOR_KEY)
                 begin_view(TextView)
+                    mystyle(Color, rgb(255, 0, 0))
                     map(my_var(view_greet_text))
                 end_view
             end_view
