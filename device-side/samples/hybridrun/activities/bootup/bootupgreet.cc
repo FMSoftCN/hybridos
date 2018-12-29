@@ -25,9 +25,9 @@
 
 using namespace hfcl;
 
-BootupGreet::BootupGreet(Controller* owner, int view_id, RootView* root,
+BootupGreet::BootupGreet(Controller* owner, int view_id, Window* window,
         HTData param1, HTData param2)
-    : ControllerClient(owner, view_id, root)
+    : ControllerClient(owner, view_id, window)
 {
 }
 

@@ -29,7 +29,7 @@ using namespace hfcl;
 
 class BootupLogo : public ControllerClient, public TimerEventListener {
 public:
-    BootupLogo (Controller* owner, int view_id, RootView* root,
+    BootupLogo (Controller* owner, int view_id, Window* window,
         HTData param1, HTData param2);
     virtual ~BootupLogo();
 

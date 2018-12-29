@@ -69,7 +69,7 @@ protected:
     ControllerClientList m_list;
     int m_modalCount;
 
-    virtual View *getViewParent(HTResId view_id) = 0;
+    virtual Window *getWindow() = 0;
     virtual ControllerClient* createClient(int view_id,
             HTData param1, HTData param2) { return NULL; }
     virtual void animationSwitch(ControllerClient* prev, ControllerClient* cur);
@@ -98,15 +98,14 @@ protected:
 #define CONTROLLER_CLIENT(view_id, ClientClass) \
     case view_id:  \
         return HFCL_NEW_EX(ClientClass, (this, \
-                view_id, \
-                getViewParent(view_id), \
-                param1, param2));
+                view_id, getWindow(), param1, param2));
 
 //////////////////////////////////////////////////////////////
 
 class ControllerClient : public ViewContext {
 protected:
     Controller* m_owner;
+    Window*     m_window;
     RootView*   m_rootView;
     int         m_id;
     int         m_inactiveTimes;
@@ -117,28 +116,29 @@ protected:
 public:
     ControllerClient(Controller* owner)
         : m_owner(owner)
+        , m_window(NULL)
         , m_rootView(NULL)
         , m_id(0)
         , m_inactiveTimes(0)
         , m_modeManager(NULL)
         , m_currentList(NULL) {}
 
-    ControllerClient(Controller* owner, int id, RootView *rootView)
+    ControllerClient(Controller* owner, int id, Window *window)
         : m_owner(owner)
-        , m_rootView(rootView)
+        , m_window(window)
         , m_id(id)
         , m_inactiveTimes(0)
         , m_modeManager(NULL)
-        , m_currentList(NULL) {}
+        , m_currentList(NULL) { m_rootView = new RootView(); }
 
-    ControllerClient(Controller* owner, int id, RootView * parent,
+    ControllerClient(Controller* owner, int id, Window * window,
             HTData param1, HTData param2)
         : m_owner(owner)
-        , m_rootView(NULL)
+        , m_window(window)
         , m_id(id)
         , m_inactiveTimes(0)
         , m_modeManager(NULL)
-        , m_currentList(NULL) {}
+        , m_currentList(NULL) { m_rootView = new RootView(); }
 
     virtual ~ControllerClient();
 
@@ -157,9 +157,20 @@ public:
     void setModal(bool bModal ) { m_bModal = bModal; }
     bool isModal() const { return m_bModal; }
 
-    RootView *rootView() { return m_rootView; }
-    const RootView *rootView() const { return m_rootView; }
-    void cleanRootView();
+    RootView *getRootView() { return m_rootView; }
+    const RootView *getRootView() const { return m_rootView; }
+    void setRootView(RootView* root) {
+        if (m_rootView) {
+            delete m_rootView;
+        }
+        m_rootView = root;
+    }
+    void cleanRootView() {
+        setRootView(NULL);
+    }
+
+    Window* getWindow() { return m_window; }
+    const Window* getWindow() const { return m_window; }
 
     unsigned int sendCommand(unsigned int cmd_id,
             HTData param1, HTData param2) {
@@ -249,7 +260,6 @@ protected:
             m_currentList = NULL;
     }
 
-    void setView(int view_id, RootView* view) { }
     EventListener* getHandle(int handle_id, int event_type) {
         return NULL;
     }

@@ -122,12 +122,12 @@ unsigned int ActivityWithClients::showView (int view_id,
 
     ActivityClient *clt = (ActivityClient *)getTop();
     if (NULL != clt) {
-        RootView *root = clt->rootView();
+        RootView *root = clt->getRootView();
         if (NULL != root) {
             if (clt->isTip()) {
                 ActivityClient *_lower = NULL;
                 for(int i = 1; (_lower = (ActivityClient *)getTop(i)) != NULL; i++){
-                    _lower->rootView()->show();
+                    _lower->getRootView()->show();
                     if (!_lower->isTip()) {
                         break;
                     }
@@ -152,8 +152,7 @@ unsigned int ActivityWithClients::backView (unsigned int endCode)
         _clt_top->inactive();
         if(m_modalCount > 0) {
             if(_clt_top && _clt_top->isModal()) {
-                Window* window = _clt_top->rootView()->getSysWindow();
-                window->endDlg(endCode);
+                endDlg(endCode);
                 m_modalCount --;
             }
         }

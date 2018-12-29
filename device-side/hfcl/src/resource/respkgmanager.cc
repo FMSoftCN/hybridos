@@ -316,12 +316,13 @@ DrawableSetGroup* GetDrawableSetGroupRes(HTResId id)
     return NULL;
 }
 
-View* CreateViewFromRes(HTResId id, View *parent, ViewContext *viewContext, ContentProvider* provider /*= NULL*/)
+View* CreateViewFromRes(HTResId id, ViewContainer *parent,
+    ViewContext *viewContext, ContentProvider* provider)
 {
     ResPackage * resPkg = GetResPackageById(RPKGID(id));
 
     if(resPkg && (RESTYPE(id) & R_TYPE_UI))
-        return resPkg->createView(id , parent, viewContext, provider);
+        return resPkg->createView(id, parent, viewContext, provider);
 
     return NULL;
 }

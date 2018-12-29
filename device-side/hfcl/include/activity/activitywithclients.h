@@ -35,8 +35,8 @@ class ActivityWithClients;
 
 class ActivityClient : public ControllerClient {
 public:
-    ActivityClient(Controller* owner, int view_id, RootView* root)
-        : ControllerClient(owner, view_id, root, 0, 0) { }
+    ActivityClient(Controller* owner, int view_id, Window* window)
+        : ControllerClient(owner, view_id, window, 0, 0) { }
 
     /* overloaded virtual functions */
     virtual bool isTip() { return false; }
@@ -44,8 +44,8 @@ public:
 
 class TipClient : public ActivityClient {
 public:
-    TipClient(Controller* owner, int view_id, RootView* root)
-        : ActivityClient(owner, view_id, root) { }
+    TipClient(Controller* owner, int view_id, Window* window)
+        : ActivityClient(owner, view_id, window) { }
     virtual ~TipClient() {}
 
     /* overloaded virtual functions */

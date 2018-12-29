@@ -144,7 +144,7 @@ public:
 
     CB_CREATE_VIEW getUi(HTResId id);
     CB_CREATE_MENU getMenu(HTResId id);
-    View *createView(HTResId id, View *parent, ViewContext *viewContext,
+    View *createView(HTResId id, ViewContainer *parent, ViewContext *viewContext,
         ContentProvider *provider = NULL);
     Menu *createMenu(HTResId id, Menu *parent, EventListener* listener);
 

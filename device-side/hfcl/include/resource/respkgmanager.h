@@ -34,6 +34,7 @@ class Menu;
 class Image;
 class GifAnimate;
 class View;
+class ViewContainer;
 class Style;
 class Drawable;
 class DrawableSet;
@@ -98,11 +99,11 @@ ThemeRes* GetThemeRes(HTResId id);
 DrawableSet* GetDrawableSetResFromTheme(int theme_drset_id);
 DrawableSetGroup* GetDrawableSetGroupRes(HTResId id);
 
-View * CreateViewFromRes(HTResId id, View *parent,
+View* CreateViewFromRes(HTResId id, ViewContainer *parent,
         ViewContext *viewContext, ContentProvider* provider = NULL);
 #define GetUITempl(id)   (CB_CREATE_VIEW)GetRes(id)
 
-Menu * CreateMenuFromRes(HTResId id, Menu* parent, EventListener* listener);
+Menu* CreateMenuFromRes(HTResId id, Menu* parent, EventListener* listener);
 
 bool SetResourceLanguage (HIDLanguage lang,
         HIDEncoding enc = R_ENCODING_utf8, int pkgId = 0);

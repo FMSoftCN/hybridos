@@ -711,7 +711,7 @@ CB_CREATE_VIEW ResPackage::getUi(HTResId id)
 }
 
 View *ResPackage::createView(HTResId id,
-        View *parent, ViewContext *viewContext, ContentProvider* provider)
+        ViewContainer *parent, ViewContext *viewContext, ContentProvider* provider)
 {
     CB_CREATE_VIEW cb = (CB_CREATE_VIEW)getRes(id);
     if (NULL == cb)

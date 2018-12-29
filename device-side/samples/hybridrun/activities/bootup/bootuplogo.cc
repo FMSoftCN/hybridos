@@ -30,14 +30,13 @@ using namespace hfcl;
 
 #define HRESNAME(pkg, type, name) R_##pkg##_##type##_##name
 
-BootupLogo::BootupLogo(Controller* owner, int view_id, RootView* root,
+BootupLogo::BootupLogo(Controller* owner, int view_id, Window* window,
         HTData param1, HTData param2)
-    : ControllerClient(owner, view_id, root)
+    : ControllerClient(owner, view_id, window)
     , m_animateview(NULL)
 {
-    // m_rootView =
     View* view = CreateViewFromRes (HRESNAME(bootup, ui, logo),
-            root, this, NULL);
+            m_rootView, this, NULL);
 
     m_animateview->setGifAnimate (
             GetGifAnimateRes (HRESNAME (bootup, img, animation_logo)));
