@@ -648,7 +648,7 @@ bool AddCommonStyleElementsFromRes(const TRStyleElement *style_res)
 }
 
 //////////////////////////////////////////////////////
-MAPCLASSKEY(string, DrawableFactory*, DrawableFactoryMap)
+MAPCLASSKEY(utf8string, DrawableFactory*, DrawableFactoryMap)
 
 MAP(int, Drawable*, CommonDrawableMap)
 
@@ -662,7 +662,7 @@ bool RegisterDrawableFactory(const char* name, DrawableFactory* factory)
     if (!_drawableFactories)
         _drawableFactories = HFCL_NEW(DrawableFactoryMap);
 
-    string sname(name);
+    utf8string sname(name);
 
     DrawableFactoryMap::iterator it = _drawableFactories->find(sname);
     if (it == _drawableFactories->end())

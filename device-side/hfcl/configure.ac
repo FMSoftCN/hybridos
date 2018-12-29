@@ -180,6 +180,7 @@ AC_OUTPUT([
     include/animation/Makefile
     include/resource/Makefile
     include/services/Makefile
+    include/drawable/Makefile
     src/Makefile
     src/common/Makefile
     src/css/Makefile
@@ -190,5 +191,6 @@ AC_OUTPUT([
     src/animation/Makefile
     src/resource/Makefile
     src/services/Makefile
+    src/drawable/Makefile
 ])
 
