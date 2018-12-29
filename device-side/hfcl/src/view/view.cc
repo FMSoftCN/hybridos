@@ -65,13 +65,12 @@ View::View(const char* cssCls, const char* name, int id)
     , m_next(0)
     , m_css_computed(0)
 {
-    add_spaces (m_cssCls);
-    m_cssd_user = HFCL_NEW_EX(CssDeclared, (""));
+    add_spaces(m_cssCls);
 }
 
 View::~View()
 {
-    m_cssd_user->unref();
+    m_cssd_user.unref();
     if (m_css_computed)
         delete m_css_computed;
 }

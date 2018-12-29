@@ -139,10 +139,6 @@ public:
     static Uint32 getKeywordType(const char* name);
 };
 
-namespace css {
-
-} // namespace css
-
 } // namespace hfcl
 
 #endif /* HFCL_CSS_CSS_H_ */

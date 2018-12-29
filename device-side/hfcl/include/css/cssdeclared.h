@@ -41,7 +41,7 @@ MAP(intptr_t, CssPropertyValue*, CssPropertyValueMap);
 
 class CssDeclared : public Css {
 public:
-    CssDeclared(const char* selector) : m_selector (selector) {}
+    CssDeclared(const char* selector = "") : m_selector (selector) {}
     ~CssDeclared();
 
 #include "cssdeclared.inc"

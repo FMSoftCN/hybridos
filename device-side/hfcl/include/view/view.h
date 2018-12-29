@@ -255,7 +255,7 @@ public:
     void removeEventListener(EventListener* listener);
 
     // use in initialization stage
-    CssDeclared* myCss() { return m_cssd_user; }
+    CssDeclared* myCss() { return &m_cssd_user; }
 
     // Change style on the fly
     bool getProperty(CssPropertyIds pid, Uint32 *value,
@@ -399,7 +399,7 @@ protected:
 
     /* CSS-related members */
     // user-defined CSS (properties specified on the fly)
-    CssDeclared* m_cssd_user;
+    CssDeclared m_cssd_user;
     // All selected CssDeclared objects for the view
     CssDeclaredGroupWithSpecificity m_cssdg_static;
     CssDeclaredGroupWithSpecificity m_cssdg_dynamic;

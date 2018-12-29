@@ -71,10 +71,6 @@ protected:
     std::vector<CssWithSpecificity> m_css_specif_vec;
 };
 
-namespace css {
-
-} // namespace css
-
 } // namespace hfcl
 
 #endif /* HFCL_CSS_CSSDECLAREDGROUP_H_ */

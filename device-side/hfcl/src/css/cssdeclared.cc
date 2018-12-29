@@ -23,7 +23,7 @@
 
 namespace hfcl {
 
-CssDeclared::~CssDeclared ()
+CssDeclared::~CssDeclared()
 {
     CssPropertyValueMap::iterator it;
     for (it = m_map.begin(); it != m_map.end(); ++it) {
@@ -31,21 +31,21 @@ CssDeclared::~CssDeclared ()
         HFCL_DELETE(pv);
     }
 
-    m_map.clear ();
+    m_map.clear();
 }
 
-bool CssDeclared::setMargin (Uint32 value)
+bool CssDeclared::setMargin(Uint32 value)
 {
-    if (!setMarginLeft (value))
+    if (!setMarginLeft(value))
         goto error;
 
-    if (!setMarginTop (value))
+    if (!setMarginTop(value))
         goto error;
 
-    if (!setMarginRight (value))
+    if (!setMarginRight(value))
         goto error;
 
-    if (setMarginBottom (value))
+    if (setMarginBottom(value))
         goto error;
 
     return true;
@@ -54,7 +54,7 @@ error:
     return false;
 }
 
-bool CssDeclared::setMargin (Uint32 value, const HTReal* r)
+bool CssDeclared::setMargin(Uint32 value, const HTReal* r)
 {
     if (r) {
         if (!setMarginLeft (value, r[0]))
@@ -89,18 +89,18 @@ error:
     return false;
 }
 
-bool CssDeclared::setPadding (Uint32 value)
+bool CssDeclared::setPadding(Uint32 value)
 {
-    if (!setPaddingLeft (value))
+    if (!setPaddingLeft(value))
         goto error;
 
-    if (!setPaddingTop (value))
+    if (!setPaddingTop(value))
         goto error;
 
-    if (!setPaddingRight (value))
+    if (!setPaddingRight(value))
         goto error;
 
-    if (setPaddingBottom (value))
+    if (setPaddingBottom(value))
         goto error;
 
     return true;
@@ -109,32 +109,32 @@ error:
     return false;
 }
 
-bool CssDeclared::setPadding (Uint32 value, const HTReal* r)
+bool CssDeclared::setPadding(Uint32 value, const HTReal* r)
 {
     if (r) {
-        if (!setPaddingLeft (value, r[0]))
+        if (!setPaddingLeft(value, r[0]))
             goto error;
 
-        if (!setPaddingTop (value, r[1]))
+        if (!setPaddingTop(value, r[1]))
             goto error;
 
-        if (!setPaddingRight (value, r[2]))
+        if (!setPaddingRight(value, r[2]))
             goto error;
 
-        if (setPaddingBottom (value, r[3]))
+        if (setPaddingBottom(value, r[3]))
             goto error;
     }
     else {
-        if (!setPaddingLeft (value))
+        if (!setPaddingLeft(value))
             goto error;
 
-        if (!setPaddingTop (value))
+        if (!setPaddingTop(value))
             goto error;
 
-        if (!setPaddingRight (value))
+        if (!setPaddingRight(value))
             goto error;
 
-        if (setPaddingBottom (value))
+        if (setPaddingBottom(value))
             goto error;
     }
 
@@ -144,7 +144,7 @@ error:
     return false;
 }
 
-bool CssDeclared::getProperty (CssPropertyIds pid, Uint32 *value,
+bool CssDeclared::getProperty(CssPropertyIds pid, Uint32 *value,
         HTPVData *data)
 {
     CssPropertyValueMap::iterator it = m_map.find (pid);
@@ -161,7 +161,7 @@ bool CssDeclared::getProperty (CssPropertyIds pid, Uint32 *value,
     return true;
 }
 
-bool CssDeclared::setProperty (CssPropertyIds pid, Uint32 value,
+bool CssDeclared::setProperty(CssPropertyIds pid, Uint32 value,
     HTPVData data)
 {
     CssPropertyValue* pv;

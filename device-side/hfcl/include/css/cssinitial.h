@@ -69,10 +69,6 @@ private:
     Uint8 m_arraysize[MAX_CSS_PID];
 };
 
-namespace css {
-
-} // namespace css
-
 } // namespace hfcl
 
 #endif /* HFCL_CSS_CSSINITIAL_H_ */

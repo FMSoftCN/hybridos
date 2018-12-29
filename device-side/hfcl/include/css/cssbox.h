@@ -112,10 +112,6 @@ private:
     CssBoxLineVec m_lines;
 };
 
-namespace css {
-
-} // namespace css
-
 } // namespace hfcl
 
 #endif /* HFCL_CSS_CSSBOX_H_ */

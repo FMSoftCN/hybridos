@@ -104,10 +104,6 @@ private:
     CssSelectorVec m_group;
 };
 
-namespace css {
-
-} // namespace css
-
 } // namespace hfcl
 
 #endif /* HFCL_CSS_CSSSELECTOR_H_ */
