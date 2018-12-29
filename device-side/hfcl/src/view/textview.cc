@@ -32,20 +32,8 @@ namespace hfcl {
 
 DEFINE_CLASS_NAME(TextView)
 
-TextView::TextView (View *p_parent)
-    : View(p_parent, DEFAULT_VIEW_DRAWABLESET(TextView))
-    , m_isLongText(false)
-    , m_stringId(-1)
-    , m_lineAboveH (0)
-    , m_lineBellowH (0)
-    , m_margin(0)
-    , m_bidicheck (false)
-{
-    m_textBuf[0] = '\0';
-}
-
-TextView::TextView(View* p_parent, DrawableSet* drset)
-    : View(p_parent, drset)
+TextView::TextView(const char* cssClass, const char* name, int id)
+    : View(cssClass, name, id)
     , m_isLongText(false)
     , m_stringId(-1)
     , m_lineAboveH (0)
@@ -181,7 +169,7 @@ int TextView::getTextLength(void)
     }
 }
 
-void TextView::drawContent(GraphicsContext* context, IntRect &rc, int status)
+void TextView::drawContent(GraphicsContext* context, IntRect &rc)
 {
     char* buf = NULL;
 
@@ -225,10 +213,10 @@ void TextView::drawContent(GraphicsContext* context, IntRect &rc, int status)
     context->setTextAboveLineExtra(m_lineAboveH);
     context->setTextBellowLineExtra(m_lineBellowH);
 
+#if 0
     if(isDisabled())
         status = DRAWSTATE_DISABLED;
 
-#if 0
     rc.inset(m_margin, 0);
     if (getRollProp() && isRolling()) {
         if(RollTextTransition::DrawRollText(this, context, m_drset,

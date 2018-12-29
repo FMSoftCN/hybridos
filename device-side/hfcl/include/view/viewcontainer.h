@@ -30,8 +30,8 @@ namespace hfcl {
 
 class ViewContainer : public View {
 public:
-    ViewContainer(int id = 0, const char* cssClass = NULL,
-            const char* name = NULL);
+    ViewContainer(const char* cssClass = NULL,
+            const char* name = NULL, int id = 0);
     virtual ~ViewContainer();
 
     /* methods specfic to ViewContainer */

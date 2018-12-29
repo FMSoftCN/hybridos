@@ -67,11 +67,6 @@
 #define my_ui(name)             (RESID(ui_##name))
 #define my_menu(name)           (RESID(menu_##name))
 
-#if 0 /* to be deprecated */
-#define my_textid(name)         name,
-#define my_imageid(name)        (RESID(img_##name))
-#endif
-
 //text resource
 #define begin_text_res()
 #define text_res_raw(lang, encoding, txt_file)
@@ -162,8 +157,183 @@ static int* array_quad_int (int a, int b, int c, int d)
 
 #define end_css_group_res
 
-////////////////////////////////
-//Menu resource
+// UI resource
+#define begin_uis
+#define end_uis
+
+#define begin_ui_res(name)  \
+    static View* create_ui_##name(ViewContainer* parent, ViewContext* viewCtxt, ContentProvider* cntProvider) { \
+        View *_view_created = NULL; \
+        ViewContainer *_parent = parent;
+
+#define end_ui_res \
+        return _view_created; \
+    }
+
+#define apply_css_group(cssg_id) \
+        if (parent && parent->isRoot()) { \
+            RootView* root = dynamic_cast<RootView*>(parent); \
+            root->applyCssGroup(cssg_id); \
+        }
+
+// create an anonymous view without specific CSS class, name, and id
+#define begin_view(ViewClass) \
+    do { \
+        ViewContainer *__saved_parent = _parent; \
+        ViewClass* __view = HFCL_NEW_EX(ViewClass, (NULL, NULL, 0)); \
+        if (_parent) \
+            _parent->addChild(__view); \
+        else \
+            _DBG_PRINTF("begin_view: you are trying to create an ORPHAN view (Parent is not a contianer)\n"); \
+        if (__view->isContainer()) \
+            _parent = (ViewContainer*)__view; \
+        else \
+            _parent = NULL;
+
+// create a view with CSS class, name, and id
+#define begin_view_ex(ViewClass, css_class, vname, vid) \
+    do { \
+        ViewContainer *__saved_parent = _parent; \
+        ViewClass* __view = HFCL_NEW_EX(ViewClass, (css_class, vname, vid)); \
+        if (_parent) \
+            _parent->addChild(__view); \
+        else \
+            _DBG_PRINTF("begin_view_ex: you are trying to create an ORPHAN view (Parent is not a contianer)\n"); \
+        if (__view->isContainer()) \
+            _parent = (ViewContainer*)__view; \
+        else \
+            _parent = NULL;
+
+#define end_view  \
+        _view_created = (View*)__view; \
+        _parent = __saved_parent; \
+    } while(0);
+
+// import another view
+#define import_view(view_resid) \
+    do { \
+        CB_CREATE_VIEW __create_view = (CB_CREATE_VIEW)GetRes(view_resid); \
+        if (__create_view) { \
+            View* __view = __create_view(_parent, viewCtxt, cntProvider); \
+            if (_parent) \
+                _parent->addChild(__view); \
+            else \
+                _DBG_PRINTF("import_view: you are trying to create an ORPHAN view (Parent is not a contianer)\n"); \
+            _view_created = (View*)__view; \
+        } \
+    } while(0);
+
+// import another view as a container
+#define begin_import_view(view_resid) \
+    do { \
+        ViewContainer* __saved_parent = _parent; \
+        CB_CREATE_VIEW __create_view = (CB_CREATE_VIEW)GetRes(view_resid); \
+        if (__create_view) { \
+            View* __view = __create_view(_parent, viewCtxt, cntProvider); \
+            if (_parent) \
+                _parent->addChild(__view); \
+            else \
+                _DBG_PRINTF("begin_import_view: you are trying to create an ORPHAN view (Parent is not a contianer)\n"); \
+            if (__view && __view->isContainer()) \
+                _parent = dynamic_cast<ViewContainer*>(__view); \
+            else \
+                _DBG_PRINTF("begin_import_view: the imported view is not a container\n"); \
+
+#define end_import_view \
+            _view_created = __view; \
+        } \
+        _parent = __saved_parent; \
+    } while(0);
+
+// helpers for set view specific attribute
+#define set(Name, value) \
+    __view->set##Name(value);
+
+// set general attribute
+#define attribute(name, value) \
+    __view->setAttribute(name, value);
+
+// set CSS style
+#define mystyle(pid, value, ...) \
+    __view->set##pid((value), ##__VA_ARGS__);
+
+#define map(name_id) \
+    if (viewCtxt) { \
+        __view->setId(name_id); \
+        viewCtxt->setView(name_id, __view); \
+    }
+
+#define on(event_type, handle_id) \
+    if (viewCtxt) { \
+        EventListener* listener = \
+            viewCtxt->getHandle(handle_id, event_type); \
+        if (listener)                           \
+            __view->addEventListener(listener); \
+    }
+
+#define begin_foreach(n) \
+    do { \
+        unsigned int i = 0; \
+        for(i = 0; i < n; i++) { \
+            char c[4]; \
+            sprintf(c, "%d", i+1); \
+
+#define end_foreach \
+        } \
+    } while(0);
+
+#define data_get(id, type)  \
+    (cntProvider ? cntProvider->getContentData(id, type) : NULL)
+#define data_get_any(id)    \
+    data_get(id, 0)
+#define data_get_image(id)  \
+    (Image*)data_get(id, R_TYPE_IMAGE)
+
+#define data_get_text(id)   \
+    (const char *) data_get(id, R_TYPE_TEXT)
+
+#define data_get_text_id(id)   \
+    (const int)(cntProvider ? \
+        cntProvider->getContentStringId(id, R_TYPE_TEXT) : \
+        NULL)
+
+#define data_get_int(id)    \
+    (int)data_get(id, 0)
+
+// Resource identifiers
+#define begin_resid(name) \
+    static HTResId name[] = {
+
+#define end_resid \
+    };
+
+// Controller
+#define begin_mode(name)  \
+    static ControllerMode name##_mode[] = {
+
+#define end_mode \
+    };
+
+#define setMode(id, value, cmd) \
+    { (int)(id), (unsigned int)(value), (unsigned int)(cmd) },
+
+#define begin_controller_modes \
+    static ControllerModeList _controller_mode_lists[] = {
+
+#define end_controller_modes(def_mode) \
+    }; \
+    static ControllerModeManager _controller_mode_manager = { \
+            _controller_mode_lists, \
+            sizeof(_controller_mode_lists) / sizeof(ControllerModeList), \
+            RESID(mode_##def_mode) }; \
+    if (viewCtxt) \
+        viewCtxt->setControllerModeManager(&_controller_mode_manager);
+
+#define add_mode(name) \
+    { RESID(mode_##name), sizeof(name##_mode) / sizeof(ControllerMode), \
+        name##_mode },
+
+// Menu resource
 #define begin_menus
 #define end_menus
 
@@ -176,13 +346,8 @@ static int* array_quad_int (int a, int b, int c, int d)
     return ret_menu; }
 
 #define begin_menu() \
-    do { Menu* __menu = HFCL_NEW_EX(Menu, ()); \
-        setMenu(Parent, _parent) \
-        _parent = __menu;
-
-#define begin_theme_menu(list_ssid, item_ssid, menubar_ssid) \
     do { \
-        Menu* __menu = HFCL_NEW_EX(Menu, (list_ssid, item_ssid, menubar_ssid));\
+        Menu* __menu = HFCL_NEW_EX(Menu, ()); \
         setMenu(Parent, _parent) \
         _parent = __menu;
 
@@ -212,228 +377,4 @@ static int* array_quad_int (int a, int b, int c, int d)
 #define addSubMenuEx(str, image, id, disable, ssid)    \
     __menu->addSubMenuItem(str, image, (int)id, (Menu*)(ret_menu), disable, ssid);
 #define addSubMenu(str, image, id)    addSubMenuEx(str, image, id, false, NULL)
-
-// UI resource
-#define begin_uis
-#define end_uis
-
-#define begin_ui_res(name)  \
-    static View* create_ui_##name (View* parent, ViewContext* viewContext, \
-            ContentProvider * contentProvider) { \
-        View *ret_view = NULL, *_parent = NULL, *__view = NULL; \
-        __view = (View*) ((DWORD)__view ^ 0x00); /* VW */ \
-        _parent= parent; \
-        __view = parent;
-
-#define end_ui_res  return ret_view ; }
-
-#define data_get(id, type)  \
-    (contentProvider ? contentProvider->getContentData(id, type) : NULL)
-#define data_get_any(id)    \
-    data_get(id, 0)
-#define data_get_image(id)  \
-    (Image*)data_get(id, R_TYPE_IMAGE)
-
-#define data_get_text(id)   \
-    (const char *) data_get(id, R_TYPE_TEXT)
-
-#define data_get_text_id(id)   \
-    (const int)( contentProvider ? \
-        contentProvider->getContentStringId(id, R_TYPE_TEXT) : \
-        NULL)
-
-#define data_get_int(id)    \
-    (int)data_get(id, 0)
-
-#define begin_view(view_class) \
-    do { view_class* __view = HFCL_NEW_EX(view_class, (_parent)); \
-        View* _parent = (View*)__view; \
-        _parent = _parent;
-
-#define begin_theme_view(view_class, theme_drset_id) \
-    do { view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSetResFromTheme(theme_drset_id))); \
-        __view->themeAble(true); \
-        __view->setThemeDrsetId(theme_drset_id); \
-        View* _parent = (View*)__view; \
-        _parent = _parent;
-
-#define begin_view_ex(view_class, drsetid) \
-    do { \
-        view_class* __view; \
-        __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSetRes(drsetid))); \
-        View* _parent = (View*)__view; \
-        _parent = _parent;
-
-#define begin_view_id_ex(view_class, view_classname, setid) \
-    do { \
-        view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSelector(RESPKGID, #view_classname, setid))); \
-        View* _parent = (View*)__view; \
-        _parent = _parent;
-
-#define begin_scrollable_view(view_class) \
-    do { view_class* __view = HFCL_NEW_EX(view_class, (_parent)); \
-        ContainerView* _parent = __view->content(); \
-        _parent = _parent;
-
-#define begin_theme_scrollable_view(view_class, theme_drset_id) \
-    do { view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSetResFromTheme(theme_drset_id))); \
-        __view->themeAble(true); \
-        __view->setThemeDrsetId(theme_drset_id); \
-        ContainerView* _parent = __view->content(); \
-        _parent = _parent;
-
-#define begin_scrollable_view_ex(view_class, view_classname, setid) \
-    do { \
-        view_class* __view; \
-        if(!strcmp(#setid,"0"))\
-            __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSelector(RESPKGID, #view_classname, 0))); \
-        else\
-            __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSelector(RESPKGID, #view_classname, RESID(drset_##setid)))); \
-        ContainerView* _parent = __view->content(); \
-        _parent = _parent;
-
-#define begin_scrollable_view_id_ex(view_class, view_classname, setid) \
-    do { \
-        view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSelector(RESPKGID, #view_classname, setid))); \
-        ContainerView* _parent = __view->content(); \
-        _parent = _parent;
-
-#define begin_item(view_class) \
-    do { view_class* __view = HFCL_NEW(view_class); \
-        ((ListView*)_parent)->addItem((ItemView*)__view); \
-        View *_parent = (View*)__view;
-
-#define begin_theme_item(view_class, theme_drset_id) \
-    do { view_class* __view = HFCL_NEW_EX(view_class, (_parent, GetDrawableSetResFromTheme(theme_drset_id))); \
-        __view->themeAble(true); \
-        __view->setThemeDrsetId(theme_drset_id); \
-        ((ListView*)_parent)->addItem((ItemView*)__view); \
-        View* _parent = (View*)__view; \
-
-#define begin_item_ex(view_class, ssid)  \
-    do {    \
-        view_class* __view  \
-            = HFCL_NEW_EX(view_class, (NULL, GetCssRes(ssid))); \
-        ((ListView*)_parent)->addItem((ItemView*)__view);   \
-        View *_parent = (View*)__view;
-
-#define begin_composite_view(view_class, ss_set_id) \
-    do {                            \
-        view_class* __view =        \
-            HFCL_NEW_EX(view_class, (_parent, GeCssSetRes(ss_set_id))); \
-        View* _parent = (View*)__view;
-
-#define end_item end_view
-
-#define end_composite_view end_view
-
-#define end_view  \
-    ret_view = (View*)__view; \
-} while(0);
-
-#define end_scrollable_view         \
-    __view->updateContentRect();    \
-    ret_view = (View*)__view;       \
-} while(0);
-
-#define end_scrollable_view_ex      \
-    __view->updateContentRect();    \
-    ret_view = (View*)__view;       \
-} while(0);
-
-#define end_scrollable_view_id_ex   \
-    __view->updateContentRect();    \
-    ret_view = (View*)__view;       \
-} while(0);
-
-#define hide()   __view->hide();
-#define add(Name)   __view->add##Name(ret_view);
-
-//import the other view
-#define import_view(view_id) do { \
-    CB_CREATE_VIEW _create_view = (CB_CREATE_VIEW)GetRes(view_id); \
-    if (_create_view) \
-        ret_view = _create_view((View*)_parent, viewContext, \
-            contentProvider); \
-    } while(0);
-
-#define begin_import_view(ViewClass, view_id) do { \
-    CB_CREATE_VIEW _create_view = (CB_CREATE_VIEW)GetRes(view_id); \
-    if (_create_view) { \
-        ViewClass* __view = (ViewClass*)_create_view((View*)_parent, \
-            viewContext, contentProvider); \
-        if (__view) { \
-            View* _parent = NULL; _parent = (View*)__view;
-
-#define end_import_view \
-            ret_view = (View*)__view; \
-        }   \
-    }       \
-} while(0);
-
-//controller
-#define begin_mode(name)  \
-        static ControllerMode name##_mode[] = {
-
-#define end_mode };
-
-#define setMode(id, value, cmd) \
-    { (int)(id), (unsigned int)(value), (unsigned int)(cmd) },
-
-#define begin_controller_modes \
-    static ControllerModeList _controller_mode_lists[] = {
-
-#define end_controller_modes(def_mode) \
-    }; \
-    static ControllerModeManager _controller_mode_manager = { \
-        _controller_mode_lists, \
-        sizeof(_controller_mode_lists) / sizeof(ControllerModeList), \
-        RESID(mode_##def_mode) }; \
-    if (viewContext) \
-        viewContext->setControllerModeManager(&_controller_mode_manager);
-
-
-#define add_mode(name) \
-    { RESID(mode_##name), sizeof(name##_mode) / sizeof(ControllerMode), \
-        name##_mode },
-
-#define set(Name, value)        __view->set##Name(value);
-
-#define setProperty(pid, value, user_data)   \
-    __view->setProperty((pid), (value), (HTData)(user_data));
-
-#define addCss(style)    __view->addCss(style);
-#define removeCss(style) __view->removeCss(style);
-#define _m(Name, args)          __view->Name args;
-
-#define map(name_id)                            \
-    if (viewContext) {                          \
-        __view->setId(name_id);                 \
-        viewContext->setView(name_id, __view);  \
-    }
-
-#define on(event_type, handle_id)               \
-    if (viewContext) {                          \
-        EventListener* listener                 \
-            = viewContext->getHandle(handle_id, event_type); \
-        if (listener)                           \
-            __view->addEventListener(listener); \
-    }
-
-#define begin_foreach(n)            \
-    do {                            \
-        unsigned int i = 0;         \
-        for(i = 0; i < n; i++) {    \
-            char c[4];              \
-            sprintf(c,"%d", i+1);   \
-
-#define end_foreach                 \
-        }                           \
-    } while(0);
-
-#define begin_resid(name) \
-    static  HTResId name[] = {
-
-#define end_resid \
-    };
 

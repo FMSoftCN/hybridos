@@ -56,7 +56,7 @@ typedef struct {
 
 class View : public Object {
 public:
-    View(int id = 0, const char* cssCls = NULL, const char* name = NULL);
+    View(const char* cssCls = NULL, const char* name = NULL, int id = 0);
     virtual ~View();
 
     bool attach(ViewContainer* parent);

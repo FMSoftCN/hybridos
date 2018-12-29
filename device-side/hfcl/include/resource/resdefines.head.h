@@ -140,7 +140,54 @@
 
 #define end_css_group_res  RESID(cssg_end_id), };
 
-//Menu resource
+//UI resource
+#define begin_uis \
+    enum { RESID(ui_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_UI, 0),
+
+#define end_uis RESID(ui_end_id) };
+
+#define apply_css_group(cssg_id)
+
+#define begin_ui_res(name)  RESID(ui_##name),
+
+#define end_ui_res
+
+#define begin_view(ViewClass)
+#define begin_view_ex(ViewClass, css_class, vname, vid)
+#define end_view
+
+#define import_view(view_id)
+#define begin_import_view(ViewClass, view_resid)
+#define end_import_view
+
+#define set(Name, value)
+#define attribute(name, value)
+#define mystyle(pid, value, ...)
+#define map(name)
+#define on(event_name, handle_name)
+
+#define begin_foreach(n)
+#define end_foreach
+
+#define begin_resid(name)
+#define end_resid
+
+// get data from id
+#define data_get(id, type)
+#define data_get_any(id)
+#define data_get_image(id)
+#define data_get_text(id)
+#define data_get_text_id(id)
+#define data_get_int(id)
+
+#define begin_controller_modes
+#define end_controller_modes(def_mode)
+#define begin_mode(name)
+#define end_mode
+#define setMode(id, value, cmd)
+#define add_mode(name)
+
+// menu resource
 #define begin_menus \
     enum { RESID(menu_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_MENU, 0),
 #define end_menus RESID(menu_end_id) };
@@ -149,7 +196,6 @@
 #define end_menu_res
 
 #define begin_menu()
-#define begin_theme_menu(list_theme_drset_id, item_theme_drset_id, menubar_theme_drset_id)
 #define end_menu
 
 #define setMenuRect(l, t, r, b)
@@ -167,69 +213,4 @@
 #define addCheckItem(str, image, id, checked)
 #define addSubMenuEx(str, imge, id, disable, drset)
 #define addSubMenu(str, imge, id)
-
-//UI resource
-#define begin_uis \
-    enum { RESID(ui_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_UI, 0),
-
-#define end_uis RESID(ui_end_id) };
-
-#define begin_ui_res(name)  RESID(ui_##name),
-
-#define end_ui_res
-
-// get data from id
-#define data_get(id, type)
-#define data_get_any(id)
-#define data_get_image(id)
-#define data_get_text(id)
-#define data_get_text_id(id)
-#define data_get_int(id)
-
-#define begin_view(view_class)
-#define begin_theme_view(view_class, theme_drset_id)
-#define begin_view_ex(view_class, drid)
-#define end_view
-#define begin_composite_view(view_class, drsetgrpid)
-#define end_composite_view
-
-#define begin_item(view_class)
-#define begin_theme_item(view_class, theme_drset_id)
-#define begin_item_ex(view_class, drset)
-#define end_item
-
-#define begin_controller_modes
-#define end_controller_modes(def_mode)
-#define begin_mode(name)
-#define end_mode
-#define setMode(id, value, cmd)
-#define add_mode(name)
-
-#define begin_scrollable_view(view_class)
-#define begin_theme_scrollable_view(view_class, theme_drset_id)
-#define begin_scrollable_view_ex(view_class, view_classname, setid)
-#define begin_scrollable_view_id_ex(view_class, view_classname, setid)
-#define end_scrollable_view
-#define end_scrollable_view_ex
-#define end_scrollable_view_id_ex
-
-#define set(Name, value)
-#define addTablePage(value1, value2, value3)
-#define setStyle(style_id)
-#define _m(Name, args)
-#define map(name)
-#define id(id)
-#define on(event_name, handle_name)
-#define hide()
-#define add(Name)
-#define setSBVLocation(location)
-// #define addSubMenu(id)
-#define addLayoutView(__type, __min, __max)
-#define import_view(view_id)
-#define begin_import_view(ViewClass, view_id)
-#define end_import_view
-#define begin_foreach(n)
-#define end_foreach
-#define begin_resid(name)
-#define end_resid
 

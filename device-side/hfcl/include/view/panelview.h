@@ -31,7 +31,7 @@ class Image;
 class PanelView : public ViewContainer
 {
 public:
-    PanelView(int id, const char* cssClass, const char* name);
+    PanelView(const char* cssClass, const char* name, int id = 0);
     virtual ~PanelView();
 
     /* overloaded virtual functions */

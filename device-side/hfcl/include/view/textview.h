@@ -31,19 +31,45 @@
 
 namespace hfcl {
 
-class TextView : public View
-{
+class TextView : public View {
 public:
-    TextView(View *parent);
-    TextView(View* parent, DrawableSet* drset);
+    TextView(const char* cssClass, const char* name, int id = 0);
     virtual ~TextView();
 
+    /* public methods */
     void setText(const char *text);
     void setText(const std::string& text);
     void setText(int strId);
-    int getTextId(void) { return m_stringId; }
-    char* getText(void);
-    int getTextLength(void);
+    int getTextId() const { return m_stringId; }
+    char* getText();
+    int getTextLength();
+
+    bool setLongText();
+    bool isLongText();
+
+    void setBidiCheck(bool bidiflag);
+    bool isBidiCheck();
+
+    void setRollProp(bool roll) { stopRoll(); setFlag(roll, ROLLTEXT); }
+    bool getRollProp() { return m_flags & ROLLTEXT; }
+
+    void startRoll();
+    void stopRoll();
+    void resetRoll();
+
+    bool isNeedRoll();
+    void setRolling(bool b) { setFlag(b, ROLLING); }
+    bool isRolling() { return m_flags & ROLLING; }
+
+    /* overloaded virtual functions */
+    virtual const char* type() const { return "hvtext"; }
+    virtual void drawContent(GraphicsContext* context, IntRect &rc);
+
+    /* to be deprecated */
+    void setAutoSize(bool b) { setFlag(b, AUTOSIZE); }
+    bool isAutoSize()        { return m_flags & AUTOSIZE; }
+    virtual void autoFitSize(bool auto_child_fit = false);
+
     void setMargin(int margin) { m_margin = margin; }
 
     void setTextColor(Color *c);
@@ -61,34 +87,10 @@ public:
     void setTextFont(unsigned int font);
 
     void setTextBreak(int tBreak);
-    int getTextBreak(void);
+    int getTextBreak();
 
     inline void setLineAboveHeight(int height) { m_lineAboveH = height; }
     inline void setLineBellowHeight(int height) { m_lineBellowH = height; }
-
-    //////////////////////////////////////////////
-    //once is long-text, we can not go back to short text, cause that is NOT right.
-    bool setLongText(void);
-    bool isLongText(void);
-
-    void setBidiCheck(bool bidiflag);
-    bool isBidiCheck(void);
-
-    virtual void drawContent(GraphicsContext* context, IntRect &rc, int status/*= Style::NORMAL*/);
-
-    void setRollProp(bool roll) { stopRoll(); setFlag(roll, ROLLTEXT); }
-    bool getRollProp() { return m_flags & ROLLTEXT; }
-
-    void startRoll();
-    void stopRoll();
-    void resetRoll();
-
-    void setAutoSize(bool b) { setFlag(b, AUTOSIZE); }
-    bool isAutoSize()        { return m_flags & AUTOSIZE; }
-    virtual void autoFitSize(bool auto_child_fit = false);
-    bool isNeedRoll();
-    void setRolling(bool b) { setFlag(b, ROLLING); }
-    bool isRolling() { return m_flags & ROLLING; }
 
 protected:
     //define the flags of TextView
@@ -110,7 +112,6 @@ protected:
 
     DECLARE_CLASS_NAME(TextView)
 };
-
 
 } // namespace hfcl
 

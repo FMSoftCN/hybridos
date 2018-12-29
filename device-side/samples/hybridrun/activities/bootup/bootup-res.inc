@@ -51,13 +51,16 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
             def_name(event_animation_logo)
             // back panel
             begin_view(PanelView)
-                set(BkColor, MakeRGBA (255, 255, 255, 0))
+                mystyle(BkColor, MakeRGBA (255, 255, 255, 0))
                 // animate view
                 begin_view(GifAnimateView)
                     map(my_var(view_animation_logo))
-                    on(CustomEvent::CUSTOM_NOTIFY, my_var(event_animation_logo))
+                    on(Event::ET_VIEW, my_var(event_animation_logo))
                 end_view
             end_view
+
+            apply_css_group(sysid_css_group(global))
+            apply_css_group(my_css_group(logo))
         end_ui_res
 
         begin_ui_res(greet)
@@ -69,6 +72,9 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
                     map(my_var(view_greet_text))
                 end_view
             end_view
+
+            apply_css_group(sysid_css_group(global))
+            apply_css_group(my_css_group(greet))
         end_ui_res
     end_uis
 

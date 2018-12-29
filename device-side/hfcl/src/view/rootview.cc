@@ -29,7 +29,7 @@
 namespace hfcl {
 
 RootView::RootView()
-    : ViewContainer(0, NULL, NULL)
+    : ViewContainer(NULL, NULL, 0)
     , m_window(0)
 {
 }

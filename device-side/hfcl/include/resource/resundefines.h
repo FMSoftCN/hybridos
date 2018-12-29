@@ -105,6 +105,7 @@
 #undef end_devbmpfont
 #undef devbmpfont
 
+// CSS resource
 #undef rgba
 #undef rgb
 
@@ -120,7 +121,52 @@
 #undef end_css_group
 #undef end_css_group_res
 
-//Menu resource
+// UI resource
+#undef begin_uis
+#undef end_uis
+
+#undef apply_css_group
+
+#undef begin_ui_res
+#undef end_ui_res
+
+#undef begin_view
+#undef begin_view_ex
+#undef end_view
+
+#undef import_view
+#undef begin_import_view
+#undef end_import_view
+
+#undef set
+#undef attribute
+#undef mystyle
+#undef map
+#undef on
+
+#undef begin_foreach
+#undef end_foreach
+
+#undef data_get
+#undef data_get_any
+#undef data_get_image
+#undef data_get_text
+#undef data_get_text_id
+#undef data_get_int
+
+// Resrouce identifier
+#undef begin_resid
+#undef end_resid
+
+// Controller
+#undef begin_controller_modes
+#undef end_controller_modes
+#undef begin_mode
+#undef end_mode
+#undef setMode
+#undef add_mode
+
+// Menu resource
 #undef begin_menus
 #undef end_menus
 
@@ -128,7 +174,6 @@
 #undef end_menu_res
 
 #undef begin_menu
-#undef begin_theme_menu
 #undef end_menu
 
 #undef setMenuRect
@@ -146,66 +191,4 @@
 #undef addCheckItemEx
 #undef addSubMenu
 #undef addSubMenuEx
-
-//UI resource
-#undef begin_uis
-#undef end_uis
-
-#undef begin_ui_res
-#undef end_ui_res
-
-#undef data_get
-#undef data_get_any
-#undef data_get_image
-#undef data_get_text
-#undef data_get_text_id
-#undef data_get_int
-
-#undef begin_view
-#undef begin_theme_view
-#undef begin_view_ex
-#undef begin_view_id_ex
-#undef begin_scrollable_view
-#undef begin_theme_scrollable_view
-#undef begin_scrollable_view_ex
-#undef begin_scrollable_view_id_ex
-#undef end_view
-#undef end_scrollable_view
-#undef end_scrollable_view_ex
-#undef end_scrollable_view_id_ex
-#undef begin_composite_view
-#undef end_composite_view
-
-#undef begin_item
-#undef begin_theme_item
-#undef begin_item_ex
-#undef end_item
-
-#undef begin_controller_modes
-#undef end_controller_modes
-#undef begin_mode
-#undef end_mode
-#undef setMode
-#undef add_mode
-
-#undef set
-#undef addTablePage
-#undef setRect
-#undef setRectWH
-#undef setStyle
-#undef _m
-#undef map
-#undef id
-#undef on
-#undef hide
-#undef add
-#undef setSBVLocation
-#undef addLayoutView
-#undef import_view
-#undef begin_import_view
-#undef end_import_view
-#undef begin_foreach
-#undef end_foreach
-#undef begin_resid
-#undef end_resid
 

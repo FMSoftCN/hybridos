@@ -25,8 +25,8 @@
 
 namespace hfcl {
 
-ViewContainer::ViewContainer(int id, const char* cssClass, const char* name)
-    : View(id, cssClass, name)
+ViewContainer::ViewContainer(const char* cssClass, const char* name, int id)
+    : View(cssClass, name, id)
     , m_focused(0)
     , m_first(NULL)
     , m_last(NULL)

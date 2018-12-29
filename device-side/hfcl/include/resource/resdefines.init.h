@@ -158,56 +158,35 @@
 
 #define end_css_group_res
 
-//Menu resource
-#define begin_menus \
-    static MENU_RES_ARRAY menuArray[] = {
-
-#define end_menus \
-}; \
- resPkg->addMenuResource(menuArray, sizeof(menuArray)/sizeof(MENU_RES_ARRAY));
-
-
-
-#define begin_menu_res(name) \
-    {RESID(menu_##name),(void *)create_menu_##name},
-
-
-#define end_menu_res \
-
-
-#define begin_menu()
-#define begin_theme_menu(list_theme_drset_id, item_theme_drset_id, menubar_theme_drset_id)
-#define end_menu
-
-#define setMenuRect(l, t, r, b)
-#define setOnMenuListener()
-#define setMenu(Name, value)
-#define menu_set(Name, value)
-#define menuAutoFit()
-#define menuHilightFirstEnable()
-
-#define addMenuItemEx(str, image, id, disable, drset)
-#define addMenuItem(str, image, id)
-#define addRadioItemEx(str, image, id, tag, checked, disable, drset)
-#define addRadioItem(str, image, id, tag, checked)
-#define addCheckItemEx(str, image, id, checked, disabled, drset)
-#define addCheckItem(str, image, id, checked)
-#define addSubMenuEx(str, imge, id, disable, drset)
-#define addSubMenu(str, imge, id)
-
-
-//UI resource
+// UI resource
 #define begin_uis \
     static UI_RES_ARRAY UIArray[] = {
 
 #define end_uis \
-}; \
- resPkg->addUIResource(UIArray, sizeof(UIArray)/sizeof(UI_RES_ARRAY));
+    }; \
+    resPkg->addUIResource(UIArray, sizeof(UIArray)/sizeof(UI_RES_ARRAY));
+
+#define apply_css_group(cssg_id)
 
 #define begin_ui_res(name)  \
-        {RESID(ui_##name),(void *)create_ui_##name},
+        { RESID(ui_##name), (void *)create_ui_##name},
 
 #define end_ui_res
+
+#define begin_view(ViewClass)
+#define begin_view_ex(ViewClass, view_css_class, vname, vid)
+#define end_view
+
+#define import_view(view_res_id)
+#define begin_import_view(ViewClass, view_resid)
+#define end_import_view
+
+#define set(Name, value)
+#define attribute(name, value)
+#define mystyle(pid, value, ...)
+
+#define map(name)
+#define on(event_name, handle_name)
 
 // get data from id
 #define data_get(id, type)
@@ -217,54 +196,50 @@
 #define data_get_text_id(id)
 #define data_get_int(id)
 
-#define begin_view(view_class)
-#define begin_theme_view(view_class, theme_drset_id)
-#define begin_view_ex(view_class, dr_id)
-//#define begin_view_id_ex(view_class, view_classname, setid)
-#define begin_composite_view(view_class, drsetgrpid)
-#define end_composite_view
+#define begin_foreach(n)
+#define end_foreach
 
-#define begin_scrollable_view(view_class)
-#define begin_theme_scrollable_view(view_class, theme_drset_id)
-#define begin_scrollable_view_ex(view_class, view_classname, setid)
-#define begin_scrollable_view_id_ex(view_class, view_classname, setid)
+#define begin_resid(name)
+#define end_resid
 
-#define end_view
-#define end_scrollable_view
-#define end_scrollable_view_ex
-#define end_scrollable_view_id_ex
-
-#define begin_item(view_class)
-#define begin_theme_item(view_class, theme_drset_id)
-#define begin_item_ex(view_class, drset)
-#define end_item
-
+// controller
 #define begin_controller_modes
 #define end_controller_modes(def_mode)
+
 #define begin_mode(name)
 #define end_mode
+
 #define setMode(id, value, cmd)
 #define add_mode(name)
 
-#define set(Name, value)
-#define addTablePage(imageNormal, imageSel, view)
-#define setStyle(style_id)
-#define _m(Name, args)
-#define map(name)
-#define id(id)
-#define on(event_name, handle_name)
-#define hide()
-#define add(Name)
-#define setSBVLocation(location)
-// #define addSubMenu(id)
-#define addLayoutView(__type, __min, __max)
-#define import_view(view_id)
-#define begin_import_view(ViewClass, view_id)
-#define end_import_view
-#define begin_foreach(n)
-#define end_foreach
-#define begin_resid(name)
-#define end_resid
-#define my_imageid(name)
-#define my_textid(name)
+// menu resource
+#define begin_menus \
+    static MENU_RES_ARRAY menuArray[] = {
+
+#define end_menus \
+    }; \
+    resPkg->addMenuResource(menuArray, \
+            sizeof(menuArray)/sizeof(MENU_RES_ARRAY));
+
+#define begin_menu_res(name) \
+    {RESID(menu_##name),(void *)create_menu_##name},
+
+#define end_menu_res
+
+#define begin_menu()
+#define end_menu
+
+#define setMenuRect(l, t, r, b)
+#define setOnMenuListener()
+#define setMenu(Name, value)
+#define menu_set(Name, value)
+
+#define addMenuItemEx(str, image, id, disable, drset)
+#define addMenuItem(str, image, id)
+#define addRadioItemEx(str, image, id, tag, checked, disable, drset)
+#define addRadioItem(str, image, id, tag, checked)
+#define addCheckItemEx(str, image, id, checked, disabled, drset)
+#define addCheckItem(str, image, id, checked)
+#define addSubMenuEx(str, imge, id, disable, drset)
+#define addSubMenu(str, imge, id)
 
