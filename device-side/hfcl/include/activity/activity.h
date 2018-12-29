@@ -55,6 +55,7 @@ public:
     virtual void setFullScreen(bool isFullScreen);
 
 protected:
+    View *getViewParent(HTResId view_id) { return (View*)this; }
 
 private:
     IntRect m_old_rect;

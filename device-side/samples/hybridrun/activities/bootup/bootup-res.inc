@@ -53,7 +53,7 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
             begin_view(PanelView)
                 mystyle(BkColor, MakeRGBA (255, 255, 255, 0))
                 // animate view
-                begin_view(GifAnimateView)
+                begin_view(GifView)
                     map(my_var(view_animation_logo))
                     on(Event::ET_VIEW, my_var(event_animation_logo))
                 end_view

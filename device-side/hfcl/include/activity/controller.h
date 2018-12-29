@@ -69,6 +69,7 @@ protected:
     ControllerClientList m_list;
     int m_modalCount;
 
+    virtual View *getViewParent(HTResId view_id) = 0;
     virtual ControllerClient* createClient(int view_id,
             HTData param1, HTData param2) { return NULL; }
     virtual void animationSwitch(ControllerClient* prev, ControllerClient* cur);

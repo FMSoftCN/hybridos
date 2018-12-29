@@ -25,8 +25,9 @@
 
 using namespace hfcl;
 
-BootupGreet::BootupGreet(Controller* owner, int view_id, View* parent,
-        HTData param1, HTData param2) : ControllerClient(owner, view_id, parent)
+BootupGreet::BootupGreet(Controller* owner, int view_id, RootView* root,
+        HTData param1, HTData param2)
+    : ControllerClient(owner, view_id, root)
 {
 }
 
@@ -36,7 +37,7 @@ BootupGreet::~BootupGreet()
 
 bool BootupGreet::handleEvent(Event* event)
 {
-    if (event->eventType() == Event::TIMER
+    if (event->eventType() == Event::ET_TIMER
             && m_timer_id == ((TimerEvent *)event)->timerID()) {
 
         if (((BootupActivity *)m_owner)->getTop() == NULL)
@@ -48,7 +49,7 @@ bool BootupGreet::handleEvent(Event* event)
         }
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 BEGIN_SETVIEW(BootupGreet)

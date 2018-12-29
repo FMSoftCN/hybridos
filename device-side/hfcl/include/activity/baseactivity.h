@@ -80,6 +80,8 @@ public:
     virtual void exit() { close(); }
 
 protected:
+    View *getViewParent(HTResId view_id) { return NULL; }
+
     char * m_name;
     ActPriority m_priority;
     ActState m_state;

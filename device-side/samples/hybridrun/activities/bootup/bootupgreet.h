@@ -23,21 +23,19 @@
 #define HFCL_SAMPLES_BOOTUPGREET_H_
 
 #include <hfcl/activity.h>
+#include <hfcl/services.h>
 
 using namespace hfcl;
 
 class BootupGreet : public ControllerClient, public TimerEventListener {
 public:
-    BootupGreet (Controller* owner, int view_id, View* parent,
+    BootupGreet (Controller* owner, int view_id, RootView* root,
         HTData param1, HTData param2);
     virtual ~BootupGreet();
 
     DECLARE_VIEWCONTEXT
 
 private:
-#if 0
-    bool onKey(int keyCode, KeyEvent* event);
-#endif
     bool handleEvent(Event* event);
 
     int m_timer_id;

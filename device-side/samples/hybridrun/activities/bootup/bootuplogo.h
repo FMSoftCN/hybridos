@@ -29,7 +29,7 @@ using namespace hfcl;
 
 class BootupLogo : public ControllerClient, public TimerEventListener {
 public:
-    BootupLogo (Controller* owner, int view_id, View* parent,
+    BootupLogo (Controller* owner, int view_id, RootView* root,
         HTData param1, HTData param2);
     virtual ~BootupLogo();
 
@@ -44,10 +44,9 @@ private:
 
     bool handleEvent(Event* event);
 
-    void onMenuCommand(CustomEvent* event);
-    bool onGifAnimateNotify(CustomEvent* event);
+    bool onGifAnimateNotify(ViewEvent* event);
 
-    GifAnimateView* m_animateview;
+    GifView* m_animateview;
     int m_timer_id;
 };
 

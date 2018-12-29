@@ -30,13 +30,14 @@ using namespace hfcl;
 
 #define HRESNAME(pkg, type, name) R_##pkg##_##type##_##name
 
-BootupLogo::BootupLogo(Controller* owner, int view_id, View* parent,
+BootupLogo::BootupLogo(Controller* owner, int view_id, RootView* root,
         HTData param1, HTData param2)
-    : ControllerClient (owner, view_id, parent)
+    : ControllerClient(owner, view_id, root)
     , m_animateview(NULL)
 {
-    m_baseView = CreateViewFromRes (HRESNAME(bootup, ui, logo),
-            parent, this, NULL);
+    // m_rootView =
+    View* view = CreateViewFromRes (HRESNAME(bootup, ui, logo),
+            root, this, NULL);
 
     m_animateview->setGifAnimate (
             GetGifAnimateRes (HRESNAME (bootup, img, animation_logo)));
@@ -51,9 +52,9 @@ BootupLogo::~BootupLogo()
     }
 }
 
-bool BootupLogo::onGifAnimateNotify(CustomEvent* event)
+bool BootupLogo::onGifAnimateNotify(ViewEvent* event)
 {
-    if (event->customWparam() != CustomEvent::CUS_GIFANIMATE_STOP)
+    if (event->nc() != GifView::NOTIFY_GIFANIMATE_STOP)
         return false;
 
     // TODO: show greeting words
@@ -62,7 +63,7 @@ bool BootupLogo::onGifAnimateNotify(CustomEvent* event)
 
 bool BootupLogo::handleEvent(Event* event)
 {
-    if (event->eventType() == Event::TIMER
+    if (event->eventType() == Event::ET_TIMER
             && m_timer_id == ((TimerEvent *)event)->timerID()) {
 
         if (((BootupActivity *)m_owner)->getTop() == NULL)
@@ -74,11 +75,11 @@ bool BootupLogo::handleEvent(Event* event)
         }
     }
 
-    return DISPATCH_CONTINUE_MSG;
+    return GOON_DISPATCH;
 }
 
 BEGIN_SETVIEW(BootupLogo)
-    MAP_VIEW(m_animateview, HRESNAME (bootup, var, view_animation_logo), GifAnimateView)
+    MAP_VIEW(m_animateview, HRESNAME (bootup, var, view_animation_logo), GifView)
 END_SETVIEW
 
 BEGIN_GETHANDLE(BootupLogo)
