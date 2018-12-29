@@ -92,7 +92,7 @@ public:
     void   setEnableScroll(bool enable){ m_scrollStyle = enable;}
     bool enableScroll(void){ return m_scrollStyle ;}
 private:
-    bool handleEvent(Event* event);
+    bool handler(Event* event);
     bool switchLine(bool isUpLine);
     void   refreshCaretPos(bool fromXY);
     void   _insertText(const char *text, int* pos, string& str, bool internal);

@@ -53,14 +53,14 @@ BootupLogo::~BootupLogo()
 
 bool BootupLogo::onGifAnimateNotify(ViewEvent* event)
 {
-    if (event->nc() != GifView::NOTIFY_GIFANIMATE_STOP)
+    if (event->code() != GifView::NOTIFY_GIFANIMATE_STOP)
         return false;
 
     // TODO: show greeting words
     return true;
 }
 
-bool BootupLogo::handleEvent(Event* event)
+bool BootupLogo::handler(Event* event)
 {
     if (event->eventType() == Event::ET_TIMER
             && m_timer_id == ((TimerEvent *)event)->timerID()) {

@@ -186,7 +186,7 @@ bool AnimateImageView::setImageIdArray(unsigned int * array, unsigned int num, i
     return true;
 }
 
-bool AnimateImageView::handleEvent(Event* event)
+bool AnimateImageView::handler(Event* event)
 {
     // check state
     if (Stop == m_state)

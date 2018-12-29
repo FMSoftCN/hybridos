@@ -37,10 +37,10 @@ bool EventBroadcaster::raiseEvent (Event* event)
         // hal_HstSendEvent(0xcc9cFFFF);
         if(m_current_raise) {
              // hal_HstSendEvent((UINT32)(m_current_raise));
-            m_current_raise->handleEvent(event);
+            m_current_raise->handler(event);
         }
 
-        // in handleEvent, some may be removed, so we need to see.
+        // in handler, some may be removed, so we need to see.
         if(m_want_to_remove) {
             // 1. remove current one, we just remove it here
             if(m_want_to_remove == m_current_raise) {

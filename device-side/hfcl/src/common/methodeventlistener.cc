@@ -35,7 +35,7 @@ MethodEventListener::~MethodEventListener()
 {
 }
 
-bool MethodEventListener::handleEvent(Event* event)
+bool MethodEventListener::handler(Event* event)
 {
     if (m_ctx && m_eventHandle && event && (m_eventType == 0 || event->eventType() == m_eventType)) {
         (((MethodEventListener*) m_ctx)->*m_eventHandle)(event);

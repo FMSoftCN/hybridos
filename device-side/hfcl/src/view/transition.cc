@@ -55,7 +55,7 @@ void TransitionManager::removeTransition(HTData key)
     m_trMaps.erase(it);
 }
 
-bool TransitionManager::handleEvent(Event* event)
+bool TransitionManager::handler(Event* event)
 {
     // wait next time to delete
     if (m_trMaps.size() <= 0 && m_timerId != 0) {

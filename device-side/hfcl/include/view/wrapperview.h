@@ -54,7 +54,7 @@ private:
     static void _notify_proc(HANDLE handle, int id, int nc, DWORD add_data);
     bool onKeyPressed(int keyCode);
 #if 0   // GT_jyseo rollback
-    bool handleEvent(Event* event);
+    bool handler(Event* event);
     void closeTimer(void);
 #endif
     void calcWndRect(IntRect& r);

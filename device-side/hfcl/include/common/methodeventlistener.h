@@ -38,7 +38,7 @@ public:
     MethodEventListener(void* ctx, EventHandle event_handle, int event_type);
     virtual ~MethodEventListener();
 
-    bool handleEvent(Event* event);
+    bool handler(Event* event);
 
 private:
     void* m_ctx;

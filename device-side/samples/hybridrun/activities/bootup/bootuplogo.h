@@ -42,7 +42,7 @@ private:
         HTData param1, HTData param2);
 #endif
 
-    bool handleEvent(Event* event);
+    bool handler(Event* event);
 
     bool onGifAnimateNotify(ViewEvent* event);
 

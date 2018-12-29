@@ -533,7 +533,7 @@ bool View::raiseViewEvent(ViewEvent *event)
     EventListenerList::iterator i;
 
     for (i = m_listeners.begin(); i != m_listeners.end(); ++i) {
-        if ((*i)->handleEvent(event))
+        if ((*i)->handler(event))
             return true;
     }
 

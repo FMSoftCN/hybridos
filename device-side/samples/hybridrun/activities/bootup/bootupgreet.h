@@ -36,7 +36,7 @@ public:
     DECLARE_VIEWCONTEXT
 
 private:
-    bool handleEvent(Event* event);
+    bool handler(Event* event);
 
     int m_timer_id;
 };

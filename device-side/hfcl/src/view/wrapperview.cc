@@ -285,7 +285,7 @@ bool WrapperView::dispatchEvent(Event *event)
 }
 
 #if 0 // GT_jyseo rollback
-bool WrapperView::handleEvent(Event* event)
+bool WrapperView::handler(Event* event)
 {
     if (event->eventType() == Event::TIMER
             && m_timerId == ((TimerEvent *)event)->timerID())

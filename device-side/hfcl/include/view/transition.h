@@ -64,7 +64,7 @@ public:
     int interval() { return m_interval; }
 
 private:
-    bool handleEvent(Event *event);
+    bool handler(Event *event);
 };
 
 class RollTextTransition : public Transition {

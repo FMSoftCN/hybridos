@@ -191,7 +191,7 @@ void GifView::onPaint(GraphicsContext* context)
     m_animate->drawOneFrame(context, mapRc);
 }
 
-bool GifView::handleEvent(Event* event)
+bool GifView::handler(Event* event)
 {
     if (NULL == m_animate)
         return GOON_DISPATCH;

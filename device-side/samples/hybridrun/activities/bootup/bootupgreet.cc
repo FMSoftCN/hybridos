@@ -35,7 +35,7 @@ BootupGreet::~BootupGreet()
 {
 }
 
-bool BootupGreet::handleEvent(Event* event)
+bool BootupGreet::handler(Event* event)
 {
     if (event->eventType() == Event::ET_TIMER
             && m_timer_id == ((TimerEvent *)event)->timerID()) {

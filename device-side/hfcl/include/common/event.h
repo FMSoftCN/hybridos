@@ -29,9 +29,9 @@
 #include "../common/stlalternative.h"
 #include "../common/object.h"
 
-// GOON_DISPATCHING to continue dispatching the event;
-// STOP_DISPATCHING to stop dispatching the event.
-#define GOON_DISPATCH   false
+// GOON_DISPATCH to continue dispatching the event;
+// STOP_DISPATCH to stop dispatching the event.
+#define GOON_DISPATCH       false
 #define STOP_DISPATCH       true
 
 namespace hfcl {
@@ -46,6 +46,7 @@ public:
         ET_WINDOW,
         ET_VIEW,
         ET_USER,
+        ET_ALL,
     };
 
     Event(EventType type, HTData eventSource = 0)
@@ -314,9 +315,9 @@ private:
 
 class EventListener : public RefCount {
 public:
-    EventListener() : RefCount (0) { }
+    EventListener() : RefCount(0) { }
 
-    virtual bool handleEvent(Event* event) = 0;
+    virtual bool handler(Event* event) = 0;
 
 protected:
     EventListener(int start_ref) : RefCount(start_ref) { }

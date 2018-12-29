@@ -1650,7 +1650,7 @@ void SlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
 #endif
 }
 
-bool SlEditView::handleEvent(Event* event)
+bool SlEditView::handler(Event* event)
 {
     if (event->eventType() == Event::TIMER
             && m_timerId == ((TimerEvent *)event)->timerID()

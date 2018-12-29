@@ -116,7 +116,7 @@ public:
     virtual bool onMouseEvent(const MouseEvent* event);
     virtual bool onMouseWheelEvent(const MouseWheelEvent* event);
 
-    virtual bool handleEvent(Event* event);
+    virtual bool handler(Event* event);
 
     /* new virtual functions specific to ActivityWithClients */
     virtual void onCmdOk() { }

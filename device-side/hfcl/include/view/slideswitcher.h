@@ -96,7 +96,7 @@ class SlideSwitcher : public PanelView
          */
         View* focusItem(void) { return m_curr_focus_view; };
 
-        //bool handleEvent(Event* event);     // GT_jyseo rollback
+        //bool handler(Event* event);     // GT_jyseo rollback
 
     protected:
         /**

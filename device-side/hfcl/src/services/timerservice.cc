@@ -36,7 +36,7 @@ BOOL TimerService::TimerProc (HWND listener, LINT id, DWORD data)
 {
     TimerEvent event(id);
     if (listener != 0)
-        ((TimerEventListener *)(listener))->handleEvent(&event);
+        ((TimerEventListener *)(listener))->handler(&event);
 
     return TRUE;
 }
@@ -46,7 +46,7 @@ BOOL TimerService::OneShotTimerProc (HWND listener, LINT id, DWORD data)
     TimerEvent event(id);
 
     if(listener != 0)
-        ((TimerEventListener *)(listener))->handleEvent(&event);
+        ((TimerEventListener *)(listener))->handler(&event);
 
     return FALSE;
 }

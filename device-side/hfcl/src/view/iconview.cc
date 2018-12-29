@@ -75,7 +75,7 @@ void IconView::makeHilightVisible()
     }
 }
 
-bool IconView::handleEvent(Event* event)
+bool IconView::handler(Event* event)
 {
     if (event->eventType() == Event::CUSTOM_NOTIFY
             && ((CustomEvent *)event)->customWparam() == CustomEvent::CUS_SELCHANGED)
@@ -86,7 +86,7 @@ bool IconView::handleEvent(Event* event)
             updateView();
         }
     }
-    return ScrollView::handleEvent(event);
+    return ScrollView::handler(event);
 }
 
 bool IconView::dispatchEvent(Event *e)

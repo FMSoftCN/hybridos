@@ -2455,7 +2455,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
 }
 
 
-bool MlEditView::handleEvent(Event* event)
+bool MlEditView::handler(Event* event)
 {
     if (event->eventType() == Event::TIMER
             && m_timerId == ((TimerEvent *)event)->timerID()

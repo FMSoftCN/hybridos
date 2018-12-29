@@ -320,7 +320,7 @@ bool GridView::notify2Parent(KEY_DIRECTION direction)
     {
         CustomEvent event(eventType, flag, 0);
         if (m_boundary_listener)
-            return m_boundary_listener->handleEvent(&event);
+            return m_boundary_listener->handler(&event);
     }
     return true;
 }
@@ -491,7 +491,7 @@ bool GridView::onKeyPressed(int keyCode)
 }
 
 #if 0   // GT_jyseo rollback
-bool GridView::handleEvent(Event* event)
+bool GridView::handler(Event* event)
 {
     if (event->eventType() == Event::TIMER
             && m_timerId == ((TimerEvent *)event)->timerID())

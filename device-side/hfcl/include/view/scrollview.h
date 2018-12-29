@@ -57,7 +57,7 @@ public:
     }
 
     bool dispatchEvent(Event*);
-    bool handleEvent(Event* event);
+    bool handler(Event* event);
 
     /*
      * set vertical scrollbar and horizontal scrollbar width.

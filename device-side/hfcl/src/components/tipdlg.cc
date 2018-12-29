@@ -181,7 +181,7 @@ void TipDlg::setAutoCloseTime(int time)
     m_autoCloseTime = time;
 }
 
-bool TipDlg::handleEvent(Event* event)
+bool TipDlg::handler(Event* event)
 {
     switch (event->eventType()) {
         case Event::TIMER: {

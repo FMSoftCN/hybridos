@@ -267,7 +267,7 @@ void ScrollView::drawScroll(GraphicsContext* context, IntRect &rc, int status)
     }
 }
 
-bool ScrollView::handleEvent(Event* event)
+bool ScrollView::handler(Event* event)
 {
     if (event->eventType() == Event::TIMER
             && m_timerId > 0

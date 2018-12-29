@@ -90,7 +90,7 @@ class IconView : public ScrollView
 
         void makeHilightVisible();
 
-        virtual bool handleEvent(Event* event);
+        virtual bool handler(Event* event);
 
         bool dispatchEvent(Event*);
 

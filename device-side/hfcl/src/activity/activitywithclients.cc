@@ -256,7 +256,7 @@ unsigned int ActivityWithClients::showModalView(int view_id, HTData param1, HTDa
     return Activity::showModalView (view_id, param1, param2);
 }
 
-bool ActivityWithClients::handleEvent(Event* event)
+bool ActivityWithClients::handler(Event* event)
 {
     if (event->eventType() == Event::ET_TIMER
                 && m_timerId == ((TimerEvent*)event)->timerID()) {

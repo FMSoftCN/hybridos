@@ -65,7 +65,7 @@ public:
     int closeDlg(int endCode = 0);
     virtual int doModal();
 
-    bool handleEvent(Event* event);
+    bool handler(Event* event);
 
 
     /*

@@ -74,7 +74,7 @@ public:
     /* overloaded virtual functions */
     virtual const char* type() const { return "hvgif"; }
     virtual void onPaint(GraphicsContext* context);
-    virtual bool handleEvent(Event* event);
+    virtual bool handler(Event* event);
 
 private:
     GifAnimate* m_animate;

@@ -89,7 +89,7 @@ public:
 
 private:
     void innerDrawText(GraphicsContext *gc, const string s, const IntRect &rc, unsigned int color, Logfont *f, unsigned int format);
-    bool handleEvent(Event* event);
+    bool handler(Event* event);
     int CalculateCursor(GraphicsContext *gc,IntRect rc,string tmpStr ,int  caretPos ,int  *caretWidth);
 
 private:

@@ -78,7 +78,7 @@ public:
     bool start(void);
     bool stop(void);
     bool setImageIdArray(unsigned int * array, unsigned int num, int timeDuration,const DWORD color);
-    bool handleEvent(Event* event);
+    bool handler(Event* event);
 
 protected:
     Image*            m_image;

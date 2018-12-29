@@ -86,7 +86,7 @@ class GridView : public PanelView
 
         void setAutoConvert(bool bCon) { m_bNeedConvert = bCon; }
 
-        // bool handleEvent(Event* event);        // GT_jyseo rollbakc
+        // bool handler(Event* event);        // GT_jyseo rollbakc
 
     protected:
         int gridWidth(){ return m_grid_w; }
