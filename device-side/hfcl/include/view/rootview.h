@@ -48,12 +48,14 @@ public:
     bool applyCssGroup(HTResId cssgId);
     const RealRect& viewport() const { return m_viewport; }
 
-    /* overloaded virtual functions */
+    /* overloaded public virtual functions */
     virtual const char* type() const { return "hvroot"; }
     virtual bool isRoot() const { return true; }
     virtual Window* getSysWindow() const { return m_window; }
 
 protected:
+    /* overloaded protected virtual functions */
+    virtual void calcLayout(const RealRect& ctnBlock);
 
 private:
     Window* m_window;

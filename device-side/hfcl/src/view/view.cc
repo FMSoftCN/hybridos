@@ -684,7 +684,7 @@ void View::computeCss()
     m_css_computed->makeAbsolute(*this);
 }
 
-void View::layout()
+void View::calcLayout(const RealRect& cntBlock)
 {
 }
 

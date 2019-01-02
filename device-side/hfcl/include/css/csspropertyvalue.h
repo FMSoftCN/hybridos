@@ -77,7 +77,7 @@ namespace hfcl {
 // Data types for property value
 typedef int             HTInt;
 typedef unsigned int    HTUint;
-typedef const void*           HTPointer;
+typedef const void*     HTPointer;
 
 typedef union _HTPVData {
     HTInt       i;

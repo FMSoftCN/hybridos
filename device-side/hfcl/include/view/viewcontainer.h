@@ -111,7 +111,12 @@ protected:
         FLAG_SHIFT = (View::FLAG_SHIFT + 1)
     };
 
+    /* overloaded protected virtual functions */
+
+    // compute CSS properties
     virtual void computeCss();
+    // calculate layout
+    virtual void calcLayout(const RealRect& ctnBlock);
 };
 
 } // namespace hfcl

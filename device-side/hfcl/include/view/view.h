@@ -25,6 +25,7 @@
 #include "../view/viewcontext.h"
 #include "../common/event.h"
 #include "../common/intrect.h"
+#include "../common/realrect.h"
 
 #include "../css/cssdeclared.h"
 #include "../css/cssdeclaredgroup.h"
@@ -93,7 +94,7 @@ public:
     const void *getAddData() const { return m_addData; }
 
     // methods to get/set name of the view
-    // name correspond to the id attribute of one HVML element
+    // name corresponds to the id attribute of one HVML element
     const char* getName() const { return m_name.c_str(); }
     bool setName(const char* name);
 
@@ -196,9 +197,10 @@ public:
     virtual const char* type() const = 0;
     virtual bool isContainer() const { return false; }
     virtual bool isRoot() const { return false; }
-
-    /* virtual functions for rendering */
-    virtual void applyCss(CssDeclared* css, const CssSelectorGroup& selector);
+    virtual bool isReplaced() const { return false; }
+    virtual bool getIntrinsicWidth(HTReal* v) const { return false; }
+    virtual bool getIntrinsicHeight(HTReal* v) const { return false; }
+    virtual bool getIntrinsicRatio(HTReal* v) const { return false; }
 
     enum {
         VN_GOTFOCUS,
@@ -273,10 +275,10 @@ public:
     void updateViewRect();
     void updateView(bool upBackGnd = true);
 
+    /* to be deprecated */
     virtual void focusMe();
     bool setFocus(View *view);
 
-    /* to be deprecated */
     virtual bool isWrapperView() { return false; }
 
     bool isVisible() { return m_flags & VA_VISIBLE; }
@@ -360,6 +362,7 @@ public:
     }
 
     friend class ViewContainer;
+    friend class RootView;
 
 protected:
     enum {
@@ -406,11 +409,14 @@ protected:
     // The computed values of all CSS properties.
     CssComputed* m_css_computed;
 
+    /* virtual functions for rendering */
     // compute CSS property values
+    virtual void applyCss(CssDeclared* css, const CssSelectorGroup& selector);
     virtual void computeCss();
 
-    /* Visual formatting */
-    virtual void layout();
+    /* Members for visual formatting */
+    virtual void calcLayout(const RealRect& ctnBlock);
+
     // The pricipal box of the view, either a CssBoxBlock,
     // a CssBoxInline, or a CssBoxLineBoxContainer
     CssBox* m_box_principal;

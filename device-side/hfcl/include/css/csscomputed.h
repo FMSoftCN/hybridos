@@ -26,6 +26,7 @@
 #include "../common/realrect.h"
 #include "../css/css.h"
 #include "../css/csspropertyvalue.h"
+#include "../css/cssbox.h"
 
 #include "../view/view.h"
 
@@ -33,16 +34,19 @@ namespace hfcl {
 
 class CssComputed : public Css {
 public:
-    CssComputed ();
-    CssComputed (const CssComputed& init);
-    ~CssComputed () { freeArray(); }
+    CssComputed();
+    CssComputed(const CssComputed& init);
+    ~CssComputed() { freeArray(); }
 
+    /* public methods */
     void reset();
     bool makeAbsolute(const View& view);
+    CssBox* calcWidthsMargins(const View& view, const RealRect& ctnBlock);
 
-    virtual bool getProperty (CssPropertyIds pid, Uint32 *value,
+    /* overloaded virtual functions */
+    virtual bool getProperty(CssPropertyIds pid, Uint32 *value,
             HTPVData *data);
-    virtual bool setProperty (CssPropertyIds pid, Uint32 value,
+    virtual bool setProperty(CssPropertyIds pid, Uint32 value,
             HTPVData data);
 
 private:
@@ -52,8 +56,20 @@ private:
     bool convertArray(int pid, int t);
     bool convertArray(int pid, int t, const RealRect& viewport);
     bool convertArray(int pid, int t, const View& view);
-
     void freeArray();
+
+    void autoMarginsForInline(const RealRect& ctnBlock,
+            HTReal& ml, HTReal& mr);
+    bool hasComputedMarginLeft(const RealRect& ctnBlock, HTReal& ml);
+    bool hasComputedMarginRight(const RealRect& ctnBlock, HTReal& mr);
+    bool hasComputedWidth(const RealRect& ctnBlock, HTReal& w);
+    bool hasComputedHeight(const RealRect& ctnBlock, HTReal& h);
+    void calcPaddings(const RealRect& ctnBlock,
+        HTReal* pl, HTReal* pt, HTReal* pr, HTReal* pb);
+    void calcWidthForIR(const View& view, const RealRect& ctnBlock,
+        HTReal& w, HTReal& ml, HTReal& mr);
+    void calcWidthForBNR(const RealRect& ctnBlock,
+        HTReal& w, HTReal& ml, HTReal& mr, bool br = false);
 };
 
 } // namespace hfcl

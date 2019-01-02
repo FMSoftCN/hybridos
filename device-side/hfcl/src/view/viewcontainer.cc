@@ -503,6 +503,10 @@ void ViewContainer::computeCss()
     }
 }
 
+void ViewContainer::calcLayout(const RealRect& cntBlock)
+{
+}
+
 void ViewContainer::onChildAttached(View* view)
 {
 }

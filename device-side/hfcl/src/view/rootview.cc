@@ -25,6 +25,7 @@
 #include "resource/respkgmanager.h"
 #include "css/cssdeclaredgroup.h"
 #include "css/cssselector.h"
+#include "css/cssbox.h"
 
 namespace hfcl {
 
@@ -55,6 +56,7 @@ bool RootView::attachToSysWindow(Window* window)
         /* FIXME: viewport should be defined in px */
         m_viewport = rc;
         computeCss();
+        calcLayout(m_viewport);
         return true;
     }
 
@@ -86,6 +88,12 @@ bool RootView::applyCssGroup(HTResId cssgId)
     }
 
     return true;
+}
+
+void RootView::calcLayout(const RealRect& ctnBlock)
+{
+    // determine width and margins
+    ViewContainer::calcLayout(ctnBlock);
 }
 
 } // namespace hfcl

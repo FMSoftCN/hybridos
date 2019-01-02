@@ -24,6 +24,7 @@
 
 #include "../common/common.h"
 #include "../common/intrect.h"
+#include "../common/realrect.h"
 #include "../common/object.h"
 #include "../common/stlalternative.h"
 #include "../view/view.h"
@@ -36,6 +37,9 @@ public:
     virtual ~CssBox() {};
 
 protected:
+    HTReal m_width;
+    HTReal m_margin_left, m_margin_right;
+
     IntRect m_margin_box;
     IntRect m_content_box;
 
