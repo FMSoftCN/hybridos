@@ -58,6 +58,9 @@ private:
     bool convertArray(int pid, int t, const View& view);
     void freeArray();
 
+    void validateBorderWidth(int pid);
+    void validateNotNegative(int pid);
+
     void autoMarginsForInline(const RealRect& ctnBlock,
             HTReal& ml, HTReal& mr);
     bool hasComputedMarginLeft(const RealRect& ctnBlock, HTReal& ml);

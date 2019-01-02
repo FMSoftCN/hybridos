@@ -190,6 +190,39 @@ bool CssComputed::convertArray (int pid, int t, const View& view)
     return true;
 }
 
+void CssComputed::validateBorderWidth(int pid)
+{
+    if (m_values[pid] == PV_BW_THIN) {
+        m_values[pid] = PV_LENGTH_PX;
+        m_data[pid].r = 1.0;
+    }
+    else if (m_values[pid] == PV_BW_MEDIUM) {
+        m_values[pid] = PV_LENGTH_PX;
+        m_data[pid].r = 2.0;
+    }
+    else if (m_values[pid] == PV_BW_THICK) {
+        m_values[pid] = PV_LENGTH_PX;
+        m_data[pid].r = 4.0;
+    }
+    else if (m_values[pid] == PV_LENGTH_PX &&
+            m_data[pid].r < 0.0) {
+        m_data[pid].r = 0.0;
+    }
+    else {
+        _ERR_PRINTF ("%s: invalid property value: %d\n",
+            __FUNCTION__, pid);
+    }
+}
+
+void CssComputed::validateNotNegative(int pid)
+{
+    Uint32 type = CSS_PPT_VALUE_TYPE(m_values[pid]);
+    if ((type == PVT_PERCENTAGE || type == PVT_LENGTH_CM) &&
+            m_data[pid].r < 0.0) {
+        m_data[pid].r = 0.0;
+    }
+}
+
 /*
  * A specified value can be either absolute (i.e., not relative to
  * another value, as in red or 2mm) or relative (i.e., relative to
@@ -212,6 +245,34 @@ bool CssComputed::makeAbsolute(const View& view)
     const RealRect& viewport = root->viewport();
 
     /* handle special properties here: e.g., font-size */
+    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_LEFT_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
+        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_LEFT_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
+        m_values[PID_BORDER_LEFT_WIDTH] = PV_LENGTH_PX;
+        m_data[PID_BORDER_LEFT_WIDTH].r = 0.0;
+    }
+    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_TOP_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
+        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_TOP_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
+        m_values[PID_BORDER_TOP_WIDTH] = PV_LENGTH_PX;
+        m_data[PID_BORDER_TOP_WIDTH].r = 0.0;
+    }
+    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_RIGHT_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
+        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_RIGHT_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
+        m_values[PID_BORDER_RIGHT_WIDTH] = PV_LENGTH_PX;
+        m_data[PID_BORDER_RIGHT_WIDTH].r = 0.0;
+    }
+    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_BOTTOM_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
+        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_BOTTOM_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
+        m_values[PID_BORDER_BOTTOM_WIDTH] = PV_LENGTH_PX;
+        m_data[PID_BORDER_BOTTOM_WIDTH].r = 0.0;
+    }
 
     /* handle length and percentage values */
     for (int i = 0; i < MAX_CSS_PID; i++) {
@@ -312,6 +373,17 @@ bool CssComputed::makeAbsolute(const View& view)
         }
     }
 
+    /* make sure border widths are not negative */
+    validateBorderWidth(PID_BORDER_LEFT_WIDTH);
+    validateBorderWidth(PID_BORDER_TOP_WIDTH);
+    validateBorderWidth(PID_BORDER_RIGHT_WIDTH);
+    validateBorderWidth(PID_BORDER_BOTTOM_WIDTH);
+
+    /* make sure paddings are not negative */
+    validateNotNegative(PID_PADDING_LEFT);
+    validateNotNegative(PID_PADDING_TOP);
+    validateNotNegative(PID_PADDING_RIGHT);
+    validateNotNegative(PID_PADDING_BOTTOM);
     return true;
 }
 

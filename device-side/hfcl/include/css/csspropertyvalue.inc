@@ -295,8 +295,8 @@ typedef enum _CssPropertyValueKeywords {
     PVK_BS_RIDGE,
     PVK_BS_SOLID,
     PVK_BW_MEDIUM,
+    PVK_BW_THICK,
     PVK_BW_THIN,
-    PVK_BW_THINK,
     PVK_CAPITALIZE,
     PVK_CENTER,
     PVK_CIRCLE,
@@ -1242,10 +1242,10 @@ typedef enum _CssPropertyValueKeywords {
 // PV_LENGTH_VW has been defined
 #define PV_BW_MEDIUM \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BW_MEDIUM)
+#define PV_BW_THICK \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BW_THICK)
 #define PV_BW_THIN \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BW_THIN)
-#define PV_BW_THINK \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BW_THINK)
 // PV_INHERIT has been defined
 
 // Values for property border-collapse
@@ -1613,8 +1613,8 @@ typedef enum _CssPropertyValueKeywords {
 // PV_LENGTH_VMIN has been defined
 // PV_LENGTH_VW has been defined
 // PV_BW_MEDIUM has been defined
+// PV_BW_THICK has been defined
 // PV_BW_THIN has been defined
-// PV_BW_THINK has been defined
 // PV_INHERIT has been defined
 
 // Values for property border-spacing
@@ -1889,8 +1889,8 @@ typedef enum _CssPropertyValueKeywords {
 // PV_LENGTH_VMIN has been defined
 // PV_LENGTH_VW has been defined
 // PV_BW_MEDIUM has been defined
+// PV_BW_THICK has been defined
 // PV_BW_THIN has been defined
-// PV_BW_THINK has been defined
 // PV_INHERIT has been defined
 
 // Values for property bottom
@@ -2788,8 +2788,8 @@ typedef enum _CssPropertyValueKeywords {
 // PV_LENGTH_VMIN has been defined
 // PV_LENGTH_VW has been defined
 // PV_BW_MEDIUM has been defined
+// PV_BW_THICK has been defined
 // PV_BW_THIN has been defined
-// PV_BW_THINK has been defined
 // PV_INHERIT has been defined
 
 // Values for property overflow
