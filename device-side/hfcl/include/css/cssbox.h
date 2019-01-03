@@ -36,17 +36,65 @@ public:
     CssBox();
     virtual ~CssBox() {};
 
+    void setWidth(HTReal l, HTReal w) {
+        m_l = l;
+        m_r = l + w;
+    }
+    HTReal getWidth() { return m_r - m_l; }
+
+    void setHeight(HTReal t, HTReal h) {
+        m_t = t;
+        m_b = t + h;
+    }
+    HTReal getHeight() { return m_b - m_t; }
+
+    void setHMargins(HTReal ml, HTReal mr) {
+        m_ml = ml; m_mr = mr;
+    }
+    void getHMargins(HTReal& ml, HTReal& mr) {
+        ml = m_ml; mr = m_mr;
+    }
+
+    void setVMargins(HTReal mt, HTReal mb) {
+        m_mt = mt; m_mb = mb;
+    }
+    void getVMargins(HTReal& mt, HTReal& mb) {
+        mt = m_mt; mb = m_mb;
+    }
+
+    void setHPaddings(HTReal pl, HTReal pr) {
+        m_pl = pl; m_pr = pr;
+    }
+    void getHPaddings(HTReal& pl, HTReal& pr) {
+        pl = m_pl; pr = m_pr;
+    }
+
+    void setVPaddings(HTReal pt, HTReal pb) {
+        m_pt = pt; m_pb = pb;
+    }
+    void getVPaddings(HTReal& pt, HTReal& pb) {
+        pt = m_pt; pb = m_pb;
+    }
+
+    void setHBorderWidths(HTReal blw, HTReal brw) {
+        m_blw = blw; m_brw = brw;
+    }
+    void getHBorderWidths(HTReal& blw, HTReal& brw) {
+        blw = m_blw; brw = m_brw;
+    }
+
+    void setVBorderWidths(HTReal btw, HTReal bbw) {
+        m_btw = btw; m_bbw = bbw;
+    }
+    void getVBorderWidths(HTReal& btw, HTReal& bbw) {
+        btw = m_btw; bbw = m_bbw;
+    }
+
 protected:
-    HTReal m_width;
-    HTReal m_margin_left, m_margin_right;
-
-    IntRect m_margin_box;
-    IntRect m_content_box;
-
-    /* left, top, right, bottom */
-    int m_margins[4];
-    int m_borders[4];
-    int m_paddings[4];
+    HTReal m_l, m_t, m_r, m_b;
+    HTReal m_ml, m_mt, m_mr, m_mb;
+    HTReal m_pl, m_pt, m_pr, m_pb;
+    HTReal m_blw, m_btw, m_brw, m_bbw;
 };
 
 // Block box

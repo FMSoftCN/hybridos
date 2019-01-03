@@ -32,6 +32,8 @@
 
 namespace hfcl {
 
+#define NR_PID_INTERNAL_USE     2
+
 class CssComputed : public Css {
 public:
     CssComputed();
@@ -42,8 +44,8 @@ public:
     void reset();
     bool makeAbsolute(const View& view);
     bool validate();
-    CssBox* calcWidthsMargins(const View& view, const RealRect& ctnBlock,
-            bool ltr = true);
+    void calcBox(const View& view, const RealRect& ctnBlock, bool ltr,
+        const CssBox* prevBox, CssBox* currBox);
 
     /* overloaded virtual functions */
     virtual bool getProperty(CssPropertyIds pid, Uint32 *value,
@@ -52,8 +54,14 @@ public:
             HTPVData data);
 
 private:
-    Uint32 m_values[MAX_CSS_PID];
-    HTPVData m_data[MAX_CSS_PID];
+    enum {
+        PID_INTERNAL_WIDTH = MAX_CSS_PID,
+        PID_INTERNAL_HEIGHT,
+        MAX_CSS_PID_COMPUTED,
+    };
+
+    Uint32 m_values[MAX_CSS_PID_COMPUTED];
+    HTPVData m_data[MAX_CSS_PID_COMPUTED];
 
     bool convertArray(int pid, int t);
     bool convertArray(int pid, int t, const RealRect& viewport);
@@ -68,6 +76,10 @@ private:
 
     bool getHSize(const RealRect& ctnBlock, int pid, HTReal& s);
     bool getVSize(const RealRect& ctnBlock, int pid, HTReal& s);
+    bool getMinWidth(const RealRect& ctnBlock, HTReal& minw);
+    bool getMaxWidth(const RealRect& ctnBlock, HTReal& maxw);
+    bool getMinHeight(const RealRect& ctnBlock, HTReal& minh);
+    bool getMaxHeight(const RealRect& ctnBlock, HTReal& maxh);
 
     void autoHMarginsAsZero(const RealRect& ctnBlock,
             HTReal& ml, HTReal& mr);
@@ -76,13 +88,19 @@ private:
         HTReal* pl, HTReal* pt, HTReal* pr, HTReal* pb);
     void calcWidthForIR(const View& view, const RealRect& ctnBlock,
         HTReal& w);
-    void calcWidthForBlock(const RealRect& ctnBlock,
-        HTReal& w, HTReal& ml, HTReal& mr, bool calced_w, bool ltr);
+    void calcWidthForBlock(const RealRect& ctnBlock, bool ltr,
+        HTReal& w, HTReal& ml, HTReal& mr, bool calced_w);
 
     void calcWidthsForAPNR(const View& view, const RealRect& ctnBlock,
         bool ltr, CssBox* box);
     void calcWidthsForAPR(const View& view, const RealRect& ctnBlock,
         bool ltr, CssBox* box);
+
+    bool resolveWHForRIR(const View& view, const RealRect& ctnBlock,
+        HTReal& w, HTReal& h);
+
+    bool calcWidthsMargins(const View& view, const RealRect& ctnBlock,
+            bool ltr, const CssBox* prevBox, CssBox* currBox);
 
 #if 0
     bool hasComputedMarginLeft(const RealRect& ctnBlock, HTReal& ml);

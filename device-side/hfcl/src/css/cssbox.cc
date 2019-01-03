@@ -23,11 +23,12 @@
 
 namespace hfcl {
 
-CssBox::CssBox()
+CssBox::CssBox() :
+    m_l(0), m_t(0), m_r(0), m_b(0),
+    m_ml(0), m_mt(0), m_mr(0), m_mb(0),
+    m_pl(0), m_pt(0), m_pr(0), m_pb(0),
+    m_blw(0), m_btw(0), m_brw(0), m_bbw(0)
 {
-    memset (&m_margins, 0, sizeof (m_margins));
-    memset (&m_borders, 0, sizeof (m_borders));
-    memset (&m_paddings, 0, sizeof (m_paddings));
 }
 
 CssBoxLineBoxContainer::~CssBoxLineBoxContainer()
