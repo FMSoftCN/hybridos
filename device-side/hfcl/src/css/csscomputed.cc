@@ -1252,14 +1252,8 @@ bool CssComputed::resolveWHForRIR(const View& view, const RealRect& ctnBlock,
     bool valid_minh = getMinHeight(ctnBlock, minh);
     bool valid_maxh = getMaxHeight(ctnBlock, maxh);
 
-    if (valid_maxw)
-        maxw = realmax(minw, maxw);
-    else
-        maxw = HTHUGE_VAL;
-    if (valid_maxh)
-        maxh = realmax(minh, maxh);
-    else
-        maxh = HTHUGE_VAL;
+    maxw = realmax(minw, maxw);
+    maxh = realmax(minh, maxh);
 
     if (valid_maxw && w > maxw && valid_maxh && h > maxh) {
         if ((maxw/w) <= (maxh/h)) {
