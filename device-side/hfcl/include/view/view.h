@@ -201,6 +201,8 @@ public:
     virtual bool getIntrinsicWidth(HTReal* v) const { return false; }
     virtual bool getIntrinsicHeight(HTReal* v) const { return false; }
     virtual bool getIntrinsicRatio(HTReal* v) const { return false; }
+    virtual bool getShrinkToFitWhidth(HTReal* preferred,
+            HTReal* minimum) const { return false; }
 
     enum {
         VN_GOTFOCUS,

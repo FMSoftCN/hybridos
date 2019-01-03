@@ -41,7 +41,9 @@ public:
     /* public methods */
     void reset();
     bool makeAbsolute(const View& view);
-    CssBox* calcWidthsMargins(const View& view, const RealRect& ctnBlock);
+    bool validate();
+    CssBox* calcWidthsMargins(const View& view, const RealRect& ctnBlock,
+            bool ltr = true);
 
     /* overloaded virtual functions */
     virtual bool getProperty(CssPropertyIds pid, Uint32 *value,
@@ -61,18 +63,34 @@ private:
     void validateBorderWidth(int pid);
     void validateNotNegative(int pid);
 
-    void autoMarginsForInline(const RealRect& ctnBlock,
+    bool isAbsolutelyPositioned();
+    bool isFloating();
+
+    bool getHSize(const RealRect& ctnBlock, int pid, HTReal& s);
+    bool getVSize(const RealRect& ctnBlock, int pid, HTReal& s);
+
+    void autoHMarginsAsZero(const RealRect& ctnBlock,
             HTReal& ml, HTReal& mr);
+
+    void calcPaddings(const RealRect& ctnBlock,
+        HTReal* pl, HTReal* pt, HTReal* pr, HTReal* pb);
+    void calcWidthForIR(const View& view, const RealRect& ctnBlock,
+        HTReal& w);
+    void calcWidthForBlock(const RealRect& ctnBlock,
+        HTReal& w, HTReal& ml, HTReal& mr, bool calced_w, bool ltr);
+
+    void calcWidthsForAPNR(const View& view, const RealRect& ctnBlock,
+        bool ltr, CssBox* box);
+    void calcWidthsForAPR(const View& view, const RealRect& ctnBlock,
+        bool ltr, CssBox* box);
+
+#if 0
     bool hasComputedMarginLeft(const RealRect& ctnBlock, HTReal& ml);
     bool hasComputedMarginRight(const RealRect& ctnBlock, HTReal& mr);
     bool hasComputedWidth(const RealRect& ctnBlock, HTReal& w);
     bool hasComputedHeight(const RealRect& ctnBlock, HTReal& h);
-    void calcPaddings(const RealRect& ctnBlock,
-        HTReal* pl, HTReal* pt, HTReal* pr, HTReal* pb);
-    void calcWidthForIR(const View& view, const RealRect& ctnBlock,
-        HTReal& w, HTReal& ml, HTReal& mr);
-    void calcWidthForBNR(const RealRect& ctnBlock,
-        HTReal& w, HTReal& ml, HTReal& mr, bool br = false);
+#endif
+
 };
 
 } // namespace hfcl
