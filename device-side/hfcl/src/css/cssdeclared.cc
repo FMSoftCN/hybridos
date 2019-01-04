@@ -23,6 +23,112 @@
 
 namespace hfcl {
 
+inline bool check_keywords(int kw, int* valid_keywords)
+{
+    while (*valid_keywords != PVK_UNDEFINED) {
+        if (kw == *valid_keywords)
+            return true;
+
+        valid_keywords++;
+    }
+
+    return false;
+}
+
+inline bool check_length(Uint32 value, HTPVData data)
+{
+    return (value >= PV_LENGTH_Q && value <= PV_LENGTH_VW);
+}
+
+inline bool check_percentage(Uint32 value, HTPVData data)
+{
+    return (value == PV_PERCENTAGE);
+}
+
+inline bool check_color(Uint32 value, HTPVData data)
+{
+    if (value >= PV_COLOR_ALICEBLUE && value <= PV_COLOR_YELLOWGREEN)
+        return true;
+    if (value == PV_CURRENT_COLOR || value == PV_TRANSPARENT
+            || value == PV_RGB || value == PV_RGBA
+            || value == PV_HSL || value == PV_HSLA)
+        return true;
+    return false;
+}
+
+inline bool check_url(Uint32 value, HTPVData data)
+{
+    return (value == PV_URL);
+}
+
+inline bool check_sysid(Uint32 value, HTPVData data)
+{
+    return (value == PV_SYSID);
+}
+
+inline bool check_string(Uint32 value, HTPVData data)
+{
+    if (value == PV_STRING)
+        return true;
+    return false;
+}
+
+inline bool check_number(Uint32 value, HTPVData data)
+{
+    return (value == PV_NUMBER);
+}
+
+inline bool check_integer(Uint32 value, HTPVData data)
+{
+    return (value == PV_INTEGER);
+}
+
+inline bool check_alphavalue(Uint32 value, HTPVData data)
+{
+    return (value == PV_ALPHAVALUE && data.r >= 0 && data.r <= 1.0);
+}
+
+inline bool check_border_style(Uint32 value, HTPVData data)
+{
+    return (value >= PV_BS_DASHED && value <= PV_BS_SOLID);
+}
+
+inline bool check_border_width(Uint32 value, HTPVData data)
+{
+    if (value >= PV_BW_MEDIUM && value <= PV_BW_THIN)
+        return true;
+    if (value >= PV_LENGTH_Q && value <= PV_LENGTH_VW && data.r >= 0)
+        return true;
+    return false;
+}
+
+inline bool check_array_length(Uint32 value, HTPVData data)
+{
+    return (value >= PV_ARRAY_LENGTH_Q && value <= PV_ARRAY_LENGTH_VW);
+}
+
+inline bool check_array_percentage(Uint32 value, HTPVData data)
+{
+    return (value == PV_ARRAY_PERCENTAGE);
+}
+
+inline bool check_array_string(Uint32 value, HTPVData data)
+{
+    return (value == PV_ARRAY_STRING);
+}
+
+inline bool check_shape(Uint32 value, HTPVData data)
+{
+    return (value == PV_SHAPE);
+}
+
+inline bool check_counter(Uint32 value, HTPVData data)
+{
+    return (value == PV_COUNTER);
+}
+
+#include "pvcheckers.inc"
+
 CssDeclared::~CssDeclared()
 {
     CssPropertyValueMap::iterator it;
@@ -167,19 +273,20 @@ bool CssDeclared::setProperty(CssPropertyIds pid, Uint32 value,
     CssPropertyValue* pv;
     CssPropertyValueMap::iterator it = m_map.find(pid);
 
-    /* TODO: check validity of the value */
+    /* check validity of the value */
+    if (!_pv_checkers[pid](value, data))
+        return false;
 
     if (it == m_map.end()) {
         pv = HFCL_NEW_EX(CssPropertyValue, (value, data));
         m_map [pid] = pv;
-        return true;
     }
     else {
         CssPropertyValue* pv = (CssPropertyValue*)it->second;
         pv->setValue(value, data);
     }
 
-    return false;
+    return true;
 }
 
 } // namespace hfcl
