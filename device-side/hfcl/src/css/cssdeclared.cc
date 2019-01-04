@@ -23,7 +23,7 @@
 
 namespace hfcl {
 
-inline bool check_keywords(int kw, int* valid_keywords)
+inline bool check_keyword(int kw, int* valid_keywords)
 {
     while (*valid_keywords != PVK_UNDEFINED) {
         if (kw == *valid_keywords)
@@ -100,6 +100,12 @@ inline bool check_border_width(Uint32 value, HTPVData data)
     if (value >= PV_LENGTH_Q && value <= PV_LENGTH_VW && data.r >= 0)
         return true;
     return false;
+}
+
+inline bool check_width_height(Uint32 value, HTPVData data)
+{
+    return (value >= PV_LENGTH_Q && value <= PV_LENGTH_VW
+            && value == PV_PERCENTAGE && data.r >= 0);
 }
 
 inline bool check_array_length(Uint32 value, HTPVData data)

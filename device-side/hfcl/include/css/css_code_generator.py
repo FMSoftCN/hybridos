@@ -658,7 +658,7 @@ def write_pv_checkers(fout, property_info):
         fout.write("    };\n")
         fout.write("\n")
         fout.write("    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {\n")
-        fout.write("        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))\n")
+        fout.write("        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))\n")
         fout.write("            return true;\n")
         fout.write("    }\n")
         fout.write("\n")

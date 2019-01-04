@@ -5,6 +5,7 @@
 
 <border-style>: bs-none bs-hidden bs-dotted bs-dashed bs-solid bs-double bs-groove bs-ridge bs-inset bs-outset
 <border-width>: bw-thin bw-medium bw-thick <length>
+<width-height>: <length> <percentage>
 
 <angle>: <%-deg> <%-grad> <%-rad> <%-turn>
 <time>: <%-s> <%-ms>
@@ -238,7 +239,7 @@ font
     inherited: yes
 
 height
-    values: <length> <percentage> auto inherit
+    values: <width-height> auto inherit
     initial: auto
     inherited: no
 
@@ -294,22 +295,22 @@ margin-bottom
     inherited: no
 
 max-height
-    values: <length> <percentage> none inherit
+    values: <width-height> none inherit
     initial: none
     inherited: no
 
 max-width
-    values: <length> <percentage> none inherit
+    values: <width-height> none inherit
     initial: none
     inherited: no
 
 min-height
-    values: <length> <percentage> inherit
+    values: <width-height> inherit
     initial: <length-px>=0
     inherited: no
 
 min-width
-    values: <length> <percentage> inherit
+    values: <width-height> inherit
     initial: <length-px>=0
     inherited: no
 
@@ -456,7 +457,7 @@ widows
     inherited: yes
 
 width
-    values: <length> <percentage> auto inherit
+    values: <width-height> auto inherit
     initial: auto
     inherited: no
 

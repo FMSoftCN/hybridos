@@ -33,7 +33,7 @@ static bool pvc_background_attachment(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -49,7 +49,7 @@ static bool pvc_background_color(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -67,7 +67,7 @@ static bool pvc_background_image(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -88,7 +88,7 @@ static bool pvc_background_position_x(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -109,7 +109,7 @@ static bool pvc_background_position_y(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -131,7 +131,7 @@ static bool pvc_background_repeat(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -147,7 +147,7 @@ static bool pvc_border_bottom_color(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -163,7 +163,7 @@ static bool pvc_border_bottom_left_radius(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -182,7 +182,7 @@ static bool pvc_border_bottom_right_radius(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -202,7 +202,7 @@ static bool pvc_border_bottom_style(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -219,7 +219,7 @@ static bool pvc_border_bottom_width(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -238,7 +238,7 @@ static bool pvc_border_collapse(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -254,7 +254,7 @@ static bool pvc_border_left_color(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -271,7 +271,7 @@ static bool pvc_border_left_style(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -288,7 +288,7 @@ static bool pvc_border_left_width(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -304,7 +304,7 @@ static bool pvc_border_right_color(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -321,7 +321,7 @@ static bool pvc_border_right_style(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -338,7 +338,7 @@ static bool pvc_border_right_width(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -355,7 +355,7 @@ static bool pvc_border_spacing(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -372,7 +372,7 @@ static bool pvc_border_top_color(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -388,7 +388,7 @@ static bool pvc_border_top_left_radius(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -407,7 +407,7 @@ static bool pvc_border_top_right_radius(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -427,7 +427,7 @@ static bool pvc_border_top_style(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -444,7 +444,7 @@ static bool pvc_border_top_width(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -462,7 +462,7 @@ static bool pvc_bottom(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -482,7 +482,7 @@ static bool pvc_caption_side(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -502,7 +502,7 @@ static bool pvc_clear(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -519,7 +519,7 @@ static bool pvc_clip(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -536,7 +536,7 @@ static bool pvc_color(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -559,7 +559,7 @@ static bool pvc_content(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -579,7 +579,7 @@ static bool pvc_counter_increment(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -597,7 +597,7 @@ static bool pvc_counter_reset(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -631,7 +631,7 @@ static bool pvc_cursor(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -650,7 +650,7 @@ static bool pvc_direction(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -681,7 +681,7 @@ static bool pvc_display(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -699,7 +699,7 @@ static bool pvc_empty_cells(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -718,7 +718,7 @@ static bool pvc_float(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -735,7 +735,7 @@ static bool pvc_font(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -758,7 +758,7 @@ static bool pvc_font_family(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -784,7 +784,7 @@ static bool pvc_font_size(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -805,7 +805,7 @@ static bool pvc_font_style(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -823,7 +823,7 @@ static bool pvc_font_variant(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -852,7 +852,7 @@ static bool pvc_font_weight(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -869,13 +869,12 @@ static bool pvc_height(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
     return false
-        || check_length(value, data)
-        || check_percentage(value, data)
+        || check_width_height(value, data)
     ;
 }
 
@@ -888,7 +887,7 @@ static bool pvc_left(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -907,7 +906,7 @@ static bool pvc_letter_spacing(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -925,7 +924,7 @@ static bool pvc_line_height(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -945,7 +944,7 @@ static bool pvc_list_style_image(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -965,7 +964,7 @@ static bool pvc_list_style_position(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -996,7 +995,7 @@ static bool pvc_list_style_type(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1013,7 +1012,7 @@ static bool pvc_margin_bottom(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1032,7 +1031,7 @@ static bool pvc_margin_left(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1051,7 +1050,7 @@ static bool pvc_margin_right(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1070,7 +1069,7 @@ static bool pvc_margin_top(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1089,13 +1088,12 @@ static bool pvc_max_height(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
     return false
-        || check_length(value, data)
-        || check_percentage(value, data)
+        || check_width_height(value, data)
     ;
 }
 
@@ -1108,13 +1106,12 @@ static bool pvc_max_width(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
     return false
-        || check_length(value, data)
-        || check_percentage(value, data)
+        || check_width_height(value, data)
     ;
 }
 
@@ -1126,13 +1123,12 @@ static bool pvc_min_height(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
     return false
-        || check_length(value, data)
-        || check_percentage(value, data)
+        || check_width_height(value, data)
     ;
 }
 
@@ -1144,13 +1140,12 @@ static bool pvc_min_width(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
     return false
-        || check_length(value, data)
-        || check_percentage(value, data)
+        || check_width_height(value, data)
     ;
 }
 
@@ -1162,7 +1157,7 @@ static bool pvc_opacity(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1179,7 +1174,7 @@ static bool pvc_orphans(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1197,7 +1192,7 @@ static bool pvc_outline_color(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1214,7 +1209,7 @@ static bool pvc_outline_style(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1231,7 +1226,7 @@ static bool pvc_outline_width(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1252,7 +1247,7 @@ static bool pvc_overflow(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1268,7 +1263,7 @@ static bool pvc_padding_bottom(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1286,7 +1281,7 @@ static bool pvc_padding_left(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1304,7 +1299,7 @@ static bool pvc_padding_right(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1322,7 +1317,7 @@ static bool pvc_padding_top(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1345,7 +1340,7 @@ static bool pvc_page_break_after(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1366,7 +1361,7 @@ static bool pvc_page_break_before(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1384,7 +1379,7 @@ static bool pvc_page_break_inside(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1404,7 +1399,7 @@ static bool pvc_position(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1421,7 +1416,7 @@ static bool pvc_quotes(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1439,7 +1434,7 @@ static bool pvc_right(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1459,7 +1454,7 @@ static bool pvc_table_layout(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1479,7 +1474,7 @@ static bool pvc_text_align(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1500,7 +1495,7 @@ static bool pvc_text_decoration(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1516,7 +1511,7 @@ static bool pvc_text_indent(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1538,7 +1533,7 @@ static bool pvc_text_transform(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1555,7 +1550,7 @@ static bool pvc_top(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1576,7 +1571,7 @@ static bool pvc_unicode_bidi(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1600,7 +1595,7 @@ static bool pvc_vertical_align(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1621,7 +1616,7 @@ static bool pvc_visibility(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1642,7 +1637,7 @@ static bool pvc_white_space(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1658,7 +1653,7 @@ static bool pvc_widows(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1676,13 +1671,12 @@ static bool pvc_width(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
     return false
-        || check_length(value, data)
-        || check_percentage(value, data)
+        || check_width_height(value, data)
     ;
 }
 
@@ -1695,7 +1689,7 @@ static bool pvc_word_spacing(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
@@ -1713,7 +1707,7 @@ static bool pvc_z_index(Uint32 value, HTPVData data)
     };
 
     if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keywords(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
             return true;
     }
 
