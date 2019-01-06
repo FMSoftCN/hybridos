@@ -31,22 +31,34 @@
 
 namespace hfcl {
 
-class CssBox : public Object {
+class CssBox {
 public:
     CssBox();
     virtual ~CssBox() {};
 
-    void setWidth(HTReal l, HTReal w) {
-        m_l = l;
-        m_r = l + w;
+    void setContentWidth(HTReal w) {
+        m_cw = w;
     }
-    HTReal getWidth() { return m_r - m_l; }
+    HTReal getContentWidth() { return m_cw; }
 
-    void setHeight(HTReal t, HTReal h) {
-        m_t = t;
-        m_b = t + h;
+    void setContentHeight(HTReal h) {
+        m_ch = h;
     }
-    HTReal getHeight() { return m_b - m_t; }
+    HTReal getContentHeight() { return m_ch; }
+
+    void setHPosition(HTReal l, HTReal r) {
+        m_l = l; m_r = r;
+    }
+    void getHPosition(HTReal& l, HTReal& r) {
+        l = m_l; r = m_r;
+    }
+
+    void setVPosition(HTReal t, HTReal b) {
+        m_t = t; m_b = b;
+    }
+    void getVPosition(HTReal& t, HTReal& b) {
+        t = m_t; b = m_b;
+    }
 
     void setHMargins(HTReal ml, HTReal mr) {
         m_ml = ml; m_mr = mr;
@@ -91,77 +103,88 @@ public:
     }
 
 protected:
+    // content width and height
+    HTReal m_cw, m_ch;
+    // position
     HTReal m_l, m_t, m_r, m_b;
+    // margins
     HTReal m_ml, m_mt, m_mr, m_mb;
+    // paddings
     HTReal m_pl, m_pt, m_pr, m_pb;
+    // border widths
     HTReal m_blw, m_btw, m_brw, m_bbw;
 };
 
-// Block box
+// Line box
 //
-// A block box may contain only block-level boxes
-// or contain only inline-level boxes, or it is not a
-// container.
+// Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
+class CssLineBox
+{
+public:
+    CssLineBox() {
+        m_w = m_h = 0;
+        m_first = m_last = NULL;
+    };
+    virtual ~CssLineBox() {};
+
+protected:
+    HTReal m_w, m_h;
+
+private:
+    const View* m_first;
+    const View* m_last;
+};
+
+// The block box acts as a line box container
+// A line box container only contains inline-level boxes
 //
-// HFCL dose not generate anonymous block boxes.
+// Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
+class CssLineBoxContainer : public CssBox
+{
+public:
+    CssLineBoxContainer() {};
+    virtual ~CssLineBoxContainer();
+
+protected:
+
+private:
+    VECTOR(CssLineBox*, CssLineBoxVec);
+    CssLineBoxVec m_lines;
+};
+
+class CssInlineBox
+{
+public:
+    CssInlineBox(const CssLineBox* line, const View* view)
+        : m_w(0), m_h(0), m_line(line), m_view(view) {
+    };
+    virtual ~CssInlineBox() {};
+
+private:
+    HTReal m_w, m_h;
+
+    const CssLineBox* m_line;
+    const View* m_view;
+    // the splitting context of the view
+    const void* m_split_ctxt;
+};
+
+// The block box acts as a block box container
+//
+// A block box container contains only block-level boxes.
 //
 // Ref: https://www.w3.org/TR/CSS22/visuren.html#block-boxes
-class CssBoxBlock : public CssBox
+class CssBlockBoxContainer : public CssBox
 {
 public:
-    CssBoxBlock() {};
-    virtual ~CssBoxBlock() {};
+    CssBlockBoxContainer() {};
+    virtual ~CssBlockBoxContainer();
 
 protected:
 
 private:
-};
-
-// Inline box
-//
-// HFCL dose not generate anonymous inline boxes.
-//
-// Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-boxes
-class CssBoxInline : public CssBox
-{
-public:
-    CssBoxInline() {};
-    virtual ~CssBoxInline() {};
-
-protected:
-
-private:
-};
-
-// Line box
-// The inline boxes in a line box will be referred by the view
-//
-// Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
-class CssBoxLine : public CssBoxBlock
-{
-public:
-    CssBoxLine() {};
-    virtual ~CssBoxLine() {};
-
-protected:
-
-private:
-};
-
-// Block box acts as a line box container
-//
-// Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
-class CssBoxLineBoxContainer : public CssBoxBlock
-{
-public:
-    CssBoxLineBoxContainer() {};
-    virtual ~CssBoxLineBoxContainer();
-
-protected:
-
-private:
-    VECTOR(CssBoxLine*, CssBoxLineVec);
-    CssBoxLineVec m_lines;
+    VECTOR(CssBox*, CssBlockBoxVec);
+    CssBlockBoxVec m_blocks;
 };
 
 } // namespace hfcl

@@ -81,11 +81,13 @@ private:
     bool getMinHeight(const RealRect& ctnBlock, HTReal& minh);
     bool getMaxHeight(const RealRect& ctnBlock, HTReal& maxh);
 
+    void calcPaddings(const RealRect& ctnBlock,
+        HTReal* pl, HTReal* pt, HTReal* pr, HTReal* pb);
+
+    /* methods for widths caculation */
     void autoHMarginsAsZero(const RealRect& ctnBlock,
             HTReal& ml, HTReal& mr);
 
-    void calcPaddings(const RealRect& ctnBlock,
-        HTReal* pl, HTReal* pt, HTReal* pr, HTReal* pb);
     void calcWidthForIR(const View& view, const RealRect& ctnBlock,
         HTReal& w);
     void calcWidthForBlock(const RealRect& ctnBlock, bool ltr,
@@ -100,6 +102,25 @@ private:
         HTReal& w, HTReal& h);
 
     bool calcWidthsMargins(const View& view, const RealRect& ctnBlock,
+            bool ltr, const CssBox* prevBox, CssBox* currBox);
+
+    /* methods for heights caculation */
+    void autoVMarginsAsZero(const RealRect& ctnBlock,
+            HTReal& mt, HTReal& mb);
+
+    void calcHeightForIR(const View& view, const RealRect& ctnBlock,
+        HTReal &w, HTReal& h);
+    void calcHeightsForAPNR(const View& view, const RealRect& ctnBlock,
+        CssBox* box);
+    void calcHeightsForAPR(const View& view, const RealRect& ctnBlock,
+        CssBox* box);
+
+    void calcHeightForBlockVNR(const View& view, const RealRect& ctnBlock,
+            CssBox* currBox);
+
+    void resolveAutoHeights(const View& view, const RealRect& ctnBlock,
+            const CssBox* prevBox, CssBox* currBox);
+    bool calcHeightsMargins(const View& view, const RealRect& ctnBlock,
             bool ltr, const CssBox* prevBox, CssBox* currBox);
 
 #if 0

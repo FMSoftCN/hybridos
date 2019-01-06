@@ -204,6 +204,19 @@ public:
     virtual bool getShrinkToFitWhidth(HTReal* preferred,
             HTReal* minimum) const { return false; }
 
+    virtual HTReal getContentWidth() { return 0; }
+    virtual HTReal getContentHeight() { return 0; }
+
+    // split content for inline formatting
+    // the returned value represents the split piece of the content
+    // and the width will be the content width of the split piece.
+    virtual const void* splitContent(const void* splitCtxt,
+            HTReal& width, HTReal& height) {
+        width = getContentWidth();
+        height = getContentHeight();
+        return NULL;
+    }
+
     enum {
         VN_GOTFOCUS,
         VN_LOSTFOCUS,

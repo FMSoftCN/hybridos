@@ -31,11 +31,20 @@ CssBox::CssBox() :
 {
 }
 
-CssBoxLineBoxContainer::~CssBoxLineBoxContainer()
+CssLineBoxContainer::~CssLineBoxContainer()
 {
-    CssBoxLineVec::iterator it;
+    CssLineBoxVec::iterator it;
     for (it = m_lines.begin(); it != m_lines.end(); ++it) {
-        CssBoxLine* box = *it;
+        CssLineBox* line = *it;
+        HFCL_DELETE(line);
+    }
+}
+
+CssBlockBoxContainer::~CssBlockBoxContainer()
+{
+    CssBlockBoxVec::iterator it;
+    for (it = m_blocks.begin(); it != m_blocks.end(); ++it) {
+        CssBox* box = *it;
         HFCL_DELETE(box);
     }
 }
