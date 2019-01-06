@@ -73,6 +73,39 @@ void CssComputed::reset()
     memcpy(&m_data, initial->m_values, sizeof(m_data));
 }
 
+void CssComputed::inherit(const CssComputed* css)
+{
+    if (css == NULL)
+        return;
+
+    CssInitial* initial = CssInitial::getSingleton();
+    for (int i = 0; i < MAX_CSS_PID; i++) {
+
+        if (IS_CSS_PPT_VALUE_INHERITED(initial->m_values[i])) {
+            if (CSS_PPT_VALUE_TYPE(css->m_values[i])
+                    == PVT_ARRAY_LENGTH_PX &&
+                IS_CSS_PPT_VALUE_ALLOCATED(css->m_values[i])) {
+
+                Uint8 n = initial->m_arraysize[i];
+                HTReal* p = new HTReal[n];
+                memcpy (p, css->m_data[i].p, sizeof(HTReal)*n);
+
+                m_values[i] = css->m_values[i];
+                m_data[i].p = p;
+                // MARK_CSS_PPT_VALUE_ALLOCATED(m_values[i]);
+            }
+            else {
+                m_values[i] = css->m_values[i];
+                m_data[i] = css->m_data[i];
+            }
+        }
+        else {
+            m_values[i] = initial->m_values[i];
+            m_data[i] = initial->m_data[i];
+        }
+    }
+}
+
 void CssComputed::freeArray()
 {
     for (int i = 0; i < MAX_CSS_PID; i++) {

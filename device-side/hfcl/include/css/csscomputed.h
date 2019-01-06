@@ -42,6 +42,7 @@ public:
 
     /* public methods */
     void reset();
+    void inherit(const CssComputed* css);
     bool makeAbsolute(const View& view);
     bool validate();
     void calcBox(const View& view, const RealRect& ctnBlock, bool ltr,

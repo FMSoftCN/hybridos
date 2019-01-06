@@ -21,14 +21,40 @@
 
 #include "css/cssbox.h"
 
+#include "css/csscomputed.h"
+
 namespace hfcl {
 
-CssBox::CssBox() :
+CssBox::CssBox(CssComputed* css, bool anonymous) :
     m_l(0), m_t(0), m_r(0), m_b(0),
     m_ml(0), m_mt(0), m_mr(0), m_mb(0),
     m_pl(0), m_pt(0), m_pr(0), m_pb(0),
     m_blw(0), m_btw(0), m_brw(0), m_bbw(0)
 {
+    if (anonymous) {
+        m_css = new CssComputed();
+        if (css)
+            m_css->inherit(css);
+    }
+    else if (m_css) {
+        m_css->ref();
+    }
+}
+
+CssBox::~CssBox()
+{
+    if (m_css) {
+        m_css->unref();
+    }
+}
+
+CssLineBox::~CssLineBox()
+{
+    CssInlineBoxVec::iterator it;
+    for (it = m_inlines.begin(); it != m_inlines.end(); ++it) {
+        CssInlineBox* inline_box = *it;
+        HFCL_DELETE(inline_box);
+    }
 }
 
 CssLineBoxContainer::~CssLineBoxContainer()

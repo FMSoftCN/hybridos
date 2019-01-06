@@ -31,10 +31,13 @@
 
 namespace hfcl {
 
+// Genral block box
+// Either for anonymous block-level boxes or normal block-level
+// or inline-block boxes
 class CssBox {
 public:
-    CssBox();
-    virtual ~CssBox() {};
+    CssBox(CssComputed* css = NULL, bool anonymous = false);
+    virtual ~CssBox();
 
     void setContentWidth(HTReal w) {
         m_cw = w;
@@ -102,6 +105,8 @@ public:
         btw = m_btw; bbw = m_bbw;
     }
 
+    CssComputed* getCss() { return m_css; }
+
 protected:
     // content width and height
     HTReal m_cw, m_ch;
@@ -113,36 +118,48 @@ protected:
     HTReal m_pl, m_pt, m_pr, m_pb;
     // border widths
     HTReal m_blw, m_btw, m_brw, m_bbw;
+
+    CssComputed* m_css;
+};
+
+// Inline box either for anonymous inline-level boxes or normal inline-level boxes
+class CssInlineBox : public CssBox {
+public:
+    CssInlineBox(const View* view, CssComputed* css, bool anonymous = false)
+        : CssBox(css, anonymous), m_view(view), m_split_ctxt(0) {
+    };
+    virtual ~CssInlineBox() {};
+
+private:
+    const View* m_view;
+    // the splitting context of the view
+    const void* m_split_ctxt;
 };
 
 // Line box
 //
 // Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
-class CssLineBox
-{
+class CssLineBox {
 public:
-    CssLineBox() {
-        m_w = m_h = 0;
-        m_first = m_last = NULL;
-    };
-    virtual ~CssLineBox() {};
+    CssLineBox() : m_w(0), m_h(0) { }
+    virtual ~CssLineBox();
 
 protected:
     HTReal m_w, m_h;
 
 private:
-    const View* m_first;
-    const View* m_last;
+    VECTOR(CssInlineBox*, CssInlineBoxVec);
+    CssInlineBoxVec m_inlines;
 };
 
 // The block box acts as a line box container
 // A line box container only contains inline-level boxes
 //
 // Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
-class CssLineBoxContainer : public CssBox
-{
+class CssLineBoxContainer : public CssBox {
 public:
-    CssLineBoxContainer() {};
+    CssLineBoxContainer(CssComputed* css)
+        : CssBox(css) {};
     virtual ~CssLineBoxContainer();
 
 protected:
@@ -152,32 +169,15 @@ private:
     CssLineBoxVec m_lines;
 };
 
-class CssInlineBox
-{
-public:
-    CssInlineBox(const CssLineBox* line, const View* view)
-        : m_w(0), m_h(0), m_line(line), m_view(view) {
-    };
-    virtual ~CssInlineBox() {};
-
-private:
-    HTReal m_w, m_h;
-
-    const CssLineBox* m_line;
-    const View* m_view;
-    // the splitting context of the view
-    const void* m_split_ctxt;
-};
-
 // The block box acts as a block box container
 //
 // A block box container contains only block-level boxes.
 //
 // Ref: https://www.w3.org/TR/CSS22/visuren.html#block-boxes
-class CssBlockBoxContainer : public CssBox
-{
+class CssBlockBoxContainer : public CssBox {
 public:
-    CssBlockBoxContainer() {};
+    CssBlockBoxContainer(CssComputed* css)
+        : CssBox(css) {};
     virtual ~CssBlockBoxContainer();
 
 protected:
