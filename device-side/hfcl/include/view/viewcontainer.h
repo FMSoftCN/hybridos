@@ -25,6 +25,7 @@
 
 #include "../view/view.h"
 #include "../css/cssselector.h"
+#include "../css/cssbox.h"
 
 namespace hfcl {
 
@@ -112,11 +113,12 @@ protected:
     };
 
     /* overloaded protected virtual functions */
-
-    // compute CSS properties
     virtual void computeCss();
-    // calculate layout
-    virtual void calcLayout(const RealRect& ctnBlock);
+    virtual void makeCssBox();
+    virtual void layOut(const CssBox* ctnBlock);
+
+private:
+    CssLineBoxContainer* createAnonymousBlock(const View* child);
 };
 
 } // namespace hfcl

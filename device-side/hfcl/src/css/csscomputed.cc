@@ -54,7 +54,9 @@ inline HTReal realmin(HTReal x, HTReal y)
 CssComputed::CssComputed()
 {
     CssInitial* initial = CssInitial::getSingleton();
-    memcpy(&m_values, initial->m_values, sizeof(m_values));
+    for (int i = 0; i < MAX_CSS_PID; i++) {
+        m_values[i] = CSS_PPT_VALUE_NOFLAGS(initial->m_values[i]);
+    }
     memcpy(&m_data, initial->m_values, sizeof(m_data));
 }
 
@@ -69,7 +71,9 @@ void CssComputed::reset()
     freeArray();
 
     CssInitial* initial = CssInitial::getSingleton();
-    memcpy(&m_values, initial->m_values, sizeof(m_values));
+    for (int i = 0; i < MAX_CSS_PID; i++) {
+        m_values[i] = CSS_PPT_VALUE_NOFLAGS(initial->m_values[i]);
+    }
     memcpy(&m_data, initial->m_values, sizeof(m_data));
 }
 
@@ -433,7 +437,7 @@ bool CssComputed::makeAbsolute(const View& view)
     return true;
 }
 
-bool CssComputed::validate()
+bool CssComputed::validate(const View& view)
 {
     /* make sure border widths are not negative */
     validateBorderWidth(PID_BORDER_LEFT_WIDTH);
@@ -452,18 +456,23 @@ bool CssComputed::validate()
      * NOTE: HFCL only supports the following display values:
      *  inline block inline-block
      */
-    if (m_values[PID_POSITION] == PV_FIXED ||
-            m_values[PID_POSITION] == PV_ABSOLUTE) {
-        m_values[PID_FLOAT] = PV_NONE;
-        if (m_values[PID_DISPLAY] == PV_INLINE ||
-                m_values[PID_DISPLAY] == PV_INLINE_BLOCK) {
-            m_values[PID_DISPLAY] = PV_BLOCK;
-        }
+    if (view.isRoot()) {
+        m_values[PID_DISPLAY] = PV_BLOCK;
     }
-    else if (m_values[PID_FLOAT] != PV_NONE) {
-        if (m_values[PID_DISPLAY] == PV_INLINE ||
-                m_values[PID_DISPLAY] == PV_INLINE_BLOCK) {
-            m_values[PID_DISPLAY] = PV_BLOCK;
+    else {
+        if (m_values[PID_POSITION] == PV_FIXED ||
+                m_values[PID_POSITION] == PV_ABSOLUTE) {
+            m_values[PID_FLOAT] = PV_NONE;
+            if (m_values[PID_DISPLAY] == PV_INLINE ||
+                    m_values[PID_DISPLAY] == PV_INLINE_BLOCK) {
+                m_values[PID_DISPLAY] = PV_BLOCK;
+            }
+        }
+        else if (m_values[PID_FLOAT] != PV_NONE) {
+            if (m_values[PID_DISPLAY] == PV_INLINE ||
+                    m_values[PID_DISPLAY] == PV_INLINE_BLOCK) {
+                m_values[PID_DISPLAY] = PV_BLOCK;
+            }
         }
     }
 
@@ -471,10 +480,10 @@ bool CssComputed::validate()
 }
 
 bool CssComputed::getProperty(CssPropertyIds pid, Uint32 *value,
-        HTPVData *data)
+        HTPVData *data) const
 {
     if (value) {
-        *value = m_values[pid];
+        *value = CSS_PPT_VALUE_NOFLAGS(m_values[pid]);
     }
     if (data) {
         *data = m_data[pid];

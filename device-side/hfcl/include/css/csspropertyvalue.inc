@@ -50,8 +50,6 @@ typedef enum _CssPropertyIds {
     PID_BORDER_BOTTOM_STYLE,
     // border-bottom-width
     PID_BORDER_BOTTOM_WIDTH,
-    // border-collapse
-    PID_BORDER_COLLAPSE,
     // border-left-color
     PID_BORDER_LEFT_COLOR,
     // border-left-style
@@ -64,8 +62,6 @@ typedef enum _CssPropertyIds {
     PID_BORDER_RIGHT_STYLE,
     // border-right-width
     PID_BORDER_RIGHT_WIDTH,
-    // border-spacing
-    PID_BORDER_SPACING,
     // border-top-color
     PID_BORDER_TOP_COLOR,
     // border-top-left-radius
@@ -78,8 +74,6 @@ typedef enum _CssPropertyIds {
     PID_BORDER_TOP_WIDTH,
     // bottom
     PID_BOTTOM,
-    // caption-side
-    PID_CAPTION_SIDE,
     // clear
     PID_CLEAR,
     // clip
@@ -98,8 +92,6 @@ typedef enum _CssPropertyIds {
     PID_DIRECTION,
     // display
     PID_DISPLAY,
-    // empty-cells
-    PID_EMPTY_CELLS,
     // float
     PID_FLOAT,
     // font
@@ -176,8 +168,6 @@ typedef enum _CssPropertyIds {
     PID_QUOTES,
     // right
     PID_RIGHT,
-    // table-layout
-    PID_TABLE_LAYOUT,
     // text-align
     PID_TEXT_ALIGN,
     // text-decoration
@@ -463,11 +453,9 @@ typedef enum _CssPropertyValueKeywords {
     PVK_GEORGIAN,
     PVK_HELP,
     PVK_HIDDEN,
-    PVK_HIDE,
     PVK_INHERIT,
     PVK_INLINE,
     PVK_INLINE_BLOCK,
-    PVK_INLINE_TABLE,
     PVK_INSIDE,
     PVK_INVERT,
     PVK_ITALIC,
@@ -516,9 +504,7 @@ typedef enum _CssPropertyValueKeywords {
     PVK_SANS_SERIF,
     PVK_SCROLL,
     PVK_SE_RESIZE,
-    PVK_SEPARATE,
     PVK_SERIF,
-    PVK_SHOW,
     PVK_SMALL,
     PVK_SMALL_CAPS,
     PVK_SMALLER,
@@ -527,15 +513,6 @@ typedef enum _CssPropertyValueKeywords {
     PVK_SUB,
     PVK_SUPER,
     PVK_SW_RESIZE,
-    PVK_TABLE,
-    PVK_TABLE_CAPTION,
-    PVK_TABLE_CELL,
-    PVK_TABLE_COLUMN,
-    PVK_TABLE_COLUMN_GROUP,
-    PVK_TABLE_FOOTER_GROUP,
-    PVK_TABLE_HEADER_GROUP,
-    PVK_TABLE_ROW,
-    PVK_TABLE_ROW_GROUP,
     PVK_TEXT,
     PVK_TEXT_BOTTOM,
     PVK_TEXT_TOP,
@@ -1248,13 +1225,6 @@ typedef enum _CssPropertyValueKeywords {
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BW_THIN)
 // PV_INHERIT has been defined
 
-// Values for property border-collapse
-#define PV_COLLAPSE \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_COLLAPSE)
-// PV_INHERIT has been defined
-#define PV_SEPARATE \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_SEPARATE)
-
 // Values for property border-left-color
 // PV_HSL has been defined
 // PV_HSLA has been defined
@@ -1617,24 +1587,6 @@ typedef enum _CssPropertyValueKeywords {
 // PV_BW_THIN has been defined
 // PV_INHERIT has been defined
 
-// Values for property border-spacing
-// PV_LENGTH_Q has been defined
-// PV_LENGTH_CH has been defined
-// PV_LENGTH_CM has been defined
-// PV_LENGTH_EM has been defined
-// PV_LENGTH_EX has been defined
-// PV_LENGTH_IN has been defined
-// PV_LENGTH_MM has been defined
-// PV_LENGTH_PC has been defined
-// PV_LENGTH_PT has been defined
-// PV_LENGTH_PX has been defined
-// PV_LENGTH_REM has been defined
-// PV_LENGTH_VH has been defined
-// PV_LENGTH_VMAX has been defined
-// PV_LENGTH_VMIN has been defined
-// PV_LENGTH_VW has been defined
-// PV_INHERIT has been defined
-
 // Values for property border-top-color
 // PV_HSL has been defined
 // PV_HSLA has been defined
@@ -1914,11 +1866,6 @@ typedef enum _CssPropertyValueKeywords {
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)
 // PV_INHERIT has been defined
 
-// Values for property caption-side
-// PV_BOTTOM has been defined
-// PV_INHERIT has been defined
-// PV_TOP has been defined
-
 // Values for property clear
 #define PV_BOTH \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BOTH)
@@ -2170,36 +2117,9 @@ typedef enum _CssPropertyValueKeywords {
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_INLINE)
 #define PV_INLINE_BLOCK \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_INLINE_BLOCK)
-#define PV_INLINE_TABLE \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_INLINE_TABLE)
 #define PV_LIST_ITEM \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_LIST_ITEM)
 // PV_NONE has been defined
-#define PV_TABLE \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_TABLE)
-#define PV_TABLE_CAPTION \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_TABLE_CAPTION)
-#define PV_TABLE_CELL \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_TABLE_CELL)
-#define PV_TABLE_COLUMN \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_TABLE_COLUMN)
-#define PV_TABLE_COLUMN_GROUP \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_TABLE_COLUMN_GROUP)
-#define PV_TABLE_FOOTER_GROUP \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_TABLE_FOOTER_GROUP)
-#define PV_TABLE_HEADER_GROUP \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_TABLE_HEADER_GROUP)
-#define PV_TABLE_ROW \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_TABLE_ROW)
-#define PV_TABLE_ROW_GROUP \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_TABLE_ROW_GROUP)
-
-// Values for property empty-cells
-#define PV_HIDE \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_HIDE)
-// PV_INHERIT has been defined
-#define PV_SHOW \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_SHOW)
 
 // Values for property float
 // PV_INHERIT has been defined
@@ -2936,11 +2856,6 @@ typedef enum _CssPropertyValueKeywords {
 // PV_AUTO has been defined
 // PV_INHERIT has been defined
 
-// Values for property table-layout
-// PV_AUTO has been defined
-// PV_FIXED has been defined
-// PV_INHERIT has been defined
-
 // Values for property text-align
 // PV_CENTER has been defined
 // PV_INHERIT has been defined
@@ -3052,7 +2967,8 @@ typedef enum _CssPropertyValueKeywords {
 // PV_TOP has been defined
 
 // Values for property visibility
-// PV_COLLAPSE has been defined
+#define PV_COLLAPSE \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_COLLAPSE)
 // PV_HIDDEN has been defined
 // PV_INHERIT has been defined
 // PV_VISIBLE has been defined

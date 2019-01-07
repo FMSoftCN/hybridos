@@ -29,6 +29,7 @@
 #include <string>
 
 #include "css/csscomputed.h"
+#include "css/cssbox.h"
 #include "view/viewcontainer.h"
 #include "view/rootview.h"
 
@@ -64,6 +65,7 @@ View::View(const char* cssCls, const char* name, int id)
     , m_prev(0)
     , m_next(0)
     , m_css_computed(0)
+    , m_cssbox_principal(0)
 {
     add_spaces(m_cssCls);
 }
@@ -73,6 +75,8 @@ View::~View()
     m_cssd_user.unref();
     if (m_css_computed)
         delete m_css_computed;
+    if (m_cssbox_principal)
+        delete m_cssbox_principal;
 }
 
 bool View::attach(ViewContainer* parent)
@@ -682,10 +686,37 @@ void View::computeCss()
 
     // make length/URI and others to be absolute here
     m_css_computed->makeAbsolute(*this);
+    m_css_computed->validate(*this);
 }
 
-void View::calcLayout(const RealRect& cntBlock)
+void View::layOut(const CssBox* ctnBlock)
 {
+}
+
+void View::makeCssBox()
+{
+    Uint32 pv;
+    m_css_computed->getProperty(PID_DISPLAY, &pv, NULL);
+
+    if (!isReplaced() && (pv == PV_BLOCK || pv == PV_LIST_ITEM ||
+            pv == PV_INLINE_BLOCK)) {
+        // inline box container
+        m_cssbox_principal
+            = new CssLineBoxContainer(m_css_computed, this, this);
+    }
+    else if (!isReplaced() && pv == PV_INLINE) {
+        // inline box container
+        m_cssbox_principal
+            = new CssLineBoxContainer(m_css_computed, this, this);
+    }
+    else if (isReplaced() && (pv == PV_INLINE || pv == PV_INLINE_BLOCK)) {
+        // atomic inline-level box
+        m_cssbox_principal = new CssBox(m_css_computed);
+    }
+    else {
+        // block box
+        m_cssbox_principal = new CssBox(m_css_computed);
+    }
 }
 
 void View::onContainingBlockChanged()

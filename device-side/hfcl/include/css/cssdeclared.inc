@@ -120,11 +120,6 @@
         return Css::setProperty (PID_BORDER_BOTTOM_WIDTH, value, data);
     }
 
-    // Operators for property border-collapse
-    bool setBorderCollapse(Uint32 value) {
-        return Css::setProperty(PID_BORDER_COLLAPSE, value);
-    }
-
     // Operators for property border-left-color
     bool setBorderLeftColor(Uint32 value) {
         return Css::setProperty(PID_BORDER_LEFT_COLOR, value);
@@ -168,14 +163,6 @@
     }
     bool setBorderRightWidth(Uint32 value, HTReal data) {
         return Css::setProperty (PID_BORDER_RIGHT_WIDTH, value, data);
-    }
-
-    // Operators for property border-spacing
-    bool setBorderSpacing(Uint32 value) {
-        return Css::setProperty(PID_BORDER_SPACING, value);
-    }
-    bool setBorderSpacing(Uint32 value, HTReal data) {
-        return Css::setProperty (PID_BORDER_SPACING, value, data);
     }
 
     // Operators for property border-top-color
@@ -230,11 +217,6 @@
     }
     bool setBottom(Uint32 value, HTReal data) {
         return Css::setProperty (PID_BOTTOM, value, data);
-    }
-
-    // Operators for property caption-side
-    bool setCaptionSide(Uint32 value) {
-        return Css::setProperty(PID_CAPTION_SIDE, value);
     }
 
     // Operators for property clear
@@ -301,11 +283,6 @@
     // Operators for property display
     bool setDisplay(Uint32 value) {
         return Css::setProperty(PID_DISPLAY, value);
-    }
-
-    // Operators for property empty-cells
-    bool setEmptyCells(Uint32 value) {
-        return Css::setProperty(PID_EMPTY_CELLS, value);
     }
 
     // Operators for property float
@@ -583,11 +560,6 @@
     }
     bool setRight(Uint32 value, HTReal data) {
         return Css::setProperty (PID_RIGHT, value, data);
-    }
-
-    // Operators for property table-layout
-    bool setTableLayout(Uint32 value) {
-        return Css::setProperty(PID_TABLE_LAYOUT, value);
     }
 
     // Operators for property text-align

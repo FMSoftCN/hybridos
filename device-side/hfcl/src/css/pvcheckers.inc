@@ -228,24 +228,6 @@ static bool pvc_border_bottom_width(Uint32 value, HTPVData data)
     ;
 }
 
-static bool pvc_border_collapse(Uint32 value, HTPVData data)
-{
-    static int valid_keywords[] = {
-        PVK_COLLAPSE,
-        PVK_SEPARATE,
-        PVK_INHERIT,
-        PVK_UNDEFINED
-    };
-
-    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
-            return true;
-    }
-
-    return false
-    ;
-}
-
 static bool pvc_border_left_color(Uint32 value, HTPVData data)
 {
     static int valid_keywords[] = {
@@ -344,23 +326,6 @@ static bool pvc_border_right_width(Uint32 value, HTPVData data)
 
     return false
         || check_border_width(value, data)
-    ;
-}
-
-static bool pvc_border_spacing(Uint32 value, HTPVData data)
-{
-    static int valid_keywords[] = {
-        PVK_INHERIT,
-        PVK_UNDEFINED
-    };
-
-    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
-            return true;
-    }
-
-    return false
-        || check_length(value, data)
     ;
 }
 
@@ -469,24 +434,6 @@ static bool pvc_bottom(Uint32 value, HTPVData data)
     return false
         || check_length(value, data)
         || check_percentage(value, data)
-    ;
-}
-
-static bool pvc_caption_side(Uint32 value, HTPVData data)
-{
-    static int valid_keywords[] = {
-        PVK_TOP,
-        PVK_BOTTOM,
-        PVK_INHERIT,
-        PVK_UNDEFINED
-    };
-
-    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
-            return true;
-    }
-
-    return false
     ;
 }
 
@@ -665,35 +612,7 @@ static bool pvc_display(Uint32 value, HTPVData data)
         PVK_BLOCK,
         PVK_LIST_ITEM,
         PVK_INLINE_BLOCK,
-        PVK_TABLE,
-        PVK_INLINE_TABLE,
-        PVK_TABLE_ROW_GROUP,
-        PVK_TABLE_HEADER_GROUP,
-        PVK_TABLE_FOOTER_GROUP,
-        PVK_TABLE_ROW,
-        PVK_TABLE_COLUMN_GROUP,
-        PVK_TABLE_COLUMN,
-        PVK_TABLE_CELL,
-        PVK_TABLE_CAPTION,
         PVK_NONE,
-        PVK_INHERIT,
-        PVK_UNDEFINED
-    };
-
-    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
-            return true;
-    }
-
-    return false
-    ;
-}
-
-static bool pvc_empty_cells(Uint32 value, HTPVData data)
-{
-    static int valid_keywords[] = {
-        PVK_SHOW,
-        PVK_HIDE,
         PVK_INHERIT,
         PVK_UNDEFINED
     };
@@ -1444,24 +1363,6 @@ static bool pvc_right(Uint32 value, HTPVData data)
     ;
 }
 
-static bool pvc_table_layout(Uint32 value, HTPVData data)
-{
-    static int valid_keywords[] = {
-        PVK_AUTO,
-        PVK_FIXED,
-        PVK_INHERIT,
-        PVK_UNDEFINED
-    };
-
-    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
-        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
-            return true;
-    }
-
-    return false
-    ;
-}
-
 static bool pvc_text_align(Uint32 value, HTPVData data)
 {
     static int valid_keywords[] = {
@@ -1730,21 +1631,18 @@ static PV_CHECKER* _pv_checkers[] = {
     pvc_border_bottom_right_radius,
     pvc_border_bottom_style,
     pvc_border_bottom_width,
-    pvc_border_collapse,
     pvc_border_left_color,
     pvc_border_left_style,
     pvc_border_left_width,
     pvc_border_right_color,
     pvc_border_right_style,
     pvc_border_right_width,
-    pvc_border_spacing,
     pvc_border_top_color,
     pvc_border_top_left_radius,
     pvc_border_top_right_radius,
     pvc_border_top_style,
     pvc_border_top_width,
     pvc_bottom,
-    pvc_caption_side,
     pvc_clear,
     pvc_clip,
     pvc_color,
@@ -1754,7 +1652,6 @@ static PV_CHECKER* _pv_checkers[] = {
     pvc_cursor,
     pvc_direction,
     pvc_display,
-    pvc_empty_cells,
     pvc_float,
     pvc_font,
     pvc_font_family,
@@ -1793,7 +1690,6 @@ static PV_CHECKER* _pv_checkers[] = {
     pvc_position,
     pvc_quotes,
     pvc_right,
-    pvc_table_layout,
     pvc_text_align,
     pvc_text_decoration,
     pvc_text_indent,

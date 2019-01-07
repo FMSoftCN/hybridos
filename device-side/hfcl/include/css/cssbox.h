@@ -31,7 +31,7 @@
 
 namespace hfcl {
 
-// Genral block box
+// General block box
 // Either for anonymous block-level boxes or normal block-level
 // or inline-block boxes
 class CssBox {
@@ -122,10 +122,11 @@ protected:
     CssComputed* m_css;
 };
 
-// Inline box either for anonymous inline-level boxes or normal inline-level boxes
+// Inline box either for anonymous inline-level boxes
+// or normal inline-level boxes
 class CssInlineBox : public CssBox {
 public:
-    CssInlineBox(const View* view, CssComputed* css, bool anonymous = false)
+    CssInlineBox(CssComputed* css, const View* view, bool anonymous = false)
         : CssBox(css, anonymous), m_view(view), m_split_ctxt(0) {
     };
     virtual ~CssInlineBox() {};
@@ -158,13 +159,19 @@ private:
 // Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
 class CssLineBoxContainer : public CssBox {
 public:
-    CssLineBoxContainer(CssComputed* css)
-        : CssBox(css) {};
+    CssLineBoxContainer(CssComputed* css, const View* first, const View* last,
+            bool anonymous = false)
+        : CssBox(css, anonymous), m_first(first), m_last(last) {};
     virtual ~CssLineBoxContainer();
+
+    const View* getFirstView() const { return m_first; }
+    const View* getLastView() const { return m_last; }
 
 protected:
 
 private:
+    const View* m_first;
+    const View* m_last;
     VECTOR(CssLineBox*, CssLineBoxVec);
     CssLineBoxVec m_lines;
 };
@@ -179,6 +186,8 @@ public:
     CssBlockBoxContainer(CssComputed* css)
         : CssBox(css) {};
     virtual ~CssBlockBoxContainer();
+
+    void addBox(CssBox* box);
 
 protected:
 

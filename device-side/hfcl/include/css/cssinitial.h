@@ -37,7 +37,7 @@ public:
     ~CssInitial() {}
 
     virtual bool getProperty(CssPropertyIds pid, Uint32 *value,
-            HTPVData *data) {
+            HTPVData *data) const {
         if (value) {
             *value = m_values[pid];
         }

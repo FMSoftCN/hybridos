@@ -21,6 +21,8 @@
 
 #include "view/viewcontainer.h"
 
+#include "css/csscomputed.h"
+#include "css/cssbox.h"
 #include "graphics/graphicscontext.h"
 
 namespace hfcl {
@@ -503,8 +505,97 @@ void ViewContainer::computeCss()
     }
 }
 
-void ViewContainer::calcLayout(const RealRect& cntBlock)
+CssLineBoxContainer* ViewContainer::createAnonymousBlock(const View* child)
 {
+    const View* first_nb = 0;
+    while (child) {
+        Uint32 pv;
+        child->m_css_computed->getProperty(PID_DISPLAY, &pv, NULL);
+        if (pv |= PV_BLOCK && pv != PV_LIST_ITEM) {
+            first_nb = child;
+            break;
+        }
+        child = child->getNext();
+    }
+
+    if (first_nb) {
+        const View* last_nb = first_nb;
+        child = child->getNext();
+        while (child) {
+            Uint32 pv;
+            child->m_css_computed->getProperty(PID_DISPLAY, &pv, NULL);
+            if (pv == PV_BLOCK || pv == PV_LIST_ITEM) {
+                break;
+            }
+            last_nb = child;
+            child = child->getNext();
+        }
+
+        CssLineBoxContainer* anmbox
+            = new CssLineBoxContainer(m_css_computed, first_nb, last_nb, true);
+        return anmbox;
+    }
+
+    return NULL;
+}
+
+void ViewContainer::layOut(const CssBox* cntBlock)
+{
+}
+
+void ViewContainer::makeCssBox()
+{
+    if (m_cssbox_principal) {
+        delete m_cssbox_principal;
+        m_cssbox_principal = 0;
+    }
+
+    if (m_first) {
+        // whether has block-level child?
+        View* child = m_first;
+        while (child) {
+            Uint32 pv;
+            child->m_css_computed->getProperty(PID_DISPLAY, &pv, NULL);
+            if (pv == PV_BLOCK || pv == PV_LIST_ITEM) {
+                // create a block formatting context for children
+                m_cssbox_principal = new CssBlockBoxContainer(m_css_computed);
+                break;
+            }
+            child = child->getNext();
+        }
+
+        if (m_cssbox_principal == 0) {
+            // create an inline formatting context for all children
+            m_cssbox_principal
+                = new CssLineBoxContainer(m_css_computed, m_first, m_last);
+        }
+        else {
+            // create anonymous block boxes for non-block-level children
+            CssLineBoxContainer* anmbox;
+            const View* child = m_first;
+            do {
+                anmbox = createAnonymousBlock(child);
+                if (anmbox) {
+                    static_cast<CssBlockBoxContainer*>
+                        (m_cssbox_principal)->addBox(anmbox);
+
+                    child = anmbox->getLastView();
+                    child = child->getNext();
+
+                    // this is a block-level view
+                    if (child) {
+                        ((View*)child)->makeCssBox();
+                        static_cast<CssBlockBoxContainer*>(m_cssbox_principal)
+                            ->addBox(child->m_cssbox_principal);
+                    }
+                }
+            } while (anmbox && child);
+        }
+    }
+    else {
+        // no child
+        View::makeCssBox();
+    }
 }
 
 void ViewContainer::onChildAttached(View* view)

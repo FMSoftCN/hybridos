@@ -44,13 +44,13 @@ public:
     void reset();
     void inherit(const CssComputed* css);
     bool makeAbsolute(const View& view);
-    bool validate();
+    bool validate(const View& view);
     void calcBox(const View& view, const RealRect& ctnBlock, bool ltr,
         const CssBox* prevBox, CssBox* currBox);
 
     /* overloaded virtual functions */
     virtual bool getProperty(CssPropertyIds pid, Uint32 *value,
-            HTPVData *data);
+            HTPVData *data) const;
     virtual bool setProperty(CssPropertyIds pid, Uint32 value,
             HTPVData data);
 

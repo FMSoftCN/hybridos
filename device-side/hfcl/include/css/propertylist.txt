@@ -42,17 +42,17 @@ background-repeat
     initial: repeat
     inherited: no
 
-border-collapse
-    values: collapse separate inherit
-    initial: separate
-    inherited: yes
-    appliesto: table
+#border-collapse
+#    values: collapse separate inherit
+#    initial: separate
+#    inherited: yes
+#    appliesto: table
 
-border-spacing
-    values: <length> inherit
-    initial: <length-px>=0
-    inherited: yes
-    appliesto: table
+#border-spacing
+#    values: <length> inherit
+#    initial: <length-px>=0
+#    inherited: yes
+#    appliesto: table
 
 border-left-color
     values: <color> inherit
@@ -144,11 +144,11 @@ bottom
     inherited: no
     appliesto: positioned
 
-caption-side
-    values: top bottom inherit
-    initial: top
-    inherited: yes
-    appliesto: table-caption
+#caption-side
+#    values: top bottom inherit
+#    initial: top
+#    inherited: yes
+#    appliesto: table-caption
 
 clear
     values: none left right both inherit
@@ -193,15 +193,18 @@ direction
     inherited: yes
 
 display
-    values: inline block list-item inline-block table inline-table table-row-group table-header-group table-footer-group table-row table-column-group table-column table-cell table-caption none inherit
+    values: inline block list-item inline-block none inherit
     initial: inline
     inherited: no
 
-empty-cells
-    values: show hide inherit
-    initial: show
-    inherited: yes
-    appliesto: table-cell
+# disable table related values
+# table inline-table table-row-group table-header-group table-footer-group table-row table-column-group table-column table-cell table-caption
+
+#empty-cells
+#    values: show hide inherit
+#    initial: show
+#    inherited: yes
+#    appliesto: table-cell
 
 float
     values: left right none inherit
@@ -399,10 +402,10 @@ right
     inherited: no
     appliesto: positioned
 
-table-layout
-    values: auto fixed inherit
-    initial: auto
-    inherited: no
+#table-layout
+#    values: auto fixed inherit
+#    initial: auto
+#    inherited: no
 
 text-align
     values: left right center justify inherit

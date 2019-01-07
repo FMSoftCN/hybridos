@@ -271,7 +271,7 @@ public:
     void addEventListener(EventListener* listener);
     void removeEventListener(EventListener* listener);
 
-    // use in initialization stage
+    // the style sheet specified on the fly
     CssDeclared* myCss() { return &m_cssd_user; }
 
     // Change style on the fly
@@ -429,14 +429,14 @@ protected:
     virtual void applyCss(CssDeclared* css, const CssSelectorGroup& selector);
     virtual void computeCss();
 
-    /* Members for visual formatting */
-    virtual void calcLayout(const RealRect& ctnBlock);
+    virtual void makeCssBox();
+    virtual void layOut(const CssBox* ctnBlock);
 
-    // The pricipal box of the view, either a CssBoxBlock,
-    // a CssBoxInline, or a CssBoxLineBoxContainer
-    CssBox* m_box_principal;
+    // The pricipal box of the view, either a CssBox,
+    // a CssLineBoxContainer, or a CssBlockBoxContainer
+    CssBox* m_cssbox_principal;
     // The additional box of the view if Property display is list-item.
-    CssBox* m_box_additional;
+    CssBox* m_cssbox_additional;
 
     IntRect m_rc_viewport;
     IntRect m_rect;

@@ -35,7 +35,7 @@ public:
     virtual ~Css() {}
 
     virtual bool getProperty(CssPropertyIds pid, Uint32 *value,
-            HTPVData* data) = 0;
+            HTPVData* data) const = 0;
     virtual bool setProperty(CssPropertyIds pid, Uint32 value,
             HTPVData data) = 0;
 

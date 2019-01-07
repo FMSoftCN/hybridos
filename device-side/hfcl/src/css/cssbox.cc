@@ -26,6 +26,7 @@
 namespace hfcl {
 
 CssBox::CssBox(CssComputed* css, bool anonymous) :
+    m_cw(0), m_ch(0),
     m_l(0), m_t(0), m_r(0), m_b(0),
     m_ml(0), m_mt(0), m_mr(0), m_mb(0),
     m_pl(0), m_pt(0), m_pr(0), m_pb(0),
@@ -73,6 +74,11 @@ CssBlockBoxContainer::~CssBlockBoxContainer()
         CssBox* box = *it;
         HFCL_DELETE(box);
     }
+}
+
+void CssBlockBoxContainer::addBox(CssBox* box)
+{
+    m_blocks.push_back(box);
 }
 
 } // namespace hfcl

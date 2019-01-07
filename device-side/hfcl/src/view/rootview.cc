@@ -56,7 +56,20 @@ bool RootView::attachToSysWindow(Window* window)
         /* FIXME: viewport should be defined in px */
         m_viewport = rc;
         computeCss();
-        calcLayout(m_viewport);
+
+        makeCssBox();
+
+        /* create initial containing block */
+        if (m_cssbox_principal) {
+            delete m_cssbox_principal;
+        }
+        else {
+            m_cssbox_principal = new CssBox(m_css_computed);
+        }
+        m_cssbox_principal->setContentWidth(m_viewport.width());
+        m_cssbox_principal->setContentHeight(m_viewport.height());
+
+        layOut(m_cssbox_principal);
         return true;
     }
 
@@ -88,12 +101,6 @@ bool RootView::applyCssGroup(HTResId cssgId)
     }
 
     return true;
-}
-
-void RootView::calcLayout(const RealRect& ctnBlock)
-{
-    // determine width and margins
-    ViewContainer::calcLayout(ctnBlock);
 }
 
 } // namespace hfcl

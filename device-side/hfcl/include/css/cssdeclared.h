@@ -55,7 +55,7 @@ public:
     bool setPadding(Uint32 value, const HTReal* r);
 
     virtual bool getProperty(CssPropertyIds pid, Uint32 *value,
-            HTPVData* data);
+            HTPVData* data) const;
     virtual bool setProperty(CssPropertyIds pid, Uint32 value,
             HTPVData data);
 

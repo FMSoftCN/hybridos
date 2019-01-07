@@ -30,6 +30,7 @@
 #include "../common/realrect.h"
 #include "../view/viewcontainer.h"
 #include "../css/cssdeclared.h"
+#include "../css/cssbox.h"
 #include "../graphics/graphicscontext.h"
 #include "../resource/restypes.h"
 
@@ -54,8 +55,6 @@ public:
     virtual Window* getSysWindow() const { return m_window; }
 
 protected:
-    /* overloaded protected virtual functions */
-    virtual void calcLayout(const RealRect& ctnBlock);
 
 private:
     Window* m_window;

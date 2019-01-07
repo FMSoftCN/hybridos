@@ -257,14 +257,14 @@ error:
 }
 
 bool CssDeclared::getProperty(CssPropertyIds pid, Uint32 *value,
-        HTPVData *data)
+        HTPVData *data) const
 {
-    CssPropertyValueMap::iterator it = m_map.find (pid);
+    CssPropertyValueMap::const_iterator it = m_map.find (pid);
     if (it == m_map.end ()) {
         return false;
     }
 
-    CssPropertyValue* pv = m_map [pid];
+    const CssPropertyValue* pv = m_map [pid];
     if (value)
         *value = pv->getValue();
     if (data)
