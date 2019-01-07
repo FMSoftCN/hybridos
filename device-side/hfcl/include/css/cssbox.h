@@ -42,70 +42,71 @@ public:
     void setContentWidth(HTReal w) {
         m_cw = w;
     }
-    HTReal getContentWidth() { return m_cw; }
+    HTReal getContentWidth() const { return m_cw; }
 
     void setContentHeight(HTReal h) {
         m_ch = h;
     }
-    HTReal getContentHeight() { return m_ch; }
+    HTReal getContentHeight() const { return m_ch; }
 
     void setHPosition(HTReal l, HTReal r) {
         m_l = l; m_r = r;
     }
-    void getHPosition(HTReal& l, HTReal& r) {
+    void getHPosition(HTReal& l, HTReal& r) const {
         l = m_l; r = m_r;
     }
 
     void setVPosition(HTReal t, HTReal b) {
         m_t = t; m_b = b;
     }
-    void getVPosition(HTReal& t, HTReal& b) {
+    void getVPosition(HTReal& t, HTReal& b) const {
         t = m_t; b = m_b;
     }
 
     void setHMargins(HTReal ml, HTReal mr) {
         m_ml = ml; m_mr = mr;
     }
-    void getHMargins(HTReal& ml, HTReal& mr) {
+    void getHMargins(HTReal& ml, HTReal& mr) const {
         ml = m_ml; mr = m_mr;
     }
 
     void setVMargins(HTReal mt, HTReal mb) {
         m_mt = mt; m_mb = mb;
     }
-    void getVMargins(HTReal& mt, HTReal& mb) {
+    void getVMargins(HTReal& mt, HTReal& mb) const {
         mt = m_mt; mb = m_mb;
     }
 
     void setHPaddings(HTReal pl, HTReal pr) {
         m_pl = pl; m_pr = pr;
     }
-    void getHPaddings(HTReal& pl, HTReal& pr) {
+    void getHPaddings(HTReal& pl, HTReal& pr) const {
         pl = m_pl; pr = m_pr;
     }
 
     void setVPaddings(HTReal pt, HTReal pb) {
         m_pt = pt; m_pb = pb;
     }
-    void getVPaddings(HTReal& pt, HTReal& pb) {
+    void getVPaddings(HTReal& pt, HTReal& pb) const {
         pt = m_pt; pb = m_pb;
     }
 
     void setHBorderWidths(HTReal blw, HTReal brw) {
         m_blw = blw; m_brw = brw;
     }
-    void getHBorderWidths(HTReal& blw, HTReal& brw) {
+    void getHBorderWidths(HTReal& blw, HTReal& brw) const {
         blw = m_blw; brw = m_brw;
     }
 
     void setVBorderWidths(HTReal btw, HTReal bbw) {
         m_btw = btw; m_bbw = bbw;
     }
-    void getVBorderWidths(HTReal& btw, HTReal& bbw) {
+    void getVBorderWidths(HTReal& btw, HTReal& bbw) const {
         btw = m_btw; bbw = m_bbw;
     }
 
     CssComputed* getCss() { return m_css; }
+    const CssComputed* getCss() const { return m_css; }
 
 protected:
     // content width and height
@@ -174,6 +175,26 @@ private:
     const View* m_last;
     VECTOR(CssLineBox*, CssLineBoxVec);
     CssLineBoxVec m_lines;
+};
+
+// The box acts as a inline box container
+//
+// A box container contains only inline-level boxes.
+//
+// Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
+class CssInlineBoxContainer : public CssBox {
+public:
+    CssInlineBoxContainer(CssComputed* css)
+        : CssBox(css) {};
+    virtual ~CssInlineBoxContainer();
+
+    void addBox(CssBox* box);
+
+protected:
+
+private:
+    VECTOR(CssBox*, CssInlineBoxVec);
+    CssInlineBoxVec m_boxes;
 };
 
 // The block box acts as a block box container

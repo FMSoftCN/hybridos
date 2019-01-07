@@ -70,6 +70,8 @@ public:
 
     const View* getNext() const { return m_next; }
     View* getNext() { return m_next; }
+    const View* getNextVisible() const { return m_next; }
+
     void setNext(View* view) { m_next = view; }
 
     const ViewContainer* getParent() const { return m_parent; }

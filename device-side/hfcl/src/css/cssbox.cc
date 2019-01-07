@@ -67,6 +67,20 @@ CssLineBoxContainer::~CssLineBoxContainer()
     }
 }
 
+CssInlineBoxContainer::~CssInlineBoxContainer()
+{
+    CssInlineBoxVec::iterator it;
+    for (it = m_boxes.begin(); it != m_boxes.end(); ++it) {
+        CssBox* box = *it;
+        HFCL_DELETE(box);
+    }
+}
+
+void CssInlineBoxContainer::addBox(CssBox* box)
+{
+    m_boxes.push_back(box);
+}
+
 CssBlockBoxContainer::~CssBlockBoxContainer()
 {
     CssBlockBoxVec::iterator it;

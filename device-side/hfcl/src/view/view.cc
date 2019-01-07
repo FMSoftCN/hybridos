@@ -689,14 +689,17 @@ void View::computeCss()
     m_css_computed->validate(*this);
 }
 
-void View::layOut(const CssBox* ctnBlock)
-{
-}
-
 void View::makeCssBox()
 {
+    if (m_cssbox_principal) {
+        delete m_cssbox_principal;
+        m_cssbox_principal = 0;
+    }
+
     Uint32 pv;
     m_css_computed->getProperty(PID_DISPLAY, &pv, NULL);
+    if (pv == PV_NONE)
+        return;
 
     if (!isReplaced() && (pv == PV_BLOCK || pv == PV_LIST_ITEM ||
             pv == PV_INLINE_BLOCK)) {
@@ -716,6 +719,12 @@ void View::makeCssBox()
     else {
         // block box
         m_cssbox_principal = new CssBox(m_css_computed);
+    }
+}
+
+void View::layOut(const CssBox* ctnBlock)
+{
+    if (m_cssbox_principal) {
     }
 }
 

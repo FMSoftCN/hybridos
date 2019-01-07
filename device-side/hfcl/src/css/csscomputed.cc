@@ -499,8 +499,8 @@ bool CssComputed::setProperty(CssPropertyIds pid, Uint32 value,
     return true;
 }
 
-void CssComputed::autoHMarginsAsZero(const RealRect& ctnBlock,
-        HTReal& ml, HTReal& mr)
+void CssComputed::autoHMarginsAsZero(const CssBox& ctnBlock,
+        HTReal& ml, HTReal& mr) const
 {
     if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_MARGIN_LEFT]) ==
         MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
@@ -513,7 +513,7 @@ void CssComputed::autoHMarginsAsZero(const RealRect& ctnBlock,
         }
         else if (CSS_PPT_VALUE_TYPE(m_values[PID_MARGIN_LEFT]) ==
             PVT_PERCENTAGE) {
-            ml = ctnBlock.width() * m_data[PID_MARGIN_LEFT].r / 100.0;
+            ml = ctnBlock.getContentWidth() * m_data[PID_MARGIN_LEFT].r / 100.0;
         }
     }
 
@@ -528,13 +528,13 @@ void CssComputed::autoHMarginsAsZero(const RealRect& ctnBlock,
         }
         else if (CSS_PPT_VALUE_TYPE(m_values[PID_MARGIN_RIGHT]) ==
             PVT_PERCENTAGE) {
-            mr = ctnBlock.width() * m_data[PID_MARGIN_RIGHT].r / 100.0;
+            mr = ctnBlock.getContentWidth() * m_data[PID_MARGIN_RIGHT].r / 100.0;
         }
     }
 }
 
-void CssComputed::autoVMarginsAsZero(const RealRect& ctnBlock,
-        HTReal& mt, HTReal& mb)
+void CssComputed::autoVMarginsAsZero(const CssBox& ctnBlock,
+        HTReal& mt, HTReal& mb) const
 {
     if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_MARGIN_TOP]) ==
         MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
@@ -547,7 +547,7 @@ void CssComputed::autoVMarginsAsZero(const RealRect& ctnBlock,
         }
         else if (CSS_PPT_VALUE_TYPE(m_values[PID_MARGIN_TOP]) ==
             PVT_PERCENTAGE) {
-            mt = ctnBlock.width() * m_data[PID_MARGIN_TOP].r / 100.0;
+            mt = ctnBlock.getContentWidth() * m_data[PID_MARGIN_TOP].r / 100.0;
         }
     }
 
@@ -562,13 +562,13 @@ void CssComputed::autoVMarginsAsZero(const RealRect& ctnBlock,
         }
         else if (CSS_PPT_VALUE_TYPE(m_values[PID_MARGIN_BOTTOM]) ==
             PVT_PERCENTAGE) {
-            mb = ctnBlock.width() * m_data[PID_MARGIN_BOTTOM].r / 100.0;
+            mb = ctnBlock.getContentWidth() * m_data[PID_MARGIN_BOTTOM].r / 100.0;
         }
     }
 }
 
 #if 0
-bool CssComputed::hasComputedMarginLeft(const RealRect& ctnBlock, HTReal& ml)
+bool CssComputed::hasComputedMarginLeft(const CssBox& ctnBlock, HTReal& ml)
 {
     Uint32 v = m_values[PID_MARGIN_LEFT];
 
@@ -580,14 +580,14 @@ bool CssComputed::hasComputedMarginLeft(const RealRect& ctnBlock, HTReal& ml)
             ml = m_data[PID_MARGIN_LEFT].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            ml = ctnBlock.width() * m_data[PID_MARGIN_LEFT].r / 100.0;
+            ml = ctnBlock.getContentWidth() * m_data[PID_MARGIN_LEFT].r / 100.0;
         }
     }
 
     return true;
 }
 
-bool CssComputed::hasComputedMarginRight(const RealRect& ctnBlock, HTReal& mr)
+bool CssComputed::hasComputedMarginRight(const CssBox& ctnBlock, HTReal& mr)
 {
     Uint32 v = m_values[PID_MARGIN_RIGHT];
 
@@ -599,14 +599,14 @@ bool CssComputed::hasComputedMarginRight(const RealRect& ctnBlock, HTReal& mr)
             mr = m_data[PID_MARGIN_RIGHT].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            mr = ctnBlock.width() * m_data[PID_MARGIN_RIGHT].r / 100.0;
+            mr = ctnBlock.getContentWidth() * m_data[PID_MARGIN_RIGHT].r / 100.0;
         }
     }
 
     return true;
 }
 
-bool CssComputed::hasComputedWidth(const RealRect& ctnBlock, HTReal& w)
+bool CssComputed::hasComputedWidth(const CssBox& ctnBlock, HTReal& w)
 {
     Uint32 v = m_values[PID_WIDTH];
 
@@ -618,14 +618,14 @@ bool CssComputed::hasComputedWidth(const RealRect& ctnBlock, HTReal& w)
             w = m_data[PID_WIDTH].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            w = ctnBlock.width() * m_data[PID_WIDTH].r / 100.0;
+            w = ctnBlock.getContentWidth() * m_data[PID_WIDTH].r / 100.0;
         }
     }
 
     return true;
 }
 
-bool CssComputed::hasComputedHeight(const RealRect& ctnBlock, HTReal& h)
+bool CssComputed::hasComputedHeight(const CssBox& ctnBlock, HTReal& h)
 {
     Uint32 v = m_values[PID_HEIGHT];
 
@@ -637,7 +637,7 @@ bool CssComputed::hasComputedHeight(const RealRect& ctnBlock, HTReal& h)
             h = m_data[PID_HEIGHT].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            h = ctnBlock.height() * m_data[PID_HEIGHT].r / 100.0;
+            h = ctnBlock.getContentHeight() * m_data[PID_HEIGHT].r / 100.0;
         }
     }
 
@@ -655,7 +655,7 @@ bool CssComputed::hasComputedHeight(const RealRect& ctnBlock, HTReal& h)
  * width was always calculated with respect to the content box
  * of the parent element.
  */
-bool CssComputed::getHSize(const RealRect& ctnBlock, int pid, HTReal& s)
+bool CssComputed::getHSize(const CssBox& ctnBlock, int pid, HTReal& s) const
 {
     Uint32 v = m_values[pid];
 
@@ -667,7 +667,7 @@ bool CssComputed::getHSize(const RealRect& ctnBlock, int pid, HTReal& s)
             s = m_data[pid].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            s = ctnBlock.width() * m_data[pid].r / 100.0;
+            s = ctnBlock.getContentWidth() * m_data[pid].r / 100.0;
         }
     }
 
@@ -675,12 +675,12 @@ bool CssComputed::getHSize(const RealRect& ctnBlock, int pid, HTReal& s)
 }
 
 /* return false if min-width was illegal */
-bool CssComputed::getMinWidth(const RealRect& ctnBlock, HTReal& minw)
+bool CssComputed::getMinWidth(const CssBox& ctnBlock, HTReal& minw) const
 {
     Uint32 type = CSS_PPT_VALUE_TYPE(m_values[PID_MIN_WIDTH]);
 
     if (type == PVT_PERCENTAGE) {
-        minw = ctnBlock.width() * m_data[PID_MIN_WIDTH].r / 100.0;
+        minw = ctnBlock.getContentWidth() * m_data[PID_MIN_WIDTH].r / 100.0;
     }
     else if (type == PVT_LENGTH_PX) {
         minw = m_data[PID_MIN_WIDTH].r;
@@ -699,7 +699,7 @@ bool CssComputed::getMinWidth(const RealRect& ctnBlock, HTReal& minw)
 }
 
 /* return true if max-width is defined and not negative */
-bool CssComputed::getMaxWidth(const RealRect& ctnBlock, HTReal& maxw)
+bool CssComputed::getMaxWidth(const CssBox& ctnBlock, HTReal& maxw) const
 {
     Uint32 v = m_values[PID_MAX_WIDTH];
 
@@ -710,7 +710,7 @@ bool CssComputed::getMaxWidth(const RealRect& ctnBlock, HTReal& maxw)
 
     Uint32 type = CSS_PPT_VALUE_TYPE(v);
     if (type == PVT_PERCENTAGE) {
-        maxw = ctnBlock.width() * m_data[PID_MAX_WIDTH].r / 100.0;
+        maxw = ctnBlock.getContentWidth() * m_data[PID_MAX_WIDTH].r / 100.0;
     }
     else if (type == PVT_LENGTH_PX) {
         maxw = m_data[PID_MAX_WIDTH].r;
@@ -727,12 +727,12 @@ bool CssComputed::getMaxWidth(const RealRect& ctnBlock, HTReal& maxw)
 }
 
 /* return false if min-height was illegal */
-bool CssComputed::getMinHeight(const RealRect& ctnBlock, HTReal& minw)
+bool CssComputed::getMinHeight(const CssBox& ctnBlock, HTReal& minw) const
 {
     Uint32 type = CSS_PPT_VALUE_TYPE(m_values[PID_MIN_HEIGHT]);
 
     if (type == PVT_PERCENTAGE) {
-        minw = ctnBlock.height() * m_data[PID_MIN_HEIGHT].r / 100.0;
+        minw = ctnBlock.getContentHeight() * m_data[PID_MIN_HEIGHT].r / 100.0;
     }
     else if (type == PVT_LENGTH_PX) {
         minw = m_data[PID_MIN_HEIGHT].r;
@@ -751,7 +751,7 @@ bool CssComputed::getMinHeight(const RealRect& ctnBlock, HTReal& minw)
 }
 
 /* return true if max-height is defined and not negative */
-bool CssComputed::getMaxHeight(const RealRect& ctnBlock, HTReal& maxh)
+bool CssComputed::getMaxHeight(const CssBox& ctnBlock, HTReal& maxh) const
 {
     Uint32 v = m_values[PID_MAX_HEIGHT];
 
@@ -762,7 +762,7 @@ bool CssComputed::getMaxHeight(const RealRect& ctnBlock, HTReal& maxh)
 
     Uint32 type = CSS_PPT_VALUE_TYPE(v);
     if (type == PVT_PERCENTAGE) {
-        maxh = ctnBlock.height() * m_data[PID_MAX_HEIGHT].r / 100.0;
+        maxh = ctnBlock.getContentHeight() * m_data[PID_MAX_HEIGHT].r / 100.0;
     }
     else if (type == PVT_LENGTH_PX) {
         maxh = m_data[PID_MAX_HEIGHT].r;
@@ -779,7 +779,7 @@ bool CssComputed::getMaxHeight(const RealRect& ctnBlock, HTReal& maxh)
 }
 
 /* return true for auto */
-bool CssComputed::getVSize(const RealRect& ctnBlock, int pid, HTReal& s)
+bool CssComputed::getVSize(const CssBox& ctnBlock, int pid, HTReal& s) const
 {
     Uint32 v = m_values[pid];
 
@@ -791,15 +791,17 @@ bool CssComputed::getVSize(const RealRect& ctnBlock, int pid, HTReal& s)
             s = m_data[pid].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            s = ctnBlock.height() * m_data[pid].r / 100.0;
+            s = ctnBlock.getContentHeight() * m_data[pid].r / 100.0;
         }
+        else
+            s = 0;
     }
 
     return false;
 }
 
-void CssComputed::calcPaddings(const RealRect& ctnBlock,
-        HTReal* pl, HTReal* pt, HTReal* pr, HTReal* pb)
+void CssComputed::calcPaddings(const CssBox& ctnBlock,
+        HTReal* pl, HTReal* pt, HTReal* pr, HTReal* pb) const
 {
     if (pl) {
         Uint32 v = m_values[PID_PADDING_LEFT];
@@ -807,7 +809,7 @@ void CssComputed::calcPaddings(const RealRect& ctnBlock,
             *pl = m_data[PID_PADDING_LEFT].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            *pl = ctnBlock.width() * m_data[PID_PADDING_LEFT].r / 100.0;
+            *pl = ctnBlock.getContentWidth() * m_data[PID_PADDING_LEFT].r / 100.0;
         }
         else {
             *pl = 0.0;
@@ -823,7 +825,7 @@ void CssComputed::calcPaddings(const RealRect& ctnBlock,
             *pt = m_data[PID_PADDING_TOP].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            *pt = ctnBlock.height() * m_data[PID_PADDING_TOP].r / 100.0;
+            *pt = ctnBlock.getContentHeight() * m_data[PID_PADDING_TOP].r / 100.0;
         }
         else {
             *pt = 0.0;
@@ -839,7 +841,7 @@ void CssComputed::calcPaddings(const RealRect& ctnBlock,
             *pr = m_data[PID_PADDING_RIGHT].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            *pr = ctnBlock.width() * m_data[PID_PADDING_RIGHT].r / 100.0;
+            *pr = ctnBlock.getContentWidth() * m_data[PID_PADDING_RIGHT].r / 100.0;
         }
         else {
             *pr = 0.0;
@@ -855,7 +857,7 @@ void CssComputed::calcPaddings(const RealRect& ctnBlock,
             *pb = m_data[PID_PADDING_BOTTOM].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            *pb = ctnBlock.height() * m_data[PID_PADDING_BOTTOM].r / 100.0;
+            *pb = ctnBlock.getContentHeight() * m_data[PID_PADDING_BOTTOM].r / 100.0;
         }
         else {
             *pb = 0.0;
@@ -867,7 +869,7 @@ void CssComputed::calcPaddings(const RealRect& ctnBlock,
 }
 
 // Inline, replaced elements
-void CssComputed::calcWidthForIR(const View& view, const RealRect& ctnBlock,
+void CssComputed::calcWidthForIR(const View& view, const CssBox& ctnBlock,
         HTReal& w)
 {
     HTReal inw, inh, inr;
@@ -890,7 +892,7 @@ void CssComputed::calcWidthForIR(const View& view, const RealRect& ctnBlock,
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
         HTReal h;
         bool autoh = getVSize(ctnBlock, PID_INTERNAL_HEIGHT, h);
-        if (autoh && view.getIntrinsicRatio(&inr)) {
+        if (!autoh && view.getIntrinsicRatio(&inr)) {
             w = h * inr;
         }
         else if (view.getIntrinsicWidth(&inw)) {
@@ -907,7 +909,7 @@ void CssComputed::calcWidthForIR(const View& view, const RealRect& ctnBlock,
 }
 
 // Inline, replaced elements
-void CssComputed::calcHeightForIR(const View& view, const RealRect& ctnBlock,
+void CssComputed::calcHeightForIR(const View& view, const CssBox& ctnBlock,
         HTReal &w, HTReal& h)
 {
     HTReal inh, inr;
@@ -939,7 +941,7 @@ void CssComputed::calcHeightForIR(const View& view, const RealRect& ctnBlock,
 }
 
 void CssComputed::calcHeightForBlockVNR(const View& view,
-        const RealRect& ctnBlock, CssBox* currBox)
+        const CssBox& ctnBlock, CssBox* currBox)
 {
     HTReal h;
 
@@ -952,7 +954,7 @@ void CssComputed::calcHeightForBlockVNR(const View& view,
     currBox->setContentHeight(h);
 }
 
-void CssComputed::calcWidthForBlock(const RealRect& ctnBlock, bool ltr,
+void CssComputed::calcWidthForBlock(const CssBox& ctnBlock,
         HTReal& w, HTReal& ml, HTReal& mr, bool calced_w)
 {
     // NOTE:
@@ -976,48 +978,48 @@ void CssComputed::calcWidthForBlock(const RealRect& ctnBlock, bool ltr,
         autow = getHSize(ctnBlock, PID_INTERNAL_WIDTH, w);
     }
 
-    if (!autow && ((ml + blw + pl + w + pr + brw + mr) > ctnBlock.width())) {
+    if (!autow && ((ml + blw + pl + w + pr + brw + mr) > ctnBlock.getContentWidth())) {
         if (automl) {
-            ml = ctnBlock.width() - w - mr - brw - blw - pr - pl;
+            ml = ctnBlock.getContentWidth() - w - mr - brw - blw - pr - pl;
         }
         else if (automr) {
-            mr = ctnBlock.width() - w - ml - brw - blw - pr - pl;
+            mr = ctnBlock.getContentWidth() - w - ml - brw - blw - pr - pl;
         }
         else {
             // over-constrained
-            if (ltr) {
+            if (ctnBlock.getCss()->isLtr()) {
                 // if direction of containing block is ltr
-                mr = ctnBlock.width() - w - ml - brw - blw - pr - pl;
+                mr = ctnBlock.getContentWidth() - w - ml - brw - blw - pr - pl;
             }
             else {
                 // if direction of containing block is rtl
-                ml = ctnBlock.width() - w - mr - brw - blw - pr - pl;
+                ml = ctnBlock.getContentWidth() - w - mr - brw - blw - pr - pl;
             }
         }
     }
     else if (autow && !automl && !automr) {
-        w = ctnBlock.width() - ml - mr - brw - blw - pr - pl;
+        w = ctnBlock.getContentWidth() - ml - mr - brw - blw - pr - pl;
     }
     else if (!autow && automl && !automr) {
-        ml = ctnBlock.width() - w - mr - brw - blw - pr - pl;
+        ml = ctnBlock.getContentWidth() - w - mr - brw - blw - pr - pl;
     }
     else if (!autow && !automl && automr) {
-        mr = ctnBlock.width() - w - ml - brw - blw - pr - pl;
+        mr = ctnBlock.getContentWidth() - w - ml - brw - blw - pr - pl;
     }
     else if (autow) {
         if (automl) ml = 0.0;
         if (automr) mr = 0.0;
-        w = ctnBlock.width() - ml - mr - brw - blw - pr - pl;
+        w = ctnBlock.getContentWidth() - ml - mr - brw - blw - pr - pl;
     }
     else if (automl && automr) {
-        ml = mr = (ctnBlock.width() - w - brw - blw - pr - pl) / 2.0;
+        ml = mr = (ctnBlock.getContentWidth() - w - brw - blw - pr - pl) / 2.0;
     }
 }
 
-void CssComputed::calcWidthsForAPNR(const View& view, const RealRect& ctnBlock,
-        bool ltr, CssBox* box)
+void CssComputed::calcWidthsForAPNR(const View& view, const CssBox& ctnBlock,
+        CssBox* box)
 {
-    HTReal w, ml, mr, l, r;
+    HTReal w, ml, mr, l = 0, r = 0;
     bool autol = getHSize(ctnBlock, PID_LEFT, l);
     bool autow = getHSize(ctnBlock, PID_INTERNAL_WIDTH, w);
     bool autor = getHSize(ctnBlock, PID_RIGHT, r);
@@ -1028,12 +1030,12 @@ void CssComputed::calcWidthsForAPNR(const View& view, const RealRect& ctnBlock,
     HTReal pl, pr;
     box->getHPaddings(pl, pr);
 
-    HTReal ctnw = ctnBlock.width();
+    HTReal ctnw = ctnBlock.getContentWidth();
 
     if (autol && autow && autor) {
         autoHMarginsAsZero(ctnBlock, ml, mr);
 
-        if (ltr) {
+        if (ctnBlock.getCss()->isLtr()) {
             // TODO: left is static position
             l = 0.0;
 
@@ -1062,12 +1064,12 @@ void CssComputed::calcWidthsForAPNR(const View& view, const RealRect& ctnBlock,
     }
     else if (!autol && !autow && !autor) {
         bool automl = getHSize(ctnBlock, PID_MARGIN_LEFT, ml);
-        bool automr = getHSize(ctnBlock, PID_MARGIN_LEFT, mr);
+        bool automr = getHSize(ctnBlock, PID_MARGIN_RIGHT, mr);
         if (automl && automr) {
             ml = (ctnw - l - blw - pl - pr - brw - r) / 2.0;
             mr = ml;
             if (ml < 0) {
-                if (ltr) {
+                if (ctnBlock.getCss()->isLtr()) {
                     ml = 0;
                     mr = ctnw - l - ml - blw - pl - pr - brw - r;
                 }
@@ -1084,7 +1086,7 @@ void CssComputed::calcWidthsForAPNR(const View& view, const RealRect& ctnBlock,
             mr = ctnw - l - ml - blw - pl - pr - brw - r;
         }
         else {
-            if (ltr) {
+            if (ctnBlock.getCss()->isLtr()) {
                 // ignore right
                 r = ctnw - l - ml - blw - pl - w - pr - brw - mr;
             }
@@ -1108,7 +1110,7 @@ void CssComputed::calcWidthsForAPNR(const View& view, const RealRect& ctnBlock,
             l = ctnw - ml - blw - pl - w - pr - brw - mr - r;
         }
         else if (autol && autor && !autow) {
-            if (ltr) {
+            if (ctnBlock.getCss()->isLtr()) {
                 // TODO: left is the static position
                 l = 0.0;
                 r = ctnw - l - ml - blw - pl - w - pr - brw - mr;
@@ -1141,10 +1143,10 @@ void CssComputed::calcWidthsForAPNR(const View& view, const RealRect& ctnBlock,
     }
 }
 
-void CssComputed::calcWidthsForAPR(const View& view, const RealRect& ctnBlock,
-        bool ltr, CssBox* box)
+void CssComputed::calcWidthsForAPR(const View& view, const CssBox& ctnBlock,
+        CssBox* box)
 {
-    HTReal w, ml, mr, l, r;
+    HTReal w, ml, mr, l = 0, r = 0;
     bool autol = getHSize(ctnBlock, PID_LEFT, l);
     bool autor = getHSize(ctnBlock, PID_RIGHT, r);
     bool automl = getHSize(ctnBlock, PID_MARGIN_LEFT, ml);
@@ -1156,7 +1158,7 @@ void CssComputed::calcWidthsForAPR(const View& view, const RealRect& ctnBlock,
     HTReal pl, pr;
     box->getHPaddings(pl, pr);
 
-    HTReal ctnw = ctnBlock.width();
+    HTReal ctnw = ctnBlock.getContentWidth();
 
     calcWidthForIR(view, ctnBlock, w);
 
@@ -1171,7 +1173,7 @@ void CssComputed::calcWidthsForAPR(const View& view, const RealRect& ctnBlock,
                 automr = false;
             }
 
-            if (ltr) {
+            if (ctnBlock.getCss()->isLtr()) {
                 // TODO: left is static position
                 l = 0.0;
                 autol = false;
@@ -1200,7 +1202,7 @@ void CssComputed::calcWidthsForAPR(const View& view, const RealRect& ctnBlock,
         ml = (ctnw - l - blw - pl - pr - brw - r) / 2.0;
         mr = ml;
         if (ml < 0) {
-            if (ltr) {
+            if (ctnBlock.getCss()->isLtr()) {
                 ml = 0;
                 mr = ctnw - l - blw - pl - pr - brw - r;
             }
@@ -1215,7 +1217,7 @@ void CssComputed::calcWidthsForAPR(const View& view, const RealRect& ctnBlock,
         l = ctnw - ml - blw - pl - w - pr - brw - mr - r;
     }
     else {
-        if (ltr) {
+        if (ctnBlock.getCss()->isLtr()) {
             // ignore right
             r = ctnw - l - ml - blw - pl - w - pr - brw - mr;
         }
@@ -1231,10 +1233,10 @@ void CssComputed::calcWidthsForAPR(const View& view, const RealRect& ctnBlock,
  * Return false for undefined width
  */
 bool CssComputed::calcWidthsMargins(const View& view,
-        const RealRect& ctnBlock, bool ltr,
+        const CssBox& ctnBlock,
         const CssBox* prevBox, CssBox* currBox)
 {
-    HTReal ctnw = ctnBlock.width();
+    HTReal ctnw = ctnBlock.getContentWidth();
 
     HTReal blw = m_data[PID_BORDER_LEFT_WIDTH].r;
     HTReal brw = m_data[PID_BORDER_RIGHT_WIDTH].r;
@@ -1266,14 +1268,14 @@ bool CssComputed::calcWidthsMargins(const View& view,
     else if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY]) == PV_BLOCK &&
             !view.isReplaced()) {
         // Block-level, non-replaced elements in normal flow
-        calcWidthForBlock(ctnBlock, ltr, w, ml, mr, false);
+        calcWidthForBlock(ctnBlock, w, ml, mr, false);
     }
     else if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY]) == PV_BLOCK &&
             view.isReplaced()) {
         // Block-level, replaced elements in normal flow
         autoHMarginsAsZero(ctnBlock, ml, mr);
         calcWidthForIR(view, ctnBlock, w);
-        calcWidthForBlock(ctnBlock, ltr, w, ml, mr, true);
+        calcWidthForBlock(ctnBlock, w, ml, mr, true);
     }
     else if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_FLOAT]) != PV_NONE &&
             !view.isReplaced()) {
@@ -1302,14 +1304,14 @@ bool CssComputed::calcWidthsMargins(const View& view,
             !view.isReplaced()) {
         // Absolutely positioned, non-replaced elements
 
-        calcWidthsForAPNR(view, ctnBlock, ltr, currBox);
+        calcWidthsForAPNR(view, ctnBlock, currBox);
     }
     else if ((CSS_PPT_VALUE_NOFLAGS(m_values[PID_POSITION]) == PV_ABSOLUTE ||
             CSS_PPT_VALUE_NOFLAGS(m_values[PID_POSITION]) == PV_FIXED) &&
             view.isReplaced()) {
         // Absolutely positioned, replaced elements
 
-        calcWidthsForAPR(view, ctnBlock, ltr, currBox);
+        calcWidthsForAPR(view, ctnBlock, currBox);
     }
     else if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY])
                 == PV_INLINE_BLOCK && !view.isReplaced()) {
@@ -1339,7 +1341,7 @@ bool CssComputed::calcWidthsMargins(const View& view,
     return true;
 }
 
-bool CssComputed::resolveWHForRIR(const View& view, const RealRect& ctnBlock,
+bool CssComputed::resolveWHForRIR(const View& view, const CssBox& ctnBlock,
         HTReal& w, HTReal& h)
 {
     HTReal inw, inh, inr;
@@ -1426,7 +1428,7 @@ bool CssComputed::resolveWHForRIR(const View& view, const RealRect& ctnBlock,
 }
 
 void CssComputed::resolveAutoHeights(const View& view,
-            const RealRect& ctnBlock,
+            const CssBox& ctnBlock,
             const CssBox* prevBox, CssBox* currBox)
 {
     // TODO
@@ -1437,10 +1439,10 @@ void CssComputed::resolveAutoHeights(const View& view,
  * Return false for undefined height
  */
 bool CssComputed::calcHeightsMargins(const View& view,
-        const RealRect& ctnBlock, bool ltr,
+        const CssBox& ctnBlock,
         const CssBox* prevBox, CssBox* currBox)
 {
-    //HTReal ctnh = ctnBlock.height();
+    //HTReal ctnh = ctnBlock.getContentHeight();
 
     HTReal btw = m_data[PID_BORDER_TOP_WIDTH].r;
     HTReal bbw = m_data[PID_BORDER_BOTTOM_WIDTH].r;
@@ -1535,7 +1537,7 @@ bool CssComputed::calcHeightsMargins(const View& view,
     return true;
 }
 
-void CssComputed::calcBox(const View& view, const RealRect& ctnBlock, bool ltr,
+void CssComputed::calcBox(const View& view, const CssBox& ctnBlock,
         const CssBox* prevBox, CssBox* currBox)
 {
     // use PID_INTERNAL_WIDTH for the actually used property of width.
@@ -1545,7 +1547,7 @@ void CssComputed::calcBox(const View& view, const RealRect& ctnBlock, bool ltr,
     m_values[PID_INTERNAL_HEIGHT] = m_values[PID_HEIGHT];
     m_data[PID_INTERNAL_HEIGHT] = m_data[PID_HEIGHT];
 
-    if (calcWidthsMargins(view, ctnBlock, ltr, prevBox, currBox)) {
+    if (calcWidthsMargins(view, ctnBlock, prevBox, currBox)) {
         // check min-width, and max-width
         HTReal minw, maxw;
         bool valid_minw = getMinWidth(ctnBlock, minw);
@@ -1572,7 +1574,7 @@ void CssComputed::calcBox(const View& view, const RealRect& ctnBlock, bool ltr,
                 m_data[PID_INTERNAL_WIDTH] = m_data[PID_MIN_WIDTH];
             }
 
-            calcWidthsMargins(view, ctnBlock, ltr, prevBox, currBox);
+            calcWidthsMargins(view, ctnBlock, prevBox, currBox);
         }
 
         if (valid_maxw && currBox->getContentWidth() > maxw) {
@@ -1595,7 +1597,7 @@ void CssComputed::calcBox(const View& view, const RealRect& ctnBlock, bool ltr,
                 m_data[PID_INTERNAL_WIDTH] = m_data[PID_MAX_WIDTH];
             }
 
-            calcWidthsMargins(view, ctnBlock, ltr, prevBox, currBox);
+            calcWidthsMargins(view, ctnBlock, prevBox, currBox);
         }
     }
 
@@ -1606,7 +1608,7 @@ void CssComputed::calcBox(const View& view, const RealRect& ctnBlock, bool ltr,
     m_values[PID_INTERNAL_HEIGHT] = m_values[PID_HEIGHT];
     m_data[PID_INTERNAL_HEIGHT] = m_data[PID_HEIGHT];
 
-    if (calcHeightsMargins(view, ctnBlock, ltr, prevBox, currBox)) {
+    if (calcHeightsMargins(view, ctnBlock, prevBox, currBox)) {
         // check min-height, and max-height
         HTReal minh, maxh;
         bool valid_minh = getMinHeight(ctnBlock, minh);
@@ -1633,7 +1635,7 @@ void CssComputed::calcBox(const View& view, const RealRect& ctnBlock, bool ltr,
                 m_data[PID_INTERNAL_HEIGHT] = m_data[PID_MIN_HEIGHT];
             }
 
-            calcHeightsMargins(view, ctnBlock, ltr, prevBox, currBox);
+            calcHeightsMargins(view, ctnBlock, prevBox, currBox);
         }
 
         if (valid_maxh && currBox->getContentHeight() > maxh) {
@@ -1656,7 +1658,7 @@ void CssComputed::calcBox(const View& view, const RealRect& ctnBlock, bool ltr,
                 m_data[PID_INTERNAL_HEIGHT] = m_data[PID_MAX_HEIGHT];
             }
 
-            calcHeightsMargins(view, ctnBlock, ltr, prevBox, currBox);
+            calcHeightsMargins(view, ctnBlock, prevBox, currBox);
         }
     }
 }
