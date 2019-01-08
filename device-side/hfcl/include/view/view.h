@@ -206,8 +206,10 @@ public:
     virtual bool getShrinkToFitWhidth(HTReal* preferred,
             HTReal* minimum) const { return false; }
 
-    virtual HTReal getContentWidth() { return 0; }
-    virtual HTReal getContentHeight() { return 0; }
+    virtual HTReal getContentWidth(const void* splitCtxt = 0) const {
+        return 0;
+    }
+    virtual HTReal getContentHeight() const { return 0; }
 
     // split content for inline formatting
     // the returned value represents the split piece of the content

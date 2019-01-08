@@ -118,7 +118,9 @@ protected:
     virtual void layOut(const CssBox* ctnBlock);
 
 private:
-    CssLineBoxContainer* createAnonymousBlock(const View* child);
+    CssInlineBoxContainer* createAnonymousBlock(const View* child);
+    View* checkInlineSlibings(CssInlineBoxContainer* anmbox,
+        View* child);
 };
 
 } // namespace hfcl

@@ -29,6 +29,8 @@
 #include "../common/stlalternative.h"
 #include "../view/view.h"
 
+#include <vector>
+
 namespace hfcl {
 
 // General block box
@@ -108,7 +110,12 @@ public:
     CssComputed* getCss() { return m_css; }
     const CssComputed* getCss() const { return m_css; }
 
+    /* virtual functions */
+    virtual void calcBox(const View* view, const CssBox* ctnBlock);
+
 protected:
+    // position in containing block
+    HTReal m_x, m_y;
     // content width and height
     HTReal m_cw, m_ch;
     // position
@@ -123,14 +130,16 @@ protected:
     CssComputed* m_css;
 };
 
-// Inline box either for anonymous inline-level boxes
-// or normal inline-level boxes
-class CssInlineBox : public CssBox {
+// A sub-inline-box for splitted inline box contained in a line box.
+class CssSubInlineBox : public CssBox {
 public:
-    CssInlineBox(CssComputed* css, const View* view, bool anonymous = false)
-        : CssBox(css, anonymous), m_view(view), m_split_ctxt(0) {
-    };
-    virtual ~CssInlineBox() {};
+    CssSubInlineBox(CssComputed* css, const View* view)
+        : CssBox(css, false)
+        , m_view(view), m_split_ctxt(0) { };
+    virtual ~CssSubInlineBox() {};
+
+    /* virtual functions */
+    virtual void calcBox(const View* view, const CssBox* ctnBlock);
 
 private:
     const View* m_view;
@@ -138,63 +147,69 @@ private:
     const void* m_split_ctxt;
 };
 
+// The box acts as an inline box for non-atomatic inline elements
+// It is not a real CSS box, just used to split and maintain the
+// non-replaced content and the basic dimensions.
+//
+// Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
+class CssInlineBox : public CssBox {
+public:
+    CssInlineBox(CssComputed* css, bool anonymous = false);
+    virtual ~CssInlineBox();
+
+    /* virtual functions */
+    virtual void calcBox(const View* view, const CssBox* ctnBlock);
+
+protected:
+
+private:
+    std::vector<CssSubInlineBox*> m_sub_boxes;
+};
+
 // Line box
 //
 // Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
 class CssLineBox {
 public:
-    CssLineBox() : m_w(0), m_h(0) { }
+    CssLineBox() : m_x(0), m_y(0), m_w(0), m_h(0) { }
     virtual ~CssLineBox();
 
-protected:
+    bool tryToAddBox(const CssBox* box);
+
+private:
+    HTReal m_x, m_y;
     HTReal m_w, m_h;
 
-private:
-    VECTOR(CssInlineBox*, CssInlineBoxVec);
-    CssInlineBoxVec m_inlines;
+    std::vector<const CssBox*> m_sub_boxes;
 };
 
-// The block box acts as a line box container
-// A line box container only contains inline-level boxes
+// The box acts as an inline box container
 //
-// Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
-class CssLineBoxContainer : public CssBox {
-public:
-    CssLineBoxContainer(CssComputed* css, const View* first, const View* last,
-            bool anonymous = false)
-        : CssBox(css, anonymous), m_first(first), m_last(last) {};
-    virtual ~CssLineBoxContainer();
-
-    const View* getFirstView() const { return m_first; }
-    const View* getLastView() const { return m_last; }
-
-protected:
-
-private:
-    const View* m_first;
-    const View* m_last;
-    VECTOR(CssLineBox*, CssLineBoxVec);
-    CssLineBoxVec m_lines;
-};
-
-// The box acts as a inline box container
-//
-// A box container contains only inline-level boxes.
+// A inline-level box container contains only inline-level boxes.
+// One contained box is either an atomic inline-level box,
+// or a line box container.
 //
 // Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
 class CssInlineBoxContainer : public CssBox {
 public:
-    CssInlineBoxContainer(CssComputed* css)
-        : CssBox(css) {};
+    CssInlineBoxContainer(CssComputed* css, bool anonymous = false)
+        : CssBox(css, anonymous) {};
     virtual ~CssInlineBoxContainer();
 
-    void addBox(CssBox* box);
+    void addBox(CssBox* box) { m_boxes.push_back(box); }
 
+    void addFloatingBox(CssBox* floatBox) {
+        m_floatings.push_back(floatBox);
+    }
+
+    /* virtual functions */
+    virtual void calcBox(const View* view, const CssBox* ctnBlock);
 protected:
 
 private:
-    VECTOR(CssBox*, CssInlineBoxVec);
-    CssInlineBoxVec m_boxes;
+    std::vector<CssBox*> m_boxes;
+    std::vector<CssLineBox*> m_lines;
+    std::vector<CssBox*> m_floatings;
 };
 
 // The block box acts as a block box container
@@ -208,13 +223,15 @@ public:
         : CssBox(css) {};
     virtual ~CssBlockBoxContainer();
 
-    void addBox(CssBox* box);
+    void addBox(CssBox* box) { m_blocks.push_back(box); }
+
+    /* virtual functions */
+    virtual void calcBox(const View* view, const CssBox* ctnBlock);
 
 protected:
 
 private:
-    VECTOR(CssBox*, CssBlockBoxVec);
-    CssBlockBoxVec m_blocks;
+    std::vector<CssBox*> m_blocks;
 };
 
 } // namespace hfcl

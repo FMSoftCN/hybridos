@@ -685,8 +685,8 @@ void View::computeCss()
     }
 
     // make length/URI and others to be absolute here
-    m_css_computed->makeAbsolute(*this);
-    m_css_computed->validate(*this);
+    m_css_computed->makeAbsolute(this);
+    m_css_computed->validate(this);
 }
 
 void View::makeCssBox()
@@ -703,14 +703,12 @@ void View::makeCssBox()
 
     if (!isReplaced() && (pv == PV_BLOCK || pv == PV_LIST_ITEM ||
             pv == PV_INLINE_BLOCK)) {
-        // inline box container
-        m_cssbox_principal
-            = new CssLineBoxContainer(m_css_computed, this, this);
+        // inline box
+        m_cssbox_principal = new CssInlineBox(m_css_computed);
     }
     else if (!isReplaced() && pv == PV_INLINE) {
-        // inline box container
-        m_cssbox_principal
-            = new CssLineBoxContainer(m_css_computed, this, this);
+        // line box
+        m_cssbox_principal = new CssInlineBox(m_css_computed);
     }
     else if (isReplaced() && (pv == PV_INLINE || pv == PV_INLINE_BLOCK)) {
         // atomic inline-level box
@@ -725,6 +723,10 @@ void View::makeCssBox()
 void View::layOut(const CssBox* ctnBlock)
 {
     if (m_cssbox_principal) {
+        m_cssbox_principal->calcBox(this, ctnBlock);
+    }
+    else {
+        _ERR_PRINTF("%s: should not be here\n", __FUNCTION__);
     }
 }
 

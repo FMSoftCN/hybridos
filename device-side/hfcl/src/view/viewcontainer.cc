@@ -505,7 +505,7 @@ void ViewContainer::computeCss()
     }
 }
 
-CssLineBoxContainer* ViewContainer::createAnonymousBlock(const View* child)
+CssInlineBoxContainer* ViewContainer::createAnonymousBlock(const View* child)
 {
     const View* first_nb = 0;
     while (child) {
@@ -524,29 +524,39 @@ CssLineBoxContainer* ViewContainer::createAnonymousBlock(const View* child)
     }
 
     if (first_nb) {
-        const View* last_nb = first_nb;
-        child = child->getNext();
-        while (child) {
-            Uint32 pv;
-            child->m_css_computed->getProperty(PID_DISPLAY, &pv, NULL);
-            if (pv == PV_NONE) {
-                child = child->getNext();
-                continue;
-            }
+        CssInlineBoxContainer* anmbox
+            = new CssInlineBoxContainer(m_css_computed, true);
 
-            if (pv == PV_BLOCK || pv == PV_LIST_ITEM) {
-                break;
-            }
-            last_nb = child;
-            child = child->getNext();
-        }
-
-        CssLineBoxContainer* anmbox
-            = new CssLineBoxContainer(m_css_computed, first_nb, last_nb, true);
         return anmbox;
     }
 
     return NULL;
+}
+
+View* ViewContainer::checkInlineSlibings(CssInlineBoxContainer* anmbox,
+        View* child)
+{
+    while (child) {
+        Uint32 pv;
+        child->m_css_computed->getProperty(PID_DISPLAY, &pv, NULL);
+        if (pv == PV_NONE) {
+            child = child->getNext();
+            continue;
+        }
+
+        if (pv == PV_BLOCK || pv == PV_LIST_ITEM) {
+            break;
+        }
+
+        child->makeCssBox();
+        if (child->m_cssbox_principal) {
+            anmbox->addBox(child->m_cssbox_principal);
+        }
+
+        child = child->getNext();
+    }
+
+    return child;
 }
 
 void ViewContainer::makeCssBox()
@@ -561,6 +571,7 @@ void ViewContainer::makeCssBox()
     if (pv == PV_NONE)
         return;
 
+    CssBlockBoxContainer* bc = 0;
     bool any_visible_child = false;
     if (m_first) {
         // whether has a block-level child?
@@ -577,38 +588,35 @@ void ViewContainer::makeCssBox()
 
             if (pv == PV_BLOCK || pv == PV_LIST_ITEM) {
                 // create a block formatting context for children
-                m_cssbox_principal = new CssBlockBoxContainer(m_css_computed);
+                bc = new CssBlockBoxContainer(m_css_computed);
                 break;
             }
             child = child->getNext();
         }
 
-        if (m_cssbox_principal) {
+        if (bc) {
+            m_cssbox_principal = bc;
             // create anonymous block boxes for non-block-level children
-            CssLineBoxContainer* anmbox;
-            const View* child = m_first;
+            CssInlineBoxContainer* anmbox;
+            View* child = m_first;
             do {
                 anmbox = createAnonymousBlock(child);
                 if (anmbox) {
-                    static_cast<CssBlockBoxContainer*>
-                        (m_cssbox_principal)->addBox(anmbox);
-
-                    child = anmbox->getLastView();
-                    child = child->getNext();
-
-                    // this is a block-level view
-                    if (child) {
-                        ((View*)child)->makeCssBox();
-                        static_cast<CssBlockBoxContainer*>(m_cssbox_principal)
-                            ->addBox(child->m_cssbox_principal);
-                    }
+                    bc->addBox(anmbox);
+                    child = checkInlineSlibings(anmbox, child);
+                }
+                else {
+                    child->makeCssBox();
+                    if (child->m_cssbox_principal)
+                        bc->addBox(child->m_cssbox_principal);
                 }
             } while (anmbox && child);
         }
         else if (any_visible_child) {
             // create an inline formatting context for all visible children
-            m_cssbox_principal
+            CssInlineBoxContainer* ibc
                 = new CssInlineBoxContainer(m_css_computed);
+            m_cssbox_principal = ibc;
 
             child = m_first;
             while (child) {
@@ -619,9 +627,9 @@ void ViewContainer::makeCssBox()
                     continue;
                 }
 
-                ((View*)child)->makeCssBox();
-                static_cast<CssInlineBoxContainer*>(m_cssbox_principal)
-                    ->addBox(child->m_cssbox_principal);
+                child->makeCssBox();
+                if (child->m_cssbox_principal)
+                    ibc->addBox(child->m_cssbox_principal);
 
                 child = child->getNext();
             }
@@ -634,8 +642,23 @@ void ViewContainer::makeCssBox()
     }
 }
 
-void ViewContainer::layOut(const CssBox* cntBlock)
+void ViewContainer::layOut(const CssBox* ctnBlock)
 {
+    if (m_cssbox_principal == 0) {
+        return;
+    }
+
+    if (m_first) {
+        View* child = m_first;
+        while (child) {
+            if (child->m_cssbox_principal) {
+                child->m_cssbox_principal->calcBox(child, m_cssbox_principal);
+            }
+            child = child->getNext();
+        }
+    }
+
+    View::layOut(ctnBlock);
 }
 
 void ViewContainer::onChildAttached(View* view)

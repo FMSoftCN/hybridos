@@ -26,6 +26,7 @@
 namespace hfcl {
 
 CssBox::CssBox(CssComputed* css, bool anonymous) :
+    m_x(0), m_y(0),
     m_cw(0), m_ch(0),
     m_l(0), m_t(0), m_r(0), m_b(0),
     m_ml(0), m_mt(0), m_mr(0), m_mb(0),
@@ -49,50 +50,69 @@ CssBox::~CssBox()
     }
 }
 
+// For atomic inline-level box and general block box
+void CssBox::calcBox(const View* view, const CssBox* ctnBlock)
+{
+    m_css->calcWidthsMargins(view, ctnBlock, this);
+    m_css->calcHeightsMargins(view, ctnBlock, this);
+}
+
+// For inline boxes
+void CssSubInlineBox::calcBox(const View* view, const CssBox* ctnBlock)
+{
+    m_cw = m_view->getContentWidth(m_split_ctxt);
+    m_ch = m_view->getContentHeight();
+}
+
 CssLineBox::~CssLineBox()
 {
-    CssInlineBoxVec::iterator it;
-    for (it = m_inlines.begin(); it != m_inlines.end(); ++it) {
-        CssInlineBox* inline_box = *it;
-        HFCL_DELETE(inline_box);
+}
+
+bool CssLineBox::tryToAddBox(const CssBox* box)
+{
+    return true;
+}
+
+CssInlineBox::CssInlineBox(CssComputed* css, bool anonymous)
+    : CssBox(css, anonymous)
+{
+}
+
+CssInlineBox::~CssInlineBox()
+{
+    std::vector<CssSubInlineBox*>::iterator it;
+    for (it = m_sub_boxes.begin(); it != m_sub_boxes.end(); ++it) {
+        CssSubInlineBox* splitted = *it;
+        delete splitted;
     }
 }
 
-CssLineBoxContainer::~CssLineBoxContainer()
+// For line box container
+void CssInlineBox::calcBox(const View* view, const CssBox* ctnBlock)
 {
-    CssLineBoxVec::iterator it;
-    for (it = m_lines.begin(); it != m_lines.end(); ++it) {
-        CssLineBox* line = *it;
-        HFCL_DELETE(line);
-    }
 }
 
 CssInlineBoxContainer::~CssInlineBoxContainer()
 {
-    CssInlineBoxVec::iterator it;
-    for (it = m_boxes.begin(); it != m_boxes.end(); ++it) {
-        CssBox* box = *it;
-        HFCL_DELETE(box);
+    std::vector<CssLineBox*>::iterator it;
+    for (it = m_lines.begin(); it != m_lines.end(); ++it) {
+        CssLineBox* line = *it;
+        delete line;
     }
 }
 
-void CssInlineBoxContainer::addBox(CssBox* box)
+// For inline-level box container
+void CssInlineBoxContainer::calcBox(const View* view, const CssBox* ctnBlock)
 {
-    m_boxes.push_back(box);
 }
 
 CssBlockBoxContainer::~CssBlockBoxContainer()
 {
-    CssBlockBoxVec::iterator it;
-    for (it = m_blocks.begin(); it != m_blocks.end(); ++it) {
-        CssBox* box = *it;
-        HFCL_DELETE(box);
-    }
 }
 
-void CssBlockBoxContainer::addBox(CssBox* box)
+// For block-level box container
+void CssBlockBoxContainer::calcBox(const View* view, const CssBox* ctnBlock)
 {
-    m_blocks.push_back(box);
 }
 
 } // namespace hfcl

@@ -43,8 +43,8 @@ public:
     /* public methods */
     void reset();
     void inherit(const CssComputed* css);
-    bool makeAbsolute(const View& view);
-    bool validate(const View& view);
+    bool makeAbsolute(const View* view);
+    bool validate(const View* view);
 
     /* methods for visual formatting */
     bool isAbsolutelyPositioned() const {
@@ -58,24 +58,26 @@ public:
         return (m_values[PID_DIRECTION] == PV_LTR);
     }
 
-    bool getHSize(const CssBox& ctnBlock, int pid, HTReal& s) const;
-    bool getVSize(const CssBox& ctnBlock, int pid, HTReal& s) const;
-    bool getMinWidth(const CssBox& ctnBlock, HTReal& minw) const;
-    bool getMaxWidth(const CssBox& ctnBlock, HTReal& maxw) const;
-    bool getMinHeight(const CssBox& ctnBlock, HTReal& minh) const;
-    bool getMaxHeight(const CssBox& ctnBlock, HTReal& maxh) const;
+    bool getHSize(const CssBox* ctnBlock, int pid, HTReal& s) const;
+    bool getVSize(const CssBox* ctnBlock, int pid, HTReal& s) const;
+    bool getMinWidth(const CssBox* ctnBlock, HTReal& minw) const;
+    bool getMaxWidth(const CssBox* ctnBlock, HTReal& maxw) const;
+    bool getMinHeight(const CssBox* ctnBlock, HTReal& minh) const;
+    bool getMaxHeight(const CssBox* ctnBlock, HTReal& maxh) const;
 
-    void calcPaddings(const CssBox& ctnBlock,
+    void calcPaddings(const CssBox* ctnBlock,
         HTReal* pl, HTReal* pt, HTReal* pr, HTReal* pb) const;
 
-    void autoHMarginsAsZero(const CssBox& ctnBlock,
+    void autoHMarginsAsZero(const CssBox* ctnBlock,
             HTReal& ml, HTReal& mr) const;
 
-    void autoVMarginsAsZero(const CssBox& ctnBlock,
+    void autoVMarginsAsZero(const CssBox* ctnBlock,
             HTReal& mt, HTReal& mb) const;
 
-    void calcBox(const View& view, const CssBox& ctnBlock,
-        const CssBox* prevBox, CssBox* currBox);
+    bool calcWidthsMargins(const View* view, const CssBox* ctnBlock,
+            CssBox* cssBox);
+    bool calcHeightsMargins(const View* view, const CssBox* ctnBlock,
+            CssBox* cssBox);
 
     /* overloaded virtual functions */
     virtual bool getProperty(CssPropertyIds pid, Uint32 *value,
@@ -95,44 +97,44 @@ private:
 
     bool convertArray(int pid, int t);
     bool convertArray(int pid, int t, const RealRect& viewport);
-    bool convertArray(int pid, int t, const View& view);
+    bool convertArray(int pid, int t, const View* view);
     void freeArray();
 
     void validateBorderWidth(int pid);
     void validateNotNegative(int pid);
 
     /* methods for widths caculation */
-    void calcWidthForIR(const View& view, const CssBox& ctnBlock,
+    void calcWidthForIR(const View* view, const CssBox* ctnBlock,
         HTReal& w);
-    void calcWidthForBlock(const CssBox& ctnBlock,
+    void calcWidthForBlock(const CssBox* ctnBlock,
         HTReal& w, HTReal& ml, HTReal& mr, bool calced_w);
 
-    void calcWidthsForAPNR(const View& view, const CssBox& ctnBlock,
-        CssBox* box);
-    void calcWidthsForAPR(const View& view, const CssBox& ctnBlock,
-        CssBox* box);
+    void calcWidthsForAPNR(const View* view, const CssBox* ctnBlock,
+        CssBox* CssBox);
+    void calcWidthsForAPR(const View* view, const CssBox* ctnBlock,
+        CssBox* CssBox);
 
-    bool resolveWHForRIR(const View& view, const CssBox& ctnBlock,
+    bool resolveWHForRIR(const View* view, const CssBox* ctnBlock,
         HTReal& w, HTReal& h);
 
-    bool calcWidthsMargins(const View& view, const CssBox& ctnBlock,
-            const CssBox* prevBox, CssBox* currBox);
+    bool doCalcWidthsMargins(const View* view, const CssBox* ctnBlock,
+            CssBox* cssBox);
 
     /* methods for heights caculation */
-    void calcHeightForIR(const View& view, const CssBox& ctnBlock,
+    void calcHeightForIR(const View* view, const CssBox* ctnBlock,
         HTReal &w, HTReal& h);
-    void calcHeightsForAPNR(const View& view, const CssBox& ctnBlock,
-        CssBox* box);
-    void calcHeightsForAPR(const View& view, const CssBox& ctnBlock,
-        CssBox* box);
+    void calcHeightsForAPNR(const View* view, const CssBox* ctnBlock,
+        CssBox* CssBox);
+    void calcHeightsForAPR(const View* view, const CssBox* ctnBlock,
+        CssBox* CssBox);
 
-    void calcHeightForBlockVNR(const View& view, const CssBox& ctnBlock,
-            CssBox* currBox);
+    void calcHeightForBlockVNR(const View* view, const CssBox* ctnBlock,
+            CssBox* cssBox);
 
-    void resolveAutoHeights(const View& view, const CssBox& ctnBlock,
-            const CssBox* prevBox, CssBox* currBox);
-    bool calcHeightsMargins(const View& view, const CssBox& ctnBlock,
-            const CssBox* prevBox, CssBox* currBox);
+    void resolveAutoHeights(const View* view, const CssBox* ctnBlock,
+            CssBox* cssBox);
+    bool doCalcHeightsMargins(const View* view, const CssBox* ctnBlock,
+            CssBox* cssBox);
 
 #if 0
     bool hasComputedMarginLeft(const RealRect& ctnBlock, HTReal& ml);
