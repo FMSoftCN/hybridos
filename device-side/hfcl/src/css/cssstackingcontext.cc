@@ -23,22 +23,15 @@
 
 namespace hfcl {
 
-bool CssStackingContext::append(CssBox* cssbox, int zindex)
+static bool _sort_by_zindex (const CssStackingContext* v1,
+        const CssStackingContext* v2)
 {
-    CssBoxWithZIndex tmp = {cssbox, zindex};
-    m_boxes.push_back(tmp);
-    return true;
-}
-
-static bool _sort_by_zindex (const CssBoxWithZIndex &v1,
-        const CssBoxWithZIndex &v2)
-{
-    return v1.zindex < v2.zindex;
+    return v1->getZIndex() < v2->getZIndex();
 }
 
 void CssStackingContext::sort()
 {
-    std::sort(m_boxes.begin(), m_boxes.end(), _sort_by_zindex);
+    std::sort(m_children.begin(), m_children.end(), _sort_by_zindex);
 }
 
 } // namespace hfcl

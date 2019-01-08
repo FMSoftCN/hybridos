@@ -48,7 +48,7 @@ public:
 
     /* methods for visual formatting */
     bool isFloat() const {
-        return m_values[PID_FLOAT] != PV_NONE;
+        return (m_values[PID_FLOAT] != PV_NONE);
     }
     bool isLtr() const {
         return (m_values[PID_DIRECTION] == PV_LTR);

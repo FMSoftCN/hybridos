@@ -29,31 +29,24 @@
 
 namespace hfcl {
 
-typedef struct _CssBoxWithZIndex {
-    CssBox*    cssbox;
-    int        zindex;
-} CssBoxWithZIndex;
-
 class CssStackingContext {
 public:
-    CssStackingContext();
-    virtual ~CssStackingContext();
+    CssStackingContext(const View* view, int zindex)
+        : m_view(view), m_zindex(zindex) { }
+    ~CssStackingContext() {};
 
-    bool append(CssBox* cssbox, int zindex);
+    int getZIndex() const { return m_zindex; }
+    bool append(CssStackingContext* child) {
+        m_children.push_back(child);
+        return true;
+    }
+
     void sort();
 
-    const std::vector<CssBoxWithZIndex>& getVec() const {
-        return m_boxes;
-    }
-
-    std::vector<CssBoxWithZIndex>& getVec() {
-        return m_boxes;
-    }
-
 protected:
-
-private:
-    std::vector<CssBoxWithZIndex> m_boxes;
+    const View* m_view;
+    int         m_zindex;
+    std::vector<CssStackingContext*> m_children;
 };
 
 } // namespace hfcl
