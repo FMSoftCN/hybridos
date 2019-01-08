@@ -21,6 +21,8 @@
 
 #include "view/viewcontainer.h"
 
+#include <typeinfo>
+
 #include "css/csscomputed.h"
 #include "css/cssbox.h"
 #include "graphics/graphicscontext.h"
@@ -550,13 +552,36 @@ View* ViewContainer::checkInlineSlibings(CssInlineBoxContainer* anmbox,
 
         child->makeCssBox();
         if (child->m_cssbox_principal) {
-            anmbox->addBox(child->m_cssbox_principal);
+            anmbox->addInlineBox(child->m_cssbox_principal);
         }
 
         child = child->getNext();
     }
 
     return child;
+}
+
+void ViewContainer::handleFloats(CssBlockBoxContainer* bc)
+{
+    std::vector<CssBox*>& subboxes = bc->getBoxes();
+    std::vector<CssBox*>::iterator it;
+    for (it = subboxes.begin(); it != subboxes.end(); ++it) {
+        CssBox* box = *it;
+
+        CssInlineBoxContainer* ibc;
+        if (typeid(box) == typeid(ibc)) {
+            ibc = static_cast<CssInlineBoxContainer*>(box);
+
+            View* child = m_first;
+            while (child) {
+                if (child->m_cssbox_principal && m_css_computed->isFloat()) {
+                    ibc->addFloatBox(child->m_cssbox_principal);
+                }
+
+                child = child->getNext();
+            }
+        }
+    }
 }
 
 void ViewContainer::makeCssBox()
@@ -607,10 +632,15 @@ void ViewContainer::makeCssBox()
                 }
                 else {
                     child->makeCssBox();
-                    if (child->m_cssbox_principal)
+                    if (child->m_cssbox_principal) {
                         bc->addBox(child->m_cssbox_principal);
+                    }
                 }
             } while (anmbox && child);
+
+            // check all floats and add to all Inline Box Container
+            // for subsequent layout
+            handleFloats(bc);
         }
         else if (any_visible_child) {
             // create an inline formatting context for all visible children
@@ -629,7 +659,7 @@ void ViewContainer::makeCssBox()
 
                 child->makeCssBox();
                 if (child->m_cssbox_principal)
-                    ibc->addBox(child->m_cssbox_principal);
+                    ibc->addInlineBox(child->m_cssbox_principal);
 
                 child = child->getNext();
             }
@@ -642,7 +672,7 @@ void ViewContainer::makeCssBox()
     }
 }
 
-void ViewContainer::layOut(const CssBox* ctnBlock)
+void ViewContainer::layOut(CssBox* ctnBlock)
 {
     if (m_cssbox_principal == 0) {
         return;
@@ -652,7 +682,7 @@ void ViewContainer::layOut(const CssBox* ctnBlock)
         View* child = m_first;
         while (child) {
             if (child->m_cssbox_principal) {
-                child->m_cssbox_principal->calcBox(child, m_cssbox_principal);
+                child->layOut(m_cssbox_principal);
             }
             child = child->getNext();
         }

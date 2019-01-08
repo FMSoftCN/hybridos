@@ -115,12 +115,13 @@ protected:
     /* overloaded protected virtual functions */
     virtual void computeCss();
     virtual void makeCssBox();
-    virtual void layOut(const CssBox* ctnBlock);
+    virtual void layOut(CssBox* ctnBlock);
 
 private:
     CssInlineBoxContainer* createAnonymousBlock(const View* child);
     View* checkInlineSlibings(CssInlineBoxContainer* anmbox,
         View* child);
+    void handleFloats(CssBlockBoxContainer* bc);
 };
 
 } // namespace hfcl

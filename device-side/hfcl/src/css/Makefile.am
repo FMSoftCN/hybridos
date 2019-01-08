@@ -13,6 +13,7 @@ libhfcl_css_la_SOURCES = \
     cssinitial.cc \
     csscomputed.cc \
     cssdeclaredgroup.cc \
+    cssstackingcontext.cc \
     cssselector.cc
 
 test_cssselector_CPPFLAGS = -D_UNIT_TEST -I../../include

@@ -499,6 +499,16 @@ bool CssComputed::setProperty(CssPropertyIds pid, Uint32 value,
     return true;
 }
 
+/* return true for auto */
+bool CssComputed::getZIndex(int& zindex) const
+{
+    if (m_values[PID_Z_INDEX] == PV_AUTO)
+        return true;
+
+    zindex = m_data[PID_Z_INDEX].i;
+    return false;
+}
+
 void CssComputed::autoHMarginsAsZero(const CssBox* ctnBlock,
         HTReal& ml, HTReal& mr) const
 {

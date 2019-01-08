@@ -11,6 +11,7 @@ myinclude_HEADERS= \
     cssdeclared.h \
     csscomputed.h \
     cssdeclaredgroup.h \
+    cssstackingcontext.h \
     cssselector.h
 
 EXTRA_DIST= \

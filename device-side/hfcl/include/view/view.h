@@ -434,7 +434,7 @@ protected:
     virtual void computeCss();
 
     virtual void makeCssBox();
-    virtual void layOut(const CssBox* ctnBlock);
+    virtual void layOut(CssBox* ctnBlock);
 
     // The pricipal box of the view, either a CssBox,
     // a CssLineBoxContainer, or a CssBlockBoxContainer

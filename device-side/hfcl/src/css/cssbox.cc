@@ -21,6 +21,8 @@
 
 #include "css/cssbox.h"
 
+#include <typeinfo>
+
 #include "css/csscomputed.h"
 
 namespace hfcl {
@@ -51,14 +53,14 @@ CssBox::~CssBox()
 }
 
 // For atomic inline-level box and general block box
-void CssBox::calcBox(const View* view, const CssBox* ctnBlock)
+void CssBox::calcBox(const View* view, CssBox* ctnBlock)
 {
     m_css->calcWidthsMargins(view, ctnBlock, this);
     m_css->calcHeightsMargins(view, ctnBlock, this);
 }
 
-// For inline boxes
-void CssSubInlineBox::calcBox(const View* view, const CssBox* ctnBlock)
+// For splitted inline boxes
+void CssSubInlineBox::calcBox(const View* view, CssBox* ctnBlock)
 {
     m_cw = m_view->getContentWidth(m_split_ctxt);
     m_ch = m_view->getContentHeight();
@@ -80,16 +82,22 @@ CssInlineBox::CssInlineBox(CssComputed* css, bool anonymous)
 
 CssInlineBox::~CssInlineBox()
 {
-    std::vector<CssSubInlineBox*>::iterator it;
-    for (it = m_sub_boxes.begin(); it != m_sub_boxes.end(); ++it) {
-        CssSubInlineBox* splitted = *it;
+    std::vector<CssLineBox*>::iterator it;
+    for (it = m_lines.begin(); it != m_lines.end(); ++it) {
+        CssLineBox* splitted = *it;
         delete splitted;
     }
 }
 
-// For line box container
-void CssInlineBox::calcBox(const View* view, const CssBox* ctnBlock)
+// For inline-level box
+void CssInlineBox::calcBox(const View* view, CssBox* ctnBlock)
 {
+    CssInlineBoxContainer* ibc;
+    if (typeid(ctnBlock) == typeid(ibc)) {
+        ibc = static_cast<CssInlineBoxContainer*>(ctnBlock);
+    }
+    else {
+    }
 }
 
 CssInlineBoxContainer::~CssInlineBoxContainer()
@@ -102,7 +110,7 @@ CssInlineBoxContainer::~CssInlineBoxContainer()
 }
 
 // For inline-level box container
-void CssInlineBoxContainer::calcBox(const View* view, const CssBox* ctnBlock)
+void CssInlineBoxContainer::calcBox(const View* view, CssBox* ctnBlock)
 {
 }
 
@@ -111,7 +119,7 @@ CssBlockBoxContainer::~CssBlockBoxContainer()
 }
 
 // For block-level box container
-void CssBlockBoxContainer::calcBox(const View* view, const CssBox* ctnBlock)
+void CssBlockBoxContainer::calcBox(const View* view, CssBox* ctnBlock)
 {
 }
 

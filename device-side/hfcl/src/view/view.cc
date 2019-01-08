@@ -720,7 +720,7 @@ void View::makeCssBox()
     }
 }
 
-void View::layOut(const CssBox* ctnBlock)
+void View::layOut(CssBox* ctnBlock)
 {
     if (m_cssbox_principal) {
         m_cssbox_principal->calcBox(this, ctnBlock);

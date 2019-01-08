@@ -47,16 +47,26 @@ public:
     bool validate(const View* view);
 
     /* methods for visual formatting */
-    bool isAbsolutelyPositioned() const {
-        return (m_values[PID_POSITION] == PV_FIXED ||
-                m_values[PID_POSITION] == PV_ABSOLUTE);
-    }
-    bool isFloating() const {
+    bool isFloat() const {
         return m_values[PID_FLOAT] != PV_NONE;
     }
     bool isLtr() const {
         return (m_values[PID_DIRECTION] == PV_LTR);
     }
+    bool isAbsolutelyPositioned() const {
+        return (m_values[PID_POSITION] == PV_FIXED ||
+                m_values[PID_POSITION] == PV_ABSOLUTE);
+    }
+    bool isPositioned() const {
+        return (m_values[PID_POSITION] == PV_RELATIVE ||
+                m_values[PID_POSITION] == PV_FIXED ||
+                m_values[PID_POSITION] == PV_ABSOLUTE);
+    }
+    bool isFixed() const {
+        return (m_values[PID_POSITION] == PV_FIXED);
+    }
+
+    bool getZIndex(int& zindex) const;
 
     bool getHSize(const CssBox* ctnBlock, int pid, HTReal& s) const;
     bool getVSize(const CssBox* ctnBlock, int pid, HTReal& s) const;
