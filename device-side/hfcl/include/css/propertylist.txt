@@ -213,7 +213,7 @@ float
 
 font-family
     values: serif sans-serif cursive fantasy monospace <string> inherit
-    initial: <string>="default"
+    initial: serif
     inherited: yes
 
 # CSS specification defines the initial value of font-size is medium, we use an absolute length value here
@@ -238,8 +238,8 @@ font-weight
     inherited: yes
 
 font
-    values: default <string> <sysid> inherit
-    initial: default
+    values: use-others <string> <sysid> inherit
+    initial: use-others
     inherited: yes
 
 height

@@ -648,7 +648,7 @@ static bool pvc_float(Uint32 value, HTPVData data)
 static bool pvc_font(Uint32 value, HTPVData data)
 {
     static int valid_keywords[] = {
-        PVK_DEFAULT,
+        PVK_USE_OTHERS,
         PVK_INHERIT,
         PVK_UNDEFINED
     };

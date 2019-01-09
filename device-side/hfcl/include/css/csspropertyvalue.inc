@@ -523,6 +523,7 @@ typedef enum _CssPropertyValueKeywords {
     PVK_UPPER_LATIN,
     PVK_UPPER_ROMAN,
     PVK_UPPERCASE,
+    PVK_USE_OTHERS,
     PVK_VISIBLE,
     PVK_W_RESIZE,
     PVK_WAIT,
@@ -2130,8 +2131,9 @@ typedef enum _CssPropertyValueKeywords {
 // Values for property font
 // PV_STRING has been defined
 // PV_SYSID has been defined
-// PV_DEFAULT has been defined
 // PV_INHERIT has been defined
+#define PV_USE_OTHERS \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_USE_OTHERS)
 
 // Values for property font-family
 // PV_STRING has been defined
