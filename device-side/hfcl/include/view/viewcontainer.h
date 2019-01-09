@@ -26,6 +26,7 @@
 #include "../view/view.h"
 #include "../css/cssselector.h"
 #include "../css/cssbox.h"
+#include "../css/cssstackingcontext.h"
 
 namespace hfcl {
 
@@ -115,6 +116,7 @@ protected:
     /* overloaded protected virtual functions */
     virtual void computeCss();
     virtual void makeCssBox();
+    virtual void makeStackingContext(CssStackingContext* cssSc);
     virtual void layOut(CssBox* ctnBlock);
 
 private:

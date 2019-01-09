@@ -21,6 +21,8 @@
 
 #include "css/cssdeclaredgroup.h"
 
+#include <algorithm>
+
 namespace hfcl {
 
 CssDeclaredGroup::~CssDeclaredGroup()

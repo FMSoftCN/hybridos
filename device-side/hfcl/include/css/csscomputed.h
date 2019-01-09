@@ -48,26 +48,26 @@ public:
 
     /* methods for visual formatting */
     bool isFloat() const {
-        return (m_values[PID_FLOAT] != PV_NONE);
+        return (CSS_PPT_VALUE_NOFLAGS(m_values[PID_FLOAT]) != PV_NONE);
     }
     bool isLtr() const {
-        return (m_values[PID_DIRECTION] == PV_LTR);
+        return (CSS_PPT_VALUE_NOFLAGS(m_values[PID_DIRECTION]) == PV_LTR);
     }
     bool isAbsolutelyPositioned() const {
-        return (m_values[PID_POSITION] == PV_FIXED ||
-                m_values[PID_POSITION] == PV_ABSOLUTE);
+        Uint32 value = CSS_PPT_VALUE_NOFLAGS(m_values[PID_POSITION]);
+        return (value == PV_FIXED || value == PV_ABSOLUTE);
     }
     bool isPositioned() const {
-        return (m_values[PID_POSITION] == PV_RELATIVE ||
-                m_values[PID_POSITION] == PV_FIXED ||
-                m_values[PID_POSITION] == PV_ABSOLUTE);
+        Uint32 value = CSS_PPT_VALUE_NOFLAGS(m_values[PID_POSITION]);
+        return (value == PV_RELATIVE || value == PV_FIXED ||
+                value == PV_ABSOLUTE);
     }
     bool isFixed() const {
-        return (m_values[PID_POSITION] == PV_FIXED);
+        return (CSS_PPT_VALUE_NOFLAGS(m_values[PID_POSITION]) == PV_FIXED);
     }
 
     bool getZIndex(int& zindex) const;
-
+    unsigned char getOpacity() const;
     bool getHSize(const CssBox* ctnBlock, int pid, HTReal& s) const;
     bool getVSize(const CssBox* ctnBlock, int pid, HTReal& s) const;
     bool getMinWidth(const CssBox* ctnBlock, HTReal& minw) const;

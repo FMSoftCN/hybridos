@@ -30,6 +30,7 @@
 #include "../css/cssdeclared.h"
 #include "../css/cssdeclaredgroup.h"
 #include "../css/cssselector.h"
+#include "../css/cssstackingcontext.h"
 #include "../drawable/drawable.h"
 
 #include <string>
@@ -434,6 +435,7 @@ protected:
     virtual void computeCss();
 
     virtual void makeCssBox();
+    virtual void makeStackingContext(CssStackingContext* cssSc);
     virtual void layOut(CssBox* ctnBlock);
 
     // The pricipal box of the view, either a CssBox,

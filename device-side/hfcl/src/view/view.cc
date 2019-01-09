@@ -720,6 +720,20 @@ void View::makeCssBox()
     }
 }
 
+void View::makeStackingContext(CssStackingContext* cssSc)
+{
+    if (m_cssbox_principal && m_css_computed->isPositioned()) {
+        int zindex;
+        bool autozindex = m_css_computed->getZIndex(zindex);
+        if (!autozindex || (autozindex && m_css_computed->isFixed())) {
+            unsigned char opacity = m_css_computed->getOpacity();
+            CssStackingContext* csc;
+            csc = new CssStackingContext(this, zindex, opacity);
+            cssSc->append(csc);
+        }
+    }
+}
+
 void View::layOut(CssBox* ctnBlock)
 {
     if (m_cssbox_principal) {

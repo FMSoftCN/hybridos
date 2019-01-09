@@ -672,6 +672,43 @@ void ViewContainer::makeCssBox()
     }
 }
 
+void ViewContainer::makeStackingContext(CssStackingContext* cssSc)
+{
+    if (m_cssbox_principal == 0) {
+        return;
+    }
+
+    if (m_first) {
+        View* child = m_first;
+        while (child) {
+            if (child->m_cssbox_principal == 0) {
+                continue;
+            }
+
+            CssStackingContext* child_csc = 0;
+            CssComputed* css = child->m_css_computed;
+            if (css->isPositioned()) {
+                int zindex;
+                bool autozindex = css->getZIndex(zindex);
+                if (!autozindex || (autozindex && css->isFixed())) {
+                    unsigned char opacity = css->getOpacity();
+                    child_csc = new CssStackingContext(this, zindex, opacity);
+                    cssSc->append(child_csc);
+                }
+            }
+
+            if (child_csc)
+                child->makeStackingContext(child_csc);
+            else
+                child->makeStackingContext(cssSc);
+
+            child = child->getNext();
+        }
+    }
+
+    View::makeStackingContext(cssSc);
+}
+
 void ViewContainer::layOut(CssBox* ctnBlock)
 {
     if (m_cssbox_principal == 0) {

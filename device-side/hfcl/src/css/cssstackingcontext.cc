@@ -21,7 +21,34 @@
 
 #include "css/cssstackingcontext.h"
 
+#include <algorithm>
+
 namespace hfcl {
+
+CssStackingContext::CssStackingContext(const View* view, int zindex,
+            unsigned char opacity)
+    : m_view(view)
+    , m_zindex(zindex)
+    , m_opacity(opacity)
+    , m_mem_gc(0)
+{
+    // TODO: create memgc if opacity is not 0xFF.
+}
+
+CssStackingContext::~CssStackingContext()
+{
+    std::vector<CssStackingContext*>::iterator it;
+    for (it = m_children.begin(); it != m_children.end(); ++it) {
+        CssStackingContext* child = *it;
+        _DBG_PRINTF ("%s: Deleting CssStackingContext object: %p\n", child);
+        delete child;
+    }
+
+    if (m_mem_gc) {
+        _DBG_PRINTF ("%s: Deleting GraphicsContext object: %p\n", m_mem_gc);
+        delete m_mem_gc;
+    }
+}
 
 static bool _sort_by_zindex (const CssStackingContext* v1,
         const CssStackingContext* v2)

@@ -26,12 +26,14 @@
 #include "css/cssdeclaredgroup.h"
 #include "css/cssselector.h"
 #include "css/cssbox.h"
+#include "css/csscomputed.h"
 
 namespace hfcl {
 
 RootView::RootView()
     : ViewContainer(NULL, NULL, 0)
     , m_window(0)
+    , m_root_csc(0)
 {
 }
 
@@ -39,6 +41,10 @@ RootView::~RootView()
 {
     if (m_window) {
         detachFromSysWindow();
+    }
+
+    if (m_root_csc) {
+        delete m_root_csc;
     }
 }
 
@@ -53,19 +59,25 @@ bool RootView::attachToSysWindow(Window* window)
         IntRect rc;
         window->getClientRect(rc);
 
-        /* FIXME: viewport should be defined in px */
+        // FIXME: viewport should be defined in px
         m_viewport = rc;
-        computeCss();
 
+        computeCss();
         makeCssBox();
 
-        /* create initial containing block */
-        if (m_cssbox_principal) {
+        // create the default stacking context
+        if (m_root_csc)
+            delete m_root_csc;
+        int zindex;
+        m_css_computed->getZIndex(zindex);
+        m_root_csc = new CssStackingContext(this, zindex,
+            m_css_computed->getOpacity());
+        makeStackingContext(m_root_csc);
+
+        // create initial containing block
+        if (m_cssbox_principal)
             delete m_cssbox_principal;
-        }
-        else {
-            m_cssbox_principal = new CssBox(m_css_computed);
-        }
+        m_cssbox_principal = new CssBox(m_css_computed);
         m_cssbox_principal->setContentWidth(m_viewport.width());
         m_cssbox_principal->setContentHeight(m_viewport.height());
 

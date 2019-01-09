@@ -509,6 +509,20 @@ bool CssComputed::getZIndex(int& zindex) const
     return false;
 }
 
+unsigned char CssComputed::getOpacity() const
+{
+    HTReal alpha = m_data[PID_OPACITY].r;
+    // special values
+    if (alpha > 0.999)
+        return 0xFF;
+    else if (alpha < 0.001)
+        return 0x00;
+    else if (alpha > 0.499 && alpha < 0.501)
+        return 0x80;
+
+    return (unsigned char) (alpha * 255);
+}
+
 void CssComputed::autoHMarginsAsZero(const CssBox* ctnBlock,
         HTReal& ml, HTReal& mr) const
 {

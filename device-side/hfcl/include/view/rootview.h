@@ -31,7 +31,7 @@
 #include "../view/viewcontainer.h"
 #include "../css/cssdeclared.h"
 #include "../css/cssbox.h"
-#include "../graphics/graphicscontext.h"
+#include "../css/cssstackingcontext.h"
 #include "../resource/restypes.h"
 
 namespace hfcl {
@@ -59,6 +59,7 @@ protected:
 private:
     Window* m_window;
     RealRect m_viewport;
+    CssStackingContext* m_root_csc;
 };
 
 } // namespace hfcl

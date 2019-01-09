@@ -25,15 +25,15 @@
 #include <vector>
 
 #include "../common/common.h"
-#include "../css/cssbox.h"
+#include "../graphics/graphicscontext.h"
 
 namespace hfcl {
 
 class CssStackingContext {
 public:
-    CssStackingContext(const View* view, int zindex)
-        : m_view(view), m_zindex(zindex) { }
-    ~CssStackingContext() {};
+    CssStackingContext(const View* view, int zindex,
+            unsigned char opacity = 0xFF);
+    virtual ~CssStackingContext();
 
     int getZIndex() const { return m_zindex; }
     bool append(CssStackingContext* child) {
@@ -44,8 +44,10 @@ public:
     void sort();
 
 protected:
-    const View* m_view;
-    int         m_zindex;
+    const View*         m_view;
+    int                 m_zindex;
+    unsigned char       m_opacity;
+    GraphicsContext*    m_mem_gc;
     std::vector<CssStackingContext*> m_children;
 };
 

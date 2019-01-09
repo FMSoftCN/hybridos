@@ -23,7 +23,6 @@
 #define HFCL_CSS_CSSDECLAREDGROUP_H_
 
 #include <vector>
-#include <algorithm>
 
 #include "../css/cssdeclared.h"
 #include "../common/object.h"
