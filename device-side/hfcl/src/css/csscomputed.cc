@@ -711,7 +711,9 @@ bool CssComputed::handleFont()
     else if (type == PVT_SYSID) {
         // get the system log font and use the font attributes
         // for individual properties of font
-        Logfont* lf = GetFontRes((HTResId)(m_data[PID_FONT].u));
+        Font* font = GetFontRes((HTResId)(m_data[PID_FONT].u));
+        Logfont* lf = font->getLogfont();
+        font->unref();
 
         if (lf) {
             char* p = strdup(lf->family);

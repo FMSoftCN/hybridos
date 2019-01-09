@@ -23,6 +23,7 @@
 #define HFCL_RESOURCE_RESPKGMANAGER_H_
 
 #include "../resource/restypes.h"
+#include "../graphics/font.h"
 #include "../graphics/graphicscontext.h"
 #include "../css/cssdeclared.h"
 #include "../css/cssdeclaredgroup.h"
@@ -84,11 +85,11 @@ ResPackage* GetResPackageById(int id);
 bool UnregisterResPackageByName(const char* name);
 bool UnregisterResPackageById(int id);
 
-void * GetRes(HTResId id);
-Logfont * GetFontRes(HTResId id);
-Style * GetStyleRes(HTResId id);
-Image * GetImageRes(HTResId id);
-Bitmap * GetBitmapRes(HTResId id);
+void* GetRes(HTResId id);
+Font* GetFontRes(HTResId id);
+Style* GetStyleRes(HTResId id);
+Image* GetImageRes(HTResId id);
+Bitmap* GetBitmapRes(HTResId id);
 GifAnimate* GetGifAnimateRes(HTResId id);
 CssDeclared* GetCssRes(HTResId id);
 CssDeclaredGroup* GetCssGroupRes(HTResId id);

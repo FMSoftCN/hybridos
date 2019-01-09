@@ -33,7 +33,7 @@ namespace hfcl {
 
 class ResLoader {
 public:
-    Logfont* getFont(const char* fontname);
+    Font* getFont(const char* fontname);
     bool releaseFont(const char* fontname);
 
     Image* getImage(const char* filepath);
@@ -44,10 +44,10 @@ public:
     bool releaseBitmap(const char* filepath);
     bool releaseBitmap(Bitmap* pbmp);
 
-    void* loadData (const char* filepath, bool *fromincore);
-    const HFCL_INCORE_RES *getIncoreData (const char* resname);
+    void* loadData(const char* filepath, bool *fromincore);
+    const HFCL_INCORE_RES *getIncoreData(const char* resname);
 
-    void registerIncoreRes (const char* resname,
+    void registerIncoreRes(const char* resname,
             const HFCL_INCORE_RES *incores, int count);
 
 #if 0 /* VM: deprecated code */

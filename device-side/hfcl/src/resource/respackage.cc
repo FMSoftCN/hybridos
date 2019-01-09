@@ -664,12 +664,12 @@ Bitmap *ResPackage::getBitmap(HTResId id)
     return ResLoader::getInstance()->getBitmap(m_imageResourceEntry[idx].value);
 }
 
-Logfont *ResPackage::getFont(HTResId id)
+Font *ResPackage::getFont(HTResId id)
 {
     unsigned int idx = RESINDEX(id) - 1;
     if (R_TYPE_FONT != RESTYPE(id) || idx < 0
             || idx >= (unsigned int)m_resBuckets[RESTYPE(id)].fontRes().size())
-        return (Logfont *)NULL;
+        return 0;
 
     return m_resBuckets[RESTYPE(id)].fontRes()[idx].get();
 }
