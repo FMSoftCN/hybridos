@@ -1,0 +1,74 @@
+# Copyright (C) 2006 OpenWrt.org
+
+config interface loopback
+	option ifname	lo
+	option proto	static
+	option ipaddr	127.0.0.1
+	option netmask	255.0.0.0
+
+config device
+	option name	br-lan
+	option type	bridge
+	list ifname	eth0.1
+	list ifname	eth0.2
+	option mtu	1500
+
+config device
+	option name		dummy
+
+config interface lan
+	option ifname	'br-lan'
+	option proto	static
+	option ipaddr	192.168.1.1
+	option netmask	255.255.255.0
+
+config interface dummy
+	option ifname	eth0.4
+	option mtu		1500
+	option proto	none
+
+config interface lan2
+	option ifname	"eth0.3 eth0.5"
+	option type		bridge
+	option proto	static
+	option ipaddr	192.168.1.1
+	option netmask	255.255.255.0
+	option gateway	192.168.1.2
+	option dns		'192.168.1.5 192.168.1.6'
+
+config interface wan
+	option proto	pppoe
+	option ifname	br-lan2
+	option username	foo
+	option password bar
+
+config alias wan1
+	option proto	static
+	option interface	wan
+	option ipaddr	192.168.99.1
+	option ip6addr	2a01:4f8:131:30e2::2/59
+	option netmask	255.255.255.0
+	option gateway	192.168.99.3
+
+config route6
+	option interface wan1
+	option target ::0/0
+	option gateway 2a01:4f8:131:30e2::1
+
+config interface wlan
+	option proto	static
+	option ipaddr	192.168.2.1
+	option netmask	255.255.255.0
+
+config interface pptp
+	option proto	pptp
+	option server	1.1.1.1
+	option peerdns	0
+	option dns		192.168.10.1
+
+config route
+	option target	192.168.0.1
+	option netmask	24
+	option gateway	192.168.5.2
+	option interface wan
+

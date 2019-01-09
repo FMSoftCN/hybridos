@@ -1,0 +1,140 @@
+Design of the the network interface daemon (netifd)
+----------------------------------------------------
+
+The primary elements of netifd's state are devices and interfaces.
+
+Devices
+-------
+
+A device represents either a physical Linux interface (e.g. eth0), or a
+virtual link, bound to a static route, a socket or some other external trigger
+(e.g. for VPN links or tunnels).
+
+Anything that needs to be aware of device state registers a device_user, which
+is bound to the device and contains a callback for receiving events on device
+changes. As soon as the last device_user is removed, the device itself is freed
+immediately.
+
+Devices can also internally reference other devices, this is used to manage
+specific kinds of devices, such as bridges or vlans, which do not require
+special treatment from interfaces or other high level data structures, with
+the exception of adding more member interfaces via hotplug, which is useful
+for bridges or bonding interfaces.
+
+The device up/down state is managed through refcounting. A device can be
+brought up using claim_device(), and its reference released again with
+release_device(). As soon as the refcount goes to zero, the device is
+immediately brought down.
+If the device cannot be brought up, claim_device() will return a non-zero
+status and the caller will not have increased the refcount.
+
+A registered device may not be available immediately, an interface or another
+device could also be attached to it, waiting for it to appear in the system,
+to support triggering interfaces via hotplug.
+
+All device state transitions are announced via events to all the device_user
+callbacks. The following event types are supported:
+
+DEV_EVENT_ADD:
+  The device is now present in the system. When a device_user is being added
+  to a device and the device was already present, this event is generated
+  immediately.
+
+DEV_EVENT_REMOVE:
+  The device is no longer available. Either it is currently being removed,
+  or it has already disappeared. All users should drop their references
+  immediately and clean up their state for this device.
+
+DEV_EVENT_SETUP:
+  The device is about to be brought up. This allows device users to apply
+  some low level configuration parameters if necessary, however this event
+  may not be emitted in all cases. Externally managed devices added via
+  hotplug may be already up, and in that case this notification is skipped.
+
+DEV_EVENT_UP:
+  The device has been successfully brought up.
+
+DEV_EVENT_TEARDOWN:
+  The device is about to be brought down
+
+DEV_EVENT_DOWN:
+  The device has been brought down
+
+The following optional events are supported on some devices:
+
+DEV_EVENT_LINK_UP: a link has been established on this device
+DEV_EVENT_LINK_DOWN: the link has been lost
+
+
+
+Interfaces
+----------
+
+An interface represents a high level configuration applied to one or more
+devices. An active interface must always be bound to one main device and
+to a layer 3 device. By default, the layer 3 device points at the reference
+to the main device, based on how simple protocols like static, dhcp, etc.
+are set up. More complex protcol handlers such as ppp/pptp or VPN software
+can remap the layer 3 interface to something else, and external modules
+such as the firewall can take care of both interfaces if necessary.
+
+An interface always has the following state information:
+
+active:
+  The interface can be brought up (its main device is available)
+
+autostart:
+  If the interface switches from inactive to active, netifd will attempt
+  to bring it up immediately. Manually setting an interface to up (regardless
+  of whether that was successful or not) will set this flag.
+
+state:
+  IFS_SETUP:
+    The interface is currently being configured by the protocol handler
+  IFS_UP:
+    The interface is fully configured
+  IFS_TEARDOWN:
+    The interface is being deconfigured
+  IFS_DOWN:
+    The interface is down
+
+An interface references only one protocol handler state, modular protocol
+handlers such as PPP are expected to be written in a way that allows them
+to be set up as slave to another protocol handler if necessary (useful for
+PPPoE or PPTP).
+
+
+
+Protocol handlers
+-----------------
+
+A protocol handler can be attached to anything that provides a callback
+for state changes. For the simple case it is usually attached to an interface
+directly.
+
+The state of a protocol handler is tracked in a struct interface_proto_state,
+and it depends on the state of the entity that's controlling it.
+
+It responds to PROTO_CMD_SETUP and PROTO_SETUP_TEARDOWN commands, which
+should not block at any point in time. Completion is signalled back to the
+master by sending IFPEV_UP and IFPEV_DOWN events.
+
+If the setup can be done fast without blocking for a noticeable amount of
+time, the callback can do it and send back those events immediately.
+If the setup can take longer, it should use uloop to schedule its actions
+asynchronously and (if necessary) fork.
+
+The protocol handler must be able to abort a setup request that's being
+processed when it encounters a teardown command.
+
+When a PROTO_SETUP_TEARDOWN call is issued and the 'force' parameter is
+set, the protocol handler needs to clean up immediately as good as possible,
+without waiting for its pending actions to complete. If it has spawned
+any child processes, it needs to kill them and clean up their mess.
+
+Simple protocol handlers can set the PROTO_FLAG_IMMEDIATE flag if they
+can perform all required actions immediately without waiting and thus
+do not need to schedule IFPEV_UP and IFPEV_DOWN transitions. This will
+cause those events to be generated by core code instead.
+
+## TODO: Configuration management, ubus callbacks

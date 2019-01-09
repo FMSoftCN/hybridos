@@ -1,0 +1,1 @@
+echo "Action: $ACTION, Interface: $INTERFACE"
