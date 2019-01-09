@@ -216,9 +216,10 @@ font-family
     initial: <string>="default"
     inherited: yes
 
+# CSS specification defines the initial value of font-size is medium, we use an absolute length value here
 font-size
     values: xx-small x-small small medium large x-large xx-large larger smaller <length> <percentage> inherit
-    initial: medium
+    initial: <length-px>=14
     inherited: yes
 
 font-style

@@ -42,9 +42,15 @@ public:
 
     /* public methods */
     void reset();
+    // inherit CSS for anonymous box
     void inherit(const CssComputed* css);
+    // inherit a specified property
+    void inherit(const CssComputed* css, int pid);
     bool makeAbsolute(const View* view);
     bool validate(const View* view);
+
+    bool getParentPropertyValue(const View* view, CssPropertyIds pid,
+            Uint32* value, HTPVData* data) const;
 
     /* methods for visual formatting */
     bool isFloat() const {
@@ -99,6 +105,7 @@ private:
     enum {
         PID_INTERNAL_WIDTH = MAX_CSS_PID,
         PID_INTERNAL_HEIGHT,
+        PID_INTERNAL_FONT,
         MAX_CSS_PID_COMPUTED,
     };
 
@@ -112,7 +119,9 @@ private:
 
     void validateBorderWidth(int pid);
     void validateNotNegative(int pid);
+
     void handleColor(int pid);
+    void handleFontSize(const View* view);
 
     /* methods for widths caculation */
     void calcWidthForIR(const View* view, const CssBox* ctnBlock,

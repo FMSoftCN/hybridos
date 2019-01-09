@@ -100,7 +100,8 @@ typedef float           HTReal;
 #define OPT_CLASSNAME(clss)
 #endif
 
-#define HFCL_ASSERT(expression)    do {                         \
+#define HFCL_ASSERT(expression) \
+do {                                                            \
     if (!(expression)) {                                        \
         _DBG_PRINTF (0, "HFCL assert failed in %s (Line: %d)",  \
                 __FILE__, __LINE__);                            \

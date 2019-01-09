@@ -77,12 +77,44 @@ void CssComputed::reset()
     memcpy(&m_data, initial->m_values, sizeof(m_data));
 }
 
+void CssComputed::inherit(const CssComputed* css, int pid)
+{
+    if (css == NULL)
+        return;
+
+    CssInitial* initial = CssInitial::getSingleton();
+
+    if (CSS_PPT_VALUE_TYPE(css->m_values[pid])
+            == PVT_ARRAY_LENGTH_PX &&
+        IS_CSS_PPT_VALUE_ALLOCATED(css->m_values[pid])) {
+
+        Uint8 n = initial->m_arraysize[pid];
+        HTReal* p = new HTReal[n];
+        memcpy(p, css->m_data[pid].p, sizeof(HTReal)*n);
+
+        m_values[pid] = css->m_values[pid];
+        m_data[pid].p = p;
+        MARK_CSS_PPT_VALUE_ALLOCATED(m_values[pid]);
+    }
+    else {
+        m_values[pid] = css->m_values[pid];
+        m_data[pid] = css->m_data[pid];
+    }
+}
+
+/*
+ * The properties of anonymous boxes are inherited from the enclosing
+ * non-anonymous box. Non-inherited properties have their initial value.
+ *
+ * Ref: https://www.w3.org/TR/CSS22/visuren.html#anonymous-block-level
+ */
 void CssComputed::inherit(const CssComputed* css)
 {
     if (css == NULL)
         return;
 
     CssInitial* initial = CssInitial::getSingleton();
+
     for (int i = 0; i < MAX_CSS_PID; i++) {
 
         if (IS_CSS_PPT_VALUE_INHERITED(initial->m_values[i])) {
@@ -92,11 +124,11 @@ void CssComputed::inherit(const CssComputed* css)
 
                 Uint8 n = initial->m_arraysize[i];
                 HTReal* p = new HTReal[n];
-                memcpy (p, css->m_data[i].p, sizeof(HTReal)*n);
+                memcpy(p, css->m_data[i].p, sizeof(HTReal)*n);
 
                 m_values[i] = css->m_values[i];
                 m_data[i].p = p;
-                // MARK_CSS_PPT_VALUE_ALLOCATED(m_values[i]);
+                MARK_CSS_PPT_VALUE_ALLOCATED(m_values[i]);
             }
             else {
                 m_values[i] = css->m_values[i];
@@ -349,6 +381,9 @@ static RGBCOLOR hsl2rgb(HTReal h, HTReal s, HTReal l, HTReal a)
     return MakeRGBA(r, g, b, rgba_real_to_char(a));
 }
 
+/*
+ * Ref: https://www.w3.org/TR/css-color-3/
+ */
 void CssComputed::handleColor(int pid)
 {
     Uint32 type = CSS_PPT_VALUE_TYPE(m_values[pid]);
@@ -377,12 +412,103 @@ void CssComputed::handleColor(int pid)
         HTReal* p = (HTReal*)m_data[pid].p;
         rgba = hsl2rgb(p[0], p[1], p[2], p[3]);
     }
-    else {
-        rgba = MakeRGB(0xFF, 0xFF, 0xFF);
+    else if (type == PVT_KEYWORD && kw == PVK_CURRENT_COLOR) {
+        // use value of color
+        // The used value of the ‘currentColor’ keyword is the computed value
+        // of the ‘color’ property. If the ‘currentColor’ keyword is set on 
+        // the ‘color’ property itself, it is treated as ‘color: inherit’.
+        //
+        // Ref: https://www.w3.org/TR/css-color-3/#currentcolor-def
+        rgba = m_data[PID_COLOR].u;
     }
 
     m_values[pid] = PV_RGBA;
     m_data[pid].u = rgba;
+}
+
+bool CssComputed::getParentPropertyValue(const View* view, CssPropertyIds pid,
+        Uint32* value, HTPVData* data) const
+{
+    const View* parent = view->getParent();
+    const CssComputed* parent_css;
+    if (parent && (parent_css = parent->getCssComputed())) {
+        return parent_css->getProperty(pid, value, data);
+    }
+
+    return false;
+}
+
+
+/* TODO: the font-size for medium in pixels */
+#define FONT_MEDIUM_SIZE 14
+
+void CssComputed::handleFontSize(const View* view)
+{
+    Uint32 type = CSS_PPT_VALUE_TYPE(m_values[PID_FONT_SIZE]);
+    int kw = CSS_PPT_VALUE_KEYWORD(m_values[PID_FONT_SIZE]);
+    HTReal font_size;
+
+    if (type == PVT_KEYWORD) {
+        switch (kw) {
+        case PVK_XX_SMALL:
+            font_size = FONT_MEDIUM_SIZE/4.0;
+            break;
+        case PVK_X_SMALL:
+            font_size = FONT_MEDIUM_SIZE*2/4.0;
+            break;
+        case PVK_SMALL:
+            font_size = FONT_MEDIUM_SIZE*3/4.0;
+            break;
+        case PVK_MEDIUM:
+            font_size = FONT_MEDIUM_SIZE;
+            break;
+        case PVK_LARGE:
+            font_size = FONT_MEDIUM_SIZE*5/4.0;
+            break;
+        case PVK_X_LARGE:
+            font_size = FONT_MEDIUM_SIZE*6/4.0;
+            break;
+        case PVK_XX_LARGE:
+            font_size = FONT_MEDIUM_SIZE*7/4.0;
+            break;
+        case PVK_LARGER: {
+            Uint32 value;
+            HTPVData data;
+            if (getParentPropertyValue(view, PID_FONT_SIZE, &value, &data)) {
+                HFCL_ASSERT(value == PV_LENGTH_PX);
+                font_size = data.r * 1.25;
+            }
+            else {
+                /* use the initial value of font-size */
+                font_size = FONT_MEDIUM_SIZE * 1.25;
+            }
+            break;
+        }
+
+        case PVK_SMALLER: {
+            Uint32 value;
+            HTPVData data;
+            if (getParentPropertyValue(view, PID_FONT_SIZE, &value, &data)) {
+                HFCL_ASSERT(value == PV_LENGTH_PX);
+                font_size = data.r * 0.8;
+            }
+            else {
+                /* use the initial value of font-size */
+                font_size = FONT_MEDIUM_SIZE * 0.8;
+            }
+            break;
+        }
+
+        default:
+            return;
+        }
+    }
+    else {
+        return;
+    }
+
+    m_values[PID_FONT_SIZE] = PV_LENGTH_PX;
+    m_data[PID_FONT_SIZE].r = font_size;
 }
 
 /*
@@ -407,6 +533,8 @@ bool CssComputed::makeAbsolute(const View* view)
     const RealRect& viewport = root->viewport();
 
     /* handle special properties here: e.g., font-size */
+    handleFontSize(view);
+
     if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_LEFT_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
         CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_LEFT_STYLE]) ==

@@ -666,16 +666,30 @@ void View::computeCss()
             CssPropertyIds pid = (CssPropertyIds)(pv_it->first);
             const CssPropertyValue* pv = pv_it->second;
 
-            // check inherit
             Uint32 value = pv->getValue();
             HTPVData data = pv->getData();
-            if (CSS_PPT_VALUE_NOFLAGS(value) == PV_INHERIT && m_parent) {
-                if (m_parent->m_css_computed == NULL) {
-                    _ERR_PRINTF("View::computeCss: No parent CssComputed\n");
+
+            /* check inherit */
+
+            // The used value of the ‘currentColor’ keyword is the computed
+            // value of the ‘color’ property. If the ‘currentColor’ keyword
+            // is set on the ‘color’ property itself, it is treated as
+            // ‘color: inherit’.
+            if (pid == PID_COLOR &&
+                    CSS_PPT_VALUE_NOFLAGS(value) == PV_CURRENT_COLOR) {
+                if (m_parent && m_parent->m_css_computed) {
+                    m_css_computed->inherit(m_parent->m_css_computed, pid);
                 }
                 else {
-                    m_parent->m_css_computed->getProperty(pid, &value, &data);
-                    m_css_computed->setProperty(pid, value, data);
+                    _ERR_PRINTF("View::computeCss: No parent CssComputed\n");
+                }
+            }
+            else if (CSS_PPT_VALUE_NOFLAGS(value) == PV_INHERIT) {
+                if (m_parent && m_parent->m_css_computed) {
+                    m_css_computed->inherit(m_parent->m_css_computed, pid);
+                }
+                else {
+                    _ERR_PRINTF("View::computeCss: No parent CssComputed\n");
                 }
             }
             else {

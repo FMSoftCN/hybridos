@@ -87,6 +87,7 @@ public:
     }
 
     const RootView* getRoot() const;
+    const CssComputed* getCssComputed() const { return m_css_computed; }
 
     // methods to get/set identifier (integer) of the view
     int getId() const { return m_id; }
