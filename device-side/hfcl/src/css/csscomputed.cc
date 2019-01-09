@@ -511,6 +511,134 @@ void CssComputed::handleFontSize(const View* view)
     m_data[PID_FONT_SIZE].r = font_size;
 }
 
+inline Uint32 font_weight_bolder(Uint32 value)
+{
+    switch (value) {
+    case PV_100:
+        return PV_400;
+    case PV_200:
+        return PV_400;
+    case PV_300:
+        return PV_400;
+    case PV_400:
+        return PV_700;
+    case PV_500:
+        return PV_700;
+    case PV_600:
+        return PV_900;
+    case PV_700:
+        return PV_900;
+    case PV_800:
+        return PV_900;
+    case PV_900:
+        return PV_900;
+    default:
+        return PV_700;
+    }
+}
+
+inline Uint32 font_weight_lighter(Uint32 value)
+{
+    switch (value) {
+    case PV_100:
+        return PV_100;
+    case PV_200:
+        return PV_100;
+    case PV_300:
+        return PV_100;
+    case PV_400:
+        return PV_100;
+    case PV_500:
+        return PV_100;
+    case PV_600:
+        return PV_400;
+    case PV_700:
+        return PV_400;
+    case PV_800:
+        return PV_700;
+    case PV_900:
+        return PV_700;
+    default:
+        return PV_100;
+    }
+}
+
+void CssComputed::handleFontWeight(const View* view)
+{
+    Uint32 type = CSS_PPT_VALUE_TYPE(m_values[PID_FONT_WEIGHT]);
+    int kw = CSS_PPT_VALUE_KEYWORD(m_values[PID_FONT_WEIGHT]);
+    Uint32 pv;
+
+    if (type == PVT_KEYWORD) {
+        switch (kw) {
+        case PVK_100:
+        case PVK_200:
+        case PVK_300:
+        case PVK_400:
+        case PVK_500:
+        case PVK_600:
+        case PVK_700:
+        case PVK_800:
+        case PVK_900:
+            return;
+        case PVK_NORMAL:
+            pv = PV_400;
+            break;
+        case PVK_BOLD:
+            pv = PV_700;
+            break;
+        case PVK_BOLDER: {
+            Uint32 value;
+            if (!getParentPropertyValue(view, PID_FONT_WEIGHT, &value, NULL)) {
+                value = PV_400;
+            }
+            pv = font_weight_bolder(value);
+            break;
+        }
+
+        case PVK_SMALLER: {
+            Uint32 value;
+            if (!getParentPropertyValue(view, PID_FONT_WEIGHT, &value, NULL)) {
+                value = PV_400;
+            }
+            pv = font_weight_bolder(value);
+            break;
+        }
+
+        default:
+            return;
+        }
+    }
+    else {
+        return;
+    }
+
+    m_values[PID_FONT_WEIGHT] = pv;
+}
+
+/* return true if individual properties of font has been handled */
+bool CssComputed::handleFont()
+{
+    Uint32 type = CSS_PPT_VALUE_TYPE(m_values[PID_FONT]);
+    int kw = CSS_PPT_VALUE_KEYWORD(m_values[PID_FONT]);
+
+    if (type == PVT_KEYWORD && kw == PVK_USE_OTHERS) {
+        return false;
+    }
+    else if (type == PVT_STRING) {
+        // use the font attributes from font name
+        // for individual properties of font
+        return true;
+    }
+    else if (type == PVT_SYSID) {
+        // get the system log font and use the font attributes
+        // for individual properties of font
+        return true;
+    }
+
+    return false;
+}
+
 /*
  * A specified value can be either absolute (i.e., not relative to
  * another value, as in red or 2mm) or relative (i.e., relative to
@@ -533,7 +661,10 @@ bool CssComputed::makeAbsolute(const View* view)
     const RealRect& viewport = root->viewport();
 
     /* handle special properties here: e.g., font-size */
-    handleFontSize(view);
+    if (!handleFont()) {
+        handleFontSize(view);
+        handleFontWeight(view);
+    }
 
     if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_LEFT_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||

@@ -105,7 +105,6 @@ private:
     enum {
         PID_INTERNAL_WIDTH = MAX_CSS_PID,
         PID_INTERNAL_HEIGHT,
-        PID_INTERNAL_FONT,
         MAX_CSS_PID_COMPUTED,
     };
 
@@ -122,6 +121,8 @@ private:
 
     void handleColor(int pid);
     void handleFontSize(const View* view);
+    void handleFontWeight(const View* view);
+    bool handleFont();
 
     /* methods for widths caculation */
     void calcWidthForIR(const View* view, const CssBox* ctnBlock,
