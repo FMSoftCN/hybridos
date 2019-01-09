@@ -26,6 +26,7 @@
 #include "css/cssinitial.h"
 #include "view/view.h"
 #include "view/rootview.h"
+#include "resource/respkgmanager.h"
 
 namespace hfcl {
 
@@ -616,6 +617,13 @@ void CssComputed::handleFontWeight(const View* view)
     m_values[PID_FONT_WEIGHT] = pv;
 }
 
+// MiniGUI internal APIs
+extern "C" {
+BOOL fontGetFamilyFromName(const char* name, char* family);
+DWORD fontGetStyleFromName(const char* name);
+int fontGetHeightFromName(const char* name);
+}
+
 /* return true if individual properties of font has been handled */
 bool CssComputed::handleFont()
 {
@@ -628,11 +636,142 @@ bool CssComputed::handleFont()
     else if (type == PVT_STRING) {
         // use the font attributes from font name
         // for individual properties of font
+
+        const char* font_name = (const char*)m_data[PID_FONT].p;
+        char family[LEN_FONT_NAME + 1];
+        DWORD style;
+        int size;
+
+        if (fontGetFamilyFromName(font_name, family)) {
+            char* p = strdup(family);
+            m_values[PID_FONT_FAMILY] = PV_STRING;
+            m_data[PID_FONT_FAMILY].p = p;
+            MARK_CSS_PPT_VALUE_ALLOCATED(m_values[PID_FONT_FAMILY]);
+        }
+        else {
+            m_values[PID_FONT_FAMILY] = PV_SERIF;
+        }
+
+        if ((size = fontGetHeightFromName(font_name)) != -1) {
+            m_values[PID_FONT_SIZE] = PV_LENGTH_PX;
+            /* FIXME: unit conversion */
+            m_data[PID_FONT_SIZE].r = size;
+        }
+        else {
+            m_values[PID_FONT_SIZE] = PV_LENGTH_PX;
+            m_data[PID_FONT_SIZE].r = 14;
+        }
+
+        if ((style = fontGetStyleFromName(font_name)) != 0xFFFFFFFF) {
+            Uint32 weight = PV_400;
+            switch (style & FS_WEIGHT_MASK) {
+            case FS_WEIGHT_LIGHT:
+                weight = PV_200;
+                break;
+            case FS_WEIGHT_DEMIBOLD:
+                weight = PV_300;
+                break;
+            case FS_WEIGHT_REGULAR:
+                weight = PV_400;
+                break;
+            case FS_WEIGHT_MEDIUM:
+                weight = PV_500;
+                break;
+            case FS_WEIGHT_SUBPIXEL:
+                weight = PV_600;
+                break;
+            case FS_WEIGHT_BOOK:
+                weight = PV_700;
+                break;
+            case FS_WEIGHT_BOLD:
+                weight = PV_800;
+                break;
+            case FS_WEIGHT_BLACK:
+                weight = PV_900;
+                break;
+            }
+
+            m_values[PID_FONT_WEIGHT] = weight;
+
+            Uint32 slant = PV_NORMAL;
+            switch (style & FS_SLANT_MASK) {
+            case FS_SLANT_ITALIC:
+                slant = PV_ITALIC;
+                break;
+            case FS_SLANT_OBLIQUE:
+                slant = PV_OBLIQUE;
+                break;
+            }
+
+            m_values[PID_FONT_STYLE] = slant;
+        }
+
         return true;
     }
     else if (type == PVT_SYSID) {
         // get the system log font and use the font attributes
         // for individual properties of font
+        Font* font = GetFontRes((HTResId)(m_data[PID_FONT].u));
+        Logfont* lf = font->getLogfont();
+        font->unref();
+
+        if (lf) {
+            char* p = strdup(lf->family);
+            m_values[PID_FONT_FAMILY] = PV_STRING;
+            m_data[PID_FONT_FAMILY].p = p;
+            MARK_CSS_PPT_VALUE_ALLOCATED(m_values[PID_FONT_FAMILY]);
+
+            m_values[PID_FONT_SIZE] = PV_LENGTH_PX;
+            /* FIXME: unit conversion */
+            m_data[PID_FONT_SIZE].r = lf->size;
+
+            Uint32 weight = PV_400;
+            switch (lf->style & FS_WEIGHT_MASK) {
+            case FS_WEIGHT_LIGHT:
+                weight = PV_200;
+                break;
+            case FS_WEIGHT_DEMIBOLD:
+                weight = PV_300;
+                break;
+            case FS_WEIGHT_REGULAR:
+                weight = PV_400;
+                break;
+            case FS_WEIGHT_MEDIUM:
+                weight = PV_500;
+                break;
+            case FS_WEIGHT_SUBPIXEL:
+                weight = PV_600;
+                break;
+            case FS_WEIGHT_BOOK:
+                weight = PV_700;
+                break;
+            case FS_WEIGHT_BOLD:
+                weight = PV_800;
+                break;
+            case FS_WEIGHT_BLACK:
+                weight = PV_900;
+                break;
+            }
+
+            m_values[PID_FONT_WEIGHT] = weight;
+
+            Uint32 slant = PV_NORMAL;
+            switch (lf->style & FS_SLANT_MASK) {
+            case FS_SLANT_ITALIC:
+                slant = PV_ITALIC;
+                break;
+            case FS_SLANT_OBLIQUE:
+                slant = PV_OBLIQUE;
+                break;
+            }
+
+            m_values[PID_FONT_STYLE] = slant;
+        }
+        else {
+            m_values[PID_FONT] = PV_USE_OTHERS;
+            return false;
+        }
+
         return true;
     }
 

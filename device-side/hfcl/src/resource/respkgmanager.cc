@@ -177,7 +177,7 @@ void* GetRes(HTResId id)
     return NULL;
 }
 
-Logfont* GetFontRes(HTResId id)
+Font* GetFontRes(HTResId id)
 {
     ResPackage *resPkg = GetResPackageById(RPKGID(id));
     if (resPkg && (RESTYPE(id) & R_TYPE_FONT))

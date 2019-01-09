@@ -11,6 +11,8 @@ libhfcl_css_la_SOURCES = \
     cssbox.cc \
     cssdeclared.cc \
     cssinitial.cc \
+    pvcheckers.inc \
+    pvcolors.inc \
     csscomputed.cc \
     cssdeclaredgroup.cc \
     cssstackingcontext.cc \

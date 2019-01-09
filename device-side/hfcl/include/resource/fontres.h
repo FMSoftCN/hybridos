@@ -32,14 +32,11 @@ public:
     FontRes(const char *fontname);
     ~FontRes();
 
-    /*
-     * load real font
-     */
-    Logfont *get(/*Style* style*/);
+    Font *get();
 
 private:
     const char* m_fontname;
-    Logfont* m_font;
+    Font* m_font;
 };
 
 } // namespace hfcl

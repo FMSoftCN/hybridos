@@ -40,20 +40,22 @@ ResLoader* ResLoader::getInstance()
     return ResLoader::m_singleton;
 }
 
-Logfont* ResLoader::getFont(const char* fontname)
+Font* ResLoader::getFont(const char* fontname)
 {
     utf8string fontName(fontname);
     FontResMap::iterator it = m_fontRes.find(fontName);
 
     if (it == m_fontRes.end()) {
         Font* font = Font::createFont(fontname);
-        if(!font)
+        if (!font)
             return NULL;
         m_fontRes[fontname] = font;
-        return font->getLogfont();
+        return font;
     }
 
-    return it->second->getLogfont();
+    /* VincentWei increase refCount here */
+    it->second->ref();
+    return it->second;
 }
 
 bool ResLoader::releaseFont(const char* fontname)

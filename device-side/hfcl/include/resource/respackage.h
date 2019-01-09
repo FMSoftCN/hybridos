@@ -138,7 +138,7 @@ public:
     Image *getImage(HTResId id);
     Bitmap *getBitmap(HTResId id);
     GifAnimate *getGifAnimate(HTResId id);
-    Logfont *getFont(HTResId id);
+    Font *getFont(HTResId id);
     CssDeclared *getCss(HTResId id);
     CssDeclaredGroup *getCssGroup(HTResId id);
 

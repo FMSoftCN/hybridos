@@ -39,14 +39,18 @@ FontRes::FontRes()
 
 FontRes::~FontRes()
 {
+    if (m_fontname && m_font) {
+        ResLoader::getInstance()->releaseFont(m_fontname);
+    }
+
     m_fontname = NULL;
     m_font = NULL;
 }
 
-Logfont* FontRes::get(/*Style* style = NULL*/)
+Font* FontRes::get()
 {
     if (NULL == m_font)
-        m_font = ResLoader::getInstance()->getFont(m_fontname/*, style*/);
+        m_font = ResLoader::getInstance()->getFont(m_fontname);
 
     return m_font;
 }

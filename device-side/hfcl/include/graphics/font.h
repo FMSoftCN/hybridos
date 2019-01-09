@@ -29,7 +29,7 @@ namespace hfcl {
 
 class Font : public RefCount {
 public:
-    Font(){};
+    Font() : m_logfont(0) {};
     virtual ~Font();
 
     const char* getFontType();
