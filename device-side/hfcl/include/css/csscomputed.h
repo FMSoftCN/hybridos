@@ -112,6 +112,7 @@ private:
 
     void validateBorderWidth(int pid);
     void validateNotNegative(int pid);
+    void handleColor(int pid);
 
     /* methods for widths caculation */
     void calcWidthForIR(const View* view, const CssBox* ctnBlock,

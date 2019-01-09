@@ -34,7 +34,7 @@ import os, sys
 import time
 import re
 
-TOOL_NAME="css_code_generator.py"
+TOOL_NAME="make_css_properties.py"
 SRC_FILE="propertylist.txt"
 PROPERTYVALUE_FILE="csspropertyvalue.inc"
 STYLESHEETDECLARED_FILE="cssdeclared.inc"

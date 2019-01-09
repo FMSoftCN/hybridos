@@ -284,6 +284,107 @@ void CssComputed::validateNotNegative(int pid)
     }
 }
 
+#include "pvcolors.inc"
+
+inline HTReal hue2rgb(HTReal m1, HTReal m2, HTReal h)
+{
+    if (h < 0)
+        h = h + 1;
+    if (h > 1)
+        h = h - 1;
+
+    if (h * 6 < 1)
+        return m1+(m2-m1)*h*6;
+
+    if (h * 2 < 1)
+        return m2;
+
+    if (h * 3 < 2)
+        return m1+(m2-m1)*(2/3-h)*6;
+
+    return m1;
+}
+
+inline unsigned char rgba_real_to_char(HTReal real)
+{
+    // special values
+    if (real > 0.999)
+        return 0xFF;
+    else if (real < 0.001)
+        return 0x00;
+    else if (real > 0.499 && real < 0.501)
+        return 0x80;
+
+    return (unsigned char)(real * 255);
+}
+
+static RGBCOLOR hsl2rgb(HTReal h, HTReal s, HTReal l, HTReal a)
+{
+    HTReal m1, m2;
+    unsigned char r, g, b;
+
+    h = h / 360.0;
+    if (h < 0) h = 0;
+    if (h > 1) h = 1;
+
+    if (s < 0) s = 0;
+    if (s > 1) s = 1;
+
+    if (l < 0) l = 0;
+    if (l > 1) l = 1;
+
+    if (a < 0) a = 0;
+    if (a > 1) a = 1;
+
+    if (l < 0.5)
+        m2 = l * (s + 1);
+    else
+        m2 = l + s - l * s;
+
+    m1 = l * 2 - m2;
+    r = rgba_real_to_char(hue2rgb(m1, m2, h+1/3));
+    g = rgba_real_to_char(hue2rgb(m1, m2, h));
+    b = rgba_real_to_char(hue2rgb(m1, m2, h-1/3));
+
+    return MakeRGBA(r, g, b, rgba_real_to_char(a));
+}
+
+void CssComputed::handleColor(int pid)
+{
+    Uint32 type = CSS_PPT_VALUE_TYPE(m_values[pid]);
+    int kw = CSS_PPT_VALUE_KEYWORD(m_values[pid]);
+    RGBCOLOR rgba = 0;
+
+    if (type == PVT_KEYWORD &&
+            kw >= PVK_COLOR_ALICEBLUE && PVK_COLOR_YELLOWGREEN) {
+        rgba = _css_color_keyword_to_rgba[kw - PVK_COLOR_ALICEBLUE];
+    }
+    else if (type == PVT_KEYWORD && kw == PVK_TRANSPARENT) {
+        rgba = MakeRGBA(0, 0, 0, 0);
+    }
+    else if (type == PVT_RGB) {
+        rgba = MakeRGB(GetRValue(m_data[pid].u), GetGValue(m_data[pid].u),
+                       GetBValue(m_data[pid].u));
+    }
+    else if (type == PVT_RGBA) {
+        rgba = m_data[pid].u;
+    }
+    else if (type == PVT_HSL) {
+        HTReal* p = (HTReal*)m_data[pid].p;
+        rgba = hsl2rgb(p[0], p[1], p[2], 1.0);
+    }
+    else if (type == PVT_HSLA) {
+        HTReal* p = (HTReal*)m_data[pid].p;
+        rgba = hsl2rgb(p[0], p[1], p[2], p[3]);
+    }
+    else {
+        rgba = MakeRGB(0xFF, 0xFF, 0xFF);
+    }
+
+    m_values[pid] = PV_RGBA;
+    m_data[pid].u = rgba;
+}
+
 /*
  * A specified value can be either absolute (i.e., not relative to
  * another value, as in red or 2mm) or relative (i.e., relative to
@@ -334,6 +435,14 @@ bool CssComputed::makeAbsolute(const View* view)
         m_values[PID_BORDER_BOTTOM_WIDTH] = PV_LENGTH_PX;
         m_data[PID_BORDER_BOTTOM_WIDTH].r = 0.0;
     }
+
+    handleColor(PID_COLOR);
+    handleColor(PID_BACKGROUND_COLOR);
+    handleColor(PID_BORDER_LEFT_COLOR);
+    handleColor(PID_BORDER_TOP_COLOR);
+    handleColor(PID_BORDER_RIGHT_COLOR);
+    handleColor(PID_BORDER_BOTTOM_COLOR);
+    handleColor(PID_OUTLINE_COLOR);
 
     /* handle length and percentage values */
     for (int i = 0; i < MAX_CSS_PID; i++) {
@@ -511,16 +620,7 @@ bool CssComputed::getZIndex(int& zindex) const
 
 unsigned char CssComputed::getOpacity() const
 {
-    HTReal alpha = m_data[PID_OPACITY].r;
-    // special values
-    if (alpha > 0.999)
-        return 0xFF;
-    else if (alpha < 0.001)
-        return 0x00;
-    else if (alpha > 0.499 && alpha < 0.501)
-        return 0x80;
-
-    return (unsigned char) (alpha * 255);
+    return rgba_real_to_char(m_data[PID_OPACITY].r);
 }
 
 void CssComputed::autoHMarginsAsZero(const CssBox* ctnBlock,

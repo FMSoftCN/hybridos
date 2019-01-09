@@ -16,5 +16,5 @@ myinclude_HEADERS= \
     cssselector.h
 
 EXTRA_DIST= \
-    css_code_generator.py
-
+    make_css_properties.py \
+    make_css_color_list.py
