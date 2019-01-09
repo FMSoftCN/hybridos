@@ -47,12 +47,14 @@ Logfont* ResLoader::getFont(const char* fontname)
 
     if (it == m_fontRes.end()) {
         Font* font = Font::createFont(fontname);
-        if(!font)
+        if (!font)
             return NULL;
         m_fontRes[fontname] = font;
         return font->getLogfont();
     }
 
+    /* VincentWei increase refCount here */
+    it->second->ref();
     return it->second->getLogfont();
 }
 
