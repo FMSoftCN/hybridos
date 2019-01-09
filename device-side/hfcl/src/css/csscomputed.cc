@@ -1451,6 +1451,16 @@ bool CssComputed::resolveWHForRIR(const View* view, const CssBox* ctnBlock,
     return true;
 }
 
+void CssComputed::calcHeightsForAPNR(const View* view, const CssBox* ctnBlock,
+        CssBox* CssBox)
+{
+}
+
+void CssComputed::calcHeightsForAPR(const View* view, const CssBox* ctnBlock,
+        CssBox* CssBox)
+{
+}
+
 void CssComputed::resolveAutoHeights(const View* view,
             const CssBox* ctnBlock,
             CssBox* cssBox)

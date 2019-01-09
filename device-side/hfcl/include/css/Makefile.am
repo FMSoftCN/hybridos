@@ -6,6 +6,7 @@ myinclude_HEADERS= \
     csspropertyvalue.inc \
     csspropertyvalue.h \
     css.h \
+    cssbox.h \
     cssinitial.h \
     cssdeclared.inc \
     cssdeclared.h \
