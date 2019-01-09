@@ -36,109 +36,93 @@ VECTOR(HDC, DCVector);
 VECTOR(POINT*, PointVector);
 
 class GraphicsContextPrivate {
-    public:
-        GraphicsContextPrivate(HDC hdc)
-        {
+public:
+    GraphicsContextPrivate(HDC hdc) {
+        m_winPos.x = 0;
+        m_winPos.y = 0;
+        m_dcAbsPos.x = 0;
+        m_dcAbsPos.y = 0;
+        m_dcRelPos.x = 0;
+        m_dcRelPos.y = 0;
+        initDC(hdc);
+    }
+
+    ~GraphicsContextPrivate() {
+        // FIXME,
+        // delete memdc ....
+    }
+
+    void initDC(HDC hdc) {
+        m_viewdc = m_context = hdc;
+
+        if (m_context != HDC_INVALID) {
+            m_dcSize.cx = GetGDCapability(m_context, GDCAP_MAXX);
+            m_dcSize.cy = GetGDCapability(m_context, GDCAP_MAXY);
+        } else {
+            m_dcSize.cx = 0;
+            m_dcSize.cy = 0;
+        }
+    }
+
+    void setMapView(View* view) {
+        if (view) {
+            view->getSize(&m_dcSize.cx, &m_dcSize.cy);
             m_winPos.x = 0;
             m_winPos.y = 0;
-            m_dcAbsPos.x = 0;
-            m_dcAbsPos.y = 0;
-            m_dcRelPos.x = 0;
-            m_dcRelPos.y = 0;
-            initDC(hdc);
+            view->viewToWindow(&m_winPos.x, &m_winPos.y);
         }
+    }
 
-        ~GraphicsContextPrivate()
-        {
-            // FIXME,
-            // delete memdc ....
+    void map(int x, int y, int &x2, int &y2) {
+        x2 = x + m_winPos.x - m_dcAbsPos.x;
+        y2 = y + m_winPos.y - m_dcAbsPos.y;
+    }
+
+    void mapRect(RECT &rc) {
+        if (m_winPos.x != m_dcAbsPos.x || m_winPos.y != m_dcAbsPos.y) {
+            OffsetRect(&rc, m_winPos.x - m_dcAbsPos.x,
+                m_winPos.y - m_dcAbsPos.y);
         }
+    }
 
-        void initDC(HDC hdc)
-        {
-            m_viewdc = m_context = hdc;
+    void translation(int offx, int offy) {
+        m_winPos.x += offx;
+        m_winPos.y += offy;
+    }
 
-            if (m_context != HDC_INVALID) {
-                m_dcSize.cx = GetGDCapability(m_context, GDCAP_MAXX);
-                m_dcSize.cy = GetGDCapability(m_context, GDCAP_MAXY);
-            } else {
-                m_dcSize.cx = 0;
-                m_dcSize.cy = 0;
-            }
-        }
+    void getTranslation(int &offx, int &offy) {
+        offx = m_winPos.x;
+        offy = m_winPos.y;
+    }
 
-        void beginTransparencyLayer(int alpha)
-        {
-        }
+private:
+    void copyPoint(POINT &dstPt, POINT &srcPt) {
+        dstPt.x = srcPt.x;
+        dstPt.y = srcPt.y;
+    }
 
-        void endTransparencyLayer()
-        {
-        }
+public:
+    HDC   m_viewdc;
+    HDC   m_context;
+    POINT m_winPos;
+    POINT m_dcAbsPos;
+    SIZE  m_dcSize;
 
-        void setMapView(View* view)
-        {
-            if (view) {
-                view->getSize(&m_dcSize.cx, &m_dcSize.cy);
-                m_winPos.x = 0;
-                m_winPos.y = 0;
-                view->viewToWindow(&m_winPos.x, &m_winPos.y);
-            }
-        }
-
-        void map(int x, int y, int &x2, int &y2) {
-            x2 = x + m_winPos.x - m_dcAbsPos.x;
-            y2 = y + m_winPos.y - m_dcAbsPos.y;
-        }
-
-        void mapRect(RECT &rc)
-        {
-            if (m_winPos.x != m_dcAbsPos.x || m_winPos.y != m_dcAbsPos.y) {
-                OffsetRect(&rc, m_winPos.x - m_dcAbsPos.x, m_winPos.y - m_dcAbsPos.y);
-                //rc.right = rc.right > m_dcSize.cx ? rc.left + m_dcSize.cx : rc.right;
-                //rc.bottom = rc.bottom > m_dcSize.cy ? rc.top + m_dcSize.cy : rc.bottom;
-            }
-        }
-
-        void translation(int offx, int offy)
-        {
-            m_winPos.x += offx;
-            m_winPos.y += offy;
-        }
-
-        void getTranslation(int &offx, int &offy)
-        {
-            offx = m_winPos.x;
-            offy = m_winPos.y;
-        }
-
-    private:
-        void copyPoint(POINT &dstPt, POINT &srcPt)
-        {
-            dstPt.x = srcPt.x;
-            dstPt.y = srcPt.y;
-        }
-
-    public:
-        HDC   m_viewdc;
-        HDC   m_context;
-        POINT m_winPos;
-        POINT m_dcAbsPos;
-        SIZE  m_dcSize;
-
-    private:
-        POINT       m_dcRelPos;
-        DCVector    m_layers;
-        PointVector m_points;
+private:
+    POINT       m_dcRelPos;
+    DCVector    m_layers;
+    PointVector m_points;
 };
 
-GraphicsContext* GraphicsContext::screenGraphics() {
+GraphicsContext* GraphicsContext::screenGraphics()
+{
     if (NULL == screen_graphics_context) {
         screen_graphics_context = HFCL_NEW_EX(GraphicsContext, (HDC_SCREEN));
     }
     return screen_graphics_context;
 }
 
-void GraphicsContext::deleteScreenGraphics(void) {
+void GraphicsContext::deleteScreenGraphics() {
     if (NULL != screen_graphics_context)
         HFCL_DELETE(screen_graphics_context);
     screen_graphics_context = NULL;
@@ -162,7 +146,7 @@ void GraphicsContext::getTranslation(int &offx, int &offy)
     m_data->getTranslation(offx, offy);
 }
 
-Logfont* GraphicsContext::getLogFont(void)
+Logfont* GraphicsContext::getLogFont()
 {
     return GetCurFont(m_data->m_context);
 }
@@ -195,7 +179,7 @@ GraphicsContext::~GraphicsContext()
     m_data = NULL;
 }
 
-bool GraphicsContext::getBiDiFlag (void)
+bool GraphicsContext::getBiDiFlag ()
 {
     return (bool)GetBIDIFlags (m_data->m_context);
 }
@@ -205,7 +189,7 @@ void GraphicsContext::setBiDiFlag (bool bidi)
     SetBIDIFlags (m_data->m_context, bidi);
 }
 
-int GraphicsContext::getBiDiFirstChType (void)
+int GraphicsContext::getBiDiFirstChType ()
 {
     _DBG_PRINTF ("GraphicsContext::getBiDiFirstChType: NOT IMPLEMENTED\n");
     return BIDI_TYPE_LTR;
@@ -216,7 +200,8 @@ void GraphicsContext::setBiDiFirstChType (int type)
     _DBG_PRINTF ("GraphicsContext::setBiDiFirstChType: NOT IMPLEMENTED\n");
 }
 
-void GraphicsContext::textOutOmitted(int x, int y, const char * text, int len, int max_extent)
+void GraphicsContext::textOutOmitted(int x, int y, const char * text, int len,
+        int max_extent)
 {
     if (!text)
         return;
@@ -232,7 +217,7 @@ void GraphicsContext::textOutOmitted(int x, int y, const char * text, int len, i
 }
 
 void GraphicsContext::textOutOmitted(int x, int y, const char * text,
-        int len, int max_extent, unsigned int color, Logfont * logfont)
+        int len, int max_extent, RGBCOLOR color, Logfont * logfont)
 {
     if (!text)
         return;
@@ -248,7 +233,7 @@ void GraphicsContext::textOutOmitted(int x, int y, const char * text,
 }
 
 void GraphicsContext::textOut(int x, int y, const char * text, int len,
-        unsigned int color, Logfont * logfont)
+        RGBCOLOR color, Logfont * logfont)
 {
     if (!text)
         return;
@@ -263,19 +248,22 @@ void GraphicsContext::textOut(int x, int y, const char * text, int len,
     TextOutLen (hdc, outx, outy, text, len);
 }
 
-void GraphicsContext::getTextDrawSize (const std::string text, Logfont *f, int *w, int *h)
+void GraphicsContext::getTextDrawSize(const std::string text, Logfont *f,
+        int *w, int *h)
 {
     getTextDrawSize (text.c_str(), f, w, h);
 }
 
-void GraphicsContext::getTextDrawSize (const char *text, Logfont *f, int *w, int *h)
+void GraphicsContext::getTextDrawSize(const char *text, Logfont *f,
+        int *w, int *h)
 {
     SIZE cz = {0, 0};
     int text_len = strlen (text);
     Glyph32* glyphs = NULL;
     GLYPHMAPINFO* glyphs_map = NULL;
 
-    int nr_glyphs = BIDIGetTextLogicalGlyphs (f, text, text_len, &glyphs, &glyphs_map);
+    int nr_glyphs = BIDIGetTextLogicalGlyphs (f, text, text_len, &glyphs,
+        &glyphs_map);
 
     if (nr_glyphs <= 0)
         goto END;
@@ -297,7 +285,8 @@ END:
     *h = cz.cy;
 }
 
-int GraphicsContext::drawTextToCalcRect(const std::string& text, IntRect& rect, unsigned int format, Logfont *font)
+int GraphicsContext::drawTextToCalcRect(const std::string& text, IntRect& rect,
+    unsigned int format, Logfont *font)
 {
     RECT rc = { rect.left(), rect.top(), rect.right(), rect.bottom() };
 
@@ -311,17 +300,18 @@ int GraphicsContext::drawTextToCalcRect(const std::string& text, IntRect& rect, 
 }
 
 int GraphicsContext::calcTextRectOnDrawing(const char *text,
-        Logfont *f, unsigned int format, IntRect *rect, DTFIRSTLINE *firstline, Point *txtPos)
+        Logfont *f, unsigned int format, IntRect *rect,
+        DTFIRSTLINE *firstline, Point *txtPos)
 {
     if (rect == NULL)
         return -1;
 
     RECT rc = {rect->left(), rect->top(), rect->right(), rect->bottom()};
 
-    DrawTextEx2(m_data->m_context, text, -1, &rc, 0, format | DT_CALCRECT, firstline);
+    DrawTextEx2(m_data->m_context, text, -1, &rc, 0, format | DT_CALCRECT,
+        firstline);
 
     rect->setRect(rc.left, rc.top, rc.right, rc.bottom);
-
     return RECTH(rc);
 }
 
@@ -329,8 +319,8 @@ int GraphicsContext::drawTextToGetLenght(const std::string& text)
 {
     RECT rc = {0, 0, 100, 30};
 
-    DrawText(m_data->m_context, text.c_str(), -1, &rc, DT_SINGLELINE | DT_CALCRECT);
-
+    DrawText(m_data->m_context, text.c_str(), -1, &rc,
+        DT_SINGLELINE | DT_CALCRECT);
     return rc.right - rc.left;
 }
 
@@ -366,11 +356,12 @@ void GraphicsContext::drawText(const std::string& text, const IntRect& rect)
 
     mapRect(rc);
     SetBkMode(hdc, BM_TRANSPARENT);
-    DrawText(hdc, text.c_str(), -1, &rc, DT_SINGLELINE | DT_CENTER  | DT_VCENTER);
+    DrawText(hdc, text.c_str(), -1, &rc,
+        DT_SINGLELINE | DT_CENTER  | DT_VCENTER);
 }
 
 void GraphicsContext::drawText(const char * text, const IntRect& rect,
-        unsigned int color, Logfont * logfont, unsigned int format)
+        RGBCOLOR color, Logfont * logfont, unsigned int format)
 {
     RECT rc = RECT(rect);
     Color clr(color);
@@ -481,12 +472,14 @@ void GraphicsContext::fillBox(int x, int y, int w, int h)
     FillBox(m_data->m_context, x, y, w, h);
 }
 
-void GraphicsContext::bitBlt(GraphicsContext* src, int sx, int sy, int sw, int sh, int dx, int dy, Uint32 op)
+void GraphicsContext::bitBlt(GraphicsContext* src, int sx, int sy,
+        int sw, int sh, int dx, int dy, Uint32 op)
 {
     BitBlt(src->context(), sx, sy, sw, sh, m_data->m_context, dx, dy, op);
 }
 
-void GraphicsContext::fillRect(const IntRect& rc, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+void GraphicsContext::fillRect(const IntRect& rc,
+        Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     if (rc.width() <= 0 || rc.height() <= 0)
         return;
@@ -554,7 +547,8 @@ void GraphicsContext::rectangle(int x0, int y0, int x1, int y1)
     Rectangle(m_data->m_context, out_x0, out_y0, out_x1, out_y1);
 }
 
-void GraphicsContext::rectangle(int x0, int y0, int x1, int y1, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+void GraphicsContext::rectangle(int x0, int y0, int x1, int y1,
+        Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     drawLine(x0, y0, x1, y0, 1, r, g, b, a);
     drawLine(x1, y0, x1, y1, 1, r, g, b, a);
@@ -563,7 +557,7 @@ void GraphicsContext::rectangle(int x0, int y0, int x1, int y1, Uint8 r, Uint8 g
 }
 
 void GraphicsContext::drawLine(int x0, int y0, int x1, int y1,
-                int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+        int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     int out_x0, out_y0, out_x1, out_y1;
     HDC hdc = m_data->m_context;
@@ -581,7 +575,7 @@ void GraphicsContext::drawLine(int x0, int y0, int x1, int y1,
 }
 
 void GraphicsContext::drawHVDotLine(int x, int y, int wh, bool isHorz,
-                Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+        Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     int out_x, out_y;
     HDC hdc = m_data->m_context;
@@ -594,7 +588,8 @@ void GraphicsContext::drawHVDotLine(int x, int y, int wh, bool isHorz,
     SetPenColor(hdc, oldC);
 }
 
-void GraphicsContext::drawPolygonLine(Point *pts, int nums, int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+void GraphicsContext::drawPolygonLine(Point *pts, int nums, int width,
+        Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     HDC hdc = m_data->m_context;
     Point* p = HFCL_NEW_ARR(Point, (sizeof(Point) * nums));
@@ -620,7 +615,8 @@ void GraphicsContext::drawPolygonLine(Point *pts, int nums, int width, Uint8 r, 
     }
 }
 
-void GraphicsContext::fillPolygon(const Point* pts, int vertices, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+void GraphicsContext::fillPolygon(const Point* pts, int vertices,
+        Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     HDC hdc = m_data->m_context;
     int c = 0;
@@ -643,7 +639,8 @@ void GraphicsContext::fillPolygon(const Point* pts, int vertices, Uint8 r, Uint8
     }
 }
 
-bool GraphicsContext::fillBoxWithBitmap(int x, int y, int w, int h, const Bitmap* pBitmap)
+bool GraphicsContext::fillBoxWithBitmap(int x, int y, int w, int h,
+        const Bitmap* pBitmap)
 {
     int outx, outy;
     HDC hdc = m_data->m_context;
@@ -653,12 +650,13 @@ bool GraphicsContext::fillBoxWithBitmap(int x, int y, int w, int h, const Bitmap
     return FillBoxWithBitmap(hdc, outx, outy, w, h, pBitmap);
 }
 
-bool GraphicsContext::setReplaceColor(const DWORD color)
+bool GraphicsContext::setReplaceColor(RGBCOLOR color)
 {
     return true;
 }
 
-bool GraphicsContext::drawRotateBitmap(const Bitmap* pBitmap,int lx, int ty, int angle)
+bool GraphicsContext::drawRotateBitmap(const Bitmap* pBitmap,
+        int lx, int ty, int angle)
 {
     HDC hdc = m_data->m_context;
 
@@ -666,7 +664,8 @@ bool GraphicsContext::drawRotateBitmap(const Bitmap* pBitmap,int lx, int ty, int
     return true;
 }
 
-bool GraphicsContext::fillBoxWithBitmapPart(int x, int y, int w, int h, const Bitmap* pBitmap, int xo, int yo)
+bool GraphicsContext::fillBoxWithBitmapPart(int x, int y, int w, int h,
+        const Bitmap* pBitmap, int xo, int yo)
 {
     int outx, outy;
     HDC hdc = m_data->m_context;
@@ -686,7 +685,8 @@ int GraphicsContext::loadBitmap(Bitmap* bmp, const char * file_name)
     return ret;
 }
 
-int GraphicsContext::loadBitmap(Bitmap **bmp, const void* data, int size, const char * extern_name)
+int GraphicsContext::loadBitmap(Bitmap **bmp, const void* data, int size,
+        const char * extern_name)
 {
     return LoadBitmapFromMem(m_data->m_viewdc, *bmp, data, size, extern_name);
 }
@@ -728,7 +728,7 @@ bool GraphicsContext::getBitmapSize(Bitmap* pBitmap, int* w, int* h)
     return true;
 }
 
-Logfont* GraphicsContext::getCurFont(void)
+Logfont* GraphicsContext::getCurFont()
 {
     return GetCurFont(m_data->m_context);
 }
@@ -743,71 +743,12 @@ void GraphicsContext::deleteLogFont(Logfont* logfont)
     DestroyLogFont(logfont);
 }
 
-void GraphicsContext::rotateBitmap(const Bitmap *pBitmap, int lx, int ty, int angle)
+void GraphicsContext::rotateBitmap(const Bitmap *pBitmap, int lx, int ty,
+        int angle)
 {
     int outx, outy;
     map(lx, ty, outx, outy);
     RotateBitmap(context(), pBitmap, outx, outy, angle);
-}
-
-void GraphicsContext::beginTransparencyLayer(int alpha)
-{
-    m_data->beginTransparencyLayer(alpha);
-}
-
-void GraphicsContext::endTransparencyLayer(void)
-{
-    m_data->endTransparencyLayer();
-}
-
-int GraphicsContext::getLayers(void)
-{
-/* VincentWei: disable multiple-layer support */
-#if __MG_MULTILAYER_SUPPORT
-    return GetDCLayers(context());
-#else
-    return 1;
-#endif
-}
-
-void GraphicsContext::setLayer(int layer)
-{
-/* VincentWei: disable multiple-layer support */
-#if __MG_MULTILAYER_SUPPORT
-    SetDCLayer(context(), layer);
-#else
-    return;
-#endif
-}
-
-void GraphicsContext::setLayerEnable(int layer, BOOL enable)
-{
-/* VincentWei: disable multiple-layer support */
-#if __MG_MULTILAYER_SUPPORT
-    SetDCLayerEnable (context(), layer, enable);
-#else
-    return;
-#endif
-}
-
-void GraphicsContext::setLayerOpacity(int layer, BOOL enable,unsigned char opacity_value)
-{
-/* VincentWei: disable multiple-layer support */
-#if __MG_MULTILAYER_SUPPORT
-    SetDCLayerOpacity (context(), layer, enable, opacity_value);
-#else
-    return;
-#endif
-}
-
-void GraphicsContext::setLayerColorKey(int layer, BOOL enable,
-        unsigned char r, unsigned char g, unsigned char b )
-{
-/* VincentWei: disable multiple-layer support */
-#if __MG_MULTILAYER_SUPPORT
-    SetDCLayerColorKey (context(),  layer,  enable, r, g, b);
-#else
-#endif
 }
 
 /////////////////////////////////////////////////////////

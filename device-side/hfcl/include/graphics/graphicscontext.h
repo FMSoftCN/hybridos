@@ -31,12 +31,10 @@
 
 namespace hfcl {
 
-typedef BITMAP     Bitmap;
-
-#ifdef  USE_HFCL_FONT
+typedef BITMAP  Bitmap;
 typedef DEVFONT Devfont;
-#endif
-typedef POINT     Point;
+typedef POINT   Point;
+typedef LOGFONT Logfont;
 
 // for inner resource
 typedef struct _tagBitmapFrame {
@@ -63,8 +61,6 @@ typedef struct _tagBitmapFrameArray
 #define HFCL_BMP_TYPE_ALPHA_MASK     0x20
 #define HFCL_BMP_TYPE_PRIV_PIXEL     0x00
 
-typedef LOGFONT Logfont;
-
 class Image;
 class View;
 class GraphicsContextPrivate;
@@ -75,80 +71,101 @@ public:
     ~GraphicsContext();
 
     static GraphicsContext* screenGraphics();
-    static void deleteScreenGraphics(void);
+    static void deleteScreenGraphics();
     void translation(int offx, int offy);
     void getTranslation(int& offx, int & offy);
 
-    Logfont* getLogFont(void);
+    Logfont* getLogFont();
 
     void clip(const IntRect&);
     void clipOut(const IntRect&);
     void clipIn(const IntRect&);
     bool rectVisible(IntRect&);
 
-    void beginTransparencyLayer(int alpha);
-    void endTransparencyLayer();
-
     void save();
     void restore();
 
-    inline int setTextCharacterExtra(int extra)  { return SetTextCharacterExtra (context(), extra); }
-    inline int setTextAboveLineExtra(int extra)  { return SetTextAboveLineExtra (context(), extra); }
-    inline int setTextBellowLineExtra(int extra) { return SetTextBellowLineExtra(context(), extra); }
-    inline int getTextCharacterExtra(void)  { return GetTextCharacterExtra (context()); }
-    inline int getTextAboveLineExtra(void)  { return GetTextAboveLineExtra (context()); }
-    inline int getTextBellowLineExtra(void) { return GetTextBellowLineExtra(context()); }
+    int setTextCharacterExtra(int extra) {
+        return SetTextCharacterExtra (context(), extra);
+    }
+    int setTextAboveLineExtra(int extra) {
+        return SetTextAboveLineExtra (context(), extra);
+    }
+    int setTextBellowLineExtra(int extra) {
+        return SetTextBellowLineExtra(context(), extra);
+    }
+    int getTextCharacterExtra() {
+        return GetTextCharacterExtra (context());
+    }
+    int getTextAboveLineExtra() {
+        return GetTextAboveLineExtra (context());
+    }
+    int getTextBellowLineExtra() {
+        return GetTextBellowLineExtra(context());
+    }
 
-    void fillRect(const IntRect& rc, Uint8 r, Uint8 g, Uint8 b, Uint8 a=0xFF);
+    void fillRect(const IntRect& rc, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 0xFF);
     void fillBox(int x, int y, int w, int h);
-    void bitBlt(GraphicsContext* src, int sx, int sy, int sw, int sh, int dx, int dy, Uint32 op);
+    void bitBlt(GraphicsContext* src, int sx, int sy, int sw, int sh,
+            int dx, int dy, Uint32 op);
     void rectangle(int x0, int y0, int x1, int y1);
-    void rectangle(int x0, int y0, int x1, int y1, Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
+    void rectangle(int x0, int y0, int x1, int y1,
+            Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
     void drawLine(int x0, int y0, int x1, int y1, int width,
             Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
     void drawHVDotLine(int x, int y, int wh, bool isHorz,
             Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-    void drawPolygonLine(Point *pts, int nums, int width, Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
-    void fillPolygon(const Point* pts, int vertices, Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
+    void drawPolygonLine(Point *pts, int nums, int width,
+            Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
+    void fillPolygon(const Point* pts, int vertices,
+            Uint8 r, Uint8 g, Uint8 b, Uint8 a=255);
 
-    void getTextDrawSize (const std::string text, Logfont *f, int *w, int *h);
-    void getTextDrawSize (const char *text, Logfont *f, int *w, int *h);
+    void getTextDrawSize(const std::string text, Logfont *f, int *w, int *h);
+    void getTextDrawSize(const char *text, Logfont *f, int *w, int *h);
 
-    bool getBiDiFlag (void);
-    void setBiDiFlag (bool bidi);
-    int  getBiDiFirstChType (void);
+    bool getBiDiFlag();
+    void setBiDiFlag(bool bidi);
+    int  getBiDiFirstChType ();
     void setBiDiFirstChType (int type);
 
     void textOut(int x, int y, const char * text, int len,
-            unsigned int color, Logfont * logfont = NULL);
-    void textOut(int x, int y, std::string text, unsigned int color, Logfont * logfont){
-            textOut(x, y, text.c_str(), text.size(), color, logfont);
+            RGBCOLOR color, Logfont * logfont = NULL);
+    void textOut(int x, int y, std::string text,
+            RGBCOLOR color, Logfont * logfont) {
+        textOut(x, y, text.c_str(), text.size(), color, logfont);
     }
 
-    void textOutOmitted(int x, int y, const char * text, int len, int max_extent);
-    void textOutOmitted(int x, int y, const char * text, int len,
-            int max_extent, unsigned int color, Logfont * logfont);
-    void textOutOmitted(int x, int y, const std::string& text, int max_extent){
+    void textOutOmitted(int x, int y, const char* text, int len,
+            int max_extent);
+    void textOutOmitted(int x, int y, const char* text, int len,
+            int max_extent, RGBCOLOR color, Logfont * logfont);
+    void textOutOmitted(int x, int y, const std::string& text,
+            int max_extent) {
         textOutOmitted(x, y, text.c_str(), text.size(), max_extent);
     }
     void textOutOmitted(int x, int y, const std::string& text,
-            int max_extent, unsigned int color, Logfont * logfont) {
-        textOutOmitted(x, y, text.c_str(), text.size(), max_extent, color, logfont);
+            int max_extent, RGBCOLOR color, Logfont * logfont) {
+        textOutOmitted(x, y, text.c_str(), text.size(),
+                max_extent, color, logfont);
     }
 
     void drawText(const std::string& text, const IntRect& rc);
-    void drawText(const char * text, const IntRect& rc, \
-            unsigned int color, Logfont * logfont, unsigned int format);
-    void drawText(const std::string& text, const IntRect& rc, \
-            unsigned int color, Logfont * logfont, unsigned int format) {
+    void drawText(const char * text, const IntRect& rc,
+            RGBCOLOR color, Logfont * logfont, unsigned int format);
+    void drawText(const std::string& text, const IntRect& rc,
+            RGBCOLOR color, Logfont * logfont, unsigned int format) {
         drawText(text.c_str(), rc, color, logfont, format);
     }
-    int drawTextToCalcRect(const std::string& text, IntRect& rect, unsigned int format, Logfont *font = NULL);
+    int drawTextToCalcRect(const std::string& text, IntRect& rect,
+            unsigned int format, Logfont *font = NULL);
     int calcTextRectOnDrawing(const char *text, Logfont *f,
-            unsigned int format, IntRect *rect, DTFIRSTLINE *firstline = NULL, Point *txtPos = NULL);
+            unsigned int format, IntRect *rect,
+            DTFIRSTLINE *firstline = NULL, Point *txtPos = NULL);
     int calcTextRectOnDrawing(const std::string& text, Logfont *f,
-            unsigned int format, IntRect *rect, DTFIRSTLINE *firstline = NULL, Point *txtPos = NULL) {
-        return calcTextRectOnDrawing(text.c_str(), f, format, rect, firstline, txtPos);
+            unsigned int format, IntRect *rect,
+            DTFIRSTLINE *firstline = NULL, Point *txtPos = NULL) {
+        return calcTextRectOnDrawing(text.c_str(), f, format, rect,
+            firstline, txtPos);
     }
     int drawTextToGetLenght(const std::string& text);
     int getFontHeight(Logfont *f = NULL);
@@ -156,21 +173,20 @@ public:
 
     //Bitmap
     bool fillBoxWithBitmap(int x, int y, int w, int h, const Bitmap* pBitmap);
-    bool setReplaceColor(const DWORD color);
+    bool setReplaceColor(const RGBCOLOR color);
     bool drawRotateBitmap(const Bitmap* pBitmap,int lx, int ty, int angle);
-    bool fillBoxWithBitmapPart(int x, int y, int w, int h, const Bitmap* pBitmap, int xo, int yo);
+    bool fillBoxWithBitmapPart(int x, int y, int w, int h,
+            const Bitmap* pBitmap, int xo, int yo);
     int loadBitmap(Bitmap* bmp, const char * file_name);
-    int loadBitmap(Bitmap** bmp, const void* data, int size, const char * extern_name);
+    int loadBitmap(Bitmap** bmp, const void* data, int size,
+            const char * extern_name);
     void unloadBitmap(Bitmap* pBitmap);
     bool getBitmapSize(Bitmap* pBitmap, int* w, int* h);
     GraphicsContext* createGraphicsFromBitmap(Bitmap *pbmp);
     bool initBitmap(int w, int h, Bitmap* pbmp);
-    //add interface for Image
-    //virtual void drawImage(Image *image, int x, int y, int state);
-    //virtual void drawImage(Image *image, int x, int y, int width, int height, int state);
 
     //Font
-    Logfont* getCurFont(void);
+    Logfont* getCurFont();
     Logfont* createLogFontByName(const char * fontname);
 
     void deleteLogFont(Logfont* logfont);
@@ -183,12 +199,6 @@ public:
     void map(int x, int y, int &x2, int &y2);
     void mapRect(RECT &rc);
 
-    int getLayers(void);
-    void setLayer(int layer);
-    void setLayerEnable(int layer, BOOL enable);
-    void setLayerOpacity(int layer, BOOL enable, unsigned char opacity_value);
-    void setLayerColorKey(int layer, BOOL enable, unsigned char r, unsigned char g, unsigned char b );
-
     // create memdc
     GraphicsContext* createMemGc(int w, int h);
 
@@ -200,7 +210,7 @@ private:
 GraphicsContext* CreateMemGC(int w, int h);
 void DeleteMemGC(GraphicsContext *memGc);
 
-bool SaveScreenToFile (const char * bmpFile);
+bool SaveScreenToFile(const char* bmpFile);
 
 } // namespace hfcl
 

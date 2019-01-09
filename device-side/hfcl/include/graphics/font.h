@@ -27,7 +27,7 @@
 
 namespace hfcl {
 
-class Font : public Object, public RefCount {
+class Font : public RefCount {
 public:
     Font(){};
     virtual ~Font();
@@ -49,4 +49,4 @@ protected:
 
 } // namespace hfcl
 
-#endif /*HFCL_GRAPHICS_FONT_H_*/
+#endif /* HFCL_GRAPHICS_FONT_H_ */
