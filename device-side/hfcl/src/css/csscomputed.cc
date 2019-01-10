@@ -97,15 +97,12 @@ void CssComputed::setFont(Font* font)
     m_values[PID_INTERNAL_FONT]
         = MAKE_CSS_PPT_VALUE(PVT_INTERNAL_FONT, PVK_USER_DATA);
     m_data[PID_INTERNAL_FONT].p = font;
+
+    font->ref();
 }
 
-const Font* CssComputed::getFont()
+Font* CssComputed::createFont() const
 {
-    /* if has been set, return it directly */
-    if (CSS_PPT_VALUE_TYPE(m_values[PID_INTERNAL_FONT]) == PVT_INTERNAL_FONT) {
-        return (const Font*)(m_data[PID_INTERNAL_FONT].p);
-    }
-
     /* create Font object here */
     Font* font = NULL;
     Uint32 type = CSS_PPT_VALUE_TYPE(m_values[PID_FONT]);
@@ -141,8 +138,7 @@ const Font* CssComputed::getFont()
                 LEN_FONT_NAME);
             break;
         default:
-            HFCL_ASSERT(0);
-            return NULL;
+            goto always_ret;
         }
 
         // TODO: convert font size to physical pixels
@@ -178,8 +174,7 @@ const Font* CssComputed::getFont()
             style[0] = FONT_WEIGHT_BLACK;
             break;
         default:
-            HFCL_ASSERT(0);
-            return NULL;
+            goto always_ret;
         }
 
         pv = m_values[PID_FONT_STYLE];
@@ -191,8 +186,7 @@ const Font* CssComputed::getFont()
             style[1] = FONT_SLANT_OBLIQUE;
             break;
         default:
-            HFCL_ASSERT(0);
-            return NULL;
+            goto always_ret;
         }
 
         const char* font_name_format = "ttf-%s-%s-*-%d-utf-8";
@@ -210,13 +204,35 @@ const Font* CssComputed::getFont()
         font = GetFontRes((HTResId)(m_data[PID_FONT].u));
     }
 
+always_ret:
+
     if (!font) {
         // use system font here to always return a valid Font object
         font = Font::createFont(SYSLOGFONT_DEFAULT);
     }
 
-    setFont(font);
+    return font;
+}
 
+const Font* CssComputed::getFont() const
+{
+    /* if has been set, return it directly */
+    if (CSS_PPT_VALUE_TYPE(m_values[PID_INTERNAL_FONT]) == PVT_INTERNAL_FONT) {
+        return (const Font*)(m_data[PID_INTERNAL_FONT].p);
+    }
+
+    return NULL;
+}
+
+const Font* CssComputed::getFont()
+{
+    /* if has been set, return it directly */
+    if (CSS_PPT_VALUE_TYPE(m_values[PID_INTERNAL_FONT]) == PVT_INTERNAL_FONT) {
+        return (const Font*)(m_data[PID_INTERNAL_FONT].p);
+    }
+
+    Font* font = createFont();
+    setFont(font);
     return font;
 }
 
@@ -421,7 +437,8 @@ bool CssComputed::convertArray(int pid, int t, const RealRect& viewport)
 }
 
 /* font-relative lengths */
-bool CssComputed::convertArray(int pid, int t, const View* view)
+bool CssComputed::convertArray(int pid, int t, const Font* font,
+        const View* root)
 {
     CssInitial* initial = CssInitial::getSingleton();
     Uint8 n = initial->m_arraysize[pid];
@@ -433,16 +450,31 @@ bool CssComputed::convertArray(int pid, int t, const View* view)
     switch(t) {
     case PVT_ARRAY_LENGTH_EM:
         for (int i = 0; i < n; i++) {
+            p[i] = old[i] * font->getFontSize();
         }
+        break;
+
     case PVT_ARRAY_LENGTH_EX:
         for (int i = 0; i < n; i++) {
+            p[i] = old[i] * font->getGlyphHeight_x();
         }
+        break;
+
     case PVT_ARRAY_LENGTH_CH:
         for (int i = 0; i < n; i++) {
+            p[i] = old[i] * font->getGlyphHeight_0();
         }
-    case PVT_ARRAY_LENGTH_REM:
+        break;
+
+    case PVT_ARRAY_LENGTH_REM: {
+        const Font* root_font = root->getCssComputed()->getFont();
+        HFCL_ASSERT(root_font);
         for (int i = 0; i < n; i++) {
+            p[i] = old[i] * root_font->getFontSize();
         }
+        break;
+    }
+
     default:
         free(p);
         return false;
@@ -948,7 +980,7 @@ bool CssComputed::handleFont()
     return false;
 }
 
-void CssComputed::handleTabSize()
+void CssComputed::handleTabSize(const Font* font)
 {
     Uint32 value = CSS_PPT_VALUE_NOFLAGS(m_values[PID_TAB_SIZE]);
 
@@ -957,7 +989,6 @@ void CssComputed::handleTabSize()
         r = m_data[PID_TAB_SIZE].r;
         if (r < 0) r = 8;
 
-        const Font* font = getFont();
         r *= font->getWhiteSpaceWidth();
         m_values[PID_TAB_SIZE] = PV_LENGTH_PX;
         m_data[PID_TAB_SIZE].r = r;
@@ -985,13 +1016,20 @@ bool CssComputed::makeAbsolute(const View* view)
     /* viewport should be defined in px */
     const RealRect& viewport = root->viewport();
 
-    /* handle special properties here: e.g., font-size */
+    /* handle special properties here: e.g., font, font-size, and so on */
     if (!handleFont()) {
         handleFontSize(view);
         handleFontWeight(view);
     }
 
-    handleTabSize();
+    // if it is root element, call getFont to set the Font object
+    if (view == root) {
+        getFont();
+    }
+
+    const Font* font = getFont();
+
+    handleTabSize(font);
 
     if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_WORD_SPACING]) == PV_NORMAL) {
         m_values[PID_WORD_SPACING] = PV_LENGTH_PX;
@@ -1092,13 +1130,40 @@ bool CssComputed::makeAbsolute(const View* view)
 
         /* font-relative lengths */
         case PVT_LENGTH_CH:
+            // Equal to the used advance measure of the "0" glyph
+            // TODO: The advance measure of a glyph is its advance
+            // width or height, whichever is in the inline axis of the element.
+            m_values[i] = PV_LENGTH_PX;
+            m_data[i].r *= font->getGlyphHeight_0();
             break;
         case PVT_LENGTH_EM:
+            m_values[i] = PV_LENGTH_PX;
+            m_data[i].r *= font->getFontSize();
             break;
         case PVT_LENGTH_EX:
+            // The x-height is so called because it is often 
+            // equal to the height of the lowercase "x".
+            m_values[i] = PV_LENGTH_PX;
+            m_data[i].r *= font->getGlyphHeight_x();
             break;
-        case PVT_LENGTH_REM:
+        case PVT_LENGTH_REM: {
+            if (root == view && i == PID_FONT_SIZE) {
+                // If used in the font-size property of the root element,
+                // or in a document with no root element, 1rem is equal
+                // to the initial value of the font-size property.
+                CssInitial* initial = CssInitial::getSingleton();
+                m_values[i] = PV_LENGTH_PX;
+                m_data[i].r *= initial->m_data[PID_FONT_SIZE].r;
+            }
+            else {
+                const Font* root_font = root->getCssComputed()->getFont();
+                HFCL_ASSERT(root_font);
+
+                m_values[i] = PV_LENGTH_PX;
+                m_data[i].r *= root_font->getFontSize();
+            }
             break;
+        }
 
         /* percentages */
         case PVT_ARRAY_PERCENTAGE:
@@ -1111,7 +1176,7 @@ bool CssComputed::makeAbsolute(const View* view)
         case PVT_ARRAY_LENGTH_PC:
         case PVT_ARRAY_LENGTH_PT:
         case PVT_ARRAY_LENGTH_Q:
-            convertArray (i, type);
+            convertArray(i, type);
             break;
 
         /* viewport-relative lengths */
@@ -1119,7 +1184,7 @@ bool CssComputed::makeAbsolute(const View* view)
         case PVT_ARRAY_LENGTH_VH:
         case PVT_ARRAY_LENGTH_VMAX:
         case PVT_ARRAY_LENGTH_VMIN:
-            convertArray (i, type, viewport);
+            convertArray(i, type, viewport);
             break;
 
         /* font-relative lengths */
@@ -1127,7 +1192,7 @@ bool CssComputed::makeAbsolute(const View* view)
         case PVT_ARRAY_LENGTH_EX:
         case PVT_ARRAY_LENGTH_CH:
         case PVT_ARRAY_LENGTH_REM:
-            convertArray (i, type, view);
+            convertArray(i, type, font, root);
             break;
 
         case PVT_ARRAY_LENGTH_PX:

@@ -44,12 +44,18 @@ public:
     Logfont* getLogfont() const;
 
     HTReal getWhiteSpaceWidth() const;
+    HTReal getGlyphHeight_0() const;
+    HTReal getGlyphHeight_x() const;
 
 protected:
-    Font(Logfont* logfont) : m_logfont(logfont) { }
+    Font(Logfont* logfont)
+        : m_logfont(logfont), m_glyph_height_0(0), m_glyph_height_x(0) { }
     Logfont* m_logfont;
 
 private:
+    HTReal m_glyph_height_0;
+    HTReal m_glyph_height_x;
+
     /* No public constructor
     Font() : m_logfont(0) {};
     */

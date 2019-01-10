@@ -618,6 +618,19 @@ const RootView* View::getRoot() const
     return NULL;
 }
 
+RootView* View::getRoot()
+{
+    View *p = this;
+
+    while (p != NULL) {
+        if (p->isRoot())
+            return (RootView *)p;
+        p = p->getParent();
+    }
+
+    return NULL;
+}
+
 #if 0
 Window* View::getSysWindow() const
 {

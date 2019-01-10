@@ -82,7 +82,10 @@ public:
     bool getMinHeight(const CssBox* ctnBlock, HTReal& minh) const;
     bool getMaxHeight(const CssBox* ctnBlock, HTReal& maxh) const;
 
+    const Font* getFont() const;
     const Font* getFont();
+    // if getFont() const returns NULL, one can call createFont
+    Font* createFont() const;
 
     void calcPaddings(const CssBox* ctnBlock,
         HTReal* pl, HTReal* pt, HTReal* pr, HTReal* pb) const;
@@ -122,7 +125,7 @@ private:
 
     bool convertArray(int pid, int t);
     bool convertArray(int pid, int t, const RealRect& viewport);
-    bool convertArray(int pid, int t, const View* view);
+    bool convertArray(int pid, int t, const Font* font, const View* root);
     void freeArray();
 
     void setFont(Font* font);
@@ -135,7 +138,7 @@ private:
     void handleFontSize(const View* view);
     void handleFontWeight(const View* view);
     bool handleFont();
-    void handleTabSize();
+    void handleTabSize(const Font* font);
 
     /* methods for widths caculation */
     void calcWidthForIR(const View* view, const CssBox* ctnBlock,
