@@ -56,6 +56,11 @@ Font* Font::createFont(const char* fontname)
     return HFCL_NEW_EX(Font, (logfont));
 }
 
+Font* Font::createFont(int idSysfont)
+{
+    return HFCL_NEW_EX(Font, (GetSystemFont(idSysfont)));
+}
+
 Font::~Font()
 {
     if(!m_logfont)
@@ -68,39 +73,45 @@ Font::~Font()
     DestroyLogFont(m_logfont);
 }
 
-Logfont* Font::getLogfont()
+Logfont* Font::getLogfont() const
 {
     return m_logfont;
 }
 
-const char* Font::getFontType()
+const char* Font::getFontType() const
 {
     return (const char*)m_logfont->type;
 }
 
-const char* Font::getFontFamily()
+const char* Font::getFontFamily() const
 {
     return (const char*)m_logfont->family;
 }
 
-const char* Font::getFontCharset()
+const char* Font::getFontCharset() const
 {
     return (const char*)m_logfont->charset;
 }
 
-DWORD Font::getFontStyle()
+DWORD Font::getFontStyle() const
 {
     return (DWORD)m_logfont->style;
 }
 
-int Font::getFontSize()
+HTReal Font::getFontSize() const
 {
-    return m_logfont->size;
+    /* TODO: unit conversion */
+    return (HTReal)m_logfont->size;
 }
 
-int Font::getFontRotation()
+int Font::getFontRotation() const
 {
     return m_logfont->rotation;
+}
+
+HTReal Font::getWhiteSpaceWidth() const
+{
+    return 0;
 }
 
 } // namespace hfcl

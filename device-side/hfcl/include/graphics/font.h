@@ -29,22 +29,30 @@ namespace hfcl {
 
 class Font : public RefCount {
 public:
-    Font() : m_logfont(0) {};
+    // Font objects must be created by calling the static creators
+    static Font* createFont(const char* fontname);
+    static Font* createFont(int idSysfont);
+
     virtual ~Font();
 
-    const char* getFontType();
-    const char* getFontFamily();
-    const char* getFontCharset();
-    DWORD getFontStyle();
-    int getFontSize();
-    int getFontRotation();
-    Logfont* getLogfont();
+    const char* getFontType() const;
+    const char* getFontFamily() const;
+    const char* getFontCharset() const;
+    DWORD getFontStyle() const;
+    HTReal getFontSize() const;
+    int getFontRotation() const;
+    Logfont* getLogfont() const;
 
-    static Font* createFont(const char* fontname);
+    HTReal getWhiteSpaceWidth() const;
 
 protected:
     Font(Logfont* logfont) : m_logfont(logfont) { }
     Logfont* m_logfont;
+
+private:
+    /* No public constructor
+    Font() : m_logfont(0) {};
+    */
 };
 
 } // namespace hfcl

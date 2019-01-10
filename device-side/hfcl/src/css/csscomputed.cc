@@ -210,8 +210,12 @@ const Font* CssComputed::getFont()
         font = GetFontRes((HTResId)(m_data[PID_FONT].u));
     }
 
-    if (font)
-        setFont(font);
+    if (!font) {
+        // use system font here to always return a valid Font object
+        font = Font::createFont(SYSLOGFONT_DEFAULT);
+    }
+
+    setFont(font);
 
     return font;
 }
@@ -347,7 +351,7 @@ bool CssComputed::convertArray(int pid, int t)
         break;
     case PVT_ARRAY_LENGTH_MM:
         for (int i = 0; i < n; i++) {
-            p[i] = (old[i] * 96.0/2.54/10.0);
+            p[i] = (old[i] * 96.0/2.54/10);
         }
         break;
     case PVT_ARRAY_LENGTH_PC:
@@ -388,22 +392,22 @@ bool CssComputed::convertArray(int pid, int t, const RealRect& viewport)
     switch (t) {
     case PVT_ARRAY_LENGTH_VW:
         for (int i = 0; i < n; i++) {
-            p[i] = (old[i] * viewport.width()/100.0);
+            p[i] = (old[i] * viewport.width()/100);
         }
         break;
     case PVT_ARRAY_LENGTH_VH:
         for (int i = 0; i < n; i++) {
-            p[i] = (old[i] * viewport.height()/100.0);
+            p[i] = (old[i] * viewport.height()/100);
         }
         break;
     case PVT_ARRAY_LENGTH_VMAX:
         for (int i = 0; i < n; i++) {
-            p[i] = (old[i] * viewport.maxWH()/100.0);
+            p[i] = (old[i] * viewport.maxWH()/100);
         }
         break;
     case PVT_ARRAY_LENGTH_VMIN:
         for (int i = 0; i < n; i++) {
-            p[i] = (old[i] * viewport.minWH()/100.0);
+            p[i] = (old[i] * viewport.minWH()/100);
         }
         break;
     default:
@@ -464,8 +468,8 @@ void CssComputed::validateBorderWidth(int pid)
         m_data[pid].r = 4.0;
     }
     else if (m_values[pid] == PV_LENGTH_PX &&
-            m_data[pid].r < 0.0) {
-        m_data[pid].r = 0.0;
+            m_data[pid].r < 0) {
+        m_data[pid].r = 0;
     }
     else {
         _ERR_PRINTF ("%s: invalid property value: %d\n",
@@ -477,8 +481,8 @@ void CssComputed::validateNotNegative(int pid)
 {
     Uint32 type = CSS_PPT_VALUE_TYPE(m_values[pid]);
     if ((type == PVT_PERCENTAGE || type == PVT_LENGTH_PX) &&
-            m_data[pid].r < 0.0) {
-        m_data[pid].r = 0.0;
+            m_data[pid].r < 0) {
+        m_data[pid].r = 0;
     }
 }
 
@@ -508,8 +512,8 @@ inline unsigned char rgba_real_to_char(HTReal real)
     // special values
     if (real > 0.999)
         return 0xFF;
-    else if (real < 0.001)
-        return 0x00;
+    else if (real < 001)
+        return 00;
     else if (real > 0.499 && real < 0.501)
         return 0x80;
 
@@ -521,7 +525,7 @@ static RGBCOLOR hsl2rgb(HTReal h, HTReal s, HTReal l, HTReal a)
     HTReal m1, m2;
     unsigned char r, g, b;
 
-    h = h / 360.0;
+    h = h / 360;
     if (h < 0) h = 0;
     if (h > 1) h = 1;
 
@@ -944,6 +948,22 @@ bool CssComputed::handleFont()
     return false;
 }
 
+void CssComputed::handleTabSize()
+{
+    Uint32 value = CSS_PPT_VALUE_NOFLAGS(m_values[PID_TAB_SIZE]);
+
+    if (value == PV_NUMBER) {
+        HTReal r;
+        r = m_data[PID_TAB_SIZE].r;
+        if (r < 0) r = 8;
+
+        const Font* font = getFont();
+        r *= font->getWhiteSpaceWidth();
+        m_values[PID_TAB_SIZE] = PV_LENGTH_PX;
+        m_data[PID_TAB_SIZE].r = r;
+    }
+}
+
 /*
  * A specified value can be either absolute (i.e., not relative to
  * another value, as in red or 2mm) or relative (i.e., relative to
@@ -971,33 +991,43 @@ bool CssComputed::makeAbsolute(const View* view)
         handleFontWeight(view);
     }
 
+    handleTabSize();
+
+    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_WORD_SPACING]) == PV_NORMAL) {
+        m_values[PID_WORD_SPACING] = PV_LENGTH_PX;
+        m_data[PID_WORD_SPACING].r = 0;
+    }
+    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_LETTER_SPACING]) == PV_NORMAL) {
+        m_values[PID_LETTER_SPACING] = PV_LENGTH_PX;
+        m_data[PID_LETTER_SPACING].r = 0;
+    }
     if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_LEFT_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
         CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_LEFT_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
         m_values[PID_BORDER_LEFT_WIDTH] = PV_LENGTH_PX;
-        m_data[PID_BORDER_LEFT_WIDTH].r = 0.0;
+        m_data[PID_BORDER_LEFT_WIDTH].r = 0;
     }
     if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_TOP_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
         CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_TOP_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
         m_values[PID_BORDER_TOP_WIDTH] = PV_LENGTH_PX;
-        m_data[PID_BORDER_TOP_WIDTH].r = 0.0;
+        m_data[PID_BORDER_TOP_WIDTH].r = 0;
     }
     if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_RIGHT_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
         CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_RIGHT_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
         m_values[PID_BORDER_RIGHT_WIDTH] = PV_LENGTH_PX;
-        m_data[PID_BORDER_RIGHT_WIDTH].r = 0.0;
+        m_data[PID_BORDER_RIGHT_WIDTH].r = 0;
     }
     if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_BOTTOM_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
         CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_BOTTOM_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
         m_values[PID_BORDER_BOTTOM_WIDTH] = PV_LENGTH_PX;
-        m_data[PID_BORDER_BOTTOM_WIDTH].r = 0.0;
+        m_data[PID_BORDER_BOTTOM_WIDTH].r = 0;
     }
 
     handleColor(PID_COLOR);
@@ -1027,7 +1057,7 @@ bool CssComputed::makeAbsolute(const View* view)
             break;
         case PVT_LENGTH_MM:
             m_values[i] = PV_LENGTH_PX;
-            m_data[i].r = (m_data[i].r * 96.0/2.54/10.0);
+            m_data[i].r = (m_data[i].r * 96.0/2.54/10);
             break;
         case PVT_LENGTH_PC:
             m_values[i] = PV_LENGTH_PX;
@@ -1045,19 +1075,19 @@ bool CssComputed::makeAbsolute(const View* view)
         /* viewport-relative lengths */
         case PVT_LENGTH_VW:
             m_values[i] = PV_LENGTH_PX;
-            m_data[i].r = (m_data[i].r * viewport.width()/100.0);
+            m_data[i].r = (m_data[i].r * viewport.width()/100);
             break;
         case PVT_LENGTH_VH:
             m_values[i] = PV_LENGTH_PX;
-            m_data[i].r = (m_data[i].r * viewport.height()/100.0);
+            m_data[i].r = (m_data[i].r * viewport.height()/100);
             break;
         case PVT_LENGTH_VMAX:
             m_values[i] = PV_LENGTH_PX;
-            m_data[i].r = (m_data[i].r * viewport.maxWH()/100.0);
+            m_data[i].r = (m_data[i].r * viewport.maxWH()/100);
             break;
         case PVT_LENGTH_VMIN:
             m_values[i] = PV_LENGTH_PX;
-            m_data[i].r = (m_data[i].r * viewport.minWH()/100.0);
+            m_data[i].r = (m_data[i].r * viewport.minWH()/100);
             break;
 
         /* font-relative lengths */
@@ -1192,7 +1222,7 @@ void CssComputed::autoHMarginsAsZero(const CssBox* ctnBlock,
 {
     if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_MARGIN_LEFT]) ==
         MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
-        ml = 0.0;
+        ml = 0;
     }
     else {
         if (CSS_PPT_VALUE_TYPE(m_values[PID_MARGIN_LEFT]) ==
@@ -1201,13 +1231,13 @@ void CssComputed::autoHMarginsAsZero(const CssBox* ctnBlock,
         }
         else if (CSS_PPT_VALUE_TYPE(m_values[PID_MARGIN_LEFT]) ==
             PVT_PERCENTAGE) {
-            ml = ctnBlock->getContentWidth() * m_data[PID_MARGIN_LEFT].r / 100.0;
+            ml = ctnBlock->getContentWidth() * m_data[PID_MARGIN_LEFT].r / 100;
         }
     }
 
     if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_MARGIN_RIGHT]) ==
         MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
-        mr = 0.0;
+        mr = 0;
     }
     else {
         if (CSS_PPT_VALUE_TYPE(m_values[PID_MARGIN_RIGHT]) ==
@@ -1216,7 +1246,7 @@ void CssComputed::autoHMarginsAsZero(const CssBox* ctnBlock,
         }
         else if (CSS_PPT_VALUE_TYPE(m_values[PID_MARGIN_RIGHT]) ==
             PVT_PERCENTAGE) {
-            mr = ctnBlock->getContentWidth() * m_data[PID_MARGIN_RIGHT].r / 100.0;
+            mr = ctnBlock->getContentWidth() * m_data[PID_MARGIN_RIGHT].r / 100;
         }
     }
 }
@@ -1226,7 +1256,7 @@ void CssComputed::autoVMarginsAsZero(const CssBox* ctnBlock,
 {
     if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_MARGIN_TOP]) ==
         MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
-        mt = 0.0;
+        mt = 0;
     }
     else {
         if (CSS_PPT_VALUE_TYPE(m_values[PID_MARGIN_TOP]) ==
@@ -1235,13 +1265,13 @@ void CssComputed::autoVMarginsAsZero(const CssBox* ctnBlock,
         }
         else if (CSS_PPT_VALUE_TYPE(m_values[PID_MARGIN_TOP]) ==
             PVT_PERCENTAGE) {
-            mt = ctnBlock->getContentWidth() * m_data[PID_MARGIN_TOP].r / 100.0;
+            mt = ctnBlock->getContentWidth() * m_data[PID_MARGIN_TOP].r / 100;
         }
     }
 
     if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_MARGIN_BOTTOM]) ==
         MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
-        mb = 0.0;
+        mb = 0;
     }
     else {
         if (CSS_PPT_VALUE_TYPE(m_values[PID_MARGIN_BOTTOM]) ==
@@ -1250,7 +1280,7 @@ void CssComputed::autoVMarginsAsZero(const CssBox* ctnBlock,
         }
         else if (CSS_PPT_VALUE_TYPE(m_values[PID_MARGIN_BOTTOM]) ==
             PVT_PERCENTAGE) {
-            mb = ctnBlock->getContentWidth() * m_data[PID_MARGIN_BOTTOM].r / 100.0;
+            mb = ctnBlock->getContentWidth() * m_data[PID_MARGIN_BOTTOM].r / 100;
         }
     }
 }
@@ -1268,7 +1298,7 @@ bool CssComputed::hasComputedMarginLeft(const CssBox* ctnBlock, HTReal& ml)
             ml = m_data[PID_MARGIN_LEFT].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            ml = ctnBlock->getContentWidth() * m_data[PID_MARGIN_LEFT].r / 100.0;
+            ml = ctnBlock->getContentWidth() * m_data[PID_MARGIN_LEFT].r / 100;
         }
     }
 
@@ -1287,7 +1317,7 @@ bool CssComputed::hasComputedMarginRight(const CssBox* ctnBlock, HTReal& mr)
             mr = m_data[PID_MARGIN_RIGHT].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            mr = ctnBlock->getContentWidth() * m_data[PID_MARGIN_RIGHT].r / 100.0;
+            mr = ctnBlock->getContentWidth() * m_data[PID_MARGIN_RIGHT].r / 100;
         }
     }
 
@@ -1306,7 +1336,7 @@ bool CssComputed::hasComputedWidth(const CssBox* ctnBlock, HTReal& w)
             w = m_data[PID_WIDTH].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            w = ctnBlock->getContentWidth() * m_data[PID_WIDTH].r / 100.0;
+            w = ctnBlock->getContentWidth() * m_data[PID_WIDTH].r / 100;
         }
     }
 
@@ -1325,7 +1355,7 @@ bool CssComputed::hasComputedHeight(const CssBox* ctnBlock, HTReal& h)
             h = m_data[PID_HEIGHT].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            h = ctnBlock->getContentHeight() * m_data[PID_HEIGHT].r / 100.0;
+            h = ctnBlock->getContentHeight() * m_data[PID_HEIGHT].r / 100;
         }
     }
 
@@ -1355,7 +1385,7 @@ bool CssComputed::getHSize(const CssBox* ctnBlock, int pid, HTReal& s) const
             s = m_data[pid].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            s = ctnBlock->getContentWidth() * m_data[pid].r / 100.0;
+            s = ctnBlock->getContentWidth() * m_data[pid].r / 100;
         }
     }
 
@@ -1368,7 +1398,7 @@ bool CssComputed::getMinWidth(const CssBox* ctnBlock, HTReal& minw) const
     Uint32 type = CSS_PPT_VALUE_TYPE(m_values[PID_MIN_WIDTH]);
 
     if (type == PVT_PERCENTAGE) {
-        minw = ctnBlock->getContentWidth() * m_data[PID_MIN_WIDTH].r / 100.0;
+        minw = ctnBlock->getContentWidth() * m_data[PID_MIN_WIDTH].r / 100;
     }
     else if (type == PVT_LENGTH_PX) {
         minw = m_data[PID_MIN_WIDTH].r;
@@ -1398,7 +1428,7 @@ bool CssComputed::getMaxWidth(const CssBox* ctnBlock, HTReal& maxw) const
 
     Uint32 type = CSS_PPT_VALUE_TYPE(v);
     if (type == PVT_PERCENTAGE) {
-        maxw = ctnBlock->getContentWidth() * m_data[PID_MAX_WIDTH].r / 100.0;
+        maxw = ctnBlock->getContentWidth() * m_data[PID_MAX_WIDTH].r / 100;
     }
     else if (type == PVT_LENGTH_PX) {
         maxw = m_data[PID_MAX_WIDTH].r;
@@ -1420,7 +1450,7 @@ bool CssComputed::getMinHeight(const CssBox* ctnBlock, HTReal& minw) const
     Uint32 type = CSS_PPT_VALUE_TYPE(m_values[PID_MIN_HEIGHT]);
 
     if (type == PVT_PERCENTAGE) {
-        minw = ctnBlock->getContentHeight() * m_data[PID_MIN_HEIGHT].r / 100.0;
+        minw = ctnBlock->getContentHeight() * m_data[PID_MIN_HEIGHT].r / 100;
     }
     else if (type == PVT_LENGTH_PX) {
         minw = m_data[PID_MIN_HEIGHT].r;
@@ -1450,7 +1480,7 @@ bool CssComputed::getMaxHeight(const CssBox* ctnBlock, HTReal& maxh) const
 
     Uint32 type = CSS_PPT_VALUE_TYPE(v);
     if (type == PVT_PERCENTAGE) {
-        maxh = ctnBlock->getContentHeight() * m_data[PID_MAX_HEIGHT].r / 100.0;
+        maxh = ctnBlock->getContentHeight() * m_data[PID_MAX_HEIGHT].r / 100;
     }
     else if (type == PVT_LENGTH_PX) {
         maxh = m_data[PID_MAX_HEIGHT].r;
@@ -1479,7 +1509,7 @@ bool CssComputed::getVSize(const CssBox* ctnBlock, int pid, HTReal& s) const
             s = m_data[pid].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            s = ctnBlock->getContentHeight() * m_data[pid].r / 100.0;
+            s = ctnBlock->getContentHeight() * m_data[pid].r / 100;
         }
         else
             s = 0;
@@ -1497,14 +1527,14 @@ void CssComputed::calcPaddings(const CssBox* ctnBlock,
             *pl = m_data[PID_PADDING_LEFT].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            *pl = ctnBlock->getContentWidth() * m_data[PID_PADDING_LEFT].r / 100.0;
+            *pl = ctnBlock->getContentWidth() * m_data[PID_PADDING_LEFT].r / 100;
         }
         else {
-            *pl = 0.0;
+            *pl = 0;
         }
 
-        if (*pl < 0.0)
-            *pl = 0.0;
+        if (*pl < 0)
+            *pl = 0;
     }
 
     if (pt) {
@@ -1513,14 +1543,14 @@ void CssComputed::calcPaddings(const CssBox* ctnBlock,
             *pt = m_data[PID_PADDING_TOP].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            *pt = ctnBlock->getContentHeight() * m_data[PID_PADDING_TOP].r / 100.0;
+            *pt = ctnBlock->getContentHeight() * m_data[PID_PADDING_TOP].r / 100;
         }
         else {
-            *pt = 0.0;
+            *pt = 0;
         }
 
-        if (*pt < 0.0)
-            *pt = 0.0;
+        if (*pt < 0)
+            *pt = 0;
     }
 
     if (pr) {
@@ -1529,14 +1559,14 @@ void CssComputed::calcPaddings(const CssBox* ctnBlock,
             *pr = m_data[PID_PADDING_RIGHT].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            *pr = ctnBlock->getContentWidth() * m_data[PID_PADDING_RIGHT].r / 100.0;
+            *pr = ctnBlock->getContentWidth() * m_data[PID_PADDING_RIGHT].r / 100;
         }
         else {
-            *pr = 0.0;
+            *pr = 0;
         }
 
-        if (*pr < 0.0)
-            *pr = 0.0;
+        if (*pr < 0)
+            *pr = 0;
     }
 
     if (pb) {
@@ -1545,14 +1575,14 @@ void CssComputed::calcPaddings(const CssBox* ctnBlock,
             *pb = m_data[PID_PADDING_BOTTOM].r;
         }
         else if (CSS_PPT_VALUE_TYPE(v) == PVT_PERCENTAGE) {
-            *pb = ctnBlock->getContentHeight() * m_data[PID_PADDING_BOTTOM].r / 100.0;
+            *pb = ctnBlock->getContentHeight() * m_data[PID_PADDING_BOTTOM].r / 100;
         }
         else {
-            *pb = 0.0;
+            *pb = 0;
         }
 
-        if (*pb < 0.0)
-            *pb = 0.0;
+        if (*pb < 0)
+            *pb = 0;
     }
 }
 
@@ -1573,7 +1603,7 @@ void CssComputed::calcWidthForIR(const View* view, const CssBox* ctnBlock,
             w = inh * inr;
         }
         else if (view->getIntrinsicRatio(&inr)) {
-            w = 0.0; // undefined
+            w = 0; // undefined
         }
     }
     else if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_INTERNAL_WIDTH]) ==
@@ -1587,7 +1617,7 @@ void CssComputed::calcWidthForIR(const View* view, const CssBox* ctnBlock,
             w = inw;
         }
         else {
-            w = 300.0;
+            w = 300;
             // TODO:
             // If 300px is too wide to fit the device,
             // UAs should use the width of the largest rectangle
@@ -1654,7 +1684,7 @@ void CssComputed::calcWidthForBlock(const CssBox* ctnBlock,
     HTReal pl, pr;
     calcPaddings(ctnBlock, &pl, NULL, &pr, NULL);
 
-    ml = mr = 0.0;
+    ml = mr = 0;
     bool automl = getHSize(ctnBlock, PID_MARGIN_LEFT, ml);
     bool automr = getHSize(ctnBlock, PID_MARGIN_RIGHT, mr);
     bool autow;
@@ -1695,8 +1725,8 @@ void CssComputed::calcWidthForBlock(const CssBox* ctnBlock,
         mr = ctnBlock->getContentWidth() - w - ml - brw - blw - pr - pl;
     }
     else if (autow) {
-        if (automl) ml = 0.0;
-        if (automr) mr = 0.0;
+        if (automl) ml = 0;
+        if (automr) mr = 0;
         w = ctnBlock->getContentWidth() - ml - mr - brw - blw - pr - pl;
     }
     else if (automl && automr) {
@@ -1725,7 +1755,7 @@ void CssComputed::calcWidthsForAPNR(const View* view, const CssBox* ctnBlock,
 
         if (ctnBlock->getCss()->isLtr()) {
             // TODO: left is static position
-            l = 0.0;
+            l = 0;
 
             HTReal preferred, minimum;
             view->getShrinkToFitWhidth(&preferred, &minimum);
@@ -1738,7 +1768,7 @@ void CssComputed::calcWidthsForAPNR(const View* view, const CssBox* ctnBlock,
         }
         else {
             // TODO: right is static position
-            r = 0.0;
+            r = 0;
 
             HTReal preferred, minimum;
             view->getShrinkToFitWhidth(&preferred, &minimum);
@@ -1800,12 +1830,12 @@ void CssComputed::calcWidthsForAPNR(const View* view, const CssBox* ctnBlock,
         else if (autol && autor && !autow) {
             if (ctnBlock->getCss()->isLtr()) {
                 // TODO: left is the static position
-                l = 0.0;
+                l = 0;
                 r = ctnw - l - ml - blw - pl - w - pr - brw - mr;
             }
             else {
                 // TODO: right is the static position
-                r = 0.0;
+                r = 0;
                 l = ctnw - ml - blw - pl - w - pr - brw - mr - r;
             }
         }
@@ -1863,14 +1893,14 @@ void CssComputed::calcWidthsForAPR(const View* view, const CssBox* ctnBlock,
 
             if (ctnBlock->getCss()->isLtr()) {
                 // TODO: left is static position
-                l = 0.0;
+                l = 0;
                 autol = false;
                 r = ctnw - ml - blw - pl - w - pr - brw - mr;
                 autor = false;
             }
             else {
                 // TODO: right is static position
-                r = 0.0;
+                r = 0;
                 autor = false;
                 l = ctnw - ml - blw - pl - w - pr - brw - mr;
                 autor = false;
@@ -1941,7 +1971,7 @@ bool CssComputed::doCalcWidthsMargins(const View* view,
             !view->isReplaced()) {
         // inline, non-replaced elements
 
-        w = 0.0; /* undefined so far */
+        w = 0; /* undefined so far */
         autoHMarginsAsZero(ctnBlock, ml, mr);
         cssBox->setHMargins(ml, mr);
         return false;
@@ -2042,7 +2072,7 @@ bool CssComputed::resolveWHForRIR(const View* view, const CssBox* ctnBlock,
         w = inh * inr;
     }
     else if (view->getIntrinsicRatio(&inr)) {
-        w = 0.0; // undefined
+        w = 0; // undefined
         return false;
     }
 
@@ -2054,7 +2084,7 @@ bool CssComputed::resolveWHForRIR(const View* view, const CssBox* ctnBlock,
         h = inw / inr;
     }
     else if (view->getIntrinsicRatio(&inr)) {
-        h = 0.0; // undefined
+        h = 0; // undefined
         return false;
     }
 
