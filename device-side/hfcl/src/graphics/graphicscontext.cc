@@ -31,6 +31,7 @@
 namespace hfcl {
 
 GraphicsContext* GraphicsContext::screen_graphics_context = NULL;
+int GraphicsContext::screen_dpi = 0;
 
 VECTOR(HDC, DCVector);
 VECTOR(POINT*, PointVector);
@@ -120,6 +121,24 @@ GraphicsContext* GraphicsContext::screenGraphics()
         screen_graphics_context = HFCL_NEW_EX(GraphicsContext, (HDC_SCREEN));
     }
     return screen_graphics_context;
+}
+
+int GraphicsContext::px2dots(HTReal px)
+{
+    if (screen_dpi == 0) {
+        screen_dpi = GetGDCapability(HDC_SCREEN, GDCAP_DPI);
+    }
+
+    return (int)(px*screen_dpi/96 + 0.5);
+}
+
+HTReal GraphicsContext::dots2px(int dots)
+{
+    if (screen_dpi == 0) {
+        screen_dpi = GetGDCapability(HDC_SCREEN, GDCAP_DPI);
+    }
+
+    return dots*96.0/screen_dpi;
 }
 
 void GraphicsContext::deleteScreenGraphics() {

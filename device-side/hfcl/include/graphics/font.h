@@ -32,27 +32,56 @@ public:
     // Font objects must be created by calling the static creators
     static Font* createFont(const char* fontname);
     static Font* createFont(int idSysfont);
-
     virtual ~Font();
 
-    const char* getFontType() const;
-    const char* getFontFamily() const;
-    const char* getFontCharset() const;
-    DWORD getFontStyle() const;
-    HTReal getFontSize() const;
-    int getFontRotation() const;
-    Logfont* getLogfont() const;
+    Logfont* getLogfont() const {
+        return m_logfont;
+    }
 
-    HTReal getWhiteSpaceWidth() const;
-    HTReal getGlyphHeight_0() const;
-    HTReal getGlyphHeight_x() const;
+    const char* getFontType() const {
+        return (const char*)m_logfont->type;
+    }
+
+    const char* getFontFamily() const {
+        return (const char*)m_logfont->family;
+    }
+
+    const char* getFontCharset() const {
+        return (const char*)m_logfont->charset;
+    }
+
+    DWORD getFontStyle() const {
+        return (DWORD)m_logfont->style;
+    }
+
+    HTReal getFontSize() const {
+        return GraphicsContext::dots2px(m_logfont->size);
+    }
+
+    int getFontRotation() const {
+        return m_logfont->rotation;
+    }
+
+    HTReal getWhiteSpaceWidth() const {
+        return m_white_space_width;
+    }
+
+    HTReal getGlyphHeight_0() const {
+        return m_glyph_height_0;
+    }
+
+    HTReal getGlyphHeight_x() const {
+        return m_glyph_height_x;
+    }
 
 protected:
-    Font(Logfont* logfont)
-        : m_logfont(logfont), m_glyph_height_0(0), m_glyph_height_x(0) { }
+    Font(Logfont* logfont);
+
     Logfont* m_logfont;
 
 private:
+    HTReal m_font_size;
+    HTReal m_white_space_width;
     HTReal m_glyph_height_0;
     HTReal m_glyph_height_x;
 

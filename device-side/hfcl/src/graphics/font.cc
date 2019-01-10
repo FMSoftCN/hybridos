@@ -61,57 +61,41 @@ Font* Font::createFont(int idSysfont)
     return HFCL_NEW_EX(Font, (GetSystemFont(idSysfont)));
 }
 
+Font::Font(Logfont* logfont)
+    : m_logfont(logfont)
+{
+    m_font_size = GraphicsContext::dots2px(m_logfont->size);
+
+    Glyph32 glyph;
+    GLYPHINFO info;
+
+    glyph = GetGlyphValue(m_logfont, " ", 1, NULL, 0);
+    info.mask = GLYPH_INFO_METRICS;
+    GetGlyphInfo(m_logfont, glyph, &info);
+    m_white_space_width = GraphicsContext::dots2px(info.advance_x);
+
+    glyph = GetGlyphValue(m_logfont, "0", 1, NULL, 0);
+    info.mask = GLYPH_INFO_METRICS;
+    GetGlyphInfo(m_logfont, glyph, &info);
+    m_glyph_height_0 = GraphicsContext::dots2px(info.height);
+
+    glyph = GetGlyphValue(m_logfont, "x", 1, NULL, 0);
+    info.mask = GLYPH_INFO_METRICS;
+    GetGlyphInfo(m_logfont, glyph, &info);
+    m_glyph_height_x = GraphicsContext::dots2px(info.height);
+}
+
 Font::~Font()
 {
     if(!m_logfont)
         return ;
 
-    for (int i=0; i < NR_SYSLOGFONTS; i++)
+    for (int i = 0; i < NR_SYSLOGFONTS; i++) {
         if (g_SysLogFont[i] == m_logfont)
             return;
+    }
 
     DestroyLogFont(m_logfont);
-}
-
-Logfont* Font::getLogfont() const
-{
-    return m_logfont;
-}
-
-const char* Font::getFontType() const
-{
-    return (const char*)m_logfont->type;
-}
-
-const char* Font::getFontFamily() const
-{
-    return (const char*)m_logfont->family;
-}
-
-const char* Font::getFontCharset() const
-{
-    return (const char*)m_logfont->charset;
-}
-
-DWORD Font::getFontStyle() const
-{
-    return (DWORD)m_logfont->style;
-}
-
-HTReal Font::getFontSize() const
-{
-    /* TODO: unit conversion */
-    return (HTReal)m_logfont->size;
-}
-
-int Font::getFontRotation() const
-{
-    return m_logfont->rotation;
-}
-
-HTReal Font::getWhiteSpaceWidth() const
-{
-    return 0;
 }
 
 } // namespace hfcl

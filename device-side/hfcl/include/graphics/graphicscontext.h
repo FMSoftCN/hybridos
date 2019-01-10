@@ -72,6 +72,9 @@ public:
 
     static GraphicsContext* screenGraphics();
     static void deleteScreenGraphics();
+    static int px2dots(HTReal px);
+    static HTReal dots2px(int dots);
+
     void translation(int offx, int offy);
     void getTranslation(int& offx, int & offy);
 
@@ -205,6 +208,7 @@ public:
 private:
     GraphicsContextPrivate *m_data;
     static GraphicsContext *screen_graphics_context;
+    static int screen_dpi;
 };
 
 GraphicsContext* CreateMemGC(int w, int h);
