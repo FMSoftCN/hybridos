@@ -85,7 +85,7 @@ refer to the `README.md` file.
 
 The following people are the main developers of HFCL:
 
-* Vincent Wei
+* WEI Yongming
 
 The following people had been involved in the development of mGNGUX:
 
