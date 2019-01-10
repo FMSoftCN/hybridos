@@ -340,6 +340,11 @@
         return Css::setProperty (PID_HEIGHT, value, data);
     }
 
+    // Operators for property hyphens
+    bool setHyphens(Uint32 value) {
+        return Css::setProperty(PID_HYPHENS, value);
+    }
+
     // Operators for property left
     bool setLeft(Uint32 value) {
         return Css::setProperty(PID_LEFT, value);
@@ -354,6 +359,11 @@
     }
     bool setLetterSpacing(Uint32 value, HTReal data) {
         return Css::setProperty (PID_LETTER_SPACING, value, data);
+    }
+
+    // Operators for property line-break
+    bool setLineBreak(Uint32 value) {
+        return Css::setProperty(PID_LINE_BREAK, value);
     }
 
     // Operators for property line-height
@@ -494,6 +504,11 @@
         return Css::setProperty(PID_OVERFLOW, value);
     }
 
+    // Operators for property overflow-wrap
+    bool setOverflowWrap(Uint32 value) {
+        return Css::setProperty(PID_OVERFLOW_WRAP, value);
+    }
+
     // Operators for property padding-bottom
     bool setPaddingBottom(Uint32 value) {
         return Css::setProperty(PID_PADDING_BOTTOM, value);
@@ -562,9 +577,27 @@
         return Css::setProperty (PID_RIGHT, value, data);
     }
 
+    // Operators for property tab-size
+    bool setTabSize(Uint32 value) {
+        return Css::setProperty(PID_TAB_SIZE, value);
+    }
+    bool setTabSize(Uint32 value, HTReal data) {
+        return Css::setProperty (PID_TAB_SIZE, value, data);
+    }
+
     // Operators for property text-align
     bool setTextAlign(Uint32 value) {
         return Css::setProperty(PID_TEXT_ALIGN, value);
+    }
+
+    // Operators for property text-align-all
+    bool setTextAlignAll(Uint32 value) {
+        return Css::setProperty(PID_TEXT_ALIGN_ALL, value);
+    }
+
+    // Operators for property text-align-last
+    bool setTextAlignLast(Uint32 value) {
+        return Css::setProperty(PID_TEXT_ALIGN_LAST, value);
     }
 
     // Operators for property text-decoration
@@ -578,6 +611,11 @@
     }
     bool setTextIndent(Uint32 value, HTReal data) {
         return Css::setProperty (PID_TEXT_INDENT, value, data);
+    }
+
+    // Operators for property text-justify
+    bool setTextJustify(Uint32 value) {
+        return Css::setProperty(PID_TEXT_JUSTIFY, value);
     }
 
     // Operators for property text-transform
@@ -638,6 +676,11 @@
     }
     bool setWordSpacing(Uint32 value, HTReal data) {
         return Css::setProperty (PID_WORD_SPACING, value, data);
+    }
+
+    // Operators for property word-wrap
+    bool setWordWrap(Uint32 value) {
+        return Css::setProperty(PID_WORD_WRAP, value);
     }
 
     // Operators for property z-index

@@ -409,7 +409,7 @@ right
 #    inherited: no
 
 text-align
-    values: left right center justify inherit
+    values: start end left right center justify match-parent justify-all inherit
     initial: left
     inherited: yes
 
@@ -424,7 +424,7 @@ text-indent
     inherited: yes
 
 text-transform
-    values: capitalize uppercase lowercase none inherit
+    values: none capitalize uppercase lowercase full-width full-size-kana inherit
     initial: none
     inherited: yes
 
@@ -451,7 +451,7 @@ visibility
     inherited: yes
 
 white-space
-    values: normal pre nowrap pre-wrap pre-line inherit
+    values: normal pre nowrap pre-wrap break-spaces pre-line inherit
     initial: normal
     inherited: yes
 
@@ -475,4 +475,45 @@ z-index
     initial: auto
     inherited: no
     appliesto: positioned
+
+# CSS3 properties
+tab-size
+    values: <number> <length> inherit
+    initial: <number>=8
+    inherited: yes
+
+line-break
+    values: auto loose normal strict anywhere inherit
+    initial: auto
+    inherited: yes
+
+hyphens
+    values: none manual auto inherit
+    initial: manual
+    inherited: yes
+
+overflow-wrap
+    values: normal break-word anywhere inherit
+    initial: normal
+    inherited: yes
+
+word-wrap
+    values: normal break-word anywhere inherit
+    initial: normal
+    inherited: yes
+
+text-align-all
+    values: start end left right center justify match-parent inherit
+    initial: start
+    inherited: yes
+
+text-align-last
+    values: auto start end left right center justify match-parent inherit
+    initial: auto
+    inherited: yes
+
+text-justify
+    values: auto none inter-word inter-character inherit
+    initial: auto
+    inherited: yes
 

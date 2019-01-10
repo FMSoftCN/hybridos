@@ -108,10 +108,14 @@ typedef enum _CssPropertyIds {
     PID_FONT_WEIGHT,
     // height
     PID_HEIGHT,
+    // hyphens
+    PID_HYPHENS,
     // left
     PID_LEFT,
     // letter-spacing
     PID_LETTER_SPACING,
+    // line-break
+    PID_LINE_BREAK,
     // line-height
     PID_LINE_HEIGHT,
     // list-style-image
@@ -148,6 +152,8 @@ typedef enum _CssPropertyIds {
     PID_OUTLINE_WIDTH,
     // overflow
     PID_OVERFLOW,
+    // overflow-wrap
+    PID_OVERFLOW_WRAP,
     // padding-bottom
     PID_PADDING_BOTTOM,
     // padding-left
@@ -168,12 +174,20 @@ typedef enum _CssPropertyIds {
     PID_QUOTES,
     // right
     PID_RIGHT,
+    // tab-size
+    PID_TAB_SIZE,
     // text-align
     PID_TEXT_ALIGN,
+    // text-align-all
+    PID_TEXT_ALIGN_ALL,
+    // text-align-last
+    PID_TEXT_ALIGN_LAST,
     // text-decoration
     PID_TEXT_DECORATION,
     // text-indent
     PID_TEXT_INDENT,
+    // text-justify
+    PID_TEXT_JUSTIFY,
     // text-transform
     PID_TEXT_TRANSFORM,
     // top
@@ -192,6 +206,8 @@ typedef enum _CssPropertyIds {
     PID_WIDTH,
     // word-spacing
     PID_WORD_SPACING,
+    // word-wrap
+    PID_WORD_WRAP,
     // z-index
     PID_Z_INDEX,
     MAX_CSS_PID,
@@ -263,6 +279,7 @@ typedef enum _CssPropertyValueKeywords {
     PVK_900,
     PVK_ABSOLUTE,
     PVK_ALWAYS,
+    PVK_ANYWHERE,
     PVK_ARMENIAN,
     PVK_AUTO,
     PVK_AVOID,
@@ -274,6 +291,8 @@ typedef enum _CssPropertyValueKeywords {
     PVK_BOLDER,
     PVK_BOTH,
     PVK_BOTTOM,
+    PVK_BREAK_SPACES,
+    PVK_BREAK_WORD,
     PVK_BS_DASHED,
     PVK_BS_DOTTED,
     PVK_BS_DOUBLE,
@@ -448,8 +467,11 @@ typedef enum _CssPropertyValueKeywords {
     PVK_DISC,
     PVK_E_RESIZE,
     PVK_EMBED,
+    PVK_END,
     PVK_FANTASY,
     PVK_FIXED,
+    PVK_FULL_SIZE_KANA,
+    PVK_FULL_WIDTH,
     PVK_GEORGIAN,
     PVK_HELP,
     PVK_HIDDEN,
@@ -457,21 +479,27 @@ typedef enum _CssPropertyValueKeywords {
     PVK_INLINE,
     PVK_INLINE_BLOCK,
     PVK_INSIDE,
+    PVK_INTER_CHARACTER,
+    PVK_INTER_WORD,
     PVK_INVERT,
     PVK_ITALIC,
     PVK_JUSTIFY,
+    PVK_JUSTIFY_ALL,
     PVK_LARGE,
     PVK_LARGER,
     PVK_LEFT,
     PVK_LIGHTER,
     PVK_LINE_THROUGH,
     PVK_LIST_ITEM,
+    PVK_LOOSE,
     PVK_LOWER_ALPHA,
     PVK_LOWER_GREEK,
     PVK_LOWER_LATIN,
     PVK_LOWER_ROMAN,
     PVK_LOWERCASE,
     PVK_LTR,
+    PVK_MANUAL,
+    PVK_MATCH_PARENT,
     PVK_MEDIUM,
     PVK_MIDDLE,
     PVK_MONOSPACE,
@@ -509,7 +537,9 @@ typedef enum _CssPropertyValueKeywords {
     PVK_SMALL_CAPS,
     PVK_SMALLER,
     PVK_SQUARE,
+    PVK_START,
     PVK_STATIC,
+    PVK_STRICT,
     PVK_SUB,
     PVK_SUPER,
     PVK_SW_RESIZE,
@@ -2248,6 +2278,13 @@ typedef enum _CssPropertyValueKeywords {
 // PV_AUTO has been defined
 // PV_INHERIT has been defined
 
+// Values for property hyphens
+// PV_AUTO has been defined
+// PV_INHERIT has been defined
+#define PV_MANUAL \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_MANUAL)
+// PV_NONE has been defined
+
 // Values for property left
 // PV_LENGTH_Q has been defined
 // PV_LENGTH_CH has been defined
@@ -2286,6 +2323,17 @@ typedef enum _CssPropertyValueKeywords {
 // PV_LENGTH_VW has been defined
 // PV_INHERIT has been defined
 // PV_NORMAL has been defined
+
+// Values for property line-break
+#define PV_ANYWHERE \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_ANYWHERE)
+// PV_AUTO has been defined
+// PV_INHERIT has been defined
+#define PV_LOOSE \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_LOOSE)
+// PV_NORMAL has been defined
+#define PV_STRICT \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_STRICT)
 
 // Values for property line-height
 // PV_LENGTH_Q has been defined
@@ -2723,6 +2771,13 @@ typedef enum _CssPropertyValueKeywords {
 #define PV_VISIBLE \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_VISIBLE)
 
+// Values for property overflow-wrap
+// PV_ANYWHERE has been defined
+#define PV_BREAK_WORD \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BREAK_WORD)
+// PV_INHERIT has been defined
+// PV_NORMAL has been defined
+
 // Values for property padding-bottom
 // PV_LENGTH_Q has been defined
 // PV_LENGTH_CH has been defined
@@ -2858,13 +2913,61 @@ typedef enum _CssPropertyValueKeywords {
 // PV_AUTO has been defined
 // PV_INHERIT has been defined
 
+// Values for property tab-size
+// PV_LENGTH_Q has been defined
+// PV_LENGTH_CH has been defined
+// PV_LENGTH_CM has been defined
+// PV_LENGTH_EM has been defined
+// PV_LENGTH_EX has been defined
+// PV_LENGTH_IN has been defined
+// PV_LENGTH_MM has been defined
+// PV_LENGTH_PC has been defined
+// PV_LENGTH_PT has been defined
+// PV_LENGTH_PX has been defined
+// PV_LENGTH_REM has been defined
+// PV_LENGTH_VH has been defined
+// PV_LENGTH_VMAX has been defined
+// PV_LENGTH_VMIN has been defined
+// PV_LENGTH_VW has been defined
+// PV_NUMBER has been defined
+// PV_INHERIT has been defined
+
 // Values for property text-align
 // PV_CENTER has been defined
+#define PV_END \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_END)
 // PV_INHERIT has been defined
 #define PV_JUSTIFY \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_JUSTIFY)
+#define PV_JUSTIFY_ALL \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_JUSTIFY_ALL)
 // PV_LEFT has been defined
+#define PV_MATCH_PARENT \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_MATCH_PARENT)
 // PV_RIGHT has been defined
+#define PV_START \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_START)
+
+// Values for property text-align-all
+// PV_CENTER has been defined
+// PV_END has been defined
+// PV_INHERIT has been defined
+// PV_JUSTIFY has been defined
+// PV_LEFT has been defined
+// PV_MATCH_PARENT has been defined
+// PV_RIGHT has been defined
+// PV_START has been defined
+
+// Values for property text-align-last
+// PV_AUTO has been defined
+// PV_CENTER has been defined
+// PV_END has been defined
+// PV_INHERIT has been defined
+// PV_JUSTIFY has been defined
+// PV_LEFT has been defined
+// PV_MATCH_PARENT has been defined
+// PV_RIGHT has been defined
+// PV_START has been defined
 
 // Values for property text-decoration
 #define PV_BLINK \
@@ -2897,9 +3000,22 @@ typedef enum _CssPropertyValueKeywords {
 // PV_PERCENTAGE has been defined
 // PV_INHERIT has been defined
 
+// Values for property text-justify
+// PV_AUTO has been defined
+// PV_INHERIT has been defined
+#define PV_INTER_CHARACTER \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_INTER_CHARACTER)
+#define PV_INTER_WORD \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_INTER_WORD)
+// PV_NONE has been defined
+
 // Values for property text-transform
 #define PV_CAPITALIZE \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_CAPITALIZE)
+#define PV_FULL_SIZE_KANA \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_FULL_SIZE_KANA)
+#define PV_FULL_WIDTH \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_FULL_WIDTH)
 // PV_INHERIT has been defined
 #define PV_LOWERCASE \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_LOWERCASE)
@@ -2976,6 +3092,8 @@ typedef enum _CssPropertyValueKeywords {
 // PV_VISIBLE has been defined
 
 // Values for property white-space
+#define PV_BREAK_SPACES \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BREAK_SPACES)
 // PV_INHERIT has been defined
 // PV_NORMAL has been defined
 #define PV_NOWRAP \
@@ -3027,6 +3145,12 @@ typedef enum _CssPropertyValueKeywords {
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
 // PV_LENGTH_VW has been defined
+// PV_INHERIT has been defined
+// PV_NORMAL has been defined
+
+// Values for property word-wrap
+// PV_ANYWHERE has been defined
+// PV_BREAK_WORD has been defined
 // PV_INHERIT has been defined
 // PV_NORMAL has been defined
 

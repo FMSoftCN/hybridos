@@ -797,6 +797,25 @@ static bool pvc_height(Uint32 value, HTPVData data)
     ;
 }
 
+static bool pvc_hyphens(Uint32 value, HTPVData data)
+{
+    static int valid_keywords[] = {
+        PVK_NONE,
+        PVK_MANUAL,
+        PVK_AUTO,
+        PVK_INHERIT,
+        PVK_UNDEFINED
+    };
+
+    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+            return true;
+    }
+
+    return false
+    ;
+}
+
 static bool pvc_left(Uint32 value, HTPVData data)
 {
     static int valid_keywords[] = {
@@ -831,6 +850,27 @@ static bool pvc_letter_spacing(Uint32 value, HTPVData data)
 
     return false
         || check_length(value, data)
+    ;
+}
+
+static bool pvc_line_break(Uint32 value, HTPVData data)
+{
+    static int valid_keywords[] = {
+        PVK_AUTO,
+        PVK_LOOSE,
+        PVK_NORMAL,
+        PVK_STRICT,
+        PVK_ANYWHERE,
+        PVK_INHERIT,
+        PVK_UNDEFINED
+    };
+
+    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+            return true;
+    }
+
+    return false
     ;
 }
 
@@ -1174,6 +1214,25 @@ static bool pvc_overflow(Uint32 value, HTPVData data)
     ;
 }
 
+static bool pvc_overflow_wrap(Uint32 value, HTPVData data)
+{
+    static int valid_keywords[] = {
+        PVK_NORMAL,
+        PVK_BREAK_WORD,
+        PVK_ANYWHERE,
+        PVK_INHERIT,
+        PVK_UNDEFINED
+    };
+
+    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+            return true;
+    }
+
+    return false
+    ;
+}
+
 static bool pvc_padding_bottom(Uint32 value, HTPVData data)
 {
     static int valid_keywords[] = {
@@ -1363,13 +1422,82 @@ static bool pvc_right(Uint32 value, HTPVData data)
     ;
 }
 
+static bool pvc_tab_size(Uint32 value, HTPVData data)
+{
+    static int valid_keywords[] = {
+        PVK_INHERIT,
+        PVK_UNDEFINED
+    };
+
+    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+            return true;
+    }
+
+    return false
+        || check_number(value, data)
+        || check_length(value, data)
+    ;
+}
+
 static bool pvc_text_align(Uint32 value, HTPVData data)
 {
     static int valid_keywords[] = {
+        PVK_START,
+        PVK_END,
         PVK_LEFT,
         PVK_RIGHT,
         PVK_CENTER,
         PVK_JUSTIFY,
+        PVK_MATCH_PARENT,
+        PVK_JUSTIFY_ALL,
+        PVK_INHERIT,
+        PVK_UNDEFINED
+    };
+
+    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+            return true;
+    }
+
+    return false
+    ;
+}
+
+static bool pvc_text_align_all(Uint32 value, HTPVData data)
+{
+    static int valid_keywords[] = {
+        PVK_START,
+        PVK_END,
+        PVK_LEFT,
+        PVK_RIGHT,
+        PVK_CENTER,
+        PVK_JUSTIFY,
+        PVK_MATCH_PARENT,
+        PVK_INHERIT,
+        PVK_UNDEFINED
+    };
+
+    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+            return true;
+    }
+
+    return false
+    ;
+}
+
+static bool pvc_text_align_last(Uint32 value, HTPVData data)
+{
+    static int valid_keywords[] = {
+        PVK_AUTO,
+        PVK_START,
+        PVK_END,
+        PVK_LEFT,
+        PVK_RIGHT,
+        PVK_CENTER,
+        PVK_JUSTIFY,
+        PVK_MATCH_PARENT,
         PVK_INHERIT,
         PVK_UNDEFINED
     };
@@ -1422,13 +1550,35 @@ static bool pvc_text_indent(Uint32 value, HTPVData data)
     ;
 }
 
+static bool pvc_text_justify(Uint32 value, HTPVData data)
+{
+    static int valid_keywords[] = {
+        PVK_AUTO,
+        PVK_NONE,
+        PVK_INTER_WORD,
+        PVK_INTER_CHARACTER,
+        PVK_INHERIT,
+        PVK_UNDEFINED
+    };
+
+    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+            return true;
+    }
+
+    return false
+    ;
+}
+
 static bool pvc_text_transform(Uint32 value, HTPVData data)
 {
     static int valid_keywords[] = {
+        PVK_NONE,
         PVK_CAPITALIZE,
         PVK_UPPERCASE,
         PVK_LOWERCASE,
-        PVK_NONE,
+        PVK_FULL_WIDTH,
+        PVK_FULL_SIZE_KANA,
         PVK_INHERIT,
         PVK_UNDEFINED
     };
@@ -1532,6 +1682,7 @@ static bool pvc_white_space(Uint32 value, HTPVData data)
         PVK_PRE,
         PVK_NOWRAP,
         PVK_PRE_WRAP,
+        PVK_BREAK_SPACES,
         PVK_PRE_LINE,
         PVK_INHERIT,
         PVK_UNDEFINED
@@ -1599,6 +1750,25 @@ static bool pvc_word_spacing(Uint32 value, HTPVData data)
     ;
 }
 
+static bool pvc_word_wrap(Uint32 value, HTPVData data)
+{
+    static int valid_keywords[] = {
+        PVK_NORMAL,
+        PVK_BREAK_WORD,
+        PVK_ANYWHERE,
+        PVK_INHERIT,
+        PVK_UNDEFINED
+    };
+
+    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+            return true;
+    }
+
+    return false
+    ;
+}
+
 static bool pvc_z_index(Uint32 value, HTPVData data)
 {
     static int valid_keywords[] = {
@@ -1660,8 +1830,10 @@ static PV_CHECKER* _pv_checkers[] = {
     pvc_font_variant,
     pvc_font_weight,
     pvc_height,
+    pvc_hyphens,
     pvc_left,
     pvc_letter_spacing,
+    pvc_line_break,
     pvc_line_height,
     pvc_list_style_image,
     pvc_list_style_position,
@@ -1680,6 +1852,7 @@ static PV_CHECKER* _pv_checkers[] = {
     pvc_outline_style,
     pvc_outline_width,
     pvc_overflow,
+    pvc_overflow_wrap,
     pvc_padding_bottom,
     pvc_padding_left,
     pvc_padding_right,
@@ -1690,9 +1863,13 @@ static PV_CHECKER* _pv_checkers[] = {
     pvc_position,
     pvc_quotes,
     pvc_right,
+    pvc_tab_size,
     pvc_text_align,
+    pvc_text_align_all,
+    pvc_text_align_last,
     pvc_text_decoration,
     pvc_text_indent,
+    pvc_text_justify,
     pvc_text_transform,
     pvc_top,
     pvc_unicode_bidi,
@@ -1702,6 +1879,7 @@ static PV_CHECKER* _pv_checkers[] = {
     pvc_widows,
     pvc_width,
     pvc_word_spacing,
+    pvc_word_wrap,
     pvc_z_index,
 };
 
