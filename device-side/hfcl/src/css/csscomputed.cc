@@ -21,12 +21,15 @@
 
 #include "css/csscomputed.h"
 
+#include <stdlib.h>
+#include <string.h>
 #include <math.h>
 
 #include "css/cssinitial.h"
 #include "view/view.h"
 #include "view/rootview.h"
 #include "resource/respkgmanager.h"
+#include "resource/resloader.h"
 
 namespace hfcl {
 
@@ -55,27 +58,181 @@ inline HTReal realmin(HTReal x, HTReal y)
 CssComputed::CssComputed()
 {
     CssInitial* initial = CssInitial::getSingleton();
-    for (int i = 0; i < MAX_CSS_PID; i++) {
-        m_values[i] = CSS_PPT_VALUE_NOFLAGS(initial->m_values[i]);
+    for (int pid = 0; pid < MAX_CSS_PID; pid++) {
+        m_values[pid] = CSS_PPT_VALUE_NOFLAGS(initial->m_values[pid]);
     }
     memcpy(&m_data, initial->m_values, sizeof(m_data));
+
+    for (int pid = MAX_CSS_PID; pid < MAX_CSS_PID_COMPUTED; pid++) {
+        m_values[pid] = 0;
+        m_data[pid].p = 0;
+    }
 }
 
 CssComputed::CssComputed(const CssComputed& init)
 {
-    memcpy(&m_values, init.m_values, sizeof(m_values));
-    memcpy(&m_data, init.m_data, sizeof(m_data));
+    for (int pid = 0; pid < MAX_CSS_PID; pid++) {
+        inherit(&init, pid);
+    }
+
+    for (int pid = MAX_CSS_PID; pid < MAX_CSS_PID_COMPUTED; pid++) {
+        m_values[pid] = 0;
+        m_data[pid].p = 0;
+    }
+}
+
+/* we use PID_INTERNAL_FONT to store the Font object */
+void CssComputed::setFont(Font* font)
+{
+    m_values[PID_INTERNAL_FONT]
+        = MAKE_CSS_PPT_VALUE(PVT_INTERNAL_FONT, PVK_USER_DATA);
+    m_data[PID_INTERNAL_FONT].p = font;
+}
+
+const Font* CssComputed::getFont()
+{
+    /* if has been set, return it directly */
+    if (CSS_PPT_VALUE_TYPE(m_values[PID_INTERNAL_FONT]) == PVT_INTERNAL_FONT) {
+        return (const Font*)(m_data[PID_INTERNAL_FONT].p);
+    }
+
+    /* create Font object here */
+    Font* font = NULL;
+    Uint32 type = CSS_PPT_VALUE_TYPE(m_values[PID_FONT]);
+    int kw = CSS_PPT_VALUE_KEYWORD(m_values[PID_FONT]);
+
+    if (type == PVT_KEYWORD && kw == PVK_USE_OTHERS) {
+        Uint32 value;
+
+        // assemble the font name by using the individual property values
+        // TODO font type and charset
+        char family[LEN_FONT_NAME + 1];
+        char style[LEN_FONT_NAME + 1];
+
+        value = CSS_PPT_VALUE_NOFLAGS(m_values[PID_FONT_FAMILY]);
+        switch (value) {
+        case PV_SERIF:
+            strcpy(family, "serif");
+            break;
+        case PV_SANS_SERIF:
+            strcpy(family, "sanserif");
+            break;
+        case PV_CURSIVE:
+            strcpy(family, "cursive");
+            break;
+        case PV_FANTASY:
+            strcpy(family, "fantasy");
+            break;
+        case PV_MONOSPACE:
+            strcpy(family, "monospace");
+            break;
+        case PV_STRING:
+            strncpy(family, (const char*)(m_data[PID_FONT_FAMILY].p),
+                LEN_FONT_NAME);
+            break;
+        default:
+            HFCL_ASSERT(0);
+            return NULL;
+        }
+
+        // TODO: convert font size to physical pixels
+        HFCL_ASSERT(m_values[PID_FONT_SIZE] == PV_LENGTH_PX);
+        int size = m_data[PID_FONT_SIZE].r;
+
+        strcpy(style, "rrncnn");
+        Uint32 pv = m_values[PID_FONT_WEIGHT];
+        switch (pv) {
+        case PV_100:
+        case PV_200:
+            style[0] = FONT_WEIGHT_LIGHT;
+            break;
+        case PV_300:
+            style[0] = FONT_WEIGHT_DEMIBOLD;
+            break;
+        case PV_400:
+            style[0] = FONT_WEIGHT_REGULAR;
+            break;
+        case PV_500:
+            style[0] = FONT_WEIGHT_MEDIUM;
+            break;
+        case PV_600:
+            style[0] = FONT_WEIGHT_SUBPIXEL;
+            break;
+        case PV_700:
+            style[0] = FONT_WEIGHT_BOOK;
+            break;
+        case PV_800:
+            style[0] = FONT_WEIGHT_BOLD;
+            break;
+        case PV_900:
+            style[0] = FONT_WEIGHT_BLACK;
+            break;
+        default:
+            HFCL_ASSERT(0);
+            return NULL;
+        }
+
+        pv = m_values[PID_FONT_STYLE];
+        switch (pv) {
+        case PV_ITALIC:
+            style[1] = FONT_SLANT_ITALIC;
+            break;
+        case PV_OBLIQUE:
+            style[1] = FONT_SLANT_OBLIQUE;
+            break;
+        default:
+            HFCL_ASSERT(0);
+            return NULL;
+        }
+
+        const char* font_name_format = "ttf-%s-%s-*-%d-utf-8";
+        char font_name[LEN_FONT_NAME*3 + 1];
+        sprintf(font_name, font_name_format, family, style, size);
+        font = ResLoader::getInstance()->getFont(font_name);
+    }
+    else if (type == PVT_STRING) {
+        const char* font_name = (const char*)m_data[PID_FONT].p;
+        font = ResLoader::getInstance()->getFont(font_name);
+    }
+    else if (type == PVT_SYSID) {
+        // get the Font object via sysid
+        // for individual properties of font
+        font = GetFontRes((HTResId)(m_data[PID_FONT].u));
+    }
+
+    if (font)
+        setFont(font);
+
+    return font;
+}
+
+void CssComputed::releaseFont()
+{
+    if (CSS_PPT_VALUE_TYPE(m_values[PID_INTERNAL_FONT]) == PVT_INTERNAL_FONT) {
+        Font* font = (Font*)(m_data[PID_INTERNAL_FONT].p);
+        if (font)
+            font->unref();
+    }
 }
 
 void CssComputed::reset()
 {
     freeArray();
 
+    /* use initial CSS values */
     CssInitial* initial = CssInitial::getSingleton();
-    for (int i = 0; i < MAX_CSS_PID; i++) {
-        m_values[i] = CSS_PPT_VALUE_NOFLAGS(initial->m_values[i]);
+    for (int pid = 0; pid < MAX_CSS_PID; pid++) {
+        m_values[pid] = CSS_PPT_VALUE_NOFLAGS(initial->m_values[pid]);
     }
     memcpy(&m_data, initial->m_values, sizeof(m_data));
+
+    /* release font if there is one */
+    releaseFont();
+
+    for (int pid = MAX_CSS_PID; pid < MAX_CSS_PID_COMPUTED; pid++) {
+        m_values[pid] = 0;
+        m_data[pid].p = 0;
+    }
 }
 
 void CssComputed::inherit(const CssComputed* css, int pid)
@@ -85,20 +242,34 @@ void CssComputed::inherit(const CssComputed* css, int pid)
 
     CssInitial* initial = CssInitial::getSingleton();
 
-    if (CSS_PPT_VALUE_TYPE(css->m_values[pid])
-            == PVT_ARRAY_LENGTH_PX &&
-        IS_CSS_PPT_VALUE_ALLOCATED(css->m_values[pid])) {
+    if (IS_CSS_PPT_VALUE_ALLOCATED(css->m_values[pid])) {
 
-        Uint8 n = initial->m_arraysize[pid];
-        HTReal* p = new HTReal[n];
-        memcpy(p, css->m_data[pid].p, sizeof(HTReal)*n);
+        Uint32 type = CSS_PPT_VALUE_TYPE(css->m_values[pid]);
+        void* p = NULL;
 
-        m_values[pid] = css->m_values[pid];
-        m_data[pid].p = p;
-        MARK_CSS_PPT_VALUE_ALLOCATED(m_values[pid]);
+        if (type == PVT_ARRAY_LENGTH_PX) {
+            Uint8 n = initial->m_arraysize[pid];
+            p = malloc(sizeof(HTReal) * n);
+            if (p)
+                memcpy(p, css->m_data[pid].p, sizeof(HTReal)*n);
+        }
+        else if (type == PVT_STRING) {
+            p = strdup ((const char*)css->m_data[pid].p);
+        }
+
+        if (p) {
+            m_values[pid] = CSS_PPT_VALUE_NOFLAGS(css->m_values[pid]);
+            MARK_CSS_PPT_VALUE_ALLOCATED(m_values[pid]);
+            m_data[pid].p = p;
+        }
+        else {
+            /* use initial value */
+            m_values[pid] = CSS_PPT_VALUE_NOFLAGS(initial->m_values[pid]);
+            m_data[pid] = initial->m_data[pid];
+        }
     }
     else {
-        m_values[pid] = css->m_values[pid];
+        m_values[pid] = CSS_PPT_VALUE_NOFLAGS(css->m_values[pid]);
         m_data[pid] = css->m_data[pid];
     }
 }
@@ -116,29 +287,14 @@ void CssComputed::inherit(const CssComputed* css)
 
     CssInitial* initial = CssInitial::getSingleton();
 
-    for (int i = 0; i < MAX_CSS_PID; i++) {
+    for (int pid = 0; pid < MAX_CSS_PID; pid++) {
 
-        if (IS_CSS_PPT_VALUE_INHERITED(initial->m_values[i])) {
-            if (CSS_PPT_VALUE_TYPE(css->m_values[i])
-                    == PVT_ARRAY_LENGTH_PX &&
-                IS_CSS_PPT_VALUE_ALLOCATED(css->m_values[i])) {
-
-                Uint8 n = initial->m_arraysize[i];
-                HTReal* p = new HTReal[n];
-                memcpy(p, css->m_data[i].p, sizeof(HTReal)*n);
-
-                m_values[i] = css->m_values[i];
-                m_data[i].p = p;
-                MARK_CSS_PPT_VALUE_ALLOCATED(m_values[i]);
-            }
-            else {
-                m_values[i] = css->m_values[i];
-                m_data[i] = css->m_data[i];
-            }
+        if (IS_CSS_PPT_VALUE_INHERITED(initial->m_values[pid])) {
+            inherit(css, pid);
         }
         else {
-            m_values[i] = initial->m_values[i];
-            m_data[i] = initial->m_data[i];
+            m_values[pid] = CSS_PPT_VALUE_NOFLAGS(initial->m_values[pid]);
+            m_data[pid] = initial->m_data[pid];
         }
     }
 }
@@ -146,10 +302,9 @@ void CssComputed::inherit(const CssComputed* css)
 void CssComputed::freeArray()
 {
     for (int i = 0; i < MAX_CSS_PID; i++) {
-        if (CSS_PPT_VALUE_TYPE(m_values[i]) == PVT_ARRAY_LENGTH_PX &&
-            IS_CSS_PPT_VALUE_ALLOCATED(m_values[i])) {
+        if (IS_CSS_PPT_VALUE_ALLOCATED(m_values[i])) {
             if (m_data[i].p) {
-                delete [] (HTReal*)(m_data[i].p);
+                free((void*)(m_data[i].p));
                 m_data[i].p = NULL;
             }
 
@@ -159,7 +314,7 @@ void CssComputed::freeArray()
 }
 
 /* absolute lengths */
-bool CssComputed::convertArray (int pid, int t)
+bool CssComputed::convertArray(int pid, int t)
 {
     CssInitial* initial = CssInitial::getSingleton();
     Uint8 n = initial->m_arraysize[pid];
@@ -167,7 +322,7 @@ bool CssComputed::convertArray (int pid, int t)
     if (n == 0 || old == NULL)
         return false;
 
-    HTReal* p = new HTReal[n];
+    HTReal* p = (HTReal*)malloc(sizeof(HTReal) * n);
     switch (t) {
     /* absolute lengths */
     case PVT_ARRAY_LENGTH_CM:
@@ -201,7 +356,7 @@ bool CssComputed::convertArray (int pid, int t)
         }
         break;
     default:
-        delete [] p;
+        free(p);
         return false;
     }
 
@@ -211,7 +366,7 @@ bool CssComputed::convertArray (int pid, int t)
 }
 
 /* viewport-relative lengths */
-bool CssComputed::convertArray (int pid, int t, const RealRect& viewport)
+bool CssComputed::convertArray(int pid, int t, const RealRect& viewport)
 {
     CssInitial* initial = CssInitial::getSingleton();
     Uint8 n = initial->m_arraysize[pid];
@@ -219,7 +374,7 @@ bool CssComputed::convertArray (int pid, int t, const RealRect& viewport)
     if (n == 0 || old == NULL)
         return false;
 
-    HTReal* p = new HTReal[n];
+    HTReal* p = (HTReal*)malloc(sizeof(HTReal) * n);
     switch (t) {
     case PVT_ARRAY_LENGTH_VW:
         for (int i = 0; i < n; i++) {
@@ -242,7 +397,7 @@ bool CssComputed::convertArray (int pid, int t, const RealRect& viewport)
         }
         break;
     default:
-        delete [] p;
+        free(p);
         return false;
     }
 
@@ -252,7 +407,7 @@ bool CssComputed::convertArray (int pid, int t, const RealRect& viewport)
 }
 
 /* font-relative lengths */
-bool CssComputed::convertArray (int pid, int t, const View* view)
+bool CssComputed::convertArray(int pid, int t, const View* view)
 {
     CssInitial* initial = CssInitial::getSingleton();
     Uint8 n = initial->m_arraysize[pid];
@@ -260,7 +415,7 @@ bool CssComputed::convertArray (int pid, int t, const View* view)
     if (n == 0 || old == NULL)
         return false;
 
-    HTReal* p = new HTReal[n];
+    HTReal* p = (HTReal*)malloc(sizeof(HTReal) * n);
     switch(t) {
     case PVT_ARRAY_LENGTH_EM:
         for (int i = 0; i < n; i++) {
@@ -275,7 +430,7 @@ bool CssComputed::convertArray (int pid, int t, const View* view)
         for (int i = 0; i < n; i++) {
         }
     default:
-        delete [] p;
+        free(p);
         return false;
     }
 
@@ -712,10 +867,9 @@ bool CssComputed::handleFont()
         // get the system log font and use the font attributes
         // for individual properties of font
         Font* font = GetFontRes((HTResId)(m_data[PID_FONT].u));
-        Logfont* lf = font->getLogfont();
-        font->unref();
+        Logfont* lf;
 
-        if (lf) {
+        if (font && (lf = font->getLogfont())) {
             char* p = strdup(lf->family);
             m_values[PID_FONT_FAMILY] = PV_STRING;
             m_data[PID_FONT_FAMILY].p = p;
@@ -766,6 +920,8 @@ bool CssComputed::handleFont()
             }
 
             m_values[PID_FONT_STYLE] = slant;
+
+            setFont(font);
         }
         else {
             m_values[PID_FONT] = PV_USE_OTHERS;

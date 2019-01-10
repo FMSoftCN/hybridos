@@ -27,6 +27,7 @@
 #include "../css/css.h"
 #include "../css/csspropertyvalue.h"
 #include "../css/cssbox.h"
+#include "../graphics/font.h"
 
 #include "../view/view.h"
 
@@ -81,6 +82,8 @@ public:
     bool getMinHeight(const CssBox* ctnBlock, HTReal& minh) const;
     bool getMaxHeight(const CssBox* ctnBlock, HTReal& maxh) const;
 
+    const Font* getFont();
+
     void calcPaddings(const CssBox* ctnBlock,
         HTReal* pl, HTReal* pt, HTReal* pr, HTReal* pb) const;
 
@@ -103,8 +106,14 @@ public:
 
 private:
     enum {
+        PVT_INTERNAL_FONT = MAX_CSS_PVT,
+        MAX_CSS_PVT_COMPUTED,
+    };
+
+    enum {
         PID_INTERNAL_WIDTH = MAX_CSS_PID,
         PID_INTERNAL_HEIGHT,
+        PID_INTERNAL_FONT,
         MAX_CSS_PID_COMPUTED,
     };
 
@@ -115,6 +124,9 @@ private:
     bool convertArray(int pid, int t, const RealRect& viewport);
     bool convertArray(int pid, int t, const View* view);
     void freeArray();
+
+    void setFont(Font* font);
+    void releaseFont();
 
     void validateBorderWidth(int pid);
     void validateNotNegative(int pid);
