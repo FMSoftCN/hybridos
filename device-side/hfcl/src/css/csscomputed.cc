@@ -79,6 +79,15 @@ CssComputed::CssComputed(const CssComputed& init)
         m_values[pid] = 0;
         m_data[pid].p = 0;
     }
+
+    if (CSS_PPT_VALUE_TYPE(init.m_values[PID_INTERNAL_FONT])
+            == PVT_INTERNAL_FONT) {
+        Font* font = (Font*)(init.m_data[PID_INTERNAL_FONT].p);
+        font->ref();
+
+        m_values[PID_INTERNAL_FONT] = init.m_values[PID_INTERNAL_FONT];
+        m_data[PID_INTERNAL_FONT].p = init.m_data[PID_INTERNAL_FONT].p;
+    }
 }
 
 /* we use PID_INTERNAL_FONT to store the Font object */
