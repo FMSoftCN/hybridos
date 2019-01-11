@@ -641,7 +641,7 @@ bool CssComputed::getParentPropertyValue(const View* view, CssPropertyIds pid,
 }
 
 
-/* TODO: the font-size for medium in pixels */
+/* the font-size for medium in pixels */
 #define FONT_MEDIUM_SIZE 14
 
 void CssComputed::handleFontSize(const View* view)
@@ -855,8 +855,7 @@ bool CssComputed::handleFont()
 
         if ((size = fontGetHeightFromName(font_name)) != -1) {
             m_values[PID_FONT_SIZE] = PV_LENGTH_PX;
-            /* FIXME: unit conversion */
-            m_data[PID_FONT_SIZE].r = size;
+            m_data[PID_FONT_SIZE].r = GraphicsContext::dots2px(size);
         }
         else {
             m_values[PID_FONT_SIZE] = PV_LENGTH_PX;
@@ -922,8 +921,7 @@ bool CssComputed::handleFont()
             MARK_CSS_PPT_VALUE_ALLOCATED(m_values[PID_FONT_FAMILY]);
 
             m_values[PID_FONT_SIZE] = PV_LENGTH_PX;
-            /* FIXME: unit conversion */
-            m_data[PID_FONT_SIZE].r = lf->size;
+            m_data[PID_FONT_SIZE].r = GraphicsContext::dots2px(lf->size);
 
             Uint32 weight = PV_400;
             switch (lf->style & FS_WEIGHT_MASK) {

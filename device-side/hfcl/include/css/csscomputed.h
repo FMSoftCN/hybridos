@@ -83,9 +83,10 @@ public:
     bool getMaxHeight(const CssBox* ctnBlock, HTReal& maxh) const;
 
     const Font* getFont() const;
-    const Font* getFont();
     // if getFont() const returns NULL, one can call createFont
     Font* createFont() const;
+
+    const Font* getFont();
 
     void calcPaddings(const CssBox* ctnBlock,
         HTReal* pl, HTReal* pt, HTReal* pr, HTReal* pb) const;
