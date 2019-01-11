@@ -1,0 +1,17 @@
+Tina Linux V2 Version SDK Description
+
+build system only support linux 64bit system
+
+compile:
+$ source build/envsetup.sh
+$ lunch
+$ make
+$ pack [-d]
+note:
+${board}-tina for tina linux firmware, ${board}-dragonboard for board
+test firmware
+[-d] option for serial used default(uart0) io or TF-card io(card0)
+
+firmware:
+firmware at out/{board}/tina_{board}_card.img.
+burn tools at tools/aw_tools

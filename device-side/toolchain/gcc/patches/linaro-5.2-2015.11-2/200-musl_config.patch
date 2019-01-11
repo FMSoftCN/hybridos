@@ -1,0 +1,63 @@
+From: ktkachov <ktkachov@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 8 May 2015 08:25:47 +0000 (+0000)
+Subject: [PATCH 2/13] musl libc config
+X-Git-Url: https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff_plain;h=a9173ceabaf29c16f8ef226fbf98af373a4b2ceb
+
+[PATCH 2/13] musl libc config
+
+2015-05-08  Gregor Richards  <gregor.richards@uwaterloo.ca>
+	    Szabolcs Nagy  <szabolcs.nagy@arm.com>
+
+	* config.gcc (LIBC_MUSL): New tm_defines macro.
+	* config/linux.h (OPTION_MUSL): Define.
+	(MUSL_DYNAMIC_LINKER, MUSL_DYNAMIC_LINKER32,)
+	(MUSL_DYNAMIC_LINKER64, MUSL_DYNAMIC_LINKERX32,)
+	(INCLUDE_DEFAULTS_MUSL_GPP, INCLUDE_DEFAULTS_MUSL_LOCAL,)
+	(INCLUDE_DEFAULTS_MUSL_PREFIX, INCLUDE_DEFAULTS_MUSL_CROSS,)
+	(INCLUDE_DEFAULTS_MUSL_TOOL, INCLUDE_DEFAULTS_MUSL_NATIVE): Define.
+	* config/linux.opt (mmusl): New option.
+	* doc/invoke.texi (GNU/Linux Options): Document -mmusl.
+	* configure.ac (gcc_cv_libc_provides_ssp): Add *-*-musl*.
+	(gcc_cv_target_dl_iterate_phdr): Add *-linux-musl*.
+	* configure: Regenerate.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk@222904 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -723,6 +723,9 @@ case ${target} in
+     *-*-*musl*)
+       tm_defines="$tm_defines DEFAULT_LIBC=LIBC_MUSL"
+       ;;
++    *-*-*musl*)
++      tm_defines="$tm_defines DEFAULT_LIBC=LIBC_MUSL"
++      ;;
+     *)
+       tm_defines="$tm_defines DEFAULT_LIBC=LIBC_GLIBC"
+       ;;
+--- a/gcc/configure
++++ b/gcc/configure
+@@ -27661,6 +27661,9 @@ $as_echo "#define HAVE_LD_LARGE_TOC 1" >
+ 
+     fi
+     ;;
++  *-linux-musl*)
++    gcc_cv_target_dl_iterate_phdr=yes
++    ;;
+ esac
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking linker --build-id support" >&5
+--- a/gcc/configure.ac
++++ b/gcc/configure.ac
+@@ -5361,6 +5361,9 @@ case "$target" in
+       && gcc_cv_target_ldbl128=yes
+       ]])])
+     ;;
++  *-linux-musl*)
++    gcc_cv_target_dl_iterate_phdr=yes
++    ;;
+ esac
+ if test x$gcc_cv_target_ldbl128 = xyes; then
+   AC_DEFINE(TARGET_DEFAULT_LONG_DOUBLE_128, 1,

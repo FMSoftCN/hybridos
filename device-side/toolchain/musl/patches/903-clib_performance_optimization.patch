@@ -1,0 +1,3100 @@
+--- /dev/null
++++ b/src/string/arm/memcmp.S
+@@ -0,0 +1,287 @@
++/*
++ * Copyright (C) 2008 The Android Open Source Project
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *  * Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ *  * Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
++ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
++ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++
++
++/*
++ * Optimized memcmp() for ARM9.
++ * This would not be optimal on XScale or ARM11, where more prefetching
++ * and use of PLD will be needed.
++ * The 2 major optimzations here are
++ * (1) The main loop compares 16 bytes at a time
++ * (2) The loads are scheduled in a way they won't stall
++ */
++#define PLD(reg,offset)     pld     [reg, offset]
++
++	.text
++	.align
++	.global memcmp
++	.type memcmp, %function
++
++memcmp:
++		.fnstart
++        PLD         (r0, #0)
++        PLD         (r1, #0)
++
++        /* take of the case where length is 0 or the buffers are the same */
++        cmp         r0, r1
++        cmpne       r2, #0
++        moveq       r0, #0
++        bxeq        lr
++
++        .save {r4, lr}
++        /* save registers */
++        stmfd       sp!, {r4, lr}
++
++        PLD         (r0, #32)
++        PLD         (r1, #32)
++
++        /* since r0 hold the result, move the first source
++         * pointer somewhere else
++         */
++
++         mov        r4, r0
++
++         /* make sure we have at least 8+4 bytes, this simplify things below
++          * and avoid some overhead for small blocks
++          */
++         cmp        r2, #(8+4)
++         bmi        8f
++
++        /* align first pointer to word boundary
++         * offset = -src & 3
++         */
++        rsb         r3, r4, #0
++        ands        r3, r3, #3
++        beq         0f
++
++        /* align first pointer  */
++        sub         r2, r2, r3
++1:      ldrb        r0, [r4], #1
++        ldrb        ip, [r1], #1
++        subs        r0, r0, ip
++        bne         9f
++        subs        r3, r3, #1
++        bne         1b
++
++
++0:      /* here the first pointer is aligned, and we have at least 4 bytes
++         * to process.
++         */
++
++        /* see if the pointers are congruent */
++        eor         r0, r4, r1
++        ands        r0, r0, #3
++        bne         5f
++
++        /* congruent case, 32 bytes per iteration
++         * We need to make sure there are at least 32+4 bytes left
++         * because we effectively read ahead one word, and we could
++         * read past the buffer (and segfault) if we're not careful.
++         */
++
++        ldr         ip, [r1]
++        subs        r2, r2, #(32 + 4)
++        bmi         1f
++
++0:      PLD         (r4, #64)
++        PLD         (r1, #64)
++        ldr         r0, [r4], #4
++        ldr         lr, [r1, #4]!
++        eors        r0, r0, ip
++        ldreq       r0, [r4], #4
++        ldreq       ip, [r1, #4]!
++        eoreqs      r0, r0, lr
++        ldreq       r0, [r4], #4
++        ldreq       lr, [r1, #4]!
++        eoreqs      r0, r0, ip
++        ldreq       r0, [r4], #4
++        ldreq       ip, [r1, #4]!
++        eoreqs      r0, r0, lr
++        ldreq       r0, [r4], #4
++        ldreq       lr, [r1, #4]!
++        eoreqs      r0, r0, ip
++        ldreq       r0, [r4], #4
++        ldreq       ip, [r1, #4]!
++        eoreqs      r0, r0, lr
++        ldreq       r0, [r4], #4
++        ldreq       lr, [r1, #4]!
++        eoreqs      r0, r0, ip
++        ldreq       r0, [r4], #4
++        ldreq       ip, [r1, #4]!
++        eoreqs      r0, r0, lr
++        bne         2f
++        subs        r2, r2, #32
++        bhs         0b
++
++        /* do we have at least 4 bytes left? */
++1:      adds        r2, r2, #(32 - 4 + 4)
++        bmi         4f
++
++        /* finish off 4 bytes at a time */
++3:      ldr         r0, [r4], #4
++        ldr         ip, [r1], #4
++        eors        r0, r0, ip
++        bne         2f
++        subs        r2, r2, #4
++        bhs         3b
++
++        /* are we done? */
++4:      adds        r2, r2, #4
++        moveq       r0, #0
++        beq         9f
++
++        /* finish off the remaining bytes */
++        b           8f
++
++2:      /* the last 4 bytes are different, restart them */
++        sub         r4, r4, #4
++        sub         r1, r1, #4
++        mov         r2, #4
++
++        /* process the last few bytes */
++8:      ldrb        r0, [r4], #1
++        ldrb        ip, [r1], #1
++        // stall
++        subs        r0, r0, ip
++        bne         9f
++        subs        r2, r2, #1
++        bne         8b
++
++9:      /* restore registers and return */
++        ldmfd       sp!, {r4, lr}
++        bx          lr
++		.fnend
++
++
++
++
++
++5:      /*************** non-congruent case ***************/
++        and         r0, r1, #3
++        cmp         r0, #2
++        bne         4f
++
++        /* here, offset is 2 (16-bits aligned, special cased) */
++
++        /* make sure we have at least 16 bytes to process */
++        subs        r2, r2, #16
++        addmi       r2, r2, #16
++        bmi         8b
++
++        /* align the unaligned pointer */
++        bic         r1, r1, #3
++        ldr         lr, [r1], #4
++
++6:      PLD         (r1, #64)
++        PLD         (r4, #64)
++        mov         ip, lr, lsr #16
++        ldr         lr, [r1], #4
++        ldr         r0, [r4], #4
++        orr         ip, ip, lr, lsl #16
++        eors        r0, r0, ip
++        moveq       ip, lr, lsr #16
++        ldreq       lr, [r1], #4
++        ldreq       r0, [r4], #4
++        orreq       ip, ip, lr, lsl #16
++        eoreqs      r0, r0, ip
++        moveq       ip, lr, lsr #16
++        ldreq       lr, [r1], #4
++        ldreq       r0, [r4], #4
++        orreq       ip, ip, lr, lsl #16
++        eoreqs      r0, r0, ip
++        moveq       ip, lr, lsr #16
++        ldreq       lr, [r1], #4
++        ldreq       r0, [r4], #4
++        orreq       ip, ip, lr, lsl #16
++        eoreqs      r0, r0, ip
++        bne         7f
++        subs        r2, r2, #16
++        bhs         6b
++        sub         r1, r1, #2
++        /* are we done? */
++        adds        r2, r2, #16
++        moveq       r0, #0
++        beq         9b
++        /* finish off the remaining bytes */
++        b           8b
++
++7:      /* fix up the 2 pointers and fallthrough... */
++        sub         r1, r1, #(4+2)
++        sub         r4, r4, #4
++        mov         r2, #4
++        b           8b
++
++
++4:      /*************** offset is 1 or 3 (less optimized) ***************/
++
++		stmfd		sp!, {r5, r6, r7}
++
++        // r5 = rhs
++        // r6 = lhs
++        // r7 = scratch
++
++        mov         r5, r0, lsl #3		/* r5 = right shift */
++        rsb         r6, r5, #32         /* r6 = left shift */
++
++        /* align the unaligned pointer */
++        bic         r1, r1, #3
++        ldr         r7, [r1], #4
++        sub         r2, r2, #8
++
++6:      mov         ip, r7, lsr r5
++        ldr         r7, [r1], #4
++        ldr         r0, [r4], #4
++        orr         ip, ip, r7, lsl r6
++        eors        r0, r0, ip
++        moveq       ip, r7, lsr r5
++        ldreq       r7, [r1], #4
++        ldreq       r0, [r4], #4
++        orreq       ip, ip, r7, lsl r6
++        eoreqs      r0, r0, ip
++        bne         7f
++        subs        r2, r2, #8
++        bhs         6b
++
++        sub         r1, r1, r6, lsr #3
++		ldmfd       sp!, {r5, r6, r7}
++
++        /* are we done? */
++        adds        r2, r2, #8
++        moveq       r0, #0
++        beq         9b
++
++        /* finish off the remaining bytes */
++        b           8b
++
++7:      /* fix up the 2 pointers and fallthrough... */
++        sub         r1, r1, #4
++        sub         r1, r1, r6, lsr #3
++        sub         r4, r4, #4
++        mov         r2, #4
++		ldmfd		sp!, {r5, r6, r7}
++        b           8b
+--- /dev/null
++++ b/src/string/arm/strcmp.S
+@@ -0,0 +1,319 @@
++/*
++ * Copyright (c) 2011 The Android Open Source Project
++ * Copyright (c) 2008 ARM Ltd
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. The name of the company may not be used to endorse or promote
++ *    products derived from this software without specific prior written
++ *    permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY ARM LTD ``AS IS'' AND ANY EXPRESS OR IMPLIED
++ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
++ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
++ * IN NO EVENT SHALL ARM LTD BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
++ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
++ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#define PLD(reg,offset)     pld     [reg, offset]
++	.text
++	.align
++	.global strcmp
++	.type strcmp, %function
++
++#ifdef __ARMEB__
++#define SHFT2LSB lsl
++#define SHFT2LSBEQ lsleq
++#define SHFT2MSB lsr
++#define SHFT2MSBEQ lsreq
++#define MSB 0x000000ff
++#define LSB 0xff000000
++#else
++#define SHFT2LSB lsr
++#define SHFT2LSBEQ lsreq
++#define SHFT2MSB lsl
++#define SHFT2MSBEQ lsleq
++#define MSB 0xff000000
++#define LSB 0x000000ff
++#endif
++
++#define magic1(REG) REG
++#define magic2(REG) REG, lsl #7
++
++strcmp:
++	.fnstart
++	PLD(r0, #0)
++	PLD(r1, #0)
++	eor	r2, r0, r1
++	tst	r2, #3
++
++	/* Strings not at same byte offset from a word boundary.  */
++	bne	.Lstrcmp_unaligned
++	ands	r2, r0, #3
++	bic	r0, r0, #3
++	bic	r1, r1, #3
++	ldr	ip, [r0], #4
++	it	eq
++	ldreq	r3, [r1], #4
++	beq	1f
++
++	/* Although s1 and s2 have identical initial alignment, they are
++	 * not currently word aligned.  Rather than comparing bytes,
++	 * make sure that any bytes fetched from before the addressed
++	 * bytes are forced to 0xff.  Then they will always compare
++	 * equal.
++	 */
++	eor	r2, r2, #3
++	lsl	r2, r2, #3
++	mvn	r3, #MSB
++	SHFT2LSB	r2, r3, r2
++	ldr	r3, [r1], #4
++	orr	ip, ip, r2
++	orr	r3, r3, r2
++1:
++	/* Load the 'magic' constant 0x01010101. */
++	str	r4, [sp, #-4]!
++	mov	r4, #1
++	orr	r4, r4, r4, lsl #8
++	orr	r4, r4, r4, lsl #16
++	.p2align	2
++4:
++	PLD(r0, #8)
++	PLD(r1, #8)
++	sub	r2, ip, magic1(r4)
++	cmp	ip, r3
++	itttt	eq
++
++	/* check for any zero bytes in first word */
++	biceq	r2, r2, ip
++	tsteq	r2, magic2(r4)
++	ldreq	ip, [r0], #4
++	ldreq	r3, [r1], #4
++	beq	4b
++2:
++	/* There's a zero or a different byte in the word */
++	SHFT2MSB	r0, ip, #24
++	SHFT2LSB	ip, ip, #8
++	cmp	r0, #1
++	it	cs
++	cmpcs	r0, r3, SHFT2MSB #24
++	it	eq
++	SHFT2LSBEQ r3, r3, #8
++	beq	2b
++	/* On a big-endian machine, r0 contains the desired byte in bits
++	 * 0-7; on a little-endian machine they are in bits 24-31.  In
++	 * both cases the other bits in r0 are all zero.  For r3 the
++	 * interesting byte is at the other end of the word, but the
++	 * other bits are not necessarily zero.  We need a signed result
++	 * representing the differnece in the unsigned bytes, so for the
++	 * little-endian case we can't just shift the interesting bits up.
++	 */
++#ifdef __ARMEB__
++	sub	r0, r0, r3, lsr #24
++#else
++	and	r3, r3, #255
++	/* No RSB instruction in Thumb2 */
++#ifdef __thumb2__
++	lsr	r0, r0, #24
++	sub	r0, r0, r3
++#else
++	rsb	r0, r3, r0, lsr #24
++#endif
++#endif
++	ldr	r4, [sp], #4
++	bx	lr
++
++.Lstrcmp_unaligned:
++	wp1 .req r0
++	wp2 .req r1
++	b1  .req r2
++	w1  .req r4
++	w2  .req r5
++	t1  .req ip
++	@ r3 is scratch
++
++	/* First of all, compare bytes until wp1(sp1) is word-aligned. */
++1:
++	tst	wp1, #3
++	beq	2f
++	ldrb	r2, [wp1], #1
++	ldrb	r3, [wp2], #1
++	cmp	r2, #1
++	it	cs
++	cmpcs	r2, r3
++	beq	1b
++	sub	r0, r2, r3
++	bx	lr
++
++2:
++	str	r5, [sp, #-4]!
++	str	r4, [sp, #-4]!
++	mov	b1, #1
++	orr	b1, b1, b1, lsl #8
++	orr	b1, b1, b1, lsl #16
++
++	and	t1, wp2, #3
++	bic	wp2, wp2, #3
++	ldr	w1, [wp1], #4
++	ldr	w2, [wp2], #4
++	cmp	t1, #2
++	beq	2f
++	bhi	3f
++
++	/* Critical inner Loop: Block with 3 bytes initial overlap */
++	.p2align	2
++1:
++	bic	t1, w1, #MSB
++	cmp	t1, w2, SHFT2LSB #8
++	sub	r3, w1, b1
++	bic	r3, r3, w1
++	bne	4f
++	ands	r3, r3, b1, lsl #7
++	it	eq
++	ldreq	w2, [wp2], #4
++	bne	5f
++	eor	t1, t1, w1
++	cmp	t1, w2, SHFT2MSB #24
++	bne	6f
++	ldr	w1, [wp1], #4
++	b	1b
++4:
++	SHFT2LSB	w2, w2, #8
++	b	8f
++
++5:
++#ifdef __ARMEB__
++	/* The syndrome value may contain false ones if the string ends
++	 * with the bytes 0x01 0x00
++	 */
++	tst	w1, #0xff000000
++	itt	ne
++	tstne	w1, #0x00ff0000
++	tstne	w1, #0x0000ff00
++	beq	7f
++#else
++	bics	r3, r3, #0xff000000
++	bne	7f
++#endif
++	ldrb	w2, [wp2]
++	SHFT2LSB	t1, w1, #24
++#ifdef __ARMEB__
++	lsl	w2, w2, #24
++#endif
++	b	8f
++
++6:
++	SHFT2LSB	t1, w1, #24
++	and	w2, w2, #LSB
++	b	8f
++
++	/* Critical inner Loop: Block with 2 bytes initial overlap */
++	.p2align	2
++2:
++	SHFT2MSB	t1, w1, #16
++	sub	r3, w1, b1
++	SHFT2LSB	t1, t1, #16
++	bic	r3, r3, w1
++	cmp	t1, w2, SHFT2LSB #16
++	bne	4f
++	ands	r3, r3, b1, lsl #7
++	it	eq
++	ldreq	w2, [wp2], #4
++	bne	5f
++	eor	t1, t1, w1
++	cmp	t1, w2, SHFT2MSB #16
++	bne	6f
++	ldr	w1, [wp1], #4
++	b	2b
++
++5:
++#ifdef __ARMEB__
++	/* The syndrome value may contain false ones if the string ends
++	 * with the bytes 0x01 0x00
++	 */
++	tst	w1, #0xff000000
++	it	ne
++	tstne	w1, #0x00ff0000
++	beq	7f
++#else
++	lsls	r3, r3, #16
++	bne	7f
++#endif
++	ldrh	w2, [wp2]
++	SHFT2LSB	t1, w1, #16
++#ifdef __ARMEB__
++	lsl	w2, w2, #16
++#endif
++	b	8f
++
++6:
++	SHFT2MSB	w2, w2, #16
++	SHFT2LSB	t1, w1, #16
++4:
++	SHFT2LSB	w2, w2, #16
++	b	8f
++
++	/* Critical inner Loop: Block with 1 byte initial overlap */
++	.p2align	2
++3:
++	and	t1, w1, #LSB
++	cmp	t1, w2, SHFT2LSB #24
++	sub	r3, w1, b1
++	bic	r3, r3, w1
++	bne	4f
++	ands	r3, r3, b1, lsl #7
++	it	eq
++	ldreq	w2, [wp2], #4
++	bne	5f
++	eor	t1, t1, w1
++	cmp	t1, w2, SHFT2MSB #8
++	bne	6f
++	ldr	w1, [wp1], #4
++	b	3b
++4:
++	SHFT2LSB	w2, w2, #24
++	b	8f
++5:
++	/* The syndrome value may contain false ones if the string ends
++	 * with the bytes 0x01 0x00
++	 */
++	tst	w1, #LSB
++	beq	7f
++	ldr	w2, [wp2], #4
++6:
++	SHFT2LSB	t1, w1, #8
++	bic	w2, w2, #MSB
++	b	8f
++7:
++	mov	r0, #0
++	ldr	r4, [sp], #4
++	ldr	r5, [sp], #4
++	bx	lr
++
++8:
++	and	r2, t1, #LSB
++	and	r0, w2, #LSB
++	cmp	r0, #1
++	it	cs
++	cmpcs	r0, r2
++	itt	eq
++	SHFT2LSBEQ	t1, t1, #8
++	SHFT2LSBEQ	w2, w2, #8
++	beq	8b
++	sub	r0, r2, r0
++	ldr	r4, [sp], #4
++	ldr	r5, [sp], #4
++	bx	lr
++	.fnend
+--- /dev/null
++++ b/src/string/arm/strcpy.S
+@@ -0,0 +1,137 @@
++/*
++ * Copyright (C) 2010 The Android Open Source Project
++ * Copyright (c) 2008 ARM Ltd
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. The name of the company may not be used to endorse or promote
++ *    products derived from this software without specific prior written
++ *    permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY ARM LTD ``AS IS'' AND ANY EXPRESS OR IMPLIED
++ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
++ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
++ * IN NO EVENT SHALL ARM LTD BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
++ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
++ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ *
++ * Android adaptation and tweak by Jim Huang <jserv@0xlab.org>.
++ */
++
++#define PLD(reg,offset)     pld     [reg, offset]
++	.text
++	.align
++	.global strcpy
++	.type strpy, %function
++
++strcpy:
++	.fnstart
++	PLD(r1, #0)
++	eor	r2, r0, r1
++	mov	ip, r0
++	tst	r2, #3
++	bne	4f
++	tst	r1, #3
++	bne	3f
++5:
++	str	r5, [sp, #-4]!
++	mov	r5, #0x01
++	orr	r5, r5, r5, lsl #8
++	orr	r5, r5, r5, lsl #16
++
++	str	r4, [sp, #-4]!
++	tst	r1, #4
++	ldr	r3, [r1], #4
++	beq	2f
++	sub	r2, r3, r5
++	bics	r2, r2, r3
++	tst	r2, r5, lsl #7
++	itt	eq
++	streq	r3, [ip], #4
++	ldreq	r3, [r1], #4
++	bne	1f
++       /* Inner loop.  We now know that r1 is 64-bit aligned, so we
++	  can safely fetch up to two words.  This allows us to avoid
++	  load stalls.  */
++	.p2align 2
++2:
++	PLD(r1, #8)
++	ldr	r4, [r1], #4
++	sub	r2, r3, r5
++	bics	r2, r2, r3
++	tst	r2, r5, lsl #7
++	sub	r2, r4, r5
++	bne	1f
++	str	r3, [ip], #4
++	bics	r2, r2, r4
++	tst	r2, r5, lsl #7
++	itt	eq
++	ldreq	r3, [r1], #4
++	streq	r4, [ip], #4
++	beq	2b
++	mov	r3, r4
++1:
++#ifdef __ARMEB__
++	rors	r3, r3, #24
++#endif
++	strb	r3, [ip], #1
++	tst	r3, #0xff
++#ifdef __ARMEL__
++	ror	r3, r3, #8
++#endif
++	bne	1b
++	ldr	r4, [sp], #4
++	ldr	r5, [sp], #4
++	bx	lr
++
++       /* Strings have the same offset from word alignment, but it's
++	  not zero.  */
++3:
++	tst	r1, #1
++	beq	1f
++	ldrb	r2, [r1], #1
++	strb	r2, [ip], #1
++	cmp	r2, #0
++	it	eq
++	bxeq	lr
++1:
++	tst	r1, #2
++	beq	5b
++	ldrh	r2, [r1], #2
++#ifdef __ARMEB__
++	tst	r2, #0xff00
++	iteet	ne
++	strneh	r2, [ip], #2
++	lsreq	r2, r2, #8
++	streqb	r2, [ip]
++	tstne	r2, #0xff
++#else
++	tst	r2, #0xff
++	itet	ne
++	strneh	r2, [ip], #2
++	streqb	r2, [ip]
++	tstne	r2, #0xff00
++#endif
++	bne	5b
++	bx	lr
++
++       /* src and dst do not have a common word-alignement.  Fall back to
++	  byte copying.  */
++4:
++	ldrb	r2, [r1], #1
++	strb	r2, [ip], #1
++	cmp	r2, #0
++	bne	4b
++	bx	lr
++	.fnend
+--- /dev/null
++++ b/src/string/arm/strlen.c
+@@ -0,0 +1,128 @@
++/*
++ * Copyright (C) 2008 The Android Open Source Project
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *  * Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ *  * Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
++ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
++ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++#include <string.h>
++#include <stdint.h>
++
++size_t strlen(const char *s)
++{
++    __builtin_prefetch(s);
++    __builtin_prefetch(s+32);
++
++    union {
++        const char      *b;
++        const uint32_t  *w;
++        uintptr_t       i;
++    } u;
++
++    // these are some scratch variables for the asm code below
++    uint32_t v, t;
++
++    // initialize the string length to zero
++    size_t l = 0;
++
++    // align the pointer to a 32-bit word boundary
++    u.b = s;
++    while (u.i & 0x3)  {
++        if (__builtin_expect(*u.b++ == 0, 0)) {
++            goto done;
++        }
++        l++;
++    }
++
++    // loop for each word, testing if it contains a zero byte
++    // if so, exit the loop and update the length.
++    // We need to process 32 bytes per loop to schedule PLD properly
++    // and achieve the maximum bus speed.
++    __asm__(
++        "ldr     %[v], [ %[s] ], #4         \n"
++        "sub     %[l], %[l], %[s]           \n"
++        "0:                                 \n"
++#if __ARM_HAVE_PLD
++        "pld     [ %[s], #64 ]              \n"
++#endif
++        "sub     %[t], %[v], %[mask], lsr #7\n"
++        "and     %[t], %[t], %[mask]        \n"
++        "bics    %[t], %[t], %[v]           \n"
++        "ldreq   %[v], [ %[s] ], #4         \n"
++#if !defined(__OPTIMIZE_SIZE__)
++        "bne     1f                         \n"
++        "sub     %[t], %[v], %[mask], lsr #7\n"
++        "and     %[t], %[t], %[mask]        \n"
++        "bics    %[t], %[t], %[v]           \n"
++        "ldreq   %[v], [ %[s] ], #4         \n"
++        "bne     1f                         \n"
++        "sub     %[t], %[v], %[mask], lsr #7\n"
++        "and     %[t], %[t], %[mask]        \n"
++        "bics    %[t], %[t], %[v]           \n"
++        "ldreq   %[v], [ %[s] ], #4         \n"
++        "bne     1f                         \n"
++        "sub     %[t], %[v], %[mask], lsr #7\n"
++        "and     %[t], %[t], %[mask]        \n"
++        "bics    %[t], %[t], %[v]           \n"
++        "ldreq   %[v], [ %[s] ], #4         \n"
++        "bne     1f                         \n"
++        "sub     %[t], %[v], %[mask], lsr #7\n"
++        "and     %[t], %[t], %[mask]        \n"
++        "bics    %[t], %[t], %[v]           \n"
++        "ldreq   %[v], [ %[s] ], #4         \n"
++        "bne     1f                         \n"
++        "sub     %[t], %[v], %[mask], lsr #7\n"
++        "and     %[t], %[t], %[mask]        \n"
++        "bics    %[t], %[t], %[v]           \n"
++        "ldreq   %[v], [ %[s] ], #4         \n"
++        "bne     1f                         \n"
++        "sub     %[t], %[v], %[mask], lsr #7\n"
++        "and     %[t], %[t], %[mask]        \n"
++        "bics    %[t], %[t], %[v]           \n"
++        "ldreq   %[v], [ %[s] ], #4         \n"
++        "bne     1f                         \n"
++        "sub     %[t], %[v], %[mask], lsr #7\n"
++        "and     %[t], %[t], %[mask]        \n"
++        "bics    %[t], %[t], %[v]           \n"
++        "ldreq   %[v], [ %[s] ], #4         \n"
++#endif
++        "beq     0b                         \n"
++        "1:                                 \n"
++        "add     %[l], %[l], %[s]           \n"
++        "tst     %[v], #0xFF                \n"
++        "beq     2f                         \n"
++        "add     %[l], %[l], #1             \n"
++        "tst     %[v], #0xFF00              \n"
++        "beq     2f                         \n"
++        "add     %[l], %[l], #1             \n"
++        "tst     %[v], #0xFF0000            \n"
++        "addne   %[l], %[l], #1             \n"
++        "2:                                 \n"
++        : [l]"=&r"(l), [v]"=&r"(v), [t]"=&r"(t), [s]"=&r"(u.b)
++        : "%[l]"(l), "%[s]"(u.b), [mask]"r"(0x80808080UL)
++        : "cc"
++    );
++
++done:
++    return l;
++}
+--- /dev/null
++++ b/src/math/arm/atan.S
+@@ -0,0 +1,303 @@
++       .cpu cortex-a7
++       .eabi_attribute 27, 3
++       .fpu neon-vfpv4
++       .eabi_attribute 20, 1
++       .eabi_attribute 21, 1
++       @.eabi_attribute 23, 3
++       .eabi_attribute 24, 1
++       .eabi_attribute 25, 1
++       .eabi_attribute 26, 2
++       .eabi_attribute 30, 2
++       .eabi_attribute 34, 1
++       .eabi_attribute 18, 4
++       .file   "s_atan.c"
++       .section        .text.hot.atan,"ax",%progbits
++       .align  2
++       .global atan
++       .type   atan, %function
++atan:
++       .fnstart
++       @ args = 0, pretend = 0, frame = 0
++       @ frame_needed = 0, uses_anonymous_args = 0
++       @ link register save eliminated.
++	   vmov    r0, r1, d0
++       fmdrr   d16, r0, r1
++       movw    r0, #65535
++       movt    r0, 16370
++       fmrrd   r2, r3, d16
++       fabsd   d18, d16
++       bic     r1, r3, #-2147483648
++       cmp     r1, r0
++       ble     .L2
++       fconstd d0, #120
++       fconstd d5, #112
++       movw    r0, #32767
++       fsubd   d6, d18, d0
++       fmacd   d5, d18, d0
++       movt    r0, 16387
++       cmp     r1, r0
++       fdivd   d0, d6, d5
++       bgt     .L3
++       fmuld   d17, d0, d0
++       fldd    d22, .L23
++       fldd    d29, .L23+8
++       fldd    d19, .L23+16
++       fmuld   d28, d17, d17
++       fldd    d18, .L23+24
++       fldd    d30, .L23+32
++       fldd    d16, .L23+40
++       fmacd   d29, d28, d22
++       fldd    d31, .L23+48
++       fmscd   d18, d28, d19
++       fldd    d1, .L23+56
++       fldd    d19, .L23+64
++       fldd    d2, .L23+72
++       fmacd   d30, d29, d28
++       fldd    d3, .L23+80
++       fmscd   d16, d18, d28
++       fldd    d4, .L23+88
++       fldd    d18, .L23+96
++.L18:
++       fmacd   d31, d30, d28
++       cmp     r3, #0
++       fmscd   d19, d16, d28
++       fmacd   d1, d31, d28
++       fmscd   d2, d19, d28
++       fmacd   d3, d1, d28
++       fmuld   d28, d2, d28
++       fmacd   d28, d3, d17
++       fmscd   d18, d28, d0
++       fsubd   d30, d18, d0
++       fsubd   d16, d4, d30
++       blt     .L11
++       fmrrd   r0, r1, d16
++	   vmov    d0, d16
++       bx      lr
++.L2:
++       fconstd d19, #112
++       movw    r2, #65535
++       movt    r2, 16357
++       fsubd   d20, d18, d19
++       faddd   d17, d18, d19
++       cmp     r1, r2
++       fdivd   d0, d20, d17
++       ble     .L10
++       fmuld   d17, d0, d0
++       fldd    d7, .L23
++       fldd    d20, .L23+8
++       fldd    d27, .L23+16
++       fmuld   d28, d17, d17
++       fldd    d29, .L23+24
++       fldd    d30, .L23+32
++       fldd    d16, .L23+40
++       fmacd   d20, d28, d7
++       fldd    d31, .L23+48
++       fmscd   d29, d28, d27
++       fldd    d19, .L23+64
++       fldd    d1, .L23+56
++       fldd    d2, .L23+72
++       fmacd   d30, d20, d28
++       fldd    d3, .L23+80
++       fmscd   d16, d29, d28
++       fldd    d18, .L23+104
++       fldd    d4, .L23+112
++       b       .L18
++.L10:
++       movw    ip, #65535
++       movt    ip, 16347
++       cmp     r1, ip
++       ble     .L12
++       faddd   d30, d18, d18
++       fconstd d16, #0
++       fldd    d31, .L23
++       fsubd   d19, d30, d19
++       faddd   d18, d18, d16
++       fldd    d0, .L23+8
++       fldd    d1, .L23+16
++       fdivd   d2, d19, d18
++       fldd    d3, .L23+24
++       fldd    d4, .L23+32
++       fldd    d5, .L23+40
++       fldd    d6, .L23+48
++       fldd    d26, .L23+64
++       fldd    d25, .L23+56
++       fldd    d24, .L23+72
++       fldd    d21, .L23+80
++       fldd    d23, .L23+120
++       fldd    d22, .L23+128
++.L20:
++       fmuld   d7, d2, d2
++       cmp     r3, #0
++       fmuld   d17, d7, d7
++       fmacd   d0, d17, d31
++       fmscd   d3, d17, d1
++       fmacd   d4, d0, d17
++       fmscd   d5, d3, d17
++       fmacd   d6, d4, d17
++       fmscd   d26, d5, d17
++       fmacd   d25, d6, d17
++       fmscd   d24, d26, d17
++       fmacd   d21, d25, d17
++       fmuld   d20, d24, d17
++       fmacd   d20, d21, d7
++       fmscd   d23, d20, d2
++       fsubd   d27, d23, d2
++       fsubd   d16, d22, d27
++       fnegdlt d16, d16
++.L5:
++       fmrrd   r0, r1, d16
++	   vmov    d0, d16
++       bx      lr
++.L11:
++       fnegd   d16, d16
++       b       .L5
++.L3:
++       movw    r2, #65535
++       movt    r2, 17423
++       cmp     r1, r2
++       bgt     .L6
++       fconstd d23, #240
++       fldd    d31, .L23
++       fdivd   d2, d23, d18
++       fldd    d0, .L23+8
++       fldd    d1, .L23+16
++       fldd    d3, .L23+24
++       fldd    d4, .L23+32
++       fldd    d5, .L23+40
++       fldd    d6, .L23+48
++       fldd    d26, .L23+64
++       fldd    d25, .L23+56
++       fldd    d24, .L23+72
++       fldd    d21, .L23+80
++       fldd    d23, .L23+136
++       fldd    d22, .L23+144
++       b       .L20
++.L12:
++       cmp     r1, #1044381696
++       bge     .L13
++       fldd    d1, .L23+152
++       faddd   d2, d16, d1
++       fcmped  d2, d19
++       fmstat
++       bgt     .L5
++.L13:
++       fmuld   d3, d16, d16
++       fldd    d21, .L23
++       fldd    d4, .L23+8
++       fldd    d5, .L23+16
++       fmuld   d6, d3, d3
++       fldd    d26, .L23+24
++       fldd    d25, .L23+32
++       fldd    d24, .L23+40
++       fmacd   d4, d6, d21
++       fldd    d23, .L23+48
++       fmscd   d26, d6, d5
++       fldd    d22, .L23+64
++       fldd    d7, .L23+56
++       fldd    d27, .L23+72
++       fmacd   d25, d4, d6
++       fldd    d28, .L23+80
++       fmscd   d24, d26, d6
++       fmacd   d23, d25, d6
++       fmscd   d22, d24, d6
++       fmacd   d7, d23, d6
++       fmscd   d27, d22, d6
++       fmacd   d28, d7, d6
++       fmuld   d29, d27, d6
++       fmacd   d29, d28, d3
++       fnmacd  d16, d29, d16
++       b       .L5
++.L6:
++       mov     ip, #0
++       movt    ip, 32752
++       cmp     r1, ip
++       fmrrd   r0, r1, d16
++       bgt     .L7
++       beq     .L22
++.L8:
++       cmp     r3, #0
++       ble     .L9
++       ldr     r0, .L23+168
++       fldd    d24, .L23+144
++.LPIC0:
++       add     r2, pc, r0
++       fldd    d21, [r2, #0]
++       faddd   d16, d21, d24
++       b       .L5
++.L22:
++       cmp     r0, #0
++       beq     .L8
++.L7:
++       faddd   d16, d16, d16
++       b       .L5
++.L9:
++       ldr     r3, .L23+172
++       fldd    d26, .L23+160
++.LPIC1:
++       add     r1, pc, r3
++       fldd    d25, [r1, #0]
++       fsubd   d16, d26, d25
++       b       .L5
++.L24:
++       .align  3
++.L23:
++       .word   -484255215
++       .word   1066446138
++       .word   611716587
++       .word   1068071755
++       .word   745172015
++       .word   -1079856060
++       .word   1390345626
++       .word   1068359213
++       .word   -1596965551
++       .word   1068567910
++       .word   -1351312787
++       .word   1068740850
++       .word   -984866706
++       .word   1068975565
++       .word   -1845459969
++       .word   1069697316
++       .word   -31254927
++       .word   1069314502
++       .word   -1718031420
++       .word   1070176665
++       .word   1431655693
++       .word   1070945621
++       .word   -763234661
++       .word   1072657163
++       .word   2062601149
++       .word   1013974920
++       .word   856972295
++       .word   1015129638
++       .word   1413754136
++       .word   1072243195
++       .word   573531618
++       .word   1014639487
++       .word   90291023
++       .word   1071492199
++       .word   856972295
++       .word   1016178214
++       .word   1413754136
++       .word   1073291771
++       .word   -2013235812
++       .word   2117592124
++       .word   1413754136
++       .word   -1074191877
++       .word   .LANCHOR0-(.LPIC0+8)
++       .word   .LANCHOR0-(.LPIC1+8)
++       .fnend
++       .size   atan, .-atan
++       .section        .rodata.atanlo_3,"a",%progbits
++       .align  3
++.LANCHOR0 = . + 0
++       .type   atanlo_3, %object
++       .size   atanlo_3, 8
++atanlo_3:
++       .word   856972295
++       .word   1016178214
++#if (LDBL_MANT_DIG == 53)
++    .weak   atanl
++    .equ    atanl, atan
++#endif
++       .ident  "GCC: (crosstool-NG linaro-1.13.1-4.7-2012.10-20121022 - Linaro GCC 2012.10) 4.7.3 20121001 (prerelease)"
++       .section        .note.GNU-stack,"",%progbits
+--- /dev/null
++++ b/src/math/arm/cos.S
+@@ -0,0 +1,420 @@
++@ Copyright (c) 2012, The Linux Foundation. All rights reserved.
++@
++@ Redistribution and use in source and binary forms, with or without
++@ modification, are permitted provided that the following conditions are
++@ met:
++@    * Redistributions of source code must retain the above copyright
++@      notice, this list of conditions and the following disclaimer.
++@    * Redistributions in binary form must reproduce the above
++@      copyright notice, this list of conditions and the following
++@      disclaimer in the documentation and/or other materials provided
++@      with the distribution.
++@    * Neither the name of The Linux Foundation nor the names of its
++@      contributors may be used to endorse or promote products derived
++@      from this software without specific prior written permission.
++@
++@ THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
++@ WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
++@ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
++@ ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
++@ BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++@ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++@ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
++@ BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
++@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
++@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
++@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++@
++@ Additional notices preserved for attributions purposes only.
++@
++@ ====================================================
++@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
++@
++@ Developed at SunSoft, a Sun Microsystems, Inc. business.
++@ Permission to use, copy, modify, and distribute this
++@ software is freely granted, provided that this notice
++@ is preserved.
++@ ====================================================
++@
++@ ====================================================
++@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
++@
++@ Developed at SunPro, a Sun Microsystems, Inc. business.
++@ Permission to use, copy, modify, and distribute this
++@ software is freely granted, provided that this notice
++@ is preserved.
++@ ====================================================
++
++#include <machine/cpu-features.h>
++#include <machine/asm.h>
++
++#define vmov_f64 fconstd
++
++ENTRY(cos)
++    push            {r4, r6, r7, lr}
++    @vmov            d0, r0, r1
++    vmov            r0, r1, d0
++    mov             r2, r0
++    mov             r3, r1
++    movw            r1, #0x21fb
++    movt            r1, #0x3fe9
++    mov             r4, r3
++    bic             r3, r3, #0x80000000
++    sub             sp, sp, #48
++    cmp             r3, r1
++    bgt             .Lxgtpio4
++    cmp             r3, #0x3e400000
++    bge             .Lxnottiny
++    vcvt.s32.f64    s15, d0
++    vmov            r3, s15
++    cmp             r3, #0
++    beq             .Lreturnone
++.Lxnottiny:
++    vmov.i64        d1, #0
++    bl              __cos
++.Lleave_cos:
++    vmov            r0, r1, d0
++.Lleave_cos_direct:
++    add             sp, sp, #48
++    pop             {r4, r6, r7, pc}
++.Lxgtpio4:
++    movw            r2, #0xffff
++    movt            r2, #0x7fef
++    cmp             r3, r2
++    bgt             .LxisNaN
++    movw            r0, #0xd97b
++    movt            r0, #0x4002
++    cmp             r3, r0
++    movw            r2, #0x21fb
++    bgt             .Lxge3pio4
++    cmp             r4, #0
++    movt            r2, #0x3ff9
++    ble             .Lsmallxisnegative
++    vldr            d16, .Lpio2_1
++    cmp             r3, r2
++    vsub.f64        d16, d0, d16
++    beq             .Lxnearpio2
++    vldr            d17, .Lpio2_1t
++.Lfinalizesmallxremainder:
++    vsub.f64        d0, d16, d17
++    vsub.f64        d16, d16, d0
++    vstr            d0, [sp, #8]
++    vsub.f64        d1, d16, d17
++    vstr            d1, [sp, #16]
++.Lnmod3is1:
++    mov             r0, #1
++    bl              __sin
++    vneg.f64        d0, d0
++    b               .Lleave_cos
++.Lreturnone:
++    mov             r0, #0
++    movw            r1, #0x0000
++    movt            r1, #0x3ff0
++    vmov_f64        d0, #0x70
++    b               .Lleave_cos_direct
++.LxisNaN:
++    vsub.f64        d0, d0, d0
++    b               .Lleave_cos
++.Lxge3pio4:
++    movt            r2, #0x4139
++    cmp             r3, r2
++    bgt             .Lxgigantic
++    vmov_f64        d3, #0x60
++    vldr            d2, .Linvpio2
++    vldr            d18, .Lpio2_1
++    vabs.f64        d16, d0
++    vmla.f64        d3, d16, d2
++    vcvt.s32.f64    s3, d3
++    vcvt.f64.s32    d17, s3
++    vmov            r0, s3
++    cmp             r0, #31
++    vmls.f64        d16, d17, d18
++    vldr            d18, .Lpio2_1t
++    vmul.f64        d18, d17, d18
++    bgt             .Lcomputeremainder
++    ldr             r2, .Lnpio2_hw_ptr
++    sub             lr, r0, #1
++.LPICnpio2_hw0:
++    add             r12, pc, r2
++    ldr             r1, [r12, lr, lsl #2]
++    cmp             r3, r1
++    beq             .Lcomputeremainder
++.Lfinishthirditeration:
++    vsub.f64        d0, d16, d18
++    vstr            d0, [sp, #8]
++.Lfinishcomputingremainder:
++    vsub.f64        d16, d16, d0
++    cmp             r4, #0
++    vsub.f64        d1, d16, d18
++    vstr            d1, [sp, #16]
++    blt             .Lhandlenegativex
++.Lselectregion:
++    and             r0, r0, #3
++    cmp             r0, #1
++    beq             .Lnmod3is1
++    cmp             r0, #2
++    beq             .Lnmod3is2
++    cmp             r0, #0
++    bne             .Lnmod3is0
++    bl              __cos
++    b               .Lleave_cos
++.Lxgigantic:
++    asr             r2, r3, #20
++    vmov            r6, r7, d0
++    sub             r2, r2, #1040
++    mov             r0, r6
++    sub             r2, r2, #6
++    vldr            d16, .Ltwo24
++    sub             r1, r3, r2, lsl #20
++    vmov            d18, r0, r1
++    vcvt.s32.f64    s15, d18
++    add             r1, sp, #48
++    mov             r3, #3
++    vcvt.f64.s32    d17, s15
++    vsub.f64        d18, d18, d17
++    vstr            d17, [sp, #24]
++    vmul.f64        d18, d18, d16
++    vcvt.s32.f64    s15, d18
++    vcvt.f64.s32    d17, s15
++    vsub.f64        d18, d18, d17
++    vstr            d17, [sp, #32]
++    vmul.f64        d16, d18, d16
++    fcmpzd          d16
++    vstmdb          r1!, {d16}
++    vmrs            APSR_nzcv, fpscr
++    bne             .Lprocessnonzeroterm
++.Lskipzeroterms:
++    vldmdb          r1!, {d16}
++    sub             r3, r3, #1
++    fcmpzd          d16
++    vmrs            APSR_nzcv, fpscr
++    beq             .Lskipzeroterms
++.Lprocessnonzeroterm:
++    ldr             r12, .Ltwo_over_pi_ptr
++    add             r0, sp, #24
++    add             r1, sp, #8
++.LPICtwo_over_pi0:
++    add             lr, pc, r12
++    mov             r12, #2
++    str             lr, [sp, #4]
++    str             r12, [sp]
++    bl              __rem_pio2_large
++    cmp             r4, #0
++    vldr            d0, [sp, #8]
++    blt             .Lhandlenegativxalso
++    vldr            d1, [sp, #16]
++    b               .Lselectregion
++.Lxnearpio2:
++    vldr            d17, .Lpio2_2
++    vsub.f64        d16, d16, d17
++    vldr            d17, .Lpio2_2t
++    b               .Lfinalizesmallxremainder
++.Lsmallxisnegative:
++    vldr            d1, .Lpio2_1
++    cmp             r3, r2
++    vadd.f64        d16, d0, d1
++    beq             .Lxnearnegpio2
++    vldr            d17, .Lpio2_1t
++.Lfinalizesmallnegxremainder:
++    vadd.f64        d0, d16, d17
++    vsub.f64        d16, d16, d0
++    vstr            d0, [sp, #8]
++    vadd.f64        d1, d16, d17
++    vstr            d1, [sp, #16]
++.Lnmod3is0:
++    mov             r0, #1
++    bl              __sin
++    b               .Lleave_cos
++.Lnmod3is2:
++    bl              __cos
++    vneg.f64        d0, d0
++    b               .Lleave_cos
++.Lcomputeremainder:
++    vsub.f64        d0, d16, d18
++    asr             r1, r3, #20
++    vmov            r2, r3, d0
++    ubfx            r3, r3, #20, #11
++    rsb             r3, r3, r1
++    vstr            d0, [sp, #8]
++    cmp             r3, #16
++    ble             .Lfinishcomputingremainder
++    vldr            d18, .Lpio2_2
++    vmul.f64        d20, d17, d18
++    vsub.f64        d19, d16, d20
++    vsub.f64        d16, d16, d19
++    vsub.f64        d18, d16, d20
++    vldr            d16, .Lpio2_2t
++    vnmls.f64       d18, d17, d16
++    vsub.f64        d0, d19, d18
++    vmov            r2, r3, d0
++    ubfx            r3, r3, #20, #11
++    rsb             r1, r3, r1
++    vstr            d0, [sp, #8]
++    cmp             r1, #49
++    ble             .Lfinishseconditeration
++    vldr            d5, .Lpio2_3
++    vmul.f64        d20, d17, d5
++    vsub.f64        d16, d19, d20
++    vsub.f64        d4, d19, d16
++    vldr            d19, .Lpio2_3t
++    vsub.f64        d18, d4, d20
++    vnmls.f64       d18, d17, d19
++    b               .Lfinishthirditeration
++.Lhandlenegativex:
++    vneg.f64        d0, d0
++    rsb             r0, r0, #0
++    vneg.f64        d1, d1
++    vstr            d0, [sp, #8]
++    vstr            d1, [sp, #16]
++    b               .Lselectregion
++.Lfinishseconditeration:
++    vmov            d16, d19
++    b               .Lfinishcomputingremainder
++.Lxnearnegpio2:
++    vldr            d0, .Lpio2_2
++    vldr            d17, .Lpio2_2t
++    vadd.f64        d16, d16, d0
++    b               .Lfinalizesmallnegxremainder
++.Lhandlenegativxalso:
++    vldr            d6, [sp, #16]
++    vneg.f64        d0, d0
++    rsb             r0, r0, #0
++    vneg.f64        d1, d6
++    vstr            d0, [sp, #8]
++    vstr            d1, [sp, #16]
++    b               .Lselectregion
++
++.align 3
++.Lpio2_1:
++    .word           0x54400000, 0x3ff921fb
++.Lpio2_1t:
++    .word           0x1a626331, 0x3dd0b461
++.Linvpio2:
++    .word           0x6dc9c883, 0x3fe45f30
++.Ltwo24:
++    .word           0x00000000, 0x41700000
++.Lpio2_2:
++    .word           0x1a600000, 0x3dd0b461
++.Lpio2_2t:
++    .word           0x2e037073, 0x3ba3198a
++.Lpio2_3:
++    .word           0x2e000000, 0x3ba3198a
++.Lpio2_3t:
++    .word           0x252049c1, 0x397b839a
++.Lnpio2_hw_ptr:
++    .word           .Lnpio2_hw-(.LPICnpio2_hw0+8)
++.Ltwo_over_pi_ptr:
++    .word           .Ltwo_over_pi-(.LPICtwo_over_pi0+8)
++END(cos)
++
++    .section        .rodata.npio2_hw,"a",%progbits
++    .align          2
++.Lnpio2_hw = . + 0
++    .type           npio2_hw, %object
++    .size           npio2_hw, 128
++npio2_hw:
++    .word           0x3ff921fb
++    .word           0x400921fb
++    .word           0x4012d97c
++    .word           0x401921fb
++    .word           0x401f6a7a
++    .word           0x4022d97c
++    .word           0x4025fdbb
++    .word           0x402921fb
++    .word           0x402c463a
++    .word           0x402f6a7a
++    .word           0x4031475c
++    .word           0x4032d97c
++    .word           0x40346b9c
++    .word           0x4035fdbb
++    .word           0x40378fdb
++    .word           0x403921fb
++    .word           0x403ab41b
++    .word           0x403c463a
++    .word           0x403dd85a
++    .word           0x403f6a7a
++    .word           0x40407e4c
++    .word           0x4041475c
++    .word           0x4042106c
++    .word           0x4042d97c
++    .word           0x4043a28c
++    .word           0x40446b9c
++    .word           0x404534ac
++    .word           0x4045fdbb
++    .word           0x4046c6cb
++    .word           0x40478fdb
++    .word           0x404858eb
++    .word           0x404921fb
++
++    .section        .rodata.two_over_pi,"a",%progbits
++    .align          2
++.Ltwo_over_pi = . + 0
++    .type           two_over_pi, %object
++    .size           two_over_pi, 264
++two_over_pi:
++    .word           0x00a2f983
++    .word           0x006e4e44
++    .word           0x001529fc
++    .word           0x002757d1
++    .word           0x00f534dd
++    .word           0x00c0db62
++    .word           0x0095993c
++    .word           0x00439041
++    .word           0x00fe5163
++    .word           0x00abdebb
++    .word           0x00c561b7
++    .word           0x00246e3a
++    .word           0x00424dd2
++    .word           0x00e00649
++    .word           0x002eea09
++    .word           0x00d1921c
++    .word           0x00fe1deb
++    .word           0x001cb129
++    .word           0x00a73ee8
++    .word           0x008235f5
++    .word           0x002ebb44
++    .word           0x0084e99c
++    .word           0x007026b4
++    .word           0x005f7e41
++    .word           0x003991d6
++    .word           0x00398353
++    .word           0x0039f49c
++    .word           0x00845f8b
++    .word           0x00bdf928
++    .word           0x003b1ff8
++    .word           0x0097ffde
++    .word           0x0005980f
++    .word           0x00ef2f11
++    .word           0x008b5a0a
++    .word           0x006d1f6d
++    .word           0x00367ecf
++    .word           0x0027cb09
++    .word           0x00b74f46
++    .word           0x003f669e
++    .word           0x005fea2d
++    .word           0x007527ba
++    .word           0x00c7ebe5
++    .word           0x00f17b3d
++    .word           0x000739f7
++    .word           0x008a5292
++    .word           0x00ea6bfb
++    .word           0x005fb11f
++    .word           0x008d5d08
++    .word           0x00560330
++    .word           0x0046fc7b
++    .word           0x006babf0
++    .word           0x00cfbc20
++    .word           0x009af436
++    .word           0x001da9e3
++    .word           0x0091615e
++    .word           0x00e61b08
++    .word           0x00659985
++    .word           0x005f14a0
++    .word           0x0068408d
++    .word           0x00ffd880
++    .word           0x004d7327
++    .word           0x00310606
++    .word           0x001556ca
++    .word           0x0073a8c9
++    .word           0x0060e27b
++    .word           0x00c08c6b
+--- /dev/null
++++ b/src/math/arm/e_pow.S
+@@ -0,0 +1,455 @@
++@ Copyright (c) 2009-2013 The Linux Foundation. All rights reserved.
++@
++@ Redistribution and use in source and binary forms, with or without
++@ modification, are permitted provided that the following conditions are met:
++@     * Redistributions of source code must retain the above copyright
++@       notice, this list of conditions and the following disclaimer.
++@     * Redistributions in binary form must reproduce the above copyright
++@       notice, this list of conditions and the following disclaimer in the
++@       documentation and/or other materials provided with the distribution.
++@     * Neither the name of The Linux Foundation nor the names of its contributors may
++@       be used to endorse or promote products derived from this software
++@       without specific prior written permission.
++@
++@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++@ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++@ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++@ ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
++@ LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++@ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++@ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++@ POSSIBILITY OF SUCH DAMAGE.
++
++
++#include <machine/cpu-features.h>
++#include <machine/asm.h>
++
++@ Values which exist the program lifetime:
++#define HIGH_WORD_MASK      d31
++#define EXPONENT_MASK       d30
++#define int_1               d29
++#define double_1            d28
++@ sign and 2^int_n fixup:
++#define maxrange            r12
++#define expadjustment       d7
++#define literals            r10
++@ Values which exist within both polynomial implementations:
++#define int_n               d2
++#define int_n_low           s4
++#define int_n_high          s5
++#define double_n            d3
++#define k1                  d27
++#define k2                  d26
++#define k3                  d25
++#define k4                  d24
++@ Values which cross the boundaries between polynomial implementations:
++#define ss                  d16
++#define ss2                 d17
++#define ss4                 d18
++#define Result              d0
++#define Return_hw           r1
++#define Return_lw           r0
++#define ylg2x               d0
++@ Intermediate values only needed sometimes:
++@ initial (sorted in approximate order of availability for overwriting):
++#define x_hw                r1
++#define x_lw                r0
++#define y_hw                r3
++#define y_lw                r2
++#define x                   d0
++#define bp                  d4
++#define y                   d1
++@ log series:
++#define u                   d19
++#define v                   d20
++#define lg2coeff            d21
++#define bpa                 d5
++#define bpb                 d3
++#define lg2const            d6
++#define xmantissa           r8
++#define twoto1o5            r4
++#define twoto3o5            r5
++#define ix                  r6
++#define iEXP_MASK           r7
++@ exp input setup:
++#define twoto1o8mask        d3
++#define twoto1o4mask        d4
++#define twoto1o2mask        d1
++#define ylg2x_round_offset  d16
++#define ylg2x_temp          d17
++#define yn_temp             d18
++#define yn_round_offset     d19
++#define ln2                 d5
++@ Careful, overwriting HIGH_WORD_MASK, reset it if you need it again ...
++#define rounded_exponent    d31
++@ exp series:
++#define k5                  d23
++#define k6                  d22
++#define k7                  d21
++#define k8                  d20
++#define ss3                 d19
++@ overwrite double_1 (we're done with it by now)
++#define k0                  d28
++#define twoto1o4            d6
++
++@instructions that gas doesn't like to encode correctly:
++#define vmov_f64            fconstd
++#define vmov_f32            fconsts
++#define vmovne_f64          fconstdne
++
++
++ENTRY(pow)
++     @ ARM ABI has inputs coming in via r registers, lets move to a d register
++    @vmov            x, x_lw, x_hw
++	vmov            x_lw, x_hw, x
++
++    push            {r4, r5, r6, r7, r8, r9, r10, lr}
++
++    movw            maxrange, #0x0000
++    movt            maxrange, #0x4010
++
++    @ pre-staged bp values
++    vldr            bpa, .LbpA
++    vldr            bpb, .LbpB
++    @ load two fifths into constant term in case we need it due to offsets
++    vldr            lg2const, .Ltwofifths
++
++    @ bp is initially 1.0, may adjust later based on x value
++    vmov_f64        bp,  #0x70
++
++    @ extract the mantissa from x for scaled value comparisons
++    lsl             xmantissa, x_hw, #12
++
++    @ twoto1o5 = 2^(1/5) (input bracketing)
++    movw            twoto1o5, #0x186c
++    movt            twoto1o5, #0x2611
++    @ twoto3o5 = 2^(3/5) (input bracketing)
++    movw            twoto3o5, #0x003b
++    movt            twoto3o5, #0x8406
++
++    @ finish extracting xmantissa
++    orr             xmantissa, xmantissa, x_lw, lsr #20
++
++    @ begin preparing a mask for normalization
++    vmov.i64        HIGH_WORD_MASK, #0xffffffff00000000
++
++    @ double_1 = (double) 1.0
++    vmov_f64        double_1, #0x70
++
++     @ move y from r registers to a d register
++    @vmov            y, y_lw, y_hw
++	vmov 			y_lw, y_hw, y
++
++    cmp             xmantissa, twoto1o5
++
++    vshl.i64        EXPONENT_MASK, HIGH_WORD_MASK, #20
++    vshr.u64        int_1, HIGH_WORD_MASK, #63
++
++    adr             literals, .LliteralTable
++
++    bhi             .Lxgt2to1over5
++    @ zero out lg2 constant term if don't offset our input
++    vsub.f64        lg2const, lg2const, lg2const
++    b               .Lxle2to1over5
++
++.Lxgt2to1over5:
++    @ if normalized x > 2^(1/5), bp = 1 + (2^(2/5)-1) = 2^(2/5)
++    vadd.f64        bp, bp, bpa
++
++.Lxle2to1over5:
++    @ will need ln2 for various things
++    vldr            ln2, .Lln2
++
++    cmp             xmantissa, twoto3o5
++@@@@ X Value Normalization @@@@
++
++    @ ss = abs(x) 2^(-1024)
++    vbic.i64        ss, x, EXPONENT_MASK
++
++    @ N = (floor(log2(x)) + 0x3ff) * 2^52
++    vand.i64        int_n, x, EXPONENT_MASK
++
++    bls             .Lxle2to3over5
++    @ if normalized x > 2^(3/5), bp = 2^(2/5) + (2^(4/5) - 2^(2/5) = 2^(4/5)
++    vadd.f64      bp, bp, bpb
++    vadd.f64      lg2const, lg2const, lg2const
++
++.Lxle2to3over5:
++
++    cmp             x_hw, maxrange
++    cmpls           y_hw, maxrange
++    movt            maxrange, #0x3f00
++    cmpls           maxrange, x_hw
++
++    @ load log2 polynomial series constants
++    vldm            literals!, {k4, k3, k2, k1}
++
++    @ s = abs(x) 2^(-floor(log2(x))) (normalize abs(x) to around 1)
++    vorr.i64        ss, ss, double_1
++
++@@@@ 3/2 (Log(bp(1+s)/(1-s))) input computation (s = (x-bp)/(x+bp)) @@@@
++
++    vsub.f64        u, ss, bp
++    vadd.f64        v, ss, bp
++
++    bhi             .LuseFullImpl
++
++    @ s = (x-1)/(x+1)
++    vdiv.f64        ss, u, v
++
++    @ load 2/(3log2) into lg2coeff
++    vldr            lg2coeff, .Ltwooverthreeln2
++
++    @ N = floor(log2(x)) * 2^52
++    vsub.i64        int_n, int_n, double_1
++
++@@@@ 3/2 (Log(bp(1+s)/(1-s))) polynomial series @@@@
++
++    @ ss2 = ((x-dp)/(x+dp))^2
++    vmul.f64        ss2, ss, ss
++    @ ylg2x = 3.0
++    vmov_f64        ylg2x, #8
++    vmul.f64        ss4, ss2, ss2
++
++    @ todo: useful later for two-way clamp
++    vmul.f64        lg2coeff, lg2coeff, y
++
++    @ N = floor(log2(x))
++    vshr.s64        int_n, int_n, #52
++
++    @ k3 = ss^2 * L4 + L3
++    vmla.f64        k3, ss2, k4
++
++    @ k1 = ss^2 * L2 + L1
++    vmla.f64        k1, ss2, k2
++
++    @ scale ss by 2/(3 ln 2)
++    vmul.f64        lg2coeff, ss, lg2coeff
++
++    @ ylg2x = 3.0 + s^2
++    vadd.f64        ylg2x, ylg2x, ss2
++
++    vcvt.f64.s32    double_n, int_n_low
++
++    @ k1 = s^4 (s^2 L4 + L3) + s^2 L2 + L1
++    vmla.f64        k1, ss4, k3
++
++    @ add in constant term
++    vadd.f64        double_n, lg2const
++
++    @ ylg2x = 3.0 + s^2 + s^4 (s^4 (s^2 L4 + L3) + s^2 L2 + L1)
++    vmla.f64        ylg2x, ss4, k1
++
++    @ ylg2x = y 2 s / (3 ln(2)) (3.0 + s^2 + s^4 (s^4(s^2 L4 + L3) + s^2 L2 + L1)
++    vmul.f64        ylg2x, lg2coeff, ylg2x
++
++@@@@ Compute input to Exp(s) (s = y(n + log2(x)) - (floor(8 yn + 1)/8 + floor(8 ylog2(x) + 1)/8) @@@@@
++
++    @ mask to extract bit 1 (2^-2 from our fixed-point representation)
++    vshl.u64        twoto1o4mask, int_1, #1
++
++    @ double_n = y * n
++    vmul.f64        double_n, double_n, y
++
++    @ Load 2^(1/4) for later computations
++    vldr            twoto1o4, .Ltwoto1o4
++
++    @ either add or subtract one based on the sign of double_n and ylg2x
++    vshr.s64        ylg2x_round_offset, ylg2x, #62
++    vshr.s64        yn_round_offset, double_n, #62
++
++    @ move unmodified y*lg2x into temp space
++    vmov            ylg2x_temp, ylg2x
++    @ compute floor(8 y * n + 1)/8
++    @ and floor(8 y (log2(x)) + 1)/8
++    vcvt.s32.f64    ylg2x, ylg2x, #3
++    @ move unmodified y*n into temp space
++    vmov            yn_temp, double_n
++    vcvt.s32.f64    double_n, double_n, #3
++
++    @ load exp polynomial series constants
++    vldm            literals!, {k8, k7, k6, k5, k4, k3, k2, k1}
++
++    @ mask to extract bit 2 (2^-1 from our fixed-point representation)
++    vshl.u64        twoto1o2mask, int_1, #2
++
++    @ make rounding offsets either 1 or -1 instead of 0 or -2
++    vorr.u64        ylg2x_round_offset, ylg2x_round_offset, int_1
++    vorr.u64        yn_round_offset, yn_round_offset, int_1
++
++    @ round up to the nearest 1/8th
++    vadd.s32        ylg2x, ylg2x, ylg2x_round_offset
++    vadd.s32        double_n, double_n, yn_round_offset
++
++    @ clear out round-up bit for y log2(x)
++    vbic.s32        ylg2x, ylg2x, int_1
++    @ clear out round-up bit for yn
++    vbic.s32        double_n, double_n, int_1
++    @ add together the (fixed precision) rounded parts
++    vadd.s64        rounded_exponent, double_n, ylg2x
++    @ turn int_n into a double with value 2^int_n
++    vshl.i64        int_n, rounded_exponent, #49
++    @ compute masks for 2^(1/4) and 2^(1/2) fixups for fractional part of fixed-precision rounded values:
++    vand.u64        twoto1o4mask, twoto1o4mask, rounded_exponent
++    vand.u64        twoto1o2mask, twoto1o2mask, rounded_exponent
++
++    @ convert back into floating point, double_n now holds (double) floor(8 y * n + 1)/8
++    @                                   ylg2x now holds (double) floor(8 y * log2(x) + 1)/8
++    vcvt.f64.s32    ylg2x, ylg2x, #3
++    vcvt.f64.s32    double_n, double_n, #3
++
++    @ put the 2 bit (0.5) through the roof of twoto1o2mask (make it 0x0 or 0xffffffffffffffff)
++    vqshl.u64        twoto1o2mask, twoto1o2mask, #62
++    @ put the 1 bit (0.25) through the roof of twoto1o4mask (make it 0x0 or 0xffffffffffffffff)
++    vqshl.u64        twoto1o4mask, twoto1o4mask, #63
++
++    @ center y*log2(x) fractional part between -0.125 and 0.125 by subtracting (double) floor(8 y * log2(x) + 1)/8
++    vsub.f64        ylg2x_temp, ylg2x_temp, ylg2x
++    @ center y*n fractional part between -0.125 and 0.125 by subtracting (double) floor(8 y * n + 1)/8
++    vsub.f64        yn_temp, yn_temp, double_n
++
++    @ Add fractional parts of yn and y log2(x) together
++    vadd.f64        ss, ylg2x_temp, yn_temp
++
++    @ Result = 1.0 (offset for exp(s) series)
++    vmov_f64        Result, #0x70
++
++    @ multiply fractional part of y * log2(x) by ln(2)
++    vmul.f64        ss, ln2, ss
++
++@@@@ 10th order polynomial series for Exp(s) @@@@
++
++    @ ss2 = (ss)^2
++    vmul.f64        ss2, ss, ss
++
++    @ twoto1o2mask = twoto1o2mask & twoto1o4
++    vand.u64        twoto1o2mask, twoto1o2mask, twoto1o4
++    @ twoto1o2mask = twoto1o2mask & twoto1o4
++    vand.u64        twoto1o4mask, twoto1o4mask, twoto1o4
++
++    @ Result = 1.0 + ss
++    vadd.f64        Result, Result, ss
++
++    @ k7 = ss k8 + k7
++    vmla.f64        k7, ss, k8
++
++    @ ss4 = (ss*ss) * (ss*ss)
++    vmul.f64        ss4, ss2, ss2
++
++    @ twoto1o2mask = twoto1o2mask | (double) 1.0 - results in either 1.0 or 2^(1/4) in twoto1o2mask
++    vorr.u64        twoto1o2mask, twoto1o2mask, double_1
++    @ twoto1o2mask = twoto1o4mask | (double) 1.0 - results in either 1.0 or 2^(1/4) in twoto1o4mask
++    vorr.u64        twoto1o4mask, twoto1o4mask, double_1
++
++    @ TODO: should setup sign here, expadjustment = 1.0
++    vmov_f64        expadjustment, #0x70
++
++    @ ss3 = (ss*ss) * ss
++    vmul.f64        ss3, ss2, ss
++
++    @ k0 = 1/2 (first non-unity coefficient)
++    vmov_f64        k0, #0x60
++
++    @ Mask out non-exponent bits to make sure we have just 2^int_n
++    vand.i64        int_n, int_n, EXPONENT_MASK
++
++    @ square twoto1o2mask to get 1.0 or 2^(1/2)
++    vmul.f64        twoto1o2mask, twoto1o2mask, twoto1o2mask
++    @ multiply twoto2o4mask into the exponent output adjustment value
++    vmul.f64        expadjustment, expadjustment, twoto1o4mask
++
++    @ k5 = ss k6 + k5
++    vmla.f64        k5, ss, k6
++
++    @ k3 = ss k4 + k3
++    vmla.f64        k3, ss, k4
++
++    @ k1 = ss k2 + k1
++    vmla.f64        k1, ss, k2
++
++    @ multiply twoto1o2mask into exponent output adjustment value
++    vmul.f64        expadjustment, expadjustment, twoto1o2mask
++
++    @ k5 = ss^2 ( ss k8 + k7 ) + ss k6 + k5
++    vmla.f64        k5, ss2, k7
++
++    @ k1 = ss^2 ( ss k4 + k3 ) + ss k2 + k1
++    vmla.f64        k1, ss2, k3
++
++    @ Result = 1.0 + ss + 1/2 ss^2
++    vmla.f64      Result, ss2, k0
++
++    @ Adjust int_n so that it's a double precision value that can be multiplied by Result
++    vadd.i64        expadjustment, int_n, expadjustment
++
++    @ k1 = ss^4 ( ss^2 ( ss k8 + k7 ) + ss k6 + k5 ) + ss^2 ( ss k4 + k3 ) + ss k2 + k1
++    vmla.f64        k1, ss4, k5
++
++    @ Result = 1.0 + ss + 1/2 ss^2 + ss^3 ( ss^4 ( ss^2 ( ss k8 + k7 ) + ss k6 + k5 ) + ss^2 ( ss k4 + k3 ) + ss k2 + k1 )
++    vmla.f64        Result, ss3, k1
++
++    @ multiply by adjustment (sign*(rounding ? sqrt(2) : 1) * 2^int_n)
++    vmul.f64        Result, expadjustment, Result
++
++.LleavePow:
++    @ return Result (FP)
++    vmov            Return_lw, Return_hw, Result
++.LleavePowDirect:
++    @ leave directly returning whatever is in Return_lw and Return_hw
++    pop             {r4, r5, r6, r7, r8, r9, r10, pc}
++
++.LuseFullImpl:
++    pop             {r4, r5, r6, r7, r8, r9, r10, lr}
++    b               __full_ieee754_pow
++
++.align 6
++.LliteralTable:
++@ Least-sqares tuned constants for 11th order (log2((1+s)/(1-s)):
++.LL4: @ ~3/11
++    .long       0x53a79915, 0x3fd1b108
++.LL3: @ ~1/3
++    .long       0x9ca0567a, 0x3fd554fa
++.LL2: @ ~3/7
++    .long       0x1408e660, 0x3fdb6db7
++.LL1: @ ~3/5
++    .long       0x332D4313, 0x3fe33333
++
++@ Least-squares tuned constants for 10th order exp(s):
++.LE10: @ ~1/3628800
++    .long       0x25c7ba0a, 0x3e92819b
++.LE9: @ ~1/362880
++    .long       0x9499b49c, 0x3ec72294
++.LE8: @ ~1/40320
++    .long       0xabb79d95, 0x3efa019f
++.LE7: @ ~1/5040
++    .long       0x8723aeaa, 0x3f2a019f
++.LE6: @ ~1/720
++    .long       0x16c76a94, 0x3f56c16c
++.LE5: @ ~1/120
++    .long       0x11185da8, 0x3f811111
++.LE4: @ ~1/24
++    .long       0x5555551c, 0x3fa55555
++.LE3: @ ~1/6
++    .long       0x555554db, 0x3fc55555
++
++.LbpA: @ (2^(2/5) - 1)
++    .long       0x4ee54db1, 0x3fd472d1
++
++.LbpB: @ (2^(4/5) - 2^(2/5))
++    .long       0x1c8a36cf, 0x3fdafb62
++
++.Ltwofifths: @
++    .long       0x9999999a, 0x3fd99999
++
++.Ltwooverthreeln2:
++    .long       0xDC3A03FD, 0x3FEEC709
++
++.Lln2: @ ln(2)
++    .long       0xFEFA39EF, 0x3FE62E42
++
++.Ltwoto1o4: @ 2^1/4
++    .long       0x0a31b715, 0x3ff306fe
++END(pow)
+--- /dev/null
++++ b/src/math/arm/exp.S
+@@ -0,0 +1,329 @@
++       .cpu cortex-a7
++       .eabi_attribute 27, 3
++       .fpu neon-vfpv4
++       .eabi_attribute 20, 1
++       .eabi_attribute 21, 1
++       @.eabi_attribute 23, 3
++       .eabi_attribute 24, 1
++       .eabi_attribute 25, 1
++       .eabi_attribute 26, 2
++       .eabi_attribute 30, 2
++       .eabi_attribute 34, 1
++       .eabi_attribute 18, 4
++       .file   "e_exp.c"
++       .section        .text.hot.exp,"ax",%progbits
++       .align  2
++       .global exp
++       .type   exp, %function
++exp:
++       .fnstart
++       @ args = 0, pretend = 0, frame = 0
++       @ frame_needed = 0, uses_anonymous_args = 0
++       @ link register save eliminated.
++	   vmov    r0, r1, d0
++       fmdrr   d24, r0, r1
++       mov     r3, r1
++       movw    r0, #11842
++       bic     r1, r3, #-2147483648
++       movt    r0, 16342
++       cmp     r1, r0
++       bls     .L2
++       movw    r2, #41649
++       movt    r2, 16368
++       cmp     r1, r2
++       mov     ip, r3, lsr #31
++       bls     .L23
++       movw    r0, #11841
++       movt    r0, 16518
++       cmp     r1, r0
++       bhi     .L6
++       ldr     r1, .L25+112
++       fldd    d2, .L25
++.LPIC0:
++       add     r3, pc, r1
++       add     r2, r3, ip, asl #3
++       fldd    d3, [r2, #0]
++       fmacd   d3, d24, d2
++       ftosizd s15, d3
++       fldd    d4, .L25+8
++       fsitod  d5, s15
++       fldd    d6, .L25+16
++       fmrs    ip, s15 @ int
++       fnmacd  d24, d5, d4
++       fmuld   d7, d5, d6
++       fsubd   d22, d24, d7
++       fldd    d23, .L25+24
++       fmuld   d16, d22, d22
++       fldd    d25, .L25+32
++       fldd    d26, .L25+40
++       fmscd   d25, d16, d23
++       fldd    d27, .L25+48
++       fmacd   d26, d25, d16
++       fldd    d28, .L25+56
++       fmscd   d27, d26, d16
++       fcpyd   d30, d22
++       fmacd   d28, d27, d16
++       fconstd d29, #0
++       fnmacd  d30, d28, d16
++       fmuld   d17, d22, d30
++       fsubd   d0, d29, d30
++       fdivd   d18, d17, d0
++       fsubd   d1, d7, d18
++       fconstd d20, #112
++       fsubd   d24, d1, d24
++       mvn     r0, #1020
++       cmp     ip, r0
++       fsubd   d19, d20, d24
++       blt     .L7
++.L21:
++       fmrrd   r0, r1, d19
++       fmrrd   r2, r3, d19
++       add     r3, r1, ip, asl #20
++       fmdrr   d24, r2, r3
++.L1:
++       fmrrd   r0, r1, d24
++	   vmov    d0, d24
++       bx      lr
++.L2:
++       movw    r3, #65535
++       movt    r3, 15919
++       cmp     r1, r3
++       bls     .L13
++       fmuld   d25, d24, d24
++       fldd    d26, .L25+24
++       fldd    d27, .L25+32
++       fldd    d28, .L25+40
++       fmscd   d27, d25, d26
++       fldd    d29, .L25+48
++       fmacd   d28, d27, d25
++       fldd    d30, .L25+56
++       fmscd   d29, d28, d25
++       fcpyd   d17, d24
++       fmacd   d30, d29, d25
++       fconstd d31, #0
++       fnmacd  d17, d30, d25
++       fmuld   d18, d24, d17
++       fsubd   d1, d17, d31
++       fdivd   d20, d18, d1
++       fsubd   d19, d20, d24
++       fconstd d21, #112
++       fsubd   d24, d21, d19
++       fmrrd   r0, r1, d24
++	   vmov    d0, d24
++       bx      lr
++.L23:
++       cmp     ip, #0
++       fldd    d4, .L25+8
++       beq     .L4
++       faddd   d2, d24, d4
++       fldd    d19, .L25+16
++       faddd   d3, d2, d19
++       fldd    d4, .L25+24
++       fmuld   d5, d3, d3
++       fldd    d6, .L25+32
++       fldd    d21, .L25+40
++       fmscd   d6, d5, d4
++       fldd    d7, .L25+48
++       fmacd   d21, d6, d5
++       fldd    d23, .L25+56
++       fmscd   d7, d21, d5
++       fcpyd   d25, d3
++       fmacd   d23, d7, d5
++       fconstd d16, #0
++       fnmacd  d25, d23, d5
++       fmuld   d22, d3, d25
++       fsubd   d27, d16, d25
++       fldd    d28, .L25+64
++       fdivd   d29, d22, d27
++       fsubd   d30, d28, d29
++       fconstd d31, #112
++       fsubd   d17, d30, d2
++       fsubd   d0, d31, d17
++       fmrrd   r0, r1, d0
++       fmrrd   r2, r3, d0
++       sub     r3, r1, #1048576
++       fmdrr   d24, r2, r3
++       b       .L1
++.L4:
++       fsubd   d6, d24, d4
++       fldd    d5, .L25+16
++       fsubd   d7, d6, d5
++       fldd    d23, .L25+24
++       fmuld   d16, d7, d7
++       fldd    d25, .L25+32
++       fldd    d26, .L25+40
++       fmscd   d25, d16, d23
++       fldd    d22, .L25+48
++       fmacd   d26, d25, d16
++       fldd    d27, .L25+56
++       fmscd   d22, d26, d16
++       fcpyd   d29, d7
++       fmacd   d27, d22, d16
++       fconstd d28, #0
++       fnmacd  d29, d27, d16
++       fmuld   d31, d7, d29
++       fsubd   d17, d28, d29
++       fdivd   d0, d31, d17
++       fsubd   d18, d5, d0
++       fconstd d1, #112
++       fsubd   d20, d18, d6
++       fsubd   d24, d1, d20
++       fmrrd   r0, r1, d24
++       fmrrd   r2, r3, d24
++       add     r3, r1, #1048576
++       fmdrr   d24, r2, r3
++       b       .L1
++.L8:
++       fldd    d19, .L25+72
++       fcmped  d24, d19
++       fmstat
++       bgt     .L24
++       fldd    d21, .L25+80
++       fcmped  d24, d21
++       fmstat
++       bmi     .L12
++       ldr     r1, .L25+116
++       fldd    d2, .L25
++.LPIC1:
++       add     r3, pc, r1
++       add     ip, r3, ip, asl #3
++       fldd    d3, [ip, #0]
++       fmacd   d3, d24, d2
++       ftosizd s1, d3
++       fldd    d4, .L25+8
++       fsitod  d5, s1
++       fldd    d6, .L25+16
++       fnmacd  d24, d5, d4
++       fmuld   d7, d5, d6
++       fsubd   d23, d24, d7
++       fldd    d16, .L25+24
++       fmuld   d25, d23, d23
++       fldd    d26, .L25+32
++       fldd    d22, .L25+40
++       fmscd   d26, d25, d16
++       fldd    d27, .L25+48
++       fmacd   d22, d26, d25
++       fldd    d28, .L25+56
++       fmscd   d27, d22, d25
++       fcpyd   d30, d23
++       fmacd   d28, d27, d25
++       fconstd d29, #0
++       fnmacd  d30, d28, d25
++       fmrs    ip, s1  @ int
++       fmuld   d17, d23, d30
++       fsubd   d0, d29, d30
++       fdivd   d18, d17, d0
++       fsubd   d1, d7, d18
++       fconstd d20, #112
++       fsubd   d24, d1, d24
++       mvn     r0, #1020
++       cmp     ip, r0
++       fsubd   d19, d20, d24
++       bge     .L21
++.L7:
++       fmrrd   r0, r1, d19
++       fmrrd   r2, r3, d19
++       add     r3, ip, #1000
++       add     r3, r1, r3, asl #20
++       fmdrr   d21, r2, r3
++       fldd    d2, .L25+88
++       fmuld   d24, d21, d2
++       b       .L1
++.L6:
++       movw    r2, #65535
++       movt    r2, 32751
++       cmp     r1, r2
++       bls     .L8
++       fmrrd   r0, r1, d24
++       ubfx    r2, r3, #0, #20
++       orrs    r3, r2, r0
++       fadddne d24, d24, d24
++       bne     .L1
++       cmp     ip, #0
++       beq     .L1
++.L12:
++       fldd    d24, .L25+96
++       b       .L1
++.L13:
++       fldd    d17, .L25+104
++       fconstd d18, #112
++       faddd   d0, d24, d17
++       fcmped  d0, d18
++       fmstat
++       fadddgt d24, d24, d18
++       bgt     .L1
++.L20:
++       fmuld   d1, d24, d24
++       fldd    d20, .L25+24
++       fldd    d19, .L25+32
++       fldd    d21, .L25+40
++       fmscd   d19, d1, d20
++       fldd    d2, .L25+48
++       fmacd   d21, d19, d1
++       fldd    d3, .L25+56
++       fmscd   d2, d21, d1
++       fcpyd   d5, d24
++       fmacd   d3, d2, d1
++       fconstd d4, #0
++       fnmacd  d5, d3, d1
++       fmuld   d7, d24, d5
++       fsubd   d22, d5, d4
++       fdivd   d23, d7, d22
++       fsubd   d16, d23, d24
++       fsubd   d24, d18, d16
++       b       .L1
++.L24:
++       fldd    d3, .L25+104
++       fmuld   d24, d3, d3
++       b       .L1
++.L26:
++       .align  3
++.L25:
++       .word   1697350398
++       .word   1073157447
++       .word   -18874368
++       .word   1072049730
++       .word   897137782
++       .word   1038760431
++       .word   1925096656
++       .word   1046886249
++       .word   -976065551
++       .word   1052491073
++       .word   -1356472788
++       .word   1058100842
++       .word   381599123
++       .word   1063698796
++       .word   1431655742
++       .word   1069897045
++       .word   897137782
++       .word   -1108723217
++       .word   -17155601
++       .word   1082535490
++       .word   -718458799
++       .word   -1064875760
++       .word   0
++       .word   24117248
++       .word   0
++       .word   0
++       .word   -2013235812
++       .word   2117592124
++       .word   .LANCHOR0-(.LPIC0+8)
++       .word   .LANCHOR0-(.LPIC1+8)
++       .fnend
++       .size   exp, .-exp
++       .section        .rodata.halF,"a",%progbits
++       .align  3
++.LANCHOR0 = . + 0
++       .type   halF, %object
++       .size   halF, 16
++halF:
++       .word   0
++       .word   1071644672
++       .word   0
++       .word   -1075838976
++#if (LDBL_MANT_DIG == 53)
++    .weak   expl
++    .equ    expl, exp
++#endif
++       .ident  "GCC: (crosstool-NG linaro-1.13.1-4.7-2012.10-20121022 - Linaro GCC 2012.10) 4.7.3 20121001 (prerelease)"
++       .section        .note.GNU-stack,"",%progbits
+--- /dev/null
++++ b/src/math/arm/sin.S
+@@ -0,0 +1,415 @@
++@ Copyright (c) 2012, The Linux Foundation. All rights reserved.
++@
++@ Redistribution and use in source and binary forms, with or without
++@ modification, are permitted provided that the following conditions are
++@ met:
++@    * Redistributions of source code must retain the above copyright
++@      notice, this list of conditions and the following disclaimer.
++@    * Redistributions in binary form must reproduce the above
++@      copyright notice, this list of conditions and the following
++@      disclaimer in the documentation and/or other materials provided
++@      with the distribution.
++@    * Neither the name of The Linux Foundation nor the names of its
++@      contributors may be used to endorse or promote products derived
++@      from this software without specific prior written permission.
++@
++@ THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
++@ WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
++@ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
++@ ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
++@ BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++@ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++@ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
++@ BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
++@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
++@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
++@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++@
++@ Additional notices preserved for attributions purposes only.
++@
++@ ====================================================
++@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
++@
++@ Developed at SunSoft, a Sun Microsystems, Inc. business.
++@ Permission to use, copy, modify, and distribute this
++@ software is freely granted, provided that this notice
++@ is preserved.
++@ ====================================================
++@
++@ ====================================================
++@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
++@
++@ Developed at SunPro, a Sun Microsystems, Inc. business.
++@ Permission to use, copy, modify, and distribute this
++@ software is freely granted, provided that this notice
++@ is preserved.
++@ ====================================================
++
++#include <machine/cpu-features.h>
++#include <machine/asm.h>
++
++#define vmov_f64 fconstd
++
++ENTRY(sin)
++    push            {r4, r6, r7, lr}
++    @vmov            d0, r0, r1
++	vmov 			r0, r1, d0
++    mov             r2, r0
++    mov             r3, r1
++    movw            r1, #0x21fb
++    movt            r1, #0x3fe9
++    mov             r4, r3
++    bic             r3, r3, #0x80000000
++    sub             sp, sp, #48
++    cmp             r3, r1
++    bgt             .Lxgtpio4
++    cmp             r3, #0x3e400000
++    bge             .Lxnottiny
++    vcvt.s32.f64    s15, d0
++    vmov            r3, s15
++    cmp             r3, #0
++    bne             .Lxnottiny
++.Lleave_sin:
++    vmov            r0, r1, d0
++    add             sp, sp, #48
++    pop             {r4, r6, r7, pc}
++.Lxgtpio4:
++    movw            r2, #0xffff
++    movt            r2, #0x7fef
++    cmp             r3, r2
++    bgt             .LxisNaN
++    movw            r0, #0xd97b
++    movt            r0, #0x4002
++    cmp             r3, r0
++    movw            r2, #0x21fb
++    bgt             .Lxge3pio4
++    cmp             r4, #0
++    movt            r2, #0x3ff9
++    ble             .Lsmallxisnegative
++    vldr            d16, .Lpio2_1
++    cmp             r3, r2
++    vsub.f64        d16, d0, d16
++    beq             .Lxnearpio2
++    vldr            d17, .Lpio2_1t
++.Lfinalizesmallxremainder:
++    vsub.f64        d0, d16, d17
++    vsub.f64        d16, d16, d0
++    vstr            d0, [sp, #8]
++    vsub.f64        d1, d16, d17
++    vstr            d1, [sp, #16]
++.Lnmod3is1:
++    bl              __cos
++    b               .Lleave_sin
++.Lxnottiny:
++    vmov.i64        d1, #0
++    mov             r0, #0
++    bl              __sin
++    b               .Lleave_sin
++.LxisNaN:
++    vsub.f64        d0, d0, d0
++    b               .Lleave_sin
++.Lxge3pio4:
++    movt            r2, #0x4139
++    cmp             r3, r2
++    bgt             .Lxgigantic
++    vmov_f64        d3, #0x60
++    vldr            d2, .Linvpio2
++    vldr            d18, .Lpio2_1
++    vabs.f64        d16, d0
++    vmla.f64        d3, d16, d2
++    vcvt.s32.f64    s3, d3
++    vcvt.f64.s32    d17, s3
++    vmov            r0, s3
++    cmp             r0, #31
++    vmls.f64        d16, d17, d18
++    vldr            d18, .Lpio2_1t
++    vmul.f64        d18, d17, d18
++    bgt             .Lcomputeremainder
++    ldr             r2, .Lnpio2_hw_ptr
++    sub             lr, r0, #1
++.LPICnpio2_hw0:
++    add             r12, pc, r2
++    ldr             r1, [r12, lr, lsl #2]
++    cmp             r3, r1
++    beq             .Lcomputeremainder
++.Lfinishthirditeration:
++    vsub.f64        d0, d16, d18
++    vstr            d0, [sp, #8]
++.Lfinishcomputingremainder:
++    vsub.f64        d16, d16, d0
++    cmp             r4, #0
++    vsub.f64        d1, d16, d18
++    vstr            d1, [sp, #16]
++    blt             .Lhandlenegativex
++.Lselectregion:
++    and             r0, r0, #3
++    cmp             r0, #1
++    beq             .Lnmod3is1
++    cmp             r0, #2
++    beq             .Lnmod3is2
++    cmp             r0, #0
++    bne             .Lnmod3is0
++    mov             r0, #1
++    bl              __sin
++    b               .Lleave_sin
++.Lxgigantic:
++    asr             r2, r3, #20
++    vmov            r6, r7, d0
++    sub             r2, r2, #1040
++    mov             r0, r6
++    sub             r2, r2, #6
++    vldr            d16, .Ltwo24
++    sub             r1, r3, r2, lsl #20
++    vmov            d18, r0, r1
++    vcvt.s32.f64    s15, d18
++    add             r1, sp, #48
++    mov             r3, #3
++    vcvt.f64.s32    d17, s15
++    vsub.f64        d18, d18, d17
++    vstr            d17, [sp, #24]
++    vmul.f64        d18, d18, d16
++    vcvt.s32.f64    s15, d18
++    vcvt.f64.s32    d17, s15
++    vsub.f64        d18, d18, d17
++    vstr            d17, [sp, #32]
++    vmul.f64        d16, d18, d16
++    fcmpzd          d16
++    vstmdb          r1!, {d16}
++    vmrs            APSR_nzcv, fpscr
++    bne             .Lprocessnonzeroterm
++.Lskipzeroterms:
++    vldmdb          r1!, {d16}
++    sub             r3, r3, #1
++    fcmpzd          d16
++    vmrs            APSR_nzcv, fpscr
++    beq             .Lskipzeroterms
++.Lprocessnonzeroterm:
++    ldr             r12, .Ltwo_over_pi_ptr
++    add             r0, sp, #24
++    add             r1, sp, #8
++.LPICtwo_over_pi0:
++    add             lr, pc, r12
++    mov             r12, #2
++    str             lr, [sp, #4]
++    str             r12, [sp]
++    bl              __rem_pio2_large
++    cmp             r4, #0
++    vldr            d0, [sp, #8]
++    blt             .Lhandlenegativexalso
++    vldr            d1, [sp, #16]
++    b               .Lselectregion
++.Lxnearpio2:
++    vldr            d17, .Lpio2_2
++    vsub.f64        d16, d16, d17
++    vldr            d17, .Lpio2_2t
++    b               .Lfinalizesmallxremainder
++.Lsmallxisnegative:
++    vldr            d1, .Lpio2_1
++    cmp             r3, r2
++    vadd.f64        d16, d0, d1
++    beq             .Lxnearnegpio2
++    vldr            d17, .Lpio2_1t
++.Lfinalizesmallnegxremainder:
++    vadd.f64        d0, d16, d17
++    vsub.f64        d16, d16, d0
++    vstr            d0, [sp, #8]
++    vadd.f64        d1, d16, d17
++    vstr            d1, [sp, #16]
++.Lnmod3is0:
++    bl              __cos
++    vneg.f64        d0, d0
++    b               .Lleave_sin
++.Lnmod3is2:
++    mov             r0, #1
++    bl              __sin
++    vneg.f64        d0, d0
++    b               .Lleave_sin
++.Lcomputeremainder:
++    vsub.f64        d0, d16, d18
++    asr             r1, r3, #20
++    vmov            r2, r3, d0
++    ubfx            r3, r3, #20, #11
++    rsb             r3, r3, r1
++    vstr            d0, [sp, #8]
++    cmp             r3, #16
++    ble             .Lfinishcomputingremainder
++    vldr            d18, .Lpio2_2
++    vmul.f64        d20, d17, d18
++    vsub.f64        d19, d16, d20
++    vsub.f64        d16, d16, d19
++    vsub.f64        d18, d16, d20
++    vldr            d16, .Lpio2_2t
++    vnmls.f64       d18, d17, d16
++    vsub.f64        d0, d19, d18
++    vmov            r2, r3, d0
++    ubfx            r3, r3, #20, #11
++    rsb             r1, r3, r1
++    vstr            d0, [sp, #8]
++    cmp             r1, #49
++    ble             .Lfinishseconditeration
++    vldr            d5, .Lpio2_3
++    vmul.f64        d20, d17, d5
++    vsub.f64        d16, d19, d20
++    vsub.f64        d4, d19, d16
++    vldr            d19, .Lpio2_3t
++    vsub.f64        d18, d4, d20
++    vnmls.f64       d18, d17, d19
++    b               .Lfinishthirditeration
++.Lhandlenegativex:
++    vneg.f64        d0, d0
++    rsb             r0, r0, #0
++    vneg.f64        d1, d1
++    vstr            d0, [sp, #8]
++    vstr            d1, [sp, #16]
++    b               .Lselectregion
++.Lfinishseconditeration:
++    vmov            d16, d19
++    b               .Lfinishcomputingremainder
++.Lxnearnegpio2:
++    vldr            d0, .Lpio2_2
++    vldr            d17, .Lpio2_2t
++    vadd.f64        d16, d16, d0
++    b               .Lfinalizesmallnegxremainder
++.Lhandlenegativexalso:
++    vldr            d6, [sp, #16]
++    vneg.f64        d0, d0
++    rsb             r0, r0, #0
++    vneg.f64        d1, d6
++    vstr            d0, [sp, #8]
++    vstr            d1, [sp, #16]
++    b               .Lselectregion
++
++.align 3
++.Lpio2_1:
++    .word           0x54400000, 0x3ff921fb
++.Lpio2_1t:
++    .word           0x1a626331, 0x3dd0b461
++.Linvpio2:
++    .word           0x6dc9c883, 0x3fe45f30
++.Ltwo24:
++    .word           0x00000000, 0x41700000
++.Lpio2_2:
++    .word           0x1a600000, 0x3dd0b461
++.Lpio2_2t:
++    .word           0x2e037073, 0x3ba3198a
++.Lpio2_3:
++    .word           0x2e000000, 0x3ba3198a
++.Lpio2_3t:
++    .word           0x252049c1, 0x397b839a
++.Lnpio2_hw_ptr:
++    .word           .Lnpio2_hw-(.LPICnpio2_hw0+8)
++.Ltwo_over_pi_ptr:
++    .word           .Ltwo_over_pi-(.LPICtwo_over_pi0+8)
++END(sin)
++
++    .section        .rodata.npio2_hw,"a",%progbits
++    .align          2
++.Lnpio2_hw = . + 0
++    .type           npio2_hw, %object
++    .size           npio2_hw, 128
++npio2_hw:
++    .word           0x3ff921fb
++    .word           0x400921fb
++    .word           0x4012d97c
++    .word           0x401921fb
++    .word           0x401f6a7a
++    .word           0x4022d97c
++    .word           0x4025fdbb
++    .word           0x402921fb
++    .word           0x402c463a
++    .word           0x402f6a7a
++    .word           0x4031475c
++    .word           0x4032d97c
++    .word           0x40346b9c
++    .word           0x4035fdbb
++    .word           0x40378fdb
++    .word           0x403921fb
++    .word           0x403ab41b
++    .word           0x403c463a
++    .word           0x403dd85a
++    .word           0x403f6a7a
++    .word           0x40407e4c
++    .word           0x4041475c
++    .word           0x4042106c
++    .word           0x4042d97c
++    .word           0x4043a28c
++    .word           0x40446b9c
++    .word           0x404534ac
++    .word           0x4045fdbb
++    .word           0x4046c6cb
++    .word           0x40478fdb
++    .word           0x404858eb
++    .word           0x404921fb
++
++    .section        .rodata.two_over_pi,"a",%progbits
++    .align          2
++.Ltwo_over_pi = . + 0
++    .type           two_over_pi, %object
++    .size           two_over_pi, 264
++two_over_pi:
++    .word           0x00a2f983
++    .word           0x006e4e44
++    .word           0x001529fc
++    .word           0x002757d1
++    .word           0x00f534dd
++    .word           0x00c0db62
++    .word           0x0095993c
++    .word           0x00439041
++    .word           0x00fe5163
++    .word           0x00abdebb
++    .word           0x00c561b7
++    .word           0x00246e3a
++    .word           0x00424dd2
++    .word           0x00e00649
++    .word           0x002eea09
++    .word           0x00d1921c
++    .word           0x00fe1deb
++    .word           0x001cb129
++    .word           0x00a73ee8
++    .word           0x008235f5
++    .word           0x002ebb44
++    .word           0x0084e99c
++    .word           0x007026b4
++    .word           0x005f7e41
++    .word           0x003991d6
++    .word           0x00398353
++    .word           0x0039f49c
++    .word           0x00845f8b
++    .word           0x00bdf928
++    .word           0x003b1ff8
++    .word           0x0097ffde
++    .word           0x0005980f
++    .word           0x00ef2f11
++    .word           0x008b5a0a
++    .word           0x006d1f6d
++    .word           0x00367ecf
++    .word           0x0027cb09
++    .word           0x00b74f46
++    .word           0x003f669e
++    .word           0x005fea2d
++    .word           0x007527ba
++    .word           0x00c7ebe5
++    .word           0x00f17b3d
++    .word           0x000739f7
++    .word           0x008a5292
++    .word           0x00ea6bfb
++    .word           0x005fb11f
++    .word           0x008d5d08
++    .word           0x00560330
++    .word           0x0046fc7b
++    .word           0x006babf0
++    .word           0x00cfbc20
++    .word           0x009af436
++    .word           0x001da9e3
++    .word           0x0091615e
++    .word           0x00e61b08
++    .word           0x00659985
++    .word           0x005f14a0
++    .word           0x0068408d
++    .word           0x00ffd880
++    .word           0x004d7327
++    .word           0x00310606
++    .word           0x001556ca
++    .word           0x0073a8c9
++    .word           0x0060e27b
++    .word           0x00c08c6b
+--- a/src/math/pow.c
++++ b/src/math/pow.c
+@@ -89,7 +89,12 @@ ivln2   =  1.44269504088896338700e+00, /
+ ivln2_h =  1.44269502162933349609e+00, /* 0x3FF71547, 0x60000000 =24b 1/ln2*/
+ ivln2_l =  1.92596299112661746887e-08; /* 0x3E54AE0B, 0xF85DDF44 =1/ln2 tail*/
+
+-double pow(double x, double y)
++double
++#if defined(MUSL_OPTIMIZATION)
++__full_ieee754_pow(double x, double y)
++#else
++pow(double x, double y)
++#endif
+ {
+ 	double z,ax,z_h,z_l,p_h,p_l;
+ 	double y1,t1,t2,r,s,t,u,v,w;
+--- /dev/null
++++ b/include/machine/asm.h
+@@ -0,0 +1,144 @@
++/*	$OpenBSD: asm.h,v 1.1 2004/02/01 05:09:49 drahn Exp $	*/
++/*	$NetBSD: asm.h,v 1.4 2001/07/16 05:43:32 matt Exp $	*/
++
++/*
++ * Copyright (c) 1990 The Regents of the University of California.
++ * All rights reserved.
++ *
++ * This code is derived from software contributed to Berkeley by
++ * William Jolitz.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. Neither the name of the University nor the names of its contributors
++ *    may be used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ *	from: @(#)asm.h	5.5 (Berkeley) 5/7/91
++ */
++
++#ifndef _ARM32_ASM_H_
++#define _ARM32_ASM_H_
++
++#ifdef __ELF__
++# define _C_LABEL(x)	x
++#else
++# ifdef __STDC__
++#  define _C_LABEL(x)	_ ## x
++# else
++#  define _C_LABEL(x)	_/**/x
++# endif
++#endif
++#define	_ASM_LABEL(x)	x
++
++#ifdef __STDC__
++# define __CONCAT(x,y)	x ## y
++# define __STRING(x)	#x
++#else
++# define __CONCAT(x,y)	x/**/y
++# define __STRING(x)	"x"
++#endif
++
++#ifndef _ALIGN_TEXT
++# define _ALIGN_TEXT .align 0
++#endif
++
++/*
++ * gas/arm uses @ as a single comment character and thus cannot be used here
++ * Instead it recognised the # instead of an @ symbols in .type directives
++ * We define a couple of macros so that assembly code will not be dependant
++ * on one or the other.
++ */
++#define _ASM_TYPE_FUNCTION	#function
++#define _ASM_TYPE_OBJECT	#object
++#define _ENTRY(x) \
++	.text; _ALIGN_TEXT; .globl x; .type x,_ASM_TYPE_FUNCTION; x: .fnstart
++
++#define _ASM_SIZE(x)	.size x, .-x;
++
++#define _END(x) \
++	.fnend; \
++	_ASM_SIZE(x)
++
++#ifdef GPROF
++# ifdef __ELF__
++#  define _PROF_PROLOGUE	\
++	mov ip, lr; bl __mcount
++# else
++#  define _PROF_PROLOGUE	\
++	mov ip,lr; bl mcount
++# endif
++#else
++# define _PROF_PROLOGUE
++#endif
++
++#define	ENTRY(y)	_ENTRY(_C_LABEL(y)); _PROF_PROLOGUE
++#define	ENTRY_NP(y)	_ENTRY(_C_LABEL(y))
++#define	END(y)		_END(_C_LABEL(y))
++#define	ASENTRY(y)	_ENTRY(_ASM_LABEL(y)); _PROF_PROLOGUE
++#define	ASENTRY_NP(y)	_ENTRY(_ASM_LABEL(y))
++#define	ASEND(y)	_END(_ASM_LABEL(y))
++
++#ifdef __ELF__
++#define ENTRY_PRIVATE(y)  ENTRY(y); .hidden _C_LABEL(y)
++#else
++#define ENTRY_PRIVATE(y)  ENTRY(y)
++#endif
++
++#define	ASMSTR		.asciz
++
++#if defined(__ELF__) && defined(PIC)
++#ifdef __STDC__
++#define	PIC_SYM(x,y)	x ## ( ## y ## )
++#else
++#define	PIC_SYM(x,y)	x/**/(/**/y/**/)
++#endif
++#else
++#define	PIC_SYM(x,y)	x
++#endif
++
++#ifdef __ELF__
++#define RCSID(x)	.section ".ident"; .asciz x
++#else
++#define RCSID(x)	.text; .asciz x
++#endif
++
++#ifdef __ELF__
++#define	WEAK_ALIAS(alias,sym)						\
++	.weak alias;							\
++	alias = sym
++#endif
++
++#ifdef __STDC__
++#define	WARN_REFERENCES(sym,msg)					\
++	.stabs msg ## ,30,0,0,0 ;					\
++	.stabs __STRING(_C_LABEL(sym)) ## ,1,0,0,0
++#elif defined(__ELF__)
++#define	WARN_REFERENCES(sym,msg)					\
++	.stabs msg,30,0,0,0 ;						\
++	.stabs __STRING(sym),1,0,0,0
++#else
++#define	WARN_REFERENCES(sym,msg)					\
++	.stabs msg,30,0,0,0 ;						\
++	.stabs __STRING(_/**/sym),1,0,0,0
++#endif /* __STDC__ */
++
++#endif /* !_ARM_ASM_H_ */
+--- /dev/null
++++ b/include/machine/cpu-features.h
+@@ -0,0 +1,83 @@
++/*
++ * Copyright (C) 2008 The Android Open Source Project
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *  * Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ *  * Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
++ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
++ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++#ifndef _ARM_MACHINE_CPU_FEATURES_H
++#define _ARM_MACHINE_CPU_FEATURES_H
++
++/* The purpose of this file is to define several macros corresponding
++ * to CPU features that may or may not be available at build time on
++ * on the target CPU.
++ *
++ * This is done to abstract us from the various ARM Architecture
++ * quirks and alphabet soup.
++ */
++
++/* __ARM_ARCH__ is a number corresponding to the ARM revision
++ * we're going to support. Our toolchain doesn't define __ARM_ARCH__
++ * so try to guess it.
++ */
++#ifndef __ARM_ARCH__
++#  if defined __ARM_ARCH_7__   || defined __ARM_ARCH_7A__ || \
++        defined __ARM_ARCH_7R__  || defined __ARM_ARCH_7M__
++#    define __ARM_ARCH__ 7
++#  elif defined __ARM_ARCH_6__   || defined __ARM_ARCH_6J__ || \
++        defined __ARM_ARCH_6K__  || defined __ARM_ARCH_6Z__ || \
++        defined __ARM_ARCH_6KZ__ || defined __ARM_ARCH_6T2__
++#    define __ARM_ARCH__ 6
++#  else
++#    error Unknown or unsupported ARM architecture
++#  endif
++#endif
++
++/* define __ARM_HAVE_HALFWORD_MULTIPLY when half-word multiply instructions
++ * this means variants of: smul, smulw, smla, smlaw, smlal
++ */
++#define  __ARM_HAVE_HALFWORD_MULTIPLY  1
++
++/* define __ARM_HAVE_LDREXD for ARMv7 architecture
++ * (also present in ARMv6K, but not implemented in ARMv7-M, neither of which
++ * we care about)
++ */
++#if __ARM_ARCH__ >= 7
++#  define __ARM_HAVE_LDREXD
++#endif
++
++/* define _ARM_HAVE_VFP if we have VFPv3
++ */
++#if __ARM_ARCH__ >= 7 && defined __VFP_FP__
++#  define __ARM_HAVE_VFP
++#endif
++
++/* define _ARM_HAVE_NEON for ARMv7 architecture if we support the
++ * Neon SIMD instruction set extensions. This also implies
++ * that VFPv3-D32 is supported.
++ */
++#if __ARM_ARCH__ >= 7 && defined __ARM_NEON__
++#  define __ARM_HAVE_NEON
++#endif
++
++#endif /* _ARM_MACHINE_CPU_FEATURES_H */
+
+--- a/Makefile
++++ b/Makefile
+@@ -23,7 +23,16 @@ ARCH_GLOBS = $(addsuffix /$(ARCH)/*.[csS
+ BASE_SRCS = $(sort $(wildcard $(BASE_GLOBS)))
+ ARCH_SRCS = $(sort $(wildcard $(ARCH_GLOBS)))
+ BASE_OBJS = $(patsubst $(srcdir)/%,%.o,$(basename $(BASE_SRCS)))
++ifneq ($(CONFIG_MUSL_OPTIMIZATION), y)
++#math: atan cos e_pow exp sin
++#string: memcmp strcmp strcpy strlen
++OPTIM_SRCS = atan.S cos.S e_pow.S exp.S sin.S memcmp.S strcmp.S strcpy.S strlen.S
++ARCH_FILTER_SRCS =
++ARCH_FILTER_SRCS += $(foreach n, $(OPTIM_SRCS), $(filter %/$(n), $(ARCH_SRCS)))
++ARCH_OBJS = $(patsubst $(srcdir)/%,%.o,$(basename $(filter-out $(ARCH_FILTER_SRCS), $(ARCH_SRCS))))
++else
+ ARCH_OBJS = $(patsubst $(srcdir)/%,%.o,$(basename $(ARCH_SRCS)))
++endif
+ REPLACED_OBJS = $(sort $(subst /$(ARCH)/,/,$(ARCH_OBJS)))
+ ALL_OBJS = $(addprefix obj/, $(filter-out $(REPLACED_OBJS), $(sort $(BASE_OBJS) $(ARCH_OBJS))))
+
+@@ -49,6 +58,10 @@ CFLAGS_ALL = $(CFLAGS_C99FSE)
+ CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I$(srcdir)/arch/$(ARCH) -I$(srcdir)/arch/generic -Iobj/src/internal -I$(srcdir)/src/internal -Iobj/include -I$(srcdir)/include
+ CFLAGS_ALL += $(CPPFLAGS) $(CFLAGS_AUTO) $(CFLAGS)
+
++ifeq ($(CONFIG_MUSL_OPTIMIZATION), y)
++CFLAGS_ALL += -DMUSL_OPTIMIZATION
++endif
++
+ LDFLAGS_ALL = $(LDFLAGS_AUTO) $(LDFLAGS)
+
+ AR      = $(CROSS_COMPILE)ar

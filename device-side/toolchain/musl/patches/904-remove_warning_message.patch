@@ -1,0 +1,30 @@
+--- a/include/sys/errno.h
++++ b/include/sys/errno.h
+@@ -1,2 +1 @@
+-#warning redirecting incorrect #include <sys/errno.h> to <errno.h>
+ #include <errno.h>
+--- a/include/sys/fcntl.h
++++ b/include/sys/fcntl.h
+@@ -1,2 +1 @@
+-#warning redirecting incorrect #include <sys/fcntl.h> to <fcntl.h>
+ #include <fcntl.h>
+--- a/include/sys/poll.h
++++ b/include/sys/poll.h
+@@ -1,2 +1 @@
+-#warning redirecting incorrect #include <sys/poll.h> to <poll.h>
+ #include <poll.h>
+--- a/include/sys/signal.h
++++ b/include/sys/signal.h
+@@ -1,2 +1 @@
+-#warning redirecting incorrect #include <sys/signal.h> to <signal.h>
+ #include <signal.h>
+--- a/include/sys/termios.h
++++ b/include/sys/termios.h
+@@ -1,2 +1 @@
+-#warning redirecting incorrect #include <sys/termios.h> to <termios.h>
+ #include <termios.h>
+--- a/include/wait.h
++++ b/include/wait.h
+@@ -1,2 +1 @@
+-#warning redirecting incorrect #include <wait.h> to <sys/wait.h>
+ #include <sys/wait.h>

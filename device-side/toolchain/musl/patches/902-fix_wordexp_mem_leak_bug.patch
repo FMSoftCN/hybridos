@@ -1,0 +1,17 @@
+--- a/src/misc/wordexp.c
++++ b/src/misc/wordexp.c
+@@ -26,7 +26,13 @@ static void reap(pid_t pid)
+ static char *getword(FILE *f)
+ {
+ 	char *s = 0;
+-	return getdelim(&s, (size_t [1]){0}, 0, f) < 0 ? 0 : s;
++	ssize_t len = 0;
++	len = getdelim(&s, (size_t [1]){0}, 0, f);
++	if(-1 == len) {
++		free(s);
++		s = NULL;
++	}
++	return s;
+ }
+ 
+ static int do_wordexp(const char *s, wordexp_t *we, int flags)

@@ -1,0 +1,36 @@
+From: ktkachov <ktkachov@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 8 May 2015 08:30:40 +0000 (+0000)
+Subject: [PATCH 0/13] Add musl support to GCC
+X-Git-Url: https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff_plain;h=f2d678afa5b8385d763b93772d73d6bf80a9739e
+
+[PATCH 0/13] Add musl support to GCC
+
+2015-05-08  Szabolcs Nagy  <szabolcs.nagy@arm.com>
+
+	* config/glibc-stdint.h (OPTION_MUSL): Define.
+	(INT_FAST16_TYPE, INT_FAST32_TYPE, UINT_FAST16_TYPE, UINT_FAST32_TYPE):
+	Change the definition based on OPTION_MUSL for 64 bit targets.
+	* config/linux.h (OPTION_MUSL): Redefine.
+	* config/alpha/linux.h (OPTION_MUSL): Redefine.
+	* config/rs6000/linux.h (OPTION_MUSL): Redefine.
+	* config/rs6000/linux64.h (OPTION_MUSL): Redefine.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk@222905 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+
+--- a/gcc/config/glibc-stdint.h
++++ b/gcc/config/glibc-stdint.h
+@@ -28,6 +28,12 @@ see the files COPYING3 and COPYING.RUNTI
+ #define OPTION_MUSL 0
+ #endif
+ 
++/* Systems using musl libc should use this header and make sure
++   OPTION_MUSL is defined correctly before using the TYPE macros. */
++#ifndef OPTION_MUSL
++#define OPTION_MUSL 0
++#endif
++
+ #define SIG_ATOMIC_TYPE "int"
+ 
+ #define INT8_TYPE "signed char"

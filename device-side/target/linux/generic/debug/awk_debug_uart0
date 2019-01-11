@@ -1,0 +1,11 @@
+$0!~";" && $0~"uart_debug_tx"{if(C)$0="uart_debug_tx = port:PF02<3>"} \
+$0!~";" && $0~"uart_debug_rx"{if(C)$0="uart_debug_rx = port:PF04<3>"} \
+$0!~";" && $0~"sdc_used"{if(A)$0="sdc_used = 1";A=0}  \
+$0!~";" && $0~"\\[mmc0_para\\]"{A=1} \
+$0!~";" && $0~"uart_tx"{if(B)$0="uart_tx = port:PF02<3>"} \
+$0!~";" && $0~"uart_rx"{if(B)$0="uart_tx = port:PF04<3>"} \
+$0!~";" && $0~"\\[uart0\\]"{B=1} \
+$0!~";" && $0~"uart_used"{if(B)$0="uart_used = 0"}  \
+$0!~";" && $0 ~"\\[uart1\\]"{B=0} \
+$0!~";" && $0~"\\[uart_para\\]"{C=1} \
+$0!~";" && $0~"\\[jtag_para\\]"{C=0} 1

@@ -1,0 +1,50 @@
+From: ktkachov <ktkachov@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 22 Apr 2015 14:24:11 +0000 (+0000)
+Subject: libstdc++, libgfortran gthr workaround for musl
+X-Git-Url: https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff_plain;h=1e5f711c11cb80ce609db9e9c1d8b2da0f7b5b61
+
+libstdc++, libgfortran gthr workaround for musl
+
+On behalf of szabolcs.nagy@arm.com
+
+[libstdc++-v3/]
+2015-04-22  Szabolcs Nagy  <szabolcs.nagy@arm.com>
+
+	* config/os/generic/os_defines.h (_GLIBCXX_GTHREAD_USE_WEAK): Define.
+	* configure.host (os_include_dir): Set to "os/generic" for linux-musl*.
+
+[libgfortran/]
+2015-04-22  Szabolcs Nagy  <szabolcs.nagy@arm.com>
+
+	* acinclude.m4 (GTHREAD_USE_WEAK): Define as 0 for *-*-musl*.
+	* configure: Regenerate.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk@222329 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+
+--- a/libstdc++-v3/config/os/generic/os_defines.h
++++ b/libstdc++-v3/config/os/generic/os_defines.h
+@@ -38,4 +38,9 @@
+ // workaround in gthr-posix.h and at link-time for static linking.
+ #define _GLIBCXX_GTHREAD_USE_WEAK 0
+ 
++// Disable the weak reference logic in gthr.h for os/generic because it
++// is broken on every platform unless there is implementation specific
++// workaround in gthr-posix.h and at link-time for static linking.
++#define _GLIBCXX_GTHREAD_USE_WEAK 0
++
+ #endif
+--- a/libstdc++-v3/configure.host
++++ b/libstdc++-v3/configure.host
+@@ -279,6 +279,9 @@ case "${host_os}" in
+   linux-musl*)
+     os_include_dir="os/generic"
+     ;;
++  linux-musl*)
++    os_include_dir="os/generic"
++    ;;
+   gnu* | linux* | kfreebsd*-gnu | knetbsd*-gnu)
+     if [ "$uclibc" = "yes" ]; then
+       os_include_dir="os/uclibc"

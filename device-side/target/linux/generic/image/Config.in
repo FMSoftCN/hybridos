@@ -1,0 +1,12 @@
+config SUNXI_SD_BOOT_PARTSIZE
+	int "Boot (SD Card) filesystem partition size (in MB)"
+	default 4
+
+config SUNXI_SMALL_STORAGE_OTA
+	bool "For storage less than 32M, enable this when using ota"
+	default n
+
+config SUNXI_RECOVERY_INITRAMFS_PARTSIZE
+        int "Boot-Recovery initramfs filesystem partition size (in MB)"
+        default 7
+

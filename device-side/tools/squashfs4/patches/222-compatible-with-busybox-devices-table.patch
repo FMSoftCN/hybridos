@@ -1,0 +1,52 @@
+--- a/squashfs-tools/pseudo.c	2017-08-28 11:34:58.000000000 +0800
++++ b/squashfs-tools/pseudo.c	2017-09-30 15:52:52.000000000 +0800
+@@ -336,6 +336,12 @@
+	long long uid, gid;
+	struct pseudo_dev *dev;
+
++	unsigned count = 0;
++	unsigned increment = 0;
++	unsigned start = 0;
++	unsigned i;
++	char filename_inc[2048];
++
+	n = sscanf(def, "%s %c %o %s %s %n", filename, &type, &mode, suid,
+			sgid, &bytes);
+
+@@ -348,7 +354,8 @@
+	switch(type) {
+	case 'b':
+	case 'c':
+-		n = sscanf(def + bytes,  "%u %u", &major, &minor);
++		n = sscanf(def + bytes,  "%u %u %u %u %u", &major,
++					&minor, &start, &increment, &count);
+
+		if(n < 2) {
+			ERROR("Not enough or invalid arguments in pseudo file "
+@@ -366,6 +373,11 @@
+			goto error;
+		}
+
++		if((unsigned)(start | count | increment) > 255) {
++			ERROR("start/count/increment out of range\n");
++			goto error;
++		}
++
+	case 'f':
+		if(def[bytes] == '\0') {
+			ERROR("Not enough arguments in pseudo file "
+@@ -459,7 +471,14 @@
+		add_pseudo_file(dev);
+	}
+
+-	*pseudo = add_pseudo(*pseudo, dev, filename, filename);
++	if (count)
++		count--;
++
++	for (i = start; i <= start + count; i++) {
++		sprintf(filename_inc, count ? "%s%u" : "%s", filename, i);
++		dev->minor =  minor + (i - start) * increment;
++		*pseudo = add_pseudo(*pseudo, dev, filename_inc, filename_inc);
++	}
+
+	return TRUE;

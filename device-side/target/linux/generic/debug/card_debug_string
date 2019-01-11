@@ -1,0 +1,16 @@
+$1           $2        $3              $4            $5            $6    $7        $8        $9      $10     $11   $12       $13     $14     $15     $16     $17       $18
+sun3iw1p1    uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart_used uart_port uart_tx uart_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di mmc0_para sdc_used
+sun8iw1p1    uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart_used uart_port uart_tx uart_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di mmc0_para sdc_used
+sun8iw2p1    uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart_used uart_port uart_tx uart_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di mmc0_para sdc_used
+sun8iw3p1    uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart_used uart_port uart_tx uart_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di mmc0_para sdc_used
+sun8iw5p1    uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart_used uart_port uart_tx uart_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di mmc0_para sdc_used
+sun8iw6p1    uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart_used uart_port uart_tx uart_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di mmc0_para sdc_used
+sun8iw7p1    uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart_used uart_port uart_tx uart_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di mmc0_para sdc_used
+sun8iw8p1    uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart_used uart_port uart_tx uart_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di mmc0_para sdc_used
+sun8iw9p1    uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart_used uart_port uart_tx uart_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di mmc0_para sdc_used
+sun8iw10p1   uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart0_used uart0_port uart0_tx uart0_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di sdc0 sdc0_used
+sun8iw11p1   uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart0_used uart0_port uart0_tx uart0_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di sdc0 sdc0_used
+sun9iw1p1    uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart_used uart_port uart_tx uart_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di mmc0_para sdc_used
+sun50iw1p1   uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart0_used uart0_port uart0_tx uart0_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di sdc0 sdc0_used
+sun50iw2p1   uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart0_used uart0_port uart0_tx uart0_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di sdc0 sdc0_used
+sun50iw3p1   uart_para uart_debug_port uart_debug_tx uart_debug_rx uart0 uart0_used uart0_port uart0_tx uart0_rx uart1 jtag_para jtag_ms jtag_ck jtag_do jtag_di sdc0 sdc0_used

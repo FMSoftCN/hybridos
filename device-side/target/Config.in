@@ -1,0 +1,109 @@
+source "tmp/.config-target.in"
+
+# Kernel/Hardware features
+config HAS_FPU
+	bool
+
+config AUDIO_SUPPORT
+	bool
+
+config GPIO_SUPPORT
+	bool
+
+config PCI_SUPPORT
+	select AUDIO_SUPPORT
+	bool
+
+config USB_SUPPORT
+	select AUDIO_SUPPORT
+	bool
+
+config USB_GADGET_SUPPORT
+	bool
+
+config RTC_SUPPORT
+	bool
+
+config BIG_ENDIAN
+	bool
+
+config USES_DEVICETREE
+	bool
+
+config USES_INITRAMFS
+	bool
+
+config USES_SQUASHFS
+	bool
+
+config USES_JFFS2
+	bool
+
+config USES_JFFS2_NAND
+	bool
+
+config USES_EXT4
+	bool
+
+config USES_TARGZ
+	bool
+
+config USES_CPIOGZ
+	bool
+
+config USES_UBIFS
+	bool
+	select NAND_SUPPORT
+
+config PROFILE_KCONFIG
+	bool
+
+config LOW_MEMORY_FOOTPRINT
+	bool
+
+config NOMMU
+	bool
+
+config ARCH_64BIT
+	bool
+
+# Architecture selection
+
+config aarch64
+	select ARCH_64BIT
+	bool
+
+config aarch64_be
+	select ARCH_64BIT
+	select BIG_ENDIAN
+	bool
+
+config arceb
+	select BIG_ENDIAN
+	bool
+
+config arm
+	bool
+
+config armeb
+	select BIG_ENDIAN
+	bool
+
+config arm_v4
+	bool
+
+config arm_v5
+	bool
+
+config arm_v6
+	bool
+
+config arm_v7
+	bool
+
+config ARCH
+	string
+	default "aarch64"   if aarch64
+	default "aarch64_be" if aarch64_be
+	default "arm"       if arm
+	default "armeb"     if armeb

@@ -1,0 +1,15 @@
+choice
+prompt "System init"
+default PROCD_INIT
+help
+	"select the system of init type you wish to use"
+
+config SYSTEM_INIT_PROCD
+	bool "procd-init"
+	select PACKAGE_base-files
+
+config SYSTEM_INIT_BUSYBOX
+	bool "busybox-init"
+	select PACKAGE_busybox-init-base-files
+
+endchoice

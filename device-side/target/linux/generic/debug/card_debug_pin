@@ -1,0 +1,12 @@
+board        tx		                    rx		        port               jtag_ms	                  jtag_ck		         jtag_do                        jtag_di                            NO.
+sun3iw1p1    port:PA02<3><1><1><default>    port:PA03<3><1><1><default>     0   port:PH09<3><1><1><default>    port:PH10<3><1><1><default>    port:PH11<3><1><1><default>     port:PH12<3><1><1><default>    1
+sun8iw5p1    port:PF02<3><1><1><default>    port:PF04<3><1><1><default>     0   port:PF00<3><1><1><default>    port:PF05<3><1><1><default>    port:PF03<3><1><1><default>     port:PF01<3><1><1><default>    1
+sun8iw6p1    port:PF02<3><1><1><default>    port:PF04<3><1><1><default>     0   port:PF00<3><1><1><default>    port:PF05<3><1><1><default>    port:PF03<3><1><1><default>     port:PF01<3><1><1><default>    1
+sun8iw7p1    port:PF02<3><1><1><default>    port:PF04<3><1><1><default>     0   port:PF00<3><1><1><default>    port:PF05<3><1><1><default>    port:PF03<3><1><1><default>     port:PF01<3><1><1><default>    1
+sun8iw8p1    port:PF02<3><1><1><default>    port:PF04<3><1><1><default>     0   port:PF00<3><1><1><default>    port:PF05<3><1><1><default>    port:PF03<3><1><1><default>     port:PF01<3><1><1><default>    1
+sun8iw10p1    port:PF02<4><1><1><default>    port:PF04<4><1><1><default>     0   port:PF00<4><1><1><default>    port:PF05<4><1><1><default>    port:PF03<4><1><1><default>     port:PF01<4><1><1><default>    1
+sun8iw11p1   port:PF02<4><1><1><default>    port:PF04<4><1><1><default>     0   port:PF00<4><1><1><default>    port:PF05<4><1><1><default>    port:PF03<4><1><1><default>     port:PF01<4><1><1><default>    1
+sun9iw1p1    port:PF02<4><1><1><default>    port:PF04<4><1><1><default>     0   port:PF00<4><1><1><default>    port:PF05<4><1><1><default>    port:PF03<4><1><1><default>     port:PF01<4><1><1><default>    1
+sun50iw1p1   port:PF02<3><1><1><default>    port:PF04<3><1><1><default>     0   port:PF00<3><1><1><default>    port:PF05<3><1><1><default>    port:PF03<3><1><1><default>     port:PF01<3><1><1><default>    1
+sun50iw2p1   port:PF02<3><1><1><default>    port:PF04<3><1><1><default>     0   port:PF00<3><1><1><default>    port:PF05<3><1><1><default>    port:PF03<3><1><1><default>     port:PF01<3><1><1><default>    1
+sun50iw3p1   port:PF02<3><1><1><default>    port:PF04<3><1><1><default>     0   port:PF00<3><1><1><default>    port:PF05<3><1><1><default>    port:PF03<3><1><1><default>     port:PF01<3><1><1><default>    1
