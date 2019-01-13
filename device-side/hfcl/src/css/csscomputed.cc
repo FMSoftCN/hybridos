@@ -203,6 +203,7 @@ Font* CssComputed::createFont() const
         else {
             style[5] = FONT_RENDER_GREY;
         }
+
         const char* font_name_format = "ttf-%s-%s-*-%d-utf-8";
         char font_name[LEN_FONT_NAME*3 + 1];
         sprintf(font_name, font_name_format, family, style, size);
