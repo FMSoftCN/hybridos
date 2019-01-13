@@ -101,6 +101,12 @@ void CssComputed::setFont(Font* font)
     font->ref();
 }
 
+/* the font-size for medium in pixels */
+#define FONT_MEDIUM_SIZE 14
+
+/* the minimal font-size for subpixel enabled in dots */
+#define FONT_SUBPIXEL_SIZE 20
+
 Font* CssComputed::createFont() const
 {
     /* create Font object here */
@@ -149,11 +155,13 @@ Font* CssComputed::createFont() const
         Uint32 pv = m_values[PID_FONT_WEIGHT];
         switch (pv) {
         case PV_100:
+            style[0] = FONT_WEIGHT_THIN;
+            break;
         case PV_200:
-            style[0] = FONT_WEIGHT_LIGHT;
+            style[0] = FONT_WEIGHT_EXTRA_LIGHT;
             break;
         case PV_300:
-            style[0] = FONT_WEIGHT_DEMIBOLD;
+            style[0] = FONT_WEIGHT_LIGHT;
             break;
         case PV_400:
             style[0] = FONT_WEIGHT_REGULAR;
@@ -162,13 +170,13 @@ Font* CssComputed::createFont() const
             style[0] = FONT_WEIGHT_MEDIUM;
             break;
         case PV_600:
-            style[0] = FONT_WEIGHT_SUBPIXEL;
+            style[0] = FONT_WEIGHT_DEMIBOLD;
             break;
         case PV_700:
-            style[0] = FONT_WEIGHT_BOOK;
+            style[0] = FONT_WEIGHT_BOLD;
             break;
         case PV_800:
-            style[0] = FONT_WEIGHT_BOLD;
+            style[0] = FONT_WEIGHT_EXTRA_BOLD;
             break;
         case PV_900:
             style[0] = FONT_WEIGHT_BLACK;
@@ -189,6 +197,12 @@ Font* CssComputed::createFont() const
             goto always_ret;
         }
 
+        if (size <= FONT_SUBPIXEL_SIZE) {
+            style[5] = FONT_RENDER_SUBPIXEL;
+        }
+        else {
+            style[5] = FONT_RENDER_GREY;
+        }
         const char* font_name_format = "ttf-%s-%s-*-%d-utf-8";
         char font_name[LEN_FONT_NAME*3 + 1];
         sprintf(font_name, font_name_format, family, style, size);
@@ -640,10 +654,6 @@ bool CssComputed::getParentPropertyValue(const View* view, CssPropertyIds pid,
     return false;
 }
 
-
-/* the font-size for medium in pixels */
-#define FONT_MEDIUM_SIZE 14
-
 void CssComputed::handleFontSize(const View* view)
 {
     Uint32 type = CSS_PPT_VALUE_TYPE(m_values[PID_FONT_SIZE]);
@@ -865,10 +875,13 @@ bool CssComputed::handleFont()
         if ((style = fontGetStyleFromName(font_name)) != 0xFFFFFFFF) {
             Uint32 weight = PV_400;
             switch (style & FS_WEIGHT_MASK) {
-            case FS_WEIGHT_LIGHT:
+            case FS_WEIGHT_THIN:
+                weight = PV_100;
+                break;
+            case FS_WEIGHT_EXTRA_LIGHT:
                 weight = PV_200;
                 break;
-            case FS_WEIGHT_DEMIBOLD:
+            case FS_WEIGHT_LIGHT:
                 weight = PV_300;
                 break;
             case FS_WEIGHT_REGULAR:
@@ -877,17 +890,20 @@ bool CssComputed::handleFont()
             case FS_WEIGHT_MEDIUM:
                 weight = PV_500;
                 break;
-            case FS_WEIGHT_SUBPIXEL:
+            case FS_WEIGHT_DEMIBOLD:
                 weight = PV_600;
                 break;
-            case FS_WEIGHT_BOOK:
+            case FS_WEIGHT_BOLD:
                 weight = PV_700;
                 break;
-            case FS_WEIGHT_BOLD:
+            case FS_WEIGHT_EXTRA_BOLD:
                 weight = PV_800;
                 break;
             case FS_WEIGHT_BLACK:
                 weight = PV_900;
+                break;
+            default:
+                weight = PV_400;
                 break;
             }
 
@@ -925,10 +941,13 @@ bool CssComputed::handleFont()
 
             Uint32 weight = PV_400;
             switch (lf->style & FS_WEIGHT_MASK) {
-            case FS_WEIGHT_LIGHT:
+            case FS_WEIGHT_THIN:
+                weight = PV_100;
+                break;
+            case FS_WEIGHT_EXTRA_LIGHT:
                 weight = PV_200;
                 break;
-            case FS_WEIGHT_DEMIBOLD:
+            case FS_WEIGHT_LIGHT:
                 weight = PV_300;
                 break;
             case FS_WEIGHT_REGULAR:
@@ -937,17 +956,20 @@ bool CssComputed::handleFont()
             case FS_WEIGHT_MEDIUM:
                 weight = PV_500;
                 break;
-            case FS_WEIGHT_SUBPIXEL:
+            case FS_WEIGHT_DEMIBOLD:
                 weight = PV_600;
                 break;
-            case FS_WEIGHT_BOOK:
+            case FS_WEIGHT_BOLD:
                 weight = PV_700;
                 break;
-            case FS_WEIGHT_BOLD:
+            case FS_WEIGHT_EXTRA_BOLD:
                 weight = PV_800;
                 break;
             case FS_WEIGHT_BLACK:
                 weight = PV_900;
+                break;
+            default:
+                weight = PV_400;
                 break;
             }
 
