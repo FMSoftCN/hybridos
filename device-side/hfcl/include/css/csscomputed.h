@@ -47,6 +47,8 @@ public:
     void inherit(const CssComputed* css);
     // inherit a specified property
     void inherit(const CssComputed* css, int pid);
+    // inherit a specified property from a view
+    void inherit(const View* parent, int pid);
     bool makeAbsolute(const View* view);
     bool validate(const View* view);
 
@@ -142,6 +144,7 @@ private:
     void handleTabSize(const Font* font);
     void handleSpacing();
     void handleBorders();
+    void handleTextAlign(const View* view, int pid);
 
     /* methods for widths caculation */
     void calcWidthForIR(const View* view, const CssBox* ctnBlock,

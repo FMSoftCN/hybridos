@@ -344,6 +344,18 @@ void CssComputed::inherit(const CssComputed* css)
     }
 }
 
+void CssComputed::inherit(const View* parent, int pid)
+{
+    if (parent) {
+        inherit(parent->getCssComputed(), pid);
+    }
+    else {
+        CssInitial* initial = CssInitial::getSingleton();
+        m_values[pid] = CSS_PPT_VALUE_NOFLAGS(initial->m_values[pid]);
+        m_data[pid] = initial->m_data[pid];
+    }
+}
+
 void CssComputed::freeArray()
 {
     for (int i = 0; i < MAX_CSS_PID; i++) {
@@ -651,6 +663,10 @@ bool CssComputed::getParentPropertyValue(const View* view, CssPropertyIds pid,
     if (parent && (parent_css = parent->getCssComputed())) {
         return parent_css->getProperty(pid, value, data);
     }
+    else {
+        CssInitial* initial = CssInitial::getSingleton();
+        return initial->getProperty(pid, value, data);
+    }
 
     return false;
 }
@@ -692,7 +708,7 @@ void CssComputed::handleFontSize(const View* view)
                 font_size = data.r * 1.25;
             }
             else {
-                /* use the initial value of font-size */
+                /* use the default value of font-size */
                 font_size = FONT_MEDIUM_SIZE * 1.25;
             }
             break;
@@ -706,7 +722,7 @@ void CssComputed::handleFontSize(const View* view)
                 font_size = data.r * 0.8;
             }
             else {
-                /* use the initial value of font-size */
+                /* use the default value of font-size */
                 font_size = FONT_MEDIUM_SIZE * 0.8;
             }
             break;
@@ -1054,6 +1070,40 @@ void CssComputed::handleBorders()
     }
 }
 
+// This value behaves the same as inherit (computes to its parent’s
+// computed value) except that an inherited value of start or end is
+// interpreted against the parent’s (or the initial containing block’s,
+// if there is no parent) direction value and results in a computed value of
+// either left or right. When specified on the text-align shorthand, sets
+// both text-align-all and text-align-last to match-parent.
+void CssComputed::handleTextAlign(const View* view, int pid)
+{
+    if (pid != PID_TEXT_ALIGN_ALL && pid != PID_TEXT_ALIGN_LAST)
+        return;
+
+    if (m_values[pid] == PV_MATCH_PARENT) {
+        const View* parent = view->getParent();
+        inherit(parent, pid);
+
+        if (m_values[pid] == PV_START || m_values[pid] == PV_END) {
+            Uint32 value;
+
+            if (getParentPropertyValue(view, PID_DISPLAY, &value, NULL)) {
+                if (value == PV_LTR) {
+                    m_values[pid] = PV_LEFT;
+                }
+                else {
+                    m_values[pid] = PV_RIGHT;
+                }
+            }
+            else {
+                // the default value
+                m_values[pid] = PV_LEFT;
+            }
+        }
+    }
+}
+
 /*
  * A specified value can be either absolute (i.e., not relative to
  * another value, as in red or 2mm) or relative (i.e., relative to
@@ -1090,7 +1140,10 @@ bool CssComputed::makeAbsolute(const View* view)
 
     handleTabSize(font);
     handleSpacing();
+    handleTextAlign(view, PID_TEXT_ALIGN_ALL);
+    handleTextAlign(view, PID_TEXT_ALIGN_LAST);
     handleBorders();
+
 
     handleColor(PID_COLOR);
     handleColor(PID_BACKGROUND_COLOR);
