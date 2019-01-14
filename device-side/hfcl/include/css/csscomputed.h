@@ -140,6 +140,8 @@ private:
     void handleFontWeight(const View* view);
     bool handleFont();
     void handleTabSize(const Font* font);
+    void handleSpacing();
+    void handleBorders();
 
     /* methods for widths caculation */
     void calcWidthForIR(const View* view, const CssBox* ctnBlock,

@@ -93,7 +93,7 @@ CssInlineBox::~CssInlineBox()
 void CssInlineBox::calcBox(const View* view, CssBox* ctnBlock)
 {
     CssInlineBoxContainer* ibc;
-    if (typeid(ctnBlock) == typeid(ibc)) {
+    if (typeid (ctnBlock) == typeid (ibc)) {
         ibc = static_cast<CssInlineBoxContainer*>(ctnBlock);
     }
     else {

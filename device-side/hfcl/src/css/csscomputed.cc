@@ -1005,6 +1005,55 @@ void CssComputed::handleTabSize(const Font* font)
     }
 }
 
+void CssComputed::handleSpacing()
+{
+    Uint32 value;
+
+    value = CSS_PPT_VALUE_NOFLAGS(m_values[PID_WORD_SPACING]);
+    if (value == PV_NORMAL) {
+        m_values[PID_WORD_SPACING] = PV_LENGTH_PX;
+        m_data[PID_WORD_SPACING].r = 0;
+    }
+
+    value = CSS_PPT_VALUE_NOFLAGS(m_values[PID_LETTER_SPACING]);
+    if (value == PV_NORMAL) {
+        m_values[PID_LETTER_SPACING] = PV_LENGTH_PX;
+        m_data[PID_LETTER_SPACING].r = 0;
+    }
+}
+
+void CssComputed::handleBorders()
+{
+    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_LEFT_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
+        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_LEFT_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
+        m_values[PID_BORDER_LEFT_WIDTH] = PV_LENGTH_PX;
+        m_data[PID_BORDER_LEFT_WIDTH].r = 0;
+    }
+    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_TOP_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
+        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_TOP_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
+        m_values[PID_BORDER_TOP_WIDTH] = PV_LENGTH_PX;
+        m_data[PID_BORDER_TOP_WIDTH].r = 0;
+    }
+    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_RIGHT_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
+        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_RIGHT_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
+        m_values[PID_BORDER_RIGHT_WIDTH] = PV_LENGTH_PX;
+        m_data[PID_BORDER_RIGHT_WIDTH].r = 0;
+    }
+    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_BOTTOM_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
+        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_BOTTOM_STYLE]) ==
+            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
+        m_values[PID_BORDER_BOTTOM_WIDTH] = PV_LENGTH_PX;
+        m_data[PID_BORDER_BOTTOM_WIDTH].r = 0;
+    }
+}
+
 /*
  * A specified value can be either absolute (i.e., not relative to
  * another value, as in red or 2mm) or relative (i.e., relative to
@@ -1040,43 +1089,8 @@ bool CssComputed::makeAbsolute(const View* view)
     const Font* font = getFont();
 
     handleTabSize(font);
-
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_WORD_SPACING]) == PV_NORMAL) {
-        m_values[PID_WORD_SPACING] = PV_LENGTH_PX;
-        m_data[PID_WORD_SPACING].r = 0;
-    }
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_LETTER_SPACING]) == PV_NORMAL) {
-        m_values[PID_LETTER_SPACING] = PV_LENGTH_PX;
-        m_data[PID_LETTER_SPACING].r = 0;
-    }
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_LEFT_STYLE]) ==
-            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
-        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_LEFT_STYLE]) ==
-            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
-        m_values[PID_BORDER_LEFT_WIDTH] = PV_LENGTH_PX;
-        m_data[PID_BORDER_LEFT_WIDTH].r = 0;
-    }
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_TOP_STYLE]) ==
-            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
-        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_TOP_STYLE]) ==
-            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
-        m_values[PID_BORDER_TOP_WIDTH] = PV_LENGTH_PX;
-        m_data[PID_BORDER_TOP_WIDTH].r = 0;
-    }
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_RIGHT_STYLE]) ==
-            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
-        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_RIGHT_STYLE]) ==
-            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
-        m_values[PID_BORDER_RIGHT_WIDTH] = PV_LENGTH_PX;
-        m_data[PID_BORDER_RIGHT_WIDTH].r = 0;
-    }
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_BOTTOM_STYLE]) ==
-            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
-        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_BOTTOM_STYLE]) ==
-            MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
-        m_values[PID_BORDER_BOTTOM_WIDTH] = PV_LENGTH_PX;
-        m_data[PID_BORDER_BOTTOM_WIDTH].r = 0;
-    }
+    handleSpacing();
+    handleBorders();
 
     handleColor(PID_COLOR);
     handleColor(PID_BACKGROUND_COLOR);
