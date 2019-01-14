@@ -59,6 +59,13 @@ public:
     // text-align-all and text-align-last
     bool setTextAlign(Uint32 value);
 
+    // The helper function for setting word-wrap property.
+    // In CSS3 or later, for legacy reasons, UAs must treat 
+    // word-wrap as an legacy name alias of the overflow-wrap property.
+    bool setWordBreak(Uint32 value) {
+        return setOverflowWrap(value);
+    }
+
     virtual bool getProperty(CssPropertyIds pid, Uint32 *value,
             HTPVData* data) const;
     virtual bool setProperty(CssPropertyIds pid, Uint32 value,

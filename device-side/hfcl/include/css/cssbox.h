@@ -41,6 +41,10 @@ public:
     CssBox(CssComputed* css = NULL, bool anonymous = false);
     virtual ~CssBox();
 
+    void setOffset(HTReal x, HTReal y) {
+        m_x = x; m_y = y;
+    }
+
     void setContentWidth(HTReal w) {
         m_cw = w;
     }
@@ -114,7 +118,7 @@ public:
     virtual void calcBox(const View* view, CssBox* ctnBlock);
 
 protected:
-    // position in containing block
+    // offset in containing block
     HTReal m_x, m_y;
     // content width and height
     HTReal m_cw, m_ch;
@@ -133,18 +137,24 @@ protected:
 // A sub-inline-box for splitted inline box contained in a line box.
 class CssSubInlineBox : public CssBox {
 public:
-    CssSubInlineBox(CssComputed* css, const View* view)
-        : CssBox(css, false)
-        , m_view(view), m_split_ctxt(0) { };
+    CssSubInlineBox(CssComputed* css, const Glyph32* glyphs, int nr_glyphs,
+                HTReal x, HTReal y, HTReal cw, HTReal ch)
+            : CssBox(css, false)
+            , m_glyphs(glyphs), m_nr_glyphs(nr_glyphs) {
+
+        setOffset(x, y);
+        setContentWidth(cw);
+        setContentHeight(ch);
+    };
+
     virtual ~CssSubInlineBox() {};
 
     /* virtual functions */
     virtual void calcBox(const View* view, CssBox* ctnBlock);
 
 private:
-    const View* m_view;
-    // the splitting context of the view
-    const void* m_split_ctxt;
+    const Glyph32* m_glyphs;
+    int m_nr_glyphs;
 };
 
 // Line box
@@ -161,6 +171,8 @@ public:
 private:
     HTReal m_x, m_y;
     HTReal m_w, m_h;
+    HTReal m_left_space;
+    bool m_ltr;
 
     std::vector<const CssBox*> m_sub_boxes;
 };
@@ -191,7 +203,7 @@ private:
 // or an inline box.
 //
 // Note that HFCL does not support anonymous inline boxes.
-// User should create explicitly all inline boxes.
+// User should create all inline boxes explicitly.
 //
 // Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
 class CssInlineBoxContainer : public CssBox {

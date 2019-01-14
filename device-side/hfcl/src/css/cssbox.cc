@@ -62,8 +62,6 @@ void CssBox::calcBox(const View* view, CssBox* ctnBlock)
 // For splitted inline boxes
 void CssSubInlineBox::calcBox(const View* view, CssBox* ctnBlock)
 {
-    m_cw = m_view->getContentWidth(m_split_ctxt);
-    m_ch = m_view->getContentHeight();
 }
 
 CssLineBox::~CssLineBox()
