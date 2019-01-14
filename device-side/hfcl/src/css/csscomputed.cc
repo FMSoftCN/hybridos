@@ -728,21 +728,16 @@ inline Uint32 font_weight_bolder(Uint32 value)
 {
     switch (value) {
     case PV_100:
-        return PV_400;
     case PV_200:
-        return PV_400;
     case PV_300:
         return PV_400;
     case PV_400:
-        return PV_700;
     case PV_500:
         return PV_700;
+        return PV_700;
     case PV_600:
-        return PV_900;
     case PV_700:
-        return PV_900;
     case PV_800:
-        return PV_900;
     case PV_900:
         return PV_900;
     default:
@@ -754,21 +749,15 @@ inline Uint32 font_weight_lighter(Uint32 value)
 {
     switch (value) {
     case PV_100:
-        return PV_100;
     case PV_200:
-        return PV_100;
     case PV_300:
-        return PV_100;
     case PV_400:
-        return PV_100;
     case PV_500:
         return PV_100;
     case PV_600:
-        return PV_400;
     case PV_700:
         return PV_400;
     case PV_800:
-        return PV_700;
     case PV_900:
         return PV_700;
     default:
