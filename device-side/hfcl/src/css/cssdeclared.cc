@@ -256,6 +256,42 @@ error:
     return false;
 }
 
+// The shorthand property (text-align) sets the text-align-all and
+// text-align-last properties and describes how the inline-level
+// content of a block is aligned along the inline axis if the
+// content does not completely fill the line box.
+//
+// Values other than justify-all or match-parent are assigned to
+// text-align-all and reset text-align-last to auto.
+bool CssDeclared::setTextAlign(Uint32 value)
+{
+    if (value == PV_JUSTIFY_ALL) {
+        if (!setTextAlignAll(PV_JUSTIFY))
+            goto error;
+
+        if (!setTextAlignLast(PV_JUSTIFY))
+            goto error;
+    }
+    else if (value != PV_MATCH_PARENT) {
+        if (!setTextAlignAll(value))
+            goto error;
+
+        setTextAlignLast(PV_AUTO);
+    }
+    else {
+        if (!setTextAlignAll(value))
+            goto error;
+
+        if (!setTextAlignLast(value))
+            goto error;
+    }
+
+    return true;
+
+error:
+    return false;
+}
+
 bool CssDeclared::getProperty(CssPropertyIds pid, Uint32 *value,
         HTPVData *data) const
 {

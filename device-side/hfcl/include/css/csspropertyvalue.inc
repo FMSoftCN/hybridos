@@ -108,6 +108,8 @@ typedef enum _CssPropertyIds {
     PID_FONT_WEIGHT,
     // height
     PID_HEIGHT,
+    // hvml-pseudo
+    PID_HVML_PSEUDO,
     // hyphens
     PID_HYPHENS,
     // left
@@ -176,8 +178,6 @@ typedef enum _CssPropertyIds {
     PID_RIGHT,
     // tab-size
     PID_TAB_SIZE,
-    // text-align
-    PID_TEXT_ALIGN,
     // text-align-all
     PID_TEXT_ALIGN_ALL,
     // text-align-last
@@ -206,8 +206,6 @@ typedef enum _CssPropertyIds {
     PID_WIDTH,
     // word-spacing
     PID_WORD_SPACING,
-    // word-wrap
-    PID_WORD_WRAP,
     // z-index
     PID_Z_INDEX,
     MAX_CSS_PID,
@@ -2278,6 +2276,10 @@ typedef enum _CssPropertyValueKeywords {
 // PV_AUTO has been defined
 // PV_INHERIT has been defined
 
+// Values for property hvml-pseudo
+#define PV_JUSTIFY_ALL \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_JUSTIFY_ALL)
+
 // Values for property hyphens
 // PV_AUTO has been defined
 // PV_INHERIT has been defined
@@ -2932,31 +2934,19 @@ typedef enum _CssPropertyValueKeywords {
 // PV_NUMBER has been defined
 // PV_INHERIT has been defined
 
-// Values for property text-align
+// Values for property text-align-all
 // PV_CENTER has been defined
 #define PV_END \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_END)
 // PV_INHERIT has been defined
 #define PV_JUSTIFY \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_JUSTIFY)
-#define PV_JUSTIFY_ALL \
-    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_JUSTIFY_ALL)
 // PV_LEFT has been defined
 #define PV_MATCH_PARENT \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_MATCH_PARENT)
 // PV_RIGHT has been defined
 #define PV_START \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_START)
-
-// Values for property text-align-all
-// PV_CENTER has been defined
-// PV_END has been defined
-// PV_INHERIT has been defined
-// PV_JUSTIFY has been defined
-// PV_LEFT has been defined
-// PV_MATCH_PARENT has been defined
-// PV_RIGHT has been defined
-// PV_START has been defined
 
 // Values for property text-align-last
 // PV_AUTO has been defined
@@ -3145,12 +3135,6 @@ typedef enum _CssPropertyValueKeywords {
 // PV_LENGTH_VMAX has been defined
 // PV_LENGTH_VMIN has been defined
 // PV_LENGTH_VW has been defined
-// PV_INHERIT has been defined
-// PV_NORMAL has been defined
-
-// Values for property word-wrap
-// PV_ANYWHERE has been defined
-// PV_BREAK_WORD has been defined
 // PV_INHERIT has been defined
 // PV_NORMAL has been defined
 

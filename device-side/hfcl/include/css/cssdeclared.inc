@@ -340,6 +340,11 @@
         return Css::setProperty (PID_HEIGHT, value, data);
     }
 
+    // Operators for property hvml-pseudo
+    bool setHvmlPseudo(Uint32 value) {
+        return Css::setProperty(PID_HVML_PSEUDO, value);
+    }
+
     // Operators for property hyphens
     bool setHyphens(Uint32 value) {
         return Css::setProperty(PID_HYPHENS, value);
@@ -585,11 +590,6 @@
         return Css::setProperty (PID_TAB_SIZE, value, data);
     }
 
-    // Operators for property text-align
-    bool setTextAlign(Uint32 value) {
-        return Css::setProperty(PID_TEXT_ALIGN, value);
-    }
-
     // Operators for property text-align-all
     bool setTextAlignAll(Uint32 value) {
         return Css::setProperty(PID_TEXT_ALIGN_ALL, value);
@@ -676,11 +676,6 @@
     }
     bool setWordSpacing(Uint32 value, HTReal data) {
         return Css::setProperty (PID_WORD_SPACING, value, data);
-    }
-
-    // Operators for property word-wrap
-    bool setWordWrap(Uint32 value) {
-        return Css::setProperty(PID_WORD_WRAP, value);
     }
 
     // Operators for property z-index

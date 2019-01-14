@@ -408,10 +408,11 @@ right
 #    initial: auto
 #    inherited: no
 
-text-align
-    values: start end left right center justify match-parent justify-all inherit
-    initial: left
-    inherited: yes
+# In CSS3 or later, text-align is defined as a shorthand of text-align-all and text-align-last
+# text-align
+#    values: start end left right center justify match-parent justify-all inherit
+#    initial: left
+#    inherited: yes
 
 text-decoration
     values: none underline overline line-through blink inherit
@@ -497,11 +498,6 @@ overflow-wrap
     initial: normal
     inherited: yes
 
-word-wrap
-    values: normal break-word anywhere inherit
-    initial: normal
-    inherited: yes
-
 text-align-all
     values: start end left right center justify match-parent inherit
     initial: start
@@ -516,4 +512,10 @@ text-justify
     values: auto none inter-word inter-character inherit
     initial: auto
     inherited: yes
+
+# A pseudo property to define some values for shorthand properties
+hvml-pseudo
+    values: justify-all
+    initial: justify-all
+    inherited: no
 

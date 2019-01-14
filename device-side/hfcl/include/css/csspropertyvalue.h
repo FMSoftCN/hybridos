@@ -72,6 +72,11 @@ namespace hfcl {
 
 #include "csspropertyvalue.inc"
 
+// For legacy reasons, UAs must treat word-wrap as an legacy name alias of 
+// the overflow-wrap property.
+// REF: https://drafts.csswg.org/css-text-3/#overflow-wrap-property
+#define PID_WORD_WRAP   PID_OVERFLOW_WRAP
+
 // Data types for property value
 // NOTE: these types and HTReal always have the same width with pointers
 typedef intptr_t            HTInt;

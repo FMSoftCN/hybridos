@@ -54,6 +54,11 @@ public:
     bool setPadding(Uint32 value);
     bool setPadding(Uint32 value, const HTReal* r);
 
+    // The helper function for setting text-align property.
+    // In CSS3 or later, text-align is defined as a shorthand of
+    // text-align-all and text-align-last
+    bool setTextAlign(Uint32 value);
+
     virtual bool getProperty(CssPropertyIds pid, Uint32 *value,
             HTPVData* data) const;
     virtual bool setProperty(CssPropertyIds pid, Uint32 value,
