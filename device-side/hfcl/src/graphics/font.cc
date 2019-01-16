@@ -77,12 +77,12 @@ Font::Font(Logfont* logfont)
     glyph = GetGlyphValue(m_logfont, "0", 1, NULL, 0);
     info.mask = GLYPH_INFO_METRICS;
     GetGlyphInfo(m_logfont, glyph, &info);
-    m_glyph_height_0 = GraphicsContext::dots2px(info.height);
+    m_glyph_height_0 = GraphicsContext::dots2px(info.bbox_h);
 
     glyph = GetGlyphValue(m_logfont, "x", 1, NULL, 0);
     info.mask = GLYPH_INFO_METRICS;
     GetGlyphInfo(m_logfont, glyph, &info);
-    m_glyph_height_x = GraphicsContext::dots2px(info.height);
+    m_glyph_height_x = GraphicsContext::dots2px(info.bbox_h);
 }
 
 Font::~Font()
