@@ -46,7 +46,7 @@ HFCL in real products.
 
 1. Ubuntu Linux 16.04
 1. GVFB V1.2.2 or later
-1. MiniGUI Core 3.2.1 or later
+1. MiniGUI Core 3.4.0 or later
 
 ### Building
 
