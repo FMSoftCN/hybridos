@@ -57,22 +57,22 @@ public:
 
     /* methods for visual formatting */
     bool isFloat() const {
-        return (CSS_PPT_VALUE_NOFLAGS(m_values[PID_FLOAT]) != PV_NONE);
+        return (CSS_PPT_VALUE_NOMARKS(m_values[PID_FLOAT]) != PV_NONE);
     }
     bool isLtr() const {
-        return (CSS_PPT_VALUE_NOFLAGS(m_values[PID_DIRECTION]) == PV_LTR);
+        return (CSS_PPT_VALUE_NOMARKS(m_values[PID_DIRECTION]) == PV_LTR);
     }
     bool isAbsolutelyPositioned() const {
-        Uint32 value = CSS_PPT_VALUE_NOFLAGS(m_values[PID_POSITION]);
+        Uint32 value = CSS_PPT_VALUE_NOMARKS(m_values[PID_POSITION]);
         return (value == PV_FIXED || value == PV_ABSOLUTE);
     }
     bool isPositioned() const {
-        Uint32 value = CSS_PPT_VALUE_NOFLAGS(m_values[PID_POSITION]);
+        Uint32 value = CSS_PPT_VALUE_NOMARKS(m_values[PID_POSITION]);
         return (value == PV_RELATIVE || value == PV_FIXED ||
                 value == PV_ABSOLUTE);
     }
     bool isFixed() const {
-        return (CSS_PPT_VALUE_NOFLAGS(m_values[PID_POSITION]) == PV_FIXED);
+        return (CSS_PPT_VALUE_NOMARKS(m_values[PID_POSITION]) == PV_FIXED);
     }
 
     bool getZIndex(int& zindex) const;

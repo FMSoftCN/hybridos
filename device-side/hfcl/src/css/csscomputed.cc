@@ -59,7 +59,7 @@ CssComputed::CssComputed()
 {
     CssInitial* initial = CssInitial::getSingleton();
     for (int pid = 0; pid < MAX_CSS_PID; pid++) {
-        m_values[pid] = CSS_PPT_VALUE_NOFLAGS(initial->m_values[pid]);
+        m_values[pid] = CSS_PPT_VALUE_NOMARKS(initial->m_values[pid]);
     }
     memcpy(&m_data, initial->m_values, sizeof(m_data));
 
@@ -122,7 +122,7 @@ Font* CssComputed::createFont() const
         char family[LEN_FONT_NAME + 1];
         char style[LEN_FONT_NAME + 1];
 
-        value = CSS_PPT_VALUE_NOFLAGS(m_values[PID_FONT_FAMILY]);
+        value = CSS_PPT_VALUE_NOMARKS(m_values[PID_FONT_FAMILY]);
         switch (value) {
         case PV_SERIF:
             strcpy(family, "serif");
@@ -267,7 +267,7 @@ void CssComputed::reset()
     /* use initial CSS values */
     CssInitial* initial = CssInitial::getSingleton();
     for (int pid = 0; pid < MAX_CSS_PID; pid++) {
-        m_values[pid] = CSS_PPT_VALUE_NOFLAGS(initial->m_values[pid]);
+        m_values[pid] = CSS_PPT_VALUE_NOMARKS(initial->m_values[pid]);
     }
     memcpy(&m_data, initial->m_values, sizeof(m_data));
 
@@ -303,18 +303,18 @@ void CssComputed::inherit(const CssComputed* css, int pid)
         }
 
         if (p) {
-            m_values[pid] = CSS_PPT_VALUE_NOFLAGS(css->m_values[pid]);
+            m_values[pid] = CSS_PPT_VALUE_NOMARKS(css->m_values[pid]);
             MARK_CSS_PPT_VALUE_ALLOCATED(m_values[pid]);
             m_data[pid].p = p;
         }
         else {
             /* use initial value */
-            m_values[pid] = CSS_PPT_VALUE_NOFLAGS(initial->m_values[pid]);
+            m_values[pid] = CSS_PPT_VALUE_NOMARKS(initial->m_values[pid]);
             m_data[pid] = initial->m_data[pid];
         }
     }
     else {
-        m_values[pid] = CSS_PPT_VALUE_NOFLAGS(css->m_values[pid]);
+        m_values[pid] = CSS_PPT_VALUE_NOMARKS(css->m_values[pid]);
         m_data[pid] = css->m_data[pid];
     }
 }
@@ -338,7 +338,7 @@ void CssComputed::inherit(const CssComputed* css)
             inherit(css, pid);
         }
         else {
-            m_values[pid] = CSS_PPT_VALUE_NOFLAGS(initial->m_values[pid]);
+            m_values[pid] = CSS_PPT_VALUE_NOMARKS(initial->m_values[pid]);
             m_data[pid] = initial->m_data[pid];
         }
     }
@@ -351,7 +351,7 @@ void CssComputed::inherit(const View* parent, int pid)
     }
     else {
         CssInitial* initial = CssInitial::getSingleton();
-        m_values[pid] = CSS_PPT_VALUE_NOFLAGS(initial->m_values[pid]);
+        m_values[pid] = CSS_PPT_VALUE_NOMARKS(initial->m_values[pid]);
         m_data[pid] = initial->m_data[pid];
     }
 }
@@ -417,7 +417,7 @@ bool CssComputed::convertArray(int pid, int t)
         return false;
     }
 
-    m_values[pid] = CSS_PPT_VALUE_FLAG_ALLOCATED | PV_ARRAY_LENGTH_PX;
+    m_values[pid] = CSS_PPT_VALUE_MARK_ALLOCATED | PV_ARRAY_LENGTH_PX;
     m_data[pid].p = p;
     return true;
 }
@@ -458,7 +458,7 @@ bool CssComputed::convertArray(int pid, int t, const RealRect& viewport)
         return false;
     }
 
-    m_values[pid] = CSS_PPT_VALUE_FLAG_ALLOCATED | PV_ARRAY_LENGTH_PX;
+    m_values[pid] = CSS_PPT_VALUE_MARK_ALLOCATED | PV_ARRAY_LENGTH_PX;
     m_data[pid].p = p;
     return true;
 }
@@ -507,7 +507,7 @@ bool CssComputed::convertArray(int pid, int t, const Font* font,
         return false;
     }
 
-    m_values[pid] = CSS_PPT_VALUE_FLAG_ALLOCATED | PV_ARRAY_LENGTH_PX;
+    m_values[pid] = CSS_PPT_VALUE_MARK_ALLOCATED | PV_ARRAY_LENGTH_PX;
     m_data[pid].p = p;
     return true;
 }
@@ -1008,7 +1008,7 @@ bool CssComputed::handleFont()
 
 void CssComputed::handleTabSize(const Font* font)
 {
-    Uint32 value = CSS_PPT_VALUE_NOFLAGS(m_values[PID_TAB_SIZE]);
+    Uint32 value = CSS_PPT_VALUE_NOMARKS(m_values[PID_TAB_SIZE]);
 
     if (value == PV_NUMBER) {
         HTReal r;
@@ -1025,13 +1025,13 @@ void CssComputed::handleSpacing()
 {
     Uint32 value;
 
-    value = CSS_PPT_VALUE_NOFLAGS(m_values[PID_WORD_SPACING]);
+    value = CSS_PPT_VALUE_NOMARKS(m_values[PID_WORD_SPACING]);
     if (value == PV_NORMAL) {
         m_values[PID_WORD_SPACING] = PV_LENGTH_PX;
         m_data[PID_WORD_SPACING].r = 0;
     }
 
-    value = CSS_PPT_VALUE_NOFLAGS(m_values[PID_LETTER_SPACING]);
+    value = CSS_PPT_VALUE_NOMARKS(m_values[PID_LETTER_SPACING]);
     if (value == PV_NORMAL) {
         m_values[PID_LETTER_SPACING] = PV_LENGTH_PX;
         m_data[PID_LETTER_SPACING].r = 0;
@@ -1040,30 +1040,30 @@ void CssComputed::handleSpacing()
 
 void CssComputed::handleBorders()
 {
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_LEFT_STYLE]) ==
+    if (CSS_PPT_VALUE_NOMARKS(m_values[PID_BORDER_LEFT_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
-        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_LEFT_STYLE]) ==
+        CSS_PPT_VALUE_NOMARKS(m_values[PID_BORDER_LEFT_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
         m_values[PID_BORDER_LEFT_WIDTH] = PV_LENGTH_PX;
         m_data[PID_BORDER_LEFT_WIDTH].r = 0;
     }
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_TOP_STYLE]) ==
+    if (CSS_PPT_VALUE_NOMARKS(m_values[PID_BORDER_TOP_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
-        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_TOP_STYLE]) ==
+        CSS_PPT_VALUE_NOMARKS(m_values[PID_BORDER_TOP_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
         m_values[PID_BORDER_TOP_WIDTH] = PV_LENGTH_PX;
         m_data[PID_BORDER_TOP_WIDTH].r = 0;
     }
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_RIGHT_STYLE]) ==
+    if (CSS_PPT_VALUE_NOMARKS(m_values[PID_BORDER_RIGHT_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
-        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_RIGHT_STYLE]) ==
+        CSS_PPT_VALUE_NOMARKS(m_values[PID_BORDER_RIGHT_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
         m_values[PID_BORDER_RIGHT_WIDTH] = PV_LENGTH_PX;
         m_data[PID_BORDER_RIGHT_WIDTH].r = 0;
     }
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_BOTTOM_STYLE]) ==
+    if (CSS_PPT_VALUE_NOMARKS(m_values[PID_BORDER_BOTTOM_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_NONE) ||
-        CSS_PPT_VALUE_NOFLAGS(m_values[PID_BORDER_BOTTOM_STYLE]) ==
+        CSS_PPT_VALUE_NOMARKS(m_values[PID_BORDER_BOTTOM_STYLE]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_BS_HIDDEN)) {
         m_values[PID_BORDER_BOTTOM_WIDTH] = PV_LENGTH_PX;
         m_data[PID_BORDER_BOTTOM_WIDTH].r = 0;
@@ -1328,7 +1328,7 @@ bool CssComputed::getProperty(CssPropertyIds pid, Uint32 *value,
         HTPVData *data) const
 {
     if (value) {
-        *value = CSS_PPT_VALUE_NOFLAGS(m_values[pid]);
+        *value = CSS_PPT_VALUE_NOMARKS(m_values[pid]);
     }
     if (data) {
         *data = m_data[pid];
@@ -1362,7 +1362,7 @@ unsigned char CssComputed::getOpacity() const
 void CssComputed::autoHMarginsAsZero(const CssBox* ctnBlock,
         HTReal& ml, HTReal& mr) const
 {
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_MARGIN_LEFT]) ==
+    if (CSS_PPT_VALUE_NOMARKS(m_values[PID_MARGIN_LEFT]) ==
         MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
         ml = 0;
     }
@@ -1377,7 +1377,7 @@ void CssComputed::autoHMarginsAsZero(const CssBox* ctnBlock,
         }
     }
 
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_MARGIN_RIGHT]) ==
+    if (CSS_PPT_VALUE_NOMARKS(m_values[PID_MARGIN_RIGHT]) ==
         MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
         mr = 0;
     }
@@ -1396,7 +1396,7 @@ void CssComputed::autoHMarginsAsZero(const CssBox* ctnBlock,
 void CssComputed::autoVMarginsAsZero(const CssBox* ctnBlock,
         HTReal& mt, HTReal& mb) const
 {
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_MARGIN_TOP]) ==
+    if (CSS_PPT_VALUE_NOMARKS(m_values[PID_MARGIN_TOP]) ==
         MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
         mt = 0;
     }
@@ -1411,7 +1411,7 @@ void CssComputed::autoVMarginsAsZero(const CssBox* ctnBlock,
         }
     }
 
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_MARGIN_BOTTOM]) ==
+    if (CSS_PPT_VALUE_NOMARKS(m_values[PID_MARGIN_BOTTOM]) ==
         MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
         mb = 0;
     }
@@ -1432,7 +1432,7 @@ bool CssComputed::hasComputedMarginLeft(const CssBox* ctnBlock, HTReal& ml)
 {
     Uint32 v = m_values[PID_MARGIN_LEFT];
 
-    if (CSS_PPT_VALUE_NOFLAGS(v) == MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
+    if (CSS_PPT_VALUE_NOMARKS(v) == MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
         return false;
     }
     else {
@@ -1451,7 +1451,7 @@ bool CssComputed::hasComputedMarginRight(const CssBox* ctnBlock, HTReal& mr)
 {
     Uint32 v = m_values[PID_MARGIN_RIGHT];
 
-    if (CSS_PPT_VALUE_NOFLAGS(v) == MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
+    if (CSS_PPT_VALUE_NOMARKS(v) == MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
         return false;
     }
     else {
@@ -1470,7 +1470,7 @@ bool CssComputed::hasComputedWidth(const CssBox* ctnBlock, HTReal& w)
 {
     Uint32 v = m_values[PID_WIDTH];
 
-    if (CSS_PPT_VALUE_NOFLAGS(v) == MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
+    if (CSS_PPT_VALUE_NOMARKS(v) == MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
         return false;
     }
     else {
@@ -1489,7 +1489,7 @@ bool CssComputed::hasComputedHeight(const CssBox* ctnBlock, HTReal& h)
 {
     Uint32 v = m_values[PID_HEIGHT];
 
-    if (CSS_PPT_VALUE_NOFLAGS(v) == MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
+    if (CSS_PPT_VALUE_NOMARKS(v) == MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
         return false;
     }
     else {
@@ -1519,7 +1519,7 @@ bool CssComputed::getHSize(const CssBox* ctnBlock, int pid, HTReal& s) const
 {
     Uint32 v = m_values[pid];
 
-    if (CSS_PPT_VALUE_NOFLAGS(v) == MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
+    if (CSS_PPT_VALUE_NOMARKS(v) == MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
         return true;
     }
     else {
@@ -1564,7 +1564,7 @@ bool CssComputed::getMaxWidth(const CssBox* ctnBlock, HTReal& maxw) const
     Uint32 v = m_values[PID_MAX_WIDTH];
 
     maxw = HTHUGE_VAL;
-    if (CSS_PPT_VALUE_NOFLAGS(v) == PV_NONE) {
+    if (CSS_PPT_VALUE_NOMARKS(v) == PV_NONE) {
         return false;
     }
 
@@ -1616,7 +1616,7 @@ bool CssComputed::getMaxHeight(const CssBox* ctnBlock, HTReal& maxh) const
     Uint32 v = m_values[PID_MAX_HEIGHT];
 
     maxh = HTHUGE_VAL;
-    if (CSS_PPT_VALUE_NOFLAGS(v) == PV_NONE) {
+    if (CSS_PPT_VALUE_NOMARKS(v) == PV_NONE) {
         return false;
     }
 
@@ -1643,7 +1643,7 @@ bool CssComputed::getVSize(const CssBox* ctnBlock, int pid, HTReal& s) const
 {
     Uint32 v = m_values[pid];
 
-    if (CSS_PPT_VALUE_NOFLAGS(v) == MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
+    if (CSS_PPT_VALUE_NOMARKS(v) == MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
         return true;
     }
     else {
@@ -1733,9 +1733,9 @@ void CssComputed::calcWidthForIR(const View* view, const CssBox* ctnBlock,
         HTReal& w)
 {
     HTReal inw, inh, inr;
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_INTERNAL_WIDTH]) ==
+    if (CSS_PPT_VALUE_NOMARKS(m_values[PID_INTERNAL_WIDTH]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO) &&
-        CSS_PPT_VALUE_NOFLAGS(m_values[PID_INTERNAL_HEIGHT]) ==
+        CSS_PPT_VALUE_NOMARKS(m_values[PID_INTERNAL_HEIGHT]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
         if (view->getIntrinsicWidth(&inw)) {
             w = inw;
@@ -1748,7 +1748,7 @@ void CssComputed::calcWidthForIR(const View* view, const CssBox* ctnBlock,
             w = 0; // undefined
         }
     }
-    else if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_INTERNAL_WIDTH]) ==
+    else if (CSS_PPT_VALUE_NOMARKS(m_values[PID_INTERNAL_WIDTH]) ==
             MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO)) {
         HTReal h;
         bool autoh = getVSize(ctnBlock, PID_INTERNAL_HEIGHT, h);
@@ -1777,7 +1777,7 @@ void CssComputed::calcHeightForIR(const View* view, const CssBox* ctnBlock,
     if (autoh) {
         bool autoinh = view->getIntrinsicHeight(&inh);
         bool autoinr = view->getIntrinsicRatio(&inr);
-        if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_INTERNAL_WIDTH]) ==
+        if (CSS_PPT_VALUE_NOMARKS(m_values[PID_INTERNAL_WIDTH]) ==
                 MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO) && autoinh) {
             h = inh;
         }
@@ -2109,7 +2109,7 @@ bool CssComputed::doCalcWidthsMargins(const View* view,
     // determine width and margins
     HTReal w, ml, mr;
 
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY]) == PV_INLINE &&
+    if (CSS_PPT_VALUE_NOMARKS(m_values[PID_DISPLAY]) == PV_INLINE &&
             !view->isReplaced()) {
         // inline, non-replaced elements
 
@@ -2118,26 +2118,26 @@ bool CssComputed::doCalcWidthsMargins(const View* view,
         cssBox->setHMargins(ml, mr);
         return false;
     }
-    else if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY]) == PV_INLINE &&
+    else if (CSS_PPT_VALUE_NOMARKS(m_values[PID_DISPLAY]) == PV_INLINE &&
             view->isReplaced()) {
         // inline, replaced elements
 
         autoHMarginsAsZero(ctnBlock, ml, mr);
         calcWidthForIR(view, ctnBlock, w);
     }
-    else if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY]) == PV_BLOCK &&
+    else if (CSS_PPT_VALUE_NOMARKS(m_values[PID_DISPLAY]) == PV_BLOCK &&
             !view->isReplaced()) {
         // Block-level, non-replaced elements in normal flow
         calcWidthForBlock(ctnBlock, w, ml, mr, false);
     }
-    else if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY]) == PV_BLOCK &&
+    else if (CSS_PPT_VALUE_NOMARKS(m_values[PID_DISPLAY]) == PV_BLOCK &&
             view->isReplaced()) {
         // Block-level, replaced elements in normal flow
         autoHMarginsAsZero(ctnBlock, ml, mr);
         calcWidthForIR(view, ctnBlock, w);
         calcWidthForBlock(ctnBlock, w, ml, mr, true);
     }
-    else if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_FLOAT]) != PV_NONE &&
+    else if (CSS_PPT_VALUE_NOMARKS(m_values[PID_FLOAT]) != PV_NONE &&
             !view->isReplaced()) {
         // Floating, non-replaced elements
 
@@ -2152,28 +2152,28 @@ bool CssComputed::doCalcWidthsMargins(const View* view,
             w = realmin(w, preferred);
         }
     }
-    else if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_FLOAT]) != PV_NONE &&
+    else if (CSS_PPT_VALUE_NOMARKS(m_values[PID_FLOAT]) != PV_NONE &&
             view->isReplaced()) {
         // Floating, replaced elements
 
         autoHMarginsAsZero(ctnBlock, ml, mr);
         calcWidthForIR(view, ctnBlock, w);
     }
-    else if ((CSS_PPT_VALUE_NOFLAGS(m_values[PID_POSITION]) == PV_ABSOLUTE ||
-            CSS_PPT_VALUE_NOFLAGS(m_values[PID_POSITION]) == PV_FIXED) &&
+    else if ((CSS_PPT_VALUE_NOMARKS(m_values[PID_POSITION]) == PV_ABSOLUTE ||
+            CSS_PPT_VALUE_NOMARKS(m_values[PID_POSITION]) == PV_FIXED) &&
             !view->isReplaced()) {
         // Absolutely positioned, non-replaced elements
 
         calcWidthsForAPNR(view, ctnBlock, cssBox);
     }
-    else if ((CSS_PPT_VALUE_NOFLAGS(m_values[PID_POSITION]) == PV_ABSOLUTE ||
-            CSS_PPT_VALUE_NOFLAGS(m_values[PID_POSITION]) == PV_FIXED) &&
+    else if ((CSS_PPT_VALUE_NOMARKS(m_values[PID_POSITION]) == PV_ABSOLUTE ||
+            CSS_PPT_VALUE_NOMARKS(m_values[PID_POSITION]) == PV_FIXED) &&
             view->isReplaced()) {
         // Absolutely positioned, replaced elements
 
         calcWidthsForAPR(view, ctnBlock, cssBox);
     }
-    else if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY])
+    else if (CSS_PPT_VALUE_NOMARKS(m_values[PID_DISPLAY])
                 == PV_INLINE_BLOCK && !view->isReplaced()) {
         // 'Inline-block', non-replaced elements in normal flow
 
@@ -2188,7 +2188,7 @@ bool CssComputed::doCalcWidthsMargins(const View* view,
             w = realmin(w, preferred);
         }
     }
-    else if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY])
+    else if (CSS_PPT_VALUE_NOMARKS(m_values[PID_DISPLAY])
                 == PV_INLINE_BLOCK && view->isReplaced()) {
         autoHMarginsAsZero(ctnBlock, ml, mr);
         calcWidthForIR(view, ctnBlock, w);
@@ -2323,7 +2323,7 @@ bool CssComputed::doCalcHeightsMargins(const View* view,
 
     HTReal h, mt, mb;
 
-    if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY]) == PV_INLINE &&
+    if (CSS_PPT_VALUE_NOMARKS(m_values[PID_DISPLAY]) == PV_INLINE &&
             !view->isReplaced()) {
         // inline, non-replaced elements
 
@@ -2332,10 +2332,10 @@ bool CssComputed::doCalcHeightsMargins(const View* view,
         cssBox->setVMargins(mt, mb);
         return false;
     }
-    else if ((CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY]) == PV_INLINE ||
-            CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY]) == PV_BLOCK ||
-            CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY]) == PV_INLINE_BLOCK ||
-            CSS_PPT_VALUE_NOFLAGS(m_values[PID_FLOAT]) != PV_NONE) &&
+    else if ((CSS_PPT_VALUE_NOMARKS(m_values[PID_DISPLAY]) == PV_INLINE ||
+            CSS_PPT_VALUE_NOMARKS(m_values[PID_DISPLAY]) == PV_BLOCK ||
+            CSS_PPT_VALUE_NOMARKS(m_values[PID_DISPLAY]) == PV_INLINE_BLOCK ||
+            CSS_PPT_VALUE_NOMARKS(m_values[PID_FLOAT]) != PV_NONE) &&
             view->isReplaced()) {
         // Inline replaced elements, block-level replaced elements
         // in normal flow, 'inline-block' replaced elements in normal flow,
@@ -2347,8 +2347,8 @@ bool CssComputed::doCalcHeightsMargins(const View* view,
         HTReal w = cssBox->getContentWidth();
         calcHeightForIR(view, ctnBlock, w, h);
     }
-    else if (CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY]) == PV_BLOCK &&
-            CSS_PPT_VALUE_NOFLAGS(m_values[PID_OVERFLOW]) == PV_VISIBLE &&
+    else if (CSS_PPT_VALUE_NOMARKS(m_values[PID_DISPLAY]) == PV_BLOCK &&
+            CSS_PPT_VALUE_NOMARKS(m_values[PID_OVERFLOW]) == PV_VISIBLE &&
             !view->isReplaced()) {
 
         // Block-level non-replaced elements in normal flow
@@ -2362,8 +2362,8 @@ bool CssComputed::doCalcHeightsMargins(const View* view,
         cssBox->setVMargins(mt, mb);
         calcHeightForBlockVNR(view, ctnBlock, cssBox);
     }
-    else if ((CSS_PPT_VALUE_NOFLAGS(m_values[PID_POSITION]) == PV_ABSOLUTE ||
-            CSS_PPT_VALUE_NOFLAGS(m_values[PID_POSITION]) == PV_FIXED)) {
+    else if ((CSS_PPT_VALUE_NOMARKS(m_values[PID_POSITION]) == PV_ABSOLUTE ||
+            CSS_PPT_VALUE_NOMARKS(m_values[PID_POSITION]) == PV_FIXED)) {
 
         if (view->isReplaced()) {
             // Absolutely positioned, replaced elements
@@ -2375,10 +2375,10 @@ bool CssComputed::doCalcHeightsMargins(const View* view,
         }
     }
     else if (!view->isReplaced() &&
-            ((CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY]) == PV_BLOCK &&
-             CSS_PPT_VALUE_NOFLAGS(m_values[PID_OVERFLOW]) != PV_VISIBLE) ||
-            CSS_PPT_VALUE_NOFLAGS(m_values[PID_DISPLAY]) == PV_INLINE_BLOCK ||
-            CSS_PPT_VALUE_NOFLAGS(m_values[PID_FLOAT]) != PV_NONE)) {
+            ((CSS_PPT_VALUE_NOMARKS(m_values[PID_DISPLAY]) == PV_BLOCK &&
+             CSS_PPT_VALUE_NOMARKS(m_values[PID_OVERFLOW]) != PV_VISIBLE) ||
+            CSS_PPT_VALUE_NOMARKS(m_values[PID_DISPLAY]) == PV_INLINE_BLOCK ||
+            CSS_PPT_VALUE_NOMARKS(m_values[PID_FLOAT]) != PV_NONE)) {
 
         // Block-level, non-replaced elements in normal flow when 'overflow'
         // does not compute to 'visible' (except if the 'overflow' property's
@@ -2425,9 +2425,9 @@ bool CssComputed::calcWidthsMargins(const View* view, const CssBox* ctnBlock,
 
         if (valid_minw && cssBox->getContentWidth() < minw) {
             if (view->isReplaced() &&
-                CSS_PPT_VALUE_NOFLAGS(m_values[PID_WIDTH]) ==
+                CSS_PPT_VALUE_NOMARKS(m_values[PID_WIDTH]) ==
                     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO) &&
-                CSS_PPT_VALUE_NOFLAGS(m_values[PID_HEIGHT]) ==
+                CSS_PPT_VALUE_NOMARKS(m_values[PID_HEIGHT]) ==
                     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO) &&
                 view->getIntrinsicRatio(&inr)) {
 
@@ -2448,9 +2448,9 @@ bool CssComputed::calcWidthsMargins(const View* view, const CssBox* ctnBlock,
 
         if (valid_maxw && cssBox->getContentWidth() > maxw) {
             if (view->isReplaced() &&
-                CSS_PPT_VALUE_NOFLAGS(m_values[PID_WIDTH]) ==
+                CSS_PPT_VALUE_NOMARKS(m_values[PID_WIDTH]) ==
                     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO) &&
-                CSS_PPT_VALUE_NOFLAGS(m_values[PID_HEIGHT]) ==
+                CSS_PPT_VALUE_NOMARKS(m_values[PID_HEIGHT]) ==
                     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO) &&
                 view->getIntrinsicRatio(&inr)) {
 
@@ -2494,9 +2494,9 @@ bool CssComputed::calcHeightsMargins(const View* view, const CssBox* ctnBlock,
 
         if (valid_minh && cssBox->getContentHeight() < minh) {
             if (view->isReplaced() &&
-                CSS_PPT_VALUE_NOFLAGS(m_values[PID_WIDTH]) ==
+                CSS_PPT_VALUE_NOMARKS(m_values[PID_WIDTH]) ==
                     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO) &&
-                CSS_PPT_VALUE_NOFLAGS(m_values[PID_HEIGHT]) ==
+                CSS_PPT_VALUE_NOMARKS(m_values[PID_HEIGHT]) ==
                     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO) &&
                 view->getIntrinsicRatio(&inr)) {
 
@@ -2517,9 +2517,9 @@ bool CssComputed::calcHeightsMargins(const View* view, const CssBox* ctnBlock,
 
         if (valid_maxh && cssBox->getContentHeight() > maxh) {
             if (view->isReplaced() &&
-                CSS_PPT_VALUE_NOFLAGS(m_values[PID_WIDTH]) ==
+                CSS_PPT_VALUE_NOMARKS(m_values[PID_WIDTH]) ==
                     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO) &&
-                CSS_PPT_VALUE_NOFLAGS(m_values[PID_HEIGHT]) ==
+                CSS_PPT_VALUE_NOMARKS(m_values[PID_HEIGHT]) ==
                     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_AUTO) &&
                 view->getIntrinsicRatio(&inr)) {
 

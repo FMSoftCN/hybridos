@@ -77,9 +77,20 @@ def start_with_space(line):
         return False
     return True
 
-RE_NOT_KEYWORD = re.compile(r"^<\S+>$")
+RE_IS_FLAG = re.compile(r"^&\S+$")
+def is_flag(value):
+    if RE_IS_FLAG.match(value) is not None:
+        return True
+    return False
+
+RE_IS_VARIABLE = re.compile(r"^<\S+>$")
+def is_variable(value):
+    if RE_IS_VARIABLE.match(value) is not None:
+        return True
+    return False
+
 def is_keyword(value):
-    if RE_NOT_KEYWORD.match(value) is None:
+    if not is_flag(value) and not is_variable(value):
         return True
     return False
 
@@ -235,7 +246,7 @@ def scan_src_file(fsrc):
             continue
 
         tokens = stripped_line.split(":")
-        if len (tokens) > 0 and not is_keyword(tokens[0]):
+        if len (tokens) > 0 and is_variable(tokens[0]):
             expand_definition (def_info, tokens[0], tokens[1])
         else:
             if start_with_values (org_line):
@@ -304,7 +315,7 @@ def generate_type_and_keyword_lists(property_info):
             if is_keyword(value_list[j]):
                 if value_list[j] not in keyword_dict:
                     keyword_dict[value_list[j]] = "";
-            else:
+            elif is_variable(value_list[j]):
                 if value_list[j] not in type_dict:
                     type_dict[value_list[j]] = "";
 
@@ -326,6 +337,16 @@ def make_value_keyword_id(keyword_token):
     keyword_id = keyword_token.upper()
     keyword_id = keyword_id.replace('-', '_')
     return "PVK_" + keyword_id;
+
+def make_flag_id(property_token, value_token):
+    property_id = property_token.replace('-', '_')
+    property_id = property_id.upper()
+
+    value_id = value_token.replace('&', '_')
+    value_id = value_id.replace('-', '_')
+    value_id = value_id.upper()
+
+    return "PVF_" + property_id + value_id;
 
 def make_value_id(value_token):
     value_id = value_token.strip('<>')
@@ -356,9 +377,9 @@ def make_initial_value(property_token, value_token, inherited):
     value_id = value_id.upper()
 
     if inherited == "yes":
-        inherited = "CSS_PPT_VALUE_FLAG_INHERITED, "
+        inherited = "CSS_PPT_VALUE_MARK_INHERITED, "
     else:
-        inherited = "CSS_PPT_VALUE_FLAG_NOT_INHERITED, "
+        inherited = "CSS_PPT_VALUE_MARK_NOT_INHERITED, "
 
     if is_keyword(value_token):
         user_data = None
@@ -463,15 +484,23 @@ def write_values(fout, property_info, type_list, keyword_list):
         value_list = property_info[property_tokens[i]]['values']
         value_list.sort()
 
+        flag_value = 0x1000
         fout.write("// Values for property %s\n" % (property_tokens[i], ))
         for value in value_list:
-            value_id = make_value_id (value)
-            if not value_id in value_ids:
-                fout.write("#define %s \\\n" % (value_id, ))
-                fout.write("    %s\n" % (make_value_macro (value), ))
-                value_ids.append(value_id)
+            if is_flag(value):
+                flag_id = make_flag_id (property_tokens[i], value)
+                fout.write("// flag for value %s\n" % (value, ))
+                fout.write("#define %s 0x%04x\n" % (flag_id, flag_value))
             else:
-                fout.write("// %s has been defined\n" % (value_id, ))
+                value_id = make_value_id (value)
+                if not value_id in value_ids:
+                    fout.write("#define %s \\\n" % (value_id, ))
+                    fout.write("    %s\n" % (make_value_macro (value), ))
+                    value_ids.append(value_id)
+                else:
+                    fout.write("// %s has been defined\n" % (value_id, ))
+            flag_value = flag_value * 2
+
         fout.write("\n")
 
     fout.write("\n")
@@ -666,7 +695,7 @@ def write_pv_checkers(fout, property_info):
 
         value_list = property_info[property_token]['org_values']
         for value in value_list:
-            if not is_keyword(value):
+            if not is_keyword(value) and not is_flag(value):
                 fout.write("        || %s(value, data)\n" % (make_common_checker_name(value), ))
 
         fout.write("    ;\n")

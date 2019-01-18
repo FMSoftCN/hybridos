@@ -689,7 +689,7 @@ void View::computeCss()
             // is set on the ‘color’ property itself, it is treated as
             // ‘color: inherit’.
             if (pid == PID_COLOR &&
-                    CSS_PPT_VALUE_NOFLAGS(value) == PV_CURRENT_COLOR) {
+                    CSS_PPT_VALUE_NOMARKS(value) == PV_CURRENT_COLOR) {
                 if (m_parent && m_parent->m_css_computed) {
                     m_css_computed->inherit(m_parent->m_css_computed, pid);
                 }
@@ -697,7 +697,7 @@ void View::computeCss()
                     _ERR_PRINTF("View::computeCss: No parent CssComputed\n");
                 }
             }
-            else if (CSS_PPT_VALUE_NOFLAGS(value) == PV_INHERIT) {
+            else if (CSS_PPT_VALUE_NOMARKS(value) == PV_INHERIT) {
                 if (m_parent && m_parent->m_css_computed) {
                     m_css_computed->inherit(m_parent->m_css_computed, pid);
                 }

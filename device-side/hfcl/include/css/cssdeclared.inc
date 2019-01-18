@@ -332,6 +332,11 @@
         return Css::setProperty(PID_FONT_WEIGHT, value);
     }
 
+    // Operators for property hanging-punctuation
+    bool setHangingPunctuation(Uint32 value) {
+        return Css::setProperty(PID_HANGING_PUNCTUATION, value);
+    }
+
     // Operators for property height
     bool setHeight(Uint32 value) {
         return Css::setProperty(PID_HEIGHT, value);
@@ -600,6 +605,11 @@
         return Css::setProperty(PID_TEXT_ALIGN_LAST, value);
     }
 
+    // Operators for property text-combine-upright
+    bool setTextCombineUpright(Uint32 value) {
+        return Css::setProperty(PID_TEXT_COMBINE_UPRIGHT, value);
+    }
+
     // Operators for property text-decoration
     bool setTextDecoration(Uint32 value) {
         return Css::setProperty(PID_TEXT_DECORATION, value);
@@ -616,6 +626,11 @@
     // Operators for property text-justify
     bool setTextJustify(Uint32 value) {
         return Css::setProperty(PID_TEXT_JUSTIFY, value);
+    }
+
+    // Operators for property text-orientation
+    bool setTextOrientation(Uint32 value) {
+        return Css::setProperty(PID_TEXT_ORIENTATION, value);
     }
 
     // Operators for property text-transform
@@ -670,12 +685,22 @@
         return Css::setProperty (PID_WIDTH, value, data);
     }
 
+    // Operators for property word-break
+    bool setWordBreak(Uint32 value) {
+        return Css::setProperty(PID_WORD_BREAK, value);
+    }
+
     // Operators for property word-spacing
     bool setWordSpacing(Uint32 value) {
         return Css::setProperty(PID_WORD_SPACING, value);
     }
     bool setWordSpacing(Uint32 value, HTReal data) {
         return Css::setProperty (PID_WORD_SPACING, value, data);
+    }
+
+    // Operators for property writing-mode
+    bool setWritingMode(Uint32 value) {
+        return Css::setProperty(PID_WRITING_MODE, value);
     }
 
     // Operators for property z-index

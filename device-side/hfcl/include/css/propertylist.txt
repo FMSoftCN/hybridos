@@ -420,12 +420,12 @@ text-decoration
     inherited: no
 
 text-indent
-    values: <length> <percentage> inherit
+    values: <length> <percentage> &hanging &each-line inherit
     initial: <length-px>=0
     inherited: yes
 
 text-transform
-    values: none capitalize uppercase lowercase full-width full-size-kana inherit
+    values: none capitalize uppercase lowercase &full-width &full-size-kana inherit
     initial: none
     inherited: yes
 
@@ -436,7 +436,7 @@ top
     appliesto: positioned
 
 unicode-bidi
-    values: normal embed bidi-override inherit
+    values: normal embed isolate bidi-override isolate-override plaintext inherit
     initial: normal
     inherited: no
 
@@ -488,6 +488,11 @@ line-break
     initial: auto
     inherited: yes
 
+word-break
+    values: normal keep-all break-all inherit
+    initial: normal
+    inherited: yes
+
 hyphens
     values: none manual auto inherit
     initial: manual
@@ -511,6 +516,26 @@ text-align-last
 text-justify
     values: auto none inter-word inter-character inherit
     initial: auto
+    inherited: yes
+
+hanging-punctuation
+    values: none force-end allow-end &first &last inherit
+    initial: none
+    inherited: yes
+
+writing-mode
+    values: horizontal-tb vertical-rl vertical-lr inherit
+    initial: horizontal-tb
+    inherited: yes
+
+text-orientation
+    values: mixed upright sideways inherit
+    initial: mixed
+    inherited: yes
+
+text-combine-upright
+    values: none all inherit
+    initial: none
     inherited: yes
 
 # A pseudo property to define some values for shorthand properties

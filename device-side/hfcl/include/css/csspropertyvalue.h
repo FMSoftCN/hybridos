@@ -29,17 +29,18 @@ namespace hfcl {
 
 #define MAKE_CSS_PPT_VALUE(type, keyword)    \
     ((Uint32)(                               \
-        ((Uint32)((keyword) & 0xFFFF)) |     \
+        ((Uint32)((keyword) & 0x0FFF)) |     \
         ((Uint32)((type) & 0x0FFF) << 16)    \
     ))
 
-#define CSS_PPT_VALUE_NOFLAGS(value)    ((value) & 0x0FFFFFFF)
+#define CSS_PPT_VALUE_NOMARKS(value)    ((value) & 0x0FFF0FFF)
 #define CSS_PPT_VALUE_TYPE(value)       (((value) & 0x0FFF0000) >> 16)
-#define CSS_PPT_VALUE_KEYWORD(value)    ((value) & 0x0000FFFF)
+#define CSS_PPT_VALUE_KEYWORD(value)    ((value) & 0x00000FFF)
+#define CSS_PPT_VALUE_FLAGS(value)      ((value) & 0x0000F000)
 
 /* This flag only apply to initial property value */
-#define CSS_PPT_VALUE_FLAG_INHERITED        0x80000000
-#define CSS_PPT_VALUE_FLAG_NOT_INHERITED    0x00000000
+#define CSS_PPT_VALUE_MARK_INHERITED        0x80000000
+#define CSS_PPT_VALUE_MARK_NOT_INHERITED    0x00000000
 #define MAKE_CSS_PPT_INITIAL_VALUE(inherited, type, keyword)    \
     ((Uint32)(                                                  \
         ((Uint32)((keyword) & 0xFFFF)) |                        \
@@ -48,27 +49,27 @@ namespace hfcl {
     ))
 
 #define IS_CSS_PPT_VALUE_INHERITED(value) \
-    ((value) & CSS_PPT_VALUE_FLAG_INHERITED)
+    ((value) & CSS_PPT_VALUE_MARK_INHERITED)
 #define MARK_CSS_PPT_VALUE_INHERITED(value) \
-    ((value) |= CSS_PPT_VALUE_FLAG_INHERITED)
+    ((value) |= CSS_PPT_VALUE_MARK_INHERITED)
 
 /* This flag only apply to declared property value */
-#define CSS_PPT_VALUE_FLAG_IMPORTANT        0x40000000
+#define CSS_PPT_VALUE_MARK_IMPORTANT        0x40000000
 
 #define IS_CSS_PPT_VALUE_IMPORTANT(value) \
-    ((value) & CSS_PPT_VALUE_FLAG_IMPORTANT)
+    ((value) & CSS_PPT_VALUE_MARK_IMPORTANT)
 #define MARK_CSS_PPT_VALUE_IMPORTANT(value) \
-    ((value) |= CSS_PPT_VALUE_FLAG_IMPORTANT)
+    ((value) |= CSS_PPT_VALUE_MARK_IMPORTANT)
 
 /* The flag only apply to computed property value */
-#define CSS_PPT_VALUE_FLAG_ALLOCATED       0x10000000
+#define CSS_PPT_VALUE_MARK_ALLOCATED       0x10000000
 
 #define IS_CSS_PPT_VALUE_ALLOCATED(value) \
-    ((value) & CSS_PPT_VALUE_FLAG_ALLOCATED)
+    ((value) & CSS_PPT_VALUE_MARK_ALLOCATED)
 #define MARK_CSS_PPT_VALUE_ALLOCATED(value) \
-    ((value) |= CSS_PPT_VALUE_FLAG_ALLOCATED)
+    ((value) |= CSS_PPT_VALUE_MARK_ALLOCATED)
 #define CLEAR_CSS_PPT_VALUE_ALLOCATED(value) \
-    ((value) &= ~CSS_PPT_VALUE_FLAG_ALLOCATED)
+    ((value) &= ~CSS_PPT_VALUE_MARK_ALLOCATED)
 
 #include "csspropertyvalue.inc"
 
