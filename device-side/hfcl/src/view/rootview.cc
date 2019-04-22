@@ -31,7 +31,7 @@
 namespace hfcl {
 
 RootView::RootView()
-    : ViewContainer(NULL, NULL, 0)
+    : ViewContainer(NULL, "root", 0)
     , m_window(0)
     , m_root_csc(0)
 {

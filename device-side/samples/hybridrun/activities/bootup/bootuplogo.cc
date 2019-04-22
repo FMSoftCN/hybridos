@@ -62,6 +62,11 @@ bool BootupLogo::onGifAnimateNotify(ViewEvent* event)
 
 bool BootupLogo::handler(Event* event)
 {
+    if (event == NULL) {
+        _WRN_PRINTF("event is NULL");
+        return STOP_DISPATCH;
+    }
+
     if (event->eventType() == Event::ET_TIMER
             && m_timer_id == ((TimerEvent *)event)->timerID()) {
 
