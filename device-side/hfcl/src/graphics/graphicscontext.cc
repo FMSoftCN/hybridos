@@ -278,27 +278,27 @@ void GraphicsContext::getTextDrawSize(const char *text, Logfont *f,
 {
     SIZE cz = {0, 0};
     int text_len = strlen (text);
-    Glyph32* glyphs = NULL;
-    GLYPHMAPINFO* glyphs_map = NULL;
+    Achar32* achars = NULL;
+    ACHARMAPINFO* achars_map = NULL;
 
-    int nr_glyphs = BIDIGetTextLogicalGlyphs (f, text, text_len, &glyphs,
-        &glyphs_map);
+    int nr_achars = BIDIGetTextLogicalAChars(f, text, text_len, &achars,
+        &achars_map);
 
-    if (nr_glyphs <= 0)
+    if (nr_achars <= 0)
         goto END;
 
     if (getBiDiFlag ()) {
-        BIDILogGlyphs2VisGlyphs (f, glyphs, nr_glyphs, glyphs_map);
+        BIDILogAChars2VisAChars (f, achars, nr_achars, achars_map);
     }
 
     SelectFont (m_data->m_context, f);
-    GetGlyphsExtent (m_data->m_context, glyphs, nr_glyphs, &cz);
+    GetACharsExtent (m_data->m_context, achars, nr_achars, &cz);
 
 END:
-    if (glyphs)
-        free (glyphs);
-    if (glyphs_map)
-        free (glyphs_map);
+    if (achars)
+        free (achars);
+    if (achars_map)
+        free (achars_map);
 
     *w = cz.cx;
     *h = cz.cy;

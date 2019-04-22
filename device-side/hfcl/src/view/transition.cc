@@ -146,7 +146,6 @@ static int UTF8ToUCS2 (Uint16 *ucs2, Uint8 *utf8)
 static inline bool is_bidi_right(unsigned char *_str)
 {
     int _clen;
-    Uint32 _dir;
     Uint16 _unicode = 0;
 
     if (_str == NULL){
@@ -164,10 +163,15 @@ static inline bool is_bidi_right(unsigned char *_str)
         return false;
     }
 
+    return false;
+
+#if 0
+    Uint32 _dir;
     if (GetGlyphBIDIType (GetSystemFont (SYSLOGFONT_WCHAR_DEF), (Glyph32)_unicode, &_dir))
         return (_dir == BIDI_TYPE_RTL || _dir == BIDI_TYPE_AL || _dir == BIDI_TYPE_AN);
 
     return false;
+#endif
 }
 
 bool RollTextTransition::DrawRollText(View *view, GraphicsContext* context,
