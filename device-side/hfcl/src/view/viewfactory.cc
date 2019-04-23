@@ -1,0 +1,60 @@
+/*
+** HFCL - HybridOS Foundation Class Library
+**
+** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
+**
+** This file is part of HFCL.
+**
+** This program is free software: you can redistribute it and/or modify
+** it under the terms of the GNU General Public License as published by
+** the Free Software Foundation, either version 3 of the License, or
+** (at your option) any later version.
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#include "view/viewfactory.h"
+
+namespace hfcl {
+
+ViewFactory *ViewFactory::s_single = 0;
+
+bool ViewFactory::registerView(const char *vtag, CB_VIEW_CREATOR creator)
+{
+    TagViewMap::iterator it = m_map.find(vtag);
+    if (it == m_map.end ()) {
+        m_map [vtag] = creator;
+        return true;
+    }
+
+    return false;
+}
+
+View *ViewFactory::create(const char* vtag, const char* vclass, const char* vname, int vid)
+{
+    TagViewMap::iterator it = m_map.find(vtag);
+    if (it == m_map.end ()) {
+        return NULL;
+    }
+
+    CB_VIEW_CREATOR creator = m_map [vtag];
+    return creator(vclass, vname, vid);
+}
+
+void ViewFactory::list()
+{
+    TagViewMap::iterator it;
+
+    for (it = m_map.begin(); it != m_map.end(); it++) {
+        _MG_PRINTF("view creator for tag (%s): %p", it->first, it->second);
+    }
+}
+
+} // namespace hfcl
+

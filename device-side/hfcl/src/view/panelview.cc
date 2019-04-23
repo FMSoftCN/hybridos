@@ -19,6 +19,7 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "view/viewfactory.h"
 #include "view/panelview.h"
 #include "graphics/image.h"
 #include "drawable/imagedrawable.h"
@@ -114,6 +115,6 @@ void PanelView::drawBackground(GraphicsContext* context, IntRect &rc)
     }
 }
 
-DEFINE_CLASS_NAME(PanelView)
+AUTO_REGISTER_VIEW(hvpanel, PanelView);
 
 } // namespace hfcl

@@ -152,12 +152,12 @@
 
 #define end_client
 
-#define begin_view(ViewClass)
-#define begin_view_ex(ViewClass, css_class, vname, vid)
+#define begin_view(vtag)
+#define begin_view_ex(vtag, vclass, vname, vid)
 #define end_view
 
 #define import_view(view_id)
-#define begin_import_view(ViewClass, view_resid)
+#define begin_import_view(vtag, view_resid)
 #define end_import_view
 
 #define set(Name, value)

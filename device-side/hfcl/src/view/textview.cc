@@ -21,6 +21,7 @@
 
 #include "view/textview.h"
 
+#include "view/viewfactory.h"
 #include "common/helpers.h"
 #include "graphics/textmode.h"
 #include "view/transition.h"
@@ -384,6 +385,8 @@ bool TextView::isNeedRoll()
     return false;
 #endif
 }
+
+AUTO_REGISTER_VIEW(hvtext, TextView);
 
 } // namespace hfcl
 

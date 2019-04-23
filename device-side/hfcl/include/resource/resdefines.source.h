@@ -185,10 +185,10 @@ static int* array_quad_int (int a, int b, int c, int d)
         }
 
 // create an anonymous view without specific CSS class, name, and id
-#define begin_view(ViewClass) \
+#define begin_view(vtag) \
     do { \
         ViewContainer *__saved_parent = _parent; \
-        ViewClass* __view = HFCL_NEW_EX(ViewClass, (NULL, NULL, 0)); \
+        View* __view = CreateViewByTag(#vtag); \
         if (_parent) \
             _parent->addChild(__view); \
         else \
@@ -198,11 +198,11 @@ static int* array_quad_int (int a, int b, int c, int d)
         else \
             _parent = NULL;
 
-// create a view with CSS class, name, and id
-#define begin_view_ex(ViewClass, css_class, vname, vid) \
+// create a view with tag, class, name, and id
+#define begin_view_ex(vtag, vclass, vname, vid) \
     do { \
         ViewContainer *__saved_parent = _parent; \
-        ViewClass* __view = HFCL_NEW_EX(ViewClass, (css_class, vname, vid)); \
+        View* __view = CreateViewByTag(#vtag, vclass, vname, vid); \
         if (_parent) \
             _parent->addChild(__view); \
         else \

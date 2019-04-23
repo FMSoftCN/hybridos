@@ -24,6 +24,7 @@
 
 #include "view/view.h"
 #include "view/viewcontainer.h"
+#include "view/viewfactory.h"
 #include "view/rootview.h"
 #include "view/panelview.h"
 #include "view/textview.h"

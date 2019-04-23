@@ -49,11 +49,11 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
         begin_client(logo)
             def_name(view_animation_logo)
             def_name(event_animation_logo)
-            begin_view(PanelView)
+            begin_view(hvpanel)
                 set(Id, 100)
                 mystyle(BackgroundColor, rgba(255, 255, 255, 255))
                 // animate view
-                begin_view(GifView)
+                begin_view(hvgiv)
                     map(my_var(view_animation_logo))
                     on(Event::ET_VIEW, my_var(event_animation_logo))
                 end_view
@@ -64,7 +64,7 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
         end_client
 
         begin_client(greet)
-            begin_view(TextView)
+            begin_view(hvtext)
                 set(Content, "Welcome to the world of <em>HybridOS</em>!")
             end_view
 

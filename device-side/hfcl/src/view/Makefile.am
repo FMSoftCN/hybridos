@@ -5,6 +5,7 @@ noinst_LTLIBRARIES=libhfcl_view.la
 
 AM_CPPFLAGS=-D__HFCL_LIB__ -I../../include
 libhfcl_view_la_SOURCES = \
+    viewfactory.cc \
     view.cc \
     viewcontainer.cc \
     scrollbar.cc \

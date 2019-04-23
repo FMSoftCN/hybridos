@@ -3,6 +3,7 @@ myincludedir=$(includedir)/hfcl/view
 
 # Which header files to install
 myinclude_HEADERS= \
+    viewfactory.h \
     view.h \
     viewcontainer.h \
     viewcontext.h \

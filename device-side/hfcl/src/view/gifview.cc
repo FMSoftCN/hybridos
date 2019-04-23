@@ -21,6 +21,7 @@
 
 #include "view/gifview.h"
 
+#include "view/viewfactory.h"
 #include "graphics/graphicscontext.h"
 #include "graphics/gifanimate.h"
 #include "services/timerservice.h"
@@ -233,5 +234,7 @@ bool GifView::handler(Event* event)
 
     return GOON_DISPATCH;
 }
+
+AUTO_REGISTER_VIEW(hvgif, GifView);
 
 } // namespace hfcl
