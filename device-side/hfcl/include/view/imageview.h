@@ -57,7 +57,7 @@ public:
     bool setReplaceColor(Uint32 color);
 
     /* overloaded virtual functions */
-    virtual const char* type() const { return "hvimg"; }
+    virtual const char* tag() const { return "hvimg"; }
     virtual void drawContent(GraphicsContext* context, IntRect &rc);
 
 protected:

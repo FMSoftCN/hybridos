@@ -50,7 +50,7 @@ public:
     const RealRect& viewport() const { return m_viewport; }
 
     /* overloaded public virtual functions */
-    virtual const char* type() const { return "hvroot"; }
+    virtual const char* tag() const { return "hvroot"; }
     virtual bool isRoot() const { return true; }
     virtual Window* getSysWindow() const { return m_window; }
 

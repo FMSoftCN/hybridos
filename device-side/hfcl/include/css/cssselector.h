@@ -36,9 +36,9 @@ public:
     CssSelector() {}
     ~CssSelector() {}
 
-    const utf8string& getType() const { return m_type; }
-    void setType(utf8string& type) {
-        m_type = type;
+    const utf8string& getTag() const { return m_tag; }
+    void setTag(utf8string& tag) {
+        m_tag = tag;
     }
 
     void addIdentifier(utf8string& str) {
@@ -68,7 +68,7 @@ public:
 friend class CssSelectorGroup;
 
 private:
-    utf8string m_type;
+    utf8string m_tag;
     CssSelectorPieceVec m_identifiers;
     CssSelectorPieceVec m_classes;
     CssSelectorPieceVec m_attributes;

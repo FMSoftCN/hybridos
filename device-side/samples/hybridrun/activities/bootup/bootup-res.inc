@@ -64,20 +64,8 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
         end_client
 
         begin_client(greet)
-            begin_view_ex(PanelView, "test", "", 0)
-                begin_view(TextView)
-                    set(Text, "Welcome to the world of ")
-                end_view
-                begin_view_ex(TextView, "strong", "", 0)
-                    set(Text, "HybridOS")
-                end_view
-                begin_view(TextView)
-                    set(Text, "!")
-                end_view
-            end_view
-
             begin_view(TextView)
-                set(Text, "Welcome to the world of <em>HybridOS</em>!")
+                set(Content, "Welcome to the world of <em>HybridOS</em>!")
             end_view
 
             apply_css_group(sysid_css_group(global))

@@ -72,7 +72,7 @@ public:
     LoopType loopType(void) { return m_loopType; }
 
     /* overloaded virtual functions */
-    virtual const char* type() const { return "hvgif"; }
+    virtual const char* tag() const { return "hvgif"; }
     virtual void onPaint(GraphicsContext* context);
     virtual bool handler(Event* event);
 

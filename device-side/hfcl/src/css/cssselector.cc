@@ -36,15 +36,15 @@ namespace hfcl {
 
 class View {
 public:
-    View(const char* type, const char* cls, const char* name,
+    View(const char* tag, const char* cls, const char* name,
          const char* attr, const char* ps_ele, const char* ps_cls)
-        : m_id(0), m_type(type), m_cls(cls), m_name(name)
+        : m_id(0), m_tag(tag), m_cls(cls), m_name(name)
         , m_attr(attr), m_ps_ele(ps_ele), m_ps_cls(ps_cls) {
         m_cls += ' ';
     }
     virtual ~View() {}
 
-    const char* type() const { return m_type.c_str(); }
+    const char* tag() const { return m_tag.c_str(); }
     const char* getName() const { return m_name.c_str(); }
     void genSelector(std::string& str) const;
 
@@ -54,7 +54,7 @@ public:
     bool checkPseudoClass(const char* pseudoCls) const;
 
     int m_id;
-    std::string m_type;
+    std::string m_tag;
     std::string m_cls;
     std::string m_name;
     std::string m_attr;
@@ -80,7 +80,7 @@ static void add_space (std::string& str)
 
 void View::genSelector(std::string& str) const
 {
-    str = m_type;
+    str = m_tag;
     str += "#";
     str += m_name;
     str += ".";
@@ -202,7 +202,7 @@ bool CssSelectorGroup::compileSingle(char* token, CssSelector& one)
         switch (*scan) {
         case '*':
             str = new utf8string("");
-            one.setType(*str);
+            one.setTag(*str);
             tag_set = true;
             scan++;
             break;
@@ -210,7 +210,7 @@ bool CssSelectorGroup::compileSingle(char* token, CssSelector& one)
         case '.':
             if (!tag_set) {
                 str = new utf8string("");
-                one.setType(*str);
+                one.setTag(*str);
                 tag_set = true;
             }
 
@@ -228,7 +228,7 @@ bool CssSelectorGroup::compileSingle(char* token, CssSelector& one)
         case '#':
             if (!tag_set) {
                 str = new utf8string("");
-                one.setType(*str);
+                one.setTag(*str);
                 tag_set = true;
             }
 
@@ -246,7 +246,7 @@ bool CssSelectorGroup::compileSingle(char* token, CssSelector& one)
         case '[':
             if (!tag_set) {
                 str = new utf8string("");
-                one.setType(*str);
+                one.setTag(*str);
                 tag_set = true;
             }
 
@@ -268,7 +268,7 @@ bool CssSelectorGroup::compileSingle(char* token, CssSelector& one)
         case ':':
             if (!tag_set) {
                 str = new utf8string("");
-                one.setType(*str);
+                one.setTag(*str);
                 tag_set = true;
             }
 
@@ -300,7 +300,7 @@ bool CssSelectorGroup::compileSingle(char* token, CssSelector& one)
             if (isalpha(*scan)) {
                 str = get_token(scan);
                 if (str) {
-                    one.setType (*str);
+                    one.setTag (*str);
                     scan += str->length();
                     tag_set = true;
                     break;
@@ -371,8 +371,8 @@ int CssSelectorGroup::match(const View* view, DWORD& specif) const
         // Ref: https://www.w3.org/TR/CSS22/cascade.html#specificity
         QDWORD a = 0, b = 0, c = 0, d = 0;
 
-        const utf8string& type = one->getType();
-        if (type.compare("") && type.compare(view->type()))
+        const utf8string& tag = one->getTag();
+        if (tag.compare("") && tag.compare(view->tag()))
             continue;
         d++;
 
@@ -473,7 +473,7 @@ void CssSelectorGroup::_print()
         const CssSelector* one = *it;
 
         printf ("One selector: \n");
-        printf ("   Type: %s\n", one->getType().c_str());
+        printf ("   Type: %s\n", one->getTag().c_str());
 
         {
             // check id: once an id matched

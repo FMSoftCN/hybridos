@@ -61,7 +61,7 @@ public:
     bool isRolling() { return m_flags & ROLLING; }
 
     /* overloaded virtual functions */
-    virtual const char* type() const { return "hvtext"; }
+    virtual const char* tag() const { return "hvtext"; }
     virtual void drawContent(GraphicsContext* context, IntRect &rc);
 
     /* to be deprecated */

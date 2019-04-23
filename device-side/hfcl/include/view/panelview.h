@@ -35,7 +35,7 @@ public:
     virtual ~PanelView();
 
     /* overloaded virtual functions */
-    virtual const char* type() const { return "hvpanel"; }
+    virtual const char* tag() const { return "hvpanel"; }
 
     //Image* getBkImage();
     bool setBkColor(const DWORD color);

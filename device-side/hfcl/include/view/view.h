@@ -104,6 +104,11 @@ public:
     const char* getName() const { return m_name.c_str(); }
     bool setName(const char* name);
 
+    // methods to get/set content of the view
+    // return the text content of this view
+    virtual const char* getContent() const { return NULL; }
+    virtual bool setContent(const char* content) { return TRUE; }
+
     // Operators for CSS class of the view
     const char* getClasses() { return m_cssCls.c_str(); }
     bool setClasses(const char* cssClses);
@@ -199,8 +204,8 @@ public:
     bool checkAttribute(const char* attrKey, const char* attrValue) const;
     bool checkAttribute(const char* attrPair) const;
 
-    // return the HVML type, e.g., hvroot, hvtext, hvimg, hvli, and so on
-    virtual const char* type() const = 0;
+    // return the HVML tag, e.g., hvroot, hvtext, hvimg, hvli, and so on
+    virtual const char* tag() const = 0;
     virtual bool isContainer() const { return false; }
     virtual bool isRoot() const { return false; }
     virtual bool isReplaced() const { return false; }
