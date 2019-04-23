@@ -61,7 +61,7 @@
 #define my_image(name)
 #define my_css(name)
 #define my_css_group(name)
-#define my_ui(name)
+#define my_client(name)
 #define my_menu(name)
 
 // text resource
@@ -145,13 +145,13 @@
 #define addSubMenu(str, imge, id)
 
 //UI resource
-#define begin_activities
-#define end_activities
+#define begin_clients
+#define end_clients
 
 #define apply_css_group(cssg_id)
 
-#define begin_activity(name)
-#define end_activity
+#define begin_client(name)
+#define end_client
 
 #define begin_view(ViewClass)
 #define begin_view_ex(ViewClass, css_class, vname, vid)

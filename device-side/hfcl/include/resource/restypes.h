@@ -33,7 +33,7 @@ typedef enum {
     R_TYPE_FONT,
     R_TYPE_CSS,
     R_TYPE_CSSGROUP,
-    R_TYPE_ACTIVITY,
+    R_TYPE_CLIENT,
     R_TYPE_MENU,
     R_TYPE_BINARY,
     /* the following ones will be deperacated */
@@ -182,11 +182,11 @@ typedef struct MENU_RES_ARRAY
     void * Menufunction;
 } MENU_RES_ARRAY;
 
-typedef struct ACT_RES_ARRAY
+typedef struct CLIENT_RES_ARRAY
 {
     unsigned int UiID;
     void * UiFunction;
-} ACT_RES_ARRAY;
+} CLIENT_RES_ARRAY;
 
 ///// BMPFont information
 typedef struct TRBMPDevFontItemInfo {

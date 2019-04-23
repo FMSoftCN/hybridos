@@ -79,7 +79,7 @@
 #undef my_css
 #undef my_css_group
 #undef my_menu
-#undef my_ui
+#undef my_client
 
 // text resource
 #undef begin_text_res
@@ -122,13 +122,13 @@
 #undef end_css_group_res
 
 // UI resource
-#undef begin_activities
-#undef end_activities
+#undef begin_clients
+#undef end_clients
 
 #undef apply_css_group
 
-#undef begin_activity
-#undef end_activity
+#undef begin_client
+#undef end_client
 
 #undef begin_view
 #undef begin_view_ex

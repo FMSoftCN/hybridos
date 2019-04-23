@@ -62,7 +62,7 @@
 #define my_image(name)
 #define my_css(name)
 #define my_css_group(name)
-#define my_ui(name)
+#define my_client(name)
 #define my_menu(name)
 
 // sys resource
@@ -141,16 +141,16 @@
 #define end_css_group_res  RESID(cssg_end_id), };
 
 //Activity resource
-#define begin_activities \
-    enum { RESID(act_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_ACTIVITY, 0),
+#define begin_clients \
+    enum { RESID(client_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_CLIENT, 0),
 
-#define end_activities RESID(act_end_id) };
+#define end_clients RESID(client_end_id) };
 
 #define apply_css_group(cssg_id)
 
-#define begin_activity(name)  RESID(act_##name),
+#define begin_client(name)  RESID(client_##name),
 
-#define end_activity
+#define end_client
 
 #define begin_view(ViewClass)
 #define begin_view_ex(ViewClass, css_class, vname, vid)

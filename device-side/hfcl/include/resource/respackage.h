@@ -114,8 +114,8 @@ public:
     bool addFontResource(const ResourceEntry *fonts);
     bool addCssResource(CssDeclared* cssDeclared);
     bool addCssGroupResource(CssDeclaredGroup* cssGroup);
-    bool addActResource(HTResId id, CB_CREATE_VIEW createView);
-    bool addActResource(ACT_RES_ARRAY *pUIArray, int nUICount);
+    bool addClientResource(HTResId id, CB_CREATE_VIEW createView);
+    bool addClientResource(CLIENT_RES_ARRAY *pUIArray, int nUICount);
     bool addMenuResource(HTResId id, CB_CREATE_MENU createMenu);
     bool addMenuResource(MENU_RES_ARRAY *pMnuArray, int nMenuCount);
 
@@ -185,7 +185,7 @@ private:
     MENU_RES_ARRAY *m_pMenuResArray;
     unsigned int    m_MenuArrayCount;
 
-    ACT_RES_ARRAY *  m_pUIResArray;
+    CLIENT_RES_ARRAY *  m_pUIResArray;
     unsigned int    m_UIArrayCount;
 
     // ---------------- \|/ -----------------

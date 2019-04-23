@@ -321,7 +321,7 @@ View* CreateViewFromRes(HTResId id, ViewContainer *parent,
 {
     ResPackage * resPkg = GetResPackageById(RPKGID(id));
 
-    if(resPkg && (RESTYPE(id) & R_TYPE_ACTIVITY))
+    if(resPkg && (RESTYPE(id) & R_TYPE_CLIENT))
         return resPkg->createView(id, parent, viewContext, provider);
 
     return NULL;

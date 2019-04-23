@@ -35,7 +35,7 @@ BootupLogo::BootupLogo(Controller* owner, int view_id, Window* window,
     : ControllerClient(owner, view_id, window)
     , m_animateview(NULL)
 {
-    View* view = CreateViewFromRes (HRESNAME(bootup, act, logo),
+    View* view = CreateViewFromRes (HRESNAME(bootup, client, logo),
             m_rootView, this, NULL);
 
     m_animateview->setGifAnimate (
