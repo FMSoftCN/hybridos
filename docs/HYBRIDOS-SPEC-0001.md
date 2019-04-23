@@ -8,7 +8,7 @@ Status: Proposal
 
 *Copyright Notice*
 
-Copyright (C) 2018 [FMSoft Technologies]  
+Copyright (C) 2018, 2019 [FMSoft Technologies]  
 All Rights Reserved.
 
 ## Introduction
@@ -54,37 +54,65 @@ and the framework to define a device app in JavaScript language.
 `HVML` means HybridOS View Markup Language, which defines some extended HTML5 tags.
 There are four main tags: `app`, `act`, `tmpl`, and `view`.
 
-* app: define an app.
-* act: define an activity.
-* tmpl: define a template.
-* view: define a view.
+* `app`: define an app.
+* `act`: define an activity.
+* `tmpl`: define a template.
+* `view`: define a view.
 
 For example, to define a UI, we use the HVML tag `view`:
 
-    <view hbd-type="panel" hbd-name="main">
+    <view type="panel" class="CLASS" name="NAME" id="IDENTIFIER" content="CONTENT">
     </view>
 
 We introduce some properties for the tags:
 
-1. hbd-name: The name of a view and an activity. Generally, the value of this
-   property will be a variable which you can refer to in your JavaScript or C++
-   program.
-2. hbd-type: The view type. It specifies the type of a view. Currently, HybridOS
-    provides the following view types:
-    * HiddenView
-    * ImageView
-    * TextView
-    * PanelView
-    * ListView
-    * ItemView
-    * InputView
-    * EditBoxView
-    * CanvasView
+1. `type`: The view type. It specifies the type of a view. Currently, HybridOS
+provides the following view types:
+  * `text`: A paragraph of text.
+  * `static-image`: A static image.
+  * `animated-image`: An animated-image, which use multiple images or a GIF
+picture for the animation.
+  * `panel`: A container.
+  * `list`: A container; a list view can generate the items by using a template.
+  * `item`: A super view for iteration from a template.
+  * `canvas`: A view provides the ability to draw content by the app.
+  * `progress`:
+  * `dropdown`:
+  * `tooltip`:
+  * `popover`:
+  * `input-button`:
+  * `input-checkbox`:
+  * `input-color`:
+  * `input-date`:
+  * `input-datetime`:
+  * `input-datetime-local`:
+  * `input-email`:
+  * `input-file`:
+  * `input-hidden`:
+  * `input-image`:
+  * `input-month`:
+  * `input-number`:
+  * `input-password`:
+  * `input-radio`:
+  * `input-range`:
+  * `input-reset`:
+  * `input-search`:
+  * `input-submit`:
+  * `input-tel`:
+  * `input-text`:
+  * `input-time`:
+  * `input-url`:
+  * `input-week`:
 
-    * ProgressView
-    * DropdownView
-    * TooltipView
-    * PopoverView
+1. `class`: A standard HTML5 property, which specifies the class of the view.
+
+1. `name`: A standard HTML5 property, which specifies the name of an app,
+an activity, a view, or a template, Generally, the value of this property
+will be a variable which you can refer to in your JavaScript or C++ code.
+
+1. `id`: A standard HTML5 property, which specifies the identifier of an app,
+an activity, a view, or a template, Generally, the value of this property
+will be a variable which you can refer to in your JavaScript or C++ code.
 
 ### Tag app
 
@@ -96,15 +124,42 @@ We introduce some properties for the tags:
 
 ### Tag properties
 
-### Differences from the standard HTML5 tags
+### Differences between HVML and HTML5
 
-We DO NOT use text in the tags like:
+1. HVML is defined for user interfaces not documents
 
-    <view>I am Vincent</view>
+1. No history compatibility issues
 
-Therefore, the DOM tree does not contain any text element. However, the HybridOS JavaScript
-library will create the text elements if need when we embed a HybridOS activity in a HTML5
-webpage. Especially if there is a `TextView`.
+1. Easy to localize
+
+In HTML5, we define a text paragraph like this:
+
+    <view type="text">
+        Welcome to the world of <em>HybridOS</em>!
+    </view>
+
+When we want to localize the paragraph for other locale, we generally
+generate a different webpage for the locale.
+
+However, in HVML, we define a text paragraph in the following way:
+
+    <view type="text" content="$Welcome to the world of <em>HybridOS</em>!">
+    </view>
+
+So a JavaScript or C++ code can easily translate the content into other
+locale by using a GNU message file or a JSON table.
+
+Note that the text view of HVML supports the following HTML5 tags for
+text formatting:
+
+    <em> <strong> <dfn> <code> <samp> <kbd> <var> <cite> <a>
+
+The text view also supports the following HTML5 tags for Unicode bidirectional
+override:
+
+    <bdo>
+
+You can still use CSS to define the styles for these tags.
 
 ## A Sample
 
@@ -117,28 +172,28 @@ user item, the app will show the detailed information of the user.
 The following markup statements define the user list activity:
 
     <!-- The user list activity -->
-    <act hbd-name="userList" hbd-app="firstSample">
+    <act name="userList" hbd-app="firstSample">
 
-        <!-- define a template view based on the standard item view for future use -->
-        <tmpl hbd-type="UserItemView:ItemView" class="userItem">
-            <view hbd-type="HiddenView" hbd-name="id" />
+        <!-- define a template based on the standard item view for future use -->
+        <tmpl type="user-item:item" class="userItem">
+            <view type="hidden" name="id" />
             </view>
-            <view hbd-type="ImageView" hbd-name="avatar" />
+            <view type="image" name="avatar" />
             </view>
-            <view hbd-type="TextView" hbd-name="name" />
+            <view type="text" name="name" />
             </view>
         </tmpl>
 
-        <view hbd-type="panel" hbd-name="thePanel" class="panel">
-            <view hbd-type="TextView" hbd-name="theHeader" hbd-content="$STRID_TITLE"
+        <view type="panel" name="thePanel" class="panel">
+            <view type="text" name="theHeader" content="$STRID_TITLE"
                     class="panel-header">
             </view>
-            <view hbd-type="ListView" hbd-name="theList" class="userList">
+            <view type="list" name="theList" class="userList">
                 <!-- use userItem view and iterate the view with an array variable: users -->
-                <view hbd-type="UserItemView" hbd-iterate-by="users">
+                <view type="user-item" hbd-iterate-by="users">
                 </view>
             </view>
-            <view hbd-type="TextView" hbd-name="theFooter" hbd-content="$STRID_COPYING"
+            <view type="text" name="theFooter" content="$STRID_COPYING"
                     class="panel-footer">
             </view>
         </view>
@@ -167,9 +222,9 @@ The following markup statements define the user list activity:
 The following markup statements define the user information activity:
 
     <!-- The user information activity -->
-    <act hbd-name="theUserInfo" hbd-scope="firstSample">
+    <act name="theUserInfo" hbd-scope="firstSample">
 
-        <view hbd-type="panel" hbd-name="main" class="">
+        <view type="panel" name="main" class="">
         </view>
 
         <script>
@@ -201,7 +256,7 @@ entry of the app and control the different activities.
 
 An app can be defined by using the following markup statements:
 
-    <app hbd-name="firstSample">
+    <app name="firstSample">
         <!-- define the assets of the app, such as the activities, images, L10N text, CSS, and so on -->
         <assets>
             <meta name="act:userList" content="userlist.hvml" />
@@ -234,14 +289,14 @@ An app can be defined by using the following markup statements:
 
 Obviously, if you use the method above to define the app, you need prepare three files:
 
-* firstsample.hvml: the app;
-* userlist.hvml: the `userList` activity;
-* userinfo.hvml: the `userInfo` activity.
+* `firstsample.hvml`: the app;
+* `userlist.hvml`: the `userList` activity;
+* `userinfo.hvml`: the `userInfo` activity.
 
 Otherwise, if your app is a simple one, you can organize your code in the following manner
 to use only one file:
 
-    <app hbd-name="firstSample">
+    <app name="firstSample">
         <assets>
             <meta name="act:userList" content="userlist.hvml" />
             <meta name="act:userInfo" content="userinfo.hvml" />
@@ -251,11 +306,11 @@ to use only one file:
             <link rel="stylesheet" type="text/css" href="/firstSample/assets/default.css" />
         </assets>
 
-        <act hbd-name="userList" hbd-app="firstSample">
+        <act name="userList" hbd-app="firstSample">
             ...
         </act>
 
-        <act hbd-name="userInfo" hbd-app="firstSample">
+        <act name="userInfo" hbd-app="firstSample">
             ...
         </act>
 
@@ -290,16 +345,16 @@ It is possible to embed a HybridOS app into an existed HTML5 page:
 
             <p>This page shows howto embedded a HybridOS app in a HTML5 page.</p>
 
-            <app hbd-name="firstSample">
+            <app name="firstSample">
                 <assets>
                     ...
                 </assets>
 
-                <act hbd-name="userList" hbd-app="firstSample">
+                <act name="userList" hbd-app="firstSample">
                     ...
                 </act>
 
-                <act hbd-name="userInfo" hbd-app="firstSample">
+                <act name="userInfo" hbd-app="firstSample">
                     ...
                 </act>
 
@@ -327,8 +382,9 @@ Different from webpages, HVML handles the L10N text as an asset of an app.
 HAE (the HVML user agent) loads the L10N file in JSON and translate the
 localization text according to the identifier.
 
-If you specify a content of `TextView` with a string started with `$`, the
+If you specify a content of `text` with a string started with `$`, the
 string will be treated as the identifier of a text instead of the literal text.
+To escape from the rule, use `\$` for the prefix.
 
 The content of a L10N text file will look like:
 
@@ -337,6 +393,7 @@ The content of a L10N text file will look like:
         "locale": "zh_CN",
         "STRID_TITLE": "HybridOS 的第一个示例应用",
         "STRID_COPYRING": "版权所有 (C) 2018 飞漫软件",
+        "Welcome to the world of <em>HybridOS</em>!": "欢迎来到 <em>HybridOS</em> 的世界！",
     }
 
 Obviously, `app` and `locale` are reserved keywords for L10N text file.
@@ -358,7 +415,7 @@ The following HTML5 Technologies will be supported in the future releases:
 
 ## Extended JavaScript Objects
 
-HybridOS will provide the following exteneded JavaScript Objects for app:
+HybridOS will provide the following extended JavaScript Objects for app:
 
 * SQLite for local database.
 * hBus for communication with the local system services.

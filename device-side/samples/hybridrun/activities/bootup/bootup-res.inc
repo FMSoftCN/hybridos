@@ -49,7 +49,6 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
         begin_ui_res(logo)
             def_name(view_animation_logo)
             def_name(event_animation_logo)
-            // back panel
             begin_view(PanelView)
                 set(Id, 100)
                 mystyle(BackgroundColor, rgba(255, 255, 255, 255))
@@ -65,13 +64,20 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
         end_ui_res
 
         begin_ui_res(greet)
-            def_name(view_greet_text)
-            // back panel
-            begin_view(PanelView)
+            begin_view_ex(PanelView, "test", "", 0)
                 begin_view(TextView)
-                    mystyle(Color, rgb(255, 0, 0))
-                    map(my_var(view_greet_text))
+                    set(Text, "Welcome to the world of ")
                 end_view
+                begin_view_ex(TextView, "strong", "", 0)
+                    set(Text, "HybridOS")
+                end_view
+                begin_view(TextView)
+                    set(Text, "!")
+                end_view
+            end_view
+
+            begin_view(TextView)
+                set(Text, "Welcome to the world of <em>HybridOS</em>!")
             end_view
 
             apply_css_group(sysid_css_group(global))

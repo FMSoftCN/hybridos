@@ -8,7 +8,7 @@ Status: Proposal
 
 *Copyright Notice*
 
-Copyright (C) 2018 [FMSoft Technologies]  
+Copyright (C) 2018, 2019 [FMSoft Technologies]  
 All Rights Reserved.
 
 ## Introduction
@@ -54,55 +54,55 @@ the UI resource file will be like:
         begin_assets()
             image(defAvatar, "assets/def-avatar.png")
 
-            begin_style_sheet(userAvatar)
-                style(Display,      HS_DISPLAY_INLINE_BLOCK)
-                style(Position,     HS_POSITION_RELATIVE)
-                style(Margin,       HS_METRICS_UNIT_PX, 0, 0, 0, 0)
-                style(Padding,      HS_METRICS_UNIT_PX, 0, 0, 0, 0)
-                style(Height,       HS_METRICS_UNIT_PX, 20)
-                style(Width,        HS_METRICS_UNIT_PX, 20)
-                style(BorderRadius, HS_METRICS_UNIT_PX, 5, 5, 5, 5)
-            end_style_sheet
+            begin_css(userAvatar)
+                style(Display,      PV_INLINE_BLOCK)
+                style(Position,     PV_RELATIVE)
+                style(Margin,       PV_LENGTH_PX, 0, 0, 0, 0)
+                style(Padding,      PV_LENGTH_PX, 0, 0, 0, 0)
+                style(Height,       PV_LENGTH_PX, 20)
+                style(Width,        PV_LENGTH_PX, 20)
+                style(BorderRadius, PV_LENGTH_PX, 5, 5, 5, 5)
+            end_css
 
-            begin_style_sheet(userName)
-                style(Display,      HS_DISPLAY_INLINE_BLOCK)
+            begin_css(userName)
+                style(Display,      PV_INLINE_BLOCK)
                 style(Color,        Color::BLACK)
                 style(Background,   Color::WHITE, ...)
-                style(Height,       HS_METRICS_UNIT_PX, 20)
-                style(Width,        HS_METRICS_UNIT_PX, HS_METRICS_AUTO)
-            end_style_sheet
+                style(Height,       PV_LENGTH_PX, 20)
+                style(Width,        PV_LENGTH_PX, HS_METRICS_AUTO)
+            end_css
 
-            begin_style_sheet(userItem)
+            begin_css(userItem)
                 style(Display,      HS_DISPLAY_BLOCK)
-                style(Height,       HS_METRICS_UNIT_PX, 20)
-                style(Width,        HS_METRICS_UNIT_PX, 120)
+                style(Height,       PV_LENGTH_PX, 20)
+                style(Width,        PV_LENGTH_PX, 120)
                 style(Border,       HS_BORDER_SOLID, Color::GRAY, 1)
-                style(BorderRadius, HS_METRICS_UNIT_PX, 5, 5, 5, 5)
-            end_style_sheet
+                style(BorderRadius, PV_LENGTH_PX, 5, 5, 5, 5)
+            end_css
 
-            begin_style_sheet(activeItem)
+            begin_css(activeItem)
                 style(Color,        Color::WHITE)
                 style(Background,   Color::BLUE, ...)
-            end_style_sheet
+            end_css
 
-            begin_style_sheet(userList)
+            begin_css(userList)
                 style(Display,      HS_DISPLAY_BLOCK)
                 style(Color,        Color::BLACK)
                 style(Background,   Color::WHITE, ...)
-                style(Margin,       HS_METRICS_UNIT_PX, 5, 10, 5, 10)
-                style(Padding,      HS_METRICS_UNIT_PX, 10, 10, 10, 10)
-                style(Width,        HS_METRICS_UNIT_PX, HS_METRICS_AUTO)
-                style(Height,       HS_METRICS_UNIT_PX, 100)
+                style(Margin,       PV_LENGTH_PX, 5, 10, 5, 10)
+                style(Padding,      PV_LENGTH_PX, 10, 10, 10, 10)
+                style(Width,        PV_LENGTH_PX, HS_METRICS_AUTO)
+                style(Height,       PV_LENGTH_PX, 100)
                 style(Overflow,     HS_OVERFLOW_SCROLL)
-            end_style_sheet
+            end_css
 
-            begin_style_sheet(panelHeader)
+            begin_css(panelHeader)
                 ...
-            end_style_sheet
+            end_css
 
-            begin_style_sheet(panelFooter)
+            begin_css(panelFooter)
                 ...
-            end_style_sheet
+            end_css
         end_assets
 
         begin_activity(userList)
@@ -149,30 +149,30 @@ the UI resource file will be like:
 
     end_app
 
-This file (assume named `firstsample.res.c") will be pre-compiled by 
+This file (assume named `firstsample.res.inc") will be pre-compiled by 
 your C++ compiler in a magic way:
 
 * In a C++ header file, include the resource file in the following way
   to generate the identifiers and names of the resource:
 
-        #include "resdefines.head.h"
-        #include "firstsample.res.c"
-        #include "resundefines.h"
+        #include <hfcl/resource/resdefines.head.h>
+        #include "firstsample.res.inc"
+        #include <hfcl/resource/resundefines.h>
 
-        #include "resdefines.name.h"
-        #include "firstsample.res.c"
-        #include "resundefines.h"
+        #include <hfcl/resource/resdefines.name.h>
+        #include "firstsample.res.inc"
+        #include <hfcl/resource/resundefines.h>
 
 * In a C++ source file, include the resource file in the following way to
   generate the source code and the initialization code:
 
-        #include "resdefines.source.h"
-        #include "firstsample.res.c"
-        #include "resundefines.h"
+        #include <hfcl/resource/resdefines.source.h>
+        #include "firstsample.res.inc"
+        #include <hfcl/resource/resundefines.h>
 
-        #include "resdefines.init.h"
-        #include "firstsample.res.c"
-        #include "resundefines.h"
+        #include <hfcl/resource/resdefines.init.h>
+        #include "firstsample.res.inc"
+        #include <hfcl/resource/resundefines.h>
 
 By using the method described above, we do not need a utility tool
 to interpret the resource file and generate the souce code, the C++
@@ -203,22 +203,22 @@ the style sheet of the user name corresponds to the following CSS definition:
     }
 
 For performance reason, we do not use the direct literal CSS definition in HFCL.
-We use the marcros to define every style element in C++ way instead:
+We use the macros to define every style element in C++ way instead:
 
-    begin_style_sheet(userAvatar)
-        style(Display,      HS_DISPLAY_INLINE_BLOCK)
-        style(Position,     HS_POSITION_RELATIVE)
-        style(Margin,       HS_METRICS_UNIT_PX, 0, 0, 0, 0)
-        style(Padding,      HS_METRICS_UNIT_PX, 0, 0, 0, 0)
-        style(Height,       HS_METRICS_UNIT_PX, 20)
-        style(Width,        HS_METRICS_UNIT_PERCENT, 100)
-        style(BorderRadius, HS_METRICS_UNIT_PX, 5, 5, 5, 5)
-    end_style_sheet
+    begin_css(userAvatar, ".avatar")
+        style(Display,      PV_INLINE_BLOCK)
+        style(Position,     PV_RELATIVE)
+        style(Margin,       PV_LENGTH_PX,   0)
+        style(Padding,      PV_LENGTH_PX,   0)
+        style(Height,       PV_LENGTH_PX,   20.0f)
+        style(Width,        PV_PERCENTAGE,  100.0f)
+        style(BorderRadius, PV_LENGTH_PX,   5.0f)
+    end_css
 
-In the definition of a view which uses a style sheet, we passed the name of
-the style sheet in the following way:
+In the definition of a view which uses a style sheet, we passed the class of
+the way:
 
-    begin_view(ImageView, my_style_sheet(userAvatar)))
+    begin_view_ex(hvimage, "avatar", ...))
         ...
     end_view
 

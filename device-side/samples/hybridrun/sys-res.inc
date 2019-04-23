@@ -48,13 +48,13 @@ begin_sys_respkg
 
     // global fonts
     begin_font_res()
-        font(xxs,  "ttf-HanSans-srncnn-*-10-UTF-8")
-        font(xs,   "ttf-HanSans-srncnn-*-12-UTF-8")
-        font(sm,   "ttf-HanSans-srncnn-*-14-UTF-8")
-        font(nm,   "ttf-HanSans-srncnn-*-16-UTF-8")
-        font(lg,   "ttf-HanSans-srncnn-*-20-UTF-8")
-        font(xl,   "ttf-HanSans-srncnn-*-26-UTF-8")
-        font(xxl,  "ttf-HanSans-srncnn-*-36-UTF-8")
+        font(xxs,  "ttf-HanSans-rrncns-*-10-UTF-8")
+        font(xs,   "ttf-HanSans-rrncns-*-12-UTF-8")
+        font(sm,   "ttf-HanSans-rrncns-*-14-UTF-8")
+        font(nm,   "ttf-HanSans-rrncns-*-16-UTF-8")
+        font(lg,   "ttf-HanSans-rrncng-*-20-UTF-8")
+        font(xl,   "ttf-HanSans-rrncng-*-26-UTF-8")
+        font(xxl,  "ttf-HanSans-rrncng-*-36-UTF-8")
     end_font_res
 
     // CSS
