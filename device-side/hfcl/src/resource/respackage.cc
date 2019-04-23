@@ -305,8 +305,8 @@ ResPackage::ResPackage(const char *name, int id,
     m_ImagReseSize = 0;
     m_pMenuResArray= NULL;
     m_MenuArrayCount = 0;
-    m_pUIResArray = NULL;
-    m_UIArrayCount = 0;
+    m_pClientArray = NULL;
+    m_nClientCount = 0;
 
     // m_incoreRes = incoreRes;
 
@@ -396,8 +396,8 @@ bool ResPackage::addClientResource(HTResId id, CB_CREATE_VIEW cb_createView)
 
 bool ResPackage::addClientResource(CLIENT_RES_ARRAY *pUIArray, int nUICount)
 {
-    m_pUIResArray = pUIArray;
-    m_UIArrayCount = nUICount;
+    m_pClientArray = pUIArray;
+    m_nClientCount = nUICount;
 
     return true;
 }
@@ -539,7 +539,7 @@ void *ResPackage::getRes(HTResId id)
         return (void *)getCss(id);
 
     case R_TYPE_CLIENT:
-        return (void *)getUi(id);
+        return (void *)getClient(id);
 
     case R_TYPE_MENU:
         return (void *)getMenu(id);
@@ -700,14 +700,14 @@ CssDeclaredGroup *ResPackage::getCssGroup(HTResId id)
     return m_resBuckets[RESTYPE(id)].cssGroupRes()[idx];
 }
 
-CB_CREATE_VIEW ResPackage::getUi(HTResId id)
+CB_CREATE_VIEW ResPackage::getClient(HTResId id)
 {
     unsigned int idx = RESINDEX(id) - 1;
     if (R_TYPE_CLIENT != RESTYPE(id) || idx < 0
-            || idx >= m_UIArrayCount)
+            || idx >= m_nClientCount)
         return (CB_CREATE_VIEW)NULL;
 
-    return (CB_CREATE_VIEW)m_pUIResArray[idx].UiFunction;
+    return (CB_CREATE_VIEW)m_pClientArray[idx].UiFunction;
 }
 
 View *ResPackage::createView(HTResId id,

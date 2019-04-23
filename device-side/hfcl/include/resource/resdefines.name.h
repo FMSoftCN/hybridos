@@ -144,7 +144,7 @@
 #define addSubMenuEx(str, imge, id, disable, drset)
 #define addSubMenu(str, imge, id)
 
-//UI resource
+// clients resource
 #define begin_clients
 #define end_clients
 

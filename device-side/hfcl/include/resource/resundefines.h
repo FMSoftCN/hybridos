@@ -121,7 +121,7 @@
 #undef end_css_group
 #undef end_css_group_res
 
-// UI resource
+// Client resource
 #undef begin_clients
 #undef end_clients
 

@@ -158,13 +158,13 @@
 
 #define end_css_group_res
 
-// UI resource
+// client resource
 #define begin_clients \
-    static CLIENT_RES_ARRAY UIArray[] = {
+    static CLIENT_RES_ARRAY ClientArray[] = {
 
 #define end_clients \
     }; \
-    resPkg->addClientResource(UIArray, sizeof(UIArray)/sizeof(CLIENT_RES_ARRAY));
+    resPkg->addClientResource(ClientArray, sizeof(ClientArray)/sizeof(CLIENT_RES_ARRAY));
 
 #define apply_css_group(cssg_id)
 

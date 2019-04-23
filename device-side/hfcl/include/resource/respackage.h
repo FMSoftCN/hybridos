@@ -115,7 +115,7 @@ public:
     bool addCssResource(CssDeclared* cssDeclared);
     bool addCssGroupResource(CssDeclaredGroup* cssGroup);
     bool addClientResource(HTResId id, CB_CREATE_VIEW createView);
-    bool addClientResource(CLIENT_RES_ARRAY *pUIArray, int nUICount);
+    bool addClientResource(CLIENT_RES_ARRAY *pClientArray, int nClientCount);
     bool addMenuResource(HTResId id, CB_CREATE_MENU createMenu);
     bool addMenuResource(MENU_RES_ARRAY *pMnuArray, int nMenuCount);
 
@@ -142,7 +142,7 @@ public:
     CssDeclared *getCss(HTResId id);
     CssDeclaredGroup *getCssGroup(HTResId id);
 
-    CB_CREATE_VIEW getUi(HTResId id);
+    CB_CREATE_VIEW getClient(HTResId id);
     CB_CREATE_MENU getMenu(HTResId id);
     View *createView(HTResId id, ViewContainer *parent, ViewContext *viewContext,
         ContentProvider *provider = NULL);
@@ -185,8 +185,8 @@ private:
     MENU_RES_ARRAY *m_pMenuResArray;
     unsigned int    m_MenuArrayCount;
 
-    CLIENT_RES_ARRAY *  m_pUIResArray;
-    unsigned int    m_UIArrayCount;
+    CLIENT_RES_ARRAY *m_pClientArray;
+    unsigned int    m_nClientCount;
 
     // ---------------- \|/ -----------------
     const TRDrawableArrayItem* m_drawableResource;
