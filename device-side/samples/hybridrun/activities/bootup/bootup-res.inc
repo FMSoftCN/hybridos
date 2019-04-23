@@ -28,20 +28,42 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
 
     // CSS resource
     begin_css_res
-        begin_css(def1, ".test")
-            style(BackgroundColor, PV_COLOR_RED)
+        begin_css(centerimg, ".img-center")
+            style(Width,        PV_AUTO)
+            style(Height,       PV_LENGTH_PX, 100)
+            style(Margin,       PV_AUTO)
+            style(TextAlign,    PV_CENTER)
+            style(LineHeight,   PV_LENGTH_PX, 100.0f)
+            style(WhiteSpace,   PV_NOWRAP)
+            style(TextOverflow, PV_ELLIPSIS)
         end_css
-        begin_css(def2, ".test")
-            style(BackgroundColor, PV_COLOR_RED)
+        begin_css(vcenter1, ".line-vcenter")
+            style(Width,        PV_AUTO)
+            style(Height,       PV_LENGTH_PX, 100.0f)
+            style(Margin,       PV_AUTO)
+            style(TextAlign,    PV_CENTER)
+            style(LineHeight,   PV_LENGTH_PX, 100.0f)
+            style(WhiteSpace,   PV_NOWRAP)
+            style(Overflow,     PV_ELLIPSIS)
+        end_css
+        begin_css(vcenter2, ".text-vcenter")
+            style(Width,            PV_AUTO)
+            style(Margin,           PV_AUTO)
+            style(TextAlign,        PV_CENTER)
+            style(PaddingTop,       PV_LENGTH_PX, 100.0f)
+            style(PaddingBottom,    PV_LENGTH_PX, 100.0f)
+            style(PaddingLeft,      PV_LENGTH_PX, 10.0f)
+            style(PaddingRight,     PV_LENGTH_PX, 10.0f)
         end_css
     end_css_res
 
     begin_css_group_res
         begin_css_group(logo)
-            css(def1)
+            css(centerimg)
         end_css_group
         begin_css_group(greet)
-            css(def2)
+            css(vcenter1)
+            css(vcenter2)
         end_css_group
     end_css_group_res
 
@@ -64,8 +86,12 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
         end_client
 
         begin_client(greet)
-            begin_view(hvtext)
+            begin_view_ex(hvtext, "single-line-vcenter", NULL, 0)
                 set(Content, "Welcome to the world of <em>HybridOS</em>!")
+            end_view
+
+            begin_view_ex(hvtext, "multi-line-vcenter", NULL, 0)
+                set(Content, "HybridOS is a totally new open source operating system designed for smart IoT devices and cloud computing environment.")
             end_view
 
             apply_css_group(sysid_css_group(global))

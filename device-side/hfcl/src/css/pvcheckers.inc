@@ -1618,6 +1618,23 @@ static bool pvc_text_orientation(Uint32 value, HTPVData data)
     ;
 }
 
+static bool pvc_text_overflow(Uint32 value, HTPVData data)
+{
+    static int valid_keywords[] = {
+        PVK_CLIP,
+        PVK_ELLIPSIS,
+        PVK_UNDEFINED
+    };
+
+    if (CSS_PPT_VALUE_TYPE(value) == PVT_KEYWORD) {
+        if (check_keyword(CSS_PPT_VALUE_KEYWORD(value), valid_keywords))
+            return true;
+    }
+
+    return false
+    ;
+}
+
 static bool pvc_text_transform(Uint32 value, HTPVData data)
 {
     static int valid_keywords[] = {
@@ -1941,6 +1958,7 @@ static PV_CHECKER* _pv_checkers[] = {
     pvc_text_indent,
     pvc_text_justify,
     pvc_text_orientation,
+    pvc_text_overflow,
     pvc_text_transform,
     pvc_top,
     pvc_unicode_bidi,
