@@ -122,8 +122,8 @@
 #undef end_css_group_res
 
 // Client resource
-#undef begin_clients
-#undef end_clients
+#undef begin_client_res
+#undef end_client_res
 
 #undef apply_css_group
 

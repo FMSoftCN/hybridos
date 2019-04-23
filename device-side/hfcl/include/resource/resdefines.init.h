@@ -159,10 +159,10 @@
 #define end_css_group_res
 
 // client resource
-#define begin_clients \
+#define begin_client_res \
     static CLIENT_RES_ARRAY ClientArray[] = {
 
-#define end_clients \
+#define end_client_res \
     }; \
     resPkg->addClientResource(ClientArray, sizeof(ClientArray)/sizeof(CLIENT_RES_ARRAY));
 

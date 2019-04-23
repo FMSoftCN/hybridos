@@ -141,10 +141,10 @@
 #define end_css_group_res  RESID(cssg_end_id), };
 
 //Activity resource
-#define begin_clients \
+#define begin_client_res \
     enum { RESID(client_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_CLIENT, 0),
 
-#define end_clients RESID(client_end_id) };
+#define end_client_res RESID(client_end_id) };
 
 #define apply_css_group(cssg_id)
 

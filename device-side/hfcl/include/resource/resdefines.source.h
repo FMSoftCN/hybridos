@@ -166,8 +166,8 @@ static int* array_quad_int (int a, int b, int c, int d)
 #define end_css_group_res
 
 // client resource
-#define begin_clients
-#define end_clients
+#define begin_client_res
+#define end_client_res
 
 #define begin_client(name)  \
     static View* create_client_##name(ViewContainer* parent, ViewContext* viewCtxt, ContentProvider* cntProvider) { \

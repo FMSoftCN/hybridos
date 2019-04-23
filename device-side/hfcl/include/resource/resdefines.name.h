@@ -145,8 +145,8 @@
 #define addSubMenu(str, imge, id)
 
 // clients resource
-#define begin_clients
-#define end_clients
+#define begin_client_res
+#define end_client_res
 
 #define apply_css_group(cssg_id)
 

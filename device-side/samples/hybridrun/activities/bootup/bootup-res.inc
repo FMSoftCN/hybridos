@@ -45,7 +45,7 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
         end_css_group
     end_css_group_res
 
-    begin_clients
+    begin_client_res
         begin_client(logo)
             def_name(view_animation_logo)
             def_name(event_animation_logo)
@@ -71,7 +71,7 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
             apply_css_group(sysid_css_group(global))
             apply_css_group(my_css_group(greet))
         end_client
-    end_clients
+    end_client_res
 
 end_respkg
 
