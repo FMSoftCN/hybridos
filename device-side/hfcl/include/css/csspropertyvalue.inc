@@ -194,6 +194,8 @@ typedef enum _CssPropertyIds {
     PID_TEXT_JUSTIFY,
     // text-orientation
     PID_TEXT_ORIENTATION,
+    // text-overflow
+    PID_TEXT_OVERFLOW,
     // text-transform
     PID_TEXT_TRANSFORM,
     // top
@@ -320,6 +322,7 @@ typedef enum _CssPropertyValueKeywords {
     PVK_CAPITALIZE,
     PVK_CENTER,
     PVK_CIRCLE,
+    PVK_CLIP,
     PVK_CLOSE_QUOTE,
     PVK_COLLAPSE,
     PVK_COLOR_ALICEBLUE,
@@ -477,6 +480,7 @@ typedef enum _CssPropertyValueKeywords {
     PVK_DEFAULT,
     PVK_DISC,
     PVK_E_RESIZE,
+    PVK_ELLIPSIS,
     PVK_EMBED,
     PVK_END,
     PVK_FANTASY,
@@ -3051,6 +3055,12 @@ typedef enum _CssPropertyValueKeywords {
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_SIDEWAYS)
 #define PV_UPRIGHT \
     MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_UPRIGHT)
+
+// Values for property text-overflow
+#define PV_CLIP \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_CLIP)
+#define PV_ELLIPSIS \
+    MAKE_CSS_PPT_VALUE(PVT_KEYWORD, PVK_ELLIPSIS)
 
 // Values for property text-transform
 // flag for value &full-size-kana

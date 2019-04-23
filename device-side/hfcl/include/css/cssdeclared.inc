@@ -633,6 +633,11 @@
         return Css::setProperty(PID_TEXT_ORIENTATION, value);
     }
 
+    // Operators for property text-overflow
+    bool setTextOverflow(Uint32 value) {
+        return Css::setProperty(PID_TEXT_OVERFLOW, value);
+    }
+
     // Operators for property text-transform
     bool setTextTransform(Uint32 value) {
         return Css::setProperty(PID_TEXT_TRANSFORM, value);

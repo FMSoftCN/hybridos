@@ -538,6 +538,11 @@ text-combine-upright
     initial: none
     inherited: yes
 
+text-overflow
+    values: clip ellipsis
+    initial: clip
+    inherited: no
+
 # A pseudo property to define some values for shorthand properties
 hvml-pseudo
     values: justify-all
