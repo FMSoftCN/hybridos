@@ -140,17 +140,17 @@
 
 #define end_css_group_res  RESID(cssg_end_id), };
 
-//UI resource
-#define begin_uis \
-    enum { RESID(ui_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_UI, 0),
+//Activity resource
+#define begin_activities \
+    enum { RESID(act_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_ACTIVITY, 0),
 
-#define end_uis RESID(ui_end_id) };
+#define end_activities RESID(act_end_id) };
 
 #define apply_css_group(cssg_id)
 
-#define begin_ui_res(name)  RESID(ui_##name),
+#define begin_activity(name)  RESID(act_##name),
 
-#define end_ui_res
+#define end_activity
 
 #define begin_view(ViewClass)
 #define begin_view_ex(ViewClass, css_class, vname, vid)

@@ -63,7 +63,7 @@
 #define my_image(name)          (RESID(img_##name))
 #define my_css(name)            (RESID(css_##name))
 #define my_css_group(name)      (RESID(css_group_##name))
-#define my_ui(name)             (RESID(ui_##name))
+#define my_act(name)            (RESID(act_##name))
 #define my_menu(name)           (RESID(menu_##name))
 
 // sys resource
@@ -159,19 +159,19 @@
 #define end_css_group_res
 
 // UI resource
-#define begin_uis \
-    static UI_RES_ARRAY UIArray[] = {
+#define begin_activities \
+    static ACT_RES_ARRAY UIArray[] = {
 
-#define end_uis \
+#define end_activities \
     }; \
-    resPkg->addUIResource(UIArray, sizeof(UIArray)/sizeof(UI_RES_ARRAY));
+    resPkg->addActResource(UIArray, sizeof(UIArray)/sizeof(ACT_RES_ARRAY));
 
 #define apply_css_group(cssg_id)
 
-#define begin_ui_res(name)  \
-        { RESID(ui_##name), (void *)create_ui_##name},
+#define begin_activity(name)  \
+        { RESID(act_##name), (void *)create_act_##name},
 
-#define end_ui_res
+#define end_activity
 
 #define begin_view(ViewClass)
 #define begin_view_ex(ViewClass, view_css_class, vname, vid)

@@ -145,13 +145,13 @@
 #define addSubMenu(str, imge, id)
 
 //UI resource
-#define begin_uis
-#define end_uis
+#define begin_activities
+#define end_activities
 
 #define apply_css_group(cssg_id)
 
-#define begin_ui_res(name)
-#define end_ui_res
+#define begin_activity(name)
+#define end_activity
 
 #define begin_view(ViewClass)
 #define begin_view_ex(ViewClass, css_class, vname, vid)

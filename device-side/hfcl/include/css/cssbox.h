@@ -134,30 +134,30 @@ protected:
     CssComputed* m_css;
 };
 
-// A sub-inline-box for splitted inline box contained in a line box.
-class CssSubInlineBox : public CssBox {
+// Inline-level boxes that are not inline boxes (such as replaced
+// inline-level elements, inline-block elements, and inline-table elements)
+// are called atomic inline-level boxes because they participate
+// in their inline formatting context as a single opaque box.
+//
+// Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-boxes
+class CssAtomicInlineLevelBox : public CssBox {
 public:
-    CssSubInlineBox(CssComputed* css, const Glyph32* glyphs, int nr_glyphs,
-                HTReal x, HTReal y, HTReal cw, HTReal ch)
-            : CssBox(css, false)
-            , m_glyphs(glyphs), m_nr_glyphs(nr_glyphs) {
-
-        setOffset(x, y);
+    CssAtomicInlineLevelBox(CssComputed* css, HTReal cw, HTReal ch)
+            : CssBox(css, false) {
         setContentWidth(cw);
         setContentHeight(ch);
     };
 
-    virtual ~CssSubInlineBox() {};
+    virtual ~CssAtomicInlineLevelBox() {};
 
     /* virtual functions */
     virtual void calcBox(const View* view, CssBox* ctnBlock);
 
 private:
-    const Glyph32* m_glyphs;
-    int m_nr_glyphs;
 };
 
-// Line box
+// The rectangular area that contains the boxes that form a line is called
+// a line box.
 //
 // Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
 class CssLineBox {
@@ -172,14 +172,13 @@ private:
     HTReal m_x, m_y;
     HTReal m_w, m_h;
     HTReal m_left_space;
-    bool m_ltr;
 
     std::vector<const CssBox*> m_sub_boxes;
 };
 
 // The box acts as an inline box for non-atomic inline element.
 //
-// Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
+// Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-boxes
 class CssInlineBox : public CssBox {
 public:
     CssInlineBox(CssComputed* css, bool anonymous = false);
@@ -201,9 +200,6 @@ private:
 // A inline-level box container contains only inline-level boxes.
 // One contained box is either an atomic inline-level box,
 // or an inline box.
-//
-// Note that HFCL does not support anonymous inline boxes.
-// User should create all inline boxes explicitly.
 //
 // Ref: https://www.w3.org/TR/CSS22/visuren.html#inline-formatting
 class CssInlineBoxContainer : public CssBox {

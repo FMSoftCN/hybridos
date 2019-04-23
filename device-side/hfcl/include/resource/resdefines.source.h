@@ -64,7 +64,7 @@
 #define my_image(name)          (RESID(img_##name))
 #define my_css(name)            (RESID(css_##name))
 #define my_css_group(name)      (RESID(css_group_##name))
-#define my_ui(name)             (RESID(ui_##name))
+#define my_ui(name)             (RESID(act_##name))
 #define my_menu(name)           (RESID(menu_##name))
 
 //text resource
@@ -166,15 +166,15 @@ static int* array_quad_int (int a, int b, int c, int d)
 #define end_css_group_res
 
 // UI resource
-#define begin_uis
-#define end_uis
+#define begin_activities
+#define end_activities
 
-#define begin_ui_res(name)  \
-    static View* create_ui_##name(ViewContainer* parent, ViewContext* viewCtxt, ContentProvider* cntProvider) { \
+#define begin_activity(name)  \
+    static View* create_act_##name(ViewContainer* parent, ViewContext* viewCtxt, ContentProvider* cntProvider) { \
         View *_view_created = NULL; \
         ViewContainer *_parent = parent;
 
-#define end_ui_res \
+#define end_activity \
         return _view_created; \
     }
 

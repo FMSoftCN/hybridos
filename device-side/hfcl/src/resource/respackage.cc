@@ -67,7 +67,7 @@ ResourceBucket::~ResourceBucket()
             HFCL_DELETE((FontResVec *)resouces);
         break;
 
-    case R_TYPE_UI:
+    case R_TYPE_ACTIVITY:
         if (resouces)
             HFCL_DELETE((UiResVec *)resouces);
         break;
@@ -387,14 +387,14 @@ bool ResPackage::addCssGroupResource(CssDeclaredGroup* cssGroup)
     return true;
 }
 
-bool ResPackage::addUIResource(HTResId id, CB_CREATE_VIEW cb_createView)
+bool ResPackage::addActResource(HTResId id, CB_CREATE_VIEW cb_createView)
 {
-    m_resBuckets[R_TYPE_UI].uiRes().push_back(cb_createView);
+    m_resBuckets[R_TYPE_ACTIVITY].uiRes().push_back(cb_createView);
 
     return true;
 }
 
-bool ResPackage::addUIResource(UI_RES_ARRAY *pUIArray, int nUICount)
+bool ResPackage::addActResource(ACT_RES_ARRAY *pUIArray, int nUICount)
 {
     m_pUIResArray = pUIArray;
     m_UIArrayCount = nUICount;
@@ -538,7 +538,7 @@ void *ResPackage::getRes(HTResId id)
     case R_TYPE_CSS:
         return (void *)getCss(id);
 
-    case R_TYPE_UI:
+    case R_TYPE_ACTIVITY:
         return (void *)getUi(id);
 
     case R_TYPE_MENU:
@@ -703,7 +703,7 @@ CssDeclaredGroup *ResPackage::getCssGroup(HTResId id)
 CB_CREATE_VIEW ResPackage::getUi(HTResId id)
 {
     unsigned int idx = RESINDEX(id) - 1;
-    if (R_TYPE_UI != RESTYPE(id) || idx < 0
+    if (R_TYPE_ACTIVITY != RESTYPE(id) || idx < 0
             || idx >= m_UIArrayCount)
         return (CB_CREATE_VIEW)NULL;
 

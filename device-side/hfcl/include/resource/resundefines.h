@@ -122,13 +122,13 @@
 #undef end_css_group_res
 
 // UI resource
-#undef begin_uis
-#undef end_uis
+#undef begin_activities
+#undef end_activities
 
 #undef apply_css_group
 
-#undef begin_ui_res
-#undef end_ui_res
+#undef begin_activity
+#undef end_activity
 
 #undef begin_view
 #undef begin_view_ex

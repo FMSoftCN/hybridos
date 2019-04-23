@@ -45,8 +45,8 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
         end_css_group
     end_css_group_res
 
-    begin_uis
-        begin_ui_res(logo)
+    begin_activities
+        begin_activity(logo)
             def_name(view_animation_logo)
             def_name(event_animation_logo)
             begin_view(PanelView)
@@ -61,9 +61,9 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
 
             apply_css_group(sysid_css_group(global))
             apply_css_group(my_css_group(logo))
-        end_ui_res
+        end_activity
 
-        begin_ui_res(greet)
+        begin_activity(greet)
             begin_view_ex(PanelView, "test", "", 0)
                 begin_view(TextView)
                     set(Text, "Welcome to the world of ")
@@ -82,8 +82,8 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
 
             apply_css_group(sysid_css_group(global))
             apply_css_group(my_css_group(greet))
-        end_ui_res
-    end_uis
+        end_activity
+    end_activities
 
 end_respkg
 

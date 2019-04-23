@@ -59,11 +59,6 @@ void CssBox::calcBox(const View* view, CssBox* ctnBlock)
     m_css->calcHeightsMargins(view, ctnBlock, this);
 }
 
-// For splitted inline boxes
-void CssSubInlineBox::calcBox(const View* view, CssBox* ctnBlock)
-{
-}
-
 CssLineBox::~CssLineBox()
 {
 }
