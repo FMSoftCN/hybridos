@@ -126,5 +126,7 @@ void RegisterIncoreRes (const char* resname,
 #define RESID_PKG_TYPE(pkg, type, name) R_##pkg##_##type##_##name
 #define RESID_PKG(pkg, name) R_##pkg##_##name
 
+#define _(text) GetText((text))
+
 #endif /* HFCL_RESOURCE_RESPKGMANAGER_H_ */
 

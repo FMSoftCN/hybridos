@@ -56,6 +56,11 @@ typedef struct {
     int y;
 } ViewClickEventStruct;
 
+enum {
+    VIEW_CONTENT_TYPE_TEXT,         // literal text
+    VIEW_CONTENT_TYPE_RESOURCE,     // loaded resource
+};
+
 class View : public Object {
 public:
     View(const char* vtag, const char* vtype = NULL,
@@ -111,10 +116,13 @@ public:
     bool setName(const char* name);
 
     // methods to get/set content of the view
-    const char* getContent() const;
-    size_t getContentLength() const;
-    bool setContent(const char* content);
-    bool setContent(int strId);
+    int getContentType() const;
+    const char* getTextContent() const;
+    HTResId getResourceContent() const;
+    size_t getTextContentLength() const;
+    bool setTextContent(const char* content);
+    bool setTextContent(HTStrId strId);
+    bool setResContent(HTResId resId);
 
     // methods to get/set alternative content of the view; for replaced element
     const char* getAlt() const;
@@ -419,10 +427,12 @@ protected:
     std::string m_cssCls;
     std::string m_name;
 
-    int m_contentId;    // >=0: valid string identifier else string object.
+    int     m_contentType;
+    HTStrId m_contentStrId;
+    HTResId m_contentResId;
     std::string m_contentStr;
 
-    int m_altId;        // >=0: valid string identifier else string object.
+    HTStrId m_altId;        // >=0: valid string identifier else string object.
     std::string m_altStr;
 
     const void* m_addData;

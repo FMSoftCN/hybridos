@@ -60,7 +60,8 @@ View::View(const char* vtag, const char* vtype,
     : m_id(vid)
     , m_cssCls(vclass ? vclass : "")
     , m_name(vname ? vname : "")
-    , m_contentId(-1)
+    , m_contentType(VIEW_CONTENT_TYPE_TEXT)
+    , m_contentStrId(-1)
     , m_altId(-1)
     , m_addData(0)
     , m_flags(0)
@@ -191,50 +192,72 @@ bool View::excludeClass(const char* cssCls)
     return true;
 }
 
-size_t View::getContentLength() const
+int View::getContentType() const
 {
-    if (m_contentId >= 0) {
-        return strlen(GetText(m_contentId));
-    }
-    else {
-        return m_contentStr.length();
+    return m_contentType;
+}
+
+size_t View::getTextContentLength() const
+{
+    if (m_contentType == VIEW_CONTENT_TYPE_TEXT) {
+        if (m_contentStrId >= 0) {
+            return strlen(GetText(m_contentStrId));
+        }
+        else {
+            return m_contentStr.length();
+        }
     }
 
     return 0;
 }
 
-const char* View::getContent() const
+const char* View::getTextContent() const
 {
-    if (m_contentId >= 0) {
-        return GetText(m_contentId);
-    }
-    else {
-        return m_contentStr.c_str();
+    if (m_contentType == VIEW_CONTENT_TYPE_TEXT) {
+        if (m_contentStrId >= 0) {
+            return GetText(m_contentStrId);
+        }
+        else {
+            return m_contentStr.c_str();
+        }
     }
 
     return NULL;
 }
 
-bool View::setContent(const char* content)
+bool View::setTextContent(const char* content)
 {
     if (NULL == content)
         content = "";
 
-    m_contentId = -1;
+    m_contentStrId = -1;
     m_contentStr = content;
+    m_contentType = VIEW_CONTENT_TYPE_TEXT;
 
     onContentChanged();
     return true;
 }
 
-bool View::setContent(int strId)
+bool View::setTextContent(HTStrId strId)
 {
-    if (strId < 0 || strId == m_contentId) {
+    if (strId < 0 || strId == m_contentStrId) {
         return false;
     }
 
-    m_contentId = strId;
+    m_contentStrId = strId;
     m_contentStr.clear();
+    m_contentType = VIEW_CONTENT_TYPE_TEXT;
+
+    onContentChanged();
+    return true;
+}
+
+bool View::setResContent(HTResId resId)
+{
+    m_contentResId = resId;
+    m_contentStrId = -1;
+    m_contentStr.clear();
+    m_contentType = VIEW_CONTENT_TYPE_RESOURCE;
 
     onContentChanged();
     return true;

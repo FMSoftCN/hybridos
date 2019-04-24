@@ -154,8 +154,8 @@
 #define end_client
 
 #define begin_view(vtag)
-#define begin_view_ex(vtag, vtype, vclass)
-#define begin_view_full(vtag, vtype, vclass, vname, vid)
+#define begin_view_ex(vtag, vclass)
+#define begin_view_full(vtag, vclass, vtype, vname, vid)
 #define end_view
 
 #define import_view(view_resid)

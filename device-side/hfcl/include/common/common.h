@@ -58,7 +58,7 @@
 
 /* HFCL types */
 typedef unsigned int    HTResId;
-typedef unsigned int    HTStrId;
+typedef int             HTStrId;
 typedef uintptr_t       HTHandle;
 typedef uintptr_t       HTData;
 

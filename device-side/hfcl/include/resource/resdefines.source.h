@@ -199,10 +199,10 @@ static int* array_quad_int (int a, int b, int c, int d)
             _parent = NULL;
 
 // create a view with tag, type, and class
-#define begin_view_ex(vtag, vtype, vclass) \
+#define begin_view_ex(vtag, vclass) \
     do { \
         ViewContainer *__saved_parent = _parent; \
-        View* __view = CreateViewByTagAndType(#vtag, vtype, vclass, NULL, 0); \
+        View* __view = CreateViewByTagAndType(#vtag, NULL, vclass, NULL, 0); \
         if (_parent) \
             _parent->addChild(__view); \
         else \
@@ -213,7 +213,7 @@ static int* array_quad_int (int a, int b, int c, int d)
             _parent = NULL;
 
 // create a view with tag, type, class, name, and id
-#define begin_view_full(vtag, vtype, vclass, vname, vid) \
+#define begin_view_full(vtag, vclass, vtype, vname, vid) \
     do { \
         ViewContainer *__saved_parent = _parent; \
         View* __view = CreateViewByTagAndType(#vtag, vtype, vclass, vname, vid); \
