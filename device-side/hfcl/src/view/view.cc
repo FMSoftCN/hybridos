@@ -965,6 +965,10 @@ void View::onHidden()
 {
 }
 
+void View::onDisabled()
+{
+}
+
 void View::onEnabled()
 {
 }
