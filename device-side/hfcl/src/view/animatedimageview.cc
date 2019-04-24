@@ -19,6 +19,12 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/*
+** animatedimageview.cc: The implementation of AnimatedImageView class.
+**
+** Create by WEI Yongming at 2019/04/24
+*/
+
 #include "view/animatedimageview.h"
 
 #include "view/viewfactory.h"

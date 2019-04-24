@@ -19,6 +19,12 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/*
+** viewcontainer.cc: The implementation of ViewContainer class.
+**
+** Create by WEI Yongming at 2018/10/27
+*/
+
 #include "view/viewcontainer.h"
 
 #include <typeinfo>

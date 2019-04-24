@@ -1,7 +1,7 @@
 /*
 ** HFCL - HybridOS Foundation Class Library
 **
-** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
+** Copyright (C) 2018, 2019 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
 **
@@ -17,6 +17,12 @@
 **
 ** You should have received a copy of the GNU General Public License
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+/*
+** view.cc: The implementation of View class.
+**
+** Create by WEI Yongming at 2018/10/27
 */
 
 #include "view/view.h"

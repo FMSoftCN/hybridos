@@ -19,6 +19,12 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/*
+** staticimageview.cc: The implementation of StaticImageView class.
+**
+** Create by WEI Yongming at 2019/04/24
+*/
+
 #include "view/staticimageview.h"
 
 #include "view/viewfactory.h"

@@ -8,11 +8,11 @@ libhfcl_view_la_SOURCES = \
     viewfactory.cc \
     view.cc \
     viewcontainer.cc \
-    scrollbar.cc \
     rootview.cc \
     panelview.cc \
     textview.cc \
     atomictextview.cc \
     animatedimageview.cc \
     staticimageview.cc \
+    scrollbar.cc \
     transition.cc

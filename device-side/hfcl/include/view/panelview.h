@@ -26,38 +26,16 @@
 #include "../graphics/graphicscontext.h"
 
 namespace hfcl {
-class Image;
 
-class PanelView : public ViewContainer
-{
+class PanelView : public ViewContainer {
 public:
     PanelView(const char* vtag, const char* vtype,
             const char* vclass = NULL, const char* vname = NULL, int vid = 0);
     virtual ~PanelView();
 
-    //Image* getBkImage();
-    bool setBkColor(const DWORD color);
-    bool setBkImage(const char * image_file);
-    bool setBkImageEx(Image* image);
-    bool setUpdate(bool update);
-
-    bool isUpdate(void){ return m_update;};
-
-    virtual void drawBackground(GraphicsContext* context, IntRect &rc);
-
-    void setImageDrawMode(int mode);
-
 protected:
-    enum {
-        FLAG_SHIFT = ViewContainer::FLAG_SHIFT
-    };
 
 private:
-    bool  m_update;
-    Image *m_bkImage;
-    int   m_imageDrawMode;
-    bool  m_bkColorBeSet;
-    DWORD m_bkColor;
 };
 
 } // namespace hfcl

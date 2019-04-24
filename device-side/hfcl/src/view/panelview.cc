@@ -1,7 +1,7 @@
 /*
 ** HFCL - HybridOS Foundation Class Library
 **
-** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
+** Copyright (C) 2018, 2019 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
 **
@@ -19,6 +19,12 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/*
+** panelview.cc: The implementation of PanelView class.
+**
+** Create by WEI Yongming at 2018/10/27
+*/
+
 #include "view/viewfactory.h"
 #include "view/panelview.h"
 #include "graphics/image.h"
@@ -29,91 +35,11 @@ namespace hfcl {
 PanelView::PanelView(const char* vtag, const char* vtype,
             const char* vclass, const char* vname, int vid)
     : ViewContainer(vtag, vtype, vclass, vname, vid)
-    , m_bkImage(NULL)
-    , m_imageDrawMode(DRAWMODE_NORMAL)
-    , m_bkColorBeSet(false)
 {
-    m_update = true;
 }
 
 PanelView::~PanelView()
 {
-    if (m_bkImage != NULL)
-    {
-        HFCL_DELETE(m_bkImage);
-    }
-}
-
-bool PanelView::setBkImage(const char * image_file)
-{
-    if (NULL == image_file) {
-        return false;
-    }
-
-    return setBkImageEx(Image::loadImage(image_file));
-}
-
-bool PanelView::setBkImageEx(Image* image)
-{
-    if(!image)
-        return false;
-
-    if (m_bkImage != NULL){
-        HFCL_DELETE(m_bkImage);
-    }
-    m_bkImage = image;
-    m_bkColorBeSet = false;
-    updateView();
-
-    return true;
-}
-
-bool PanelView::setBkColor(const DWORD color)
-{
-    if (m_bkImage != NULL)
-    {
-        HFCL_DELETE(m_bkImage);
-        m_bkImage = NULL;
-    }
-    m_bkColor = color;
-    m_bkColorBeSet = true;
-
-    updateView();
-    return true;
-}
-
-void PanelView::setImageDrawMode(int mode)
-{
-    m_imageDrawMode = mode;
-}
-
-bool PanelView::setUpdate(bool update) {
-    m_update = update;
-    return true;
-}
-
-void PanelView::drawBackground(GraphicsContext* context, IntRect &rc)
-{
-    if(m_update) {
-        if (m_bkImage != NULL) {
-            ImageFormat f;
-            f.drawMode = m_imageDrawMode;
-            m_bkImage->paint(context, rc, f);
-        }
-        else if (m_bkColorBeSet) {
-            //_DBG_PRINTF("PanelView::drawBackground1>>>(%d,%d,%d,%d)",rc.left(),rc.right(),rc.top(),rc.bottom());
-            context->fillRect(rc, GetRValue(m_bkColor), GetGValue(m_bkColor), GetBValue(m_bkColor), GetAValue(m_bkColor));
-        }
-#if 0
-        else if (m_drset) {
-            //_DBG_PRINTF("PanelView::drawBackground2>>>(%d,%d,%d,%d)",rc.left(),rc.right(),rc.top(),rc.bottom());
-            if(isFocused())
-                m_drset->draw(context, DR_BKGND, DRAWSTATE_HILIGHT, rc);
-            else
-                m_drset->draw(context, DR_BKGND, DRAWSTATE_NORMAL, rc);
-        }
-#endif
-    }
 }
 
 AUTO_REGISTER_VIEW(hvpanel, PanelView);

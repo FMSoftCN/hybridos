@@ -19,6 +19,12 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/*
+** viewfactory.cc: The implementation of ViewFactory class.
+**
+** Create by WEI Yongming at 2019/04/23
+*/
+
 #include "view/viewfactory.h"
 
 namespace hfcl {
