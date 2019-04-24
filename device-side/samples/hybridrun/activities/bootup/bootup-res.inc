@@ -86,11 +86,11 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
         end_client
 
         begin_client(greet)
-            begin_view_ex(hvtext, "single-line-vcenter", NULL, 0)
+            begin_view_ex(hvtext, NULL, "single-line-vcenter")
                 set(Content, "Welcome to the world of <em>HybridOS</em>!")
             end_view
 
-            begin_view_ex(hvtext, "multi-line-vcenter", NULL, 0)
+            begin_view_ex(hvtext, NULL, "multi-line-vcenter")
                 set(Content, "HybridOS is a totally new open source operating system designed for smart IoT devices and cloud computing environment.")
             end_view
 

@@ -132,6 +132,7 @@
 
 #undef begin_view
 #undef begin_view_ex
+#undef begin_view_full
 #undef end_view
 
 #undef import_view

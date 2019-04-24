@@ -184,7 +184,7 @@ static int* array_quad_int (int a, int b, int c, int d)
             root->applyCssGroup(cssg_id); \
         }
 
-// create an anonymous view without specific CSS class, name, and id
+// create a view with tag but without type, class, name, and id
 #define begin_view(vtag) \
     do { \
         ViewContainer *__saved_parent = _parent; \
@@ -198,15 +198,29 @@ static int* array_quad_int (int a, int b, int c, int d)
         else \
             _parent = NULL;
 
-// create a view with tag, class, name, and id
-#define begin_view_ex(vtag, vclass, vname, vid) \
+// create a view with tag, type, and class
+#define begin_view_ex(vtag, vtype, vclass) \
     do { \
         ViewContainer *__saved_parent = _parent; \
-        View* __view = CreateViewByTag(#vtag, vclass, vname, vid); \
+        View* __view = CreateViewByTagAndType(#vtag, vtype, vclass, NULL, 0); \
         if (_parent) \
             _parent->addChild(__view); \
         else \
             _DBG_PRINTF("begin_view_ex: you are trying to create an ORPHAN view (Parent is not a contianer)\n"); \
+        if (__view->isContainer()) \
+            _parent = (ViewContainer*)__view; \
+        else \
+            _parent = NULL;
+
+// create a view with tag, type, class, name, and id
+#define begin_view_full(vtag, vtype, vclass, vname, vid) \
+    do { \
+        ViewContainer *__saved_parent = _parent; \
+        View* __view = CreateViewByTagAndType(#vtag, vtype, vclass, vname, vid); \
+        if (_parent) \
+            _parent->addChild(__view); \
+        else \
+            _DBG_PRINTF("begin_view_full: you are trying to create an ORPHAN view (Parent is not a contianer)\n"); \
         if (__view->isContainer()) \
             _parent = (ViewContainer*)__view; \
         else \

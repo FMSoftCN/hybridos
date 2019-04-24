@@ -87,9 +87,9 @@ We may also use the following standard HTML5 tags directly to define a view
 element:
 
 * `p`:
-* `input`: type button, submit, text, checkbox, radio, password, image, hidden,
+* `input`: button, submit, text, checkbox, radio, password, image, hidden,
 file, email, url, number, range, date, month, week, time, datetime, and
-localdatetime are supported.
+datetime-local will be supported.
 * `canvas`
 * `span`
 * `em`
@@ -132,23 +132,23 @@ will be a variable which you can refer to in your JavaScript or C++ code.
 
 In HTML5, we define a text paragraph like this:
 
-    <view type="text">
+    <p>
         Welcome to the world of <em>HybridOS</em>!
-    </view>
+    </p>
 
 When we want to localize the paragraph for other locale, we generally
 generate a different webpage for the locale.
 
 However, in HVML, we define a text paragraph in the following way:
 
-    <view type="text" content="$Welcome to the world of <em>HybridOS</em>!">
-    </view>
+    <hvtext content="$Welcome to the world of <em>HybridOS</em>!">
+    </hvtext>
 
 So a JavaScript or C++ code can easily translate the content into other
 locale by using a GNU message file or a JSON table.
 
-Note that the text view of HVML supports the following HTML5 tags for
-text formatting:
+Note that for the content of a `hvtext` element of HVML, you can embed
+the following HTML5 tags for text formatting:
 
     <em> <strong> <dfn> <code> <samp> <kbd> <var> <cite> <a>
 
@@ -182,18 +182,18 @@ The following markup statements define the user list activity:
             </view>
         </tmpl>
 
-        <view type="panel" name="thePanel" class="panel">
-            <view type="text" name="theHeader" content="$STRID_TITLE"
+        <view name="thePanel" class="panel">
+            <hvtext name="theHeader" content="$STRID_TITLE"
                     class="panel-header">
-            </view>
-            <view type="list" name="theList" class="userList">
+            </hvtext>
+            <hvlist name="theList" class="userList">
                 <!-- use userItem view and iterate the view with an array variable: users -->
-                <view type="user-item" hbd-iterate-by="users">
-                </view>
-            </view>
-            <view type="text" name="theFooter" content="$STRID_COPYING"
+                <hvitem type="user-item" hbd-iterate-by="users">
+                </hvitem>
+            </hvlist>
+            <hvtext name="theFooter" content="$STRID_COPYING"
                     class="panel-footer">
-            </view>
+            </hvtext>
         </view>
 
         <script>
