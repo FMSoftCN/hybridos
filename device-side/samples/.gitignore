@@ -22,3 +22,6 @@ Makefile.in
 /*config.h
 /*config.h.in
 
+# executables
+hybridrun/hybridrun
+
