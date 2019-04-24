@@ -21,4 +21,5 @@ Makefile.in
 /*.pc
 /*config.h
 /*config.h.in
+/*~
 
