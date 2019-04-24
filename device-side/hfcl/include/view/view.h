@@ -61,6 +61,12 @@ enum {
     VIEW_CONTENT_TYPE_RESOURCE,     // loaded resource
 };
 
+enum {
+    VIEW_TEXT_DIR_LTR,
+    VIEW_TEXT_DIR_RTL,
+    VIEW_TEXT_DIR_AUTO,
+};
+
 class View : public Object {
 public:
     View(const char* vtag, const char* vtype = NULL,
@@ -102,7 +108,7 @@ public:
     // return the HVML type, e.g., button, text, date, time, and so on
     const char* type() const { return m_type; }
 
-    // methods to get/set identifier (integer) of the view
+    // methods to get/set  (integer) of the view
     int getId() const { return m_id; }
     void setId(int id) { m_id = id; }
 
@@ -136,7 +142,43 @@ public:
     bool includeClass(const char* cssCls);
     bool excludeClass(const char* cssCls);
 
-    /* Operators to get/set flags (intrinsic attributes) of the view */
+    // methods to get/set text direction of the view
+    int getDir() const { return m_dir; }
+    void setDir(int dir);
+
+    // methods to get/set language of the view
+    LanguageCode getLang() const { return m_lang; }
+    void setLang(LanguageCode lang);
+
+    // methods to get/set tab index of the view
+    int getTabIndex() const { return m_tabIndex; }
+    void setTabIndex(int tabIndex) { m_tabIndex = tabIndex; }
+
+    // methods to get/set title of the view
+    const char* getTitle() const { return m_title.c_str(); }
+    void setTitle(const char* title) { m_title = title; }
+
+    // methods to get/set hidden attribute of the view
+    void setHidden(bool b) {
+        if (b)
+            hide();
+        else
+            show();
+    }
+    bool setVisible(bool b) { return setFlag(b, VA_VISIBLE); }
+
+    bool isVisible() { return m_flags & VA_VISIBLE; }
+    bool isHidden() { return !(m_flags & VA_VISIBLE); }
+    void show() {
+        setVisible(true);
+        onShown();
+    }
+    void hide() {
+        setVisible(false);
+        onHidden();
+    }
+
+    /* Operators to get/set flags of the view */
     bool isDisabled() { return m_flags & VA_DISABLED; }
     void disable() {
         bool old = setFlag(true, VA_DISABLED);
@@ -252,6 +294,8 @@ public:
     virtual void onClassChanged();
     virtual void onContentChanged();
     virtual void onAltChanged();
+    virtual void onShown();
+    virtual void onHidden();
     virtual void onDisabled();
     virtual void onEnabled();
     virtual void onChecked();
@@ -315,8 +359,6 @@ public:
 
     virtual bool isWrapperView() { return false; }
 
-    bool isVisible() { return m_flags & VA_VISIBLE; }
-
     void getSize(int *w, int *h) {
         if (w) *w = m_rect.width();
         if (h) *h = m_rect.height();
@@ -339,19 +381,8 @@ public:
         if (y) *y = m_rect.top();
     }
 
-    virtual void show() {
-        setVisible(true);
-        updateView();
-    }
-    virtual void hide() {
-        setVisible(false);
-        updateView();
-    }
-
     View(View* parent, DrawableSet* drset);
     View(int id, int x, int y, int w, int h);
-
-    bool setVisible(bool b) { return setFlag(b, VA_VISIBLE); }
 
     bool setRect(int left, int top, int right, int bottom) {
         return setRect(IntRect(left, top, right, bottom));
@@ -423,9 +454,15 @@ protected:
 
     char* m_tag;
     char* m_type;
+
     int m_id;
+    int m_dir;
+    int m_tabIndex;
+    LanguageCode m_lang;
+
     std::string m_cssCls;
     std::string m_name;
+    std::string m_title;
 
     int     m_contentType;
     HTStrId m_contentStrId;

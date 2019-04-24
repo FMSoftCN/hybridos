@@ -267,11 +267,11 @@ static int* array_quad_int (int a, int b, int c, int d)
         _parent = __saved_parent; \
     } while(0);
 
-// helpers for set view specific attribute
+// set common attributes
 #define set(Name, value) \
     __view->set##Name(value);
 
-// set general attribute
+// set general attributes
 #define attribute(name, value) \
     __view->setAttribute(name, value);
 

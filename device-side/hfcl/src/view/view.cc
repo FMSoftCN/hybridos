@@ -64,6 +64,9 @@ static void add_spaces (std::string& str)
 View::View(const char* vtag, const char* vtype,
         const char* vclass, const char* vname, int vid)
     : m_id(vid)
+    , m_dir(VIEW_TEXT_DIR_AUTO)
+    , m_tabIndex(-1)
+    , m_lang(LANGCODE_unknown)
     , m_cssCls(vclass ? vclass : "")
     , m_name(vname ? vname : "")
     , m_contentType(VIEW_CONTENT_TYPE_TEXT)
@@ -267,6 +270,24 @@ bool View::setResContent(HTResId resId)
 
     onContentChanged();
     return true;
+}
+
+void View::setDir(int dir)
+{
+    if (dir != m_dir) {
+        m_dir = dir;
+        if (getTextContentLength() > 0)
+            onContentChanged();
+    }
+}
+
+void View::setLang(LanguageCode lang)
+{
+    if (lang != m_lang) {
+        m_lang = lang;
+        if (getTextContentLength() > 0)
+            onContentChanged();
+    }
 }
 
 size_t View::getAltLength() const
@@ -936,7 +957,11 @@ void View::onAltChanged()
 {
 }
 
-void View::onDisabled()
+void View::onShown()
+{
+}
+
+void View::onHidden()
 {
 }
 
