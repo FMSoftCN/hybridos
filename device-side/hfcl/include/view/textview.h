@@ -32,7 +32,8 @@ namespace hfcl {
 
 class TextView : public View {
 public:
-    TextView(const char* tag, const char* cssClass, const char* name, int id);
+    TextView(const char* vtag, const char* vtype,
+            const char* vclass = NULL, const char* vname = NULL, int vid = 0);
     virtual ~TextView();
 
     /* public methods */

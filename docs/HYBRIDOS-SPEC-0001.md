@@ -57,52 +57,49 @@ There are four main tags: `app`, `act`, `tmpl`, and `view`.
 * `app`: define an app.
 * `act`: define an activity.
 * `tmpl`: define a template.
-* `view`: define a view.
+* `view`: define a view client.
 
-For example, to define a UI, we use the HVML tag `view`:
+A HybridOS app can only contain one app, and an app can contains multiple
+activities, while each activity can contain multiple views and templates.
 
-    <view type="panel" class="CLASS" name="NAME" id="IDENTIFIER" content="CONTENT">
+A template is a virtual element, which can be use to generate other
+real elements by substituting some properties and inserting to the view
+elements tree.
+
+For example, to define a UI, which contains many general elements,
+we use the HVML tag `view`:
+
+    <view class="CLASS" name="NAME" id="IDENTIFIER">
     </view>
 
-We introduce some properties for the tags:
+In a `view`, we use the following tags to define the elements in the view:
 
-1. `type`: The view type. It specifies the type of a view. Currently, HybridOS
-provides the following view types:
-  * `text`: A paragraph of text.
-  * `static-image`: A static image.
-  * `animated-image`: An animated-image, which use multiple images or a GIF
+* `hvtext`: A paragraph of text.
+* `hvimg`: A static image.
+* `hvani`: An animated-image, which use multiple images or a GIF
 picture for the animation.
-  * `panel`: A container.
-  * `list`: A container; a list view can generate the items by using a template.
-  * `item`: A super view for iteration from a template.
-  * `canvas`: A view provides the ability to draw content by the app.
-  * `progress`:
-  * `dropdown`:
-  * `tooltip`:
-  * `popover`:
-  * `input-button`:
-  * `input-checkbox`:
-  * `input-color`:
-  * `input-date`:
-  * `input-datetime`:
-  * `input-datetime-local`:
-  * `input-email`:
-  * `input-file`:
-  * `input-hidden`:
-  * `input-image`:
-  * `input-month`:
-  * `input-number`:
-  * `input-password`:
-  * `input-radio`:
-  * `input-range`:
-  * `input-reset`:
-  * `input-search`:
-  * `input-submit`:
-  * `input-tel`:
-  * `input-text`:
-  * `input-time`:
-  * `input-url`:
-  * `input-week`:
+* `hvpanel`: A container.
+* `hvlist`: A container; a list view can generate the items by using a template.
+* `hvitem`: A super view for iteration from a template.
+
+We may also use the following standard HTML5 tags directly to define a view
+element:
+
+* `input`
+* `p`
+* `span`
+* `em`
+* `strong`
+* `dfn`
+* `code`
+* `samp`
+* `kbd`
+* `var`
+* `cite`
+* `a`
+* `canvas`
+
+### Tag properties
 
 1. `class`: A standard HTML5 property, which specifies the class of the view.
 
@@ -121,8 +118,6 @@ will be a variable which you can refer to in your JavaScript or C++ code.
 ### Tag view
 
 ### Tag tmpl
-
-### Tag properties
 
 ### Differences between HVML and HTML5
 

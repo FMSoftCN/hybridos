@@ -52,7 +52,8 @@ public:
         NOTIFY_GIFANIMATE_STOP,
     };
 
-    GifView(const char* tag, const char* cssClass, const char* name, int id);
+    GifView(const char* vtag, const char* vtype,
+            const char* vclass, const char* vname, int vid);
     virtual ~GifView();
 
     bool start(void);

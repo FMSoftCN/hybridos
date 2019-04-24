@@ -33,9 +33,9 @@ namespace hfcl {
 
 DEFINE_CLASS_NAME(TextView)
 
-TextView::TextView(const char* tag, const char* cssClass,
-            const char* name, int id)
-    : View(tag, cssClass, name, id)
+TextView::TextView(const char* vtag, const char* vtype,
+            const char* vclass, const char* vname, int vid)
+    : View(vtag, vtype, vclass, vname, vid)
     , m_isLongText(false)
     , m_stringId(-1)
     , m_lineAboveH (0)

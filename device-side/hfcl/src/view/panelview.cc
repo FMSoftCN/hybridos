@@ -26,9 +26,9 @@
 
 namespace hfcl {
 
-PanelView::PanelView(const char* tag, const char* cssClass,
-            const char* name, int id)
-    : ViewContainer(tag, cssClass, name, id)
+PanelView::PanelView(const char* vtag, const char* vtype,
+            const char* vclass, const char* vname, int vid)
+    : ViewContainer(vtag, vtype, vclass, vname, vid)
     , m_bkImage(NULL)
     , m_imageDrawMode(DRAWMODE_NORMAL)
     , m_bkColorBeSet(false)

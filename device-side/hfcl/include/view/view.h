@@ -58,8 +58,8 @@ typedef struct {
 
 class View : public Object {
 public:
-    View(const char* tag, const char* cssCls = NULL,
-            const char* name = NULL, int id = 0);
+    View(const char* vtag, const char* vtype = NULL,
+            const char* vclass = NULL, const char* vname = NULL, int vid = 0);
     virtual ~View();
 
     bool attach(ViewContainer* parent);
@@ -94,6 +94,8 @@ public:
 
     // return the HVML tag, e.g., hvroot, hvtext, hvimg, hvli, and so on
     const char* tag() const { return m_tag; }
+    // return the HVML type, e.g., button, text, date, time, and so on
+    const char* type() const { return m_type; }
 
     // methods to get/set identifier (integer) of the view
     int getId() const { return m_id; }
@@ -406,6 +408,7 @@ protected:
     }
 
     const char* m_tag;
+    const char* m_type;
     int m_id;
     std::string m_cssCls;
     std::string m_name;

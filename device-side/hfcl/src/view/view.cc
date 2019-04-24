@@ -55,11 +55,13 @@ static void add_spaces (std::string& str)
     }
 }
 
-View::View(const char* tag, const char* cssCls, const char* name, int id)
-    : m_tag(tag)
-    , m_id(id)
-    , m_cssCls(cssCls?cssCls:"")
-    , m_name(name?name:"")
+View::View(const char* vtag, const char* vtype,
+        const char* vclass, const char* vname, int vid)
+    : m_tag(vtag)
+    , m_type(vtype)
+    , m_id(vid)
+    , m_cssCls(vclass ? vclass : "")
+    , m_name(vname ? vname : "")
     , m_addData(0)
     , m_flags(0)
     , m_parent(0)

@@ -31,7 +31,8 @@ class Image;
 class PanelView : public ViewContainer
 {
 public:
-    PanelView(const char* tag, const char* cssClass, const char* name, int id);
+    PanelView(const char* vtag, const char* vtype,
+            const char* vclass = NULL, const char* vname = NULL, int vid = 0);
     virtual ~PanelView();
 
     //Image* getBkImage();
