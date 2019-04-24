@@ -407,8 +407,8 @@ protected:
         return old;
     }
 
-    const char* m_tag;
-    const char* m_type;
+    char* m_tag;
+    char* m_type;
     int m_id;
     std::string m_cssCls;
     std::string m_name;

@@ -57,9 +57,7 @@ static void add_spaces (std::string& str)
 
 View::View(const char* vtag, const char* vtype,
         const char* vclass, const char* vname, int vid)
-    : m_tag(vtag)
-    , m_type(vtype)
-    , m_id(vid)
+    : m_id(vid)
     , m_cssCls(vclass ? vclass : "")
     , m_name(vname ? vname : "")
     , m_addData(0)
@@ -70,11 +68,26 @@ View::View(const char* vtag, const char* vtype,
     , m_css_computed(0)
     , m_cssbox_principal(0)
 {
+    if (vtag != NULL && vtag[0] != '\0')
+        m_tag = strdup(vtag);
+    else
+        m_tag = NULL;
+
+    if (vtype != NULL && vtype[0] != '\0')
+        m_type = strdup(vtype);
+    else
+        m_type = NULL;
+
     add_spaces(m_cssCls);
 }
 
 View::~View()
 {
+    if (m_tag)
+        free(m_tag);
+    if (m_type)
+        free(m_type);
+
     m_cssd_user.unref();
     if (m_css_computed)
         delete m_css_computed;

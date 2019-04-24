@@ -28,8 +28,9 @@ namespace hfcl {
 
 DEFINE_CLASS_NAME(AtomicTextView)
 
-AtomicTextView::AtomicTextView(const char* vclass, const char* vname, int vid)
-    : View(NULL, NULL, vclass, vname, vid)
+AtomicTextView::AtomicTextView(const char* vtag, const char* vtype,
+        const char* vclass, const char* vname, int vid)
+    : View(vtag, vtype, vclass, vname, vid)
 {
 }
 

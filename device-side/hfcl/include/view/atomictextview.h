@@ -32,8 +32,8 @@ namespace hfcl {
 
 class AtomicTextView : public View {
 public:
-    AtomicTextView(const char* vclass = NULL, const char* vname = NULL,
-            int vid = 0);
+    AtomicTextView(const char* vtag, const char* vtype,
+            const char* vclass = NULL, const char* vname = NULL, int vid = 0);
     virtual ~AtomicTextView();
 
     /* overloaded virtual functions */
