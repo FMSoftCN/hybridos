@@ -75,7 +75,7 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
                 set(Id, 100)
                 mystyle(BackgroundColor, rgba(255, 255, 255, 255))
                 // animate view
-                begin_view(hvgiv)
+                begin_view(hvani)
                     map(my_var(view_animation_logo))
                     on(Event::ET_VIEW, my_var(event_animation_logo))
                 end_view

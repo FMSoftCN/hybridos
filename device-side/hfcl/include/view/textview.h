@@ -24,13 +24,13 @@
 
 #include <string>
 
-#include "../view/view.h"
+#include "../view/viewcontainer.h"
 #include "../graphics/color.h"
 #include "../resource/respkgmanager.h"
 
 namespace hfcl {
 
-class TextView : public View {
+class TextView : public ViewContainer {
 public:
     TextView(const char* vtag, const char* vtype,
             const char* vclass = NULL, const char* vname = NULL, int vid = 0);

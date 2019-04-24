@@ -79,14 +79,18 @@ In a `view`, we use the following tags to define the elements in the view:
 * `hvani`: An animated-image, which use multiple images or a GIF
 picture for the animation.
 * `hvpanel`: A container.
-* `hvlist`: A container; a list view can generate the items by using a template.
+* `hvlist`: A container; a list view can generate the items by using
+a template.
 * `hvitem`: A super view for iteration from a template.
 
 We may also use the following standard HTML5 tags directly to define a view
 element:
 
-* `input`
-* `p`
+* `p`:
+* `input`: type button, submit, text, checkbox, radio, password, image, hidden,
+file, email, url, number, range, date, month, week, time, datetime, and
+localdatetime are supported.
+* `canvas`
 * `span`
 * `em`
 * `strong`
@@ -97,7 +101,6 @@ element:
 * `var`
 * `cite`
 * `a`
-* `canvas`
 
 ### Tag properties
 

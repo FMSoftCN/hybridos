@@ -19,24 +19,27 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "view/imageview.h"
+#include "view/staticimageview.h"
+
+#include "view/viewfactory.h"
 
 namespace hfcl {
 
-ImageView::ImageView(const char* cssClass, const char* name, int id)
-    : View(cssClass, name, id)
+StaticImageView::StaticImageView(const char* vtag, const char* vtype,
+        const char* vclass, const char* vname, int vid)
+    : View(vtag, vtype, vclass, vname, vid)
 {
     init();
 }
 
-ImageView::~ImageView()
+StaticImageView::~StaticImageView()
 {
     if(m_image) {
         HFCL_DELETE(m_image);
     }
 }
 
-void ImageView::drawContent(GraphicsContext* context, IntRect &rc)
+void StaticImageView::drawContent(GraphicsContext* context, IntRect &rc)
 {
     if(m_format.rotationAngle != 0){
         m_format.drawMode = DRAWMODE_ROTATIONANGLE;
@@ -48,7 +51,7 @@ void ImageView::drawContent(GraphicsContext* context, IntRect &rc)
 }
 
 
-bool ImageView::setImage(Image *pImg)
+bool StaticImageView::setImage(Image *pImg)
 {
     if (pImg == m_image) {
         HFCL_DELETE(pImg);
@@ -65,26 +68,26 @@ bool ImageView::setImage(Image *pImg)
     return true;
 }
 
-bool ImageView::setReplaceColor(Uint32 color)
+bool StaticImageView::setReplaceColor(Uint32 color)
 {
     m_image->setReplaceColor(color);
     updateView();
     return true;
 }
 
-void ImageView::setPartBoxXoYo(int xo, int yo)
+void StaticImageView::setPartBoxXoYo(int xo, int yo)
 {
     m_xo = xo;
     m_yo = yo;
 }
 
-void ImageView::getPartBoxXoYo(int& xo, int& yo)
+void StaticImageView::getPartBoxXoYo(int& xo, int& yo)
 {
     xo = m_xo;
     yo = m_yo;
 }
 
-void ImageView::setFromImgRect(bool bSet)
+void StaticImageView::setFromImgRect(bool bSet)
 {
     if (!bSet)
         return;
@@ -95,7 +98,7 @@ void ImageView::setFromImgRect(bool bSet)
     setRect(0, 0, getImageWidth(), getImageHeight());
 }
 
-int ImageView::getImageWidth(void)
+int StaticImageView::getImageWidth(void)
 {
     if (m_image != NULL)
         return m_image->width();
@@ -103,7 +106,7 @@ int ImageView::getImageWidth(void)
     return 0;
 }
 
-int ImageView::getImageHeight(void)
+int StaticImageView::getImageHeight(void)
 {
     if (m_image != NULL)
         return m_image->height();
@@ -111,7 +114,8 @@ int ImageView::getImageHeight(void)
     return 0;
 }
 
-DEFINE_CLASS_NAME(ImageView)
+DEFINE_CLASS_NAME(StaticImageView);
+
+AUTO_REGISTER_VIEW(hvimg, StaticImageView);
 
 } // namespace hfcl
-

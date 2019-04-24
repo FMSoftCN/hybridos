@@ -19,7 +19,7 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "view/gifview.h"
+#include "view/animatedimageview.h"
 
 #include "view/viewfactory.h"
 #include "graphics/graphicscontext.h"
@@ -28,7 +28,7 @@
 
 namespace hfcl {
 
-GifView::GifView(const char* vtag, const char* vtype,
+AnimatedImageView::AnimatedImageView(const char* vtag, const char* vtype,
         const char* vclass, const char* vname, int vid)
     : View(vtag, vtype, vclass, vname, vid)
     , m_elapsed_10ms(0)
@@ -40,7 +40,7 @@ GifView::GifView(const char* vtag, const char* vtype,
     m_playType = AutoPlay;
 }
 
-GifView::~GifView()
+AnimatedImageView::~AnimatedImageView()
 {
     stop();
     if (m_timer_id != 0)
@@ -53,7 +53,7 @@ GifView::~GifView()
     }
 }
 
-bool GifView::start(void)
+bool AnimatedImageView::start(void)
 {
     if (NULL == m_animate)
         return false;
@@ -61,7 +61,7 @@ bool GifView::start(void)
     if (Play == m_state)
         return false;
 
-    m_timer_id = registerTimer(10, "GifView");
+    m_timer_id = registerTimer(10, "AnimatedImageView");
 
     if (m_timer_id == 0)
         return false;
@@ -71,7 +71,7 @@ bool GifView::start(void)
     return true;
 }
 
-bool GifView::pause(void)
+bool AnimatedImageView::pause(void)
 {
     if (Play != m_state)
         return false;
@@ -86,7 +86,7 @@ bool GifView::pause(void)
     return true;
 }
 
-bool GifView::resume(void)
+bool AnimatedImageView::resume(void)
 {
     if (NULL == m_animate)
         return false;
@@ -98,7 +98,7 @@ bool GifView::resume(void)
     {
         removeTimer(m_timer_id);
     }
-    m_timer_id = registerTimer(10, "GifView");
+    m_timer_id = registerTimer(10, "AnimatedImageView");
 
     if (m_timer_id == 0)
         return false;
@@ -108,7 +108,7 @@ bool GifView::resume(void)
     return true;
 }
 
-bool GifView::stop(void)
+bool AnimatedImageView::stop(void)
 {
     if (m_timer_id != 0)
     {
@@ -127,7 +127,7 @@ bool GifView::stop(void)
     return true;
 }
 
-bool GifView::reset(void)
+bool AnimatedImageView::reset(void)
 {
     if (NULL == m_animate)
         return false;
@@ -141,7 +141,7 @@ bool GifView::reset(void)
 }
 
 
-void GifView::setGifFile(const char* animateFile)
+void AnimatedImageView::setGifFile(const char* animateFile)
 {
     if (NULL != m_animate) {
         HFCL_DELETE(m_animate);
@@ -164,7 +164,7 @@ void GifView::setGifFile(const char* animateFile)
     }
 }
 
-void GifView::setGifAnimate(GifAnimate* animate)
+void AnimatedImageView::setGifAnimate(GifAnimate* animate)
 {
     if (NULL != m_animate && m_animate != animate) {
         HFCL_DELETE(m_animate);
@@ -180,7 +180,7 @@ void GifView::setGifAnimate(GifAnimate* animate)
     }
 }
 
-void GifView::onPaint(GraphicsContext* context)
+void AnimatedImageView::onPaint(GraphicsContext* context)
 {
     IntRect rc = getRect();
     RECT mapRc(rc);
@@ -193,7 +193,7 @@ void GifView::onPaint(GraphicsContext* context)
     m_animate->drawOneFrame(context, mapRc);
 }
 
-bool GifView::handler(Event* event)
+bool AnimatedImageView::handler(Event* event)
 {
     if (NULL == m_animate)
         return GOON_DISPATCH;
@@ -236,6 +236,8 @@ bool GifView::handler(Event* event)
     return GOON_DISPATCH;
 }
 
-AUTO_REGISTER_VIEW(hvgif, GifView);
+DEFINE_CLASS_NAME(AnimatedImageView);
+
+AUTO_REGISTER_VIEW(hvani, AnimatedImageView);
 
 } // namespace hfcl

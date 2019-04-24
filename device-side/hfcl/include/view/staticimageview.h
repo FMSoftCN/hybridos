@@ -19,18 +19,19 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef HFCL_VIEW_IMAGEVIEW_H_
-#define HFCL_VIEW_IMAGEVIEW_H_
+#ifndef HFCL_VIEW_STATICIMAGEVIEW_H_
+#define HFCL_VIEW_STATICIMAGEVIEW_H_
 
 #include "../view/view.h"
 #include "../graphics/image.h"
 
 namespace hfcl {
 
-class ImageView : public View {
+class StaticImageView : public View {
 public:
-    ImageView(const char* cssClass, const char* name, int id = 0);
-    virtual ~ImageView();
+    StaticImageView(const char* vtag, const char* vtype,
+            const char* vclass = NULL, const char* vname = NULL, int vid = 0);
+    virtual ~StaticImageView();
 
     bool setImage(Image* pImg);
     Image *getImage(void) { return m_image; }
@@ -57,7 +58,6 @@ public:
     bool setReplaceColor(Uint32 color);
 
     /* overloaded virtual functions */
-    virtual const char* tag() const { return "hvimg"; }
     virtual void drawContent(GraphicsContext* context, IntRect &rc);
 
 protected:
@@ -78,10 +78,10 @@ protected:
         m_image = NULL;
     }
 
-    DECLARE_CLASS_NAME(ImageView)
+    DECLARE_CLASS_NAME(StaticImageView)
 };
 
 } // namespace hfcl
 
-#endif /* HFCL_VIEW_IMAGEVIEW_H_ */
+#endif /* HFCL_VIEW_STATICIMAGEVIEW_H_ */
 

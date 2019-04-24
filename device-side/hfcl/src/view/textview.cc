@@ -31,11 +31,9 @@ namespace hfcl {
 //define for roll text
 #define ROLLOFFSET 5
 
-DEFINE_CLASS_NAME(TextView)
-
 TextView::TextView(const char* vtag, const char* vtype,
             const char* vclass, const char* vname, int vid)
-    : View(vtag, vtype, vclass, vname, vid)
+    : ViewContainer(vtag, vtype, vclass, vname, vid)
     , m_isLongText(false)
     , m_stringId(-1)
     , m_lineAboveH (0)
@@ -387,11 +385,14 @@ bool TextView::isNeedRoll()
 #endif
 }
 
+DEFINE_CLASS_NAME(TextView)
+
 AUTO_REGISTER_VIEW(hvtext, TextView);
 
 // the following tags are supported by TextView
-// <span> <em> <strong> <dfn> <code> <samp> <kbd> <var> <cite> <a>
+// <p> <span> <em> <strong> <dfn> <code> <samp> <kbd> <var> <cite> <a>
 
+AUTO_REGISTER_VIEW(p, TextView);
 AUTO_REGISTER_VIEW(span, TextView);
 AUTO_REGISTER_VIEW(em, TextView);
 AUTO_REGISTER_VIEW(strong, TextView);

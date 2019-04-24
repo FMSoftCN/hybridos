@@ -53,7 +53,7 @@ BootupLogo::~BootupLogo()
 
 bool BootupLogo::onGifAnimateNotify(ViewEvent* event)
 {
-    if (event->code() != GifView::NOTIFY_GIFANIMATE_STOP)
+    if (event->code() != AnimatedImageView::NOTIFY_GIFANIMATE_STOP)
         return false;
 
     // TODO: show greeting words
@@ -83,7 +83,7 @@ bool BootupLogo::handler(Event* event)
 }
 
 BEGIN_SETVIEW(BootupLogo)
-    MAP_VIEW(m_animateview, HRESNAME (bootup, var, view_animation_logo), GifView)
+    MAP_VIEW(m_animateview, HRESNAME (bootup, var, view_animation_logo), AnimatedImageView)
 END_SETVIEW
 
 BEGIN_GETHANDLE(BootupLogo)

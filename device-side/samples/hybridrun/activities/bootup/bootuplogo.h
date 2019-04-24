@@ -46,7 +46,7 @@ private:
 
     bool onGifAnimateNotify(ViewEvent* event);
 
-    GifView* m_animateview;
+    AnimatedImageView* m_animateview;
     int m_timer_id;
 };
 

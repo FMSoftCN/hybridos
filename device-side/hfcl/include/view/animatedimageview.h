@@ -1,7 +1,7 @@
 /*
 ** HFCL - HybridOS Foundation Class Library
 **
-** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
+** Copyright (C) 2018, 2019 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
 **
@@ -30,7 +30,7 @@ namespace hfcl {
 
 class GifAnimate;
 
-class GifView : public View, TimerEventListener {
+class AnimatedImageView : public View, TimerEventListener {
 public:
     typedef enum _tagPlayState {
         Play = 0,
@@ -52,9 +52,9 @@ public:
         NOTIFY_GIFANIMATE_STOP,
     };
 
-    GifView(const char* vtag, const char* vtype,
+    AnimatedImageView(const char* vtag, const char* vtype,
             const char* vclass, const char* vname, int vid);
-    virtual ~GifView();
+    virtual ~AnimatedImageView();
 
     bool start(void);
     bool pause(void);
@@ -84,6 +84,8 @@ private:
     PlayType    m_playType;
     LoopType    m_loopType;
     Uint32      m_start_ticks;
+
+    DECLARE_CLASS_NAME(AnimatedImageView)
 };
 
 } // namespace hfcl

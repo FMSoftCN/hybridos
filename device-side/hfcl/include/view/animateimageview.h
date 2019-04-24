@@ -1,7 +1,7 @@
 /*
 ** HFCL - HybridOS Foundation Class Library
 **
-** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
+** Copyright (C) 2018, 2019 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
 **
@@ -20,103 +20,73 @@
 */
 
 
-#ifndef HFCL_VIEW_ANIMATEIMAGEVIEW_H_
-#define HFCL_VIEW_ANIMATEIMAGEVIEW_H_
+#ifndef HFCL_VIEW_ANIMATEDIMAGEVIEW_H_
+#define HFCL_VIEW_ANIMATEDIMAGEVIEW_H_
 
-#include "../graphics/image.h"
 #include "../view/view.h"
 #include "../services/timerservice.h"
 
 namespace hfcl {
 
-class AnimateImageView : public View, TimerEventListener {
+class GifAnimate;
+
+class AnimatedImageView : public View, TimerEventListener {
 public:
     typedef enum _tagPlayState {
         Play = 0,
         Pause,
-        Stop
-    }PlayState;
+        Stop,
+    } PlayState;
 
-    AnimateImageView(View* parent);
-    AnimateImageView(View* parent, DrawableSet* drset);
-    AnimateImageView(Image* pImage, int id, int x, int y, int w, int h);
-    AnimateImageView(const char * filePath, int id, int x, int y, int w, int h,
-            int mode = DRAWMODE_NORMAL,
-            int align = ALIGN_CENTER,
-            int valign = VALIGN_MIDDLE);
+    typedef enum _tagLoopType {
+        Loop = 0,
+        NoLoop,
+    } LoopType;
 
-    virtual ~AnimateImageView();
+    typedef enum _tagPlayType {
+        AutoPlay,
+        NoAutoPlay,
+    } PlayType;
 
-    bool setImage(Image* pImg);
-    Image *getImage(void) { return m_image; }
+    enum {
+        NOTIFY_GIFANIMATE_STOP,
+    };
 
-    void setImageDrawMode(int  mode) {
-        m_format.drawMode = mode;
-    }
-    void setImageAlign(int halign) {
-        m_format.align = halign;
-    }
-    void setImageVAlign(int valign) {
-        m_format.valign = valign;
-    }
-    void setImageRotationAngle(int RotationAngle) {
-        m_format.rotationAngle = RotationAngle;
-    }
+    AnimatedImageView(const char* vtag, const char* vtype,
+            const char* vclass, const char* vname, int vid);
+    virtual ~AnimatedImageView();
 
-    virtual void drawContent(GraphicsContext* context,
-            IntRect &rc, int status/*= Style::NORMAL*/);
-
-    virtual void drawBackground(GraphicsContext* context, IntRect &rc, int status /*= Style::NORMAL*/);
-
-    void setPartBoxXoYo(int xo = 0, int yo = 0);
-    void getPartBoxXoYo(int& xo, int& yo);
-
-    void setFromImgRect(bool bSet = false);
-    int getImageWidth(void);
-    int getImageHeight(void);
-    bool setReplaceColor(const DWORD color);
     bool start(void);
+    bool pause(void);
+    bool resume(void);
     bool stop(void);
-    bool setImageIdArray(unsigned int * array, unsigned int num, int timeDuration,const DWORD color);
-    bool handler(Event* event);
+    bool reset(void);
+    PlayState state(void) {return m_state;}
 
-protected:
-    Image*            m_image;
-    ImageFormat     m_format;
-    unsigned int  * m_imageId_array;
-    unsigned int    m_imageId_array_num;
-    unsigned int    m_imageId_array_index;
-    int                m_timeDuration;
-    int             m_elapsed_10ms;
+    void setGifAnimate(GifAnimate* animate);
+    void setGifFile(const char* animate);
+    GifAnimate *gifAnimate(void) { return m_animate; }
 
-    void init() {
-        m_format.drawMode = DRAWMODE_NORMAL;
-        m_format.align    = ALIGN_CENTER;
-        m_format.valign   = VALIGN_MIDDLE;
-        m_format.rotationAngle   = 0;
+    void setPlayType(PlayType type) { m_playType = type; }
+    PlayType playType(void) { return m_playType; }
+    void setLoopType(LoopType type) { m_loopType = type; }
+    LoopType loopType(void) { return m_loopType; }
 
-        m_xo = 0;
-        m_yo = 0;
-        m_imageId_array_num = 0;
-        m_imageId_array_index = 0;
-        m_timeDuration = 0;
-        m_elapsed_10ms = 0;
-        m_image = NULL;
-        m_state = Stop;
-        m_replaceColor = 0;
-    }
-
-    DECLARE_CLASS_NAME(AnimateImageView)
+    /* overloaded virtual functions */
+    virtual void onPaint(GraphicsContext* context);
+    virtual bool handler(Event* event);
 
 private:
-    int         m_xo;
-    int         m_yo;
+    GifAnimate* m_animate;
     int         m_timer_id;
+    int         m_elapsed_10ms;
     PlayState   m_state;
-    DWORD         m_replaceColor;
+    PlayType    m_playType;
+    LoopType    m_loopType;
+    Uint32      m_start_ticks;
 };
 
 } // namespace hfcl
 
-#endif /* HFCL_VIEW_ANIMATEIMAGEVIEW_H_ */
+#endif /* HFCL_VIEW_ANIMATEDIMAGEVIEW_H_ */
 

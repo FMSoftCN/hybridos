@@ -12,8 +12,8 @@ myinclude_HEADERS= \
     rootview.h \
     panelview.h \
     textview.h \
-    imageview.h \
-    gifview.h
+    staticimageview.h \
+    animatedimageview.h
 
 #    animateimageview.h \
 #    arrowtextview.h \
