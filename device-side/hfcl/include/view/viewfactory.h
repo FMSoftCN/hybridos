@@ -75,7 +75,8 @@ private:
     } \
     void realRegister##_vtag##_class(const char* tag) \
     { \
-        ViewFactory::singleton()->registerView(#_vtag, NULL, create_##_vtag##_class);\
+        ViewFactory::singleton()->registerView(#_vtag, NULL, \
+                create_##_vtag##_class); \
     }
 
 #define DO_REGISTER_VIEW(_vtag, _class) \

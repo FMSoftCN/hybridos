@@ -48,8 +48,6 @@ void TextView::onContentChanged()
 {
 }
 
-DEFINE_CLASS_NAME(TextView)
-
 AUTO_REGISTER_VIEW(hvtext, TextView);
 
 // the following tags are supported by TextView

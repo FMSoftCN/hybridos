@@ -37,6 +37,8 @@ int main (int argc, const char** argv)
 {
     Initialize (argc, argv);
 
+    ViewFactory::singleton()->list();
+
     // register system resource
     REGISTER_RESPKG(sys);
 

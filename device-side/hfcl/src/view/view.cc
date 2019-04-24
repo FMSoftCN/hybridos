@@ -299,7 +299,7 @@ bool View::setAlt(const char* alt)
     return true;
 }
 
-bool View::setAlt(int strId)
+bool View::setAlt(HTStrId strId)
 {
     if (strId < 0 || strId == m_altId) {
         return false;

@@ -77,8 +77,6 @@ protected:
 
         m_image = NULL;
     }
-
-    DECLARE_CLASS_NAME(StaticImageView)
 };
 
 } // namespace hfcl

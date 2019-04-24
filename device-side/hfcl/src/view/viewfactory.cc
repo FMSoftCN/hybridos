@@ -67,8 +67,9 @@ void ViewFactory::list()
 {
     TagViewMap::iterator it;
 
+    _MG_PRINTF("List of registered tags: \n");
     for (it = m_map.begin(); it != m_map.end(); it++) {
-        _MG_PRINTF("view creator for tag (%s): %p", it->first, it->second);
+        _MG_PRINTF("\tview creator for tag (%s): %p\n", it->first.c_str(), it->second);
     }
 }
 

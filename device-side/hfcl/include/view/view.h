@@ -128,7 +128,7 @@ public:
     const char* getAlt() const;
     size_t getAltLength() const;
     bool setAlt(const char* alt);
-    bool setAlt(int strId);
+    bool setAlt(HTStrId strId);
 
     // Operators for CSS class of the view
     const char* getClasses() { return m_cssCls.c_str(); }

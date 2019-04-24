@@ -38,10 +38,6 @@ public:
 
     /* overloaded public virtual functions */
     virtual void onContentChanged();
-
-protected:
-
-    DECLARE_CLASS_NAME(TextView)
 };
 
 } // namespace hfcl

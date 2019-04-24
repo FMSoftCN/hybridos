@@ -236,8 +236,6 @@ bool AnimatedImageView::handler(Event* event)
     return GOON_DISPATCH;
 }
 
-DEFINE_CLASS_NAME(AnimatedImageView);
-
 AUTO_REGISTER_VIEW(hvani, AnimatedImageView);
 
 } // namespace hfcl

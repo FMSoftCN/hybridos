@@ -114,8 +114,6 @@ int StaticImageView::getImageHeight(void)
     return 0;
 }
 
-DEFINE_CLASS_NAME(StaticImageView);
-
 AUTO_REGISTER_VIEW(hvimg, StaticImageView);
 
 } // namespace hfcl

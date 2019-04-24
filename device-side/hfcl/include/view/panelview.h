@@ -58,8 +58,6 @@ private:
     int   m_imageDrawMode;
     bool  m_bkColorBeSet;
     DWORD m_bkColor;
-
-    DECLARE_CLASS_NAME(PanelView)
 };
 
 } // namespace hfcl
