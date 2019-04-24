@@ -31,11 +31,8 @@ class Image;
 class PanelView : public ViewContainer
 {
 public:
-    PanelView(const char* cssClass, const char* name, int id = 0);
+    PanelView(const char* tag, const char* cssClass, const char* name, int id);
     virtual ~PanelView();
-
-    /* overloaded virtual functions */
-    virtual const char* tag() const { return "hvpanel"; }
 
     //Image* getBkImage();
     bool setBkColor(const DWORD color);

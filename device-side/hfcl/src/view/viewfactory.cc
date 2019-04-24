@@ -44,7 +44,7 @@ View *ViewFactory::create(const char* vtag, const char* vclass, const char* vnam
     }
 
     CB_VIEW_CREATOR creator = m_map [vtag];
-    return creator(vclass, vname, vid);
+    return creator(vtag, vclass, vname, vid);
 }
 
 void ViewFactory::list()

@@ -29,7 +29,8 @@
 
 namespace hfcl {
 
-typedef View* (*CB_VIEW_CREATOR)(const char* vclass, const char* vname, int vid);
+typedef View* (*CB_VIEW_CREATOR)(const char* vtag,
+        const char* vclass, const char* vname, int vid);
 typedef std::map<std::string, CB_VIEW_CREATOR> TagViewMap;
 
 class ViewFactory {
@@ -44,7 +45,8 @@ public:
 
     bool registerView(const char *vtag, CB_VIEW_CREATOR creator);
 
-    View *create(const char* vtag, const char* vclass, const char* vname, int vid);
+    View *create(const char* vtag,
+            const char* vclass, const char* vname, int vid);
 
     void list();
 
@@ -66,28 +68,30 @@ private:
 };
 
 #define REGISTER_VIEW_IMPL(_vtag, _class) \
-    static View* create_##_class(const char* vclass, const char* vname, int vid) \
+    static View* create_##_vtag##_class(const char* vtag, \
+            const char* vclass, const char* vname, int vid) \
     { \
-        return new _class(vclass, vname vid); \
+        return new _class(vtag, vclass, vname vid); \
     } \
-    void realRegisterView##_class(const char* tag) \
+    void realRegister##_vtag##_class(const char* tag) \
     { \
-        ViewFactory::singleton()->registerView(#_vtag, create_##_class); \
+        ViewFactory::singleton()->registerView(#_vtag, create_##_vtag##_class); \
     }
 
 #define DO_REGISTER_VIEW(_vtag, _class) \
-    extern void realRegisterView##_class(const char*); \
-    realRegister##_class(#_vtag)
+    extern void realRegister##_vtag##_class(const char*); \
+    realRegister##_vtag##_class(#_vtag)
 
 #define AUTO_REGISTER_VIEW(_vtag, _class) \
-    static struct _ViewFactory_##_class { \
-        static View *create(const char* vclass, const char* vname, int vid) { \
-            return new _class(vclass, vname, vid); \
+    static struct _ViewFactory##_vtag##_class { \
+        static View *create(const char* vtag, \
+                const char* vclass, const char* vname, int vid) { \
+            return new _class(vtag, vclass, vname, vid); \
         } \
-        _ViewFactory_##_class() { \
+        _ViewFactory##_vtag##_class() { \
             ViewFactory::singleton()->registerView(#_vtag, create); \
         } \
-    } _autoRegister##_class
+    } _autoRegister##_vtag##_class
 
 
 inline View* CreateViewByTag(const char* vtag,

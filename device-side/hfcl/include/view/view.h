@@ -58,7 +58,8 @@ typedef struct {
 
 class View : public Object {
 public:
-    View(const char* cssCls = NULL, const char* name = NULL, int id = 0);
+    View(const char* tag, const char* cssCls = NULL,
+            const char* name = NULL, int id = 0);
     virtual ~View();
 
     bool attach(ViewContainer* parent);
@@ -90,6 +91,9 @@ public:
     RootView* getRoot();
     const CssComputed* getCssComputed() const { return m_css_computed; }
     CssComputed* getCssComputed() { return m_css_computed; }
+
+    // return the HVML tag, e.g., hvroot, hvtext, hvimg, hvli, and so on
+    const char* tag() const { return m_tag; }
 
     // methods to get/set identifier (integer) of the view
     int getId() const { return m_id; }
@@ -204,8 +208,6 @@ public:
     bool checkAttribute(const char* attrKey, const char* attrValue) const;
     bool checkAttribute(const char* attrPair) const;
 
-    // return the HVML tag, e.g., hvroot, hvtext, hvimg, hvli, and so on
-    virtual const char* tag() const = 0;
     virtual bool isContainer() const { return false; }
     virtual bool isRoot() const { return false; }
     virtual bool isReplaced() const { return false; }
@@ -403,6 +405,7 @@ protected:
         return old;
     }
 
+    const char* m_tag;
     int m_id;
     std::string m_cssCls;
     std::string m_name;

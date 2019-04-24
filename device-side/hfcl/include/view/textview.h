@@ -32,7 +32,7 @@ namespace hfcl {
 
 class TextView : public View {
 public:
-    TextView(const char* cssClass, const char* name, int id = 0);
+    TextView(const char* tag, const char* cssClass, const char* name, int id);
     virtual ~TextView();
 
     /* public methods */
@@ -60,8 +60,6 @@ public:
     void setRolling(bool b) { setFlag(b, ROLLING); }
     bool isRolling() { return m_flags & ROLLING; }
 
-    /* overloaded virtual functions */
-    virtual const char* tag() const { return "hvtext"; }
     virtual void drawContent(GraphicsContext* context, IntRect &rc);
 
     /* to be deprecated */

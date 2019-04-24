@@ -28,8 +28,8 @@
 
 namespace hfcl {
 
-GifView::GifView(const char* cssClass, const char* name, int id)
-    : View(cssClass, name, id)
+GifView::GifView(const char* tag, const char* cssClass, const char* name, int id)
+    : View(tag, cssClass, name, id)
     , m_elapsed_10ms(0)
 {
     m_animate = NULL;

@@ -32,7 +32,7 @@ namespace hfcl {
 
 class ViewContainer : public View {
 public:
-    ViewContainer(const char* cssClass = NULL,
+    ViewContainer(const char* tag, const char* cssClass = NULL,
             const char* name = NULL, int id = 0);
     virtual ~ViewContainer();
 

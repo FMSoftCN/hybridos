@@ -52,7 +52,7 @@ public:
         NOTIFY_GIFANIMATE_STOP,
     };
 
-    GifView(const char* cssClass, const char* name, int id = 0);
+    GifView(const char* tag, const char* cssClass, const char* name, int id);
     virtual ~GifView();
 
     bool start(void);
@@ -72,7 +72,6 @@ public:
     LoopType loopType(void) { return m_loopType; }
 
     /* overloaded virtual functions */
-    virtual const char* tag() const { return "hvgif"; }
     virtual void onPaint(GraphicsContext* context);
     virtual bool handler(Event* event);
 

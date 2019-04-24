@@ -33,8 +33,9 @@ namespace hfcl {
 
 DEFINE_CLASS_NAME(TextView)
 
-TextView::TextView(const char* cssClass, const char* name, int id)
-    : View(cssClass, name, id)
+TextView::TextView(const char* tag, const char* cssClass,
+            const char* name, int id)
+    : View(tag, cssClass, name, id)
     , m_isLongText(false)
     , m_stringId(-1)
     , m_lineAboveH (0)
@@ -387,6 +388,20 @@ bool TextView::isNeedRoll()
 }
 
 AUTO_REGISTER_VIEW(hvtext, TextView);
+
+// the following tags are supported by TextView
+// <span> <em> <strong> <dfn> <code> <samp> <kbd> <var> <cite> <a>
+
+AUTO_REGISTER_VIEW(span, TextView);
+AUTO_REGISTER_VIEW(em, TextView);
+AUTO_REGISTER_VIEW(strong, TextView);
+AUTO_REGISTER_VIEW(dfn, TextView);
+AUTO_REGISTER_VIEW(code, TextView);
+AUTO_REGISTER_VIEW(samp, TextView);
+AUTO_REGISTER_VIEW(kbd, TextView);
+AUTO_REGISTER_VIEW(var, TextView);
+AUTO_REGISTER_VIEW(cite, TextView);
+AUTO_REGISTER_VIEW(a, TextView);
 
 } // namespace hfcl
 
