@@ -25,8 +25,16 @@ namespace hfcl {
 
 ViewFactory *ViewFactory::s_single = 0;
 
-bool ViewFactory::registerView(const char *tag_type, CB_VIEW_CREATOR creator)
+bool ViewFactory::registerView(const char *vtag, const char* vtype,
+        CB_VIEW_CREATOR creator)
 {
+    std::string tag_type(vtag);
+    if (vtype) {
+        tag_type.append("[type=");
+        tag_type.append(vtype);
+        tag_type.append("]");
+    }
+
     TagViewMap::iterator it = m_map.find(tag_type);
     if (it == m_map.end ()) {
         m_map [tag_type] = creator;

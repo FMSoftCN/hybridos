@@ -43,7 +43,7 @@ public:
        return s_single;
     }
 
-    bool registerView(const char *tag_type, CB_VIEW_CREATOR creator);
+    bool registerView(const char *vtag, const char* vtype, CB_VIEW_CREATOR creator);
 
     View *create(const char* vtag, const char* vtype,
             const char* vclass, const char* vname, int vid);
@@ -75,7 +75,7 @@ private:
     } \
     void realRegister##_vtag##_class(const char* tag) \
     { \
-        ViewFactory::singleton()->registerView(#_vtag, create_##_vtag##_class);\
+        ViewFactory::singleton()->registerView(#_vtag, NULL, create_##_vtag##_class);\
     }
 
 #define DO_REGISTER_VIEW(_vtag, _class) \
@@ -89,7 +89,7 @@ private:
             return new _class(vtag, vtype, vclass, vname, vid); \
         } \
         _ViewFactory##_vtag##_class() { \
-            ViewFactory::singleton()->registerView(#_vtag, create); \
+            ViewFactory::singleton()->registerView(#_vtag, NULL, create); \
         } \
     } _autoRegister##_vtag##_class
 
@@ -100,11 +100,7 @@ private:
             return new _class(vtag, vtype, vclass, vname, vid); \
         } \
         _ViewFactory##_vtag##_vtype##_class() { \
-            std::string my_tag(##_vtag); \
-            my_tag.append("[type="); \
-            my_tag.append(##_vtype); \
-            my_tag.append("]"); \
-            ViewFactory::singleton()->registerView(my_tag.c_str(), create); \
+            ViewFactory::singleton()->registerView(#_vtag, #_vtype, create); \
         } \
     } _autoRegister##_vtag##_vtype##_class
 
