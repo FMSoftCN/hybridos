@@ -32,7 +32,7 @@ The key features of HFCL are follow:
 * It provides a complete set of rich views with support for CSS
   (Cascading Style Sheet).
 * It is the foundation of Hybrid App Engine.
-* It is cross multiple windowing platforms including MiniGUI, Windows, macOS,
+* It will be cross multiple windowing platforms including MiniGUI, Windows, macOS,
   Gtk+, and others.
 
 ## Current status
@@ -40,13 +40,13 @@ The key features of HFCL are follow:
 At present, HFCL is under development actively. We do not recommend to use
 HFCL in real products.
 
-## Building for Ubuntu Linux 16.04
+## Building for Ubuntu Linux
 
 ### Prerequisites
 
-1. Ubuntu Linux 16.04
+1. Ubuntu Linux 16.04 or later
 1. GVFB V1.2.2 or later
-1. MiniGUI Core 3.4.0 or later
+1. MiniGUI Core 4.0.0 or later
 
 ### Building
 
@@ -66,7 +66,7 @@ refer to the `README.md` file.
 
 ## Copying
 
-    Copyright (C) 2009~2018, Beijing FMSoft Technologies Co., Ltd.
+    Copyright (C) 2009~2019, Beijing FMSoft Technologies Co., Ltd.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
