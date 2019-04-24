@@ -36,77 +36,10 @@ public:
             const char* vclass = NULL, const char* vname = NULL, int vid = 0);
     virtual ~TextView();
 
-    /* public methods */
-    void setText(const char *text);
-    void setText(const std::string& text);
-    void setText(int strId);
-    int getTextId() const { return m_stringId; }
-    char* getText();
-    int getTextLength();
-
-    bool setLongText();
-    bool isLongText();
-
-    void setBidiCheck(bool bidiflag);
-    bool isBidiCheck();
-
-    void setRollProp(bool roll) { stopRoll(); setFlag(roll, ROLLTEXT); }
-    bool getRollProp() { return m_flags & ROLLTEXT; }
-
-    void startRoll();
-    void stopRoll();
-    void resetRoll();
-
-    bool isNeedRoll();
-    void setRolling(bool b) { setFlag(b, ROLLING); }
-    bool isRolling() { return m_flags & ROLLING; }
-
-    virtual void drawContent(GraphicsContext* context, IntRect &rc);
-
-    /* to be deprecated */
-    void setAutoSize(bool b) { setFlag(b, AUTOSIZE); }
-    bool isAutoSize()        { return m_flags & AUTOSIZE; }
-    virtual void autoFitSize(bool auto_child_fit = false);
-
-    void setMargin(int margin) { m_margin = margin; }
-
-    void setTextColor(Color *c);
-    void setTextColor(unsigned char r, unsigned char g, unsigned char b);
-    void setTextColor(DWORD color);
-
-    void setTextOutMode(unsigned int mode);
-    void setTextAlign(unsigned int align);
-    void setTextValign(unsigned int valign);
-
-    unsigned int getTextAlign();
-    unsigned int getTextValign();
-
-    void setTextOutLineMode(bool mode);
-    void setTextFont(unsigned int font);
-
-    void setTextBreak(int tBreak);
-    int getTextBreak();
-
-    inline void setLineAboveHeight(int height) { m_lineAboveH = height; }
-    inline void setLineBellowHeight(int height) { m_lineBellowH = height; }
+    /* overloaded public virtual functions */
+    virtual void onContentChanged();
 
 protected:
-    //define the flags of TextView
-    enum {
-        AUTOSIZE = (1 << View::FLAG_SHIFT),
-        ROLLTEXT = (2 << View::FLAG_SHIFT),
-        ROLLING  = (4 << View::FLAG_SHIFT),
-        FLAG_SHIFT = ( 2 + View::FLAG_SHIFT)
-    };
-
-    bool  m_isLongText;
-    std::string  m_textString;
-    char  m_textBuf[TEXT_BUFFER_LEN_OF_DEFAULT+1];
-    int   m_stringId;
-    int   m_lineAboveH;
-    int   m_lineBellowH;
-    int   m_margin;
-    bool  m_bidicheck;
 
     DECLARE_CLASS_NAME(TextView)
 };

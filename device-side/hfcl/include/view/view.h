@@ -111,9 +111,16 @@ public:
     bool setName(const char* name);
 
     // methods to get/set content of the view
-    // return the text content of this view
-    virtual const char* getContent() const { return NULL; }
-    virtual bool setContent(const char* content) { return TRUE; }
+    const char* getContent() const;
+    size_t getContentLength() const;
+    bool setContent(const char* content);
+    bool setContent(int strId);
+
+    // methods to get/set alternative content of the view; for replaced element
+    const char* getAlt() const;
+    size_t getAltLength() const;
+    bool setAlt(const char* alt);
+    bool setAlt(int strId);
 
     // Operators for CSS class of the view
     const char* getClasses() { return m_cssCls.c_str(); }
@@ -219,9 +226,6 @@ public:
     virtual bool getShrinkToFitWhidth(HTReal* preferred,
             HTReal* minimum) const { return false; }
 
-    // return the text content of this view
-    virtual const char* getTextContent() const { return 0; }
-
     enum {
         VN_GOTFOCUS,
         VN_LOSTFOCUS,
@@ -238,6 +242,8 @@ public:
     virtual void onContainingBlockChanged();
     virtual void onNameChanged();
     virtual void onClassChanged();
+    virtual void onContentChanged();
+    virtual void onAltChanged();
     virtual void onDisabled();
     virtual void onEnabled();
     virtual void onChecked();
@@ -412,6 +418,13 @@ protected:
     int m_id;
     std::string m_cssCls;
     std::string m_name;
+
+    int m_contentId;    // >=0: valid string identifier else string object.
+    std::string m_contentStr;
+
+    int m_altId;        // >=0: valid string identifier else string object.
+    std::string m_altStr;
+
     const void* m_addData;
     Uint32 m_flags;
 

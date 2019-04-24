@@ -60,6 +60,8 @@ View::View(const char* vtag, const char* vtype,
     : m_id(vid)
     , m_cssCls(vclass ? vclass : "")
     , m_name(vname ? vname : "")
+    , m_contentId(-1)
+    , m_altId(-1)
     , m_addData(0)
     , m_flags(0)
     , m_parent(0)
@@ -68,12 +70,12 @@ View::View(const char* vtag, const char* vtype,
     , m_css_computed(0)
     , m_cssbox_principal(0)
 {
-    if (vtag != NULL && vtag[0] != '\0')
+    if (vtag != NULL && vtag[0] != 0)
         m_tag = strdup(vtag);
     else
         m_tag = NULL;
 
-    if (vtype != NULL && vtype[0] != '\0')
+    if (vtype != NULL && vtype[0] != 0)
         m_type = strdup(vtype);
     else
         m_type = NULL;
@@ -186,6 +188,104 @@ bool View::excludeClass(const char* cssCls)
     size_t pos = (size_t)(found - full);
     m_cssCls.erase (pos, tmp.length() - 1);
     onClassChanged();
+    return true;
+}
+
+size_t View::getContentLength() const
+{
+    if (m_contentId >= 0) {
+        return strlen(GetText(m_contentId));
+    }
+    else {
+        return m_contentStr.length();
+    }
+
+    return 0;
+}
+
+const char* View::getContent() const
+{
+    if (m_contentId >= 0) {
+        return GetText(m_contentId);
+    }
+    else {
+        return m_contentStr.c_str();
+    }
+
+    return NULL;
+}
+
+bool View::setContent(const char* content)
+{
+    if (NULL == content)
+        content = "";
+
+    m_contentId = -1;
+    m_contentStr = content;
+
+    onContentChanged();
+    return true;
+}
+
+bool View::setContent(int strId)
+{
+    if (strId < 0 || strId == m_contentId) {
+        return false;
+    }
+
+    m_contentId = strId;
+    m_contentStr.clear();
+
+    onContentChanged();
+    return true;
+}
+
+size_t View::getAltLength() const
+{
+    if (m_altId >= 0) {
+        return strlen(GetText(m_altId));
+    }
+    else {
+        return m_altStr.length();
+    }
+
+    return 0;
+}
+
+const char* View::getAlt() const
+{
+    if (m_altId >= 0) {
+        return GetText(m_altId);
+    }
+    else {
+        return m_altStr.c_str();
+    }
+
+    return NULL;
+}
+
+bool View::setAlt(const char* alt)
+{
+    if (NULL == alt)
+        alt = "";
+
+    m_altId = -1;
+    m_altStr = alt;
+
+    onAltChanged();
+    return true;
+}
+
+bool View::setAlt(int strId)
+{
+    if (strId < 0 || strId == m_altId) {
+        return false;
+    }
+
+    m_altId = strId;
+    m_altStr.clear();
+
+    onAltChanged();
     return true;
 }
 
@@ -796,6 +896,14 @@ void View::onNameChanged()
 }
 
 void View::onClassChanged()
+{
+}
+
+void View::onContentChanged()
+{
+}
+
+void View::onAltChanged()
 {
 }
 
