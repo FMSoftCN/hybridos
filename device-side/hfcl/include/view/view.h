@@ -135,13 +135,10 @@ public:
         return setAttribute(VIEW_COMMON_ATTR_LANG, lang);
     }
 
-    // helpers to get/set title of the view
-    const char* getTitle() const {
-        return getAttribute(VIEW_COMMON_ATTR_TITLE);
-    }
-    bool setTitle(const char* title) {
-        return setAttribute(VIEW_COMMON_ATTR_TITLE, title);
-    }
+    // methods to get/set title of the view
+    const char* getTitle() const;
+    bool setTitle(const char* title);
+    bool setTitle(HTStrId strId);
 
     // methods to get/set integer identifier of the view
     int getId() const;
@@ -162,17 +159,22 @@ public:
         else
             show();
     }
-    bool setVisible(bool b) { return setFlag(b, VA_VISIBLE); }
+    void setVisible(bool b) {
+        if (b)
+            show();
+        else
+            hide();
+    }
 
     bool isVisible() { return m_flags & VA_VISIBLE; }
     bool isHidden() { return !(m_flags & VA_VISIBLE); }
     void show() {
         setVisible(true);
-        onShown();
+        setAttribute(VIEW_COMMON_ATTR_HIDDEN, NULL);
     }
     void hide() {
         setVisible(false);
-        onHidden();
+        setAttribute(VIEW_COMMON_ATTR_HIDDEN, "hidden");
     }
 
     // methods to get/set content of the view
@@ -188,8 +190,8 @@ public:
     bool isReplaced() const { return m_contentResId != 0; }
 
     // Operators for CSS class of the view
-    const char* getClasses() { return m_cssCls.c_str(); }
-    bool setClasses(const char* cssClses);
+    const char* getClass() const { return m_cssCls.c_str(); }
+    bool setClass(const char* cssClses);
     bool includeClass(const char* cssCls);
     bool excludeClass(const char* cssCls);
 
@@ -473,6 +475,9 @@ protected:
     HTStrId m_contentStrId;
     HTResId m_contentResId;
     std::string m_contentStr;
+
+    HTStrId m_titleStrId;
+    std::string m_titleStr;
 
     const void* m_addData;
     Uint32 m_flags;

@@ -65,6 +65,8 @@ View::View(const char* vtag, const char* vtype,
         const char* vclass, const char* vname, int vid)
     : m_cssCls(vclass ? vclass : "")
     , m_contentStrId(-1)
+    , m_contentResId(0)
+    , m_titleStrId(-1)
     , m_addData(0)
     , m_flags(0)
     , m_parent(0)
@@ -132,6 +134,16 @@ bool View::detach()
 
 const char* View::getAttribute(const char* attrKey) const
 {
+    if (strcasecmp(VIEW_COMMON_ATTR_CLASS, attrKey) == 0) {
+        return getClass();
+    }
+    else if (strcasecmp(VIEW_COMMON_ATTR_TITLE, attrKey) == 0) {
+        return getTitle();
+    }
+    else if (strcasecmp(VIEW_COMMON_ATTR_ALT, attrKey) == 0) {
+        return getTextContent();
+    }
+
     AttributesMap::const_iterator it = m_attrs.find(attrKey);
     if (it != m_attrs.end()) {
         it->second.c_str();
@@ -172,6 +184,16 @@ static bool is_style_attribute(const char* attr)
 
 bool View::setAttribute(const char* attrKey, const char* attrValue)
 {
+    if (strcasecmp(VIEW_COMMON_ATTR_CLASS, attrKey) == 0) {
+        return setClass(attrValue);
+    }
+    else if (strcasecmp(VIEW_COMMON_ATTR_TITLE, attrKey) == 0) {
+        return setTitle(attrValue);
+    }
+    else if (strcasecmp(VIEW_COMMON_ATTR_ALT, attrKey) == 0) {
+        return setTextContent(attrValue);
+    }
+
     const char* old_value = NULL;
     AttributesMap::iterator it = m_attrs.find(attrKey);
     if (it != m_attrs.end()) {
@@ -287,46 +309,40 @@ bool View::setDir(int dir)
     return setAttribute(VIEW_COMMON_ATTR_DIR, _dir);
 }
 
-#if 0
-void View::setDir(int dir)
+const char* View::getTitle() const
 {
-    if (dir != m_dir) {
-        m_dir = dir;
-        if (getTextContentLength() > 0)
-            onContentChanged();
+    if (m_titleStrId >= 0) {
+        return GetText(m_titleStrId);
+    }
+    else {
+        return m_titleStr.c_str();
     }
 }
 
-void View::setLang(LanguageCode lang)
+bool View::setTitle(const char* title)
 {
-    if (lang != m_lang) {
-        m_lang = lang;
-        if (getTextContentLength() > 0)
-            onContentChanged();
-    }
-}
+    if (NULL == title)
+        title = "";
 
-bool View::setName(const char* name)
-{
-    const char* curr_name = getAttribute("name");
+    m_titleStrId = -1;
+    m_titleStr = title;
 
-    if (name && curr_name && strcasecmp(name, curr_name)) {
-        goto ok;
-    }
-    else if (curr_name[0] == 0 && name) {
-        goto ok;
-    }
-
-    return false;
-
-ok:
-    setAttribute(VIEW_COMMON_ATTR_NAME, name);
-    onNameChanged();
     return true;
 }
-#endif
 
-bool View::setClasses(const char* cssClses)
+bool View::setTitle(HTStrId strId)
+{
+    if (strId < 0 || strId == m_titleStrId) {
+        return false;
+    }
+
+    m_titleStrId = strId;
+    m_titleStr.clear();
+
+    return true;
+}
+
+bool View::setClass(const char* cssClses)
 {
     std::string tmp = cssClses;
     add_spaces (tmp);
