@@ -34,6 +34,13 @@
 
 namespace hfcl {
 
+/*
+ * The TextView is intended to support the text-level tags defined by HTML5:
+ *
+ * https://www.w3.org/TR/html52/textlevel-semantics.html#textlevel-semantics
+ *
+ */
+
 TextView::TextView(const char* vtag, const char* vtype,
             const char* vclass, const char* vname, int vid)
     : ViewContainer(vtag, vtype, vclass, vname, vid)
@@ -44,32 +51,20 @@ TextView::~TextView()
 {
 }
 
-/*
- * For TextView, when the content changed, it should destroy
- * all children elements, and rebuild the children elements
- * by parsing the content and splitting the content into one or
- * multiple atomic text views.
- */
 void TextView::onContentChanged()
 {
 }
 
-AUTO_REGISTER_VIEW(hvtext, TextView);
-
-// the following tags are supported by TextView
-// <p> <span> <em> <strong> <dfn> <code> <samp> <kbd> <var> <cite> <a>
-
-AUTO_REGISTER_VIEW(p, TextView);
-AUTO_REGISTER_VIEW(span, TextView);
+AUTO_REGISTER_VIEW(a, TextView);
 AUTO_REGISTER_VIEW(em, TextView);
 AUTO_REGISTER_VIEW(strong, TextView);
+AUTO_REGISTER_VIEW(cite, TextView);
+AUTO_REGISTER_VIEW(span, TextView);
 AUTO_REGISTER_VIEW(dfn, TextView);
 AUTO_REGISTER_VIEW(code, TextView);
 AUTO_REGISTER_VIEW(samp, TextView);
 AUTO_REGISTER_VIEW(kbd, TextView);
 AUTO_REGISTER_VIEW(var, TextView);
-AUTO_REGISTER_VIEW(cite, TextView);
-AUTO_REGISTER_VIEW(a, TextView);
 
 } // namespace hfcl
 

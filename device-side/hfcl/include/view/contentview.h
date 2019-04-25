@@ -1,7 +1,7 @@
 /*
 ** HFCL - HybridOS Foundation Class Library
 **
-** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
+** Copyright (C) 2019 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
 **
@@ -16,22 +16,28 @@
 ** GNU General Public License for more details.
 **
 ** You should have received a copy of the GNU General Public License
-** along with this program. If not, see <https://www.gnu.org/licenses/>.
+** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef HFCL_VIEW_H_
-#define HFCL_VIEW_H_
+#ifndef HFCL_VIEW_CONTENTVIEW_H_
+#define HFCL_VIEW_CONTENTVIEW_H_
 
-#include "view/view.h"
-#include "view/viewcontainer.h"
-#include "view/viewfactory.h"
-#include "view/rootview.h"
-#include "view/panelview.h"
-#include "view/contentview.h"
-#include "view/textview.h"
-#include "view/staticimageview.h"
-#include "view/animatedimageview.h"
-#include "view/transition.h"
+#include <string>
 
-#endif // HFCL_VIEW_H_
+#include "../view/viewcontainer.h"
 
+namespace hfcl {
+
+class ContentView : public ViewContainer {
+public:
+    ContentView(const char* vtag, const char* vtype,
+            const char* vclass = NULL, const char* vname = NULL, int vid = 0);
+    virtual ~ContentView();
+
+    /* overloaded public virtual functions */
+    virtual void onContentChanged();
+};
+
+} // namespace hfcl
+
+#endif /* HFCL_VIEW_CONTENTVIEW_H_ */

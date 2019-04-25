@@ -10,6 +10,7 @@ libhfcl_view_la_SOURCES = \
     viewcontainer.cc \
     rootview.cc \
     panelview.cc \
+    contentview.cc \
     textview.cc \
     atomictextview.cc \
     animatedimageview.cc \
