@@ -43,7 +43,7 @@ namespace hfcl {
  * In HVML, the following tags are supported by ContentView:
  *
  * - `article`, `aside`, `nav`, `section`
- * - `header`, `footer`, `main`
+ * - `header`, `footer`, `main`, `div`
  * - `ul`, `ol`, `dl`
  * - `address`
  * - `blockquote`

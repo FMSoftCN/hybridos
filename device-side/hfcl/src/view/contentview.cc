@@ -43,7 +43,7 @@ namespace hfcl {
  * In HVML, the following tags are supported by ContentView:
  *
  * - `h1`, `h2`, `h3`, `h4`, `h5`, `h6`
- * - `p`, `div`
+ * - `p`, `pre`
  * - `li`, `dt`, `dd`
  * - `summary`
  * - `figcaption`
@@ -86,7 +86,7 @@ void ContentView::onContentChanged()
 }
 
 AUTO_REGISTER_VIEW(p, ContentView);
-AUTO_REGISTER_VIEW(div, ContentView);
+AUTO_REGISTER_VIEW(pre, ContentView);
 AUTO_REGISTER_VIEW(h1, ContentView);
 AUTO_REGISTER_VIEW(h2, ContentView);
 AUTO_REGISTER_VIEW(h3, ContentView);
