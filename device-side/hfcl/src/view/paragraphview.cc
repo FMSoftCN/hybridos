@@ -20,12 +20,12 @@
 */
 
 /*
-** contentview.cc: The implementation of ContentView class.
+** contentview.cc: The implementation of ParagraphView class.
 **
 ** Create by WEI Yongming at 2019/04/25
 */
 
-#include "view/contentview.h"
+#include "view/paragraphview.h"
 
 #include "view/viewfactory.h"
 #include "common/helpers.h"
@@ -35,12 +35,12 @@
 namespace hfcl {
 
 /*
- * The ContentView is intended to support the tags which are
+ * The ParagraphView is intended to support the tags which are
  * defined as 'Grouping content' (such as `p`) by HTML5:
  *
  * https://www.w3.org/TR/html52/grouping-content.html#grouping-content
  *
- * In HVML, the following tags are supported by ContentView:
+ * In HVML, the following tags are supported by ParagraphView:
  *
  * - `h1`, `h2`, `h3`, `h4`, `h5`, `h6`
  * - `p`, `pre`
@@ -48,7 +48,7 @@ namespace hfcl {
  * - `summary`
  * - `figcaption`
  *
- * By using ContentView, you can use most of HTML5 text-level tags to
+ * By using ParagraphView, you can use most of HTML5 text-level tags to
  * format the content, for examples:
  *
  *      Welcome to the world of <em>HybridOS</em>!
@@ -65,39 +65,39 @@ namespace hfcl {
  * automatically.
  */
 
-ContentView::ContentView(const char* vtag, const char* vtype,
+ParagraphView::ParagraphView(const char* vtag, const char* vtype,
             const char* vclass, const char* vname, int vid)
     : ViewContainer(vtag, vtype, vclass, vname, vid)
 {
 }
 
-ContentView::~ContentView()
+ParagraphView::~ParagraphView()
 {
 }
 
 /*
- * For ContentView, when the content changed, it should destroy
+ * For ParagraphView, when the content changed, it should destroy
  * all children elements, and rebuild the children elements
  * by parsing the content and splitting the content into one or
  * multiple text views.
  */
-void ContentView::onContentChanged()
+void ParagraphView::onContentChanged()
 {
 }
 
-AUTO_REGISTER_VIEW(p, ContentView);
-AUTO_REGISTER_VIEW(pre, ContentView);
-AUTO_REGISTER_VIEW(h1, ContentView);
-AUTO_REGISTER_VIEW(h2, ContentView);
-AUTO_REGISTER_VIEW(h3, ContentView);
-AUTO_REGISTER_VIEW(h4, ContentView);
-AUTO_REGISTER_VIEW(h5, ContentView);
-AUTO_REGISTER_VIEW(h6, ContentView);
-AUTO_REGISTER_VIEW(li, ContentView);
-AUTO_REGISTER_VIEW(dt, ContentView);
-AUTO_REGISTER_VIEW(dd, ContentView);
-AUTO_REGISTER_VIEW(summary, ContentView);
-AUTO_REGISTER_VIEW(figcaption, ContentView);
+AUTO_REGISTER_VIEW(p, ParagraphView);
+AUTO_REGISTER_VIEW(pre, ParagraphView);
+AUTO_REGISTER_VIEW(h1, ParagraphView);
+AUTO_REGISTER_VIEW(h2, ParagraphView);
+AUTO_REGISTER_VIEW(h3, ParagraphView);
+AUTO_REGISTER_VIEW(h4, ParagraphView);
+AUTO_REGISTER_VIEW(h5, ParagraphView);
+AUTO_REGISTER_VIEW(h6, ParagraphView);
+AUTO_REGISTER_VIEW(li, ParagraphView);
+AUTO_REGISTER_VIEW(dt, ParagraphView);
+AUTO_REGISTER_VIEW(dd, ParagraphView);
+AUTO_REGISTER_VIEW(summary, ParagraphView);
+AUTO_REGISTER_VIEW(figcaption, ParagraphView);
 
 } // namespace hfcl
 

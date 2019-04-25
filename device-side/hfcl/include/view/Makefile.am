@@ -11,8 +11,9 @@ myinclude_HEADERS= \
     transition.h \
     rootview.h \
     panelview.h \
-    contentview.h \
+    paragraphview.h \
     textview.h \
+    atomictextview.h \
     staticimageview.h \
     animatedimageview.h
 

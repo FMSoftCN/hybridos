@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef HFCL_VIEW_CONTENTVIEW_H_
-#define HFCL_VIEW_CONTENTVIEW_H_
+#ifndef HFCL_VIEW_PARAGRAPHVIEW_H_
+#define HFCL_VIEW_PARAGRAPHVIEW_H_
 
 #include <string>
 
@@ -28,11 +28,11 @@
 
 namespace hfcl {
 
-class ContentView : public ViewContainer {
+class ParagraphView : public ViewContainer {
 public:
-    ContentView(const char* vtag, const char* vtype,
+    ParagraphView(const char* vtag, const char* vtype,
             const char* vclass = NULL, const char* vname = NULL, int vid = 0);
-    virtual ~ContentView();
+    virtual ~ParagraphView();
 
     /* overloaded public virtual functions */
     virtual void onContentChanged();
@@ -40,4 +40,4 @@ public:
 
 } // namespace hfcl
 
-#endif /* HFCL_VIEW_CONTENTVIEW_H_ */
+#endif /* HFCL_VIEW_PARAGRAPHVIEW_H_ */
