@@ -119,12 +119,19 @@ public:
     const void *getAddData() const { return m_addData; }
 
     // methods to get/set name of the view
-    // name corresponds to the id attribute of one HVML element
     const char* getName() const {
         return getAttribute(VIEW_COMMON_ATTR_NAME);
     }
     bool setName(const char* name) {
         return setAttribute(VIEW_COMMON_ATTR_NAME, name);
+    }
+
+    // methods to get/set alternative of the view
+    const char* getAlt() const {
+        return getAttribute(VIEW_COMMON_ATTR_ALT);
+    }
+    bool setAlt(const char* alt) {
+        return setAttribute(VIEW_COMMON_ATTR_ALT, alt);
     }
 
     // helpers to get/set language of the view
