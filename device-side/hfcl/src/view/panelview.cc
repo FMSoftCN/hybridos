@@ -32,6 +32,25 @@
 
 namespace hfcl {
 
+/*
+ * The PanelView is intended to support the tags which are
+ * defined as 'Sectioning content' (such as `article`) by HTML5
+ * or some tags defined as 'Palpable content':
+ *
+ * https://www.w3.org/TR/html52/dom.html#sectioning-content
+ * https://www.w3.org/TR/html52/dom.html#palpable-content
+ *
+ * In HVML, the following tags are supported by ContentView:
+ *
+ * - `article`, `aside`, `nav`, `section`
+ * - `header`, `footer`, `main`
+ * - `ul`, `ol`, `dl`
+ * - `address`
+ * - `blockquote`
+ * - `figure`
+ * - `details`
+ */
+
 PanelView::PanelView(const char* vtag, const char* vtype,
             const char* vclass, const char* vname, int vid)
     : ViewContainer(vtag, vtype, vclass, vname, vid)
@@ -42,6 +61,18 @@ PanelView::~PanelView()
 {
 }
 
-AUTO_REGISTER_VIEW(hvpanel, PanelView);
+AUTO_REGISTER_VIEW(article, PanelView);
+AUTO_REGISTER_VIEW(aside, PanelView);
+AUTO_REGISTER_VIEW(nav, PanelView);
+AUTO_REGISTER_VIEW(section, PanelView);
+AUTO_REGISTER_VIEW(header, PanelView);
+AUTO_REGISTER_VIEW(footer, PanelView);
+AUTO_REGISTER_VIEW(ul, PanelView);
+AUTO_REGISTER_VIEW(ol, PanelView);
+AUTO_REGISTER_VIEW(dl, PanelView);
+AUTO_REGISTER_VIEW(address, PanelView);
+AUTO_REGISTER_VIEW(bockquote, PanelView);
+AUTO_REGISTER_VIEW(figure, PanelView);
+AUTO_REGISTER_VIEW(details, PanelView);
 
 } // namespace hfcl

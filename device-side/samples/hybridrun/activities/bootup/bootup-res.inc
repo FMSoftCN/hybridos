@@ -71,7 +71,7 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
         begin_client(logo)
             def_name(view_animation_logo)
             def_name(event_animation_logo)
-            begin_view(hvpanel)
+            begin_view(article)
                 set(Id, 100)
                 mystyle(BackgroundColor, rgba(255, 255, 255, 255))
                 // animate view
@@ -88,18 +88,18 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
         end_client
 
         begin_client(greet)
-            begin_view(hvpanel)
+            begin_view(article)
                 begin_view_full(hvimg, "logo", "", "logo", 100)
                     set(TextContent, "HybridOS Logo")
                     set(ResContent, my_image(animation_logo))
                     attribute("data", "the static logo")
                 end_view
 
-                begin_view_ex(hvctn, "single-line-vcenter")
+                begin_view_ex(p, "single-line-vcenter")
                     set(TextContent, _("Welcome to the world of <em>HybridOS</em>!"))
                 end_view
 
-                begin_view_ex(hvctn, "multi-line-vcenter")
+                begin_view_ex(p, "multi-line-vcenter")
                     set(TextContent, _("HybridOS is a totally new open source operating system designed for smart IoT devices and cloud computing environment."))
                 end_view
             end_view

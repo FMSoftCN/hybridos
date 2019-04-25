@@ -42,7 +42,11 @@ namespace hfcl {
  *
  * In HVML, the following tags are supported by ContentView:
  *
- * - `hvctn`:
+ * - `h1`, `h2`, `h3`, `h4`, `h5`, `h6`
+ * - `p`, `div`
+ * - `li`, `dt`, `dd`
+ * - `summary`
+ * - `figcaption`
  *
  * By using ContentView, you can use most of HTML5 text-level tags to
  * format the content, for examples:
@@ -54,7 +58,7 @@ namespace hfcl {
  * https://www.w3.org/TR/html52/textlevel-semantics.html#textlevel-semantics
  *
  * You can also use some tags to embed the other elements into
- * the text flow, such as `img`, `button`, `input`, `marquee`, `meter`,
+ * the  flow, such as `img`, `button`, `input`, `marquee`, `meter`,
  * and `progress`.
  *
  * This view will parse the content and generate the children views
@@ -81,7 +85,19 @@ void ContentView::onContentChanged()
 {
 }
 
-AUTO_REGISTER_VIEW(hvctn, ContentView);
+AUTO_REGISTER_VIEW(p, ContentView);
+AUTO_REGISTER_VIEW(div, ContentView);
+AUTO_REGISTER_VIEW(h1, ContentView);
+AUTO_REGISTER_VIEW(h2, ContentView);
+AUTO_REGISTER_VIEW(h3, ContentView);
+AUTO_REGISTER_VIEW(h4, ContentView);
+AUTO_REGISTER_VIEW(h5, ContentView);
+AUTO_REGISTER_VIEW(h6, ContentView);
+AUTO_REGISTER_VIEW(li, ContentView);
+AUTO_REGISTER_VIEW(dt, ContentView);
+AUTO_REGISTER_VIEW(dd, ContentView);
+AUTO_REGISTER_VIEW(summary, ContentView);
+AUTO_REGISTER_VIEW(figcaption, ContentView);
 
 } // namespace hfcl
 
