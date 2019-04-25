@@ -76,8 +76,8 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
                 mystyle(BackgroundColor, rgba(255, 255, 255, 255))
                 // animate view
                 begin_view(hvani)
+                    set(TextContent, _("HybridOS Animation Logo"))
                     set(ResContent, my_image(animation_logo))
-                    set(Alt, _("HybridOS Animation Logo"))
                     map(my_var(view_animation_logo))
                     on(Event::ET_VIEW, my_var(event_animation_logo))
                 end_view
@@ -90,8 +90,8 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
         begin_client(greet)
             begin_view(hvpanel)
                 begin_view_full(hvimg, "logo", "", "logo", 100)
+                    set(TextContent, "HybridOS Logo")
                     set(ResContent, my_image(animation_logo))
-                    set(Alt, "HybridOS Logo")
                     attribute("data", "the static logo")
                 end_view
 

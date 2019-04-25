@@ -63,15 +63,8 @@ static void add_spaces (std::string& str)
 
 View::View(const char* vtag, const char* vtype,
         const char* vclass, const char* vname, int vid)
-    : m_id(vid)
-    , m_dir(VIEW_TEXT_DIR_AUTO)
-    , m_tabIndex(-1)
-    , m_lang(LANGCODE_unknown)
-    , m_cssCls(vclass ? vclass : "")
-    , m_name(vname ? vname : "")
-    , m_contentType(VIEW_CONTENT_TYPE_TEXT)
+    : m_cssCls(vclass ? vclass : "")
     , m_contentStrId(-1)
-    , m_altId(-1)
     , m_addData(0)
     , m_flags(0)
     , m_parent(0)
@@ -89,6 +82,10 @@ View::View(const char* vtag, const char* vtype,
         m_type = strdup(vtype);
     else
         m_type = NULL;
+
+    setName(vname);
+
+    setId(vid);
 
     add_spaces(m_cssCls);
 }
@@ -133,145 +130,164 @@ bool View::detach()
     return false;
 }
 
-bool View::setName(const char* name)
+const char* View::getAttribute(const char* attrKey) const
 {
-    if (name && m_name.length() > 0) {
-        if (strcasecmp (name, m_name.c_str())) {
-            goto ok;
-        }
-    }
-    else if (m_name.length() == 0 && name) {
-        goto ok;
-    }
-
-    return false;
-
-ok:
-    m_name = name;
-    onNameChanged();
-    return true;
-}
-
-bool View::setClasses(const char* cssClses)
-{
-    std::string tmp = cssClses;
-    add_spaces (tmp);
-
-    if (strcasecmp (tmp.c_str(), m_cssCls.c_str()) == 0) {
-        return false;
-    }
-
-    m_cssCls = ' ';
-    m_cssCls += cssClses;
-    m_cssCls += ' ';
-    onClassChanged();
-    return true;
-}
-
-bool View::includeClass(const char* cssCls)
-{
-    std::string tmp = cssCls;
-    add_spaces (tmp);
-
-    if (strcasestr (m_cssCls.c_str(), tmp.c_str())) {
-        return false;
-    }
-
-    m_cssCls += cssCls;
-    m_cssCls += ' ';
-    onClassChanged();
-    return true;
-}
-
-bool View::excludeClass(const char* cssCls)
-{
-    std::string tmp = cssCls;
-    add_spaces (tmp);
-
-    const char* full = m_cssCls.c_str();
-    const char* found;
-    found = strcasestr (full, tmp.c_str());
-    if (found == NULL) {
-        return false;
-    }
-
-    size_t pos = (size_t)(found - full);
-    m_cssCls.erase (pos, tmp.length() - 1);
-    onClassChanged();
-    return true;
-}
-
-int View::getContentType() const
-{
-    return m_contentType;
-}
-
-size_t View::getTextContentLength() const
-{
-    if (m_contentType == VIEW_CONTENT_TYPE_TEXT) {
-        if (m_contentStrId >= 0) {
-            return strlen(GetText(m_contentStrId));
-        }
-        else {
-            return m_contentStr.length();
-        }
-    }
-
-    return 0;
-}
-
-const char* View::getTextContent() const
-{
-    if (m_contentType == VIEW_CONTENT_TYPE_TEXT) {
-        if (m_contentStrId >= 0) {
-            return GetText(m_contentStrId);
-        }
-        else {
-            return m_contentStr.c_str();
-        }
+    AttributesMap::const_iterator it = m_attrs.find(attrKey);
+    if (it != m_attrs.end()) {
+        it->second.c_str();
     }
 
     return NULL;
 }
 
-bool View::setTextContent(const char* content)
+static bool is_content_attribute(const char* attr)
 {
-    if (NULL == content)
-        content = "";
-
-    m_contentStrId = -1;
-    m_contentStr = content;
-    m_contentType = VIEW_CONTENT_TYPE_TEXT;
-
-    onContentChanged();
-    return true;
-}
-
-bool View::setTextContent(HTStrId strId)
-{
-    if (strId < 0 || strId == m_contentStrId) {
-        return false;
+    if (strcasecmp(VIEW_COMMON_ATTR_DIR, attr) == 0) {
+        return true;
     }
 
-    m_contentStrId = strId;
-    m_contentStr.clear();
-    m_contentType = VIEW_CONTENT_TYPE_TEXT;
+    if (strcasecmp(VIEW_COMMON_ATTR_LANG, attr) == 0) {
+        return true;
+    }
 
-    onContentChanged();
-    return true;
+    return false;
 }
 
-bool View::setResContent(HTResId resId)
+static bool is_style_attribute(const char* attr)
 {
-    m_contentResId = resId;
-    m_contentStrId = -1;
-    m_contentStr.clear();
-    m_contentType = VIEW_CONTENT_TYPE_RESOURCE;
+    if (strcasecmp(VIEW_COMMON_ATTR_ID, attr) == 0) {
+        return true;
+    }
 
-    onContentChanged();
+    if (strcasecmp(VIEW_COMMON_ATTR_NAME, attr) == 0) {
+        return true;
+    }
+
+    if (strcasecmp(VIEW_COMMON_ATTR_CLASS, attr) == 0) {
+        return true;
+    }
+
+    return false;
+}
+
+bool View::setAttribute(const char* attrKey, const char* attrValue)
+{
+    const char* old_value = NULL;
+    AttributesMap::iterator it = m_attrs.find(attrKey);
+    if (it != m_attrs.end()) {
+        if (attrValue == NULL) {
+            // erase the attribute
+            m_attrs.erase(attrKey);
+            goto changed;
+        }
+
+        old_value = it->second.c_str();
+    }
+
+    if (old_value && strcasecmp(attrValue, old_value)) {
+        m_attrs[attrKey] = attrValue;
+        goto changed;
+    }
+    else if (attrValue) {
+        m_attrs[attrKey] = attrValue;
+        goto changed;
+    }
+
+    return false;
+
+changed:
+    if (is_content_attribute(attrKey)) {
+        onContentChanged(attrKey);
+    }
+    else if (is_style_attribute(attrKey)) {
+        onStyleChanged(attrKey);
+    }
+    else if (strcasecmp(VIEW_COMMON_ATTR_HIDDEN, attrKey) == 0) {
+        if (old_value && strcasecmp("hidden", old_value) == 0) {
+            onShown();
+        }
+        else {
+            onHidden();
+        }
+    }
+
     return true;
 }
 
+int View::getId() const
+{
+    const char* id = getAttribute(VIEW_COMMON_ATTR_ID);
+    if (id == NULL)
+        return 0;
+
+    return atoi(id);
+}
+
+bool View::setId(int id)
+{
+    char buff[64];
+    snprintf(buff, 63, "%d", id);
+
+    return setAttribute(VIEW_COMMON_ATTR_ID, buff);
+}
+
+int View::getTabIndex() const
+{
+    const char* tabindex = getAttribute(VIEW_COMMON_ATTR_TABINDEX);
+    if (tabindex == NULL)
+        return 0;
+
+    return atoi(tabindex);
+}
+
+bool View::setTabIndex(int tabIndex)
+{
+    char buff[64];
+    snprintf(buff, 63, "%d", tabIndex);
+
+    return setAttribute(VIEW_COMMON_ATTR_TABINDEX, buff);
+}
+
+int View::getDir() const
+{
+    const char* dir = getAttribute(VIEW_COMMON_ATTR_DIR);
+    if (dir == NULL)
+        return VIEW_TEXT_DIR_LTR;
+
+    if (strcasecmp(dir, "ltr") == 0) {
+        return VIEW_TEXT_DIR_LTR;
+    }
+    else if (strcasecmp(dir, "rtl") == 0) {
+        return VIEW_TEXT_DIR_RTL;
+    }
+    else if (strcasecmp(dir, "auto") == 0) {
+        return VIEW_TEXT_DIR_AUTO;
+    }
+
+    return VIEW_TEXT_DIR_LTR;
+}
+
+bool View::setDir(int dir)
+{
+    const char* _dir;
+
+    switch (dir) {
+    case VIEW_TEXT_DIR_LTR:
+    default:
+        _dir = "ltr";
+        break;
+    case VIEW_TEXT_DIR_RTL:
+        _dir = "rtl";
+        break;
+    case VIEW_TEXT_DIR_AUTO:
+        _dir = "auto";
+        break;
+    }
+
+    return setAttribute(VIEW_COMMON_ATTR_DIR, _dir);
+}
+
+#if 0
 void View::setDir(int dir)
 {
     if (dir != m_dir) {
@@ -290,69 +306,133 @@ void View::setLang(LanguageCode lang)
     }
 }
 
-size_t View::getAltLength() const
+bool View::setName(const char* name)
 {
-    if (m_altId >= 0) {
-        return strlen(GetText(m_altId));
-    }
-    else {
-        return m_altStr.length();
-    }
+    const char* curr_name = getAttribute("name");
 
-    return 0;
-}
-
-const char* View::getAlt() const
-{
-    if (m_altId >= 0) {
-        return GetText(m_altId);
+    if (name && curr_name && strcasecmp(name, curr_name)) {
+        goto ok;
     }
-    else {
-        return m_altStr.c_str();
+    else if (curr_name[0] == 0 && name) {
+        goto ok;
     }
 
-    return NULL;
-}
+    return false;
 
-bool View::setAlt(const char* alt)
-{
-    if (NULL == alt)
-        alt = "";
-
-    m_altId = -1;
-    m_altStr = alt;
-
-    onAltChanged();
+ok:
+    setAttribute(VIEW_COMMON_ATTR_NAME, name);
+    onNameChanged();
     return true;
 }
+#endif
 
-bool View::setAlt(HTStrId strId)
+bool View::setClasses(const char* cssClses)
 {
-    if (strId < 0 || strId == m_altId) {
+    std::string tmp = cssClses;
+    add_spaces (tmp);
+
+    if (strcasecmp (tmp.c_str(), m_cssCls.c_str()) == 0) {
         return false;
     }
 
-    m_altId = strId;
-    m_altStr.clear();
-
-    onAltChanged();
+    m_cssCls = ' ';
+    m_cssCls += cssClses;
+    m_cssCls += ' ';
+    onStyleChanged(VIEW_COMMON_ATTR_CLASS);
     return true;
 }
 
-const char* View::getAttribute(const char* attrKey) const
+bool View::includeClass(const char* cssCls)
 {
-    AttributesMap::const_iterator it = m_attrs.find(attrKey);
-    if (it != m_attrs.end()) {
-        it->second.c_str();
+    std::string tmp = cssCls;
+    add_spaces (tmp);
+
+    if (strcasestr (m_cssCls.c_str(), tmp.c_str())) {
+        return false;
     }
 
-    return NULL;
+    m_cssCls += cssCls;
+    m_cssCls += ' ';
+    onStyleChanged(VIEW_COMMON_ATTR_CLASS);
+    return true;
 }
 
-bool View::setAttribute(const char* attrKey, const char* attrValue)
+bool View::excludeClass(const char* cssCls)
 {
-    m_attrs[attrKey] = attrValue;
+    std::string tmp = cssCls;
+    add_spaces (tmp);
+
+    const char* full = m_cssCls.c_str();
+    const char* found;
+    found = strcasestr (full, tmp.c_str());
+    if (found == NULL) {
+        return false;
+    }
+
+    size_t pos = (size_t)(found - full);
+    m_cssCls.erase (pos, tmp.length() - 1);
+    onStyleChanged(VIEW_COMMON_ATTR_CLASS);
     return true;
+}
+
+size_t View::getTextContentLength() const
+{
+    if (m_contentStrId >= 0) {
+        return strlen(GetText(m_contentStrId));
+    }
+    else {
+        return m_contentStr.length();
+    }
+}
+
+const char* View::getTextContent() const
+{
+    if (m_contentStrId >= 0) {
+        return GetText(m_contentStrId);
+    }
+    else {
+        return m_contentStr.c_str();
+    }
+}
+
+bool View::setTextContent(const char* content)
+{
+    if (NULL == content)
+        content = "";
+
+    m_contentStrId = -1;
+    m_contentStr = content;
+
+    if (m_contentResId == 0)
+        onContentChanged(NULL);
+
+    return true;
+}
+
+bool View::setTextContent(HTStrId strId)
+{
+    if (strId < 0 || strId == m_contentStrId) {
+        return false;
+    }
+
+    m_contentStrId = strId;
+    m_contentStr.clear();
+
+    if (m_contentResId == 0)
+        onContentChanged(NULL);
+
+    return true;
+}
+
+bool View::setResContent(HTResId resId)
+{
+    if (resId > 0 && m_contentResId != resId) {
+        m_contentResId = resId;
+        onContentChanged(NULL);
+        return true;
+    }
+
+    return false;
 }
 
 bool View::checkClass(const char* cssCls) const
@@ -941,19 +1021,11 @@ void View::onContainingBlockChanged()
 {
 }
 
-void View::onNameChanged()
+void View::onStyleChanged(const char* attrKey)
 {
 }
 
-void View::onClassChanged()
-{
-}
-
-void View::onContentChanged()
-{
-}
-
-void View::onAltChanged()
+void View::onContentChanged(const char* attrKey)
 {
 }
 

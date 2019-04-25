@@ -57,20 +57,26 @@ typedef struct {
 } ViewClickEventStruct;
 
 enum {
-    VIEW_CONTENT_TYPE_TEXT,         // literal text
-    VIEW_CONTENT_TYPE_RESOURCE,     // loaded resource
-};
-
-enum {
     VIEW_TEXT_DIR_LTR,
     VIEW_TEXT_DIR_RTL,
     VIEW_TEXT_DIR_AUTO,
 };
 
+#define VIEW_COMMON_ATTR_ID         "id"
+#define VIEW_COMMON_ATTR_DIR        "dir"
+#define VIEW_COMMON_ATTR_ALT        "alt"
+#define VIEW_COMMON_ATTR_NAME       "name"
+#define VIEW_COMMON_ATTR_LANG       "lang"
+#define VIEW_COMMON_ATTR_CLASS      "class"
+#define VIEW_COMMON_ATTR_TITLE      "title"
+#define VIEW_COMMON_ATTR_HIDDEN     "hidden"
+#define VIEW_COMMON_ATTR_SUBJECT    "subject"
+#define VIEW_COMMON_ATTR_TABINDEX   "tabindex"
+
 class View : public Object {
 public:
-    View(const char* vtag, const char* vtype = NULL,
-            const char* vclass = NULL, const char* vname = NULL, int vid = 0);
+    View(const char* vtag, const char* vtype,
+            const char* vclass, const char* vname, int vid);
     virtual ~View();
 
     bool attach(ViewContainer* parent);
@@ -108,55 +114,46 @@ public:
     // return the HVML type, e.g., button, text, date, time, and so on
     const char* type() const { return m_type; }
 
-    // methods to get/set  (integer) of the view
-    int getId() const { return m_id; }
-    void setId(int id) { m_id = id; }
-
     // methods to get/set additional data of the view
     void setAddData(const void *addData) { m_addData = addData; }
     const void *getAddData() const { return m_addData; }
 
     // methods to get/set name of the view
     // name corresponds to the id attribute of one HVML element
-    const char* getName() const { return m_name.c_str(); }
-    bool setName(const char* name);
+    const char* getName() const {
+        return getAttribute(VIEW_COMMON_ATTR_NAME);
+    }
+    bool setName(const char* name) {
+        return setAttribute(VIEW_COMMON_ATTR_NAME, name);
+    }
 
-    // methods to get/set content of the view
-    int getContentType() const;
-    const char* getTextContent() const;
-    HTResId getResourceContent() const;
-    size_t getTextContentLength() const;
-    bool setTextContent(const char* content);
-    bool setTextContent(HTStrId strId);
-    bool setResContent(HTResId resId);
+    // helpers to get/set language of the view
+    const char* getLang() const {
+        return getAttribute(VIEW_COMMON_ATTR_LANG);
+    }
+    bool setLang(const char* lang) {
+        return setAttribute(VIEW_COMMON_ATTR_LANG, lang);
+    }
 
-    // methods to get/set alternative content of the view; for replaced element
-    const char* getAlt() const;
-    size_t getAltLength() const;
-    bool setAlt(const char* alt);
-    bool setAlt(HTStrId strId);
+    // helpers to get/set title of the view
+    const char* getTitle() const {
+        return getAttribute(VIEW_COMMON_ATTR_TITLE);
+    }
+    bool setTitle(const char* title) {
+        return setAttribute(VIEW_COMMON_ATTR_TITLE, title);
+    }
 
-    // Operators for CSS class of the view
-    const char* getClasses() { return m_cssCls.c_str(); }
-    bool setClasses(const char* cssClses);
-    bool includeClass(const char* cssCls);
-    bool excludeClass(const char* cssCls);
-
-    // methods to get/set text direction of the view
-    int getDir() const { return m_dir; }
-    void setDir(int dir);
-
-    // methods to get/set language of the view
-    LanguageCode getLang() const { return m_lang; }
-    void setLang(LanguageCode lang);
+    // methods to get/set integer identifier of the view
+    int getId() const;
+    bool setId(int id);
 
     // methods to get/set tab index of the view
-    int getTabIndex() const { return m_tabIndex; }
-    void setTabIndex(int tabIndex) { m_tabIndex = tabIndex; }
+    int getTabIndex() const;
+    bool setTabIndex(int tabIndex);
 
-    // methods to get/set title of the view
-    const char* getTitle() const { return m_title.c_str(); }
-    void setTitle(const char* title) { m_title = title; }
+    // methods to get/set text direction of the view
+    int getDir() const;
+    bool setDir(int dir);
 
     // methods to get/set hidden attribute of the view
     void setHidden(bool b) {
@@ -177,6 +174,24 @@ public:
         setVisible(false);
         onHidden();
     }
+
+    // methods to get/set content of the view
+    int getContentType() const;
+    const char* getTextContent() const;
+    HTResId getResourceContent() const;
+    size_t getTextContentLength() const;
+    bool setTextContent(const char* content);
+    bool setTextContent(HTStrId strId);
+    bool setResContent(HTResId resId);
+
+    // If content type is resource, the view is replaced
+    bool isReplaced() const { return m_contentResId != 0; }
+
+    // Operators for CSS class of the view
+    const char* getClasses() { return m_cssCls.c_str(); }
+    bool setClasses(const char* cssClses);
+    bool includeClass(const char* cssCls);
+    bool excludeClass(const char* cssCls);
 
     /* Operators to get/set flags of the view */
     bool isDisabled() { return m_flags & VA_DISABLED; }
@@ -269,7 +284,6 @@ public:
 
     virtual bool isContainer() const { return false; }
     virtual bool isRoot() const { return false; }
-    virtual bool isReplaced() const { return false; }
     virtual bool getIntrinsicWidth(HTReal* v) const { return false; }
     virtual bool getIntrinsicHeight(HTReal* v) const { return false; }
     virtual bool getIntrinsicRatio(HTReal* v) const { return false; }
@@ -290,12 +304,11 @@ public:
 
     /* virtual functions for attribute changes */
     virtual void onContainingBlockChanged();
-    virtual void onNameChanged();
-    virtual void onClassChanged();
-    virtual void onContentChanged();
-    virtual void onAltChanged();
+    virtual void onStyleChanged(const char* attrKey);
+    virtual void onContentChanged(const char* attrKey);
     virtual void onShown();
     virtual void onHidden();
+
     virtual void onDisabled();
     virtual void onEnabled();
     virtual void onChecked();
@@ -455,22 +468,11 @@ protected:
     char* m_tag;
     char* m_type;
 
-    int m_id;
-    int m_dir;
-    int m_tabIndex;
-    LanguageCode m_lang;
-
     std::string m_cssCls;
-    std::string m_name;
-    std::string m_title;
 
-    int     m_contentType;
     HTStrId m_contentStrId;
     HTResId m_contentResId;
     std::string m_contentStr;
-
-    HTStrId m_altId;        // >=0: valid string identifier else string object.
-    std::string m_altStr;
 
     const void* m_addData;
     Uint32 m_flags;
