@@ -65,6 +65,10 @@ A template is a virtual element, which can be use to generate other
 real elements by substituting some properties and inserting them to the
 view elements tree. Note that HTML 5.2 has introduced `template` tag.
 
+A view client is a tree of document object. You can define multiple view
+clients for one activity. But at the same time, only one view client can
+be kept active.
+
 For example, to define a UI, which contains many general elements,
 we use the HVML tag `view`:
 
@@ -112,48 +116,52 @@ The following tags are specific to HVML in order to clone the template:
 
 For example:
 
-    <activity>
-        <template name="user-item" class="user-item">
-            <li>
-                <data name="id" value="$id"></data>
-                <img name="avatar" src="$avatar" />
-                <p name="name" content="$name"></p>
-            </li>
-        </template>
+    <hvapp>
 
-        <template name="footer-cn" class="footer">
+        <template id="footer-cn">
             <p><a href="http://www.baidu.com">Baidu</a></p>
         </template>
 
-        <template name="footer-tw" class="footer">
+        <template id="footer-tw">
             <p><a href="http://www.bing.com">Bing</a></p>
         </template>
 
-        <template name="footer-def" class="footer">
+        <template id="footer-def">
             <p><a href="http://www.google.com">Google</a></p>
         </template>
 
-        <view>
-            <header>
-                <h1>User List</h1>
-            </header>
+        <activity>
 
-            <main>
-                <ul>
-                    <iterator data-template="user-item" data-iterate-by="users" />
-                </ul>
-            </main>
+            <template id="user-item">
+                <li>
+                    <data data-key="id" data-attr="value"></data>
+                    <img data-key="avatar" data-attr="src" />
+                    <p data-key="name" data-attr="content"></p>
+                </li>
+            </template>
 
-            <footer>
-                <substitute>
-                    <condition data-template="footer-cn"  data-if="locale=='zh_CN'" />
-                    <condition data-template="footer-tw"  data-if="locale=='zh_TW'" />
-                    <condition data-template="footer-def" data-if="true" />
-                </substitute>
-            </footer>
-        </view>
+            <view>
+                <header>
+                    <h1>User List</h1>
+                </header>
 
-    </activity>
+                <main>
+                    <ul>
+                        <iterator data-template="user-item" data-source="users" />
+                    </ul>
+                </main>
+
+                <footer class="footer">
+                    <substitute data-source="global">
+                        <condition data-template="footer-cn"  data-if="locale=='zh_CN'" />
+                        <condition data-template="footer-tw"  data-if="locale=='zh_TW'" />
+                        <condition data-template="footer-def" data-if="true" />
+                    </substitute>
+                </footer>
+            </view>
+        </activity>
+
+    </hvapp>
 
 ### Tag properties
 
@@ -174,8 +182,6 @@ element.
 
 1. HVML is defined for user interfaces not documents
 
-1. No history compatibility issues
-
 1. Easy to localize
 
 In HTML5, we define a text paragraph like this:
@@ -189,23 +195,11 @@ generate a different webpage for the locale.
 
 However, in HVML, we define a text paragraph in the following way:
 
-    <hvtext content="$Welcome to the world of <em>HybridOS</em>!">
-    </hvtext>
+    <p content="$Welcome to the world of <em>HybridOS</em>!">
+    </p>
 
 So a JavaScript or C++ code can easily translate the content into other
 locale by using a GNU message file or a JSON table.
-
-Note that for the content of a `hvtext` element of HVML, you can embed
-the following HTML5 tags for text formatting:
-
-    <em> <strong> <dfn> <code> <samp> <kbd> <var> <cite> <a>
-
-The text view also supports the following HTML5 tags for Unicode bidirectional
-override:
-
-    <bdo>
-
-You can still use CSS to define the styles for these tags.
 
 ## A Sample
 
@@ -218,35 +212,47 @@ user item, the app will show the detailed information of the user.
 The following markup statements define the user list activity:
 
     <!-- The user list activity -->
-    <activity name="userList" hbd-app="firstSample">
+    <activity id="act-user-list" hbd-app="firstSample">
 
-        <!-- define a template based on the standard item view for future use -->
-        <template name="user-item" class="userItem">
-            <view type="hidden" name="id" />
-            </view>
-            <view type="image" name="avatar" />
-            </view>
-            <view type="text" name="name" />
-            </view>
+        <!-- define templates for future use -->
+        <template id="user-item">
+            <li class="user-item">
+                <data data-key="id" data-attr="value"></data>
+                <img data-key="avatar" data-attr="src" />
+                <span data-key="name" data-attr="content"></span>
+            </li>
         </template>
 
-        <template name="footer-cn" class="footerCN">
+        <template id="footer-cn">
+            <p><a href="http://www.baidu.com">Baidu</a></p>
         </template>
 
-        <template name="footer-us" class="footerUS">
+        <template id="footer-tw">
+            <p><a href="http://www.bing.com">Bing</a></p>
         </template>
 
-        <view name="thePanel" class="panel">
-            <p name="theHeader" content="$STRID_TITLE"
-                    class="panel-header">
-            </p>
-            <ul name="theList" class="userList">
-                <!-- use userItem view and iterate the view with an array variable: users -->
-                <iterator data-template="user-item" data-iterate-by="users" />
-            </ul>
-            <footer name="theFooter" content="$STRID_COPYING"
-                    class="panel-footer">
-                <substitute data-template-if="footer-cn" data-template-else="footer-us" data-substitute-condition="locale=='zh_CN'" />
+        <template id="footer-def">
+            <p><a href="http://www.google.com">Google</a></p>
+        </template>
+
+        <view name="item-list" class="panel">
+            <header>
+                <h1 name="theHeader" content="$STRID_TITLE" class="panel-header"></h1>
+            </header>
+
+            <main>
+                <ul>
+                    <iterator data-template="user-item" data-source="users" />
+                </ul>
+            </main>
+
+            <footer class="footer">
+                <substitute data-source="global">
+                    <condition data-template="footer-cn"  data-if="global.locale=='zh_CN'" />
+                    <condition data-template="footer-tw"  data-if="global.locale=='zh_TW'" />
+                    <condition data-template="footer-def" data-if="true" />
+                </substitute>
+                <p content="$STRID_COPYING" class="footer-copying"></p>
             </footer>
         </view>
 
@@ -255,7 +261,7 @@ The following markup statements define the user list activity:
             var app = hybridos.app ('firstSample');
 
             /* create the activity object and initialize the variables of the activity */
-            var activity = app.activity ('userList', function ($app, $activity, $intent) {
+            var activity = app.activity ('act-user-list', function ($app, $activity, $intent) {
                 $activity.users [] = {id: "1", avatar: "http://www.avatar.org/a.png", name: "John"};
                 $activity.users [] = {id: "2", avatar: "http://www.avatar.org/b.png", name: "Tom"};
             });
@@ -263,20 +269,21 @@ The following markup statements define the user list activity:
             /* bind the click event of userItem */
             activity.userItem.on ('click', function ($item) {
                 /* launcher userInfo activity */
-                app.launchActivity ("userInfo", {id: $item.id});
+                app.launchActivity ("act-user-info", {id: $item.id});
             });
 
-            /* show the view named 'thePanel' */
-            activity.showView ("thePanel");
+            /* show the view named 'item-list' */
+            activity.showView ("item-list");
         </script>
     </activity>
 
 The following markup statements define the user information activity:
 
     <!-- The user information activity -->
-    <activity name="theUserInfo" hbd-scope="firstSample">
+    <activity id="act-user-info" scope="firstSample">
 
-        <view type="panel" name="main" class="">
+        <view name="user-info" class="">
+            ...
         </view>
 
         <script>
@@ -284,7 +291,7 @@ The following markup statements define the user information activity:
             var app = hybridos.app ('firstSample');
 
             /* create the activity object and initialize the variables of the activity */
-            var activity = app.activity ('userList', function ($app, $activity, $intent) {
+            var activity = app.activity ('act-user-list', function ($app, $activity, $intent) {
                 $activity.id = $intent.id;
 
                 /* fill the user information by calling method of $app */
@@ -296,8 +303,8 @@ The following markup statements define the user information activity:
                 $activity.link = "";
             });
 
-            /* show the view named 'theUserInfo' */
-            activity.showView ("theUserInfo");
+            /* show the view named 'act-user-info' */
+            activity.showView ("user-info");
         </script>
     </activity>
 
@@ -311,7 +318,7 @@ An app can be defined by using the following markup statements:
     <hvapp name="firstSample">
         <!-- define the assets of the app, such as the activities, images, L10N text, CSS, and so on -->
         <assets>
-            <meta name="activity:userList" content="userlist.hvml" />
+            <meta name="activity:act-user-list" content="userlist.hvml" />
             <meta name="activity:userInfo" content="userinfo.hvml" />
             <meta name="img:defAvatar" content="/firstSample/assets/default.png" />
 
@@ -334,35 +341,35 @@ An app can be defined by using the following markup statements:
              */
             var app = hybridos.app ('firstSample', 'zh_CN');
 
-            /* launch the userList activity */
-            app.launchActivity ("userList", {});
+            /* launch the act-user-list activity */
+            app.launchActivity ("act-user-list", {});
         </script>
     </hvapp>
 
 Obviously, if you use the method above to define the app, you need prepare three files:
 
 * `firstsample.hvml`: the app;
-* `userlist.hvml`: the `userList` activity;
-* `userinfo.hvml`: the `userInfo` activity.
+* `userlist.hvml`: the `act-user-list` activity;
+* `userinfo.hvml`: the `act-user-info` activity.
 
 Otherwise, if your app is a simple one, you can organize your code in the following manner
 to use only one file:
 
     <hvapp name="firstSample">
         <assets>
-            <meta name="activity:userList" content="userlist.hvml" />
-            <meta name="activity:userInfo" content="userinfo.hvml" />
+            <meta name="activity:act-user-list" content="userlist.hvml" />
+            <meta name="activity:act-user-info" content="userinfo.hvml" />
             <meta name="img:defAvatar" content="/firstSample/assets/default.css" />
 
             <link rel="localtext" type="text/json" href="/firstSample/assets/messages/zh_CN.json" />
             <link rel="stylesheet" type="text/css" href="/firstSample/assets/default.css" />
         </assets>
 
-        <activity name="userList" hbd-app="firstSample">
+        <activity id="act-user-list" hbd-scope="firstSample">
             ...
         </activity>
 
-        <activity name="userInfo" hbd-app="firstSample">
+        <activity id="act-user-info" hbd-scope="firstSample">
             ...
         </activity>
 
@@ -397,16 +404,16 @@ It is possible to embed a HybridOS app into an existed HTML5 page:
 
             <p>This page shows howto embedded a HybridOS app in a HTML5 page.</p>
 
-            <hvapp name="firstSample">
+            <hvapp id="firstSample">
                 <assets>
                     ...
                 </assets>
 
-                <activity name="userList" hvapp="firstSample">
+                <activity id="act-user-list" hbd-scope="firstSample">
                     ...
                 </activity>
 
-                <activity name="userInfo" hvapp="firstSample">
+                <activity id="act-user-info" hbd-scope="firstSample">
                     ...
                 </activity>
 
