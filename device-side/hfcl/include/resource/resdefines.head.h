@@ -141,21 +141,21 @@
 #define end_css_group_res  RESID(cssg_end_id), };
 
 //Activity resource
-#define begin_client_res \
+#define begin_view_res \
     enum { RESID(client_begin_id) = MAKE_RES_ID(RESPKGID, R_TYPE_CLIENT, 0),
 
-#define end_client_res RESID(client_end_id) };
+#define end_view_res RESID(client_end_id) };
 
 #define apply_css_group(cssg_id)
 
-#define begin_client(name)  RESID(client_##name),
+#define begin_view(name)  RESID(client_##name),
 
-#define end_client
-
-#define begin_view(vtag)
-#define begin_view_ex(vtag, vclass)
-#define begin_view_full(vtag, vclass, vtype, vname, vid)
 #define end_view
+
+#define begin_element(vtag)
+#define begin_element_ex(vtag, vclass)
+#define begin_element_full(vtag, vclass, vtype, vname, vid)
+#define end_element
 
 #define import_view(view_id)
 #define begin_import_view(vtag, view_resid)

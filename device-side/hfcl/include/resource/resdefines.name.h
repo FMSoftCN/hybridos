@@ -145,18 +145,18 @@
 #define addSubMenu(str, imge, id)
 
 // clients resource
-#define begin_client_res
-#define end_client_res
+#define begin_view_res
+#define end_view_res
 
 #define apply_css_group(cssg_id)
 
-#define begin_client(name)
-#define end_client
-
-#define begin_view(vtag)
-#define begin_view_ex(vtag, vclass)
-#define begin_view_full(vtag, vclass, vtype, vname, vid)
+#define begin_view(name)
 #define end_view
+
+#define begin_element(vtag)
+#define begin_element_ex(vtag, vclass)
+#define begin_element_full(vtag, vclass, vtype, vname, vid)
+#define end_element
 
 #define import_view(view_resid)
 #define begin_import_view(vtag, view_resid)

@@ -67,47 +67,47 @@ begin_respkg(bootup, RES_PKG_BOOTUP_ID)
         end_css_group
     end_css_group_res
 
-    begin_client_res
-        begin_client(logo)
+    begin_view_res
+        begin_view(logo)
             def_name(view_animation_logo)
             def_name(event_animation_logo)
-            begin_view(article)
+            begin_element(article)
                 set(Id, 100)
                 mystyle(BackgroundColor, rgba(255, 255, 255, 255))
                 // animate view
-                begin_view(hvani)
+                begin_element(hvani)
                     set(TextContent, _("HybridOS Animation Logo"))
                     set(ResContent, my_image(animation_logo))
                     map(my_var(view_animation_logo))
                     on(Event::ET_VIEW, my_var(event_animation_logo))
-                end_view
-            end_view
+                end_element
+            end_element
 
             apply_css_group(sysid_css_group(global))
             apply_css_group(my_css_group(logo))
-        end_client
+        end_view
 
-        begin_client(greet)
-            begin_view(article)
-                begin_view_full(hvimg, "logo", "", "logo", 100)
+        begin_view(greet)
+            begin_element(article)
+                begin_element_full(hvimg, "logo", "", "logo", 100)
                     set(TextContent, "HybridOS Logo")
                     set(ResContent, my_image(animation_logo))
                     attribute("data", "the static logo")
-                end_view
+                end_element
 
-                begin_view_ex(p, "single-line-vcenter")
+                begin_element_ex(p, "single-line-vcenter")
                     set(TextContent, _("Welcome to the world of <em>HybridOS</em>!"))
-                end_view
+                end_element
 
-                begin_view_ex(p, "multi-line-vcenter")
+                begin_element_ex(p, "multi-line-vcenter")
                     set(TextContent, _("HybridOS is a totally new open source operating system designed for smart IoT devices and cloud computing environment."))
-                end_view
-            end_view
+                end_element
+            end_element
 
             apply_css_group(sysid_css_group(global))
             apply_css_group(my_css_group(greet))
-        end_client
-    end_client_res
+        end_view
+    end_view_res
 
 end_respkg
 

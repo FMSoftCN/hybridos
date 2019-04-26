@@ -122,18 +122,18 @@
 #undef end_css_group_res
 
 // Client resource
-#undef begin_client_res
-#undef end_client_res
+#undef begin_view_res
+#undef end_view_res
 
 #undef apply_css_group
 
-#undef begin_client
-#undef end_client
-
 #undef begin_view
-#undef begin_view_ex
-#undef begin_view_full
 #undef end_view
+
+#undef begin_element
+#undef begin_element_ex
+#undef begin_element_full
+#undef end_element
 
 #undef import_view
 #undef begin_import_view

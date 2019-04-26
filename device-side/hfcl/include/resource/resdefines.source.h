@@ -166,15 +166,15 @@ static int* array_quad_int (int a, int b, int c, int d)
 #define end_css_group_res
 
 // client resource
-#define begin_client_res
-#define end_client_res
+#define begin_view_res
+#define end_view_res
 
-#define begin_client(name)  \
+#define begin_view(name)  \
     static View* create_client_##name(ViewContainer* parent, ViewContext* viewCtxt, ContentProvider* cntProvider) { \
         View *_view_created = NULL; \
         ViewContainer *_parent = parent;
 
-#define end_client \
+#define end_view \
         return _view_created; \
     }
 
@@ -185,48 +185,48 @@ static int* array_quad_int (int a, int b, int c, int d)
         }
 
 // create a view with tag but without type, class, name, and id
-#define begin_view(vtag) \
+#define begin_element(vtag) \
     do { \
         ViewContainer *__saved_parent = _parent; \
         View* __view = CreateViewByTag(#vtag); \
         if (_parent) \
             _parent->addChild(__view); \
         else \
-            _DBG_PRINTF("begin_view: you are trying to create an ORPHAN view (Parent is not a contianer)\n"); \
+            _DBG_PRINTF("begin_element: you are trying to create an ORPHAN view (Parent is not a contianer)\n"); \
         if (__view->isContainer()) \
             _parent = (ViewContainer*)__view; \
         else \
             _parent = NULL;
 
 // create a view with tag, type, and class
-#define begin_view_ex(vtag, vclass) \
+#define begin_element_ex(vtag, vclass) \
     do { \
         ViewContainer *__saved_parent = _parent; \
         View* __view = CreateViewByTagAndType(#vtag, NULL, vclass, NULL, 0); \
         if (_parent) \
             _parent->addChild(__view); \
         else \
-            _DBG_PRINTF("begin_view_ex: you are trying to create an ORPHAN view (Parent is not a contianer)\n"); \
+            _DBG_PRINTF("begin_element_ex: you are trying to create an ORPHAN view (Parent is not a contianer)\n"); \
         if (__view->isContainer()) \
             _parent = (ViewContainer*)__view; \
         else \
             _parent = NULL;
 
 // create a view with tag, type, class, name, and id
-#define begin_view_full(vtag, vclass, vtype, vname, vid) \
+#define begin_element_full(vtag, vclass, vtype, vname, vid) \
     do { \
         ViewContainer *__saved_parent = _parent; \
         View* __view = CreateViewByTagAndType(#vtag, vtype, vclass, vname, vid); \
         if (_parent) \
             _parent->addChild(__view); \
         else \
-            _DBG_PRINTF("begin_view_full: you are trying to create an ORPHAN view (Parent is not a contianer)\n"); \
+            _DBG_PRINTF("begin_element_full: you are trying to create an ORPHAN view (Parent is not a contianer)\n"); \
         if (__view->isContainer()) \
             _parent = (ViewContainer*)__view; \
         else \
             _parent = NULL;
 
-#define end_view  \
+#define end_element  \
         _view_created = (View*)__view; \
         _parent = __saved_parent; \
     } while(0);
