@@ -102,11 +102,13 @@ Therefore, you can use the following HTML5 tags:
 
 The following tags are specific to HVML in order to clone the template:
 
-* `iterator`: define an iterator:
+* `iterator`: define an iterator.
+
 
     <iterator data-template="user-item" data-iterate-by="users" />
 
 * `subsitute` and `condition`: define conditional substitution.
+
 
     <substitute>
         <condition data-template="footer-cn"  data-if="locale=='zh_CN'" />
