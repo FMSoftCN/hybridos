@@ -13,9 +13,9 @@ All Rights Reserved.
 
 ## Introduction
 
-Considering the performance and differences in computing power of different
+`Considering the performance and differences in computing power of different
 IoT hardware platforms, HybridOS will provide a complete new GUI framework
-for device apps and client apps. The key features follow:
+for device apps and client apps. The key features follow:`
 
 1. If the hardware has enough computing power (at lease 64MB RAM and 600MHz CPU),
    the developer can write the device apps in JavaScript language. Or, the developer
