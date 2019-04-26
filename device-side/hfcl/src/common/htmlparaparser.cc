@@ -56,11 +56,35 @@ void HtmlParaParser::reset(size_t stackSize)
     m_len_left = 0;
 }
 
+#include "htmlentitiestable.inc"
+
+static int entity_token_comp(const void *a, const void *b)
+{
+    return strcmp(((struct _HtmlEntity*)a)->token,
+            ((struct _HtmlEntity*)b)->token);
+}
+
+static const char* search_entity(const char *token)
+{
+    struct _HtmlEntity *found, key;
+
+    key.token = token;
+    found = (struct _HtmlEntity *)bsearch (&key,
+            _html_entities, TABLESIZE(_html_entities),
+            sizeof(struct _HtmlEntity), entity_token_comp);
+
+    if (found)
+        return found->utf8;
+
+    return NULL;
+}
+
 size_t HtmlParaParser::parse(void* context, const char* content, size_t len,
             CB_ON_NEW_NODE on_new_node,
             CB_ON_NEW_ATTR on_new_attr,
             CB_ON_NEW_CHAR on_new_char)
 {
+    search_entity("COPY");
     return 0;
 }
 
