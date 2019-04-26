@@ -74,16 +74,21 @@ we use the HVML tag `view`:
 In a `view` or `template`, we use the standard sectioning and/or heading
 content tags of HTML5 to define the structure of the view:
 
-* `article`, `aside`, `nav`, `section`:
-* `header`, `footer`, `main`:
-* `ul`, `ol`:
-* `address`:
+* `article`, `aside`, `nav`, `section`
+* `header`, `footer`, `main`, `div`
+* `ul`, `ol`, `dl`
+* `address`
+* `blockquote`
+* `figure`
+* `details`
 
 and use the following tags to define the text paragraphs:
 
 * `h1`, `h2`, `h3`, `h4`, `h5`, `h6`
-* `p`, `div`
-* `li`
+* `p`, `prev`
+* `li`, `dt`, `dd`
+* `summary`
+* `figcaption`
 
 In a text paragraph, we use the phrasing content elements (text-level
 elements and embedded elemets) of HTML5 to define the content.
@@ -103,30 +108,67 @@ Therefore, you can use the following HTML5 tags:
 The following tags are specific to HVML in order to clone the template:
 
 * `iterator`: define an iterator.
-
-
-    <iterator data-template="user-item" data-iterate-by="users" />
-
 * `subsitute` and `condition`: define conditional substitution.
 
+For example:
 
-    <substitute>
-        <condition data-template="footer-cn"  data-if="locale=='zh_CN'" />
-        <condition data-template="footer-tw"  data-if="locale=='zh_TW'" />
-        <condition data-template="footer-def" data-if="true" />
-    </substitute>
+    <activity>
+        <template name="user-item" class="user-item">
+            <li>
+                <data name="id" value="$id"></data>
+                <img name="avatar" src="$avatar" />
+                <p name="name" content="$name"></p>
+            </li>
+        </template>
+
+        <template name="footer-cn" class="footer">
+            <p><a href="http://www.baidu.com">Baidu</a></p>
+        </template>
+
+        <template name="footer-tw" class="footer">
+            <p><a href="http://www.bing.com">Bing</a></p>
+        </template>
+
+        <template name="footer-def" class="footer">
+            <p><a href="http://www.google.com">Google</a></p>
+        </template>
+
+        <view>
+            <header>
+                <h1>User List</h1>
+            </header>
+
+            <main>
+                <ul>
+                    <iterator data-template="user-item" data-iterate-by="users" />
+                </ul>
+            </main>
+
+            <footer>
+                <substitute>
+                    <condition data-template="footer-cn"  data-if="locale=='zh_CN'" />
+                    <condition data-template="footer-tw"  data-if="locale=='zh_TW'" />
+                    <condition data-template="footer-def" data-if="true" />
+                </substitute>
+            </footer>
+        </view>
+
+    </activity>
 
 ### Tag properties
 
-1. `class`: A standard HTML5 property, which specifies the class of the view.
+1. `class`: A global HTML5 property, which specifies the class of the view.
 
-1. `name`: A standard HTML5 property, which specifies the name of an app,
+1. `name`: A global HTML5 property, which specifies the name of an app,
 an activity, a view, or a template, Generally, the value of this property
 will be a variable which you can refer to in your JavaScript or C++ code.
 
-1. `id`: A standard HTML5 property, which specifies the identifier of an app,
+1. `id`: A global HTML5 property, which specifies the identifier of an app,
 an activity, a view, or a template, Generally, the value of this property
 will be a variable which you can refer to in your JavaScript or C++ code.
+
+1. `content`: A global HVML property, which specifies the content of an
+element.
 
 ### Differences between HVML and HTML5
 
