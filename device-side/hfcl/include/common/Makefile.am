@@ -8,14 +8,15 @@ myinclude_HEADERS= \
     intrect.h \
     realrect.h \
     object.h \
-    event.h \
-    contextstream.h \
-    imebase.h \
-    imeinterface.h \
     list.h \
-    log.h \
-    methodeventlistener.h \
     helpers.h \
     quicksort.h \
     rbtree.h \
-    selectsort.h
+    selectsort.h \
+    htmlparaparser.h \
+    log.h \
+    contextstream.h \
+    event.h \
+    methodeventlistener.h \
+    imebase.h \
+    imeinterface.h
