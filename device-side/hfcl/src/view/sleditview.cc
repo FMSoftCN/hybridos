@@ -148,10 +148,10 @@ void SlEditView::setText(const char * str)
     if(m_IsCharCount)
     {
         unsigned int maxcount  =0;
-        maxcount =  GetUTF8CharCount(str,strlen(str));
+        maxcount =  get_utf8_char_count(str,strlen(str));
         if(maxcount > m_txtLimit && m_txtLimit > 0)
         {
-            len= GetUTF8LenByCharCount(str,m_txtLimit);
+            len= get_utf8_len_by_char_count(str,m_txtLimit);
         }
     }
     else
@@ -206,7 +206,7 @@ void SlEditView::setText(const char * str)
     #ifdef __MMI_T9__
     else
     {
-        int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+        int count =get_utf8_char_count(m_strings.c_str(),m_caretPos);
         imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
     }
     #endif
@@ -220,11 +220,11 @@ void SlEditView::setText(string str)
     if(m_IsCharCount)
     {
         unsigned int maxcount  =0;
-        maxcount =  GetUTF8CharCount(str.c_str(),str.size());
+        maxcount =  get_utf8_char_count(str.c_str(),str.size());
         if (m_txtLimit < 0 || maxcount <= m_txtLimit){
                 m_strings = str;
             }else{
-                int Len = GetUTF8LenByCharCount(str.c_str(),m_txtLimit);
+                int Len = get_utf8_len_by_char_count(str.c_str(),m_txtLimit);
                 m_strings = str.substr(0, Len);
             }
     }
@@ -246,7 +246,7 @@ void SlEditView::setText(string str)
     #ifdef __MMI_T9__
     else
     {
-        int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+        int count =get_utf8_char_count(m_strings.c_str(),m_caretPos);
         imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
     }
     #endif
@@ -280,13 +280,13 @@ void SlEditView::insertText(const char *text)
 
     if(m_IsCharCount)
     {
-        txtcount =  GetUTF8CharCount(text,txtLen);
-        strcount =  GetUTF8CharCount(m_strings.c_str(),m_strings.length());
+        txtcount =  get_utf8_char_count(text,txtLen);
+        strcount =  get_utf8_char_count(m_strings.c_str(),m_strings.length());
         if(m_txtLimit > 0  && (txtcount + strcount) > m_txtLimit)
         {
             txtcount = m_txtLimit - strcount;
         }
-        insLen = GetUTF8LenByCharCount(text,txtcount);
+        insLen = get_utf8_len_by_char_count(text,txtcount);
     }
     else
     {
@@ -303,7 +303,7 @@ void SlEditView::insertText(const char *text)
                 unsigned int charLen;
                 strncpy(m_edit_tempstr1, src, m_caretPos);
                 while (insLen > 0 && p != NULL){
-                    charLen = GetFirstUTF8CharLen(p, txtLen);
+                    charLen = get_first_utf8_char_len(p, txtLen);
                     if (insLen > charLen) {
                         strncat(m_edit_tempstr1, p, charLen);
                         m_caretPos += charLen;
@@ -344,18 +344,18 @@ void SlEditView::replacePrevChar(const char *ch)
         strcpy(m_edit_tempstr2, m_edit_tempstr1 + m_caretPos);
         m_edit_tempstr1[m_caretPos] = '\0';
     }
-    int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
+    int lastChLen = get_last_utf8_char_len(m_edit_tempstr1, strlen(m_edit_tempstr1));
 
     m_edit_tempstr1[m_caretPos - lastChLen] = '\0';
 
     if(m_IsCharCount)
     {
-        unsigned int strcount =  GetUTF8CharCount(m_strings.c_str(),m_strings.size());
-        unsigned int inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
+        unsigned int strcount =  get_utf8_char_count(m_strings.c_str(),m_strings.size());
+        unsigned int inscount = (ch != NULL ? get_utf8_char_count(ch,strlen(ch)) : 0) ;
 
         if (m_txtLimit > 0 && strcount - 1 + inscount > m_txtLimit) {
             inscount = m_txtLimit -( strcount - 1);
-            insLen = GetUTF8LenByCharCount(ch,inscount);
+            insLen = get_utf8_len_by_char_count(ch,inscount);
         }
     }
     else
@@ -443,13 +443,13 @@ void SlEditView::insertStringFromT9(char *ch, int cursor)
     if(m_IsCharCount)
     {
         unsigned int maxcount  =0;
-        maxcount =  GetUTF8CharCount(ch,strlen(ch));
+        maxcount =  get_utf8_char_count(ch,strlen(ch));
         if(maxcount > m_txtLimit)
         {
-            int Len = GetUTF8LenByCharCount(ch,m_txtLimit);
+            int Len = get_utf8_len_by_char_count(ch,m_txtLimit);
             memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
             strncpy(m_edit_tempstr1, ch,Len);
-            int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
+            int lastChLen = get_last_utf8_char_len(m_edit_tempstr1, strlen(m_edit_tempstr1));
             m_edit_tempstr1[Len - lastChLen] = '\0';
             m_strings = m_edit_tempstr1;
             cursor = m_strings.size();
@@ -473,7 +473,7 @@ void SlEditView::insertStringFromT9(char *ch, int cursor)
         {
             memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
             strncpy(m_edit_tempstr1, ch,m_txtLimit);
-            int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
+            int lastChLen = get_last_utf8_char_len(m_edit_tempstr1, strlen(m_edit_tempstr1));
             m_edit_tempstr1[m_txtLimit - lastChLen] = '\0';
             m_strings = m_edit_tempstr1;
             cursor = m_strings.size();
@@ -499,7 +499,7 @@ void SlEditView::SynText(void)
 {
     //m_caretPos = m_strings.length();
     m_bSelect = false;
-    int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+    int count =get_utf8_char_count(m_strings.c_str(),m_caretPos);
     imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
 }
 
@@ -508,7 +508,7 @@ void SlEditView::DeleteChar(void)
     int count;
     replacePrevChar(NULL);
     showCaret(false);
-    count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+    count =get_utf8_char_count(m_strings.c_str(),m_caretPos);
     imeT9KeyRSKClearHandlerMultilineInputBox((char *)m_strings.c_str(),count);
     if(imeT9GetActiveWordCount() == 0)
         m_bSelect = false;
@@ -521,7 +521,7 @@ void SlEditView::ResetT9Mode(bool  Neednotifyevent)
     m_bSelect = false;
     if(imeGetInputModeFlag() == INPUT_MODE_SMART)
     {
-        int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+        int count =get_utf8_char_count(m_strings.c_str(),m_caretPos);
         imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
     }
     if(Neednotifyevent)
@@ -537,17 +537,17 @@ void SlEditView::setCursorFromT9(void)
     m_caretPos = 0;
     for (int i = 0; i < unicodeCursor; i++)
     {
-        int f_w_len = GetFirstUTF8CharLen(utf8S, utf8Len);
+        int f_w_len = get_first_utf8_char_len(utf8S, utf8Len);
         m_caretPos += f_w_len;
         utf8S += f_w_len;
         utf8Len -= f_w_len;
     }
     if(m_IsCharCount)
     {
-        unsigned int maxcount = GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+        unsigned int maxcount = get_utf8_char_count(m_strings.c_str(),m_caretPos);
         if(maxcount > m_txtLimit)
         {
-            int Len = GetUTF8LenByCharCount(m_strings.c_str(),m_txtLimit);
+            int Len = get_utf8_len_by_char_count(m_strings.c_str(),m_txtLimit);
             m_caretPos = Len;
         }
     }
@@ -584,7 +584,7 @@ void SlEditView:: displayAddWord(char *ch, int* pos, int wordlen,string &str, bo
     }
     while(wordlen)
     {
-        int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
+        int lastChLen = get_last_utf8_char_len(m_edit_tempstr1, strlen(m_edit_tempstr1));
         deslen += lastChLen;
         m_edit_tempstr1[*pos - deslen] = '\0';
         wordlen--;
@@ -593,12 +593,12 @@ void SlEditView:: displayAddWord(char *ch, int* pos, int wordlen,string &str, bo
 
     if(m_IsCharCount)
     {
-        unsigned int strcount =  GetUTF8CharCount(str.c_str(),str.size());
-        unsigned int inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
+        unsigned int strcount =  get_utf8_char_count(str.c_str(),str.size());
+        unsigned int inscount = (ch != NULL ? get_utf8_char_count(ch,strlen(ch)) : 0) ;
 
         if (m_txtLimit > 0 && strcount - delcount + inscount > m_txtLimit) {
             inscount = m_txtLimit -( strcount - delcount);
-            insLen = GetUTF8LenByCharCount(ch,inscount);
+            insLen = get_utf8_len_by_char_count(ch,inscount);
         }
     }
     else
@@ -673,7 +673,7 @@ void SlEditView:: addWord(char *ch)
 #endif
 int SlEditView::getTextMCharLen(void)
 {
-    return GetUTF8CharInfo(m_strings.c_str(), m_strings.size(), NULL);
+    return get_utf_chars_info(m_strings.c_str(), m_strings.size(), NULL);
 }
 
 static inline char _charactor(int key_code)
@@ -835,7 +835,7 @@ bool SlEditView::dispatchEvent(Event *event)
                 else
 #endif    //__MMI_T9__
                 if (m_caretPos > 0) {
-                    int lastChLen = GetLastUTF8CharLen(m_strings.c_str(), m_caretPos);
+                    int lastChLen = get_last_utf8_char_len(m_strings.c_str(), m_caretPos);
                     m_caretPos -= lastChLen;
                     showCaret(true);
                     updateView();
@@ -859,7 +859,7 @@ bool SlEditView::dispatchEvent(Event *event)
                     if(m_IsCharCount)
                     {
                         unsigned int strcount  =0;
-                        strcount =  GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+                        strcount =  get_utf8_char_count(m_strings.c_str(),m_caretPos);
                         if(strcount >= m_txtLimit)
                             max_check = FALSE;
                     }
@@ -896,7 +896,7 @@ bool SlEditView::dispatchEvent(Event *event)
                     return STOP_DISPATCH;
                 } else if (m_caretPos < getTextLength()) {
                     string sub = m_strings.substr(m_caretPos, -1);
-                    int firstChLen = GetFirstUTF8CharLen(sub.c_str(), getTextLength() - m_caretPos);
+                    int firstChLen = get_first_utf8_char_len(sub.c_str(), getTextLength() - m_caretPos);
                     m_caretPos += firstChLen;
                     showCaret(true);
                     updateView();
@@ -970,7 +970,7 @@ bool SlEditView::dispatchEvent(Event *event)
                 {
                     if(m_IsCharCount)
                     {
-                        unsigned int maxcount =  GetUTF8CharCount(m_strings.c_str(),m_strings.size());
+                        unsigned int maxcount =  get_utf8_char_count(m_strings.c_str(),m_strings.size());
                         if(maxcount >=m_txtLimit)
                             return STOP_DISPATCH;
                     }
@@ -1016,7 +1016,7 @@ bool SlEditView::dispatchEvent(Event *event)
                         replacePrevChar((char *)utf8);
                     }
                     else if(m_strings.length() < textMaxLimit()
-                        || (m_IsCharCount && (unsigned int)GetUTF8CharCount(m_strings.c_str(),m_strings.size()) < textMaxLimit()) )
+                        || (m_IsCharCount && (unsigned int)get_utf8_char_count(m_strings.c_str(),m_strings.size()) < textMaxLimit()) )
                     {
                         if(ch[0] == '0')
                         {
@@ -1191,7 +1191,7 @@ int SlEditView::CalculateCursor(GraphicsContext *gc,IntRect rc, string tmpStr, i
         Uint16 visIndex, unicodeCaretPos;
         Uint16 tmpChar[2] = {0,};
         int w;
-        int visual_str_len = GetUTF8CharCount(tmpStr.c_str(), tmpStr.length());
+        int visual_str_len = get_utf8_char_count(tmpStr.c_str(), tmpStr.length());
         string tempStr = tmpStr;
 
         temp_unicode_str = (Uint16*)malloc((visual_str_len+1) * sizeof(Uint16));
@@ -1201,7 +1201,7 @@ int SlEditView::CalculateCursor(GraphicsContext *gc,IntRect rc, string tmpStr, i
         ConvertToGlyphForm(temp_unicode_str, visual_str_len, 0);
         getBidiString(temp_unicode_str, bidiStrOrder, visual_str_len, gc->getBiDiFlag(), TRUE);
 
-        unicodeCaretPos = GetUTF8CharCount(tempStr.c_str(), caretPos);
+        unicodeCaretPos = get_utf8_char_count(tempStr.c_str(), caretPos);
         if(getTextHighlight())
         {
             if(gc->getBiDiFlag())
@@ -1260,7 +1260,7 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
 #ifdef __MMI_T9_ARABIC__
     const char *str = m_strings.c_str();
     char tmpchar[8]={0};
-    int realCount = GetUTF8CharInfo (m_strings.c_str(), len, info);
+    int realCount = get_utf_chars_info (m_strings.c_str(), len, info);
 
     info [realCount] = len;
     for (int i = 1; i <= realCount; /*i++*/) {
@@ -1301,7 +1301,7 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
             memset(tmp,0,100);
             while ( str != NULL){
                 int _w, _h;
-                int charLen = GetFirstUTF8CharLen((const char *)str, strlen((char *)str));
+                int charLen = get_first_utf8_char_len((const char *)str, strlen((char *)str));
                 if (charLen > 0) {
                     strncat(tmp, (char *)str, charLen);
                     gc->getTextDrawSize(tmp, f, &_w, &_h);
@@ -1328,7 +1328,7 @@ void SlEditView::innerDrawText(GraphicsContext *gc, const string text, const Int
         memset(info, 0, (len + 1) * sizeof(int));
 
         while ( str != NULL){
-            int charLen = GetFirstUTF8CharLen((const char *)str, strlen((char *)str));
+            int charLen = get_first_utf8_char_len((const char *)str, strlen((char *)str));
             info[count] = charLen;
             str = str+charLen;
             if(*str == 0)

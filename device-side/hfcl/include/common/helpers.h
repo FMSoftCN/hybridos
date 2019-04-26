@@ -75,12 +75,14 @@ int uc32_to_utf8(Uint32 uc, char* outbuf);
  */
 Uint32 utf8_to_uc32(const char* mchar, int mchar_len);
 
-int GetFirstUTF8CharLen (const char *str, int len);
-int GetLastUTF8CharLen (const char *str, int len);
-int GetUTF8CharInfo (const char *mstr, int len, int *retPosChars);
-int GetUTF8CharCount (const char *mstr, int len);
+int get_first_utf8_char_len(const char *mstr, int len);
+int get_last_utf8_char_len(const char *mstr, int len);
+int get_utf_chars_info(const char *mstr, int len, int *char_pos);
+int get_utf8_char_count(const char *mstr, int len);
+int get_utf8_len_by_char_count(const char *mstr, int nr_chars);
+
+/* to be deprecated */
 bool HasUCS2Char (const char *mstr, int len);
-int GetUTF8LenByCharCount (const char *mstr, int charCount);
 Uint16 UTF8ToUCS2 (Uint8 *utf8);
 bool IsNumberUCS2Char (Uint16 inChar);
 bool IsSymbolUCS2Char (Uint16 inChar);

@@ -160,7 +160,7 @@ int uc32_to_utf8(Uint32 c, char* outbuf)
     return len;
 }
 
-int GetUTF8CharInfo(const char *mstr, int len, int *retPosChars)
+int get_utf_chars_info(const char *mstr, int len, int *retPosChars)
 {
     int count = 0;
     int left_bytes = len;
@@ -220,7 +220,7 @@ int GetUTF8CharInfo(const char *mstr, int len, int *retPosChars)
     return count;
 }
 
-int GetLastUTF8CharLen(const char *str, int len)
+int get_last_utf8_char_len(const char *str, int len)
 {
     int left_bytes = len;
     int len_cur_char;
@@ -250,7 +250,7 @@ int GetLastUTF8CharLen(const char *str, int len)
     return lastlen;
 }
 
-int GetFirstUTF8CharLen(const char *str, int len)
+int get_first_utf8_char_len(const char *str, int len)
 {
     if(str == NULL || len <= 0)
     {
@@ -262,7 +262,7 @@ int GetFirstUTF8CharLen(const char *str, int len)
     return utf8_len_first_char((unsigned char*)str, len);
 }
 
-int GetUTF8CharCount(const char *mstr, int len)
+int get_utf8_char_count(const char *mstr, int len)
 {
     int count = 0;
     int left_bytes = len;
@@ -290,7 +290,7 @@ int GetUTF8CharCount(const char *mstr, int len)
     return count;
 }
 
-int GetUTF8LenByCharCount(const char *mstr, int charcount)
+int get_utf8_len_by_char_count(const char *mstr, int charcount)
 {
    char *str_temp = NULL;
    int charLen, tLen = 0;
@@ -301,7 +301,7 @@ int GetUTF8LenByCharCount(const char *mstr, int charcount)
     }
     str_temp = (char *)mstr;
     while (charcount){
-        charLen = GetFirstUTF8CharLen(str_temp, strlen(str_temp));
+        charLen = get_first_utf8_char_len(str_temp, strlen(str_temp));
         tLen += charLen;
         str_temp += charLen;
         charcount --;

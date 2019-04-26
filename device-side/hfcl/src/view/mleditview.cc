@@ -156,12 +156,12 @@ void MlEditView::setText(const char * str)
     if(m_IsCharCount)
     {
         unsigned int maxcount  =0;
-        maxcount = GetUTF8CharCount (str,strlen(str));
+        maxcount = get_utf8_char_count (str,strlen(str));
 
         if (m_txtLimit < 0 || maxcount <= m_txtLimit){
             m_strings = str;
         }else{
-            int Len = GetUTF8LenByCharCount(str,m_txtLimit);
+            int Len = get_utf8_len_by_char_count(str,m_txtLimit);
             char *tmp = (char *)malloc(Len * sizeof(char) +2);
             memset(tmp, 0x0, Len * sizeof(char)+2);
             strncpy(tmp, str, Len);
@@ -190,7 +190,7 @@ void MlEditView::setText(const char * str)
     }
     m_caretPos = m_strings.length();
 #ifdef __MMI_T9__
-    int count = GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+    int count = get_utf8_char_count(m_strings.c_str(),m_caretPos);
     imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
 #endif
 
@@ -213,11 +213,11 @@ void MlEditView::setText(string str)
     if(m_IsCharCount)
     {
        unsigned int maxcount  =0;
-       maxcount =  GetUTF8CharCount(str.c_str(),str.size());
+       maxcount =  get_utf8_char_count(str.c_str(),str.size());
        if (m_txtLimit < 0 || maxcount <= m_txtLimit){
             m_strings = str;
         } else {
-                int Len = GetUTF8LenByCharCount(str.c_str(),m_txtLimit);
+                int Len = get_utf8_len_by_char_count(str.c_str(),m_txtLimit);
                 m_strings = str.substr(0, Len);
         }
     }
@@ -236,7 +236,7 @@ void MlEditView::setText(string str)
     }
     m_caretPos = m_strings.length();
 #ifdef __MMI_T9__
-    int count = GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+    int count = get_utf8_char_count(m_strings.c_str(),m_caretPos);
     imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
 #endif
     raiseNotifyEvent(NOTIFY_EDIT_SETTING_TEXT);
@@ -268,12 +268,12 @@ void MlEditView::_insertText(const char *text, int* pos, string& str, bool inter
 
     if(m_IsCharCount)
     {
-        txtcount =  GetUTF8CharCount(text,txtLen);
-        strcount =  GetUTF8CharCount(str.c_str(),str.length());
+        txtcount =  get_utf8_char_count(text,txtLen);
+        strcount =  get_utf8_char_count(str.c_str(),str.length());
         if(m_txtLimit > 0  && (txtcount + strcount) > m_txtLimit) {
             txtcount = m_txtLimit - strcount;
         }
-        insLen = GetUTF8LenByCharCount(text,txtcount);
+        insLen = get_utf8_len_by_char_count(text,txtcount);
     }
     else
     {
@@ -290,7 +290,7 @@ void MlEditView::_insertText(const char *text, int* pos, string& str, bool inter
             unsigned int charLen, tLen = 0;
             strncpy(m_edit_tempstr1, src, *pos);
             while (insLen > 0 && p != NULL){
-                charLen = GetFirstUTF8CharLen(p, txtLen);
+                charLen = get_first_utf8_char_len(p, txtLen);
                 if (insLen > charLen) {
                     strncat(m_edit_tempstr1, p, charLen);
                     tLen += charLen;
@@ -379,7 +379,7 @@ void MlEditView::layoutStringsByWord(void)
     m_lineCout = 0;
     m_lineCharList.clear();
 
-    cCount = GetUTF8CharCount(ptr, m_strings.length());
+    cCount = get_utf8_char_count(ptr, m_strings.length());
 
     if(cCount > 500) {
         tmpStr = ( char *)malloc ((cCount + 2) * 2 * sizeof (char));
@@ -549,7 +549,7 @@ void MlEditView::layoutStrings(int fromLine)
 
         int *info = (int *)malloc ((_len + 1) * sizeof(int));
 
-        int realCount = GetUTF8CharInfo (_start, _len, info);
+        int realCount = get_utf_chars_info (_start, _len, info);
         if (realCount == 0) {
             lineLen = 0;
             m_lineCharList.push_back(lineLen);
@@ -657,7 +657,7 @@ void MlEditView::refreshCaretPos(bool fromXY)
             }
             else {
                 int *info = (int *)malloc ((len + 1) * sizeof(int));
-                int realCount = GetUTF8CharInfo (_str, len, info);
+                int realCount = get_utf_chars_info (_str, len, info);
 
                 info [realCount] = len;
 
@@ -724,7 +724,7 @@ void MlEditView::_replacePrevChar(const char *ch, int* pos, string &str, bool in
             (*pos)--;
         m_edit_tempstr1[*pos] = '\0';
     }
-    int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
+    int lastChLen = get_last_utf8_char_len(m_edit_tempstr1, strlen(m_edit_tempstr1));
 
     if(m_edit_tempstr1[*pos - lastChLen] == '\n')
         isNewline = TRUE;
@@ -732,12 +732,12 @@ void MlEditView::_replacePrevChar(const char *ch, int* pos, string &str, bool in
     m_edit_tempstr1[*pos - lastChLen] = '\0';
 
     if (m_IsCharCount) {
-        unsigned int strcount =  GetUTF8CharCount(str.c_str(),str.size());
-        unsigned int inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
+        unsigned int strcount =  get_utf8_char_count(str.c_str(),str.size());
+        unsigned int inscount = (ch != NULL ? get_utf8_char_count(ch,strlen(ch)) : 0) ;
 
         if (m_txtLimit > 0 && strcount - 1 + inscount > m_txtLimit) {
             inscount = m_txtLimit -( strcount - 1);
-            insLen = GetUTF8LenByCharCount(ch,inscount);
+            insLen = get_utf8_len_by_char_count(ch,inscount);
         }
     }
     else {
@@ -830,12 +830,12 @@ void MlEditView::insertStringFromT9(char *ch, int cursor)
     if(m_IsCharCount) {
 
         unsigned int maxcount  =0;
-        maxcount =  GetUTF8CharCount(ch,strlen(ch));
+        maxcount =  get_utf8_char_count(ch,strlen(ch));
         if (maxcount > m_txtLimit) {
-            int Len = GetUTF8LenByCharCount (ch, m_txtLimit);
+            int Len = get_utf8_len_by_char_count (ch, m_txtLimit);
             memset (m_edit_tempstr1,0,EDITOR_MAX_LEN);
             strncpy (m_edit_tempstr1, ch,Len);
-            int lastChLen = GetLastUTF8CharLen (m_edit_tempstr1, strlen(m_edit_tempstr1));
+            int lastChLen = get_last_utf8_char_len (m_edit_tempstr1, strlen(m_edit_tempstr1));
             m_edit_tempstr1[Len - lastChLen] = '\0';
             m_strings = m_edit_tempstr1;
             cursor = m_strings.size();
@@ -856,7 +856,7 @@ void MlEditView::insertStringFromT9(char *ch, int cursor)
         if(len > m_txtLimit) {
             memset(m_edit_tempstr1,0,EDITOR_MAX_LEN);
             strncpy(m_edit_tempstr1, ch,m_txtLimit);
-            int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
+            int lastChLen = get_last_utf8_char_len(m_edit_tempstr1, strlen(m_edit_tempstr1));
             m_edit_tempstr1[m_txtLimit - lastChLen] = '\0';
             m_strings = m_edit_tempstr1;
             cursor = m_strings.size();
@@ -884,7 +884,7 @@ void MlEditView::SynText(void)
     //m_caretPos = m_strings.length();
     //int count;
     //m_bSelect = false;
-    //count = GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+    //count = get_utf8_char_count(m_strings.c_str(),m_caretPos);
     imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),m_caretPos);
 }
 
@@ -893,7 +893,7 @@ void MlEditView::DeleteChar(void)
     int count;
     replacePrevChar(NULL);
     showCaret(false);
-    count = GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+    count = get_utf8_char_count(m_strings.c_str(),m_caretPos);
     imeT9KeyRSKClearHandlerMultilineInputBox((char *)m_strings.c_str(),count);
     if(imeT9GetActiveWordCount() == 0)
         m_bSelect = false;
@@ -905,7 +905,7 @@ void MlEditView::ResetT9Mode (bool Neednotifyevent)
     m_addword = false;
     m_bSelect = false;
     if(imeGetInputModeFlag() == INPUT_MODE_SMART) {
-        int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+        int count =get_utf8_char_count(m_strings.c_str(),m_caretPos);
         imeT9SyncWithInputBoxMultilineInputBox((char *)m_strings.c_str(),count);
     }
 
@@ -922,16 +922,16 @@ void MlEditView::setCursorFromT9(void)
     m_caretPos = 0;
 
     for (int i = 0; i < unicodeCursor; i++) {
-        int f_w_len = GetFirstUTF8CharLen(utf8S, utf8Len);
+        int f_w_len = get_first_utf8_char_len(utf8S, utf8Len);
         m_caretPos += f_w_len;
         utf8S += f_w_len;
         utf8Len -= f_w_len;
     }
 
     if(m_IsCharCount) {
-        unsigned int maxcount = GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+        unsigned int maxcount = get_utf8_char_count(m_strings.c_str(),m_caretPos);
         if(maxcount > m_txtLimit) {
-            int Len = GetUTF8LenByCharCount(m_strings.c_str(),m_txtLimit);
+            int Len = get_utf8_len_by_char_count(m_strings.c_str(),m_txtLimit);
             m_caretPos = Len;
         }
     }
@@ -967,19 +967,19 @@ void MlEditView::displayAddWord(char *ch, int* pos, int wordlen,string &str, boo
     }
 
     while(wordlen) {
-        int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
+        int lastChLen = get_last_utf8_char_len(m_edit_tempstr1, strlen(m_edit_tempstr1));
         deslen += lastChLen;
         m_edit_tempstr1[*pos - deslen] = '\0';
         wordlen--;
     }
 
     if(m_IsCharCount) {
-        unsigned int strcount =  GetUTF8CharCount(str.c_str(),str.size());
-        unsigned int inscount = (ch != NULL ? GetUTF8CharCount(ch,strlen(ch)) : 0) ;
+        unsigned int strcount =  get_utf8_char_count(str.c_str(),str.size());
+        unsigned int inscount = (ch != NULL ? get_utf8_char_count(ch,strlen(ch)) : 0) ;
 
         if (m_txtLimit > 0 && strcount - delcount + inscount > m_txtLimit) {
             inscount = m_txtLimit -( strcount - delcount);
-            insLen = GetUTF8LenByCharCount(ch,inscount);
+            insLen = get_utf8_len_by_char_count(ch,inscount);
         }
     }
     else {
@@ -1054,7 +1054,7 @@ void MlEditView::addWord(char *ch)
 
 int MlEditView::getTextMCharLen(void)
 {
-    return GetUTF8CharInfo(m_strings.c_str(), m_strings.size(), NULL);
+    return get_utf_chars_info(m_strings.c_str(), m_strings.size(), NULL);
 }
 
 static inline char _charactor(int key_code)
@@ -1199,7 +1199,7 @@ bool MlEditView::dispatchEvent(Event *event)
                 else
 #endif
                 if (m_caretPos > 0) {
-                    int lastChLen = GetLastUTF8CharLen(m_strings.c_str(), m_caretPos);
+                    int lastChLen = get_last_utf8_char_len(m_strings.c_str(), m_caretPos);
                     m_caretPos -= lastChLen;
                     refreshCaretPos(false);
                     showCaret(true);
@@ -1216,7 +1216,7 @@ bool MlEditView::dispatchEvent(Event *event)
                     if(m_IsCharCount)
                     {
                         unsigned int strcount  =0;
-                        strcount =  GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+                        strcount =  get_utf8_char_count(m_strings.c_str(),m_caretPos);
                         if(strcount >= m_txtLimit)
                             max_check = FALSE;
                     }
@@ -1254,7 +1254,7 @@ bool MlEditView::dispatchEvent(Event *event)
                     return STOP_DISPATCH;
                 } else if (m_caretPos < (int)getTextLength()) {
                     string sub = m_strings.substr(m_caretPos, -1);
-                    int firstChLen = GetFirstUTF8CharLen(sub.c_str(), (int)getTextLength() - m_caretPos);
+                    int firstChLen = get_first_utf8_char_len(sub.c_str(), (int)getTextLength() - m_caretPos);
                     m_caretPos += firstChLen;
                     refreshCaretPos(false);
                     showCaret(true);
@@ -1277,7 +1277,7 @@ bool MlEditView::dispatchEvent(Event *event)
                         m_addword = false;
                         if(m_bSelect==true)
                         {
-                            int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+                            int count =get_utf8_char_count(m_strings.c_str(),m_caretPos);
                             imeT9KeyArrowUpHandlerMultilineInputBox(count);
                             imeRefreshString();
                             return STOP_DISPATCH;
@@ -1285,7 +1285,7 @@ bool MlEditView::dispatchEvent(Event *event)
                          else
                         {
                             int ret = switchLine(true);
-                            int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+                            int count =get_utf8_char_count(m_strings.c_str(),m_caretPos);
                             imeT9KeyArrowUpHandlerMultilineInputBox(count);
 
                             return ret;
@@ -1313,7 +1313,7 @@ bool MlEditView::dispatchEvent(Event *event)
                         m_addword = false;
                         if(m_bSelect==true)
                         {
-                            int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+                            int count =get_utf8_char_count(m_strings.c_str(),m_caretPos);
                             imeT9KeyArrowDownHandlerMultilineInputBox(count);
                             imeRefreshString();
 
@@ -1324,7 +1324,7 @@ bool MlEditView::dispatchEvent(Event *event)
                         else
                         {
                            bool ret = switchLine(false);
-                           int count =GetUTF8CharCount(m_strings.c_str(),m_caretPos);
+                           int count =get_utf8_char_count(m_strings.c_str(),m_caretPos);
                            imeT9KeyArrowDownHandlerMultilineInputBox(count);
 
                            return ret;
@@ -1366,7 +1366,7 @@ bool MlEditView::dispatchEvent(Event *event)
                 {
                     if(m_IsCharCount)
                     {
-                        unsigned int maxcount = GetUTF8CharCount(m_strings.c_str(),m_strings.size());
+                        unsigned int maxcount = get_utf8_char_count(m_strings.c_str(),m_strings.size());
                         if(maxcount >= m_txtLimit)
                             return STOP_DISPATCH;
                     }
@@ -1413,7 +1413,7 @@ bool MlEditView::dispatchEvent(Event *event)
                     }
                 }
                 else if(m_strings.length() < textMaxLimit()
-                    || (m_IsCharCount && GetUTF8CharCount(m_strings.c_str(),m_strings.size()) < (int)textMaxLimit()) )
+                    || (m_IsCharCount && get_utf8_char_count(m_strings.c_str(),m_strings.size()) < (int)textMaxLimit()) )
                 {
                     if(ch[0] == '0')
                     {
@@ -2132,7 +2132,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
         IntList::iterator it = m_lineCharList.begin();
 #ifdef __MMI_T9_ARABIC__
         int *info = (int *)malloc ((len + 1) * sizeof(int));
-        int realCount = GetUTF8CharInfo (m_strings.c_str(), len, info);
+        int realCount = get_utf_chars_info (m_strings.c_str(), len, info);
         info [realCount] = len;
         for (int i = 1; i <= realCount; /*i++*/) {
 
@@ -2222,7 +2222,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
 
                         if(activeWordCount >0) {
                             while(activeWordCount) {
-                                int lastChLen = GetLastUTF8CharLen(m_edit_tempstr1, strlen(m_edit_tempstr1));
+                                int lastChLen = get_last_utf8_char_len(m_edit_tempstr1, strlen(m_edit_tempstr1));
                                 activeWordLen += lastChLen;
                                 m_edit_tempstr1[m_caretPos - activeWordLen] = '\0';
                                 activeWordCount--;
@@ -2250,11 +2250,11 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
                             }
 
                             if (m_startPosY <= (int)lineNo && (int)lineNo <= m_caretPosY) {
-                                // lineStr is occasionally the value changes by GetUTF8CharCount()
+                                // lineStr is occasionally the value changes by get_utf8_char_count()
                                 strcpy(m_edit_tempstr2, lineStr.c_str());
-                                unicodeStartPosX = GetUTF8CharCount(m_edit_tempstr2, m_startPosX);
+                                unicodeStartPosX = get_utf8_char_count(m_edit_tempstr2, m_startPosX);
                                 strcpy(m_edit_tempstr2, lineStr.c_str());
-                                unicodeCaretPosX = GetUTF8CharCount(m_edit_tempstr2, m_caretPosX);
+                                unicodeCaretPosX = get_utf8_char_count(m_edit_tempstr2, m_caretPosX);
 
                                 memset(m_edit_tempstr2, 0x0, sizeof(m_edit_tempstr2));
                                 NGUtf8ToUnicode((unsigned char*)lineStr.c_str(), (unsigned char*)m_edit_tempstr2);
@@ -2358,7 +2358,7 @@ void MlEditView::drawContent(GraphicsContext* gc, IntRect &rc, int status)
                                 utf8len = lineStr.size();
                                 if(m_caretPosX > utf8len)
                                         m_caretPosX = utf8len;
-                                index =GetUTF8CharCount(lineStr.c_str(),m_caretPosX);
+                                index =get_utf8_char_count(lineStr.c_str(),m_caretPosX);
 
                                 memset(m_edit_tempstr2, 0x0, sizeof(m_edit_tempstr2));
                                 NGUtf8ToUnicode((unsigned char*)lineStr.c_str(), (unsigned char*)m_edit_tempstr2);
@@ -2494,7 +2494,7 @@ int MlEditView::setCaretPosition(int pos)
     m_caretPos = pos;
 #ifdef __MMI_T9__
     if (imeGetInputModeFlag() == INPUT_MODE_SMART) {
-        imeT9SetUnicodeCursor(GetUTF8CharCount(m_strings.c_str(), pos));
+        imeT9SetUnicodeCursor(get_utf8_char_count(m_strings.c_str(), pos));
     }
 #endif
 
