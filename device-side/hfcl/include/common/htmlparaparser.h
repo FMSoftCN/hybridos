@@ -48,6 +48,10 @@ public:
         void*       context;
     } TagState;
 
+protected:
+    size_t check_character_reference(const char* token, size_t len,
+            char* mchar, int* mchar_len);
+
 private:
     size_t          m_stack_size;
     size_t          m_stack_top;

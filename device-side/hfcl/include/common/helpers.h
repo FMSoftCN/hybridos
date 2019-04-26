@@ -64,6 +64,12 @@ inline std::string& toupper(std::string& str)
     return str;
 }
 
+/**
+ * Convert a Uchar32 to a UTF8 character, and return the
+ * length in bytes of the character.
+ */
+int uc32_to_utf8(Uint32 c, char* outbuf);
+
 int GetFirstUTF8CharLen (const char *str, int len);
 int GetLastUTF8CharLen (const char *str, int len);
 int GetUTF8CharInfo (const char *mstr, int len, int *retPosChars);
