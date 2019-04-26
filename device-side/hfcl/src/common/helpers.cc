@@ -96,6 +96,28 @@ static int utf8_len_first_char (unsigned char* mstr, int len)
     return 1;
 }
 
+Uint32 utf8_to_uc32 (const char* mchar, int mchar_len)
+{
+    Uint32 wc = *((unsigned char *)(mchar++));
+    Uint32 t;
+    int n;
+
+    if (wc & 0x80) {
+        n = 1;
+        while (wc & (0x80 >> n))
+            n++;
+
+        wc &= (1 << (8-n)) - 1;
+        while (--n > 0) {
+            t = *((unsigned char *)(mchar++));
+
+            wc = (wc << 6) | (t & 0x3F);
+        }
+    }
+
+    return wc;
+}
+
 int uc32_to_utf8(Uint32 c, char* outbuf)
 {
     int len = 0;
