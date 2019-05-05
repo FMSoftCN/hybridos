@@ -35,24 +35,6 @@ AC_ARG_ENABLE(develmode,
 [  --enable-develmode       developer mode <default=no>],
 devel_mode=$enableval)
 
-AC_ARG_WITH(lang,
-        [  --with-lang=[en/zhcn/zhtw]])
-
-case "$with_lang" in
-  zhcn)
-    AC_DEFINE(_LANG_ZHCN, 1,
-            [Use text strings for locale zh_CN])
-    ;;
-  zhtw)
-    AC_DEFINE(_LANG_ZHTW, 1,
-            [Use text strings for locale zh_TW])
-    ;;
-  *)
-    AC_DEFINE(_LANG_EN, 1,
-            [Use text strings for locale en_US])
-    ;;
-esac
-
 if test "x$devel_mode" = "xyes"; then
     CPPFLAGS="$CPPFLAGS -DDEBUG -D_DEBUG"
     if test "$ac_cv_prog_gcc" = "yes"; then
@@ -68,7 +50,6 @@ dnl ========================================================================
 dnl check for installation of MiniGUI
 dnl ========================================================================
 PKG_CHECK_MODULES([MINIGUI], [minigui >= 3.2.1])
-PKG_CHECK_MODULES([MGPLUS], [mgplus >= 1.4.0])
 PKG_CHECK_MODULES([MGEFF], [mgeff >= 1.2.0])
 PKG_CHECK_MODULES([HFCL], [hfcl >= 0.1.0])
 

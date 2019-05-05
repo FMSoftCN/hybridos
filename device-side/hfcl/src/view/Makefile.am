@@ -11,9 +11,14 @@ libhfcl_view_la_SOURCES = \
     rootview.cc \
     panelview.cc \
     paragraphview.cc \
+    htmlentitiestable.inc \
+    htmlparaparser.cc \
     textview.cc \
     atomictextview.cc \
     animatedimageview.cc \
     staticimageview.cc \
     scrollbar.cc \
     transition.cc
+
+EXTRA_DIST= \
+    make_html_entities_table.py

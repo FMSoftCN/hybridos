@@ -7,6 +7,7 @@ myinclude_HEADERS= \
     view.h \
     viewcontainer.h \
     viewcontext.h \
+    htmlparaparser.h \
     scrollbar.h \
     transition.h \
     rootview.h \

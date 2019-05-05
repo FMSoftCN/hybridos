@@ -9,7 +9,6 @@ libhfcl_common_la_SOURCES = \
     intrect.cc \
     event.cc \
     object.cc \
-    htmlparaparser.cc \
     contextstream.cc \
     log.cc \
     methodeventlistener.cc \

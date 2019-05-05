@@ -13,7 +13,6 @@ myinclude_HEADERS= \
     quicksort.h \
     rbtree.h \
     selectsort.h \
-    htmlparaparser.h \
     log.h \
     contextstream.h \
     event.h \
