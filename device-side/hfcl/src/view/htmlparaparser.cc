@@ -270,15 +270,13 @@ void HtmlParaParser::resetInsertingMode()
             }
 
             m_im_current = im;
-            return;
+            goto done;
         }
-
-        if (!last && (strcmp(tag, "td") == 0 || strcmp(tag, "th") == 0)) {
+        else if (!last && (strcmp(tag, "td") == 0 || strcmp(tag, "th") == 0)) {
             m_im_current = IM_IN_CELL;
             goto done;
         }
-
-        if (strcmp(tag, "tr") == 0) {
+        else if (strcmp(tag, "tr") == 0) {
             m_im_current = IM_IN_ROW;
             goto done;
         }
