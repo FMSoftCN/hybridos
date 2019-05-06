@@ -256,6 +256,9 @@ private:
     void            on_tag_open_state();
     void            on_end_tag_open_state();
     void            on_tag_name_state();
+    void            on_rcdata_less_than_sign_state();
+    void            on_rcdata_end_tag_open_state();
+    void            on_rcdata_end_tag_name_state();
     void            on_bogus_comment_state();
 
     void            emit_character_token(Uchar32 uc);
@@ -265,6 +268,7 @@ private:
     void            create_comment_token();
     void            emit_current_tag_token();
     void            append_to_current_tag_name(Uchar32 uc);
+    bool            is_appropriate_end_tag();
 
     CB_ON_NEW_NODE  m_on_new_node;
     CB_ON_NEW_ATTR  m_on_new_attr;

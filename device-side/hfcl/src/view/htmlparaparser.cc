@@ -611,6 +611,109 @@ void HtmlParaParser::on_tag_name_state()
     }
 }
 
+void HtmlParaParser::on_rcdata_less_than_sign_state()
+{
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_SOLIDUS:
+        // TODO: m_ctxt_tokenizer.temp_buff.clear();
+        m_ctxt_tokenizer.ts = TS_RCDATA_END_TAG_OPEN;
+        break;
+
+    default:
+        emit_character_token(UCHAR_REPLACEMENT);
+        m_ctxt_tokenizer.ts = TS_DATA;
+        m_ctxt_tokenizer.consumed = 0;
+        on_data_state();
+        break;
+    }
+}
+
+void HtmlParaParser::on_rcdata_end_tag_open_state()
+{
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_LATIN_CAPITAL_LETTER_A ... UCHAR_LATIN_CAPITAL_LETTER_Z:
+    case UCHAR_LATIN_SMALL_LETTER_A ... UCHAR_LATIN_SMALL_LETTER_Z:
+        create_end_tag_token();
+        m_ctxt_tokenizer.ts = TS_RCDATA_END_TAG_NAME;
+        m_ctxt_tokenizer.consumed = 0;
+        on_rcdata_end_tag_name_state();
+        break;
+
+    default:
+        emit_character_token(UCHAR_LESS_THAN_SIGN);
+        emit_character_token(UCHAR_SOLIDUS);
+        m_ctxt_tokenizer.ts = TS_DATA;
+        m_ctxt_tokenizer.consumed = 0;
+        on_data_state();
+        break;
+    }
+}
+
+void HtmlParaParser::on_rcdata_end_tag_name_state()
+{
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_TABULATION:
+    case UCHAR_LINE_FEED:
+    case UCHAR_FORM_FEED:
+    case UCHAR_SPACE:
+        if (is_appropriate_end_tag()) {
+            m_ctxt_tokenizer.ts = TS_BEFORE_ATTRIBUTE_NAME;
+        }
+        else {
+            goto anythingelse;
+        }
+        break;
+
+    case UCHAR_SOLIDUS:
+        if (is_appropriate_end_tag()) {
+            m_ctxt_tokenizer.ts = TS_SELF_CLOSING_START_TAG;
+        }
+        else {
+            goto anythingelse;
+        }
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        if (is_appropriate_end_tag()) {
+            m_ctxt_tokenizer.ts = TS_DATA;
+            emit_current_tag_token();
+        }
+        else {
+            goto anythingelse;
+        }
+        break;
+
+    case UCHAR_LATIN_CAPITAL_LETTER_A ... UCHAR_LATIN_CAPITAL_LETTER_Z:
+        append_to_current_tag_name(m_ctxt_tokenizer.next_uc + 0x0020);
+        // Append the current input character to the temporary buffer.
+        break;
+
+    case UCHAR_LATIN_SMALL_LETTER_A ... UCHAR_LATIN_SMALL_LETTER_Z:
+        append_to_current_tag_name(m_ctxt_tokenizer.next_uc);
+        // Append the current input character to the temporary buffer.
+        break;
+
+    default:
+anythingelse:
+        emit_character_token(UCHAR_LESS_THAN_SIGN);
+        emit_character_token(UCHAR_SOLIDUS);
+        // and a character token for each of the characters in the temporary buffer.
+        m_ctxt_tokenizer.ts = TS_RCDATA;
+        m_ctxt_tokenizer.consumed = 0;
+        on_rcdata_state();
+        break;
+    }
+}
+
 bool HtmlParaParser::tokenize()
 {
     switch (m_ctxt_tokenizer.ts) {
@@ -644,6 +747,14 @@ bool HtmlParaParser::tokenize()
 
     case TS_TAG_NAME:
         on_tag_name_state();
+        break;
+
+    case TS_RCDATA_LESS_THAN_SIGN:
+        on_rcdata_less_than_sign_state();
+        break;
+
+    case TS_RCDATA_END_TAG_OPEN:
+        on_rcdata_end_tag_open_state();
         break;
 
     default:
