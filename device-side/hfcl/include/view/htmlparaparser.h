@@ -40,10 +40,10 @@ class ViewContainer;
 
 class HtmlParaParser {
 public:
-    HtmlParaParser(size_t stackSize);
+    HtmlParaParser(size_t stackSize, const char* encoding = "UTF-8");
     ~HtmlParaParser();
 
-    void reset(size_t stackSize);
+    bool reset(size_t stackSize, const char* encoding = "UTF-8");
     size_t parse(View* parent, const char* content, size_t len,
             CB_ON_NEW_NODE on_new_node,
             CB_ON_NEW_ATTR on_new_attr,
@@ -64,7 +64,7 @@ public:
 
 protected:
     // the tokenizer states
-    enum {
+    typedef enum _TokenizerStates {
         /* 8.2.4.1  */ TS_DATA = 0,
         /* 8.2.4.2  */ TS_RCDATA,
         /* 8.2.4.3  */ TS_RAWTEXT,
@@ -144,9 +144,15 @@ protected:
         /* 8.2.4.77 */ TS_DECIMAL_CHARACTER_REFERENCE,
         /* 8.2.4.78 */ TS_NUMERIC_CHARACTER_REFERENCE_END,
         /* 8.2.4.79 */ TS_CHARACTER_REFERENCE_END,
-    };
+    } TokenizerStates;
 
-    enum {
+    typedef enum _TokenTypes {
+        TT_NONE = 0,
+        TT_EOF,
+        TT_CHARACTER,
+    } TokenTypes;
+
+    typedef enum _InsertingModes {
         IM_INITIAL = 0,
         IM_BEFORE_HTML,
         IM_BEFORE_HEAD,
@@ -169,7 +175,7 @@ protected:
         IM_IN_FRAMESET,
         IM_AFTER_FRAMESET,
         IM_AFTER_AFTER_BODY,
-    };
+    } InsertingModes;
 
     typedef struct _OpenElementNode {
         list_t      list;
@@ -194,6 +200,23 @@ protected:
     void rebuildAfeList();
     void clearUpToLastMarker();
 
+    typedef struct _TokenizerContext {
+        LOGFONT*        lf;
+        const char*     mchar;      // pointer to current character position
+
+        int             mclen;      // current mchar length
+        int             total_len;  // left string length
+        Uchar32         next_uc;    // Unicode code point of next character
+        Uchar32         curr_uc;    // current/consumed character
+
+        int             errors;     // the embedded level of errors
+        int             consumed;   // consumed length
+
+        TokenizerStates ts;         // current tokenizer state
+        TokenizerStates ts_return;  // the return state
+        //TokenTypes      tt;         // the token type
+    } TokenizerContext;
+
 private:
     // current inserting mode
     int             m_im_current;
@@ -215,14 +238,33 @@ private:
     void            reset_list_afe();
 
     // fragment context; a fake stack entry
-    OpenElementNode  m_context;
+    OpenElementNode m_ctxt_fragment;
 
     // The element pointers
     const View*     m_head_element;
     const View*     m_form_element;
 
-    const char*     m_input_content;
-    size_t          m_len_left;
+    TokenizerContext m_ctxt_tokenizer;
+    bool            reset_tokenizer(const char* encoding);
+    bool            tokenize();
+    void            on_parse_error();
+    void            on_data_state();
+    void            on_rcdata_state();
+    void            on_rawtext_state();
+    void            on_script_data_state();
+    void            on_plaintext_state();
+    void            on_tag_open_state();
+    void            on_end_tag_open_state();
+    void            on_tag_name_state();
+    void            on_bogus_comment_state();
+
+    void            emit_character_token(Uchar32 uc);
+    void            emit_eof_token();
+    void            create_start_tag_token();
+    void            create_end_tag_token();
+    void            create_comment_token();
+    void            emit_current_tag_token();
+    void            append_to_current_tag_name(Uchar32 uc);
 
     CB_ON_NEW_NODE  m_on_new_node;
     CB_ON_NEW_ATTR  m_on_new_attr;
