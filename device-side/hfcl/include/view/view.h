@@ -114,6 +114,9 @@ public:
     // return the HVML type, e.g., button, text, date, time, and so on
     const char* type() const { return m_type; }
 
+    // compare tow view's tag (namespace), and attributes
+    bool hasSameTagAndAttributes(const View* view) const;
+
     // methods to get/set additional data of the view
     void setAddData(const void *addData) { m_addData = addData; }
     const void *getAddData() const { return m_addData; }

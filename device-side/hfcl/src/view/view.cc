@@ -146,10 +146,33 @@ const char* View::getAttribute(const char* attrKey) const
 
     AttributesMap::const_iterator it = m_attrs.find(attrKey);
     if (it != m_attrs.end()) {
-        it->second.c_str();
+        return it->second.c_str();
     }
 
     return NULL;
+}
+
+bool View::hasSameTagAndAttributes(const View* other) const
+{
+    if (strcmp(tag(), other->tag())) {
+        return false;
+    }
+
+    if (m_attrs.size() != other->m_attrs.size()) {
+        return false;
+    }
+
+    AttributesMap::const_iterator it;
+    for (it = m_attrs.begin(); it != m_attrs.end(); ++it) {
+        const char* attr_key = it->first.c_str();
+        const char* my_value = it->second.c_str();
+        const char* other_value = other->getAttribute(attr_key);
+
+        if (strcmp(my_value, other_value))
+            return false;
+    }
+
+    return true;
 }
 
 static bool is_content_attribute(const char* attr)

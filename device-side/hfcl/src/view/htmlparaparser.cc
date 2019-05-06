@@ -28,8 +28,14 @@
 #include "view/htmlparaparser.h"
 
 #include "common/helpers.h"
+#include "view/view.h"
+#include "view/viewcontainer.h"
 
+#if SIZEOF_PTR == 8
+#define MIN_STACK_SIZE          16
+#else
 #define MIN_STACK_SIZE          8
+#endif
 
 namespace hfcl {
 
@@ -38,43 +44,160 @@ HtmlParaParser::HtmlParaParser(size_t stackSize)
     , m_len_left(0)
 {
     INIT_LIST_HEAD(&m_stack_oe);
-    INIT_LIST_HEAD(&m_stack_tim);
+
+    reset_stack_tim(stackSize);
+
+    INIT_LIST_HEAD(&m_list_afe);
 
     memset(&m_context, 0, sizeof(m_context));
+
+    m_head_element = NULL;
+    m_form_element = NULL;
 }
 
-void HtmlParaParser::reset_stack_oe()
+HtmlParaParser::~HtmlParaParser()
+{
+    reset_stack_oe(0);
+    reset_stack_tim(0);
+    reset_list_afe();
+}
+
+void HtmlParaParser::reset_stack_oe(int stackSize)
 {
     while (!list_empty(&m_stack_oe)) {
-        OpenElementState* oes = (OpenElementState*)m_stack_oe.next;
+        OpenElementNode* oes = (OpenElementNode*)m_stack_oe.next;
         list_del(m_stack_oe.next);
-        mg_slice_delete(OpenElementState, oes);
+        mg_slice_delete(OpenElementNode, oes);
     }
 
     INIT_LIST_HEAD(&m_stack_oe);
 }
 
-void HtmlParaParser::reset_stack_tim()
+void HtmlParaParser::reset_stack_tim(int stackSize)
 {
-    while (!list_empty(&m_stack_tim)) {
-        TemplateInsertingMode* tim = (TemplateInsertingMode*)m_stack_tim.next;
-        list_del(m_stack_tim.next);
-        mg_slice_delete(TemplateInsertingMode, tim);
-    }
+    delete [] m_stack_tim;
 
-    INIT_LIST_HEAD(&m_stack_tim);
+    if (stackSize > 0) {
+        if (stackSize < MIN_STACK_SIZE)
+            m_stack_tim_size = MIN_STACK_SIZE;
+        else
+            m_stack_tim_size = stackSize;
+
+        m_stack_tim = new int[m_stack_tim_size];
+        m_stack_tim_top = 0;
+    }
 }
 
-HtmlParaParser::~HtmlParaParser()
+void HtmlParaParser::reset_list_afe()
 {
-    reset_stack_oe();
-    reset_stack_tim();
+    while (!list_empty(&m_list_afe)) {
+        ActiveFormattingEle* afe = (ActiveFormattingEle*)m_list_afe.next;
+        list_del(m_list_afe.next);
+        mg_slice_delete(ActiveFormattingEle, afe);
+    }
+
+    INIT_LIST_HEAD(&m_list_afe);
+}
+
+void HtmlParaParser::pushNewAfe(const View* view, bool isMarker)
+{
+    list_t* pos;
+    int nr_elements;
+    ActiveFormattingEle* last_marker = NULL;
+    ActiveFormattingEle* afe;
+
+    nr_elements = 0;
+    for (pos = m_list_afe.prev; pos != &m_list_afe; pos = pos->prev) {
+        afe = (ActiveFormattingEle*)pos;
+        if (afe->is_marker) {
+            last_marker = afe;
+            break;
+        }
+
+        nr_elements++;
+    }
+
+    // find the element has the same tag name, namespace, and attributes
+    // as new view
+    if (last_marker && nr_elements >= 3) {
+        pos = last_marker->list.next;
+    }
+    else if (nr_elements > 0) {
+        pos = m_list_afe.next;
+    }
+    else {
+        pos = NULL;
+    }
+
+    if (pos) {
+        for (; pos != &m_list_afe; pos = pos->next) {
+            afe = (ActiveFormattingEle*)pos;
+            if (afe->view->hasSameTagAndAttributes(view)) {
+                list_del(pos);
+                mg_slice_delete(ActiveFormattingEle, afe);
+            }
+        }
+    }
+
+    afe = mg_slice_new(ActiveFormattingEle);
+    afe->view = view;
+    afe->is_marker = isMarker;
+    list_add_tail(&afe->list, &m_list_afe);
+}
+
+void HtmlParaParser::rebuildAfeList()
+{
+    if (list_empty(&m_list_afe))
+        return;
+
+    ActiveFormattingEle* afe = (ActiveFormattingEle*)m_list_afe.prev;
+    if (afe->is_marker || isOpenElement(afe->view))
+        return;
+
+rewind:
+
+    if (afe->list.prev == &m_list_afe) {
+
+        do {
+            // Insert an HTML element for the token for which the element entry
+            // was created, to obtain new element.
+            View* v = insertNewElement(afe->view);
+            afe->view = v;
+
+            afe = (ActiveFormattingEle*)afe->list.next;
+        } while (&afe->list != &m_list_afe);
+    }
+    else {
+        afe = (ActiveFormattingEle*)afe->list.prev;
+        if (!afe->is_marker && !isOpenElement(afe->view)) {
+            goto rewind;
+        }
+    }
+}
+
+void HtmlParaParser::clearUpToLastMarker()
+{
+    while (!list_empty(&m_list_afe)) {
+        bool is_marker;
+        ActiveFormattingEle* afe = (ActiveFormattingEle*)m_list_afe.prev;
+        is_marker = afe->is_marker;
+
+        list_del(m_list_afe.prev);
+        mg_slice_delete(ActiveFormattingEle, afe);
+
+        if (is_marker)
+            break;
+    }
 }
 
 void HtmlParaParser::reset(size_t stackSize)
 {
-    reset_stack_oe();
-    reset_stack_tim();
+    reset_stack_oe(stackSize);
+    reset_stack_tim(stackSize);
+    reset_list_afe();
+
+    m_head_element = NULL;
+    m_form_element = NULL;
 
     m_input_content = NULL;
     m_len_left = 0;
@@ -229,13 +352,13 @@ size_t HtmlParaParser::parse(View* parent, const char* content, size_t len,
 void HtmlParaParser::resetInsertingMode()
 {
     bool last = false;
-    OpenElementState* node = (OpenElementState*)m_stack_oe.prev;
+    OpenElementNode* node = (OpenElementNode*)m_stack_oe.prev;
 
     assert (!(list_empty(&m_stack_oe)));
 
     do {
 
-        if (node == (OpenElementState*)m_stack_oe.next) {
+        if (node == (OpenElementNode*)m_stack_oe.next) {
             last = true;
             if (m_context.view) {
                 node = &m_context;
@@ -253,13 +376,13 @@ void HtmlParaParser::resetInsertingMode()
             int im = IM_IN_SELECT;
             while (1) {
 
-                OpenElementState* ancestor = node;
+                OpenElementNode* ancestor = node;
                 //  If ancestor is the first node
-                if (ancestor == (OpenElementState*)m_stack_oe.next) {
+                if (ancestor == (OpenElementNode*)m_stack_oe.next) {
                     break;
                 }
 
-                ancestor = (OpenElementState*)ancestor->list.prev;
+                ancestor = (OpenElementNode*)ancestor->list.prev;
                 if (strcmp(ancestor->view->tag(), "template") == 0) {
                     break;
                 }
@@ -299,9 +422,7 @@ void HtmlParaParser::resetInsertingMode()
         }
         else if (strcmp(tag, "template") == 0) {
             // switch the insertion mode to the current template insertion mode
-            TemplateInsertingMode* tmp;
-            tmp = (TemplateInsertingMode*)(m_stack_tim.next);
-            m_im_current = tmp->im;
+            m_im_current = m_stack_tim[m_stack_tim_top];
             goto done;
         }
         else if (!last && strcmp(tag, "head") == 0) {
@@ -331,7 +452,7 @@ void HtmlParaParser::resetInsertingMode()
             goto done;
         }
 
-        node = (OpenElementState*)node->list.prev;
+        node = (OpenElementNode*)node->list.prev;
     } while (1);
 
 done:

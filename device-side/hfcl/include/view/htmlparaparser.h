@@ -24,7 +24,6 @@
 
 #include "../common/common.h"
 #include "../common/list.h"
-#include "../view/view.h"
 
 #include <minigui/minigui.h>
 #include <minigui/gdi.h>
@@ -35,6 +34,9 @@ typedef void* (*CB_ON_NEW_NODE)(void* context, const char* tag);
 typedef void  (*CB_ON_NEW_ATTR)(void* context,
         const char* attrKey, const char* attrValue);
 typedef int   (*CB_ON_NEW_CHAR)(void* context, const char* text);
+
+class View;
+class ViewContainer;
 
 class HtmlParaParser {
 public:
@@ -61,6 +63,89 @@ public:
             char* mchar, int* mchar_len);
 
 protected:
+    // the tokenizer states
+    enum {
+        /* 8.2.4.1  */ TS_DATA = 0,
+        /* 8.2.4.2  */ TS_RCDATA,
+        /* 8.2.4.3  */ TS_RAWTEXT,
+        /* 8.2.4.4  */ TS_SCRIPT_DATA,
+        /* 8.2.4.5  */ TS_PLAINTEXT,
+        /* 8.2.4.6  */ TS_TAG_OPEN,
+        /* 8.2.4.7  */ TS_END_TAG_OPEN,
+        /* 8.2.4.8  */ TS_TAG_NAME,
+        /* 8.2.4.9  */ TS_RCDATA_LESS_THAN_SIGN,
+        /* 8.2.4.10 */ TS_RCDATA_END_TAG_OPEN,
+        /* 8.2.4.11 */ TS_RCDATA_END_TAG_NAME,
+        /* 8.2.4.12 */ TS_RAWTEXT_LESS_THAN_SIGN,
+        /* 8.2.4.13 */ TS_RAWTEXT_END_TAG_OPEN,
+        /* 8.2.4.14 */ TS_RAWTEXT_END_TAG_NAME,
+        /* 8.2.4.15 */ TS_SCRIPT_DATA_LESS_THAN_SIGN,
+        /* 8.2.4.16 */ TS_SCRIPT_DATA_END_TAG_OPEN,
+        /* 8.2.4.17 */ TS_SCRIPT_DATA_END_TAG_NAME,
+        /* 8.2.4.18 */ TS_SCRIPT_DATA_ESCAPE_START,
+        /* 8.2.4.19 */ TS_SCRIPT_DATA_ESCAPE_START_DASH,
+        /* 8.2.4.20 */ TS_SCRIPT_DATA_ESCAPED,
+        /* 8.2.4.21 */ TS_SCRIPT_DATA_ESCAPED_DASH,
+        /* 8.2.4.22 */ TS_SCRIPT_DATA_ESCAPED_DASH_DASH,
+        /* 8.2.4.23 */ TS_SCRIPT_DATA_ESCAPED_LESS_THAN_SIGN,
+        /* 8.2.4.24 */ TS_SCRIPT_DATA_ESCAPED_END_TAG_OPEN,
+        /* 8.2.4.25 */ TS_SCRIPT_DATA_ESCAPED_END_TAG_NAME,
+        /* 8.2.4.26 */ TS_SCRIPT_DATA_DOUBLE_ESCAPE_START,
+        /* 8.2.4.27 */ TS_SCRIPT_DATA_DOUBLE_ESCAPED,
+        /* 8.2.4.28 */ TS_SCRIPT_DATA_DOUBLE_ESCAPED_DASH,
+        /* 8.2.4.29 */ TS_SCRIPT_DATA_DOUBLE_ESCAPED_LESS_THAN_SIGN,
+        /* 8.2.4.30 */ TS_SCRIPT_DATA_DOUBLE_ESCAPED_DASH_DASH,
+        /* 8.2.4.31 */ TS_SCRIPT_DATA_DOUBLE_ESCAPE_END,
+        /* 8.2.4.32 */ TS_BEFORE_ATTRIBUTE_NAME,
+        /* 8.2.4.33 */ TS_ATTRIBUTE_NAME,
+        /* 8.2.4.34 */ TS_AFTER_ATTRIBUTE_NAME,
+        /* 8.2.4.35 */ TS_BEFORE_ATTRIBUTE_VALUE,
+        /* 8.2.4.36 */ TS_ATTRIBUTE_VALUE_DOUBLE_QUOTED,
+        /* 8.2.4.37 */ TS_ATTRIBUTE_VALUE_SINGLE_QUOTED,
+        /* 8.2.4.38 */ TS_ATTRIBUTE_VALUE_UNQUOTED,
+        /* 8.2.4.39 */ TS_AFTER_ATTRIBUTE_VALUE_QUOTED,
+        /* 8.2.4.40 */ TS_SELF_CLOSING_START_TAG,
+        /* 8.2.4.41 */ TS_BOGUS_COMMENT,
+        /* 8.2.4.42 */ TS_MARKUP_DECLARATION_OPEN,
+        /* 8.2.4.43 */ TS_COMMENT_START,
+        /* 8.2.4.44 */ TS_COMMENT_START_DASH,
+        /* 8.2.4.45 */ TS_COMMENT,
+        /* 8.2.4.46 */ TS_COMMENT_LESS_THAN_SIGN,
+        /* 8.2.4.47 */ TS_COMMENT_LESS_THAN_SIGN_BANG,
+        /* 8.2.4.48 */ TS_COMMENT_LESS_THAN_SIGN_BANG_DASH,
+        /* 8.2.4.49 */ TS_COMMENT_LESS_THAN_SIGN_BANG_DASH_DASH,
+        /* 8.2.4.50 */ TS_COMMENT_END_DASH,
+        /* 8.2.4.51 */ TS_COMMENT_END,
+        /* 8.2.4.52 */ TS_COMMENT_END_BANG,
+        /* 8.2.4.53 */ TS_DOCTYPE,
+        /* 8.2.4.54 */ TS_BEFORE_DOCTYPE_NAME,
+        /* 8.2.4.55 */ TS_DOCTYPE_NAME,
+        /* 8.2.4.56 */ TS_AFTER_DOCTYPE_NAME,
+        /* 8.2.4.57 */ TS_AFTER_DOCTYPE_PUBLIC_KEYWORD,
+        /* 8.2.4.58 */ TS_BEFORE_DOCTYPE_PUBLIC_IDENTIFIER,
+        /* 8.2.4.59 */ TS_DOCTYPE_PUBLIC_IDENTIFIER_DOUBLE_QUOTED,
+        /* 8.2.4.60 */ TS_DOCTYPE_PUBLIC_IDENTIFIER_SINGLE_QUOTED,
+        /* 8.2.4.61 */ TS_AFTER_DOCTYPE_PUBLIC_IDENTIFIER,
+        /* 8.2.4.62 */ TS_BETWEEN_DOCTYPE_PUBLIC_SYSTEM_IDENTIFIERS,
+        /* 8.2.4.63 */ TS_AFTER_DOCTYPE_SYSTEM_KEYWORD,
+        /* 8.2.4.64 */ TS_BEFORE_DOCTYPE_SYSTEM_IDENTIFIER,
+        /* 8.2.4.65 */ TS_DOCTYPE_SYSTEM_IDENTIFIER_DOUBLE_QUOTED,
+        /* 8.2.4.66 */ TS_DOCTYPE_SYSTEM_IDENTIFIER_SINGLE_QUOTED,
+        /* 8.2.4.67 */ TS_AFTER_DOCTYPE_SYSTEM_IDENTIFIER,
+        /* 8.2.4.68 */ TS_BOGUS_DOCTYPE,
+        /* 8.2.4.69 */ TS_CDATA_SECTION,
+        /* 8.2.4.70 */ TS_CDATA_SECTION_BRACKET,
+        /* 8.2.4.71 */ TS_CDATA_SECTION_END,
+        /* 8.2.4.72 */ TS_CHARACTER_REFERENCE,
+        /* 8.2.4.73 */ TS_NUMERIC_CHARACTER_REFERENCE,
+        /* 8.2.4.74 */ TS_HEXADECIMAL_CHARACTER_REFERENCE_START,
+        /* 8.2.4.75 */ TS_DECIMAL_CHARACTER_REFERENCE_START,
+        /* 8.2.4.76 */ TS_HEXADECIMAL_CHARACTER_REFERENCE,
+        /* 8.2.4.77 */ TS_DECIMAL_CHARACTER_REFERENCE,
+        /* 8.2.4.78 */ TS_NUMERIC_CHARACTER_REFERENCE_END,
+        /* 8.2.4.79 */ TS_CHARACTER_REFERENCE_END,
+    };
+
     enum {
         IM_INITIAL = 0,
         IM_BEFORE_HTML,
@@ -86,19 +171,28 @@ protected:
         IM_AFTER_AFTER_BODY,
     };
 
-    typedef struct _OpenElementState {
+    typedef struct _OpenElementNode {
         list_t      list;
         const char* tag;
         int         tag_idx;
-        View*       view;
-    } OpenElementState;
+        const View* view;
+    } OpenElementNode;
 
-    typedef struct _TemplateInsertingMode {
+    bool isOpenElement(const View* view);
+    View* insertNewElement(const View* view);
+
+    typedef struct _ActiveFormattingEle {
         list_t      list;
-        int         im;
-    } TemplateInsertingMode;
+        const View* view;
+        bool        is_marker;
+    } ActiveFormattingEle;
 
     void resetInsertingMode();
+
+    // operators for active formatting list
+    void pushNewAfe(const View* view, bool isMarker = false);
+    void rebuildAfeList();
+    void clearUpToLastMarker();
 
 private:
     // current inserting mode
@@ -108,15 +202,24 @@ private:
 
     // stack of open elements
     list_t          m_stack_oe;
-    void            reset_stack_oe();
+    void            reset_stack_oe(int stackSize);
 
     // stack of template inserting modes.
-    list_t          m_stack_tim;
-    void            reset_stack_tim();
+    size_t          m_stack_tim_top;
+    size_t          m_stack_tim_size;
+    int*            m_stack_tim;
+    void            reset_stack_tim(int stackSize);
+
+    // list of active formatting elements.
+    list_t          m_list_afe;
+    void            reset_list_afe();
 
     // fragment context; a fake stack entry
-    OpenElementState  m_context;
-    OpenElementState* m_head_element;
+    OpenElementNode  m_context;
+
+    // The element pointers
+    const View*     m_head_element;
+    const View*     m_form_element;
 
     const char*     m_input_content;
     size_t          m_len_left;
