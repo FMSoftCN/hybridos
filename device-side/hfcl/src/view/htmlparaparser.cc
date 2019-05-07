@@ -343,23 +343,31 @@ error:
 #define UCHAR_SPACE                     0x0020
 #define UCHAR_EXCLAMATION_MARK          0x0021
 #define UCHAR_QUOTATION_MARK            0x0022
+#define UCHAR_NUMBER_SIGN               0x0023
 #define UCHAR_AMPERSAND                 0x0026
 #define UCHAR_APOSTROPHE                0x0027
 #define UCHAR_HYPHEN_MINUS              0x002D
 #define UCHAR_SOLIDUS                   0x002F
 
+#define UCHAR_DIGIT_ZERO                0x0030
+#define UCHAR_DIGIT_NINE                0x0039
+#define UCHAR_SEMICOLON                 0x003B
 #define UCHAR_LESS_THAN_SIGN            0x003C
 #define UCHAR_EQUAL_SIGN                0x003D
 #define UCHAR_GREATER_THAN_SIGN         0x003E
 #define UCHAR_QUESTION_MARK             0x003F
 
 #define UCHAR_LATIN_CAPITAL_LETTER_A    0x0041
-
+#define UCHAR_LATIN_CAPITAL_LETTER_F    0x0046
+#define UCHAR_LATIN_CAPITAL_LETTER_X    0x0058
 #define UCHAR_LATIN_CAPITAL_LETTER_Z    0x005A
 
+#define UCHAR_RIGHT_SQUARE_BRACKET      0x005D
 #define UCHAR_GRAVE_ACCENT              0x0060
-#define UCHAR_LATIN_SMALL_LETTER_A      0x0061
 
+#define UCHAR_LATIN_SMALL_LETTER_A      0x0061
+#define UCHAR_LATIN_SMALL_LETTER_F      0x0066
+#define UCHAR_LATIN_SMALL_LETTER_X      0x0078
 #define UCHAR_LATIN_SMALL_LETTER_Z      0x007A
 
 #define UCHAR_REPLACEMENT               0xFFFD
@@ -2592,46 +2600,364 @@ void HtmlParaParser::on_bogus_doctype_state()
 
 void HtmlParaParser::on_cdata_section_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_RIGHT_SQUARE_BRACKET:
+        m_ctxt_tokenizer.ts = TS_CDATA_SECTION_BRACKET;
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        emit_eof_token();
+        break;
+
+    default:
+        emit_character_token(m_ctxt_tokenizer.curr_uc);
+        break;
+    }
 }
 
 void HtmlParaParser::on_cdata_section_bracket_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_RIGHT_SQUARE_BRACKET:
+        m_ctxt_tokenizer.ts = TS_CDATA_SECTION_END;
+        break;
+
+    default:
+        emit_character_token(UCHAR_RIGHT_SQUARE_BRACKET);
+        m_ctxt_tokenizer.ts = TS_CDATA_SECTION;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_cdata_section_end_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_RIGHT_SQUARE_BRACKET:
+        emit_character_token(UCHAR_RIGHT_SQUARE_BRACKET);
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        m_ctxt_tokenizer.ts = TS_DATA;
+        break;
+
+    default:
+        emit_character_token(UCHAR_RIGHT_SQUARE_BRACKET);
+        emit_character_token(UCHAR_RIGHT_SQUARE_BRACKET);
+        m_ctxt_tokenizer.ts = TS_CDATA_SECTION;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
+}
+
+bool HtmlParaParser::is_in_attribute_value(Uchar32 last_matched, int consumed)
+{
+    if ((m_ctxt_tokenizer.ts_return == TS_ATTRIBUTE_VALUE_DOUBLE_QUOTED ||
+            m_ctxt_tokenizer.ts_return == TS_ATTRIBUTE_VALUE_SINGLE_QUOTED ||
+            m_ctxt_tokenizer.ts_return == TS_ATTRIBUTE_VALUE_UNQUOTED) &&
+            last_matched != UCHAR_SEMICOLON) {
+
+        Uchar32 next_uc = 0;    // TODO
+        if (next_uc == UCHAR_EQUAL_SIGN ||
+            (next_uc >= UCHAR_DIGIT_ZERO &&
+                next_uc <= UCHAR_DIGIT_NINE) ||
+            (next_uc >= UCHAR_LATIN_CAPITAL_LETTER_A &&
+                next_uc <= UCHAR_LATIN_CAPITAL_LETTER_Z) ||
+            (next_uc >= UCHAR_LATIN_SMALL_LETTER_A &&
+                next_uc <= UCHAR_LATIN_SMALL_LETTER_Z))
+            return true;
+    }
+
+    return false;
 }
 
 void HtmlParaParser::on_character_reference_state()
 {
+    clear_temporary_buffer();
+    append_to_temporary_buffer(UCHAR_AMPERSAND);
+
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_TABULATION:
+    case UCHAR_LINE_FEED:
+    case UCHAR_FORM_FEED:
+    case UCHAR_SPACE:
+    case UCHAR_LESS_THAN_SIGN:
+    case UCHAR_AMPERSAND:
+    case UCHAR_EOF:
+        m_ctxt_tokenizer.ts = TS_CHARACTER_REFERENCE_END;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+
+    case UCHAR_NUMBER_SIGN:
+        append_to_temporary_buffer(m_ctxt_tokenizer.curr_uc);
+        m_ctxt_tokenizer.ts = TS_NUMERIC_CHARACTER_REFERENCE;
+        break;
+
+    default: {
+        int consumed;
+        Uchar32 maped_ucs[2];
+        Uchar32 last_matched;
+        if (try_to_match_named_character_reference(maped_ucs,
+                &consumed, &last_matched)) {
+
+            if (is_in_attribute_value(last_matched, consumed)) {
+                m_ctxt_tokenizer.ts = TS_CHARACTER_REFERENCE_END;
+                break;
+            }
+
+            if (last_matched != UCHAR_SEMICOLON)
+                on_parse_error();
+
+            clear_temporary_buffer();
+            append_to_temporary_buffer(maped_ucs[0]);
+            if (maped_ucs[1])
+                append_to_temporary_buffer(maped_ucs[1]);
+
+            m_ctxt_tokenizer.ts = TS_CHARACTER_REFERENCE_END;
+            m_ctxt_tokenizer.consumed = consumed;
+        }
+        else {
+            if (does_tb_consist_named_character_reference()) {
+                on_parse_error();
+            }
+
+            m_ctxt_tokenizer.ts = TS_CHARACTER_REFERENCE_END;
+        }
+
+        break;
+    }
+    }
 }
 
 void HtmlParaParser::on_numeric_character_reference_state()
 {
+    set_character_reference_code(0);
+
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_LATIN_SMALL_LETTER_X:
+    case UCHAR_LATIN_CAPITAL_LETTER_X:
+        append_to_temporary_buffer(m_ctxt_tokenizer.curr_uc);
+        m_ctxt_tokenizer.ts = TS_HEXADECIMAL_CHARACTER_REFERENCE_START;
+        break;
+
+    default:
+        m_ctxt_tokenizer.ts = TS_DECIMAL_CHARACTER_REFERENCE_START;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_hexadecimal_character_reference_start_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_DIGIT_ZERO ... UCHAR_DIGIT_NINE:
+    case UCHAR_LATIN_CAPITAL_LETTER_A ... UCHAR_LATIN_CAPITAL_LETTER_F:
+    case UCHAR_LATIN_SMALL_LETTER_A ... UCHAR_LATIN_SMALL_LETTER_F:
+        m_ctxt_tokenizer.ts = TS_HEXADECIMAL_CHARACTER_REFERENCE;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+
+    default:
+        on_parse_error();
+        m_ctxt_tokenizer.ts = TS_CHARACTER_REFERENCE_END;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_decimal_character_reference_start_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_DIGIT_ZERO ... UCHAR_DIGIT_NINE:
+        m_ctxt_tokenizer.ts = TS_DECIMAL_CHARACTER_REFERENCE;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+
+    default:
+        on_parse_error();
+        m_ctxt_tokenizer.ts = TS_CHARACTER_REFERENCE_END;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_hexadecimal_character_reference_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_DIGIT_ZERO ... UCHAR_DIGIT_NINE:
+        operate_character_reference_code(16,
+                m_ctxt_tokenizer.curr_uc - 0x0030);
+        break;
+
+    case UCHAR_LATIN_CAPITAL_LETTER_A ... UCHAR_LATIN_CAPITAL_LETTER_F:
+        operate_character_reference_code(16,
+                m_ctxt_tokenizer.curr_uc - 0x0037);
+        break;
+
+    case UCHAR_LATIN_SMALL_LETTER_A ... UCHAR_LATIN_SMALL_LETTER_F:
+        operate_character_reference_code(16,
+                m_ctxt_tokenizer.curr_uc - 0x0057);
+        break;
+
+    case UCHAR_SEMICOLON:
+        m_ctxt_tokenizer.ts = TS_NUMERIC_CHARACTER_REFERENCE_END;
+        break;
+
+    default:
+        on_parse_error();
+        m_ctxt_tokenizer.ts = TS_NUMERIC_CHARACTER_REFERENCE_END;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_decimal_character_reference_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_DIGIT_ZERO ... UCHAR_DIGIT_NINE:
+        operate_character_reference_code(10,
+                m_ctxt_tokenizer.curr_uc - 0x0030);
+        break;
+
+    case UCHAR_SEMICOLON:
+        m_ctxt_tokenizer.ts = TS_NUMERIC_CHARACTER_REFERENCE_END;
+        break;
+
+    default:
+        on_parse_error();
+        m_ctxt_tokenizer.ts = TS_NUMERIC_CHARACTER_REFERENCE_END;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
+}
+
+static struct uc2uc {
+    Uchar32 one;
+    Uchar32 other;
+} _bad_char_ref_code_map_table [] = {
+    { 0x00,    0xFFFD }, //  REPLACEMENT CHARACTER
+    { 0x80,    0x20AC }, //  EURO SIGN (€)
+    { 0x82,    0x201A }, //  SINGLE LOW-9 QUOTATION MARK (‚)
+    { 0x83,    0x0192 }, //  LATIN SMALL LETTER F WITH HOOK (ƒ)
+    { 0x84,    0x201E }, //  DOUBLE LOW-9 QUOTATION MARK („)
+    { 0x85,    0x2026 }, //  HORIZONTAL ELLIPSIS (…)
+    { 0x86,    0x2020 }, //  DAGGER (†)
+    { 0x87,    0x2021 }, //  DOUBLE DAGGER (‡)
+    { 0x88,    0x02C6 }, //  MODIFIER LETTER CIRCUMFLEX ACCENT (ˆ)
+    { 0x89,    0x2030 }, //  PER MILLE SIGN (‰)
+    { 0x8A,    0x0160 }, //  LATIN CAPITAL LETTER S WITH CARON (Š)
+    { 0x8B,    0x2039 }, //  SINGLE LEFT-POINTING ANGLE QUOTATION MARK (‹)
+    { 0x8C,    0x0152 }, //  LATIN CAPITAL LIGATURE OE (Œ)
+    { 0x8E,    0x017D }, //  LATIN CAPITAL LETTER Z WITH CARON (Ž)
+    { 0x91,    0x2018 }, //  LEFT SINGLE QUOTATION MARK (‘)
+    { 0x92,    0x2019 }, //  RIGHT SINGLE QUOTATION MARK (’)
+    { 0x93,    0x201C }, //  LEFT DOUBLE QUOTATION MARK (“)
+    { 0x94,    0x201D }, //  RIGHT DOUBLE QUOTATION MARK (”)
+    { 0x95,    0x2022 }, //  BULLET (•)
+    { 0x96,    0x2013 }, //  EN DASH (–)
+    { 0x97,    0x2014 }, //  EM DASH (—)
+    { 0x98,    0x02DC }, //  SMALL TILDE (˜)
+    { 0x99,    0x2122 }, //  TRADE MARK SIGN (™)
+    { 0x9A,    0x0161 }, //  LATIN SMALL LETTER S WITH CARON (š)
+    { 0x9B,    0x203A }, //  SINGLE RIGHT-POINTING ANGLE QUOTATION MARK (›)
+    { 0x9C,    0x0153 }, //  LATIN SMALL LIGATURE OE (œ)
+    { 0x9E,    0x017E }, //  LATIN SMALL LETTER Z WITH CARON (ž)
+    { 0x9F,    0x0178 }, //  LATIN CAPITAL LETTER Y WITH DIAERESIS (Ÿ)
+};
+
+static bool correct_char_ref_code (Uchar32 uc, Uchar32* corrected)
+{
+    int lower = 0;
+    int upper = TABLESIZE (_bad_char_ref_code_map_table) - 1;
+    int mid = TABLESIZE (_bad_char_ref_code_map_table) >> 1;
+
+    if (uc < _bad_char_ref_code_map_table[lower].one
+            || uc > _bad_char_ref_code_map_table[upper].one)
+        return false;
+
+    do {
+        if (uc < _bad_char_ref_code_map_table[mid].one)
+            upper = mid - 1;
+        else if (uc > _bad_char_ref_code_map_table[mid].one)
+            lower = mid + 1;
+        else {
+            *corrected = _bad_char_ref_code_map_table[mid].other;
+            return true;
+        }
+
+        mid = (lower + upper) / 2;
+
+    } while (lower <= upper);
+
+    return false;
 }
 
 void HtmlParaParser::on_numeric_character_reference_end_state()
 {
+    Uchar32 uc = get_character_reference_code();
+
+    if (correct_char_ref_code(uc, &uc))
+        set_character_reference_code(uc);
+
+    if (MG_UNLIKELY ((uc >= 0xD800 && uc <= 0xDFFF) || uc > 0x10FFFF)) {
+        on_parse_error();
+        set_character_reference_code(0xFFFD);
+    }
+    else if (MG_UNLIKELY (!isValidCharacter(uc))) {
+        on_parse_error();
+    }
+
+    clear_temporary_buffer();
+    append_to_temporary_buffer(uc);
+    m_ctxt_tokenizer.ts = TS_NUMERIC_CHARACTER_REFERENCE_END;
 }
 
 void HtmlParaParser::on_character_reference_end_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.ts_return) {
+    case TS_ATTRIBUTE_VALUE_DOUBLE_QUOTED:
+    case TS_ATTRIBUTE_VALUE_SINGLE_QUOTED:
+    case TS_ATTRIBUTE_VALUE_UNQUOTED:
+        append_to_attribute_value_from_temporary_buffer();
+        break;
+
+    default:
+        emit_character_token_from_temporary_buffer();
+        break;
+    }
+
+    m_ctxt_tokenizer.ts = m_ctxt_tokenizer.ts_return;
 }
 
 bool HtmlParaParser::tokenize()
