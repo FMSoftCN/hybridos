@@ -279,7 +279,54 @@ private:
     void            on_script_data_double_escaped_dash_dash_state();
     void            on_script_data_double_escaped_less_than_sign_state();
     void            on_script_data_double_escape_end_state();
+    void            on_before_attribute_name_state();
+    void            on_attribute_name_state();
+    void            on_after_attribute_name_state();
+    void            on_before_attribute_value_state();
+    void            on_attribute_value_double_quoted_state();
+    void            on_attribute_value_single_quoted_state();
+    void            on_attribute_value_unquoted_state();
+    void            on_after_attribute_value_quoted_state();
+    void            on_self_closing_start_tag_state();
     void            on_bogus_comment_state();
+    void            on_markup_declaration_open_state();
+    void            on_comment_start_state();
+    void            on_comment_start_dash_state();
+    void            on_comment_state();
+    void            on_comment_less_than_sign_state();
+    void            on_comment_less_than_sign_bang_state();
+    void            on_comment_less_than_sign_bang_dash_state();
+    void            on_comment_less_than_sign_bang_dash_dash_state();
+    void            on_comment_end_dash_state();
+    void            on_comment_end_state();
+    void            on_comment_end_bang_state();
+    void            on_doctype_state();
+    void            on_before_doctype_name_state();
+    void            on_doctype_name_state();
+    void            on_after_doctype_name_state();
+    void            on_after_doctype_public_keyword_state();
+    void            on_before_doctype_public_identifier_state();
+    void            on_doctype_public_identifier_double_quoted_state();
+    void            on_doctype_public_identifier_single_quoted_state();
+    void            on_after_doctype_public_identifier_state();
+    void            on_between_doctype_public_system_identifiers_state();
+    void            on_after_doctype_system_keyword_state();
+    void            on_before_doctype_system_identifier_state();
+    void            on_doctype_system_identifier_double_quoted_state();
+    void            on_doctype_system_identifier_single_quoted_state();
+    void            on_after_doctype_system_identifier_state();
+    void            on_bogus_doctype_state();
+    void            on_cdata_section_state();
+    void            on_cdata_section_bracket_state();
+    void            on_cdata_section_end_state();
+    void            on_character_reference_state();
+    void            on_numeric_character_reference_state();
+    void            on_hexadecimal_character_reference_start_state();
+    void            on_decimal_character_reference_start_state();
+    void            on_hexadecimal_character_reference_state();
+    void            on_decimal_character_reference_state();
+    void            on_numeric_character_reference_end_state();
+    void            on_character_reference_end_state();
 
     void            emit_character_token(Uchar32 uc);
     void            emit_eof_token();
@@ -289,13 +336,20 @@ private:
     void            emit_current_tag_token();
     void            append_to_current_tag_name(Uchar32 uc);
     bool            is_appropriate_end_tag();
+    void            set_self_closing_flag();
 
     void            create_comment_token();
+    void            append_to_current_comment(Uchar32 uc);
+    void            emit_comment_token();
 
     void            clear_temporary_buffer();
     void            append_to_temporary_buffer(Uchar32 uc);
     void            emit_character_token_from_temporary_buffer();
     bool            check_temporary_buffer(const char* key);
+
+    void            start_new_attribute(const char* name = "", const char* value = "");
+    void            append_to_attribute_name(Uchar32 uc);
+    void            append_to_attribute_value(Uchar32 uc);
 
     CB_ON_NEW_NODE  m_on_new_node;
     CB_ON_NEW_ATTR  m_on_new_attr;
