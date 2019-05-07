@@ -1970,66 +1970,624 @@ void HtmlParaParser::on_comment_end_bang_state()
 
 void HtmlParaParser::on_doctype_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_TABULATION:
+    case UCHAR_LINE_FEED:
+    case UCHAR_FORM_FEED:
+    case UCHAR_SPACE:
+        m_ctxt_tokenizer.ts = TS_BEFORE_DOCTYPE_NAME;
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        create_doctype_token();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        on_parse_error();
+        m_ctxt_tokenizer.ts = TS_BEFORE_DOCTYPE_NAME;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_before_doctype_name_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_TABULATION:
+    case UCHAR_LINE_FEED:
+    case UCHAR_FORM_FEED:
+    case UCHAR_SPACE:
+        break;
+
+    case UCHAR_LATIN_CAPITAL_LETTER_A ... UCHAR_LATIN_CAPITAL_LETTER_Z:
+        create_doctype_token();
+        append_to_doctype_token_name(m_ctxt_tokenizer.curr_uc + 0x0020);
+        m_ctxt_tokenizer.ts = TS_DOCTYPE_NAME;
+        break;
+
+    case UCHAR_NULL:
+        on_parse_error();
+        create_doctype_token();
+        append_to_doctype_token_name(UCHAR_REPLACEMENT);
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        on_parse_error();
+        create_doctype_token();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        create_doctype_token();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        create_doctype_token();
+        append_to_doctype_token_name(m_ctxt_tokenizer.curr_uc);
+        m_ctxt_tokenizer.ts = TS_DOCTYPE_NAME;
+        break;
+    }
 }
 
 void HtmlParaParser::on_doctype_name_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_TABULATION:
+    case UCHAR_LINE_FEED:
+    case UCHAR_FORM_FEED:
+    case UCHAR_SPACE:
+        m_ctxt_tokenizer.ts = TS_AFTER_DOCTYPE_NAME;
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_LATIN_CAPITAL_LETTER_A ... UCHAR_LATIN_CAPITAL_LETTER_Z:
+        append_to_doctype_token_name(m_ctxt_tokenizer.curr_uc + 0x0020);
+        break;
+
+    case UCHAR_NULL:
+        on_parse_error();
+        append_to_doctype_token_name(UCHAR_REPLACEMENT);
+        break;
+
+
+    case UCHAR_EOF:
+        on_parse_error();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        append_to_doctype_token_name(m_ctxt_tokenizer.curr_uc);
+        break;
+    }
 }
 
 void HtmlParaParser::on_after_doctype_name_state()
 {
+    int consumed;
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_TABULATION:
+    case UCHAR_LINE_FEED:
+    case UCHAR_FORM_FEED:
+    case UCHAR_SPACE:
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        if (does_characters_match_word("PUBLIC", &consumed)) {
+            m_ctxt_tokenizer.ts = TS_AFTER_DOCTYPE_PUBLIC_KEYWORD;
+            m_ctxt_tokenizer.consumed = consumed;
+        }
+        else if (does_characters_match_word("SYSTEM", &consumed)) {
+            m_ctxt_tokenizer.ts = TS_AFTER_DOCTYPE_SYSTEM_KEYWORD;
+            m_ctxt_tokenizer.consumed = consumed;
+        }
+        else {
+            on_parse_error();
+            set_force_quirks_flag();
+            m_ctxt_tokenizer.ts = TS_BOGUS_DOCTYPE;
+        }
+        break;
+    }
 }
 
 void HtmlParaParser::on_after_doctype_public_keyword_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_TABULATION:
+    case UCHAR_LINE_FEED:
+    case UCHAR_FORM_FEED:
+    case UCHAR_SPACE:
+        m_ctxt_tokenizer.ts = TS_BEFORE_DOCTYPE_PUBLIC_IDENTIFIER;
+        break;
+
+    case UCHAR_QUOTATION_MARK:
+        on_parse_error();
+        set_doctype_public_identifier_empty();
+        m_ctxt_tokenizer.ts = TS_DOCTYPE_PUBLIC_IDENTIFIER_DOUBLE_QUOTED;
+        break;
+
+    case UCHAR_APOSTROPHE:
+        on_parse_error();
+        set_doctype_public_identifier_empty();
+        m_ctxt_tokenizer.ts = TS_DOCTYPE_PUBLIC_IDENTIFIER_SINGLE_QUOTED;
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        on_parse_error();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        on_parse_error();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_BOGUS_DOCTYPE;
+        break;
+    }
 }
 
 void HtmlParaParser::on_before_doctype_public_identifier_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_TABULATION:
+    case UCHAR_LINE_FEED:
+    case UCHAR_FORM_FEED:
+    case UCHAR_SPACE:
+        break;
+
+    case UCHAR_QUOTATION_MARK:
+        set_doctype_public_identifier_empty();
+        m_ctxt_tokenizer.ts = TS_DOCTYPE_PUBLIC_IDENTIFIER_DOUBLE_QUOTED;
+        break;
+
+    case UCHAR_APOSTROPHE:
+        set_doctype_public_identifier_empty();
+        m_ctxt_tokenizer.ts = TS_DOCTYPE_PUBLIC_IDENTIFIER_SINGLE_QUOTED;
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        on_parse_error();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        on_parse_error();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_BOGUS_DOCTYPE;
+        break;
+    }
 }
 
 void HtmlParaParser::on_doctype_public_identifier_double_quoted_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_QUOTATION_MARK:
+        m_ctxt_tokenizer.ts = TS_AFTER_DOCTYPE_PUBLIC_IDENTIFIER;
+        break;
+
+    case UCHAR_NULL:
+        on_parse_error();
+        append_to_doctype_public_identifier(UCHAR_REPLACEMENT);
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        on_parse_error();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        append_to_doctype_public_identifier(m_ctxt_tokenizer.curr_uc);
+        break;
+    }
 }
 
 void HtmlParaParser::on_doctype_public_identifier_single_quoted_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_APOSTROPHE:
+        m_ctxt_tokenizer.ts = TS_AFTER_DOCTYPE_PUBLIC_IDENTIFIER;
+        break;
+
+    case UCHAR_NULL:
+        on_parse_error();
+        append_to_doctype_public_identifier(UCHAR_REPLACEMENT);
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        on_parse_error();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        append_to_doctype_public_identifier(m_ctxt_tokenizer.curr_uc);
+        break;
+    }
 }
 
 void HtmlParaParser::on_after_doctype_public_identifier_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_TABULATION:
+    case UCHAR_LINE_FEED:
+    case UCHAR_FORM_FEED:
+    case UCHAR_SPACE:
+        m_ctxt_tokenizer.ts = TS_BETWEEN_DOCTYPE_PUBLIC_SYSTEM_IDENTIFIERS;
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_QUOTATION_MARK:
+        on_parse_error();
+        set_doctype_system_identifier_empty();
+        m_ctxt_tokenizer.ts = TS_DOCTYPE_SYSTEM_IDENTIFIER_DOUBLE_QUOTED;
+        break;
+
+    case UCHAR_APOSTROPHE:
+        on_parse_error();
+        set_doctype_system_identifier_empty();
+        m_ctxt_tokenizer.ts = TS_DOCTYPE_SYSTEM_IDENTIFIER_SINGLE_QUOTED;
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        on_parse_error();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_BOGUS_DOCTYPE;
+        break;
+    }
 }
 
 void HtmlParaParser::on_between_doctype_public_system_identifiers_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_TABULATION:
+    case UCHAR_LINE_FEED:
+    case UCHAR_FORM_FEED:
+    case UCHAR_SPACE:
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_QUOTATION_MARK:
+        set_doctype_system_identifier_empty();
+        m_ctxt_tokenizer.ts = TS_DOCTYPE_SYSTEM_IDENTIFIER_DOUBLE_QUOTED;
+        break;
+
+    case UCHAR_APOSTROPHE:
+        set_doctype_system_identifier_empty();
+        m_ctxt_tokenizer.ts = TS_DOCTYPE_SYSTEM_IDENTIFIER_SINGLE_QUOTED;
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        on_parse_error();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_BOGUS_DOCTYPE;
+        break;
+    }
 }
 
 void HtmlParaParser::on_after_doctype_system_keyword_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_TABULATION:
+    case UCHAR_LINE_FEED:
+    case UCHAR_FORM_FEED:
+    case UCHAR_SPACE:
+        m_ctxt_tokenizer.ts = TS_BEFORE_DOCTYPE_SYSTEM_IDENTIFIER;
+        break;
+
+    case UCHAR_QUOTATION_MARK:
+        on_parse_error();
+        set_doctype_system_identifier_empty();
+        m_ctxt_tokenizer.ts = TS_DOCTYPE_SYSTEM_IDENTIFIER_DOUBLE_QUOTED;
+        break;
+
+    case UCHAR_APOSTROPHE:
+        on_parse_error();
+        set_doctype_system_identifier_empty();
+        m_ctxt_tokenizer.ts = TS_DOCTYPE_SYSTEM_IDENTIFIER_SINGLE_QUOTED;
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        on_parse_error();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        on_parse_error();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_BOGUS_DOCTYPE;
+        break;
+    }
 }
 
 void HtmlParaParser::on_before_doctype_system_identifier_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_TABULATION:
+    case UCHAR_LINE_FEED:
+    case UCHAR_FORM_FEED:
+    case UCHAR_SPACE:
+        break;
+
+    case UCHAR_QUOTATION_MARK:
+        set_doctype_system_identifier_empty();
+        m_ctxt_tokenizer.ts = TS_DOCTYPE_SYSTEM_IDENTIFIER_DOUBLE_QUOTED;
+        break;
+
+    case UCHAR_APOSTROPHE:
+        set_doctype_system_identifier_empty();
+        m_ctxt_tokenizer.ts = TS_DOCTYPE_SYSTEM_IDENTIFIER_SINGLE_QUOTED;
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        on_parse_error();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        on_parse_error();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_BOGUS_DOCTYPE;
+        break;
+    }
 }
 
 void HtmlParaParser::on_doctype_system_identifier_double_quoted_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_QUOTATION_MARK:
+        m_ctxt_tokenizer.ts = TS_AFTER_DOCTYPE_SYSTEM_IDENTIFIER;
+        break;
+
+    case UCHAR_NULL:
+        on_parse_error();
+        append_to_doctype_system_identifier(UCHAR_REPLACEMENT);
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        on_parse_error();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        append_to_doctype_system_identifier(m_ctxt_tokenizer.curr_uc);
+        break;
+    }
 }
 
 void HtmlParaParser::on_doctype_system_identifier_single_quoted_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_APOSTROPHE:
+        m_ctxt_tokenizer.ts = TS_AFTER_DOCTYPE_SYSTEM_IDENTIFIER;
+        break;
+
+    case UCHAR_NULL:
+        on_parse_error();
+        append_to_doctype_system_identifier(UCHAR_REPLACEMENT);
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        on_parse_error();
+        set_force_quirks_flag();
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        append_to_doctype_system_identifier(m_ctxt_tokenizer.curr_uc);
+        break;
+    }
 }
 
 void HtmlParaParser::on_after_doctype_system_identifier_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_TABULATION:
+    case UCHAR_LINE_FEED:
+    case UCHAR_FORM_FEED:
+    case UCHAR_SPACE:
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        set_force_quirks_flag();
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        on_parse_error();
+        m_ctxt_tokenizer.ts = TS_BOGUS_DOCTYPE;
+        break;
+    }
 }
 
 void HtmlParaParser::on_bogus_doctype_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_GREATER_THAN_SIGN:
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_doctype_token();
+        break;
+
+    case UCHAR_EOF:
+        emit_doctype_token();
+        emit_eof_token();
+        break;
+
+    default:
+        break;
+    }
 }
 
 void HtmlParaParser::on_cdata_section_state()

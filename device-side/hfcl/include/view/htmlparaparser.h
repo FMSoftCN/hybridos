@@ -247,6 +247,7 @@ private:
     TokenizerContext m_ctxt_tokenizer;
     bool            reset_tokenizer(const char* encoding);
     bool            tokenize();
+
     void            on_parse_error();
     void            on_data_state();
     void            on_rcdata_state();
@@ -350,6 +351,17 @@ private:
     void            start_new_attribute(const char* name = "", const char* value = "");
     void            append_to_attribute_name(Uchar32 uc);
     void            append_to_attribute_value(Uchar32 uc);
+
+    void            create_doctype_token();
+    void            emit_doctype_token();
+    void            set_force_quirks_flag(bool on_or_off = true);
+    void            append_to_doctype_token_name(Uchar32 uc);
+    void            set_doctype_public_identifier_empty();
+    void            append_to_doctype_public_identifier(Uchar32 uc);
+    void            set_doctype_system_identifier_empty();
+    void            append_to_doctype_system_identifier(Uchar32 uc);
+
+    bool            does_characters_match_word(const char* word, int* consumed);
 
     CB_ON_NEW_NODE  m_on_new_node;
     CB_ON_NEW_ATTR  m_on_new_attr;
