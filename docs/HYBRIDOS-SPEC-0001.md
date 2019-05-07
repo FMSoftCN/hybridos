@@ -53,21 +53,22 @@ and the framework to define a device app in JavaScript language.
 
 `HVML` means HybridOS View Markup Language, which defines some extended HTML5 tags:
 
-* `hvapp`: define a HybridOS app.
+* `hvml`: define a HybridOS app.
 * `activity`: define an activity.
-* `template`: define a template which can be cloned and inserted in the view tree.
-* `view`: define a view client.
 
-A HybridOS app can only contain one app, and an app can contains multiple
-activities, while each activity can contain multiple views and templates.
+* `html`: define an activity.
+* `view`: define a view client; generally, all `view` elements are direct
+children of the `body` element.
+* `template`: define a template which can be cloned and inserted in the view tree.
+
+We use a HTML document to define an activity. However, different from HTML,
+we can define multiple view clients for one activity, and at the same time,
+only one view client can be kept active. The other view clients are virtual
+and invisible from the users.
 
 A template is a virtual element, which can be use to generate other
 real elements by substituting some properties and inserting them to the
 view elements tree. Note that HTML 5.2 has introduced `template` tag.
-
-A view client is a tree of document object. You can define multiple view
-clients for one activity. But at the same time, only one view client can
-be kept active.
 
 For example, to define a UI, which contains many general elements,
 we use the HVML tag `view`:
@@ -95,10 +96,10 @@ and use the following tags to define the text paragraphs:
 * `figcaption`
 
 In a text paragraph, we use the phrasing content elements (text-level
-elements and embedded elemets) of HTML5 to define the content.
+elements and embedded elements) of HTML5 to define the content.
 Therefore, you can use the following HTML5 tags:
 
-* The text-level elemets:
+* The text-level elements:
   * `a`, `abbr`, `b`, `bdi`, `bdo`, `br`, `cite`, `code`, `data`, `datalist`
   * `del`, `dfn`, `em`, `i`, `ins`, `kbd`, `label`, `mark`,
   * `output`, `q`, `ruby`, `s`, `samp`, `small`, `span`
@@ -116,31 +117,30 @@ The following tags are specific to HVML in order to clone the template:
 
 For example:
 
-    <hvapp>
+    <html>
+        <body>
 
-        <template id="footer-cn">
-            <p><a href="http://www.baidu.com">Baidu</a></p>
-        </template>
+            <template id="footer-cn">
+                <p><a href="http://www.baidu.com">Baidu</a></p>
+            </template>
 
-        <template id="footer-tw">
-            <p><a href="http://www.bing.com">Bing</a></p>
-        </template>
+            <template id="footer-tw">
+                <p><a href="http://www.bing.com">Bing</a></p>
+            </template>
 
-        <template id="footer-def">
-            <p><a href="http://www.google.com">Google</a></p>
-        </template>
-
-        <activity>
-
-            <template id="user-item">
-                <li>
-                    <data data-key="id" data-attr="value"></data>
-                    <img data-key="avatar" data-attr="src" />
-                    <p data-key="name" data-attr="content"></p>
-                </li>
+            <template id="footer-def">
+                <p><a href="http://www.google.com">Google</a></p>
             </template>
 
             <view>
+                <template id="user-item">
+                    <li>
+                        <data data-key="id" data-attr="value"></data>
+                        <img data-key="avatar" data-attr="src" />
+                        <p data-key="name" data-attr="content"></p>
+                    </li>
+                </template>
+
                 <header>
                     <h1>User List</h1>
                 </header>
@@ -159,9 +159,9 @@ For example:
                     </substitute>
                 </footer>
             </view>
-        </activity>
 
-    </hvapp>
+        </body>
+    </html>
 
 ### Tag properties
 
@@ -212,7 +212,7 @@ user item, the app will show the detailed information of the user.
 The following markup statements define the user list activity:
 
     <!-- The user list activity -->
-    <activity id="act-user-list" hbd-app="firstSample">
+    <body id="act-user-list" hbd-app="firstSample">
 
         <!-- define templates for future use -->
         <template id="user-item">
@@ -275,12 +275,12 @@ The following markup statements define the user list activity:
             /* show the view named 'item-list' */
             activity.showView ("item-list");
         </script>
-    </activity>
+    </body>
 
 The following markup statements define the user information activity:
 
     <!-- The user information activity -->
-    <activity id="act-user-info" scope="firstSample">
+    <body id="act-user-info" scope="firstSample">
 
         <view name="user-info" class="">
             ...
@@ -306,7 +306,7 @@ The following markup statements define the user information activity:
             /* show the view named 'act-user-info' */
             activity.showView ("user-info");
         </script>
-    </activity>
+    </body>
 
 ### Define app
 
@@ -315,11 +315,12 @@ entry of the app and control the different activities.
 
 An app can be defined by using the following markup statements:
 
-    <hvapp name="firstSample">
+    <!DOCTYPE hvml>
+    <hvml name="firstSample" lang="en">
         <!-- define the assets of the app, such as the activities, images, L10N text, CSS, and so on -->
-        <assets>
-            <meta name="activity:act-user-list" content="userlist.hvml" />
-            <meta name="activity:userInfo" content="userinfo.hvml" />
+        <head>
+            <meta name="activity:act-user-list" content="userlist.html" />
+            <meta name="activity:userInfo" content="userinfo.html" />
             <meta name="img:defAvatar" content="/firstSample/assets/default.png" />
 
             <!-- the links to the localization translation files */
@@ -331,7 +332,7 @@ An app can be defined by using the following markup statements:
                     href="/firstSample/assets/messages/en_US.json" />
 
             <link rel="stylesheet" type="text/css" href="/firstSample/assets/default.css" />
-        </assets>
+        </head>
 
         <script>
             /* create the app object
@@ -344,26 +345,27 @@ An app can be defined by using the following markup statements:
             /* launch the act-user-list activity */
             app.launchActivity ("act-user-list", {});
         </script>
-    </hvapp>
+    </hvml>
 
 Obviously, if you use the method above to define the app, you need prepare three files:
 
 * `firstsample.hvml`: the app;
-* `userlist.hvml`: the `act-user-list` activity;
-* `userinfo.hvml`: the `act-user-info` activity.
+* `userlist.html`: the `act-user-list` activity;
+* `userinfo.html`: the `act-user-info` activity.
 
 Otherwise, if your app is a simple one, you can organize your code in the following manner
 to use only one file:
 
-    <hvapp name="firstSample">
-        <assets>
-            <meta name="activity:act-user-list" content="userlist.hvml" />
-            <meta name="activity:act-user-info" content="userinfo.hvml" />
+    <!DOCTYPE hvml>
+    <hvml name="firstSample" lang="en">
+        <head>
+            <meta name="activity:act-user-list" content="userlist.html" />
+            <meta name="activity:act-user-info" content="userinfo.html" />
             <meta name="img:defAvatar" content="/firstSample/assets/default.css" />
 
             <link rel="localtext" type="text/json" href="/firstSample/assets/messages/zh_CN.json" />
             <link rel="stylesheet" type="text/css" href="/firstSample/assets/default.css" />
-        </assets>
+        </head>
 
         <activity id="act-user-list" hbd-scope="firstSample">
             ...
@@ -376,9 +378,11 @@ to use only one file:
         <script>
             ...
         </script>
-    </hvapp>
+    </hvml>
 
 ## Embed App into HTML5 Pages
+
+_obsolete_
 
 It is possible to embed a HybridOS app into an existed HTML5 page:
 
