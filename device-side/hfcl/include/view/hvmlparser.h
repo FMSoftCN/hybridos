@@ -1,7 +1,7 @@
 /*
 ** HFCL - HybridOS Foundation Class Library
 **
-** Copyright (C) 2018 Beijing FMSoft Technologies Co., Ltd.
+** Copyright (C) 2019 Beijing FMSoft Technologies Co., Ltd.
 **
 ** This file is part of HFCL.
 **
@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef HFCL_COMMON_HTMLPARAPARSER_H_
-#define HFCL_COMMON_HTMLPARAPARSER_H_
+#ifndef HFCL_COMMON_HVMLPARSER_H_
+#define HFCL_COMMON_HVMLPARSER_H_
 
 #include "../common/common.h"
 #include "../common/list.h"
@@ -38,10 +38,10 @@ typedef int   (*CB_ON_NEW_CHAR)(void* context, const char* text);
 class View;
 class ViewContainer;
 
-class HtmlParaParser {
+class HvmlParser {
 public:
-    HtmlParaParser(size_t stackSize, const char* encoding = "UTF-8");
-    ~HtmlParaParser();
+    HvmlParser(size_t stackSize, const char* encoding = "UTF-8");
+    ~HvmlParser();
 
     bool reset(size_t stackSize, const char* encoding = "UTF-8");
     size_t parse(View* parent, const char* content, size_t len,
@@ -386,5 +386,5 @@ private:
 
 } // namespace hfcl
 
-#endif /* HFCL_COMMON_HTMLPARAPARSER_H_ */
+#endif /* HFCL_COMMON_HVMLPARSER_H_ */
 

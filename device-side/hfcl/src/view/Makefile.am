@@ -12,7 +12,7 @@ libhfcl_view_la_SOURCES = \
     panelview.cc \
     paragraphview.cc \
     htmlentitiestable.inc \
-    htmlparaparser.cc \
+    hvmlparser.cc \
     textview.cc \
     atomictextview.cc \
     animatedimageview.cc \
