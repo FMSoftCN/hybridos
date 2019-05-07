@@ -259,16 +259,43 @@ private:
     void            on_rcdata_less_than_sign_state();
     void            on_rcdata_end_tag_open_state();
     void            on_rcdata_end_tag_name_state();
+    void            on_rawtext_less_than_sign_state();
+    void            on_rawtext_end_tag_open_state();
+    void            on_rawtext_end_tag_name_state();
+    void            on_script_data_less_than_sign_state();
+    void            on_script_data_end_tag_open_state();
+    void            on_script_data_end_tag_name_state();
+    void            on_script_data_escape_start_state();
+    void            on_script_data_escape_start_dash_state();
+    void            on_script_data_escaped_state();
+    void            on_script_data_escaped_dash_state();
+    void            on_script_data_escaped_dash_dash_state();
+    void            on_script_data_escaped_less_than_sign_state();
+    void            on_script_data_escaped_end_tag_open_state();
+    void            on_script_data_escaped_end_tag_name_state();
+    void            on_script_data_double_escape_start_state();
+    void            on_script_data_double_escaped_state();
+    void            on_script_data_double_escaped_dash_state();
+    void            on_script_data_double_escaped_dash_dash_state();
+    void            on_script_data_double_escaped_less_than_sign_state();
+    void            on_script_data_double_escape_end_state();
     void            on_bogus_comment_state();
 
     void            emit_character_token(Uchar32 uc);
     void            emit_eof_token();
+
     void            create_start_tag_token();
     void            create_end_tag_token();
-    void            create_comment_token();
     void            emit_current_tag_token();
     void            append_to_current_tag_name(Uchar32 uc);
     bool            is_appropriate_end_tag();
+
+    void            create_comment_token();
+
+    void            clear_temporary_buffer();
+    void            append_to_temporary_buffer(Uchar32 uc);
+    void            emit_character_token_from_temporary_buffer();
+    bool            check_temporary_buffer(const char* key);
 
     CB_ON_NEW_NODE  m_on_new_node;
     CB_ON_NEW_ATTR  m_on_new_attr;
