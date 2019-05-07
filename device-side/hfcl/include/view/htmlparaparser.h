@@ -249,6 +249,8 @@ private:
     TokenizerContext m_ctxt_tokenizer;
     bool            reset_tokenizer(const char* encoding);
 
+    bool check_adjusted_current_node();
+
     bool tokenize();
 
     void on_parse_error();
@@ -364,7 +366,8 @@ private:
     void set_doctype_system_identifier_empty();
     void append_to_doctype_system_identifier(Uchar32 uc);
 
-    bool does_characters_match_word(const char* word, int* consumed);
+    bool does_characters_match_word(const char* word, int* consumed,
+            bool case_insensitive = true);
     bool try_to_match_named_character_reference(Uchar32* maped_ucs,
             int* consumed, Uchar32* last_matched);
     bool does_tb_consist_named_character_reference();

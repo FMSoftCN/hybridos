@@ -1717,6 +1717,27 @@ void HtmlParaParser::on_bogus_comment_state()
 
 void HtmlParaParser::on_markup_declaration_open_state()
 {
+    int consumed;
+
+    if (does_characters_match_word("--", &consumed)) {
+        m_ctxt_tokenizer.consumed = consumed;
+        create_comment_token();
+        m_ctxt_tokenizer.ts = TS_COMMENT_START;
+    }
+    else if (does_characters_match_word("DOCTYPE", &consumed)) {
+        m_ctxt_tokenizer.consumed = consumed;
+        m_ctxt_tokenizer.ts = TS_DOCTYPE;
+    }
+    else if (check_adjusted_current_node() &&
+            does_characters_match_word("[CDATA[", &consumed, false)) {
+        m_ctxt_tokenizer.consumed = consumed;
+        m_ctxt_tokenizer.ts = TS_CDATA_SECTION;
+    }
+    else {
+        on_parse_error();
+        create_comment_token();
+        m_ctxt_tokenizer.ts = TS_BOGUS_COMMENT;
+    }
 }
 
 void HtmlParaParser::on_comment_start_state()
@@ -2665,17 +2686,22 @@ bool HtmlParaParser::is_in_attribute_value(Uchar32 last_matched, int consumed)
     if ((m_ctxt_tokenizer.ts_return == TS_ATTRIBUTE_VALUE_DOUBLE_QUOTED ||
             m_ctxt_tokenizer.ts_return == TS_ATTRIBUTE_VALUE_SINGLE_QUOTED ||
             m_ctxt_tokenizer.ts_return == TS_ATTRIBUTE_VALUE_UNQUOTED) &&
-            last_matched != UCHAR_SEMICOLON) {
+            last_matched != UCHAR_SEMICOLON &&
+            m_ctxt_tokenizer.total_len > consumed) {
 
         Uchar32 next_uc = 0;    // TODO
-        if (next_uc == UCHAR_EQUAL_SIGN ||
-            (next_uc >= UCHAR_DIGIT_ZERO &&
-                next_uc <= UCHAR_DIGIT_NINE) ||
-            (next_uc >= UCHAR_LATIN_CAPITAL_LETTER_A &&
-                next_uc <= UCHAR_LATIN_CAPITAL_LETTER_Z) ||
-            (next_uc >= UCHAR_LATIN_SMALL_LETTER_A &&
-                next_uc <= UCHAR_LATIN_SMALL_LETTER_Z))
+        if (GetNextUChar(m_ctxt_tokenizer.lf,
+                    m_ctxt_tokenizer.mchar + consumed,
+                    m_ctxt_tokenizer.total_len - consumed, &next_uc) > 0 &&
+                (next_uc == UCHAR_EQUAL_SIGN ||
+                (next_uc >= UCHAR_DIGIT_ZERO &&
+                    next_uc <= UCHAR_DIGIT_NINE) ||
+                (next_uc >= UCHAR_LATIN_CAPITAL_LETTER_A &&
+                    next_uc <= UCHAR_LATIN_CAPITAL_LETTER_Z) ||
+                (next_uc >= UCHAR_LATIN_SMALL_LETTER_A &&
+                    next_uc <= UCHAR_LATIN_SMALL_LETTER_Z))) {
             return true;
+        }
     }
 
     return false;
