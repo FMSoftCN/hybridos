@@ -1713,42 +1713,259 @@ void HtmlParaParser::on_markup_declaration_open_state()
 
 void HtmlParaParser::on_comment_start_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_HYPHEN_MINUS:
+        m_ctxt_tokenizer.ts = TS_COMMENT_START_DASH;
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        on_parse_error();
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_comment_token();
+        break;
+
+    default:
+        m_ctxt_tokenizer.ts = TS_COMMENT;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_comment_start_dash_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_HYPHEN_MINUS:
+        m_ctxt_tokenizer.ts = TS_COMMENT_END;
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        on_parse_error();
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_comment_token();
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        emit_comment_token();
+        emit_eof_token();
+        break;
+
+    default:
+        append_to_current_comment(UCHAR_HYPHEN_MINUS);
+        m_ctxt_tokenizer.ts = TS_COMMENT;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_comment_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_LESS_THAN_SIGN:
+        append_to_current_comment(UCHAR_LESS_THAN_SIGN);
+        m_ctxt_tokenizer.ts = TS_COMMENT_LESS_THAN_SIGN;
+        break;
+
+    case UCHAR_HYPHEN_MINUS:
+        m_ctxt_tokenizer.ts = TS_COMMENT_END_DASH;
+        break;
+
+    case UCHAR_NULL:
+        on_parse_error();
+        append_to_current_comment(UCHAR_REPLACEMENT);
+        emit_comment_token();
+        emit_eof_token();
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        emit_comment_token();
+        emit_eof_token();
+        break;
+
+    default:
+        append_to_current_comment(m_ctxt_tokenizer.curr_uc);
+        break;
+    }
 }
 
 void HtmlParaParser::on_comment_less_than_sign_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_EXCLAMATION_MARK:
+        append_to_current_comment(m_ctxt_tokenizer.curr_uc);
+        m_ctxt_tokenizer.ts = TS_COMMENT_LESS_THAN_SIGN_BANG;
+        break;
+
+    case UCHAR_LESS_THAN_SIGN:
+        append_to_current_comment(m_ctxt_tokenizer.curr_uc);
+        break;
+
+    default:
+        m_ctxt_tokenizer.ts = TS_COMMENT;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_comment_less_than_sign_bang_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_HYPHEN_MINUS:
+        m_ctxt_tokenizer.ts = TS_COMMENT_LESS_THAN_SIGN_BANG_DASH;
+        break;
+
+    default:
+        m_ctxt_tokenizer.ts = TS_COMMENT;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_comment_less_than_sign_bang_dash_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_HYPHEN_MINUS:
+        m_ctxt_tokenizer.ts = TS_COMMENT_LESS_THAN_SIGN_BANG_DASH_DASH;
+        break;
+
+    default:
+        m_ctxt_tokenizer.ts = TS_COMMENT_END_DASH;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_comment_less_than_sign_bang_dash_dash_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_GREATER_THAN_SIGN:
+    case UCHAR_EOF:
+        m_ctxt_tokenizer.ts = TS_COMMENT_END;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+
+    default:
+        on_parse_error();
+        m_ctxt_tokenizer.ts = TS_COMMENT_END;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_comment_end_dash_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_HYPHEN_MINUS:
+        m_ctxt_tokenizer.ts = TS_COMMENT_END;
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        emit_comment_token();
+        emit_eof_token();
+        break;
+
+    default:
+        append_to_current_comment(UCHAR_HYPHEN_MINUS);
+        m_ctxt_tokenizer.ts = TS_COMMENT;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_comment_end_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_GREATER_THAN_SIGN:
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_comment_token();
+        break;
+
+    case UCHAR_EXCLAMATION_MARK:
+        m_ctxt_tokenizer.ts = TS_COMMENT_END_BANG;
+        break;
+
+    case UCHAR_HYPHEN_MINUS:
+        append_to_current_comment(UCHAR_HYPHEN_MINUS);
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        emit_comment_token();
+        emit_eof_token();
+        break;
+
+    default:
+        append_to_current_comment(UCHAR_HYPHEN_MINUS);
+        m_ctxt_tokenizer.ts = TS_COMMENT;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_comment_end_bang_state()
 {
+    m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
+    m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
+
+    switch (m_ctxt_tokenizer.next_uc) {
+    case UCHAR_HYPHEN_MINUS:
+        append_to_current_comment(UCHAR_HYPHEN_MINUS);
+        append_to_current_comment(UCHAR_EXCLAMATION_MARK);
+        m_ctxt_tokenizer.ts = TS_COMMENT_END_DASH;
+        break;
+
+    case UCHAR_GREATER_THAN_SIGN:
+        on_parse_error();
+        m_ctxt_tokenizer.ts = TS_DATA;
+        emit_comment_token();
+        break;
+
+    case UCHAR_EXCLAMATION_MARK:
+        m_ctxt_tokenizer.ts = TS_COMMENT_END_BANG;
+        break;
+
+    case UCHAR_EOF:
+        on_parse_error();
+        emit_comment_token();
+        emit_eof_token();
+        break;
+
+    default:
+        append_to_current_comment(UCHAR_HYPHEN_MINUS);
+        append_to_current_comment(UCHAR_EXCLAMATION_MARK);
+        m_ctxt_tokenizer.ts = TS_COMMENT;
+        m_ctxt_tokenizer.consumed = 0;
+        break;
+    }
 }
 
 void HtmlParaParser::on_doctype_state()
