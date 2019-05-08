@@ -19,14 +19,15 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef HFCL_COMMON_HVMLPARSER_H_
-#define HFCL_COMMON_HVMLPARSER_H_
+#ifndef HFCL_VIEW_HVMLPARSER_H_
+#define HFCL_VIEW_HVMLPARSER_H_
 
 #include "../common/common.h"
 #include "../common/helpers.h"
 #include "../common/list.h"
 
 #include <string>
+#include <map>
 
 #include <minigui/minigui.h>
 #include <minigui/gdi.h>
@@ -196,6 +197,7 @@ protected:
 
     bool is_open_element(const View* view);
     View* insert_new_element(const View* view);
+    bool check_adjusted_current_node();
 
     typedef struct _ActiveFormattingEle {
         list_t      list;
@@ -209,6 +211,50 @@ protected:
     void push_new_afe(const View* view, bool isMarker = false);
     void rebuild_afe_list();
     void clear_up_to_last_marker();
+
+    class DoctypeToken {
+    public:
+        DoctypeToken() {
+            force_quirks = false;
+            pub_id_set = false;
+            sys_id_set = false;
+        }
+
+        bool            force_quirks;
+        bool            pub_id_set;
+        bool            sys_id_set;
+        std::string     name;
+        std::string     pub_id;
+        std::string     sys_id;
+    };
+
+    class TagToken {
+    public:
+        TagToken (bool start_or_end = true) {
+            is_start = start_or_end;
+            self_closing = false;
+        }
+        ~TagToken () {
+            attrs.clear();
+        }
+
+        bool add_attr() {
+            std::map<std::string, std::string>::iterator it;
+            it = attrs.find(attr_name);
+            if (it != attrs.end())
+                return false;
+
+            attrs[attr_name] = attr_value;
+            return true;
+        }
+
+        bool            is_start;
+        bool            self_closing;
+        std::string     tag_name;
+        std::string     attr_name;
+        std::string     attr_value;
+        std::map<std::string, std::string> attrs;
+    };
 
     typedef struct _TokenizerContext {
         LOGFONT*        lf;
@@ -229,11 +275,15 @@ protected:
         //TokenTypes      tt;       // the token type
 
         Uchar32         char_ref_code;  // character reference code
-        std::string     temp_buff;  // the temporary buffer
+        std::string     temp_buff;      // the temporary buffer
+        std::string     last_emitted;   // the last emitted start tag name
+
+        DoctypeToken    *dt;        // the DOCTYPE token
+        TagToken        *tt;        // the start or end tag token
+
 #ifdef DEBUG
         std::string     comment;    // the current comment
 #endif
-        std::string     tag_name;   // the current tag name
     } TokenizerContext;
 
 private:
@@ -270,8 +320,6 @@ private:
     TokenizerContext m_ctxt_tokenizer;
     bool            reset_tokenizer(const char* encoding);
 
-    bool check_adjusted_current_node();
-
     bool does_characters_match_word(const char* word, int* consumed,
             bool case_insensitive = true);
 
@@ -290,28 +338,35 @@ private:
     void clear_temporary_buffer() {
         m_ctxt_tokenizer.temp_buff.clear();
     }
+
     void append_to_temporary_buffer(Uchar32 uc) {
         append_uc32_to_utf8_string(uc, m_ctxt_tokenizer.temp_buff);
     }
+
     bool check_temporary_buffer(const char* key) {
         return m_ctxt_tokenizer.temp_buff.compare(key) == 0;
     }
+
     void emit_character_token_from_temporary_buffer() {
         emit_character_token(m_ctxt_tokenizer.temp_buff);
     }
+
     bool does_tb_consist_named_character_reference();
 
     /* operators for character reference */
     void set_character_reference_code(Uchar32 uc) {
         m_ctxt_tokenizer.char_ref_code = uc;
     }
+
     void operate_character_reference_code(int multiplier, int addend) {
         m_ctxt_tokenizer.char_ref_code *= multiplier;
         m_ctxt_tokenizer.char_ref_code += addend;
     }
+
     Uchar32 get_character_reference_code() {
         return m_ctxt_tokenizer.char_ref_code;
     }
+
     bool is_in_attribute_value(Uchar32 last_matched, int consumed);
     const Uchar32* try_to_match_named_character_reference(int* consumed,
             Uchar32* last_matched);
@@ -319,23 +374,76 @@ private:
     /* operators for character token */
     void emit_character_token(Uchar32 uc);
     void emit_character_token(const std::string& utf8_str);
+
+    /* operators for EOF token */
     void emit_eof_token();
 
     /* operators for start/end tag token */
-    void create_start_tag_token();
-    void create_end_tag_token();
-    void append_to_current_tag_name(Uchar32 uc);
-    bool is_appropriate_end_tag();
-    void set_self_closing_flag();
-    void start_new_attribute(const char* name = "", const char* value = "");
-    void append_to_attribute_name(Uchar32 uc);
-    void append_to_attribute_value(Uchar32 uc);
-    void append_to_attribute_value_from_temporary_buffer();
-    void emit_current_tag_token();
+    void create_start_tag_token() {
+        if (m_ctxt_tokenizer.tt) {
+            delete m_ctxt_tokenizer.tt;
+        }
+        m_ctxt_tokenizer.tt = new TagToken(true);
+    }
+
+    void create_end_tag_token() {
+        if (m_ctxt_tokenizer.tt) {
+            delete m_ctxt_tokenizer.tt;
+        }
+        m_ctxt_tokenizer.tt = new TagToken(false);
+    }
+
+    void append_to_tag_name(Uchar32 uc) {
+        assert(m_ctxt_tokenizer.tt);
+        append_uc32_to_utf8_string(uc, m_ctxt_tokenizer.tt->tag_name);
+    }
+
+    void start_new_attribute(const char* name = "", const char* value = "") {
+        assert(m_ctxt_tokenizer.tt);
+        if (!m_ctxt_tokenizer.tt->attr_name.empty()) {
+            if (!m_ctxt_tokenizer.tt->add_attr())
+                on_parse_error();
+        }
+
+        m_ctxt_tokenizer.tt->attr_name.clear();
+        m_ctxt_tokenizer.tt->attr_value.clear();
+    }
+
+    void append_to_attribute_name(Uchar32 uc) {
+        assert(m_ctxt_tokenizer.tt);
+        append_uc32_to_utf8_string(uc, m_ctxt_tokenizer.tt->attr_name);
+    }
+
+    void append_to_attribute_value(Uchar32 uc) {
+        assert(m_ctxt_tokenizer.tt);
+        append_uc32_to_utf8_string(uc, m_ctxt_tokenizer.tt->attr_value);
+    }
+
+    void append_to_attribute_value_from_temporary_buffer() {
+        assert(m_ctxt_tokenizer.tt);
+        m_ctxt_tokenizer.tt->attr_value += m_ctxt_tokenizer.temp_buff;
+    }
+
+    void set_self_closing_flag() {
+        assert(m_ctxt_tokenizer.tt);
+        m_ctxt_tokenizer.tt->self_closing = true;
+    }
+
+    bool is_appropriate_end_tag() {
+        assert(m_ctxt_tokenizer.tt);
+
+        if ((!m_ctxt_tokenizer.tt->is_start) &&
+                m_ctxt_tokenizer.tt->tag_name == m_ctxt_tokenizer.last_emitted)
+            return true;
+
+        return false;
+    }
+
+    void emit_tag_token();
 
     /* operators for comment token; we just ignore the comment */
     void create_comment_token() { }
-    void append_to_current_comment(Uchar32 uc) {
+    void append_to_comment(Uchar32 uc) {
 #ifdef DEBUG
         append_uc32_to_utf8_string(uc, m_ctxt_tokenizer.comment);
 #endif
@@ -347,14 +455,46 @@ private:
 #endif
     }
 
-    /* operators for doctype token */
-    void create_doctype_token();
-    void set_force_quirks_flag(bool on_or_off = true);
-    void append_to_doctype_token_name(Uchar32 uc);
-    void set_doctype_public_identifier_empty();
-    void append_to_doctype_public_identifier(Uchar32 uc);
-    void set_doctype_system_identifier_empty();
-    void append_to_doctype_system_identifier(Uchar32 uc);
+    /* operators for DOCTYPE token */
+    void create_doctype_token() {
+        if (m_ctxt_tokenizer.dt) {
+            delete m_ctxt_tokenizer.dt;
+        }
+        m_ctxt_tokenizer.dt = new DoctypeToken;
+    }
+
+    void set_force_quirks_flag(bool on_or_off = true) {
+        assert(m_ctxt_tokenizer.dt);
+        m_ctxt_tokenizer.dt->force_quirks = on_or_off;
+    }
+
+    void append_to_doctype_token_name(Uchar32 uc) {
+        assert(m_ctxt_tokenizer.dt);
+        append_uc32_to_utf8_string(uc, m_ctxt_tokenizer.dt->name);
+    }
+
+    void set_doctype_public_identifier_empty() {
+        assert(m_ctxt_tokenizer.dt);
+        m_ctxt_tokenizer.dt->pub_id.clear();
+        m_ctxt_tokenizer.dt->pub_id_set = true;
+    }
+
+    void append_to_doctype_public_identifier(Uchar32 uc) {
+        assert(m_ctxt_tokenizer.dt);
+        append_uc32_to_utf8_string(uc, m_ctxt_tokenizer.dt->pub_id);
+    }
+
+    void set_doctype_system_identifier_empty() {
+        assert(m_ctxt_tokenizer.dt);
+        m_ctxt_tokenizer.dt->sys_id.clear();
+        m_ctxt_tokenizer.dt->sys_id_set = true;
+    }
+
+    void append_to_doctype_system_identifier(Uchar32 uc) {
+        assert(m_ctxt_tokenizer.dt);
+        append_uc32_to_utf8_string(uc, m_ctxt_tokenizer.dt->sys_id);
+    }
+
     void emit_doctype_token();
 
     bool tokenize();
@@ -444,5 +584,5 @@ private:
 
 } // namespace hfcl
 
-#endif /* HFCL_COMMON_HVMLPARSER_H_ */
+#endif /* HFCL_VIEW_HVMLPARSER_H_ */
 

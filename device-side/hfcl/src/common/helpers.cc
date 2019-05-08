@@ -96,6 +96,7 @@ static int utf8_len_first_char (unsigned char* mstr, int len)
     return 1;
 }
 
+#if 0
 Uint32 utf8_to_uc32 (const char* mchar, int mchar_len)
 {
     Uint32 wc = *((unsigned char *)(mchar++));
@@ -117,6 +118,7 @@ Uint32 utf8_to_uc32 (const char* mchar, int mchar_len)
 
     return wc;
 }
+#endif
 
 int utf8_to_uc32 (const char* mchar, int mchar_len, Uint32* uc)
 {
@@ -129,7 +131,7 @@ int utf8_to_uc32 (const char* mchar, int mchar_len, Uint32* uc)
         while (wc & (0x80 >> n))
             n++;
 
-        if (n > mchar_len)
+        if (mchar_len > 0 && n > mchar_len)
             return 0;
 
         ch_len = n;
@@ -143,6 +145,8 @@ int utf8_to_uc32 (const char* mchar, int mchar_len, Uint32* uc)
             wc = (wc << 6) | (t & 0x3F);
         }
     }
+    else if (wc == 0)
+        return 0;
 
     if (uc) {
         *uc = wc;

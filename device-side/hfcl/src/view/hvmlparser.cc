@@ -102,6 +102,14 @@ void HvmlParser::reset_list_afe()
 
 bool HvmlParser::reset_tokenizer(const char* encoding)
 {
+    if (m_ctxt_tokenizer.dt) {
+        delete m_ctxt_tokenizer.dt;
+    }
+
+    if (m_ctxt_tokenizer.tt) {
+        delete m_ctxt_tokenizer.tt;
+    }
+
     if (m_ctxt_tokenizer.lf)
         DestroyLogFont(m_ctxt_tokenizer.lf);
     memset(&m_ctxt_tokenizer, 0, sizeof(TokenizerContext));
@@ -530,17 +538,17 @@ void HvmlParser::on_tag_name_state()
 
     case UCHAR_GREATER_THAN_SIGN:
         m_ctxt_tokenizer.ts = TS_DATA;
-        emit_current_tag_token();
+        emit_tag_token();
         break;
 
     case UCHAR_LATIN_CAPITAL_LETTER_A ... UCHAR_LATIN_CAPITAL_LETTER_Z:
-        append_to_current_tag_name(m_ctxt_tokenizer.next_uc + 0x0020);
+        append_to_tag_name(m_ctxt_tokenizer.next_uc + 0x0020);
         on_tag_name_state();
         break;
 
     case UCHAR_NULL:
         on_parse_error();
-        append_to_current_tag_name(UCHAR_REPLACEMENT);
+        append_to_tag_name(UCHAR_REPLACEMENT);
         break;
 
     case UCHAR_EOF:
@@ -549,7 +557,7 @@ void HvmlParser::on_tag_name_state()
         break;
 
     default:
-        append_to_current_tag_name(m_ctxt_tokenizer.next_uc);
+        append_to_tag_name(m_ctxt_tokenizer.next_uc);
         break;
     }
 }
@@ -628,7 +636,7 @@ void HvmlParser::on_rcdata_end_tag_name_state()
     case UCHAR_GREATER_THAN_SIGN:
         if (is_appropriate_end_tag()) {
             m_ctxt_tokenizer.ts = TS_DATA;
-            emit_current_tag_token();
+            emit_tag_token();
         }
         else {
             goto anythingelse;
@@ -636,12 +644,12 @@ void HvmlParser::on_rcdata_end_tag_name_state()
         break;
 
     case UCHAR_LATIN_CAPITAL_LETTER_A ... UCHAR_LATIN_CAPITAL_LETTER_Z:
-        append_to_current_tag_name(m_ctxt_tokenizer.next_uc + 0x0020);
+        append_to_tag_name(m_ctxt_tokenizer.next_uc + 0x0020);
         append_to_temporary_buffer(m_ctxt_tokenizer.next_uc);
         break;
 
     case UCHAR_LATIN_SMALL_LETTER_A ... UCHAR_LATIN_SMALL_LETTER_Z:
-        append_to_current_tag_name(m_ctxt_tokenizer.next_uc);
+        append_to_tag_name(m_ctxt_tokenizer.next_uc);
         append_to_temporary_buffer(m_ctxt_tokenizer.next_uc);
         break;
 
@@ -728,7 +736,7 @@ void HvmlParser::on_rawtext_end_tag_name_state()
     case UCHAR_GREATER_THAN_SIGN:
         if (is_appropriate_end_tag()) {
             m_ctxt_tokenizer.ts = TS_DATA;
-            emit_current_tag_token();
+            emit_tag_token();
         }
         else {
             goto anythingelse;
@@ -736,12 +744,12 @@ void HvmlParser::on_rawtext_end_tag_name_state()
         break;
 
     case UCHAR_LATIN_CAPITAL_LETTER_A ... UCHAR_LATIN_CAPITAL_LETTER_Z:
-        append_to_current_tag_name(m_ctxt_tokenizer.next_uc + 0x0020);
+        append_to_tag_name(m_ctxt_tokenizer.next_uc + 0x0020);
         append_to_temporary_buffer(m_ctxt_tokenizer.next_uc);
         break;
 
     case UCHAR_LATIN_SMALL_LETTER_A ... UCHAR_LATIN_SMALL_LETTER_Z:
-        append_to_current_tag_name(m_ctxt_tokenizer.next_uc);
+        append_to_tag_name(m_ctxt_tokenizer.next_uc);
         append_to_temporary_buffer(m_ctxt_tokenizer.next_uc);
         break;
 
@@ -834,7 +842,7 @@ void HvmlParser::on_script_data_end_tag_name_state()
     case UCHAR_GREATER_THAN_SIGN:
         if (is_appropriate_end_tag()) {
             m_ctxt_tokenizer.ts = TS_DATA;
-            emit_current_tag_token();
+            emit_tag_token();
         }
         else {
             goto anythingelse;
@@ -842,12 +850,12 @@ void HvmlParser::on_script_data_end_tag_name_state()
         break;
 
     case UCHAR_LATIN_CAPITAL_LETTER_A ... UCHAR_LATIN_CAPITAL_LETTER_Z:
-        append_to_current_tag_name(m_ctxt_tokenizer.next_uc + 0x0020);
+        append_to_tag_name(m_ctxt_tokenizer.next_uc + 0x0020);
         append_to_temporary_buffer(m_ctxt_tokenizer.next_uc);
         break;
 
     case UCHAR_LATIN_SMALL_LETTER_A ... UCHAR_LATIN_SMALL_LETTER_Z:
-        append_to_current_tag_name(m_ctxt_tokenizer.next_uc);
+        append_to_tag_name(m_ctxt_tokenizer.next_uc);
         append_to_temporary_buffer(m_ctxt_tokenizer.next_uc);
         break;
 
@@ -1078,7 +1086,7 @@ void HvmlParser::on_script_data_escaped_end_tag_name_state()
     case UCHAR_GREATER_THAN_SIGN:
         if (is_appropriate_end_tag()) {
             m_ctxt_tokenizer.ts = TS_DATA;
-            emit_current_tag_token();
+            emit_tag_token();
         }
         else {
             goto anythingelse;
@@ -1086,12 +1094,12 @@ void HvmlParser::on_script_data_escaped_end_tag_name_state()
         break;
 
     case UCHAR_LATIN_CAPITAL_LETTER_A ... UCHAR_LATIN_CAPITAL_LETTER_Z:
-        append_to_current_tag_name(m_ctxt_tokenizer.next_uc + 0x0020);
+        append_to_tag_name(m_ctxt_tokenizer.next_uc + 0x0020);
         append_to_temporary_buffer(m_ctxt_tokenizer.next_uc);
         break;
 
     case UCHAR_LATIN_SMALL_LETTER_A ... UCHAR_LATIN_SMALL_LETTER_Z:
-        append_to_current_tag_name(m_ctxt_tokenizer.next_uc);
+        append_to_tag_name(m_ctxt_tokenizer.next_uc);
         append_to_temporary_buffer(m_ctxt_tokenizer.next_uc);
         break;
 
@@ -1401,7 +1409,7 @@ void HvmlParser::on_after_attribute_name_state()
 
     case UCHAR_GREATER_THAN_SIGN:
         m_ctxt_tokenizer.ts = TS_DATA;
-        emit_current_tag_token();
+        emit_tag_token();
         break;
 
     case UCHAR_EOF:
@@ -1529,7 +1537,7 @@ void HvmlParser::on_attribute_value_unquoted_state()
 
     case UCHAR_GREATER_THAN_SIGN:
         m_ctxt_tokenizer.ts = TS_DATA;
-        emit_current_tag_token();
+        emit_tag_token();
         break;
 
     case UCHAR_NULL:
@@ -1574,7 +1582,7 @@ void HvmlParser::on_after_attribute_value_quoted_state()
 
     case UCHAR_GREATER_THAN_SIGN:
         m_ctxt_tokenizer.ts = TS_DATA;
-        emit_current_tag_token();
+        emit_tag_token();
         break;
 
     case UCHAR_EOF:
@@ -1599,7 +1607,7 @@ void HvmlParser::on_self_closing_start_tag_state()
     case UCHAR_GREATER_THAN_SIGN:
         set_self_closing_flag();
         m_ctxt_tokenizer.ts = TS_DATA;
-        emit_current_tag_token();
+        emit_tag_token();
         break;
 
     case UCHAR_EOF:
@@ -1632,11 +1640,11 @@ void HvmlParser::on_bogus_comment_state()
         break;
 
     case UCHAR_NULL:
-        append_to_current_comment(UCHAR_REPLACEMENT);
+        append_to_comment(UCHAR_REPLACEMENT);
         break;
 
     default:
-        append_to_current_comment(m_ctxt_tokenizer.curr_uc);
+        append_to_comment(m_ctxt_tokenizer.curr_uc);
         break;
     }
 }
@@ -1775,7 +1783,7 @@ void HvmlParser::on_comment_start_dash_state()
         break;
 
     default:
-        append_to_current_comment(UCHAR_HYPHEN_MINUS);
+        append_to_comment(UCHAR_HYPHEN_MINUS);
         m_ctxt_tokenizer.ts = TS_COMMENT;
         m_ctxt_tokenizer.consumed = 0;
         break;
@@ -1789,7 +1797,7 @@ void HvmlParser::on_comment_state()
 
     switch (m_ctxt_tokenizer.next_uc) {
     case UCHAR_LESS_THAN_SIGN:
-        append_to_current_comment(UCHAR_LESS_THAN_SIGN);
+        append_to_comment(UCHAR_LESS_THAN_SIGN);
         m_ctxt_tokenizer.ts = TS_COMMENT_LESS_THAN_SIGN;
         break;
 
@@ -1799,7 +1807,7 @@ void HvmlParser::on_comment_state()
 
     case UCHAR_NULL:
         on_parse_error();
-        append_to_current_comment(UCHAR_REPLACEMENT);
+        append_to_comment(UCHAR_REPLACEMENT);
         emit_comment_token();
         emit_eof_token();
         break;
@@ -1811,7 +1819,7 @@ void HvmlParser::on_comment_state()
         break;
 
     default:
-        append_to_current_comment(m_ctxt_tokenizer.curr_uc);
+        append_to_comment(m_ctxt_tokenizer.curr_uc);
         break;
     }
 }
@@ -1823,12 +1831,12 @@ void HvmlParser::on_comment_less_than_sign_state()
 
     switch (m_ctxt_tokenizer.next_uc) {
     case UCHAR_EXCLAMATION_MARK:
-        append_to_current_comment(m_ctxt_tokenizer.curr_uc);
+        append_to_comment(m_ctxt_tokenizer.curr_uc);
         m_ctxt_tokenizer.ts = TS_COMMENT_LESS_THAN_SIGN_BANG;
         break;
 
     case UCHAR_LESS_THAN_SIGN:
-        append_to_current_comment(m_ctxt_tokenizer.curr_uc);
+        append_to_comment(m_ctxt_tokenizer.curr_uc);
         break;
 
     default:
@@ -1909,7 +1917,7 @@ void HvmlParser::on_comment_end_dash_state()
         break;
 
     default:
-        append_to_current_comment(UCHAR_HYPHEN_MINUS);
+        append_to_comment(UCHAR_HYPHEN_MINUS);
         m_ctxt_tokenizer.ts = TS_COMMENT;
         m_ctxt_tokenizer.consumed = 0;
         break;
@@ -1932,7 +1940,7 @@ void HvmlParser::on_comment_end_state()
         break;
 
     case UCHAR_HYPHEN_MINUS:
-        append_to_current_comment(UCHAR_HYPHEN_MINUS);
+        append_to_comment(UCHAR_HYPHEN_MINUS);
         break;
 
     case UCHAR_EOF:
@@ -1942,7 +1950,7 @@ void HvmlParser::on_comment_end_state()
         break;
 
     default:
-        append_to_current_comment(UCHAR_HYPHEN_MINUS);
+        append_to_comment(UCHAR_HYPHEN_MINUS);
         m_ctxt_tokenizer.ts = TS_COMMENT;
         m_ctxt_tokenizer.consumed = 0;
         break;
@@ -1956,8 +1964,8 @@ void HvmlParser::on_comment_end_bang_state()
 
     switch (m_ctxt_tokenizer.next_uc) {
     case UCHAR_HYPHEN_MINUS:
-        append_to_current_comment(UCHAR_HYPHEN_MINUS);
-        append_to_current_comment(UCHAR_EXCLAMATION_MARK);
+        append_to_comment(UCHAR_HYPHEN_MINUS);
+        append_to_comment(UCHAR_EXCLAMATION_MARK);
         m_ctxt_tokenizer.ts = TS_COMMENT_END_DASH;
         break;
 
@@ -1978,8 +1986,8 @@ void HvmlParser::on_comment_end_bang_state()
         break;
 
     default:
-        append_to_current_comment(UCHAR_HYPHEN_MINUS);
-        append_to_current_comment(UCHAR_EXCLAMATION_MARK);
+        append_to_comment(UCHAR_HYPHEN_MINUS);
+        append_to_comment(UCHAR_EXCLAMATION_MARK);
         m_ctxt_tokenizer.ts = TS_COMMENT;
         m_ctxt_tokenizer.consumed = 0;
         break;
@@ -3677,6 +3685,73 @@ void HvmlParser::reset_inserting_mode()
 
 done:
     return;
+}
+
+bool HvmlParser::is_open_element(const View* view)
+{
+    return false;
+}
+
+View* HvmlParser::insert_new_element(const View* view)
+{
+    return NULL;
+}
+
+bool HvmlParser::check_adjusted_current_node()
+{
+    return false;
+}
+
+void HvmlParser::emit_character_token(Uchar32 uc)
+{
+    // TODO
+}
+
+void HvmlParser::emit_character_token(const std::string& utf8_str)
+{
+    const char* utf8 = utf8_str.c_str();
+
+    int t;
+    Uchar32 uc;
+    while ((t = utf8_to_uc32(utf8, -1, &uc)) > 0) {
+        emit_character_token(uc);
+        utf8 += t;
+    }
+}
+
+void HvmlParser::emit_eof_token()
+{
+    // TODO
+}
+
+void HvmlParser::emit_tag_token()
+{
+    assert(m_ctxt_tokenizer.dt);
+
+    if (!m_ctxt_tokenizer.tt->attr_name.empty()) {
+        if (!m_ctxt_tokenizer.tt->add_attr())
+            on_parse_error();
+    }
+
+    m_ctxt_tokenizer.tt->attr_name.clear();
+    m_ctxt_tokenizer.tt->attr_value.clear();
+    m_ctxt_tokenizer.tt->attrs.clear();
+
+    if (m_ctxt_tokenizer.tt->is_start) {
+        m_ctxt_tokenizer.last_emitted = m_ctxt_tokenizer.tt->tag_name;
+    }
+
+    // TODO
+}
+
+void HvmlParser::emit_doctype_token()
+{
+    assert(m_ctxt_tokenizer.dt);
+
+    // TODO
+
+    delete m_ctxt_tokenizer.dt;
+    m_ctxt_tokenizer.dt = NULL;
 }
 
 } // namespace hfcl
