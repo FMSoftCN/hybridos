@@ -21,4 +21,5 @@ libhfcl_view_la_SOURCES = \
     transition.cc
 
 EXTRA_DIST= \
+    data \
     make_html_entities_table.py

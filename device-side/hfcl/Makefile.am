@@ -8,7 +8,7 @@ libhfclconfigdir = $(includedir)/hfcl
 # Which header files to install
 libhfclconfig_HEADERS = $(COMM_HDRS)
 
-EXTRA_DIST = README.md RELEASE-NOTES.md INSTALL autogen.sh
+EXTRA_DIST = README.md RELEASE-NOTES.md autogen.sh
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = hfcl.pc

@@ -8,6 +8,7 @@ applet
     marker: yes
 
 area
+    kind: void
     category: special
     scopes: select
 
@@ -20,6 +21,7 @@ aside
     scopes: select
 
 base
+    kind: void
     category: special
     scopes: select
 
@@ -40,6 +42,7 @@ body
     scopes: select
 
 br
+    kind: void
     category: special
     scopes: select
 
@@ -57,6 +60,7 @@ center
     scopes: select
 
 col
+    kind: void
     category: special
     scopes: select
 
@@ -66,6 +70,10 @@ colgroup
 
 dd
     category: special
+    scopes: select
+
+dialog
+    category: ordinary
     scopes: select
 
 details
@@ -89,6 +97,7 @@ dt
     scopes: select
 
 embed
+    kind: void
     category: special
     scopes: select
 
@@ -153,22 +162,25 @@ header
     scopes: select
 
 hr
+    kind: void
     category: special
     scopes: select
 
-html
-    category: special
-    scopes: general, list-item, table, select
+#html
+#    category: special
+#    scopes: general, list-item, table, select
 
 iframe
     category: special
     scopes: select
 
 img
+    kind: void
     category: special
     scopes: select
 
 input
+    kind: void
     category: special
     scopes: select
 
@@ -177,6 +189,7 @@ li
     scopes: select
 
 link
+    kind: void
     category: special
     scopes: select
 
@@ -194,6 +207,7 @@ marquee
     marker: yes
 
 meta
+    kind: void
     category: special
     scopes: select
 
@@ -227,6 +241,7 @@ p
     scopes: select
 
 param
+    kind: void
     category: special
     scopes: select
 
@@ -239,6 +254,7 @@ pre
     scopes: select
 
 script
+    kind: rawtext
     category: special
     scopes: select
 
@@ -251,10 +267,12 @@ select
     scopes: select
 
 source
+    kind: void
     category: special
     scopes: select
 
 style
+    kind: rawtext
     category: special
     scopes: select
 
@@ -276,11 +294,13 @@ td
     marker: yes
 
 template
+    kind: template
     category: special
     scopes: general, list-item, table, select
     marker: yes
 
 textarea
+    kind: escapable-rawtext
     category: special
     scopes: select
 
@@ -298,6 +318,7 @@ thead
     scopes: select
 
 title
+    kind: escapable-rawtext
     category: special
     scopes: select
 
@@ -306,6 +327,7 @@ tr
     scopes: select
 
 track
+    kind: void
     category: special
     scopes: select
 
@@ -314,48 +336,13 @@ ul
     scopes: list-item, select
 
 wbr
+    kind: void
     category: special
     scopes: select
 
 xmp
     category: special
     scopes: select
-
-MathML mi
-    category: special
-    scopes: general, list-item, select
-
-MathML mo
-    category: special
-    scopes: general, list-item, select
-
-MathML mn
-    category: special
-    scopes: general, list-item, select
-
-MathML ms
-    category: special
-    scopes: general, list-item, select
-
-MathML mtext
-    category: special
-    scopes: general, list-item, select
-
-MathML annotation-xml
-    category: special
-    scopes: general, list-item, select
-
-SVG foreignObject
-    category: special
-    scopes: general, list-item, select
-
-SVG desc
-    category: special
-    scopes: general, list-item, select
-
-SVG title
-    category: special
-    scopes: general, list-item, select
 
 a
     category: formatting
@@ -556,15 +543,58 @@ canvas
     category: ordinary
     scopes: select
 
-HVML hvapp
+# the HVML specific tags
+hvml
+    category: special
+    scopes: general, list-item, table, select
+
+view
     category: special
     scopes: select
 
-HVML activity
+# the foreign tags
+MathML mi
+    kind: foreign
     category: special
-    scopes: select
+    scopes: general, list-item, select
 
-HVML view
+MathML mo
+    kind: foreign
     category: special
-    scopes: select
+    scopes: general, list-item, select
+
+MathML mn
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+
+MathML ms
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+
+MathML mtext
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+
+MathML annotation-xml
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+
+SVG foreignObject
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+
+SVG desc
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+
+SVG title
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
 
