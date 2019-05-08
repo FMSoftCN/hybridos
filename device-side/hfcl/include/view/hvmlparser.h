@@ -194,8 +194,8 @@ protected:
         const View* view;
     } OpenElementNode;
 
-    bool isOpenElement(const View* view);
-    View* insertNewElement(const View* view);
+    bool is_open_element(const View* view);
+    View* insert_new_element(const View* view);
 
     typedef struct _ActiveFormattingEle {
         list_t      list;
@@ -203,12 +203,12 @@ protected:
         bool        is_marker;
     } ActiveFormattingEle;
 
-    void resetInsertingMode();
+    void reset_inserting_mode();
 
     // operators for active formatting list
-    void pushNewAfe(const View* view, bool isMarker = false);
-    void rebuildAfeList();
-    void clearUpToLastMarker();
+    void push_new_afe(const View* view, bool isMarker = false);
+    void rebuild_afe_list();
+    void clear_up_to_last_marker();
 
     typedef struct _TokenizerContext {
         LOGFONT*        lf;

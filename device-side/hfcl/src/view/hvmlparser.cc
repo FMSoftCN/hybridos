@@ -127,7 +127,7 @@ bool HvmlParser::reset(size_t stackSize, const char* encoding)
     return reset_tokenizer(encoding);
 }
 
-void HvmlParser::pushNewAfe(const View* view, bool isMarker)
+void HvmlParser::push_new_afe(const View* view, bool isMarker)
 {
     list_t* pos;
     int nr_elements;
@@ -173,13 +173,13 @@ void HvmlParser::pushNewAfe(const View* view, bool isMarker)
     list_add_tail(&afe->list, &m_list_afe);
 }
 
-void HvmlParser::rebuildAfeList()
+void HvmlParser::rebuild_afe_list()
 {
     if (list_empty(&m_list_afe))
         return;
 
     ActiveFormattingEle* afe = (ActiveFormattingEle*)m_list_afe.prev;
-    if (afe->is_marker || isOpenElement(afe->view))
+    if (afe->is_marker || is_open_element(afe->view))
         return;
 
 rewind:
@@ -189,7 +189,7 @@ rewind:
         do {
             // Insert an HTML element for the token for which the element entry
             // was created, to obtain new element.
-            View* v = insertNewElement(afe->view);
+            View* v = insert_new_element(afe->view);
             afe->view = v;
 
             afe = (ActiveFormattingEle*)afe->list.next;
@@ -197,13 +197,13 @@ rewind:
     }
     else {
         afe = (ActiveFormattingEle*)afe->list.prev;
-        if (!afe->is_marker && !isOpenElement(afe->view)) {
+        if (!afe->is_marker && !is_open_element(afe->view)) {
             goto rewind;
         }
     }
 }
 
-void HvmlParser::clearUpToLastMarker()
+void HvmlParser::clear_up_to_last_marker()
 {
     while (!list_empty(&m_list_afe)) {
         bool is_marker;
@@ -3569,7 +3569,7 @@ done:
  *
  * https://www.w3.org/TR/html52/syntax.html#the-insertion-mode
  */
-void HvmlParser::resetInsertingMode()
+void HvmlParser::reset_inserting_mode()
 {
     bool last = false;
     OpenElementNode* node = (OpenElementNode*)m_stack_oe.prev;
