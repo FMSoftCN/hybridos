@@ -218,7 +218,7 @@ void HvmlParser::clearUpToLastMarker()
     }
 }
 
-bool HvmlParser::isValidCharacter(Uchar32 uc)
+bool HvmlParser::isValidHvmlCharacter(Uchar32 uc)
 {
     if (MG_UNLIKELY((uc >= 0x0001 && uc <= 0x0008) || uc == 0x000B ||
             (uc >= 0x000E && uc <= 0x001F) ||
@@ -259,80 +259,6 @@ bool HvmlParser::isValidCharacter(Uchar32 uc)
     }
 
     return true;
-}
-
-#include "htmlentitiestable.inc"
-
-static int entity_token_comp(const void *a, const void *b)
-{
-    return strcmp(((struct _HtmlEntity*)a)->token,
-            ((struct _HtmlEntity*)b)->token);
-}
-
-static const char* search_entity(const char *token)
-{
-    struct _HtmlEntity *found, key;
-
-    key.token = token;
-    found = (struct _HtmlEntity *)bsearch (&key,
-            _html_entities, TABLESIZE(_html_entities),
-            sizeof(struct _HtmlEntity), entity_token_comp);
-
-    if (found)
-        return found->utf8;
-
-    return NULL;
-}
-
-#define MAX_ENTITY_NUMERIC_CHAR_LEN     15
-
-size_t HvmlParser::checkCharacterReference(const char* token, size_t len,
-        char* mchar, int* mchar_len)
-{
-    size_t token_len = 0;
-    const char* found;
-    char real_token[MAX_ENTITY_TOKEN_LEN + 1];
-
-    // find terminator ';' first
-    do {
-        if (token[token_len] == ';') {
-            break;
-        }
-        else if (!isalnum(token[token_len])) {
-            goto error;
-        }
-
-        token_len++;
-        if (token_len >= len)
-            goto error;
-
-    } while (1);
-
-    memset(real_token, 0, sizeof(real_token));
-    memcpy(real_token, token, token_len);
-
-    if (token_len > 1 && (real_token[0] == 'x' || real_token[0] == 'X') &&
-            isxdigit(real_token[1])) {
-        Uint32 uc;
-        uc = (Uint32)strtol(real_token, NULL, 16);
-        *mchar_len = uc32_to_utf8(uc, mchar);
-    }
-    else if (token_len > 1 && isdigit(real_token[0])) {
-        Uint32 uc;
-        uc = (Uint32)strtol(real_token, NULL, 10);
-        *mchar_len = uc32_to_utf8(uc, mchar);
-    }
-    else if ((found = search_entity(real_token))) {
-        *mchar_len = strlen(found);
-        memcpy(mchar, found, *mchar_len);
-    }
-
-    if (*mchar_len > 0)
-        // size of consumed bytes
-        return token_len + 1;
-
-error:
-    return 0;
 }
 
 #define UCHAR_NULL                      0x0000
@@ -2790,6 +2716,156 @@ bool HvmlParser::does_tb_consist_named_character_reference()
     return false;
 }
 
+#include "htmlentitiestable.inc"
+
+static int entity_token_cmp(const void *a, const void *b)
+{
+    return strcmp(((struct _HtmlEntity*)a)->token,
+            ((struct _HtmlEntity*)b)->token);
+}
+
+const Uchar32* HvmlParser::matchNamedCharacterReference(const char* entity)
+{
+    size_t len = strlen(entity);
+
+    if (MG_UNLIKELY (len == 0 || len > MAX_ENTITY_TOKEN_LEN))
+        return NULL;
+
+    struct _HtmlEntity *found, key;
+
+    key.token = entity;
+    found = (struct _HtmlEntity *)bsearch (&key,
+            _html_entities, TABLESIZE(_html_entities),
+            sizeof(struct _HtmlEntity), entity_token_cmp);
+
+    if (found)
+        return found->ucs;
+
+    return NULL;
+}
+
+#if 0
+#define MAX_ENTITY_NUMERIC_CHAR_LEN     15
+
+size_t HvmlParser::checkCharacterReference(const char* token, size_t len,
+        char* mchar, int* mchar_len)
+{
+    size_t token_len = 0;
+    const char* found;
+    char real_token[MAX_ENTITY_TOKEN_LEN + 1];
+
+    // find terminator ';' first
+    do {
+        if (token[token_len] == ';') {
+            break;
+        }
+        else if (!isalnum(token[token_len])) {
+            goto error;
+        }
+
+        token_len++;
+        if (token_len >= len)
+            goto error;
+
+    } while (1);
+
+    memset(real_token, 0, sizeof(real_token));
+    memcpy(real_token, token, token_len);
+
+    if (token_len > 1 && (real_token[0] == 'x' || real_token[0] == 'X') &&
+            isxdigit(real_token[1])) {
+        Uint32 uc;
+        uc = (Uint32)strtol(real_token, NULL, 16);
+        *mchar_len = uc32_to_utf8(uc, mchar);
+    }
+    else if (token_len > 1 && isdigit(real_token[0])) {
+        Uint32 uc;
+        uc = (Uint32)strtol(real_token, NULL, 10);
+        *mchar_len = uc32_to_utf8(uc, mchar);
+    }
+    else if ((found = search_entity(real_token))) {
+        *mchar_len = strlen(found);
+        memcpy(mchar, found, *mchar_len);
+    }
+
+    if (*mchar_len > 0)
+        // size of consumed bytes
+        return token_len + 1;
+
+error:
+    return 0;
+}
+#endif
+
+static int match_entity_cmp(const void *a, const void *b)
+{
+    return strncmp(((struct _HtmlEntity*)a)->token,
+            ((struct _HtmlEntity*)b)->token, strlen(((struct _HtmlEntity*)a)->token));
+}
+
+static int match_entity(const char *token, int start_pos)
+{
+    struct _HtmlEntity *found, key;
+
+    key.token = token;
+    found = (struct _HtmlEntity *)bsearch (&key,
+            _html_entities + start_pos, TABLESIZE(_html_entities) - start_pos,
+            sizeof(struct _HtmlEntity), match_entity_cmp);
+
+    if (found)
+        return found - _html_entities;
+
+    return -1;
+}
+
+const Uchar32* HvmlParser::try_to_match_named_character_reference(
+            int* consumed, Uchar32* last_matched)
+{
+    int start_match_pos = 0;
+    int last_matched_pos = -1;
+    const char* mstr = m_ctxt_tokenizer.mchar;
+    int mstr_len = m_ctxt_tokenizer.total_len;
+
+    *consumed = 0;
+    while (mstr_len > 0) {
+
+        Uchar32 uc;
+        int mclen;
+        mclen = GetNextUChar(m_ctxt_tokenizer.lf, mstr, mstr_len, &uc);
+
+        if (mclen > 0) {
+            int matched_pos;
+
+            append_to_temporary_buffer(uc);
+            matched_pos = match_entity(m_ctxt_tokenizer.temp_buff.c_str(),
+                start_match_pos);
+
+            if (matched_pos < 0) {
+                break;
+            }
+            else {
+                *last_matched = uc;
+                last_matched_pos = matched_pos;
+                start_match_pos = matched_pos;
+            }
+        }
+        else {
+            break;
+        }
+
+        mstr += mclen;
+        mstr_len -= mclen;
+        *consumed += mclen;
+    }
+
+    if (last_matched_pos < 0) {
+        return NULL;
+    }
+    else {
+        return _html_entities[last_matched_pos].ucs;
+    }
+}
+
 void HvmlParser::on_character_reference_state()
 {
     clear_temporary_buffer();
@@ -2817,10 +2893,10 @@ void HvmlParser::on_character_reference_state()
 
     default: {
         int consumed;
-        Uchar32 maped_ucs[2];
+        const Uchar32* maped_ucs;
         Uchar32 last_matched;
-        if (try_to_match_named_character_reference(maped_ucs,
-                &consumed, &last_matched)) {
+        if ((maped_ucs = try_to_match_named_character_reference(
+                &consumed, &last_matched))) {
 
             if (is_in_attribute_value(last_matched, consumed)) {
                 m_ctxt_tokenizer.ts = TS_CHARACTER_REFERENCE_END;
@@ -3040,7 +3116,7 @@ void HvmlParser::on_numeric_character_reference_end_state()
         on_parse_error();
         set_character_reference_code(0xFFFD);
     }
-    else if (MG_UNLIKELY (!isValidCharacter(uc))) {
+    else if (MG_UNLIKELY (!isValidHvmlCharacter(uc))) {
         on_parse_error();
     }
 
@@ -3432,7 +3508,7 @@ size_t HvmlParser::parse(View* parent, const char* content, size_t len,
                 break;
             }
 
-            if (!isValidCharacter(uc)) {
+            if (!isValidHvmlCharacter(uc)) {
                 on_parse_error();
                 break;
             }

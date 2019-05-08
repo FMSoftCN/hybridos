@@ -45,7 +45,7 @@ def write_html_entities(fout, entities):
 
     fout.write("static struct _HtmlEntity {\n")
     fout.write("    const char* token;\n")
-    fout.write("    const char* utf8;\n")
+    fout.write("    Uchar32     ucs[2];\n")
     fout.write("} _html_entities [] = {\n")
 
     tokens = list(entities.keys());
@@ -54,29 +54,42 @@ def write_html_entities(fout, entities):
     max_token_len = 0
     for i in range(0, len(tokens)):
         token = tokens[i]
-        # skip token not ended with ';'
-        if token[-1] != ';':
-            continue
+#        # skip token not ended with ';'
+#        if token[-1] != ';':
+#            continue
 
         token = token.lstrip('&')
-        token = token.rstrip(';')
+#        token = token.rstrip(';')
 
         token_len = len(token)
         if token_len > max_token_len:
             max_token_len = token_len
 
-        chars = entities[tokens[i]]['characters']
-        fout.write("    { \"%s\", \"" % (token, ))
-        utf8 = bytearray(chars, 'utf-8')
-        for b in utf8:
-            fout.write("\\x%x" % (b, ))
+#        chars = entities[tokens[i]]['characters']
+#        fout.write("    { \"%s\", \"" % (token, ))
+#        utf8 = bytearray(chars, 'utf-8')
+#        for b in utf8:
+#            fout.write("\\x%x" % (b, ))
+#
+#        if chars == '\n':
+#            chars = '\\n'
+#        elif chars == '\\':
+#            chars = '\\'
+#
+#        fout.write("\" }, /* %s */\n" % (chars, ))
 
-        if chars == '\n':
-            chars = '\\n'
-        elif chars == '\\':
-            chars = '\\'
+        characters = entities[tokens[i]]['characters']
+        codepoints = entities[tokens[i]]['codepoints']
+        fout.write("    { \"%s\", { " % (token, ))
+        for cp in codepoints:
+            fout.write("0x%06X, " % (cp, ))
 
-        fout.write("\" }, /* %s */\n" % (chars, ))
+        if characters == '\n':
+            characters = '\\n'
+        elif characters == '\\':
+            characters = '\\'
+
+        fout.write("} }, /* %s */\n" % (characters, ))
 
     fout.write("};\n")
     fout.write("\n")

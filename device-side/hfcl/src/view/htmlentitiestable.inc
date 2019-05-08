@@ -3,2134 +3,2240 @@
 
 static struct _HtmlEntity {
     const char* token;
-    const char* utf8;
+    Uchar32     ucs[2];
 } _html_entities [] = {
-    { "AElig", "\xc3\x86" }, /* Æ */
-    { "AMP", "\x26" }, /* & */
-    { "Aacute", "\xc3\x81" }, /* Á */
-    { "Abreve", "\xc4\x82" }, /* Ă */
-    { "Acirc", "\xc3\x82" }, /* Â */
-    { "Acy", "\xd0\x90" }, /* А */
-    { "Afr", "\xf0\x9d\x94\x84" }, /* 𝔄 */
-    { "Agrave", "\xc3\x80" }, /* À */
-    { "Alpha", "\xce\x91" }, /* Α */
-    { "Amacr", "\xc4\x80" }, /* Ā */
-    { "And", "\xe2\xa9\x93" }, /* ⩓ */
-    { "Aogon", "\xc4\x84" }, /* Ą */
-    { "Aopf", "\xf0\x9d\x94\xb8" }, /* 𝔸 */
-    { "ApplyFunction", "\xe2\x81\xa1" }, /* ⁡ */
-    { "Aring", "\xc3\x85" }, /* Å */
-    { "Ascr", "\xf0\x9d\x92\x9c" }, /* 𝒜 */
-    { "Assign", "\xe2\x89\x94" }, /* ≔ */
-    { "Atilde", "\xc3\x83" }, /* Ã */
-    { "Auml", "\xc3\x84" }, /* Ä */
-    { "Backslash", "\xe2\x88\x96" }, /* ∖ */
-    { "Barv", "\xe2\xab\xa7" }, /* ⫧ */
-    { "Barwed", "\xe2\x8c\x86" }, /* ⌆ */
-    { "Bcy", "\xd0\x91" }, /* Б */
-    { "Because", "\xe2\x88\xb5" }, /* ∵ */
-    { "Bernoullis", "\xe2\x84\xac" }, /* ℬ */
-    { "Beta", "\xce\x92" }, /* Β */
-    { "Bfr", "\xf0\x9d\x94\x85" }, /* 𝔅 */
-    { "Bopf", "\xf0\x9d\x94\xb9" }, /* 𝔹 */
-    { "Breve", "\xcb\x98" }, /* ˘ */
-    { "Bscr", "\xe2\x84\xac" }, /* ℬ */
-    { "Bumpeq", "\xe2\x89\x8e" }, /* ≎ */
-    { "CHcy", "\xd0\xa7" }, /* Ч */
-    { "COPY", "\xc2\xa9" }, /* © */
-    { "Cacute", "\xc4\x86" }, /* Ć */
-    { "Cap", "\xe2\x8b\x92" }, /* ⋒ */
-    { "CapitalDifferentialD", "\xe2\x85\x85" }, /* ⅅ */
-    { "Cayleys", "\xe2\x84\xad" }, /* ℭ */
-    { "Ccaron", "\xc4\x8c" }, /* Č */
-    { "Ccedil", "\xc3\x87" }, /* Ç */
-    { "Ccirc", "\xc4\x88" }, /* Ĉ */
-    { "Cconint", "\xe2\x88\xb0" }, /* ∰ */
-    { "Cdot", "\xc4\x8a" }, /* Ċ */
-    { "Cedilla", "\xc2\xb8" }, /* ¸ */
-    { "CenterDot", "\xc2\xb7" }, /* · */
-    { "Cfr", "\xe2\x84\xad" }, /* ℭ */
-    { "Chi", "\xce\xa7" }, /* Χ */
-    { "CircleDot", "\xe2\x8a\x99" }, /* ⊙ */
-    { "CircleMinus", "\xe2\x8a\x96" }, /* ⊖ */
-    { "CirclePlus", "\xe2\x8a\x95" }, /* ⊕ */
-    { "CircleTimes", "\xe2\x8a\x97" }, /* ⊗ */
-    { "ClockwiseContourIntegral", "\xe2\x88\xb2" }, /* ∲ */
-    { "CloseCurlyDoubleQuote", "\xe2\x80\x9d" }, /* ” */
-    { "CloseCurlyQuote", "\xe2\x80\x99" }, /* ’ */
-    { "Colon", "\xe2\x88\xb7" }, /* ∷ */
-    { "Colone", "\xe2\xa9\xb4" }, /* ⩴ */
-    { "Congruent", "\xe2\x89\xa1" }, /* ≡ */
-    { "Conint", "\xe2\x88\xaf" }, /* ∯ */
-    { "ContourIntegral", "\xe2\x88\xae" }, /* ∮ */
-    { "Copf", "\xe2\x84\x82" }, /* ℂ */
-    { "Coproduct", "\xe2\x88\x90" }, /* ∐ */
-    { "CounterClockwiseContourIntegral", "\xe2\x88\xb3" }, /* ∳ */
-    { "Cross", "\xe2\xa8\xaf" }, /* ⨯ */
-    { "Cscr", "\xf0\x9d\x92\x9e" }, /* 𝒞 */
-    { "Cup", "\xe2\x8b\x93" }, /* ⋓ */
-    { "CupCap", "\xe2\x89\x8d" }, /* ≍ */
-    { "DD", "\xe2\x85\x85" }, /* ⅅ */
-    { "DDotrahd", "\xe2\xa4\x91" }, /* ⤑ */
-    { "DJcy", "\xd0\x82" }, /* Ђ */
-    { "DScy", "\xd0\x85" }, /* Ѕ */
-    { "DZcy", "\xd0\x8f" }, /* Џ */
-    { "Dagger", "\xe2\x80\xa1" }, /* ‡ */
-    { "Darr", "\xe2\x86\xa1" }, /* ↡ */
-    { "Dashv", "\xe2\xab\xa4" }, /* ⫤ */
-    { "Dcaron", "\xc4\x8e" }, /* Ď */
-    { "Dcy", "\xd0\x94" }, /* Д */
-    { "Del", "\xe2\x88\x87" }, /* ∇ */
-    { "Delta", "\xce\x94" }, /* Δ */
-    { "Dfr", "\xf0\x9d\x94\x87" }, /* 𝔇 */
-    { "DiacriticalAcute", "\xc2\xb4" }, /* ´ */
-    { "DiacriticalDot", "\xcb\x99" }, /* ˙ */
-    { "DiacriticalDoubleAcute", "\xcb\x9d" }, /* ˝ */
-    { "DiacriticalGrave", "\x60" }, /* ` */
-    { "DiacriticalTilde", "\xcb\x9c" }, /* ˜ */
-    { "Diamond", "\xe2\x8b\x84" }, /* ⋄ */
-    { "DifferentialD", "\xe2\x85\x86" }, /* ⅆ */
-    { "Dopf", "\xf0\x9d\x94\xbb" }, /* 𝔻 */
-    { "Dot", "\xc2\xa8" }, /* ¨ */
-    { "DotDot", "\xe2\x83\x9c" }, /* ⃜ */
-    { "DotEqual", "\xe2\x89\x90" }, /* ≐ */
-    { "DoubleContourIntegral", "\xe2\x88\xaf" }, /* ∯ */
-    { "DoubleDot", "\xc2\xa8" }, /* ¨ */
-    { "DoubleDownArrow", "\xe2\x87\x93" }, /* ⇓ */
-    { "DoubleLeftArrow", "\xe2\x87\x90" }, /* ⇐ */
-    { "DoubleLeftRightArrow", "\xe2\x87\x94" }, /* ⇔ */
-    { "DoubleLeftTee", "\xe2\xab\xa4" }, /* ⫤ */
-    { "DoubleLongLeftArrow", "\xe2\x9f\xb8" }, /* ⟸ */
-    { "DoubleLongLeftRightArrow", "\xe2\x9f\xba" }, /* ⟺ */
-    { "DoubleLongRightArrow", "\xe2\x9f\xb9" }, /* ⟹ */
-    { "DoubleRightArrow", "\xe2\x87\x92" }, /* ⇒ */
-    { "DoubleRightTee", "\xe2\x8a\xa8" }, /* ⊨ */
-    { "DoubleUpArrow", "\xe2\x87\x91" }, /* ⇑ */
-    { "DoubleUpDownArrow", "\xe2\x87\x95" }, /* ⇕ */
-    { "DoubleVerticalBar", "\xe2\x88\xa5" }, /* ∥ */
-    { "DownArrow", "\xe2\x86\x93" }, /* ↓ */
-    { "DownArrowBar", "\xe2\xa4\x93" }, /* ⤓ */
-    { "DownArrowUpArrow", "\xe2\x87\xb5" }, /* ⇵ */
-    { "DownBreve", "\xcc\x91" }, /* ̑ */
-    { "DownLeftRightVector", "\xe2\xa5\x90" }, /* ⥐ */
-    { "DownLeftTeeVector", "\xe2\xa5\x9e" }, /* ⥞ */
-    { "DownLeftVector", "\xe2\x86\xbd" }, /* ↽ */
-    { "DownLeftVectorBar", "\xe2\xa5\x96" }, /* ⥖ */
-    { "DownRightTeeVector", "\xe2\xa5\x9f" }, /* ⥟ */
-    { "DownRightVector", "\xe2\x87\x81" }, /* ⇁ */
-    { "DownRightVectorBar", "\xe2\xa5\x97" }, /* ⥗ */
-    { "DownTee", "\xe2\x8a\xa4" }, /* ⊤ */
-    { "DownTeeArrow", "\xe2\x86\xa7" }, /* ↧ */
-    { "Downarrow", "\xe2\x87\x93" }, /* ⇓ */
-    { "Dscr", "\xf0\x9d\x92\x9f" }, /* 𝒟 */
-    { "Dstrok", "\xc4\x90" }, /* Đ */
-    { "ENG", "\xc5\x8a" }, /* Ŋ */
-    { "ETH", "\xc3\x90" }, /* Ð */
-    { "Eacute", "\xc3\x89" }, /* É */
-    { "Ecaron", "\xc4\x9a" }, /* Ě */
-    { "Ecirc", "\xc3\x8a" }, /* Ê */
-    { "Ecy", "\xd0\xad" }, /* Э */
-    { "Edot", "\xc4\x96" }, /* Ė */
-    { "Efr", "\xf0\x9d\x94\x88" }, /* 𝔈 */
-    { "Egrave", "\xc3\x88" }, /* È */
-    { "Element", "\xe2\x88\x88" }, /* ∈ */
-    { "Emacr", "\xc4\x92" }, /* Ē */
-    { "EmptySmallSquare", "\xe2\x97\xbb" }, /* ◻ */
-    { "EmptyVerySmallSquare", "\xe2\x96\xab" }, /* ▫ */
-    { "Eogon", "\xc4\x98" }, /* Ę */
-    { "Eopf", "\xf0\x9d\x94\xbc" }, /* 𝔼 */
-    { "Epsilon", "\xce\x95" }, /* Ε */
-    { "Equal", "\xe2\xa9\xb5" }, /* ⩵ */
-    { "EqualTilde", "\xe2\x89\x82" }, /* ≂ */
-    { "Equilibrium", "\xe2\x87\x8c" }, /* ⇌ */
-    { "Escr", "\xe2\x84\xb0" }, /* ℰ */
-    { "Esim", "\xe2\xa9\xb3" }, /* ⩳ */
-    { "Eta", "\xce\x97" }, /* Η */
-    { "Euml", "\xc3\x8b" }, /* Ë */
-    { "Exists", "\xe2\x88\x83" }, /* ∃ */
-    { "ExponentialE", "\xe2\x85\x87" }, /* ⅇ */
-    { "Fcy", "\xd0\xa4" }, /* Ф */
-    { "Ffr", "\xf0\x9d\x94\x89" }, /* 𝔉 */
-    { "FilledSmallSquare", "\xe2\x97\xbc" }, /* ◼ */
-    { "FilledVerySmallSquare", "\xe2\x96\xaa" }, /* ▪ */
-    { "Fopf", "\xf0\x9d\x94\xbd" }, /* 𝔽 */
-    { "ForAll", "\xe2\x88\x80" }, /* ∀ */
-    { "Fouriertrf", "\xe2\x84\xb1" }, /* ℱ */
-    { "Fscr", "\xe2\x84\xb1" }, /* ℱ */
-    { "GJcy", "\xd0\x83" }, /* Ѓ */
-    { "GT", "\x3e" }, /* > */
-    { "Gamma", "\xce\x93" }, /* Γ */
-    { "Gammad", "\xcf\x9c" }, /* Ϝ */
-    { "Gbreve", "\xc4\x9e" }, /* Ğ */
-    { "Gcedil", "\xc4\xa2" }, /* Ģ */
-    { "Gcirc", "\xc4\x9c" }, /* Ĝ */
-    { "Gcy", "\xd0\x93" }, /* Г */
-    { "Gdot", "\xc4\xa0" }, /* Ġ */
-    { "Gfr", "\xf0\x9d\x94\x8a" }, /* 𝔊 */
-    { "Gg", "\xe2\x8b\x99" }, /* ⋙ */
-    { "Gopf", "\xf0\x9d\x94\xbe" }, /* 𝔾 */
-    { "GreaterEqual", "\xe2\x89\xa5" }, /* ≥ */
-    { "GreaterEqualLess", "\xe2\x8b\x9b" }, /* ⋛ */
-    { "GreaterFullEqual", "\xe2\x89\xa7" }, /* ≧ */
-    { "GreaterGreater", "\xe2\xaa\xa2" }, /* ⪢ */
-    { "GreaterLess", "\xe2\x89\xb7" }, /* ≷ */
-    { "GreaterSlantEqual", "\xe2\xa9\xbe" }, /* ⩾ */
-    { "GreaterTilde", "\xe2\x89\xb3" }, /* ≳ */
-    { "Gscr", "\xf0\x9d\x92\xa2" }, /* 𝒢 */
-    { "Gt", "\xe2\x89\xab" }, /* ≫ */
-    { "HARDcy", "\xd0\xaa" }, /* Ъ */
-    { "Hacek", "\xcb\x87" }, /* ˇ */
-    { "Hat", "\x5e" }, /* ^ */
-    { "Hcirc", "\xc4\xa4" }, /* Ĥ */
-    { "Hfr", "\xe2\x84\x8c" }, /* ℌ */
-    { "HilbertSpace", "\xe2\x84\x8b" }, /* ℋ */
-    { "Hopf", "\xe2\x84\x8d" }, /* ℍ */
-    { "HorizontalLine", "\xe2\x94\x80" }, /* ─ */
-    { "Hscr", "\xe2\x84\x8b" }, /* ℋ */
-    { "Hstrok", "\xc4\xa6" }, /* Ħ */
-    { "HumpDownHump", "\xe2\x89\x8e" }, /* ≎ */
-    { "HumpEqual", "\xe2\x89\x8f" }, /* ≏ */
-    { "IEcy", "\xd0\x95" }, /* Е */
-    { "IJlig", "\xc4\xb2" }, /* Ĳ */
-    { "IOcy", "\xd0\x81" }, /* Ё */
-    { "Iacute", "\xc3\x8d" }, /* Í */
-    { "Icirc", "\xc3\x8e" }, /* Î */
-    { "Icy", "\xd0\x98" }, /* И */
-    { "Idot", "\xc4\xb0" }, /* İ */
-    { "Ifr", "\xe2\x84\x91" }, /* ℑ */
-    { "Igrave", "\xc3\x8c" }, /* Ì */
-    { "Im", "\xe2\x84\x91" }, /* ℑ */
-    { "Imacr", "\xc4\xaa" }, /* Ī */
-    { "ImaginaryI", "\xe2\x85\x88" }, /* ⅈ */
-    { "Implies", "\xe2\x87\x92" }, /* ⇒ */
-    { "Int", "\xe2\x88\xac" }, /* ∬ */
-    { "Integral", "\xe2\x88\xab" }, /* ∫ */
-    { "Intersection", "\xe2\x8b\x82" }, /* ⋂ */
-    { "InvisibleComma", "\xe2\x81\xa3" }, /* ⁣ */
-    { "InvisibleTimes", "\xe2\x81\xa2" }, /* ⁢ */
-    { "Iogon", "\xc4\xae" }, /* Į */
-    { "Iopf", "\xf0\x9d\x95\x80" }, /* 𝕀 */
-    { "Iota", "\xce\x99" }, /* Ι */
-    { "Iscr", "\xe2\x84\x90" }, /* ℐ */
-    { "Itilde", "\xc4\xa8" }, /* Ĩ */
-    { "Iukcy", "\xd0\x86" }, /* І */
-    { "Iuml", "\xc3\x8f" }, /* Ï */
-    { "Jcirc", "\xc4\xb4" }, /* Ĵ */
-    { "Jcy", "\xd0\x99" }, /* Й */
-    { "Jfr", "\xf0\x9d\x94\x8d" }, /* 𝔍 */
-    { "Jopf", "\xf0\x9d\x95\x81" }, /* 𝕁 */
-    { "Jscr", "\xf0\x9d\x92\xa5" }, /* 𝒥 */
-    { "Jsercy", "\xd0\x88" }, /* Ј */
-    { "Jukcy", "\xd0\x84" }, /* Є */
-    { "KHcy", "\xd0\xa5" }, /* Х */
-    { "KJcy", "\xd0\x8c" }, /* Ќ */
-    { "Kappa", "\xce\x9a" }, /* Κ */
-    { "Kcedil", "\xc4\xb6" }, /* Ķ */
-    { "Kcy", "\xd0\x9a" }, /* К */
-    { "Kfr", "\xf0\x9d\x94\x8e" }, /* 𝔎 */
-    { "Kopf", "\xf0\x9d\x95\x82" }, /* 𝕂 */
-    { "Kscr", "\xf0\x9d\x92\xa6" }, /* 𝒦 */
-    { "LJcy", "\xd0\x89" }, /* Љ */
-    { "LT", "\x3c" }, /* < */
-    { "Lacute", "\xc4\xb9" }, /* Ĺ */
-    { "Lambda", "\xce\x9b" }, /* Λ */
-    { "Lang", "\xe2\x9f\xaa" }, /* ⟪ */
-    { "Laplacetrf", "\xe2\x84\x92" }, /* ℒ */
-    { "Larr", "\xe2\x86\x9e" }, /* ↞ */
-    { "Lcaron", "\xc4\xbd" }, /* Ľ */
-    { "Lcedil", "\xc4\xbb" }, /* Ļ */
-    { "Lcy", "\xd0\x9b" }, /* Л */
-    { "LeftAngleBracket", "\xe2\x9f\xa8" }, /* ⟨ */
-    { "LeftArrow", "\xe2\x86\x90" }, /* ← */
-    { "LeftArrowBar", "\xe2\x87\xa4" }, /* ⇤ */
-    { "LeftArrowRightArrow", "\xe2\x87\x86" }, /* ⇆ */
-    { "LeftCeiling", "\xe2\x8c\x88" }, /* ⌈ */
-    { "LeftDoubleBracket", "\xe2\x9f\xa6" }, /* ⟦ */
-    { "LeftDownTeeVector", "\xe2\xa5\xa1" }, /* ⥡ */
-    { "LeftDownVector", "\xe2\x87\x83" }, /* ⇃ */
-    { "LeftDownVectorBar", "\xe2\xa5\x99" }, /* ⥙ */
-    { "LeftFloor", "\xe2\x8c\x8a" }, /* ⌊ */
-    { "LeftRightArrow", "\xe2\x86\x94" }, /* ↔ */
-    { "LeftRightVector", "\xe2\xa5\x8e" }, /* ⥎ */
-    { "LeftTee", "\xe2\x8a\xa3" }, /* ⊣ */
-    { "LeftTeeArrow", "\xe2\x86\xa4" }, /* ↤ */
-    { "LeftTeeVector", "\xe2\xa5\x9a" }, /* ⥚ */
-    { "LeftTriangle", "\xe2\x8a\xb2" }, /* ⊲ */
-    { "LeftTriangleBar", "\xe2\xa7\x8f" }, /* ⧏ */
-    { "LeftTriangleEqual", "\xe2\x8a\xb4" }, /* ⊴ */
-    { "LeftUpDownVector", "\xe2\xa5\x91" }, /* ⥑ */
-    { "LeftUpTeeVector", "\xe2\xa5\xa0" }, /* ⥠ */
-    { "LeftUpVector", "\xe2\x86\xbf" }, /* ↿ */
-    { "LeftUpVectorBar", "\xe2\xa5\x98" }, /* ⥘ */
-    { "LeftVector", "\xe2\x86\xbc" }, /* ↼ */
-    { "LeftVectorBar", "\xe2\xa5\x92" }, /* ⥒ */
-    { "Leftarrow", "\xe2\x87\x90" }, /* ⇐ */
-    { "Leftrightarrow", "\xe2\x87\x94" }, /* ⇔ */
-    { "LessEqualGreater", "\xe2\x8b\x9a" }, /* ⋚ */
-    { "LessFullEqual", "\xe2\x89\xa6" }, /* ≦ */
-    { "LessGreater", "\xe2\x89\xb6" }, /* ≶ */
-    { "LessLess", "\xe2\xaa\xa1" }, /* ⪡ */
-    { "LessSlantEqual", "\xe2\xa9\xbd" }, /* ⩽ */
-    { "LessTilde", "\xe2\x89\xb2" }, /* ≲ */
-    { "Lfr", "\xf0\x9d\x94\x8f" }, /* 𝔏 */
-    { "Ll", "\xe2\x8b\x98" }, /* ⋘ */
-    { "Lleftarrow", "\xe2\x87\x9a" }, /* ⇚ */
-    { "Lmidot", "\xc4\xbf" }, /* Ŀ */
-    { "LongLeftArrow", "\xe2\x9f\xb5" }, /* ⟵ */
-    { "LongLeftRightArrow", "\xe2\x9f\xb7" }, /* ⟷ */
-    { "LongRightArrow", "\xe2\x9f\xb6" }, /* ⟶ */
-    { "Longleftarrow", "\xe2\x9f\xb8" }, /* ⟸ */
-    { "Longleftrightarrow", "\xe2\x9f\xba" }, /* ⟺ */
-    { "Longrightarrow", "\xe2\x9f\xb9" }, /* ⟹ */
-    { "Lopf", "\xf0\x9d\x95\x83" }, /* 𝕃 */
-    { "LowerLeftArrow", "\xe2\x86\x99" }, /* ↙ */
-    { "LowerRightArrow", "\xe2\x86\x98" }, /* ↘ */
-    { "Lscr", "\xe2\x84\x92" }, /* ℒ */
-    { "Lsh", "\xe2\x86\xb0" }, /* ↰ */
-    { "Lstrok", "\xc5\x81" }, /* Ł */
-    { "Lt", "\xe2\x89\xaa" }, /* ≪ */
-    { "Map", "\xe2\xa4\x85" }, /* ⤅ */
-    { "Mcy", "\xd0\x9c" }, /* М */
-    { "MediumSpace", "\xe2\x81\x9f" }, /*   */
-    { "Mellintrf", "\xe2\x84\xb3" }, /* ℳ */
-    { "Mfr", "\xf0\x9d\x94\x90" }, /* 𝔐 */
-    { "MinusPlus", "\xe2\x88\x93" }, /* ∓ */
-    { "Mopf", "\xf0\x9d\x95\x84" }, /* 𝕄 */
-    { "Mscr", "\xe2\x84\xb3" }, /* ℳ */
-    { "Mu", "\xce\x9c" }, /* Μ */
-    { "NJcy", "\xd0\x8a" }, /* Њ */
-    { "Nacute", "\xc5\x83" }, /* Ń */
-    { "Ncaron", "\xc5\x87" }, /* Ň */
-    { "Ncedil", "\xc5\x85" }, /* Ņ */
-    { "Ncy", "\xd0\x9d" }, /* Н */
-    { "NegativeMediumSpace", "\xe2\x80\x8b" }, /* ​ */
-    { "NegativeThickSpace", "\xe2\x80\x8b" }, /* ​ */
-    { "NegativeThinSpace", "\xe2\x80\x8b" }, /* ​ */
-    { "NegativeVeryThinSpace", "\xe2\x80\x8b" }, /* ​ */
-    { "NestedGreaterGreater", "\xe2\x89\xab" }, /* ≫ */
-    { "NestedLessLess", "\xe2\x89\xaa" }, /* ≪ */
-    { "NewLine", "\xa" }, /* \n */
-    { "Nfr", "\xf0\x9d\x94\x91" }, /* 𝔑 */
-    { "NoBreak", "\xe2\x81\xa0" }, /* ⁠ */
-    { "NonBreakingSpace", "\xc2\xa0" }, /*   */
-    { "Nopf", "\xe2\x84\x95" }, /* ℕ */
-    { "Not", "\xe2\xab\xac" }, /* ⫬ */
-    { "NotCongruent", "\xe2\x89\xa2" }, /* ≢ */
-    { "NotCupCap", "\xe2\x89\xad" }, /* ≭ */
-    { "NotDoubleVerticalBar", "\xe2\x88\xa6" }, /* ∦ */
-    { "NotElement", "\xe2\x88\x89" }, /* ∉ */
-    { "NotEqual", "\xe2\x89\xa0" }, /* ≠ */
-    { "NotEqualTilde", "\xe2\x89\x82\xcc\xb8" }, /* ≂̸ */
-    { "NotExists", "\xe2\x88\x84" }, /* ∄ */
-    { "NotGreater", "\xe2\x89\xaf" }, /* ≯ */
-    { "NotGreaterEqual", "\xe2\x89\xb1" }, /* ≱ */
-    { "NotGreaterFullEqual", "\xe2\x89\xa7\xcc\xb8" }, /* ≧̸ */
-    { "NotGreaterGreater", "\xe2\x89\xab\xcc\xb8" }, /* ≫̸ */
-    { "NotGreaterLess", "\xe2\x89\xb9" }, /* ≹ */
-    { "NotGreaterSlantEqual", "\xe2\xa9\xbe\xcc\xb8" }, /* ⩾̸ */
-    { "NotGreaterTilde", "\xe2\x89\xb5" }, /* ≵ */
-    { "NotHumpDownHump", "\xe2\x89\x8e\xcc\xb8" }, /* ≎̸ */
-    { "NotHumpEqual", "\xe2\x89\x8f\xcc\xb8" }, /* ≏̸ */
-    { "NotLeftTriangle", "\xe2\x8b\xaa" }, /* ⋪ */
-    { "NotLeftTriangleBar", "\xe2\xa7\x8f\xcc\xb8" }, /* ⧏̸ */
-    { "NotLeftTriangleEqual", "\xe2\x8b\xac" }, /* ⋬ */
-    { "NotLess", "\xe2\x89\xae" }, /* ≮ */
-    { "NotLessEqual", "\xe2\x89\xb0" }, /* ≰ */
-    { "NotLessGreater", "\xe2\x89\xb8" }, /* ≸ */
-    { "NotLessLess", "\xe2\x89\xaa\xcc\xb8" }, /* ≪̸ */
-    { "NotLessSlantEqual", "\xe2\xa9\xbd\xcc\xb8" }, /* ⩽̸ */
-    { "NotLessTilde", "\xe2\x89\xb4" }, /* ≴ */
-    { "NotNestedGreaterGreater", "\xe2\xaa\xa2\xcc\xb8" }, /* ⪢̸ */
-    { "NotNestedLessLess", "\xe2\xaa\xa1\xcc\xb8" }, /* ⪡̸ */
-    { "NotPrecedes", "\xe2\x8a\x80" }, /* ⊀ */
-    { "NotPrecedesEqual", "\xe2\xaa\xaf\xcc\xb8" }, /* ⪯̸ */
-    { "NotPrecedesSlantEqual", "\xe2\x8b\xa0" }, /* ⋠ */
-    { "NotReverseElement", "\xe2\x88\x8c" }, /* ∌ */
-    { "NotRightTriangle", "\xe2\x8b\xab" }, /* ⋫ */
-    { "NotRightTriangleBar", "\xe2\xa7\x90\xcc\xb8" }, /* ⧐̸ */
-    { "NotRightTriangleEqual", "\xe2\x8b\xad" }, /* ⋭ */
-    { "NotSquareSubset", "\xe2\x8a\x8f\xcc\xb8" }, /* ⊏̸ */
-    { "NotSquareSubsetEqual", "\xe2\x8b\xa2" }, /* ⋢ */
-    { "NotSquareSuperset", "\xe2\x8a\x90\xcc\xb8" }, /* ⊐̸ */
-    { "NotSquareSupersetEqual", "\xe2\x8b\xa3" }, /* ⋣ */
-    { "NotSubset", "\xe2\x8a\x82\xe2\x83\x92" }, /* ⊂⃒ */
-    { "NotSubsetEqual", "\xe2\x8a\x88" }, /* ⊈ */
-    { "NotSucceeds", "\xe2\x8a\x81" }, /* ⊁ */
-    { "NotSucceedsEqual", "\xe2\xaa\xb0\xcc\xb8" }, /* ⪰̸ */
-    { "NotSucceedsSlantEqual", "\xe2\x8b\xa1" }, /* ⋡ */
-    { "NotSucceedsTilde", "\xe2\x89\xbf\xcc\xb8" }, /* ≿̸ */
-    { "NotSuperset", "\xe2\x8a\x83\xe2\x83\x92" }, /* ⊃⃒ */
-    { "NotSupersetEqual", "\xe2\x8a\x89" }, /* ⊉ */
-    { "NotTilde", "\xe2\x89\x81" }, /* ≁ */
-    { "NotTildeEqual", "\xe2\x89\x84" }, /* ≄ */
-    { "NotTildeFullEqual", "\xe2\x89\x87" }, /* ≇ */
-    { "NotTildeTilde", "\xe2\x89\x89" }, /* ≉ */
-    { "NotVerticalBar", "\xe2\x88\xa4" }, /* ∤ */
-    { "Nscr", "\xf0\x9d\x92\xa9" }, /* 𝒩 */
-    { "Ntilde", "\xc3\x91" }, /* Ñ */
-    { "Nu", "\xce\x9d" }, /* Ν */
-    { "OElig", "\xc5\x92" }, /* Œ */
-    { "Oacute", "\xc3\x93" }, /* Ó */
-    { "Ocirc", "\xc3\x94" }, /* Ô */
-    { "Ocy", "\xd0\x9e" }, /* О */
-    { "Odblac", "\xc5\x90" }, /* Ő */
-    { "Ofr", "\xf0\x9d\x94\x92" }, /* 𝔒 */
-    { "Ograve", "\xc3\x92" }, /* Ò */
-    { "Omacr", "\xc5\x8c" }, /* Ō */
-    { "Omega", "\xce\xa9" }, /* Ω */
-    { "Omicron", "\xce\x9f" }, /* Ο */
-    { "Oopf", "\xf0\x9d\x95\x86" }, /* 𝕆 */
-    { "OpenCurlyDoubleQuote", "\xe2\x80\x9c" }, /* “ */
-    { "OpenCurlyQuote", "\xe2\x80\x98" }, /* ‘ */
-    { "Or", "\xe2\xa9\x94" }, /* ⩔ */
-    { "Oscr", "\xf0\x9d\x92\xaa" }, /* 𝒪 */
-    { "Oslash", "\xc3\x98" }, /* Ø */
-    { "Otilde", "\xc3\x95" }, /* Õ */
-    { "Otimes", "\xe2\xa8\xb7" }, /* ⨷ */
-    { "Ouml", "\xc3\x96" }, /* Ö */
-    { "OverBar", "\xe2\x80\xbe" }, /* ‾ */
-    { "OverBrace", "\xe2\x8f\x9e" }, /* ⏞ */
-    { "OverBracket", "\xe2\x8e\xb4" }, /* ⎴ */
-    { "OverParenthesis", "\xe2\x8f\x9c" }, /* ⏜ */
-    { "PartialD", "\xe2\x88\x82" }, /* ∂ */
-    { "Pcy", "\xd0\x9f" }, /* П */
-    { "Pfr", "\xf0\x9d\x94\x93" }, /* 𝔓 */
-    { "Phi", "\xce\xa6" }, /* Φ */
-    { "Pi", "\xce\xa0" }, /* Π */
-    { "PlusMinus", "\xc2\xb1" }, /* ± */
-    { "Poincareplane", "\xe2\x84\x8c" }, /* ℌ */
-    { "Popf", "\xe2\x84\x99" }, /* ℙ */
-    { "Pr", "\xe2\xaa\xbb" }, /* ⪻ */
-    { "Precedes", "\xe2\x89\xba" }, /* ≺ */
-    { "PrecedesEqual", "\xe2\xaa\xaf" }, /* ⪯ */
-    { "PrecedesSlantEqual", "\xe2\x89\xbc" }, /* ≼ */
-    { "PrecedesTilde", "\xe2\x89\xbe" }, /* ≾ */
-    { "Prime", "\xe2\x80\xb3" }, /* ″ */
-    { "Product", "\xe2\x88\x8f" }, /* ∏ */
-    { "Proportion", "\xe2\x88\xb7" }, /* ∷ */
-    { "Proportional", "\xe2\x88\x9d" }, /* ∝ */
-    { "Pscr", "\xf0\x9d\x92\xab" }, /* 𝒫 */
-    { "Psi", "\xce\xa8" }, /* Ψ */
-    { "QUOT", "\x22" }, /* " */
-    { "Qfr", "\xf0\x9d\x94\x94" }, /* 𝔔 */
-    { "Qopf", "\xe2\x84\x9a" }, /* ℚ */
-    { "Qscr", "\xf0\x9d\x92\xac" }, /* 𝒬 */
-    { "RBarr", "\xe2\xa4\x90" }, /* ⤐ */
-    { "REG", "\xc2\xae" }, /* ® */
-    { "Racute", "\xc5\x94" }, /* Ŕ */
-    { "Rang", "\xe2\x9f\xab" }, /* ⟫ */
-    { "Rarr", "\xe2\x86\xa0" }, /* ↠ */
-    { "Rarrtl", "\xe2\xa4\x96" }, /* ⤖ */
-    { "Rcaron", "\xc5\x98" }, /* Ř */
-    { "Rcedil", "\xc5\x96" }, /* Ŗ */
-    { "Rcy", "\xd0\xa0" }, /* Р */
-    { "Re", "\xe2\x84\x9c" }, /* ℜ */
-    { "ReverseElement", "\xe2\x88\x8b" }, /* ∋ */
-    { "ReverseEquilibrium", "\xe2\x87\x8b" }, /* ⇋ */
-    { "ReverseUpEquilibrium", "\xe2\xa5\xaf" }, /* ⥯ */
-    { "Rfr", "\xe2\x84\x9c" }, /* ℜ */
-    { "Rho", "\xce\xa1" }, /* Ρ */
-    { "RightAngleBracket", "\xe2\x9f\xa9" }, /* ⟩ */
-    { "RightArrow", "\xe2\x86\x92" }, /* → */
-    { "RightArrowBar", "\xe2\x87\xa5" }, /* ⇥ */
-    { "RightArrowLeftArrow", "\xe2\x87\x84" }, /* ⇄ */
-    { "RightCeiling", "\xe2\x8c\x89" }, /* ⌉ */
-    { "RightDoubleBracket", "\xe2\x9f\xa7" }, /* ⟧ */
-    { "RightDownTeeVector", "\xe2\xa5\x9d" }, /* ⥝ */
-    { "RightDownVector", "\xe2\x87\x82" }, /* ⇂ */
-    { "RightDownVectorBar", "\xe2\xa5\x95" }, /* ⥕ */
-    { "RightFloor", "\xe2\x8c\x8b" }, /* ⌋ */
-    { "RightTee", "\xe2\x8a\xa2" }, /* ⊢ */
-    { "RightTeeArrow", "\xe2\x86\xa6" }, /* ↦ */
-    { "RightTeeVector", "\xe2\xa5\x9b" }, /* ⥛ */
-    { "RightTriangle", "\xe2\x8a\xb3" }, /* ⊳ */
-    { "RightTriangleBar", "\xe2\xa7\x90" }, /* ⧐ */
-    { "RightTriangleEqual", "\xe2\x8a\xb5" }, /* ⊵ */
-    { "RightUpDownVector", "\xe2\xa5\x8f" }, /* ⥏ */
-    { "RightUpTeeVector", "\xe2\xa5\x9c" }, /* ⥜ */
-    { "RightUpVector", "\xe2\x86\xbe" }, /* ↾ */
-    { "RightUpVectorBar", "\xe2\xa5\x94" }, /* ⥔ */
-    { "RightVector", "\xe2\x87\x80" }, /* ⇀ */
-    { "RightVectorBar", "\xe2\xa5\x93" }, /* ⥓ */
-    { "Rightarrow", "\xe2\x87\x92" }, /* ⇒ */
-    { "Ropf", "\xe2\x84\x9d" }, /* ℝ */
-    { "RoundImplies", "\xe2\xa5\xb0" }, /* ⥰ */
-    { "Rrightarrow", "\xe2\x87\x9b" }, /* ⇛ */
-    { "Rscr", "\xe2\x84\x9b" }, /* ℛ */
-    { "Rsh", "\xe2\x86\xb1" }, /* ↱ */
-    { "RuleDelayed", "\xe2\xa7\xb4" }, /* ⧴ */
-    { "SHCHcy", "\xd0\xa9" }, /* Щ */
-    { "SHcy", "\xd0\xa8" }, /* Ш */
-    { "SOFTcy", "\xd0\xac" }, /* Ь */
-    { "Sacute", "\xc5\x9a" }, /* Ś */
-    { "Sc", "\xe2\xaa\xbc" }, /* ⪼ */
-    { "Scaron", "\xc5\xa0" }, /* Š */
-    { "Scedil", "\xc5\x9e" }, /* Ş */
-    { "Scirc", "\xc5\x9c" }, /* Ŝ */
-    { "Scy", "\xd0\xa1" }, /* С */
-    { "Sfr", "\xf0\x9d\x94\x96" }, /* 𝔖 */
-    { "ShortDownArrow", "\xe2\x86\x93" }, /* ↓ */
-    { "ShortLeftArrow", "\xe2\x86\x90" }, /* ← */
-    { "ShortRightArrow", "\xe2\x86\x92" }, /* → */
-    { "ShortUpArrow", "\xe2\x86\x91" }, /* ↑ */
-    { "Sigma", "\xce\xa3" }, /* Σ */
-    { "SmallCircle", "\xe2\x88\x98" }, /* ∘ */
-    { "Sopf", "\xf0\x9d\x95\x8a" }, /* 𝕊 */
-    { "Sqrt", "\xe2\x88\x9a" }, /* √ */
-    { "Square", "\xe2\x96\xa1" }, /* □ */
-    { "SquareIntersection", "\xe2\x8a\x93" }, /* ⊓ */
-    { "SquareSubset", "\xe2\x8a\x8f" }, /* ⊏ */
-    { "SquareSubsetEqual", "\xe2\x8a\x91" }, /* ⊑ */
-    { "SquareSuperset", "\xe2\x8a\x90" }, /* ⊐ */
-    { "SquareSupersetEqual", "\xe2\x8a\x92" }, /* ⊒ */
-    { "SquareUnion", "\xe2\x8a\x94" }, /* ⊔ */
-    { "Sscr", "\xf0\x9d\x92\xae" }, /* 𝒮 */
-    { "Star", "\xe2\x8b\x86" }, /* ⋆ */
-    { "Sub", "\xe2\x8b\x90" }, /* ⋐ */
-    { "Subset", "\xe2\x8b\x90" }, /* ⋐ */
-    { "SubsetEqual", "\xe2\x8a\x86" }, /* ⊆ */
-    { "Succeeds", "\xe2\x89\xbb" }, /* ≻ */
-    { "SucceedsEqual", "\xe2\xaa\xb0" }, /* ⪰ */
-    { "SucceedsSlantEqual", "\xe2\x89\xbd" }, /* ≽ */
-    { "SucceedsTilde", "\xe2\x89\xbf" }, /* ≿ */
-    { "SuchThat", "\xe2\x88\x8b" }, /* ∋ */
-    { "Sum", "\xe2\x88\x91" }, /* ∑ */
-    { "Sup", "\xe2\x8b\x91" }, /* ⋑ */
-    { "Superset", "\xe2\x8a\x83" }, /* ⊃ */
-    { "SupersetEqual", "\xe2\x8a\x87" }, /* ⊇ */
-    { "Supset", "\xe2\x8b\x91" }, /* ⋑ */
-    { "THORN", "\xc3\x9e" }, /* Þ */
-    { "TRADE", "\xe2\x84\xa2" }, /* ™ */
-    { "TSHcy", "\xd0\x8b" }, /* Ћ */
-    { "TScy", "\xd0\xa6" }, /* Ц */
-    { "Tab", "\x9" }, /* 	 */
-    { "Tau", "\xce\xa4" }, /* Τ */
-    { "Tcaron", "\xc5\xa4" }, /* Ť */
-    { "Tcedil", "\xc5\xa2" }, /* Ţ */
-    { "Tcy", "\xd0\xa2" }, /* Т */
-    { "Tfr", "\xf0\x9d\x94\x97" }, /* 𝔗 */
-    { "Therefore", "\xe2\x88\xb4" }, /* ∴ */
-    { "Theta", "\xce\x98" }, /* Θ */
-    { "ThickSpace", "\xe2\x81\x9f\xe2\x80\x8a" }, /*    */
-    { "ThinSpace", "\xe2\x80\x89" }, /*   */
-    { "Tilde", "\xe2\x88\xbc" }, /* ∼ */
-    { "TildeEqual", "\xe2\x89\x83" }, /* ≃ */
-    { "TildeFullEqual", "\xe2\x89\x85" }, /* ≅ */
-    { "TildeTilde", "\xe2\x89\x88" }, /* ≈ */
-    { "Topf", "\xf0\x9d\x95\x8b" }, /* 𝕋 */
-    { "TripleDot", "\xe2\x83\x9b" }, /* ⃛ */
-    { "Tscr", "\xf0\x9d\x92\xaf" }, /* 𝒯 */
-    { "Tstrok", "\xc5\xa6" }, /* Ŧ */
-    { "Uacute", "\xc3\x9a" }, /* Ú */
-    { "Uarr", "\xe2\x86\x9f" }, /* ↟ */
-    { "Uarrocir", "\xe2\xa5\x89" }, /* ⥉ */
-    { "Ubrcy", "\xd0\x8e" }, /* Ў */
-    { "Ubreve", "\xc5\xac" }, /* Ŭ */
-    { "Ucirc", "\xc3\x9b" }, /* Û */
-    { "Ucy", "\xd0\xa3" }, /* У */
-    { "Udblac", "\xc5\xb0" }, /* Ű */
-    { "Ufr", "\xf0\x9d\x94\x98" }, /* 𝔘 */
-    { "Ugrave", "\xc3\x99" }, /* Ù */
-    { "Umacr", "\xc5\xaa" }, /* Ū */
-    { "UnderBar", "\x5f" }, /* _ */
-    { "UnderBrace", "\xe2\x8f\x9f" }, /* ⏟ */
-    { "UnderBracket", "\xe2\x8e\xb5" }, /* ⎵ */
-    { "UnderParenthesis", "\xe2\x8f\x9d" }, /* ⏝ */
-    { "Union", "\xe2\x8b\x83" }, /* ⋃ */
-    { "UnionPlus", "\xe2\x8a\x8e" }, /* ⊎ */
-    { "Uogon", "\xc5\xb2" }, /* Ų */
-    { "Uopf", "\xf0\x9d\x95\x8c" }, /* 𝕌 */
-    { "UpArrow", "\xe2\x86\x91" }, /* ↑ */
-    { "UpArrowBar", "\xe2\xa4\x92" }, /* ⤒ */
-    { "UpArrowDownArrow", "\xe2\x87\x85" }, /* ⇅ */
-    { "UpDownArrow", "\xe2\x86\x95" }, /* ↕ */
-    { "UpEquilibrium", "\xe2\xa5\xae" }, /* ⥮ */
-    { "UpTee", "\xe2\x8a\xa5" }, /* ⊥ */
-    { "UpTeeArrow", "\xe2\x86\xa5" }, /* ↥ */
-    { "Uparrow", "\xe2\x87\x91" }, /* ⇑ */
-    { "Updownarrow", "\xe2\x87\x95" }, /* ⇕ */
-    { "UpperLeftArrow", "\xe2\x86\x96" }, /* ↖ */
-    { "UpperRightArrow", "\xe2\x86\x97" }, /* ↗ */
-    { "Upsi", "\xcf\x92" }, /* ϒ */
-    { "Upsilon", "\xce\xa5" }, /* Υ */
-    { "Uring", "\xc5\xae" }, /* Ů */
-    { "Uscr", "\xf0\x9d\x92\xb0" }, /* 𝒰 */
-    { "Utilde", "\xc5\xa8" }, /* Ũ */
-    { "Uuml", "\xc3\x9c" }, /* Ü */
-    { "VDash", "\xe2\x8a\xab" }, /* ⊫ */
-    { "Vbar", "\xe2\xab\xab" }, /* ⫫ */
-    { "Vcy", "\xd0\x92" }, /* В */
-    { "Vdash", "\xe2\x8a\xa9" }, /* ⊩ */
-    { "Vdashl", "\xe2\xab\xa6" }, /* ⫦ */
-    { "Vee", "\xe2\x8b\x81" }, /* ⋁ */
-    { "Verbar", "\xe2\x80\x96" }, /* ‖ */
-    { "Vert", "\xe2\x80\x96" }, /* ‖ */
-    { "VerticalBar", "\xe2\x88\xa3" }, /* ∣ */
-    { "VerticalLine", "\x7c" }, /* | */
-    { "VerticalSeparator", "\xe2\x9d\x98" }, /* ❘ */
-    { "VerticalTilde", "\xe2\x89\x80" }, /* ≀ */
-    { "VeryThinSpace", "\xe2\x80\x8a" }, /*   */
-    { "Vfr", "\xf0\x9d\x94\x99" }, /* 𝔙 */
-    { "Vopf", "\xf0\x9d\x95\x8d" }, /* 𝕍 */
-    { "Vscr", "\xf0\x9d\x92\xb1" }, /* 𝒱 */
-    { "Vvdash", "\xe2\x8a\xaa" }, /* ⊪ */
-    { "Wcirc", "\xc5\xb4" }, /* Ŵ */
-    { "Wedge", "\xe2\x8b\x80" }, /* ⋀ */
-    { "Wfr", "\xf0\x9d\x94\x9a" }, /* 𝔚 */
-    { "Wopf", "\xf0\x9d\x95\x8e" }, /* 𝕎 */
-    { "Wscr", "\xf0\x9d\x92\xb2" }, /* 𝒲 */
-    { "Xfr", "\xf0\x9d\x94\x9b" }, /* 𝔛 */
-    { "Xi", "\xce\x9e" }, /* Ξ */
-    { "Xopf", "\xf0\x9d\x95\x8f" }, /* 𝕏 */
-    { "Xscr", "\xf0\x9d\x92\xb3" }, /* 𝒳 */
-    { "YAcy", "\xd0\xaf" }, /* Я */
-    { "YIcy", "\xd0\x87" }, /* Ї */
-    { "YUcy", "\xd0\xae" }, /* Ю */
-    { "Yacute", "\xc3\x9d" }, /* Ý */
-    { "Ycirc", "\xc5\xb6" }, /* Ŷ */
-    { "Ycy", "\xd0\xab" }, /* Ы */
-    { "Yfr", "\xf0\x9d\x94\x9c" }, /* 𝔜 */
-    { "Yopf", "\xf0\x9d\x95\x90" }, /* 𝕐 */
-    { "Yscr", "\xf0\x9d\x92\xb4" }, /* 𝒴 */
-    { "Yuml", "\xc5\xb8" }, /* Ÿ */
-    { "ZHcy", "\xd0\x96" }, /* Ж */
-    { "Zacute", "\xc5\xb9" }, /* Ź */
-    { "Zcaron", "\xc5\xbd" }, /* Ž */
-    { "Zcy", "\xd0\x97" }, /* З */
-    { "Zdot", "\xc5\xbb" }, /* Ż */
-    { "ZeroWidthSpace", "\xe2\x80\x8b" }, /* ​ */
-    { "Zeta", "\xce\x96" }, /* Ζ */
-    { "Zfr", "\xe2\x84\xa8" }, /* ℨ */
-    { "Zopf", "\xe2\x84\xa4" }, /* ℤ */
-    { "Zscr", "\xf0\x9d\x92\xb5" }, /* 𝒵 */
-    { "aacute", "\xc3\xa1" }, /* á */
-    { "abreve", "\xc4\x83" }, /* ă */
-    { "ac", "\xe2\x88\xbe" }, /* ∾ */
-    { "acE", "\xe2\x88\xbe\xcc\xb3" }, /* ∾̳ */
-    { "acd", "\xe2\x88\xbf" }, /* ∿ */
-    { "acirc", "\xc3\xa2" }, /* â */
-    { "acute", "\xc2\xb4" }, /* ´ */
-    { "acy", "\xd0\xb0" }, /* а */
-    { "aelig", "\xc3\xa6" }, /* æ */
-    { "af", "\xe2\x81\xa1" }, /* ⁡ */
-    { "afr", "\xf0\x9d\x94\x9e" }, /* 𝔞 */
-    { "agrave", "\xc3\xa0" }, /* à */
-    { "alefsym", "\xe2\x84\xb5" }, /* ℵ */
-    { "aleph", "\xe2\x84\xb5" }, /* ℵ */
-    { "alpha", "\xce\xb1" }, /* α */
-    { "amacr", "\xc4\x81" }, /* ā */
-    { "amalg", "\xe2\xa8\xbf" }, /* ⨿ */
-    { "amp", "\x26" }, /* & */
-    { "and", "\xe2\x88\xa7" }, /* ∧ */
-    { "andand", "\xe2\xa9\x95" }, /* ⩕ */
-    { "andd", "\xe2\xa9\x9c" }, /* ⩜ */
-    { "andslope", "\xe2\xa9\x98" }, /* ⩘ */
-    { "andv", "\xe2\xa9\x9a" }, /* ⩚ */
-    { "ang", "\xe2\x88\xa0" }, /* ∠ */
-    { "ange", "\xe2\xa6\xa4" }, /* ⦤ */
-    { "angle", "\xe2\x88\xa0" }, /* ∠ */
-    { "angmsd", "\xe2\x88\xa1" }, /* ∡ */
-    { "angmsdaa", "\xe2\xa6\xa8" }, /* ⦨ */
-    { "angmsdab", "\xe2\xa6\xa9" }, /* ⦩ */
-    { "angmsdac", "\xe2\xa6\xaa" }, /* ⦪ */
-    { "angmsdad", "\xe2\xa6\xab" }, /* ⦫ */
-    { "angmsdae", "\xe2\xa6\xac" }, /* ⦬ */
-    { "angmsdaf", "\xe2\xa6\xad" }, /* ⦭ */
-    { "angmsdag", "\xe2\xa6\xae" }, /* ⦮ */
-    { "angmsdah", "\xe2\xa6\xaf" }, /* ⦯ */
-    { "angrt", "\xe2\x88\x9f" }, /* ∟ */
-    { "angrtvb", "\xe2\x8a\xbe" }, /* ⊾ */
-    { "angrtvbd", "\xe2\xa6\x9d" }, /* ⦝ */
-    { "angsph", "\xe2\x88\xa2" }, /* ∢ */
-    { "angst", "\xc3\x85" }, /* Å */
-    { "angzarr", "\xe2\x8d\xbc" }, /* ⍼ */
-    { "aogon", "\xc4\x85" }, /* ą */
-    { "aopf", "\xf0\x9d\x95\x92" }, /* 𝕒 */
-    { "ap", "\xe2\x89\x88" }, /* ≈ */
-    { "apE", "\xe2\xa9\xb0" }, /* ⩰ */
-    { "apacir", "\xe2\xa9\xaf" }, /* ⩯ */
-    { "ape", "\xe2\x89\x8a" }, /* ≊ */
-    { "apid", "\xe2\x89\x8b" }, /* ≋ */
-    { "apos", "\x27" }, /* ' */
-    { "approx", "\xe2\x89\x88" }, /* ≈ */
-    { "approxeq", "\xe2\x89\x8a" }, /* ≊ */
-    { "aring", "\xc3\xa5" }, /* å */
-    { "ascr", "\xf0\x9d\x92\xb6" }, /* 𝒶 */
-    { "ast", "\x2a" }, /* * */
-    { "asymp", "\xe2\x89\x88" }, /* ≈ */
-    { "asympeq", "\xe2\x89\x8d" }, /* ≍ */
-    { "atilde", "\xc3\xa3" }, /* ã */
-    { "auml", "\xc3\xa4" }, /* ä */
-    { "awconint", "\xe2\x88\xb3" }, /* ∳ */
-    { "awint", "\xe2\xa8\x91" }, /* ⨑ */
-    { "bNot", "\xe2\xab\xad" }, /* ⫭ */
-    { "backcong", "\xe2\x89\x8c" }, /* ≌ */
-    { "backepsilon", "\xcf\xb6" }, /* ϶ */
-    { "backprime", "\xe2\x80\xb5" }, /* ‵ */
-    { "backsim", "\xe2\x88\xbd" }, /* ∽ */
-    { "backsimeq", "\xe2\x8b\x8d" }, /* ⋍ */
-    { "barvee", "\xe2\x8a\xbd" }, /* ⊽ */
-    { "barwed", "\xe2\x8c\x85" }, /* ⌅ */
-    { "barwedge", "\xe2\x8c\x85" }, /* ⌅ */
-    { "bbrk", "\xe2\x8e\xb5" }, /* ⎵ */
-    { "bbrktbrk", "\xe2\x8e\xb6" }, /* ⎶ */
-    { "bcong", "\xe2\x89\x8c" }, /* ≌ */
-    { "bcy", "\xd0\xb1" }, /* б */
-    { "bdquo", "\xe2\x80\x9e" }, /* „ */
-    { "becaus", "\xe2\x88\xb5" }, /* ∵ */
-    { "because", "\xe2\x88\xb5" }, /* ∵ */
-    { "bemptyv", "\xe2\xa6\xb0" }, /* ⦰ */
-    { "bepsi", "\xcf\xb6" }, /* ϶ */
-    { "bernou", "\xe2\x84\xac" }, /* ℬ */
-    { "beta", "\xce\xb2" }, /* β */
-    { "beth", "\xe2\x84\xb6" }, /* ℶ */
-    { "between", "\xe2\x89\xac" }, /* ≬ */
-    { "bfr", "\xf0\x9d\x94\x9f" }, /* 𝔟 */
-    { "bigcap", "\xe2\x8b\x82" }, /* ⋂ */
-    { "bigcirc", "\xe2\x97\xaf" }, /* ◯ */
-    { "bigcup", "\xe2\x8b\x83" }, /* ⋃ */
-    { "bigodot", "\xe2\xa8\x80" }, /* ⨀ */
-    { "bigoplus", "\xe2\xa8\x81" }, /* ⨁ */
-    { "bigotimes", "\xe2\xa8\x82" }, /* ⨂ */
-    { "bigsqcup", "\xe2\xa8\x86" }, /* ⨆ */
-    { "bigstar", "\xe2\x98\x85" }, /* ★ */
-    { "bigtriangledown", "\xe2\x96\xbd" }, /* ▽ */
-    { "bigtriangleup", "\xe2\x96\xb3" }, /* △ */
-    { "biguplus", "\xe2\xa8\x84" }, /* ⨄ */
-    { "bigvee", "\xe2\x8b\x81" }, /* ⋁ */
-    { "bigwedge", "\xe2\x8b\x80" }, /* ⋀ */
-    { "bkarow", "\xe2\xa4\x8d" }, /* ⤍ */
-    { "blacklozenge", "\xe2\xa7\xab" }, /* ⧫ */
-    { "blacksquare", "\xe2\x96\xaa" }, /* ▪ */
-    { "blacktriangle", "\xe2\x96\xb4" }, /* ▴ */
-    { "blacktriangledown", "\xe2\x96\xbe" }, /* ▾ */
-    { "blacktriangleleft", "\xe2\x97\x82" }, /* ◂ */
-    { "blacktriangleright", "\xe2\x96\xb8" }, /* ▸ */
-    { "blank", "\xe2\x90\xa3" }, /* ␣ */
-    { "blk12", "\xe2\x96\x92" }, /* ▒ */
-    { "blk14", "\xe2\x96\x91" }, /* ░ */
-    { "blk34", "\xe2\x96\x93" }, /* ▓ */
-    { "block", "\xe2\x96\x88" }, /* █ */
-    { "bne", "\x3d\xe2\x83\xa5" }, /* =⃥ */
-    { "bnequiv", "\xe2\x89\xa1\xe2\x83\xa5" }, /* ≡⃥ */
-    { "bnot", "\xe2\x8c\x90" }, /* ⌐ */
-    { "bopf", "\xf0\x9d\x95\x93" }, /* 𝕓 */
-    { "bot", "\xe2\x8a\xa5" }, /* ⊥ */
-    { "bottom", "\xe2\x8a\xa5" }, /* ⊥ */
-    { "bowtie", "\xe2\x8b\x88" }, /* ⋈ */
-    { "boxDL", "\xe2\x95\x97" }, /* ╗ */
-    { "boxDR", "\xe2\x95\x94" }, /* ╔ */
-    { "boxDl", "\xe2\x95\x96" }, /* ╖ */
-    { "boxDr", "\xe2\x95\x93" }, /* ╓ */
-    { "boxH", "\xe2\x95\x90" }, /* ═ */
-    { "boxHD", "\xe2\x95\xa6" }, /* ╦ */
-    { "boxHU", "\xe2\x95\xa9" }, /* ╩ */
-    { "boxHd", "\xe2\x95\xa4" }, /* ╤ */
-    { "boxHu", "\xe2\x95\xa7" }, /* ╧ */
-    { "boxUL", "\xe2\x95\x9d" }, /* ╝ */
-    { "boxUR", "\xe2\x95\x9a" }, /* ╚ */
-    { "boxUl", "\xe2\x95\x9c" }, /* ╜ */
-    { "boxUr", "\xe2\x95\x99" }, /* ╙ */
-    { "boxV", "\xe2\x95\x91" }, /* ║ */
-    { "boxVH", "\xe2\x95\xac" }, /* ╬ */
-    { "boxVL", "\xe2\x95\xa3" }, /* ╣ */
-    { "boxVR", "\xe2\x95\xa0" }, /* ╠ */
-    { "boxVh", "\xe2\x95\xab" }, /* ╫ */
-    { "boxVl", "\xe2\x95\xa2" }, /* ╢ */
-    { "boxVr", "\xe2\x95\x9f" }, /* ╟ */
-    { "boxbox", "\xe2\xa7\x89" }, /* ⧉ */
-    { "boxdL", "\xe2\x95\x95" }, /* ╕ */
-    { "boxdR", "\xe2\x95\x92" }, /* ╒ */
-    { "boxdl", "\xe2\x94\x90" }, /* ┐ */
-    { "boxdr", "\xe2\x94\x8c" }, /* ┌ */
-    { "boxh", "\xe2\x94\x80" }, /* ─ */
-    { "boxhD", "\xe2\x95\xa5" }, /* ╥ */
-    { "boxhU", "\xe2\x95\xa8" }, /* ╨ */
-    { "boxhd", "\xe2\x94\xac" }, /* ┬ */
-    { "boxhu", "\xe2\x94\xb4" }, /* ┴ */
-    { "boxminus", "\xe2\x8a\x9f" }, /* ⊟ */
-    { "boxplus", "\xe2\x8a\x9e" }, /* ⊞ */
-    { "boxtimes", "\xe2\x8a\xa0" }, /* ⊠ */
-    { "boxuL", "\xe2\x95\x9b" }, /* ╛ */
-    { "boxuR", "\xe2\x95\x98" }, /* ╘ */
-    { "boxul", "\xe2\x94\x98" }, /* ┘ */
-    { "boxur", "\xe2\x94\x94" }, /* └ */
-    { "boxv", "\xe2\x94\x82" }, /* │ */
-    { "boxvH", "\xe2\x95\xaa" }, /* ╪ */
-    { "boxvL", "\xe2\x95\xa1" }, /* ╡ */
-    { "boxvR", "\xe2\x95\x9e" }, /* ╞ */
-    { "boxvh", "\xe2\x94\xbc" }, /* ┼ */
-    { "boxvl", "\xe2\x94\xa4" }, /* ┤ */
-    { "boxvr", "\xe2\x94\x9c" }, /* ├ */
-    { "bprime", "\xe2\x80\xb5" }, /* ‵ */
-    { "breve", "\xcb\x98" }, /* ˘ */
-    { "brvbar", "\xc2\xa6" }, /* ¦ */
-    { "bscr", "\xf0\x9d\x92\xb7" }, /* 𝒷 */
-    { "bsemi", "\xe2\x81\x8f" }, /* ⁏ */
-    { "bsim", "\xe2\x88\xbd" }, /* ∽ */
-    { "bsime", "\xe2\x8b\x8d" }, /* ⋍ */
-    { "bsol", "\x5c" }, /* \ */
-    { "bsolb", "\xe2\xa7\x85" }, /* ⧅ */
-    { "bsolhsub", "\xe2\x9f\x88" }, /* ⟈ */
-    { "bull", "\xe2\x80\xa2" }, /* • */
-    { "bullet", "\xe2\x80\xa2" }, /* • */
-    { "bump", "\xe2\x89\x8e" }, /* ≎ */
-    { "bumpE", "\xe2\xaa\xae" }, /* ⪮ */
-    { "bumpe", "\xe2\x89\x8f" }, /* ≏ */
-    { "bumpeq", "\xe2\x89\x8f" }, /* ≏ */
-    { "cacute", "\xc4\x87" }, /* ć */
-    { "cap", "\xe2\x88\xa9" }, /* ∩ */
-    { "capand", "\xe2\xa9\x84" }, /* ⩄ */
-    { "capbrcup", "\xe2\xa9\x89" }, /* ⩉ */
-    { "capcap", "\xe2\xa9\x8b" }, /* ⩋ */
-    { "capcup", "\xe2\xa9\x87" }, /* ⩇ */
-    { "capdot", "\xe2\xa9\x80" }, /* ⩀ */
-    { "caps", "\xe2\x88\xa9\xef\xb8\x80" }, /* ∩︀ */
-    { "caret", "\xe2\x81\x81" }, /* ⁁ */
-    { "caron", "\xcb\x87" }, /* ˇ */
-    { "ccaps", "\xe2\xa9\x8d" }, /* ⩍ */
-    { "ccaron", "\xc4\x8d" }, /* č */
-    { "ccedil", "\xc3\xa7" }, /* ç */
-    { "ccirc", "\xc4\x89" }, /* ĉ */
-    { "ccups", "\xe2\xa9\x8c" }, /* ⩌ */
-    { "ccupssm", "\xe2\xa9\x90" }, /* ⩐ */
-    { "cdot", "\xc4\x8b" }, /* ċ */
-    { "cedil", "\xc2\xb8" }, /* ¸ */
-    { "cemptyv", "\xe2\xa6\xb2" }, /* ⦲ */
-    { "cent", "\xc2\xa2" }, /* ¢ */
-    { "centerdot", "\xc2\xb7" }, /* · */
-    { "cfr", "\xf0\x9d\x94\xa0" }, /* 𝔠 */
-    { "chcy", "\xd1\x87" }, /* ч */
-    { "check", "\xe2\x9c\x93" }, /* ✓ */
-    { "checkmark", "\xe2\x9c\x93" }, /* ✓ */
-    { "chi", "\xcf\x87" }, /* χ */
-    { "cir", "\xe2\x97\x8b" }, /* ○ */
-    { "cirE", "\xe2\xa7\x83" }, /* ⧃ */
-    { "circ", "\xcb\x86" }, /* ˆ */
-    { "circeq", "\xe2\x89\x97" }, /* ≗ */
-    { "circlearrowleft", "\xe2\x86\xba" }, /* ↺ */
-    { "circlearrowright", "\xe2\x86\xbb" }, /* ↻ */
-    { "circledR", "\xc2\xae" }, /* ® */
-    { "circledS", "\xe2\x93\x88" }, /* Ⓢ */
-    { "circledast", "\xe2\x8a\x9b" }, /* ⊛ */
-    { "circledcirc", "\xe2\x8a\x9a" }, /* ⊚ */
-    { "circleddash", "\xe2\x8a\x9d" }, /* ⊝ */
-    { "cire", "\xe2\x89\x97" }, /* ≗ */
-    { "cirfnint", "\xe2\xa8\x90" }, /* ⨐ */
-    { "cirmid", "\xe2\xab\xaf" }, /* ⫯ */
-    { "cirscir", "\xe2\xa7\x82" }, /* ⧂ */
-    { "clubs", "\xe2\x99\xa3" }, /* ♣ */
-    { "clubsuit", "\xe2\x99\xa3" }, /* ♣ */
-    { "colon", "\x3a" }, /* : */
-    { "colone", "\xe2\x89\x94" }, /* ≔ */
-    { "coloneq", "\xe2\x89\x94" }, /* ≔ */
-    { "comma", "\x2c" }, /* , */
-    { "commat", "\x40" }, /* @ */
-    { "comp", "\xe2\x88\x81" }, /* ∁ */
-    { "compfn", "\xe2\x88\x98" }, /* ∘ */
-    { "complement", "\xe2\x88\x81" }, /* ∁ */
-    { "complexes", "\xe2\x84\x82" }, /* ℂ */
-    { "cong", "\xe2\x89\x85" }, /* ≅ */
-    { "congdot", "\xe2\xa9\xad" }, /* ⩭ */
-    { "conint", "\xe2\x88\xae" }, /* ∮ */
-    { "copf", "\xf0\x9d\x95\x94" }, /* 𝕔 */
-    { "coprod", "\xe2\x88\x90" }, /* ∐ */
-    { "copy", "\xc2\xa9" }, /* © */
-    { "copysr", "\xe2\x84\x97" }, /* ℗ */
-    { "crarr", "\xe2\x86\xb5" }, /* ↵ */
-    { "cross", "\xe2\x9c\x97" }, /* ✗ */
-    { "cscr", "\xf0\x9d\x92\xb8" }, /* 𝒸 */
-    { "csub", "\xe2\xab\x8f" }, /* ⫏ */
-    { "csube", "\xe2\xab\x91" }, /* ⫑ */
-    { "csup", "\xe2\xab\x90" }, /* ⫐ */
-    { "csupe", "\xe2\xab\x92" }, /* ⫒ */
-    { "ctdot", "\xe2\x8b\xaf" }, /* ⋯ */
-    { "cudarrl", "\xe2\xa4\xb8" }, /* ⤸ */
-    { "cudarrr", "\xe2\xa4\xb5" }, /* ⤵ */
-    { "cuepr", "\xe2\x8b\x9e" }, /* ⋞ */
-    { "cuesc", "\xe2\x8b\x9f" }, /* ⋟ */
-    { "cularr", "\xe2\x86\xb6" }, /* ↶ */
-    { "cularrp", "\xe2\xa4\xbd" }, /* ⤽ */
-    { "cup", "\xe2\x88\xaa" }, /* ∪ */
-    { "cupbrcap", "\xe2\xa9\x88" }, /* ⩈ */
-    { "cupcap", "\xe2\xa9\x86" }, /* ⩆ */
-    { "cupcup", "\xe2\xa9\x8a" }, /* ⩊ */
-    { "cupdot", "\xe2\x8a\x8d" }, /* ⊍ */
-    { "cupor", "\xe2\xa9\x85" }, /* ⩅ */
-    { "cups", "\xe2\x88\xaa\xef\xb8\x80" }, /* ∪︀ */
-    { "curarr", "\xe2\x86\xb7" }, /* ↷ */
-    { "curarrm", "\xe2\xa4\xbc" }, /* ⤼ */
-    { "curlyeqprec", "\xe2\x8b\x9e" }, /* ⋞ */
-    { "curlyeqsucc", "\xe2\x8b\x9f" }, /* ⋟ */
-    { "curlyvee", "\xe2\x8b\x8e" }, /* ⋎ */
-    { "curlywedge", "\xe2\x8b\x8f" }, /* ⋏ */
-    { "curren", "\xc2\xa4" }, /* ¤ */
-    { "curvearrowleft", "\xe2\x86\xb6" }, /* ↶ */
-    { "curvearrowright", "\xe2\x86\xb7" }, /* ↷ */
-    { "cuvee", "\xe2\x8b\x8e" }, /* ⋎ */
-    { "cuwed", "\xe2\x8b\x8f" }, /* ⋏ */
-    { "cwconint", "\xe2\x88\xb2" }, /* ∲ */
-    { "cwint", "\xe2\x88\xb1" }, /* ∱ */
-    { "cylcty", "\xe2\x8c\xad" }, /* ⌭ */
-    { "dArr", "\xe2\x87\x93" }, /* ⇓ */
-    { "dHar", "\xe2\xa5\xa5" }, /* ⥥ */
-    { "dagger", "\xe2\x80\xa0" }, /* † */
-    { "daleth", "\xe2\x84\xb8" }, /* ℸ */
-    { "darr", "\xe2\x86\x93" }, /* ↓ */
-    { "dash", "\xe2\x80\x90" }, /* ‐ */
-    { "dashv", "\xe2\x8a\xa3" }, /* ⊣ */
-    { "dbkarow", "\xe2\xa4\x8f" }, /* ⤏ */
-    { "dblac", "\xcb\x9d" }, /* ˝ */
-    { "dcaron", "\xc4\x8f" }, /* ď */
-    { "dcy", "\xd0\xb4" }, /* д */
-    { "dd", "\xe2\x85\x86" }, /* ⅆ */
-    { "ddagger", "\xe2\x80\xa1" }, /* ‡ */
-    { "ddarr", "\xe2\x87\x8a" }, /* ⇊ */
-    { "ddotseq", "\xe2\xa9\xb7" }, /* ⩷ */
-    { "deg", "\xc2\xb0" }, /* ° */
-    { "delta", "\xce\xb4" }, /* δ */
-    { "demptyv", "\xe2\xa6\xb1" }, /* ⦱ */
-    { "dfisht", "\xe2\xa5\xbf" }, /* ⥿ */
-    { "dfr", "\xf0\x9d\x94\xa1" }, /* 𝔡 */
-    { "dharl", "\xe2\x87\x83" }, /* ⇃ */
-    { "dharr", "\xe2\x87\x82" }, /* ⇂ */
-    { "diam", "\xe2\x8b\x84" }, /* ⋄ */
-    { "diamond", "\xe2\x8b\x84" }, /* ⋄ */
-    { "diamondsuit", "\xe2\x99\xa6" }, /* ♦ */
-    { "diams", "\xe2\x99\xa6" }, /* ♦ */
-    { "die", "\xc2\xa8" }, /* ¨ */
-    { "digamma", "\xcf\x9d" }, /* ϝ */
-    { "disin", "\xe2\x8b\xb2" }, /* ⋲ */
-    { "div", "\xc3\xb7" }, /* ÷ */
-    { "divide", "\xc3\xb7" }, /* ÷ */
-    { "divideontimes", "\xe2\x8b\x87" }, /* ⋇ */
-    { "divonx", "\xe2\x8b\x87" }, /* ⋇ */
-    { "djcy", "\xd1\x92" }, /* ђ */
-    { "dlcorn", "\xe2\x8c\x9e" }, /* ⌞ */
-    { "dlcrop", "\xe2\x8c\x8d" }, /* ⌍ */
-    { "dollar", "\x24" }, /* $ */
-    { "dopf", "\xf0\x9d\x95\x95" }, /* 𝕕 */
-    { "dot", "\xcb\x99" }, /* ˙ */
-    { "doteq", "\xe2\x89\x90" }, /* ≐ */
-    { "doteqdot", "\xe2\x89\x91" }, /* ≑ */
-    { "dotminus", "\xe2\x88\xb8" }, /* ∸ */
-    { "dotplus", "\xe2\x88\x94" }, /* ∔ */
-    { "dotsquare", "\xe2\x8a\xa1" }, /* ⊡ */
-    { "doublebarwedge", "\xe2\x8c\x86" }, /* ⌆ */
-    { "downarrow", "\xe2\x86\x93" }, /* ↓ */
-    { "downdownarrows", "\xe2\x87\x8a" }, /* ⇊ */
-    { "downharpoonleft", "\xe2\x87\x83" }, /* ⇃ */
-    { "downharpoonright", "\xe2\x87\x82" }, /* ⇂ */
-    { "drbkarow", "\xe2\xa4\x90" }, /* ⤐ */
-    { "drcorn", "\xe2\x8c\x9f" }, /* ⌟ */
-    { "drcrop", "\xe2\x8c\x8c" }, /* ⌌ */
-    { "dscr", "\xf0\x9d\x92\xb9" }, /* 𝒹 */
-    { "dscy", "\xd1\x95" }, /* ѕ */
-    { "dsol", "\xe2\xa7\xb6" }, /* ⧶ */
-    { "dstrok", "\xc4\x91" }, /* đ */
-    { "dtdot", "\xe2\x8b\xb1" }, /* ⋱ */
-    { "dtri", "\xe2\x96\xbf" }, /* ▿ */
-    { "dtrif", "\xe2\x96\xbe" }, /* ▾ */
-    { "duarr", "\xe2\x87\xb5" }, /* ⇵ */
-    { "duhar", "\xe2\xa5\xaf" }, /* ⥯ */
-    { "dwangle", "\xe2\xa6\xa6" }, /* ⦦ */
-    { "dzcy", "\xd1\x9f" }, /* џ */
-    { "dzigrarr", "\xe2\x9f\xbf" }, /* ⟿ */
-    { "eDDot", "\xe2\xa9\xb7" }, /* ⩷ */
-    { "eDot", "\xe2\x89\x91" }, /* ≑ */
-    { "eacute", "\xc3\xa9" }, /* é */
-    { "easter", "\xe2\xa9\xae" }, /* ⩮ */
-    { "ecaron", "\xc4\x9b" }, /* ě */
-    { "ecir", "\xe2\x89\x96" }, /* ≖ */
-    { "ecirc", "\xc3\xaa" }, /* ê */
-    { "ecolon", "\xe2\x89\x95" }, /* ≕ */
-    { "ecy", "\xd1\x8d" }, /* э */
-    { "edot", "\xc4\x97" }, /* ė */
-    { "ee", "\xe2\x85\x87" }, /* ⅇ */
-    { "efDot", "\xe2\x89\x92" }, /* ≒ */
-    { "efr", "\xf0\x9d\x94\xa2" }, /* 𝔢 */
-    { "eg", "\xe2\xaa\x9a" }, /* ⪚ */
-    { "egrave", "\xc3\xa8" }, /* è */
-    { "egs", "\xe2\xaa\x96" }, /* ⪖ */
-    { "egsdot", "\xe2\xaa\x98" }, /* ⪘ */
-    { "el", "\xe2\xaa\x99" }, /* ⪙ */
-    { "elinters", "\xe2\x8f\xa7" }, /* ⏧ */
-    { "ell", "\xe2\x84\x93" }, /* ℓ */
-    { "els", "\xe2\xaa\x95" }, /* ⪕ */
-    { "elsdot", "\xe2\xaa\x97" }, /* ⪗ */
-    { "emacr", "\xc4\x93" }, /* ē */
-    { "empty", "\xe2\x88\x85" }, /* ∅ */
-    { "emptyset", "\xe2\x88\x85" }, /* ∅ */
-    { "emptyv", "\xe2\x88\x85" }, /* ∅ */
-    { "emsp13", "\xe2\x80\x84" }, /*   */
-    { "emsp14", "\xe2\x80\x85" }, /*   */
-    { "emsp", "\xe2\x80\x83" }, /*   */
-    { "eng", "\xc5\x8b" }, /* ŋ */
-    { "ensp", "\xe2\x80\x82" }, /*   */
-    { "eogon", "\xc4\x99" }, /* ę */
-    { "eopf", "\xf0\x9d\x95\x96" }, /* 𝕖 */
-    { "epar", "\xe2\x8b\x95" }, /* ⋕ */
-    { "eparsl", "\xe2\xa7\xa3" }, /* ⧣ */
-    { "eplus", "\xe2\xa9\xb1" }, /* ⩱ */
-    { "epsi", "\xce\xb5" }, /* ε */
-    { "epsilon", "\xce\xb5" }, /* ε */
-    { "epsiv", "\xcf\xb5" }, /* ϵ */
-    { "eqcirc", "\xe2\x89\x96" }, /* ≖ */
-    { "eqcolon", "\xe2\x89\x95" }, /* ≕ */
-    { "eqsim", "\xe2\x89\x82" }, /* ≂ */
-    { "eqslantgtr", "\xe2\xaa\x96" }, /* ⪖ */
-    { "eqslantless", "\xe2\xaa\x95" }, /* ⪕ */
-    { "equals", "\x3d" }, /* = */
-    { "equest", "\xe2\x89\x9f" }, /* ≟ */
-    { "equiv", "\xe2\x89\xa1" }, /* ≡ */
-    { "equivDD", "\xe2\xa9\xb8" }, /* ⩸ */
-    { "eqvparsl", "\xe2\xa7\xa5" }, /* ⧥ */
-    { "erDot", "\xe2\x89\x93" }, /* ≓ */
-    { "erarr", "\xe2\xa5\xb1" }, /* ⥱ */
-    { "escr", "\xe2\x84\xaf" }, /* ℯ */
-    { "esdot", "\xe2\x89\x90" }, /* ≐ */
-    { "esim", "\xe2\x89\x82" }, /* ≂ */
-    { "eta", "\xce\xb7" }, /* η */
-    { "eth", "\xc3\xb0" }, /* ð */
-    { "euml", "\xc3\xab" }, /* ë */
-    { "euro", "\xe2\x82\xac" }, /* € */
-    { "excl", "\x21" }, /* ! */
-    { "exist", "\xe2\x88\x83" }, /* ∃ */
-    { "expectation", "\xe2\x84\xb0" }, /* ℰ */
-    { "exponentiale", "\xe2\x85\x87" }, /* ⅇ */
-    { "fallingdotseq", "\xe2\x89\x92" }, /* ≒ */
-    { "fcy", "\xd1\x84" }, /* ф */
-    { "female", "\xe2\x99\x80" }, /* ♀ */
-    { "ffilig", "\xef\xac\x83" }, /* ﬃ */
-    { "fflig", "\xef\xac\x80" }, /* ﬀ */
-    { "ffllig", "\xef\xac\x84" }, /* ﬄ */
-    { "ffr", "\xf0\x9d\x94\xa3" }, /* 𝔣 */
-    { "filig", "\xef\xac\x81" }, /* ﬁ */
-    { "fjlig", "\x66\x6a" }, /* fj */
-    { "flat", "\xe2\x99\xad" }, /* ♭ */
-    { "fllig", "\xef\xac\x82" }, /* ﬂ */
-    { "fltns", "\xe2\x96\xb1" }, /* ▱ */
-    { "fnof", "\xc6\x92" }, /* ƒ */
-    { "fopf", "\xf0\x9d\x95\x97" }, /* 𝕗 */
-    { "forall", "\xe2\x88\x80" }, /* ∀ */
-    { "fork", "\xe2\x8b\x94" }, /* ⋔ */
-    { "forkv", "\xe2\xab\x99" }, /* ⫙ */
-    { "fpartint", "\xe2\xa8\x8d" }, /* ⨍ */
-    { "frac12", "\xc2\xbd" }, /* ½ */
-    { "frac13", "\xe2\x85\x93" }, /* ⅓ */
-    { "frac14", "\xc2\xbc" }, /* ¼ */
-    { "frac15", "\xe2\x85\x95" }, /* ⅕ */
-    { "frac16", "\xe2\x85\x99" }, /* ⅙ */
-    { "frac18", "\xe2\x85\x9b" }, /* ⅛ */
-    { "frac23", "\xe2\x85\x94" }, /* ⅔ */
-    { "frac25", "\xe2\x85\x96" }, /* ⅖ */
-    { "frac34", "\xc2\xbe" }, /* ¾ */
-    { "frac35", "\xe2\x85\x97" }, /* ⅗ */
-    { "frac38", "\xe2\x85\x9c" }, /* ⅜ */
-    { "frac45", "\xe2\x85\x98" }, /* ⅘ */
-    { "frac56", "\xe2\x85\x9a" }, /* ⅚ */
-    { "frac58", "\xe2\x85\x9d" }, /* ⅝ */
-    { "frac78", "\xe2\x85\x9e" }, /* ⅞ */
-    { "frasl", "\xe2\x81\x84" }, /* ⁄ */
-    { "frown", "\xe2\x8c\xa2" }, /* ⌢ */
-    { "fscr", "\xf0\x9d\x92\xbb" }, /* 𝒻 */
-    { "gE", "\xe2\x89\xa7" }, /* ≧ */
-    { "gEl", "\xe2\xaa\x8c" }, /* ⪌ */
-    { "gacute", "\xc7\xb5" }, /* ǵ */
-    { "gamma", "\xce\xb3" }, /* γ */
-    { "gammad", "\xcf\x9d" }, /* ϝ */
-    { "gap", "\xe2\xaa\x86" }, /* ⪆ */
-    { "gbreve", "\xc4\x9f" }, /* ğ */
-    { "gcirc", "\xc4\x9d" }, /* ĝ */
-    { "gcy", "\xd0\xb3" }, /* г */
-    { "gdot", "\xc4\xa1" }, /* ġ */
-    { "ge", "\xe2\x89\xa5" }, /* ≥ */
-    { "gel", "\xe2\x8b\x9b" }, /* ⋛ */
-    { "geq", "\xe2\x89\xa5" }, /* ≥ */
-    { "geqq", "\xe2\x89\xa7" }, /* ≧ */
-    { "geqslant", "\xe2\xa9\xbe" }, /* ⩾ */
-    { "ges", "\xe2\xa9\xbe" }, /* ⩾ */
-    { "gescc", "\xe2\xaa\xa9" }, /* ⪩ */
-    { "gesdot", "\xe2\xaa\x80" }, /* ⪀ */
-    { "gesdoto", "\xe2\xaa\x82" }, /* ⪂ */
-    { "gesdotol", "\xe2\xaa\x84" }, /* ⪄ */
-    { "gesl", "\xe2\x8b\x9b\xef\xb8\x80" }, /* ⋛︀ */
-    { "gesles", "\xe2\xaa\x94" }, /* ⪔ */
-    { "gfr", "\xf0\x9d\x94\xa4" }, /* 𝔤 */
-    { "gg", "\xe2\x89\xab" }, /* ≫ */
-    { "ggg", "\xe2\x8b\x99" }, /* ⋙ */
-    { "gimel", "\xe2\x84\xb7" }, /* ℷ */
-    { "gjcy", "\xd1\x93" }, /* ѓ */
-    { "gl", "\xe2\x89\xb7" }, /* ≷ */
-    { "glE", "\xe2\xaa\x92" }, /* ⪒ */
-    { "gla", "\xe2\xaa\xa5" }, /* ⪥ */
-    { "glj", "\xe2\xaa\xa4" }, /* ⪤ */
-    { "gnE", "\xe2\x89\xa9" }, /* ≩ */
-    { "gnap", "\xe2\xaa\x8a" }, /* ⪊ */
-    { "gnapprox", "\xe2\xaa\x8a" }, /* ⪊ */
-    { "gne", "\xe2\xaa\x88" }, /* ⪈ */
-    { "gneq", "\xe2\xaa\x88" }, /* ⪈ */
-    { "gneqq", "\xe2\x89\xa9" }, /* ≩ */
-    { "gnsim", "\xe2\x8b\xa7" }, /* ⋧ */
-    { "gopf", "\xf0\x9d\x95\x98" }, /* 𝕘 */
-    { "grave", "\x60" }, /* ` */
-    { "gscr", "\xe2\x84\x8a" }, /* ℊ */
-    { "gsim", "\xe2\x89\xb3" }, /* ≳ */
-    { "gsime", "\xe2\xaa\x8e" }, /* ⪎ */
-    { "gsiml", "\xe2\xaa\x90" }, /* ⪐ */
-    { "gt", "\x3e" }, /* > */
-    { "gtcc", "\xe2\xaa\xa7" }, /* ⪧ */
-    { "gtcir", "\xe2\xa9\xba" }, /* ⩺ */
-    { "gtdot", "\xe2\x8b\x97" }, /* ⋗ */
-    { "gtlPar", "\xe2\xa6\x95" }, /* ⦕ */
-    { "gtquest", "\xe2\xa9\xbc" }, /* ⩼ */
-    { "gtrapprox", "\xe2\xaa\x86" }, /* ⪆ */
-    { "gtrarr", "\xe2\xa5\xb8" }, /* ⥸ */
-    { "gtrdot", "\xe2\x8b\x97" }, /* ⋗ */
-    { "gtreqless", "\xe2\x8b\x9b" }, /* ⋛ */
-    { "gtreqqless", "\xe2\xaa\x8c" }, /* ⪌ */
-    { "gtrless", "\xe2\x89\xb7" }, /* ≷ */
-    { "gtrsim", "\xe2\x89\xb3" }, /* ≳ */
-    { "gvertneqq", "\xe2\x89\xa9\xef\xb8\x80" }, /* ≩︀ */
-    { "gvnE", "\xe2\x89\xa9\xef\xb8\x80" }, /* ≩︀ */
-    { "hArr", "\xe2\x87\x94" }, /* ⇔ */
-    { "hairsp", "\xe2\x80\x8a" }, /*   */
-    { "half", "\xc2\xbd" }, /* ½ */
-    { "hamilt", "\xe2\x84\x8b" }, /* ℋ */
-    { "hardcy", "\xd1\x8a" }, /* ъ */
-    { "harr", "\xe2\x86\x94" }, /* ↔ */
-    { "harrcir", "\xe2\xa5\x88" }, /* ⥈ */
-    { "harrw", "\xe2\x86\xad" }, /* ↭ */
-    { "hbar", "\xe2\x84\x8f" }, /* ℏ */
-    { "hcirc", "\xc4\xa5" }, /* ĥ */
-    { "hearts", "\xe2\x99\xa5" }, /* ♥ */
-    { "heartsuit", "\xe2\x99\xa5" }, /* ♥ */
-    { "hellip", "\xe2\x80\xa6" }, /* … */
-    { "hercon", "\xe2\x8a\xb9" }, /* ⊹ */
-    { "hfr", "\xf0\x9d\x94\xa5" }, /* 𝔥 */
-    { "hksearow", "\xe2\xa4\xa5" }, /* ⤥ */
-    { "hkswarow", "\xe2\xa4\xa6" }, /* ⤦ */
-    { "hoarr", "\xe2\x87\xbf" }, /* ⇿ */
-    { "homtht", "\xe2\x88\xbb" }, /* ∻ */
-    { "hookleftarrow", "\xe2\x86\xa9" }, /* ↩ */
-    { "hookrightarrow", "\xe2\x86\xaa" }, /* ↪ */
-    { "hopf", "\xf0\x9d\x95\x99" }, /* 𝕙 */
-    { "horbar", "\xe2\x80\x95" }, /* ― */
-    { "hscr", "\xf0\x9d\x92\xbd" }, /* 𝒽 */
-    { "hslash", "\xe2\x84\x8f" }, /* ℏ */
-    { "hstrok", "\xc4\xa7" }, /* ħ */
-    { "hybull", "\xe2\x81\x83" }, /* ⁃ */
-    { "hyphen", "\xe2\x80\x90" }, /* ‐ */
-    { "iacute", "\xc3\xad" }, /* í */
-    { "ic", "\xe2\x81\xa3" }, /* ⁣ */
-    { "icirc", "\xc3\xae" }, /* î */
-    { "icy", "\xd0\xb8" }, /* и */
-    { "iecy", "\xd0\xb5" }, /* е */
-    { "iexcl", "\xc2\xa1" }, /* ¡ */
-    { "iff", "\xe2\x87\x94" }, /* ⇔ */
-    { "ifr", "\xf0\x9d\x94\xa6" }, /* 𝔦 */
-    { "igrave", "\xc3\xac" }, /* ì */
-    { "ii", "\xe2\x85\x88" }, /* ⅈ */
-    { "iiiint", "\xe2\xa8\x8c" }, /* ⨌ */
-    { "iiint", "\xe2\x88\xad" }, /* ∭ */
-    { "iinfin", "\xe2\xa7\x9c" }, /* ⧜ */
-    { "iiota", "\xe2\x84\xa9" }, /* ℩ */
-    { "ijlig", "\xc4\xb3" }, /* ĳ */
-    { "imacr", "\xc4\xab" }, /* ī */
-    { "image", "\xe2\x84\x91" }, /* ℑ */
-    { "imagline", "\xe2\x84\x90" }, /* ℐ */
-    { "imagpart", "\xe2\x84\x91" }, /* ℑ */
-    { "imath", "\xc4\xb1" }, /* ı */
-    { "imof", "\xe2\x8a\xb7" }, /* ⊷ */
-    { "imped", "\xc6\xb5" }, /* Ƶ */
-    { "in", "\xe2\x88\x88" }, /* ∈ */
-    { "incare", "\xe2\x84\x85" }, /* ℅ */
-    { "infin", "\xe2\x88\x9e" }, /* ∞ */
-    { "infintie", "\xe2\xa7\x9d" }, /* ⧝ */
-    { "inodot", "\xc4\xb1" }, /* ı */
-    { "int", "\xe2\x88\xab" }, /* ∫ */
-    { "intcal", "\xe2\x8a\xba" }, /* ⊺ */
-    { "integers", "\xe2\x84\xa4" }, /* ℤ */
-    { "intercal", "\xe2\x8a\xba" }, /* ⊺ */
-    { "intlarhk", "\xe2\xa8\x97" }, /* ⨗ */
-    { "intprod", "\xe2\xa8\xbc" }, /* ⨼ */
-    { "iocy", "\xd1\x91" }, /* ё */
-    { "iogon", "\xc4\xaf" }, /* į */
-    { "iopf", "\xf0\x9d\x95\x9a" }, /* 𝕚 */
-    { "iota", "\xce\xb9" }, /* ι */
-    { "iprod", "\xe2\xa8\xbc" }, /* ⨼ */
-    { "iquest", "\xc2\xbf" }, /* ¿ */
-    { "iscr", "\xf0\x9d\x92\xbe" }, /* 𝒾 */
-    { "isin", "\xe2\x88\x88" }, /* ∈ */
-    { "isinE", "\xe2\x8b\xb9" }, /* ⋹ */
-    { "isindot", "\xe2\x8b\xb5" }, /* ⋵ */
-    { "isins", "\xe2\x8b\xb4" }, /* ⋴ */
-    { "isinsv", "\xe2\x8b\xb3" }, /* ⋳ */
-    { "isinv", "\xe2\x88\x88" }, /* ∈ */
-    { "it", "\xe2\x81\xa2" }, /* ⁢ */
-    { "itilde", "\xc4\xa9" }, /* ĩ */
-    { "iukcy", "\xd1\x96" }, /* і */
-    { "iuml", "\xc3\xaf" }, /* ï */
-    { "jcirc", "\xc4\xb5" }, /* ĵ */
-    { "jcy", "\xd0\xb9" }, /* й */
-    { "jfr", "\xf0\x9d\x94\xa7" }, /* 𝔧 */
-    { "jmath", "\xc8\xb7" }, /* ȷ */
-    { "jopf", "\xf0\x9d\x95\x9b" }, /* 𝕛 */
-    { "jscr", "\xf0\x9d\x92\xbf" }, /* 𝒿 */
-    { "jsercy", "\xd1\x98" }, /* ј */
-    { "jukcy", "\xd1\x94" }, /* є */
-    { "kappa", "\xce\xba" }, /* κ */
-    { "kappav", "\xcf\xb0" }, /* ϰ */
-    { "kcedil", "\xc4\xb7" }, /* ķ */
-    { "kcy", "\xd0\xba" }, /* к */
-    { "kfr", "\xf0\x9d\x94\xa8" }, /* 𝔨 */
-    { "kgreen", "\xc4\xb8" }, /* ĸ */
-    { "khcy", "\xd1\x85" }, /* х */
-    { "kjcy", "\xd1\x9c" }, /* ќ */
-    { "kopf", "\xf0\x9d\x95\x9c" }, /* 𝕜 */
-    { "kscr", "\xf0\x9d\x93\x80" }, /* 𝓀 */
-    { "lAarr", "\xe2\x87\x9a" }, /* ⇚ */
-    { "lArr", "\xe2\x87\x90" }, /* ⇐ */
-    { "lAtail", "\xe2\xa4\x9b" }, /* ⤛ */
-    { "lBarr", "\xe2\xa4\x8e" }, /* ⤎ */
-    { "lE", "\xe2\x89\xa6" }, /* ≦ */
-    { "lEg", "\xe2\xaa\x8b" }, /* ⪋ */
-    { "lHar", "\xe2\xa5\xa2" }, /* ⥢ */
-    { "lacute", "\xc4\xba" }, /* ĺ */
-    { "laemptyv", "\xe2\xa6\xb4" }, /* ⦴ */
-    { "lagran", "\xe2\x84\x92" }, /* ℒ */
-    { "lambda", "\xce\xbb" }, /* λ */
-    { "lang", "\xe2\x9f\xa8" }, /* ⟨ */
-    { "langd", "\xe2\xa6\x91" }, /* ⦑ */
-    { "langle", "\xe2\x9f\xa8" }, /* ⟨ */
-    { "lap", "\xe2\xaa\x85" }, /* ⪅ */
-    { "laquo", "\xc2\xab" }, /* « */
-    { "larr", "\xe2\x86\x90" }, /* ← */
-    { "larrb", "\xe2\x87\xa4" }, /* ⇤ */
-    { "larrbfs", "\xe2\xa4\x9f" }, /* ⤟ */
-    { "larrfs", "\xe2\xa4\x9d" }, /* ⤝ */
-    { "larrhk", "\xe2\x86\xa9" }, /* ↩ */
-    { "larrlp", "\xe2\x86\xab" }, /* ↫ */
-    { "larrpl", "\xe2\xa4\xb9" }, /* ⤹ */
-    { "larrsim", "\xe2\xa5\xb3" }, /* ⥳ */
-    { "larrtl", "\xe2\x86\xa2" }, /* ↢ */
-    { "lat", "\xe2\xaa\xab" }, /* ⪫ */
-    { "latail", "\xe2\xa4\x99" }, /* ⤙ */
-    { "late", "\xe2\xaa\xad" }, /* ⪭ */
-    { "lates", "\xe2\xaa\xad\xef\xb8\x80" }, /* ⪭︀ */
-    { "lbarr", "\xe2\xa4\x8c" }, /* ⤌ */
-    { "lbbrk", "\xe2\x9d\xb2" }, /* ❲ */
-    { "lbrace", "\x7b" }, /* { */
-    { "lbrack", "\x5b" }, /* [ */
-    { "lbrke", "\xe2\xa6\x8b" }, /* ⦋ */
-    { "lbrksld", "\xe2\xa6\x8f" }, /* ⦏ */
-    { "lbrkslu", "\xe2\xa6\x8d" }, /* ⦍ */
-    { "lcaron", "\xc4\xbe" }, /* ľ */
-    { "lcedil", "\xc4\xbc" }, /* ļ */
-    { "lceil", "\xe2\x8c\x88" }, /* ⌈ */
-    { "lcub", "\x7b" }, /* { */
-    { "lcy", "\xd0\xbb" }, /* л */
-    { "ldca", "\xe2\xa4\xb6" }, /* ⤶ */
-    { "ldquo", "\xe2\x80\x9c" }, /* “ */
-    { "ldquor", "\xe2\x80\x9e" }, /* „ */
-    { "ldrdhar", "\xe2\xa5\xa7" }, /* ⥧ */
-    { "ldrushar", "\xe2\xa5\x8b" }, /* ⥋ */
-    { "ldsh", "\xe2\x86\xb2" }, /* ↲ */
-    { "le", "\xe2\x89\xa4" }, /* ≤ */
-    { "leftarrow", "\xe2\x86\x90" }, /* ← */
-    { "leftarrowtail", "\xe2\x86\xa2" }, /* ↢ */
-    { "leftharpoondown", "\xe2\x86\xbd" }, /* ↽ */
-    { "leftharpoonup", "\xe2\x86\xbc" }, /* ↼ */
-    { "leftleftarrows", "\xe2\x87\x87" }, /* ⇇ */
-    { "leftrightarrow", "\xe2\x86\x94" }, /* ↔ */
-    { "leftrightarrows", "\xe2\x87\x86" }, /* ⇆ */
-    { "leftrightharpoons", "\xe2\x87\x8b" }, /* ⇋ */
-    { "leftrightsquigarrow", "\xe2\x86\xad" }, /* ↭ */
-    { "leftthreetimes", "\xe2\x8b\x8b" }, /* ⋋ */
-    { "leg", "\xe2\x8b\x9a" }, /* ⋚ */
-    { "leq", "\xe2\x89\xa4" }, /* ≤ */
-    { "leqq", "\xe2\x89\xa6" }, /* ≦ */
-    { "leqslant", "\xe2\xa9\xbd" }, /* ⩽ */
-    { "les", "\xe2\xa9\xbd" }, /* ⩽ */
-    { "lescc", "\xe2\xaa\xa8" }, /* ⪨ */
-    { "lesdot", "\xe2\xa9\xbf" }, /* ⩿ */
-    { "lesdoto", "\xe2\xaa\x81" }, /* ⪁ */
-    { "lesdotor", "\xe2\xaa\x83" }, /* ⪃ */
-    { "lesg", "\xe2\x8b\x9a\xef\xb8\x80" }, /* ⋚︀ */
-    { "lesges", "\xe2\xaa\x93" }, /* ⪓ */
-    { "lessapprox", "\xe2\xaa\x85" }, /* ⪅ */
-    { "lessdot", "\xe2\x8b\x96" }, /* ⋖ */
-    { "lesseqgtr", "\xe2\x8b\x9a" }, /* ⋚ */
-    { "lesseqqgtr", "\xe2\xaa\x8b" }, /* ⪋ */
-    { "lessgtr", "\xe2\x89\xb6" }, /* ≶ */
-    { "lesssim", "\xe2\x89\xb2" }, /* ≲ */
-    { "lfisht", "\xe2\xa5\xbc" }, /* ⥼ */
-    { "lfloor", "\xe2\x8c\x8a" }, /* ⌊ */
-    { "lfr", "\xf0\x9d\x94\xa9" }, /* 𝔩 */
-    { "lg", "\xe2\x89\xb6" }, /* ≶ */
-    { "lgE", "\xe2\xaa\x91" }, /* ⪑ */
-    { "lhard", "\xe2\x86\xbd" }, /* ↽ */
-    { "lharu", "\xe2\x86\xbc" }, /* ↼ */
-    { "lharul", "\xe2\xa5\xaa" }, /* ⥪ */
-    { "lhblk", "\xe2\x96\x84" }, /* ▄ */
-    { "ljcy", "\xd1\x99" }, /* љ */
-    { "ll", "\xe2\x89\xaa" }, /* ≪ */
-    { "llarr", "\xe2\x87\x87" }, /* ⇇ */
-    { "llcorner", "\xe2\x8c\x9e" }, /* ⌞ */
-    { "llhard", "\xe2\xa5\xab" }, /* ⥫ */
-    { "lltri", "\xe2\x97\xba" }, /* ◺ */
-    { "lmidot", "\xc5\x80" }, /* ŀ */
-    { "lmoust", "\xe2\x8e\xb0" }, /* ⎰ */
-    { "lmoustache", "\xe2\x8e\xb0" }, /* ⎰ */
-    { "lnE", "\xe2\x89\xa8" }, /* ≨ */
-    { "lnap", "\xe2\xaa\x89" }, /* ⪉ */
-    { "lnapprox", "\xe2\xaa\x89" }, /* ⪉ */
-    { "lne", "\xe2\xaa\x87" }, /* ⪇ */
-    { "lneq", "\xe2\xaa\x87" }, /* ⪇ */
-    { "lneqq", "\xe2\x89\xa8" }, /* ≨ */
-    { "lnsim", "\xe2\x8b\xa6" }, /* ⋦ */
-    { "loang", "\xe2\x9f\xac" }, /* ⟬ */
-    { "loarr", "\xe2\x87\xbd" }, /* ⇽ */
-    { "lobrk", "\xe2\x9f\xa6" }, /* ⟦ */
-    { "longleftarrow", "\xe2\x9f\xb5" }, /* ⟵ */
-    { "longleftrightarrow", "\xe2\x9f\xb7" }, /* ⟷ */
-    { "longmapsto", "\xe2\x9f\xbc" }, /* ⟼ */
-    { "longrightarrow", "\xe2\x9f\xb6" }, /* ⟶ */
-    { "looparrowleft", "\xe2\x86\xab" }, /* ↫ */
-    { "looparrowright", "\xe2\x86\xac" }, /* ↬ */
-    { "lopar", "\xe2\xa6\x85" }, /* ⦅ */
-    { "lopf", "\xf0\x9d\x95\x9d" }, /* 𝕝 */
-    { "loplus", "\xe2\xa8\xad" }, /* ⨭ */
-    { "lotimes", "\xe2\xa8\xb4" }, /* ⨴ */
-    { "lowast", "\xe2\x88\x97" }, /* ∗ */
-    { "lowbar", "\x5f" }, /* _ */
-    { "loz", "\xe2\x97\x8a" }, /* ◊ */
-    { "lozenge", "\xe2\x97\x8a" }, /* ◊ */
-    { "lozf", "\xe2\xa7\xab" }, /* ⧫ */
-    { "lpar", "\x28" }, /* ( */
-    { "lparlt", "\xe2\xa6\x93" }, /* ⦓ */
-    { "lrarr", "\xe2\x87\x86" }, /* ⇆ */
-    { "lrcorner", "\xe2\x8c\x9f" }, /* ⌟ */
-    { "lrhar", "\xe2\x87\x8b" }, /* ⇋ */
-    { "lrhard", "\xe2\xa5\xad" }, /* ⥭ */
-    { "lrm", "\xe2\x80\x8e" }, /* ‎ */
-    { "lrtri", "\xe2\x8a\xbf" }, /* ⊿ */
-    { "lsaquo", "\xe2\x80\xb9" }, /* ‹ */
-    { "lscr", "\xf0\x9d\x93\x81" }, /* 𝓁 */
-    { "lsh", "\xe2\x86\xb0" }, /* ↰ */
-    { "lsim", "\xe2\x89\xb2" }, /* ≲ */
-    { "lsime", "\xe2\xaa\x8d" }, /* ⪍ */
-    { "lsimg", "\xe2\xaa\x8f" }, /* ⪏ */
-    { "lsqb", "\x5b" }, /* [ */
-    { "lsquo", "\xe2\x80\x98" }, /* ‘ */
-    { "lsquor", "\xe2\x80\x9a" }, /* ‚ */
-    { "lstrok", "\xc5\x82" }, /* ł */
-    { "lt", "\x3c" }, /* < */
-    { "ltcc", "\xe2\xaa\xa6" }, /* ⪦ */
-    { "ltcir", "\xe2\xa9\xb9" }, /* ⩹ */
-    { "ltdot", "\xe2\x8b\x96" }, /* ⋖ */
-    { "lthree", "\xe2\x8b\x8b" }, /* ⋋ */
-    { "ltimes", "\xe2\x8b\x89" }, /* ⋉ */
-    { "ltlarr", "\xe2\xa5\xb6" }, /* ⥶ */
-    { "ltquest", "\xe2\xa9\xbb" }, /* ⩻ */
-    { "ltrPar", "\xe2\xa6\x96" }, /* ⦖ */
-    { "ltri", "\xe2\x97\x83" }, /* ◃ */
-    { "ltrie", "\xe2\x8a\xb4" }, /* ⊴ */
-    { "ltrif", "\xe2\x97\x82" }, /* ◂ */
-    { "lurdshar", "\xe2\xa5\x8a" }, /* ⥊ */
-    { "luruhar", "\xe2\xa5\xa6" }, /* ⥦ */
-    { "lvertneqq", "\xe2\x89\xa8\xef\xb8\x80" }, /* ≨︀ */
-    { "lvnE", "\xe2\x89\xa8\xef\xb8\x80" }, /* ≨︀ */
-    { "mDDot", "\xe2\x88\xba" }, /* ∺ */
-    { "macr", "\xc2\xaf" }, /* ¯ */
-    { "male", "\xe2\x99\x82" }, /* ♂ */
-    { "malt", "\xe2\x9c\xa0" }, /* ✠ */
-    { "maltese", "\xe2\x9c\xa0" }, /* ✠ */
-    { "map", "\xe2\x86\xa6" }, /* ↦ */
-    { "mapsto", "\xe2\x86\xa6" }, /* ↦ */
-    { "mapstodown", "\xe2\x86\xa7" }, /* ↧ */
-    { "mapstoleft", "\xe2\x86\xa4" }, /* ↤ */
-    { "mapstoup", "\xe2\x86\xa5" }, /* ↥ */
-    { "marker", "\xe2\x96\xae" }, /* ▮ */
-    { "mcomma", "\xe2\xa8\xa9" }, /* ⨩ */
-    { "mcy", "\xd0\xbc" }, /* м */
-    { "mdash", "\xe2\x80\x94" }, /* — */
-    { "measuredangle", "\xe2\x88\xa1" }, /* ∡ */
-    { "mfr", "\xf0\x9d\x94\xaa" }, /* 𝔪 */
-    { "mho", "\xe2\x84\xa7" }, /* ℧ */
-    { "micro", "\xc2\xb5" }, /* µ */
-    { "mid", "\xe2\x88\xa3" }, /* ∣ */
-    { "midast", "\x2a" }, /* * */
-    { "midcir", "\xe2\xab\xb0" }, /* ⫰ */
-    { "middot", "\xc2\xb7" }, /* · */
-    { "minus", "\xe2\x88\x92" }, /* − */
-    { "minusb", "\xe2\x8a\x9f" }, /* ⊟ */
-    { "minusd", "\xe2\x88\xb8" }, /* ∸ */
-    { "minusdu", "\xe2\xa8\xaa" }, /* ⨪ */
-    { "mlcp", "\xe2\xab\x9b" }, /* ⫛ */
-    { "mldr", "\xe2\x80\xa6" }, /* … */
-    { "mnplus", "\xe2\x88\x93" }, /* ∓ */
-    { "models", "\xe2\x8a\xa7" }, /* ⊧ */
-    { "mopf", "\xf0\x9d\x95\x9e" }, /* 𝕞 */
-    { "mp", "\xe2\x88\x93" }, /* ∓ */
-    { "mscr", "\xf0\x9d\x93\x82" }, /* 𝓂 */
-    { "mstpos", "\xe2\x88\xbe" }, /* ∾ */
-    { "mu", "\xce\xbc" }, /* μ */
-    { "multimap", "\xe2\x8a\xb8" }, /* ⊸ */
-    { "mumap", "\xe2\x8a\xb8" }, /* ⊸ */
-    { "nGg", "\xe2\x8b\x99\xcc\xb8" }, /* ⋙̸ */
-    { "nGt", "\xe2\x89\xab\xe2\x83\x92" }, /* ≫⃒ */
-    { "nGtv", "\xe2\x89\xab\xcc\xb8" }, /* ≫̸ */
-    { "nLeftarrow", "\xe2\x87\x8d" }, /* ⇍ */
-    { "nLeftrightarrow", "\xe2\x87\x8e" }, /* ⇎ */
-    { "nLl", "\xe2\x8b\x98\xcc\xb8" }, /* ⋘̸ */
-    { "nLt", "\xe2\x89\xaa\xe2\x83\x92" }, /* ≪⃒ */
-    { "nLtv", "\xe2\x89\xaa\xcc\xb8" }, /* ≪̸ */
-    { "nRightarrow", "\xe2\x87\x8f" }, /* ⇏ */
-    { "nVDash", "\xe2\x8a\xaf" }, /* ⊯ */
-    { "nVdash", "\xe2\x8a\xae" }, /* ⊮ */
-    { "nabla", "\xe2\x88\x87" }, /* ∇ */
-    { "nacute", "\xc5\x84" }, /* ń */
-    { "nang", "\xe2\x88\xa0\xe2\x83\x92" }, /* ∠⃒ */
-    { "nap", "\xe2\x89\x89" }, /* ≉ */
-    { "napE", "\xe2\xa9\xb0\xcc\xb8" }, /* ⩰̸ */
-    { "napid", "\xe2\x89\x8b\xcc\xb8" }, /* ≋̸ */
-    { "napos", "\xc5\x89" }, /* ŉ */
-    { "napprox", "\xe2\x89\x89" }, /* ≉ */
-    { "natur", "\xe2\x99\xae" }, /* ♮ */
-    { "natural", "\xe2\x99\xae" }, /* ♮ */
-    { "naturals", "\xe2\x84\x95" }, /* ℕ */
-    { "nbsp", "\xc2\xa0" }, /*   */
-    { "nbump", "\xe2\x89\x8e\xcc\xb8" }, /* ≎̸ */
-    { "nbumpe", "\xe2\x89\x8f\xcc\xb8" }, /* ≏̸ */
-    { "ncap", "\xe2\xa9\x83" }, /* ⩃ */
-    { "ncaron", "\xc5\x88" }, /* ň */
-    { "ncedil", "\xc5\x86" }, /* ņ */
-    { "ncong", "\xe2\x89\x87" }, /* ≇ */
-    { "ncongdot", "\xe2\xa9\xad\xcc\xb8" }, /* ⩭̸ */
-    { "ncup", "\xe2\xa9\x82" }, /* ⩂ */
-    { "ncy", "\xd0\xbd" }, /* н */
-    { "ndash", "\xe2\x80\x93" }, /* – */
-    { "ne", "\xe2\x89\xa0" }, /* ≠ */
-    { "neArr", "\xe2\x87\x97" }, /* ⇗ */
-    { "nearhk", "\xe2\xa4\xa4" }, /* ⤤ */
-    { "nearr", "\xe2\x86\x97" }, /* ↗ */
-    { "nearrow", "\xe2\x86\x97" }, /* ↗ */
-    { "nedot", "\xe2\x89\x90\xcc\xb8" }, /* ≐̸ */
-    { "nequiv", "\xe2\x89\xa2" }, /* ≢ */
-    { "nesear", "\xe2\xa4\xa8" }, /* ⤨ */
-    { "nesim", "\xe2\x89\x82\xcc\xb8" }, /* ≂̸ */
-    { "nexist", "\xe2\x88\x84" }, /* ∄ */
-    { "nexists", "\xe2\x88\x84" }, /* ∄ */
-    { "nfr", "\xf0\x9d\x94\xab" }, /* 𝔫 */
-    { "ngE", "\xe2\x89\xa7\xcc\xb8" }, /* ≧̸ */
-    { "nge", "\xe2\x89\xb1" }, /* ≱ */
-    { "ngeq", "\xe2\x89\xb1" }, /* ≱ */
-    { "ngeqq", "\xe2\x89\xa7\xcc\xb8" }, /* ≧̸ */
-    { "ngeqslant", "\xe2\xa9\xbe\xcc\xb8" }, /* ⩾̸ */
-    { "nges", "\xe2\xa9\xbe\xcc\xb8" }, /* ⩾̸ */
-    { "ngsim", "\xe2\x89\xb5" }, /* ≵ */
-    { "ngt", "\xe2\x89\xaf" }, /* ≯ */
-    { "ngtr", "\xe2\x89\xaf" }, /* ≯ */
-    { "nhArr", "\xe2\x87\x8e" }, /* ⇎ */
-    { "nharr", "\xe2\x86\xae" }, /* ↮ */
-    { "nhpar", "\xe2\xab\xb2" }, /* ⫲ */
-    { "ni", "\xe2\x88\x8b" }, /* ∋ */
-    { "nis", "\xe2\x8b\xbc" }, /* ⋼ */
-    { "nisd", "\xe2\x8b\xba" }, /* ⋺ */
-    { "niv", "\xe2\x88\x8b" }, /* ∋ */
-    { "njcy", "\xd1\x9a" }, /* њ */
-    { "nlArr", "\xe2\x87\x8d" }, /* ⇍ */
-    { "nlE", "\xe2\x89\xa6\xcc\xb8" }, /* ≦̸ */
-    { "nlarr", "\xe2\x86\x9a" }, /* ↚ */
-    { "nldr", "\xe2\x80\xa5" }, /* ‥ */
-    { "nle", "\xe2\x89\xb0" }, /* ≰ */
-    { "nleftarrow", "\xe2\x86\x9a" }, /* ↚ */
-    { "nleftrightarrow", "\xe2\x86\xae" }, /* ↮ */
-    { "nleq", "\xe2\x89\xb0" }, /* ≰ */
-    { "nleqq", "\xe2\x89\xa6\xcc\xb8" }, /* ≦̸ */
-    { "nleqslant", "\xe2\xa9\xbd\xcc\xb8" }, /* ⩽̸ */
-    { "nles", "\xe2\xa9\xbd\xcc\xb8" }, /* ⩽̸ */
-    { "nless", "\xe2\x89\xae" }, /* ≮ */
-    { "nlsim", "\xe2\x89\xb4" }, /* ≴ */
-    { "nlt", "\xe2\x89\xae" }, /* ≮ */
-    { "nltri", "\xe2\x8b\xaa" }, /* ⋪ */
-    { "nltrie", "\xe2\x8b\xac" }, /* ⋬ */
-    { "nmid", "\xe2\x88\xa4" }, /* ∤ */
-    { "nopf", "\xf0\x9d\x95\x9f" }, /* 𝕟 */
-    { "not", "\xc2\xac" }, /* ¬ */
-    { "notin", "\xe2\x88\x89" }, /* ∉ */
-    { "notinE", "\xe2\x8b\xb9\xcc\xb8" }, /* ⋹̸ */
-    { "notindot", "\xe2\x8b\xb5\xcc\xb8" }, /* ⋵̸ */
-    { "notinva", "\xe2\x88\x89" }, /* ∉ */
-    { "notinvb", "\xe2\x8b\xb7" }, /* ⋷ */
-    { "notinvc", "\xe2\x8b\xb6" }, /* ⋶ */
-    { "notni", "\xe2\x88\x8c" }, /* ∌ */
-    { "notniva", "\xe2\x88\x8c" }, /* ∌ */
-    { "notnivb", "\xe2\x8b\xbe" }, /* ⋾ */
-    { "notnivc", "\xe2\x8b\xbd" }, /* ⋽ */
-    { "npar", "\xe2\x88\xa6" }, /* ∦ */
-    { "nparallel", "\xe2\x88\xa6" }, /* ∦ */
-    { "nparsl", "\xe2\xab\xbd\xe2\x83\xa5" }, /* ⫽⃥ */
-    { "npart", "\xe2\x88\x82\xcc\xb8" }, /* ∂̸ */
-    { "npolint", "\xe2\xa8\x94" }, /* ⨔ */
-    { "npr", "\xe2\x8a\x80" }, /* ⊀ */
-    { "nprcue", "\xe2\x8b\xa0" }, /* ⋠ */
-    { "npre", "\xe2\xaa\xaf\xcc\xb8" }, /* ⪯̸ */
-    { "nprec", "\xe2\x8a\x80" }, /* ⊀ */
-    { "npreceq", "\xe2\xaa\xaf\xcc\xb8" }, /* ⪯̸ */
-    { "nrArr", "\xe2\x87\x8f" }, /* ⇏ */
-    { "nrarr", "\xe2\x86\x9b" }, /* ↛ */
-    { "nrarrc", "\xe2\xa4\xb3\xcc\xb8" }, /* ⤳̸ */
-    { "nrarrw", "\xe2\x86\x9d\xcc\xb8" }, /* ↝̸ */
-    { "nrightarrow", "\xe2\x86\x9b" }, /* ↛ */
-    { "nrtri", "\xe2\x8b\xab" }, /* ⋫ */
-    { "nrtrie", "\xe2\x8b\xad" }, /* ⋭ */
-    { "nsc", "\xe2\x8a\x81" }, /* ⊁ */
-    { "nsccue", "\xe2\x8b\xa1" }, /* ⋡ */
-    { "nsce", "\xe2\xaa\xb0\xcc\xb8" }, /* ⪰̸ */
-    { "nscr", "\xf0\x9d\x93\x83" }, /* 𝓃 */
-    { "nshortmid", "\xe2\x88\xa4" }, /* ∤ */
-    { "nshortparallel", "\xe2\x88\xa6" }, /* ∦ */
-    { "nsim", "\xe2\x89\x81" }, /* ≁ */
-    { "nsime", "\xe2\x89\x84" }, /* ≄ */
-    { "nsimeq", "\xe2\x89\x84" }, /* ≄ */
-    { "nsmid", "\xe2\x88\xa4" }, /* ∤ */
-    { "nspar", "\xe2\x88\xa6" }, /* ∦ */
-    { "nsqsube", "\xe2\x8b\xa2" }, /* ⋢ */
-    { "nsqsupe", "\xe2\x8b\xa3" }, /* ⋣ */
-    { "nsub", "\xe2\x8a\x84" }, /* ⊄ */
-    { "nsubE", "\xe2\xab\x85\xcc\xb8" }, /* ⫅̸ */
-    { "nsube", "\xe2\x8a\x88" }, /* ⊈ */
-    { "nsubset", "\xe2\x8a\x82\xe2\x83\x92" }, /* ⊂⃒ */
-    { "nsubseteq", "\xe2\x8a\x88" }, /* ⊈ */
-    { "nsubseteqq", "\xe2\xab\x85\xcc\xb8" }, /* ⫅̸ */
-    { "nsucc", "\xe2\x8a\x81" }, /* ⊁ */
-    { "nsucceq", "\xe2\xaa\xb0\xcc\xb8" }, /* ⪰̸ */
-    { "nsup", "\xe2\x8a\x85" }, /* ⊅ */
-    { "nsupE", "\xe2\xab\x86\xcc\xb8" }, /* ⫆̸ */
-    { "nsupe", "\xe2\x8a\x89" }, /* ⊉ */
-    { "nsupset", "\xe2\x8a\x83\xe2\x83\x92" }, /* ⊃⃒ */
-    { "nsupseteq", "\xe2\x8a\x89" }, /* ⊉ */
-    { "nsupseteqq", "\xe2\xab\x86\xcc\xb8" }, /* ⫆̸ */
-    { "ntgl", "\xe2\x89\xb9" }, /* ≹ */
-    { "ntilde", "\xc3\xb1" }, /* ñ */
-    { "ntlg", "\xe2\x89\xb8" }, /* ≸ */
-    { "ntriangleleft", "\xe2\x8b\xaa" }, /* ⋪ */
-    { "ntrianglelefteq", "\xe2\x8b\xac" }, /* ⋬ */
-    { "ntriangleright", "\xe2\x8b\xab" }, /* ⋫ */
-    { "ntrianglerighteq", "\xe2\x8b\xad" }, /* ⋭ */
-    { "nu", "\xce\xbd" }, /* ν */
-    { "num", "\x23" }, /* # */
-    { "numero", "\xe2\x84\x96" }, /* № */
-    { "numsp", "\xe2\x80\x87" }, /*   */
-    { "nvDash", "\xe2\x8a\xad" }, /* ⊭ */
-    { "nvHarr", "\xe2\xa4\x84" }, /* ⤄ */
-    { "nvap", "\xe2\x89\x8d\xe2\x83\x92" }, /* ≍⃒ */
-    { "nvdash", "\xe2\x8a\xac" }, /* ⊬ */
-    { "nvge", "\xe2\x89\xa5\xe2\x83\x92" }, /* ≥⃒ */
-    { "nvgt", "\x3e\xe2\x83\x92" }, /* >⃒ */
-    { "nvinfin", "\xe2\xa7\x9e" }, /* ⧞ */
-    { "nvlArr", "\xe2\xa4\x82" }, /* ⤂ */
-    { "nvle", "\xe2\x89\xa4\xe2\x83\x92" }, /* ≤⃒ */
-    { "nvlt", "\x3c\xe2\x83\x92" }, /* <⃒ */
-    { "nvltrie", "\xe2\x8a\xb4\xe2\x83\x92" }, /* ⊴⃒ */
-    { "nvrArr", "\xe2\xa4\x83" }, /* ⤃ */
-    { "nvrtrie", "\xe2\x8a\xb5\xe2\x83\x92" }, /* ⊵⃒ */
-    { "nvsim", "\xe2\x88\xbc\xe2\x83\x92" }, /* ∼⃒ */
-    { "nwArr", "\xe2\x87\x96" }, /* ⇖ */
-    { "nwarhk", "\xe2\xa4\xa3" }, /* ⤣ */
-    { "nwarr", "\xe2\x86\x96" }, /* ↖ */
-    { "nwarrow", "\xe2\x86\x96" }, /* ↖ */
-    { "nwnear", "\xe2\xa4\xa7" }, /* ⤧ */
-    { "oS", "\xe2\x93\x88" }, /* Ⓢ */
-    { "oacute", "\xc3\xb3" }, /* ó */
-    { "oast", "\xe2\x8a\x9b" }, /* ⊛ */
-    { "ocir", "\xe2\x8a\x9a" }, /* ⊚ */
-    { "ocirc", "\xc3\xb4" }, /* ô */
-    { "ocy", "\xd0\xbe" }, /* о */
-    { "odash", "\xe2\x8a\x9d" }, /* ⊝ */
-    { "odblac", "\xc5\x91" }, /* ő */
-    { "odiv", "\xe2\xa8\xb8" }, /* ⨸ */
-    { "odot", "\xe2\x8a\x99" }, /* ⊙ */
-    { "odsold", "\xe2\xa6\xbc" }, /* ⦼ */
-    { "oelig", "\xc5\x93" }, /* œ */
-    { "ofcir", "\xe2\xa6\xbf" }, /* ⦿ */
-    { "ofr", "\xf0\x9d\x94\xac" }, /* 𝔬 */
-    { "ogon", "\xcb\x9b" }, /* ˛ */
-    { "ograve", "\xc3\xb2" }, /* ò */
-    { "ogt", "\xe2\xa7\x81" }, /* ⧁ */
-    { "ohbar", "\xe2\xa6\xb5" }, /* ⦵ */
-    { "ohm", "\xce\xa9" }, /* Ω */
-    { "oint", "\xe2\x88\xae" }, /* ∮ */
-    { "olarr", "\xe2\x86\xba" }, /* ↺ */
-    { "olcir", "\xe2\xa6\xbe" }, /* ⦾ */
-    { "olcross", "\xe2\xa6\xbb" }, /* ⦻ */
-    { "oline", "\xe2\x80\xbe" }, /* ‾ */
-    { "olt", "\xe2\xa7\x80" }, /* ⧀ */
-    { "omacr", "\xc5\x8d" }, /* ō */
-    { "omega", "\xcf\x89" }, /* ω */
-    { "omicron", "\xce\xbf" }, /* ο */
-    { "omid", "\xe2\xa6\xb6" }, /* ⦶ */
-    { "ominus", "\xe2\x8a\x96" }, /* ⊖ */
-    { "oopf", "\xf0\x9d\x95\xa0" }, /* 𝕠 */
-    { "opar", "\xe2\xa6\xb7" }, /* ⦷ */
-    { "operp", "\xe2\xa6\xb9" }, /* ⦹ */
-    { "oplus", "\xe2\x8a\x95" }, /* ⊕ */
-    { "or", "\xe2\x88\xa8" }, /* ∨ */
-    { "orarr", "\xe2\x86\xbb" }, /* ↻ */
-    { "ord", "\xe2\xa9\x9d" }, /* ⩝ */
-    { "order", "\xe2\x84\xb4" }, /* ℴ */
-    { "orderof", "\xe2\x84\xb4" }, /* ℴ */
-    { "ordf", "\xc2\xaa" }, /* ª */
-    { "ordm", "\xc2\xba" }, /* º */
-    { "origof", "\xe2\x8a\xb6" }, /* ⊶ */
-    { "oror", "\xe2\xa9\x96" }, /* ⩖ */
-    { "orslope", "\xe2\xa9\x97" }, /* ⩗ */
-    { "orv", "\xe2\xa9\x9b" }, /* ⩛ */
-    { "oscr", "\xe2\x84\xb4" }, /* ℴ */
-    { "oslash", "\xc3\xb8" }, /* ø */
-    { "osol", "\xe2\x8a\x98" }, /* ⊘ */
-    { "otilde", "\xc3\xb5" }, /* õ */
-    { "otimes", "\xe2\x8a\x97" }, /* ⊗ */
-    { "otimesas", "\xe2\xa8\xb6" }, /* ⨶ */
-    { "ouml", "\xc3\xb6" }, /* ö */
-    { "ovbar", "\xe2\x8c\xbd" }, /* ⌽ */
-    { "par", "\xe2\x88\xa5" }, /* ∥ */
-    { "para", "\xc2\xb6" }, /* ¶ */
-    { "parallel", "\xe2\x88\xa5" }, /* ∥ */
-    { "parsim", "\xe2\xab\xb3" }, /* ⫳ */
-    { "parsl", "\xe2\xab\xbd" }, /* ⫽ */
-    { "part", "\xe2\x88\x82" }, /* ∂ */
-    { "pcy", "\xd0\xbf" }, /* п */
-    { "percnt", "\x25" }, /* % */
-    { "period", "\x2e" }, /* . */
-    { "permil", "\xe2\x80\xb0" }, /* ‰ */
-    { "perp", "\xe2\x8a\xa5" }, /* ⊥ */
-    { "pertenk", "\xe2\x80\xb1" }, /* ‱ */
-    { "pfr", "\xf0\x9d\x94\xad" }, /* 𝔭 */
-    { "phi", "\xcf\x86" }, /* φ */
-    { "phiv", "\xcf\x95" }, /* ϕ */
-    { "phmmat", "\xe2\x84\xb3" }, /* ℳ */
-    { "phone", "\xe2\x98\x8e" }, /* ☎ */
-    { "pi", "\xcf\x80" }, /* π */
-    { "pitchfork", "\xe2\x8b\x94" }, /* ⋔ */
-    { "piv", "\xcf\x96" }, /* ϖ */
-    { "planck", "\xe2\x84\x8f" }, /* ℏ */
-    { "planckh", "\xe2\x84\x8e" }, /* ℎ */
-    { "plankv", "\xe2\x84\x8f" }, /* ℏ */
-    { "plus", "\x2b" }, /* + */
-    { "plusacir", "\xe2\xa8\xa3" }, /* ⨣ */
-    { "plusb", "\xe2\x8a\x9e" }, /* ⊞ */
-    { "pluscir", "\xe2\xa8\xa2" }, /* ⨢ */
-    { "plusdo", "\xe2\x88\x94" }, /* ∔ */
-    { "plusdu", "\xe2\xa8\xa5" }, /* ⨥ */
-    { "pluse", "\xe2\xa9\xb2" }, /* ⩲ */
-    { "plusmn", "\xc2\xb1" }, /* ± */
-    { "plussim", "\xe2\xa8\xa6" }, /* ⨦ */
-    { "plustwo", "\xe2\xa8\xa7" }, /* ⨧ */
-    { "pm", "\xc2\xb1" }, /* ± */
-    { "pointint", "\xe2\xa8\x95" }, /* ⨕ */
-    { "popf", "\xf0\x9d\x95\xa1" }, /* 𝕡 */
-    { "pound", "\xc2\xa3" }, /* £ */
-    { "pr", "\xe2\x89\xba" }, /* ≺ */
-    { "prE", "\xe2\xaa\xb3" }, /* ⪳ */
-    { "prap", "\xe2\xaa\xb7" }, /* ⪷ */
-    { "prcue", "\xe2\x89\xbc" }, /* ≼ */
-    { "pre", "\xe2\xaa\xaf" }, /* ⪯ */
-    { "prec", "\xe2\x89\xba" }, /* ≺ */
-    { "precapprox", "\xe2\xaa\xb7" }, /* ⪷ */
-    { "preccurlyeq", "\xe2\x89\xbc" }, /* ≼ */
-    { "preceq", "\xe2\xaa\xaf" }, /* ⪯ */
-    { "precnapprox", "\xe2\xaa\xb9" }, /* ⪹ */
-    { "precneqq", "\xe2\xaa\xb5" }, /* ⪵ */
-    { "precnsim", "\xe2\x8b\xa8" }, /* ⋨ */
-    { "precsim", "\xe2\x89\xbe" }, /* ≾ */
-    { "prime", "\xe2\x80\xb2" }, /* ′ */
-    { "primes", "\xe2\x84\x99" }, /* ℙ */
-    { "prnE", "\xe2\xaa\xb5" }, /* ⪵ */
-    { "prnap", "\xe2\xaa\xb9" }, /* ⪹ */
-    { "prnsim", "\xe2\x8b\xa8" }, /* ⋨ */
-    { "prod", "\xe2\x88\x8f" }, /* ∏ */
-    { "profalar", "\xe2\x8c\xae" }, /* ⌮ */
-    { "profline", "\xe2\x8c\x92" }, /* ⌒ */
-    { "profsurf", "\xe2\x8c\x93" }, /* ⌓ */
-    { "prop", "\xe2\x88\x9d" }, /* ∝ */
-    { "propto", "\xe2\x88\x9d" }, /* ∝ */
-    { "prsim", "\xe2\x89\xbe" }, /* ≾ */
-    { "prurel", "\xe2\x8a\xb0" }, /* ⊰ */
-    { "pscr", "\xf0\x9d\x93\x85" }, /* 𝓅 */
-    { "psi", "\xcf\x88" }, /* ψ */
-    { "puncsp", "\xe2\x80\x88" }, /*   */
-    { "qfr", "\xf0\x9d\x94\xae" }, /* 𝔮 */
-    { "qint", "\xe2\xa8\x8c" }, /* ⨌ */
-    { "qopf", "\xf0\x9d\x95\xa2" }, /* 𝕢 */
-    { "qprime", "\xe2\x81\x97" }, /* ⁗ */
-    { "qscr", "\xf0\x9d\x93\x86" }, /* 𝓆 */
-    { "quaternions", "\xe2\x84\x8d" }, /* ℍ */
-    { "quatint", "\xe2\xa8\x96" }, /* ⨖ */
-    { "quest", "\x3f" }, /* ? */
-    { "questeq", "\xe2\x89\x9f" }, /* ≟ */
-    { "quot", "\x22" }, /* " */
-    { "rAarr", "\xe2\x87\x9b" }, /* ⇛ */
-    { "rArr", "\xe2\x87\x92" }, /* ⇒ */
-    { "rAtail", "\xe2\xa4\x9c" }, /* ⤜ */
-    { "rBarr", "\xe2\xa4\x8f" }, /* ⤏ */
-    { "rHar", "\xe2\xa5\xa4" }, /* ⥤ */
-    { "race", "\xe2\x88\xbd\xcc\xb1" }, /* ∽̱ */
-    { "racute", "\xc5\x95" }, /* ŕ */
-    { "radic", "\xe2\x88\x9a" }, /* √ */
-    { "raemptyv", "\xe2\xa6\xb3" }, /* ⦳ */
-    { "rang", "\xe2\x9f\xa9" }, /* ⟩ */
-    { "rangd", "\xe2\xa6\x92" }, /* ⦒ */
-    { "range", "\xe2\xa6\xa5" }, /* ⦥ */
-    { "rangle", "\xe2\x9f\xa9" }, /* ⟩ */
-    { "raquo", "\xc2\xbb" }, /* » */
-    { "rarr", "\xe2\x86\x92" }, /* → */
-    { "rarrap", "\xe2\xa5\xb5" }, /* ⥵ */
-    { "rarrb", "\xe2\x87\xa5" }, /* ⇥ */
-    { "rarrbfs", "\xe2\xa4\xa0" }, /* ⤠ */
-    { "rarrc", "\xe2\xa4\xb3" }, /* ⤳ */
-    { "rarrfs", "\xe2\xa4\x9e" }, /* ⤞ */
-    { "rarrhk", "\xe2\x86\xaa" }, /* ↪ */
-    { "rarrlp", "\xe2\x86\xac" }, /* ↬ */
-    { "rarrpl", "\xe2\xa5\x85" }, /* ⥅ */
-    { "rarrsim", "\xe2\xa5\xb4" }, /* ⥴ */
-    { "rarrtl", "\xe2\x86\xa3" }, /* ↣ */
-    { "rarrw", "\xe2\x86\x9d" }, /* ↝ */
-    { "ratail", "\xe2\xa4\x9a" }, /* ⤚ */
-    { "ratio", "\xe2\x88\xb6" }, /* ∶ */
-    { "rationals", "\xe2\x84\x9a" }, /* ℚ */
-    { "rbarr", "\xe2\xa4\x8d" }, /* ⤍ */
-    { "rbbrk", "\xe2\x9d\xb3" }, /* ❳ */
-    { "rbrace", "\x7d" }, /* } */
-    { "rbrack", "\x5d" }, /* ] */
-    { "rbrke", "\xe2\xa6\x8c" }, /* ⦌ */
-    { "rbrksld", "\xe2\xa6\x8e" }, /* ⦎ */
-    { "rbrkslu", "\xe2\xa6\x90" }, /* ⦐ */
-    { "rcaron", "\xc5\x99" }, /* ř */
-    { "rcedil", "\xc5\x97" }, /* ŗ */
-    { "rceil", "\xe2\x8c\x89" }, /* ⌉ */
-    { "rcub", "\x7d" }, /* } */
-    { "rcy", "\xd1\x80" }, /* р */
-    { "rdca", "\xe2\xa4\xb7" }, /* ⤷ */
-    { "rdldhar", "\xe2\xa5\xa9" }, /* ⥩ */
-    { "rdquo", "\xe2\x80\x9d" }, /* ” */
-    { "rdquor", "\xe2\x80\x9d" }, /* ” */
-    { "rdsh", "\xe2\x86\xb3" }, /* ↳ */
-    { "real", "\xe2\x84\x9c" }, /* ℜ */
-    { "realine", "\xe2\x84\x9b" }, /* ℛ */
-    { "realpart", "\xe2\x84\x9c" }, /* ℜ */
-    { "reals", "\xe2\x84\x9d" }, /* ℝ */
-    { "rect", "\xe2\x96\xad" }, /* ▭ */
-    { "reg", "\xc2\xae" }, /* ® */
-    { "rfisht", "\xe2\xa5\xbd" }, /* ⥽ */
-    { "rfloor", "\xe2\x8c\x8b" }, /* ⌋ */
-    { "rfr", "\xf0\x9d\x94\xaf" }, /* 𝔯 */
-    { "rhard", "\xe2\x87\x81" }, /* ⇁ */
-    { "rharu", "\xe2\x87\x80" }, /* ⇀ */
-    { "rharul", "\xe2\xa5\xac" }, /* ⥬ */
-    { "rho", "\xcf\x81" }, /* ρ */
-    { "rhov", "\xcf\xb1" }, /* ϱ */
-    { "rightarrow", "\xe2\x86\x92" }, /* → */
-    { "rightarrowtail", "\xe2\x86\xa3" }, /* ↣ */
-    { "rightharpoondown", "\xe2\x87\x81" }, /* ⇁ */
-    { "rightharpoonup", "\xe2\x87\x80" }, /* ⇀ */
-    { "rightleftarrows", "\xe2\x87\x84" }, /* ⇄ */
-    { "rightleftharpoons", "\xe2\x87\x8c" }, /* ⇌ */
-    { "rightrightarrows", "\xe2\x87\x89" }, /* ⇉ */
-    { "rightsquigarrow", "\xe2\x86\x9d" }, /* ↝ */
-    { "rightthreetimes", "\xe2\x8b\x8c" }, /* ⋌ */
-    { "ring", "\xcb\x9a" }, /* ˚ */
-    { "risingdotseq", "\xe2\x89\x93" }, /* ≓ */
-    { "rlarr", "\xe2\x87\x84" }, /* ⇄ */
-    { "rlhar", "\xe2\x87\x8c" }, /* ⇌ */
-    { "rlm", "\xe2\x80\x8f" }, /* ‏ */
-    { "rmoust", "\xe2\x8e\xb1" }, /* ⎱ */
-    { "rmoustache", "\xe2\x8e\xb1" }, /* ⎱ */
-    { "rnmid", "\xe2\xab\xae" }, /* ⫮ */
-    { "roang", "\xe2\x9f\xad" }, /* ⟭ */
-    { "roarr", "\xe2\x87\xbe" }, /* ⇾ */
-    { "robrk", "\xe2\x9f\xa7" }, /* ⟧ */
-    { "ropar", "\xe2\xa6\x86" }, /* ⦆ */
-    { "ropf", "\xf0\x9d\x95\xa3" }, /* 𝕣 */
-    { "roplus", "\xe2\xa8\xae" }, /* ⨮ */
-    { "rotimes", "\xe2\xa8\xb5" }, /* ⨵ */
-    { "rpar", "\x29" }, /* ) */
-    { "rpargt", "\xe2\xa6\x94" }, /* ⦔ */
-    { "rppolint", "\xe2\xa8\x92" }, /* ⨒ */
-    { "rrarr", "\xe2\x87\x89" }, /* ⇉ */
-    { "rsaquo", "\xe2\x80\xba" }, /* › */
-    { "rscr", "\xf0\x9d\x93\x87" }, /* 𝓇 */
-    { "rsh", "\xe2\x86\xb1" }, /* ↱ */
-    { "rsqb", "\x5d" }, /* ] */
-    { "rsquo", "\xe2\x80\x99" }, /* ’ */
-    { "rsquor", "\xe2\x80\x99" }, /* ’ */
-    { "rthree", "\xe2\x8b\x8c" }, /* ⋌ */
-    { "rtimes", "\xe2\x8b\x8a" }, /* ⋊ */
-    { "rtri", "\xe2\x96\xb9" }, /* ▹ */
-    { "rtrie", "\xe2\x8a\xb5" }, /* ⊵ */
-    { "rtrif", "\xe2\x96\xb8" }, /* ▸ */
-    { "rtriltri", "\xe2\xa7\x8e" }, /* ⧎ */
-    { "ruluhar", "\xe2\xa5\xa8" }, /* ⥨ */
-    { "rx", "\xe2\x84\x9e" }, /* ℞ */
-    { "sacute", "\xc5\x9b" }, /* ś */
-    { "sbquo", "\xe2\x80\x9a" }, /* ‚ */
-    { "sc", "\xe2\x89\xbb" }, /* ≻ */
-    { "scE", "\xe2\xaa\xb4" }, /* ⪴ */
-    { "scap", "\xe2\xaa\xb8" }, /* ⪸ */
-    { "scaron", "\xc5\xa1" }, /* š */
-    { "sccue", "\xe2\x89\xbd" }, /* ≽ */
-    { "sce", "\xe2\xaa\xb0" }, /* ⪰ */
-    { "scedil", "\xc5\x9f" }, /* ş */
-    { "scirc", "\xc5\x9d" }, /* ŝ */
-    { "scnE", "\xe2\xaa\xb6" }, /* ⪶ */
-    { "scnap", "\xe2\xaa\xba" }, /* ⪺ */
-    { "scnsim", "\xe2\x8b\xa9" }, /* ⋩ */
-    { "scpolint", "\xe2\xa8\x93" }, /* ⨓ */
-    { "scsim", "\xe2\x89\xbf" }, /* ≿ */
-    { "scy", "\xd1\x81" }, /* с */
-    { "sdot", "\xe2\x8b\x85" }, /* ⋅ */
-    { "sdotb", "\xe2\x8a\xa1" }, /* ⊡ */
-    { "sdote", "\xe2\xa9\xa6" }, /* ⩦ */
-    { "seArr", "\xe2\x87\x98" }, /* ⇘ */
-    { "searhk", "\xe2\xa4\xa5" }, /* ⤥ */
-    { "searr", "\xe2\x86\x98" }, /* ↘ */
-    { "searrow", "\xe2\x86\x98" }, /* ↘ */
-    { "sect", "\xc2\xa7" }, /* § */
-    { "semi", "\x3b" }, /* ; */
-    { "seswar", "\xe2\xa4\xa9" }, /* ⤩ */
-    { "setminus", "\xe2\x88\x96" }, /* ∖ */
-    { "setmn", "\xe2\x88\x96" }, /* ∖ */
-    { "sext", "\xe2\x9c\xb6" }, /* ✶ */
-    { "sfr", "\xf0\x9d\x94\xb0" }, /* 𝔰 */
-    { "sfrown", "\xe2\x8c\xa2" }, /* ⌢ */
-    { "sharp", "\xe2\x99\xaf" }, /* ♯ */
-    { "shchcy", "\xd1\x89" }, /* щ */
-    { "shcy", "\xd1\x88" }, /* ш */
-    { "shortmid", "\xe2\x88\xa3" }, /* ∣ */
-    { "shortparallel", "\xe2\x88\xa5" }, /* ∥ */
-    { "shy", "\xc2\xad" }, /* ­ */
-    { "sigma", "\xcf\x83" }, /* σ */
-    { "sigmaf", "\xcf\x82" }, /* ς */
-    { "sigmav", "\xcf\x82" }, /* ς */
-    { "sim", "\xe2\x88\xbc" }, /* ∼ */
-    { "simdot", "\xe2\xa9\xaa" }, /* ⩪ */
-    { "sime", "\xe2\x89\x83" }, /* ≃ */
-    { "simeq", "\xe2\x89\x83" }, /* ≃ */
-    { "simg", "\xe2\xaa\x9e" }, /* ⪞ */
-    { "simgE", "\xe2\xaa\xa0" }, /* ⪠ */
-    { "siml", "\xe2\xaa\x9d" }, /* ⪝ */
-    { "simlE", "\xe2\xaa\x9f" }, /* ⪟ */
-    { "simne", "\xe2\x89\x86" }, /* ≆ */
-    { "simplus", "\xe2\xa8\xa4" }, /* ⨤ */
-    { "simrarr", "\xe2\xa5\xb2" }, /* ⥲ */
-    { "slarr", "\xe2\x86\x90" }, /* ← */
-    { "smallsetminus", "\xe2\x88\x96" }, /* ∖ */
-    { "smashp", "\xe2\xa8\xb3" }, /* ⨳ */
-    { "smeparsl", "\xe2\xa7\xa4" }, /* ⧤ */
-    { "smid", "\xe2\x88\xa3" }, /* ∣ */
-    { "smile", "\xe2\x8c\xa3" }, /* ⌣ */
-    { "smt", "\xe2\xaa\xaa" }, /* ⪪ */
-    { "smte", "\xe2\xaa\xac" }, /* ⪬ */
-    { "smtes", "\xe2\xaa\xac\xef\xb8\x80" }, /* ⪬︀ */
-    { "softcy", "\xd1\x8c" }, /* ь */
-    { "sol", "\x2f" }, /* / */
-    { "solb", "\xe2\xa7\x84" }, /* ⧄ */
-    { "solbar", "\xe2\x8c\xbf" }, /* ⌿ */
-    { "sopf", "\xf0\x9d\x95\xa4" }, /* 𝕤 */
-    { "spades", "\xe2\x99\xa0" }, /* ♠ */
-    { "spadesuit", "\xe2\x99\xa0" }, /* ♠ */
-    { "spar", "\xe2\x88\xa5" }, /* ∥ */
-    { "sqcap", "\xe2\x8a\x93" }, /* ⊓ */
-    { "sqcaps", "\xe2\x8a\x93\xef\xb8\x80" }, /* ⊓︀ */
-    { "sqcup", "\xe2\x8a\x94" }, /* ⊔ */
-    { "sqcups", "\xe2\x8a\x94\xef\xb8\x80" }, /* ⊔︀ */
-    { "sqsub", "\xe2\x8a\x8f" }, /* ⊏ */
-    { "sqsube", "\xe2\x8a\x91" }, /* ⊑ */
-    { "sqsubset", "\xe2\x8a\x8f" }, /* ⊏ */
-    { "sqsubseteq", "\xe2\x8a\x91" }, /* ⊑ */
-    { "sqsup", "\xe2\x8a\x90" }, /* ⊐ */
-    { "sqsupe", "\xe2\x8a\x92" }, /* ⊒ */
-    { "sqsupset", "\xe2\x8a\x90" }, /* ⊐ */
-    { "sqsupseteq", "\xe2\x8a\x92" }, /* ⊒ */
-    { "squ", "\xe2\x96\xa1" }, /* □ */
-    { "square", "\xe2\x96\xa1" }, /* □ */
-    { "squarf", "\xe2\x96\xaa" }, /* ▪ */
-    { "squf", "\xe2\x96\xaa" }, /* ▪ */
-    { "srarr", "\xe2\x86\x92" }, /* → */
-    { "sscr", "\xf0\x9d\x93\x88" }, /* 𝓈 */
-    { "ssetmn", "\xe2\x88\x96" }, /* ∖ */
-    { "ssmile", "\xe2\x8c\xa3" }, /* ⌣ */
-    { "sstarf", "\xe2\x8b\x86" }, /* ⋆ */
-    { "star", "\xe2\x98\x86" }, /* ☆ */
-    { "starf", "\xe2\x98\x85" }, /* ★ */
-    { "straightepsilon", "\xcf\xb5" }, /* ϵ */
-    { "straightphi", "\xcf\x95" }, /* ϕ */
-    { "strns", "\xc2\xaf" }, /* ¯ */
-    { "sub", "\xe2\x8a\x82" }, /* ⊂ */
-    { "subE", "\xe2\xab\x85" }, /* ⫅ */
-    { "subdot", "\xe2\xaa\xbd" }, /* ⪽ */
-    { "sube", "\xe2\x8a\x86" }, /* ⊆ */
-    { "subedot", "\xe2\xab\x83" }, /* ⫃ */
-    { "submult", "\xe2\xab\x81" }, /* ⫁ */
-    { "subnE", "\xe2\xab\x8b" }, /* ⫋ */
-    { "subne", "\xe2\x8a\x8a" }, /* ⊊ */
-    { "subplus", "\xe2\xaa\xbf" }, /* ⪿ */
-    { "subrarr", "\xe2\xa5\xb9" }, /* ⥹ */
-    { "subset", "\xe2\x8a\x82" }, /* ⊂ */
-    { "subseteq", "\xe2\x8a\x86" }, /* ⊆ */
-    { "subseteqq", "\xe2\xab\x85" }, /* ⫅ */
-    { "subsetneq", "\xe2\x8a\x8a" }, /* ⊊ */
-    { "subsetneqq", "\xe2\xab\x8b" }, /* ⫋ */
-    { "subsim", "\xe2\xab\x87" }, /* ⫇ */
-    { "subsub", "\xe2\xab\x95" }, /* ⫕ */
-    { "subsup", "\xe2\xab\x93" }, /* ⫓ */
-    { "succ", "\xe2\x89\xbb" }, /* ≻ */
-    { "succapprox", "\xe2\xaa\xb8" }, /* ⪸ */
-    { "succcurlyeq", "\xe2\x89\xbd" }, /* ≽ */
-    { "succeq", "\xe2\xaa\xb0" }, /* ⪰ */
-    { "succnapprox", "\xe2\xaa\xba" }, /* ⪺ */
-    { "succneqq", "\xe2\xaa\xb6" }, /* ⪶ */
-    { "succnsim", "\xe2\x8b\xa9" }, /* ⋩ */
-    { "succsim", "\xe2\x89\xbf" }, /* ≿ */
-    { "sum", "\xe2\x88\x91" }, /* ∑ */
-    { "sung", "\xe2\x99\xaa" }, /* ♪ */
-    { "sup1", "\xc2\xb9" }, /* ¹ */
-    { "sup2", "\xc2\xb2" }, /* ² */
-    { "sup3", "\xc2\xb3" }, /* ³ */
-    { "sup", "\xe2\x8a\x83" }, /* ⊃ */
-    { "supE", "\xe2\xab\x86" }, /* ⫆ */
-    { "supdot", "\xe2\xaa\xbe" }, /* ⪾ */
-    { "supdsub", "\xe2\xab\x98" }, /* ⫘ */
-    { "supe", "\xe2\x8a\x87" }, /* ⊇ */
-    { "supedot", "\xe2\xab\x84" }, /* ⫄ */
-    { "suphsol", "\xe2\x9f\x89" }, /* ⟉ */
-    { "suphsub", "\xe2\xab\x97" }, /* ⫗ */
-    { "suplarr", "\xe2\xa5\xbb" }, /* ⥻ */
-    { "supmult", "\xe2\xab\x82" }, /* ⫂ */
-    { "supnE", "\xe2\xab\x8c" }, /* ⫌ */
-    { "supne", "\xe2\x8a\x8b" }, /* ⊋ */
-    { "supplus", "\xe2\xab\x80" }, /* ⫀ */
-    { "supset", "\xe2\x8a\x83" }, /* ⊃ */
-    { "supseteq", "\xe2\x8a\x87" }, /* ⊇ */
-    { "supseteqq", "\xe2\xab\x86" }, /* ⫆ */
-    { "supsetneq", "\xe2\x8a\x8b" }, /* ⊋ */
-    { "supsetneqq", "\xe2\xab\x8c" }, /* ⫌ */
-    { "supsim", "\xe2\xab\x88" }, /* ⫈ */
-    { "supsub", "\xe2\xab\x94" }, /* ⫔ */
-    { "supsup", "\xe2\xab\x96" }, /* ⫖ */
-    { "swArr", "\xe2\x87\x99" }, /* ⇙ */
-    { "swarhk", "\xe2\xa4\xa6" }, /* ⤦ */
-    { "swarr", "\xe2\x86\x99" }, /* ↙ */
-    { "swarrow", "\xe2\x86\x99" }, /* ↙ */
-    { "swnwar", "\xe2\xa4\xaa" }, /* ⤪ */
-    { "szlig", "\xc3\x9f" }, /* ß */
-    { "target", "\xe2\x8c\x96" }, /* ⌖ */
-    { "tau", "\xcf\x84" }, /* τ */
-    { "tbrk", "\xe2\x8e\xb4" }, /* ⎴ */
-    { "tcaron", "\xc5\xa5" }, /* ť */
-    { "tcedil", "\xc5\xa3" }, /* ţ */
-    { "tcy", "\xd1\x82" }, /* т */
-    { "tdot", "\xe2\x83\x9b" }, /* ⃛ */
-    { "telrec", "\xe2\x8c\x95" }, /* ⌕ */
-    { "tfr", "\xf0\x9d\x94\xb1" }, /* 𝔱 */
-    { "there4", "\xe2\x88\xb4" }, /* ∴ */
-    { "therefore", "\xe2\x88\xb4" }, /* ∴ */
-    { "theta", "\xce\xb8" }, /* θ */
-    { "thetasym", "\xcf\x91" }, /* ϑ */
-    { "thetav", "\xcf\x91" }, /* ϑ */
-    { "thickapprox", "\xe2\x89\x88" }, /* ≈ */
-    { "thicksim", "\xe2\x88\xbc" }, /* ∼ */
-    { "thinsp", "\xe2\x80\x89" }, /*   */
-    { "thkap", "\xe2\x89\x88" }, /* ≈ */
-    { "thksim", "\xe2\x88\xbc" }, /* ∼ */
-    { "thorn", "\xc3\xbe" }, /* þ */
-    { "tilde", "\xcb\x9c" }, /* ˜ */
-    { "times", "\xc3\x97" }, /* × */
-    { "timesb", "\xe2\x8a\xa0" }, /* ⊠ */
-    { "timesbar", "\xe2\xa8\xb1" }, /* ⨱ */
-    { "timesd", "\xe2\xa8\xb0" }, /* ⨰ */
-    { "tint", "\xe2\x88\xad" }, /* ∭ */
-    { "toea", "\xe2\xa4\xa8" }, /* ⤨ */
-    { "top", "\xe2\x8a\xa4" }, /* ⊤ */
-    { "topbot", "\xe2\x8c\xb6" }, /* ⌶ */
-    { "topcir", "\xe2\xab\xb1" }, /* ⫱ */
-    { "topf", "\xf0\x9d\x95\xa5" }, /* 𝕥 */
-    { "topfork", "\xe2\xab\x9a" }, /* ⫚ */
-    { "tosa", "\xe2\xa4\xa9" }, /* ⤩ */
-    { "tprime", "\xe2\x80\xb4" }, /* ‴ */
-    { "trade", "\xe2\x84\xa2" }, /* ™ */
-    { "triangle", "\xe2\x96\xb5" }, /* ▵ */
-    { "triangledown", "\xe2\x96\xbf" }, /* ▿ */
-    { "triangleleft", "\xe2\x97\x83" }, /* ◃ */
-    { "trianglelefteq", "\xe2\x8a\xb4" }, /* ⊴ */
-    { "triangleq", "\xe2\x89\x9c" }, /* ≜ */
-    { "triangleright", "\xe2\x96\xb9" }, /* ▹ */
-    { "trianglerighteq", "\xe2\x8a\xb5" }, /* ⊵ */
-    { "tridot", "\xe2\x97\xac" }, /* ◬ */
-    { "trie", "\xe2\x89\x9c" }, /* ≜ */
-    { "triminus", "\xe2\xa8\xba" }, /* ⨺ */
-    { "triplus", "\xe2\xa8\xb9" }, /* ⨹ */
-    { "trisb", "\xe2\xa7\x8d" }, /* ⧍ */
-    { "tritime", "\xe2\xa8\xbb" }, /* ⨻ */
-    { "trpezium", "\xe2\x8f\xa2" }, /* ⏢ */
-    { "tscr", "\xf0\x9d\x93\x89" }, /* 𝓉 */
-    { "tscy", "\xd1\x86" }, /* ц */
-    { "tshcy", "\xd1\x9b" }, /* ћ */
-    { "tstrok", "\xc5\xa7" }, /* ŧ */
-    { "twixt", "\xe2\x89\xac" }, /* ≬ */
-    { "twoheadleftarrow", "\xe2\x86\x9e" }, /* ↞ */
-    { "twoheadrightarrow", "\xe2\x86\xa0" }, /* ↠ */
-    { "uArr", "\xe2\x87\x91" }, /* ⇑ */
-    { "uHar", "\xe2\xa5\xa3" }, /* ⥣ */
-    { "uacute", "\xc3\xba" }, /* ú */
-    { "uarr", "\xe2\x86\x91" }, /* ↑ */
-    { "ubrcy", "\xd1\x9e" }, /* ў */
-    { "ubreve", "\xc5\xad" }, /* ŭ */
-    { "ucirc", "\xc3\xbb" }, /* û */
-    { "ucy", "\xd1\x83" }, /* у */
-    { "udarr", "\xe2\x87\x85" }, /* ⇅ */
-    { "udblac", "\xc5\xb1" }, /* ű */
-    { "udhar", "\xe2\xa5\xae" }, /* ⥮ */
-    { "ufisht", "\xe2\xa5\xbe" }, /* ⥾ */
-    { "ufr", "\xf0\x9d\x94\xb2" }, /* 𝔲 */
-    { "ugrave", "\xc3\xb9" }, /* ù */
-    { "uharl", "\xe2\x86\xbf" }, /* ↿ */
-    { "uharr", "\xe2\x86\xbe" }, /* ↾ */
-    { "uhblk", "\xe2\x96\x80" }, /* ▀ */
-    { "ulcorn", "\xe2\x8c\x9c" }, /* ⌜ */
-    { "ulcorner", "\xe2\x8c\x9c" }, /* ⌜ */
-    { "ulcrop", "\xe2\x8c\x8f" }, /* ⌏ */
-    { "ultri", "\xe2\x97\xb8" }, /* ◸ */
-    { "umacr", "\xc5\xab" }, /* ū */
-    { "uml", "\xc2\xa8" }, /* ¨ */
-    { "uogon", "\xc5\xb3" }, /* ų */
-    { "uopf", "\xf0\x9d\x95\xa6" }, /* 𝕦 */
-    { "uparrow", "\xe2\x86\x91" }, /* ↑ */
-    { "updownarrow", "\xe2\x86\x95" }, /* ↕ */
-    { "upharpoonleft", "\xe2\x86\xbf" }, /* ↿ */
-    { "upharpoonright", "\xe2\x86\xbe" }, /* ↾ */
-    { "uplus", "\xe2\x8a\x8e" }, /* ⊎ */
-    { "upsi", "\xcf\x85" }, /* υ */
-    { "upsih", "\xcf\x92" }, /* ϒ */
-    { "upsilon", "\xcf\x85" }, /* υ */
-    { "upuparrows", "\xe2\x87\x88" }, /* ⇈ */
-    { "urcorn", "\xe2\x8c\x9d" }, /* ⌝ */
-    { "urcorner", "\xe2\x8c\x9d" }, /* ⌝ */
-    { "urcrop", "\xe2\x8c\x8e" }, /* ⌎ */
-    { "uring", "\xc5\xaf" }, /* ů */
-    { "urtri", "\xe2\x97\xb9" }, /* ◹ */
-    { "uscr", "\xf0\x9d\x93\x8a" }, /* 𝓊 */
-    { "utdot", "\xe2\x8b\xb0" }, /* ⋰ */
-    { "utilde", "\xc5\xa9" }, /* ũ */
-    { "utri", "\xe2\x96\xb5" }, /* ▵ */
-    { "utrif", "\xe2\x96\xb4" }, /* ▴ */
-    { "uuarr", "\xe2\x87\x88" }, /* ⇈ */
-    { "uuml", "\xc3\xbc" }, /* ü */
-    { "uwangle", "\xe2\xa6\xa7" }, /* ⦧ */
-    { "vArr", "\xe2\x87\x95" }, /* ⇕ */
-    { "vBar", "\xe2\xab\xa8" }, /* ⫨ */
-    { "vBarv", "\xe2\xab\xa9" }, /* ⫩ */
-    { "vDash", "\xe2\x8a\xa8" }, /* ⊨ */
-    { "vangrt", "\xe2\xa6\x9c" }, /* ⦜ */
-    { "varepsilon", "\xcf\xb5" }, /* ϵ */
-    { "varkappa", "\xcf\xb0" }, /* ϰ */
-    { "varnothing", "\xe2\x88\x85" }, /* ∅ */
-    { "varphi", "\xcf\x95" }, /* ϕ */
-    { "varpi", "\xcf\x96" }, /* ϖ */
-    { "varpropto", "\xe2\x88\x9d" }, /* ∝ */
-    { "varr", "\xe2\x86\x95" }, /* ↕ */
-    { "varrho", "\xcf\xb1" }, /* ϱ */
-    { "varsigma", "\xcf\x82" }, /* ς */
-    { "varsubsetneq", "\xe2\x8a\x8a\xef\xb8\x80" }, /* ⊊︀ */
-    { "varsubsetneqq", "\xe2\xab\x8b\xef\xb8\x80" }, /* ⫋︀ */
-    { "varsupsetneq", "\xe2\x8a\x8b\xef\xb8\x80" }, /* ⊋︀ */
-    { "varsupsetneqq", "\xe2\xab\x8c\xef\xb8\x80" }, /* ⫌︀ */
-    { "vartheta", "\xcf\x91" }, /* ϑ */
-    { "vartriangleleft", "\xe2\x8a\xb2" }, /* ⊲ */
-    { "vartriangleright", "\xe2\x8a\xb3" }, /* ⊳ */
-    { "vcy", "\xd0\xb2" }, /* в */
-    { "vdash", "\xe2\x8a\xa2" }, /* ⊢ */
-    { "vee", "\xe2\x88\xa8" }, /* ∨ */
-    { "veebar", "\xe2\x8a\xbb" }, /* ⊻ */
-    { "veeeq", "\xe2\x89\x9a" }, /* ≚ */
-    { "vellip", "\xe2\x8b\xae" }, /* ⋮ */
-    { "verbar", "\x7c" }, /* | */
-    { "vert", "\x7c" }, /* | */
-    { "vfr", "\xf0\x9d\x94\xb3" }, /* 𝔳 */
-    { "vltri", "\xe2\x8a\xb2" }, /* ⊲ */
-    { "vnsub", "\xe2\x8a\x82\xe2\x83\x92" }, /* ⊂⃒ */
-    { "vnsup", "\xe2\x8a\x83\xe2\x83\x92" }, /* ⊃⃒ */
-    { "vopf", "\xf0\x9d\x95\xa7" }, /* 𝕧 */
-    { "vprop", "\xe2\x88\x9d" }, /* ∝ */
-    { "vrtri", "\xe2\x8a\xb3" }, /* ⊳ */
-    { "vscr", "\xf0\x9d\x93\x8b" }, /* 𝓋 */
-    { "vsubnE", "\xe2\xab\x8b\xef\xb8\x80" }, /* ⫋︀ */
-    { "vsubne", "\xe2\x8a\x8a\xef\xb8\x80" }, /* ⊊︀ */
-    { "vsupnE", "\xe2\xab\x8c\xef\xb8\x80" }, /* ⫌︀ */
-    { "vsupne", "\xe2\x8a\x8b\xef\xb8\x80" }, /* ⊋︀ */
-    { "vzigzag", "\xe2\xa6\x9a" }, /* ⦚ */
-    { "wcirc", "\xc5\xb5" }, /* ŵ */
-    { "wedbar", "\xe2\xa9\x9f" }, /* ⩟ */
-    { "wedge", "\xe2\x88\xa7" }, /* ∧ */
-    { "wedgeq", "\xe2\x89\x99" }, /* ≙ */
-    { "weierp", "\xe2\x84\x98" }, /* ℘ */
-    { "wfr", "\xf0\x9d\x94\xb4" }, /* 𝔴 */
-    { "wopf", "\xf0\x9d\x95\xa8" }, /* 𝕨 */
-    { "wp", "\xe2\x84\x98" }, /* ℘ */
-    { "wr", "\xe2\x89\x80" }, /* ≀ */
-    { "wreath", "\xe2\x89\x80" }, /* ≀ */
-    { "wscr", "\xf0\x9d\x93\x8c" }, /* 𝓌 */
-    { "xcap", "\xe2\x8b\x82" }, /* ⋂ */
-    { "xcirc", "\xe2\x97\xaf" }, /* ◯ */
-    { "xcup", "\xe2\x8b\x83" }, /* ⋃ */
-    { "xdtri", "\xe2\x96\xbd" }, /* ▽ */
-    { "xfr", "\xf0\x9d\x94\xb5" }, /* 𝔵 */
-    { "xhArr", "\xe2\x9f\xba" }, /* ⟺ */
-    { "xharr", "\xe2\x9f\xb7" }, /* ⟷ */
-    { "xi", "\xce\xbe" }, /* ξ */
-    { "xlArr", "\xe2\x9f\xb8" }, /* ⟸ */
-    { "xlarr", "\xe2\x9f\xb5" }, /* ⟵ */
-    { "xmap", "\xe2\x9f\xbc" }, /* ⟼ */
-    { "xnis", "\xe2\x8b\xbb" }, /* ⋻ */
-    { "xodot", "\xe2\xa8\x80" }, /* ⨀ */
-    { "xopf", "\xf0\x9d\x95\xa9" }, /* 𝕩 */
-    { "xoplus", "\xe2\xa8\x81" }, /* ⨁ */
-    { "xotime", "\xe2\xa8\x82" }, /* ⨂ */
-    { "xrArr", "\xe2\x9f\xb9" }, /* ⟹ */
-    { "xrarr", "\xe2\x9f\xb6" }, /* ⟶ */
-    { "xscr", "\xf0\x9d\x93\x8d" }, /* 𝓍 */
-    { "xsqcup", "\xe2\xa8\x86" }, /* ⨆ */
-    { "xuplus", "\xe2\xa8\x84" }, /* ⨄ */
-    { "xutri", "\xe2\x96\xb3" }, /* △ */
-    { "xvee", "\xe2\x8b\x81" }, /* ⋁ */
-    { "xwedge", "\xe2\x8b\x80" }, /* ⋀ */
-    { "yacute", "\xc3\xbd" }, /* ý */
-    { "yacy", "\xd1\x8f" }, /* я */
-    { "ycirc", "\xc5\xb7" }, /* ŷ */
-    { "ycy", "\xd1\x8b" }, /* ы */
-    { "yen", "\xc2\xa5" }, /* ¥ */
-    { "yfr", "\xf0\x9d\x94\xb6" }, /* 𝔶 */
-    { "yicy", "\xd1\x97" }, /* ї */
-    { "yopf", "\xf0\x9d\x95\xaa" }, /* 𝕪 */
-    { "yscr", "\xf0\x9d\x93\x8e" }, /* 𝓎 */
-    { "yucy", "\xd1\x8e" }, /* ю */
-    { "yuml", "\xc3\xbf" }, /* ÿ */
-    { "zacute", "\xc5\xba" }, /* ź */
-    { "zcaron", "\xc5\xbe" }, /* ž */
-    { "zcy", "\xd0\xb7" }, /* з */
-    { "zdot", "\xc5\xbc" }, /* ż */
-    { "zeetrf", "\xe2\x84\xa8" }, /* ℨ */
-    { "zeta", "\xce\xb6" }, /* ζ */
-    { "zfr", "\xf0\x9d\x94\xb7" }, /* 𝔷 */
-    { "zhcy", "\xd0\xb6" }, /* ж */
-    { "zigrarr", "\xe2\x87\x9d" }, /* ⇝ */
-    { "zopf", "\xf0\x9d\x95\xab" }, /* 𝕫 */
-    { "zscr", "\xf0\x9d\x93\x8f" }, /* 𝓏 */
-    { "zwj", "\xe2\x80\x8d" }, /* ‍ */
-    { "zwnj", "\xe2\x80\x8c" }, /* ‌ */
+    { "AElig", { 0x0000C6, } }, /* Æ */
+    { "AElig;", { 0x0000C6, } }, /* Æ */
+    { "AMP", { 0x000026, } }, /* & */
+    { "AMP;", { 0x000026, } }, /* & */
+    { "Aacute", { 0x0000C1, } }, /* Á */
+    { "Aacute;", { 0x0000C1, } }, /* Á */
+    { "Abreve;", { 0x000102, } }, /* Ă */
+    { "Acirc", { 0x0000C2, } }, /* Â */
+    { "Acirc;", { 0x0000C2, } }, /* Â */
+    { "Acy;", { 0x000410, } }, /* А */
+    { "Afr;", { 0x01D504, } }, /* 𝔄 */
+    { "Agrave", { 0x0000C0, } }, /* À */
+    { "Agrave;", { 0x0000C0, } }, /* À */
+    { "Alpha;", { 0x000391, } }, /* Α */
+    { "Amacr;", { 0x000100, } }, /* Ā */
+    { "And;", { 0x002A53, } }, /* ⩓ */
+    { "Aogon;", { 0x000104, } }, /* Ą */
+    { "Aopf;", { 0x01D538, } }, /* 𝔸 */
+    { "ApplyFunction;", { 0x002061, } }, /* ⁡ */
+    { "Aring", { 0x0000C5, } }, /* Å */
+    { "Aring;", { 0x0000C5, } }, /* Å */
+    { "Ascr;", { 0x01D49C, } }, /* 𝒜 */
+    { "Assign;", { 0x002254, } }, /* ≔ */
+    { "Atilde", { 0x0000C3, } }, /* Ã */
+    { "Atilde;", { 0x0000C3, } }, /* Ã */
+    { "Auml", { 0x0000C4, } }, /* Ä */
+    { "Auml;", { 0x0000C4, } }, /* Ä */
+    { "Backslash;", { 0x002216, } }, /* ∖ */
+    { "Barv;", { 0x002AE7, } }, /* ⫧ */
+    { "Barwed;", { 0x002306, } }, /* ⌆ */
+    { "Bcy;", { 0x000411, } }, /* Б */
+    { "Because;", { 0x002235, } }, /* ∵ */
+    { "Bernoullis;", { 0x00212C, } }, /* ℬ */
+    { "Beta;", { 0x000392, } }, /* Β */
+    { "Bfr;", { 0x01D505, } }, /* 𝔅 */
+    { "Bopf;", { 0x01D539, } }, /* 𝔹 */
+    { "Breve;", { 0x0002D8, } }, /* ˘ */
+    { "Bscr;", { 0x00212C, } }, /* ℬ */
+    { "Bumpeq;", { 0x00224E, } }, /* ≎ */
+    { "CHcy;", { 0x000427, } }, /* Ч */
+    { "COPY", { 0x0000A9, } }, /* © */
+    { "COPY;", { 0x0000A9, } }, /* © */
+    { "Cacute;", { 0x000106, } }, /* Ć */
+    { "Cap;", { 0x0022D2, } }, /* ⋒ */
+    { "CapitalDifferentialD;", { 0x002145, } }, /* ⅅ */
+    { "Cayleys;", { 0x00212D, } }, /* ℭ */
+    { "Ccaron;", { 0x00010C, } }, /* Č */
+    { "Ccedil", { 0x0000C7, } }, /* Ç */
+    { "Ccedil;", { 0x0000C7, } }, /* Ç */
+    { "Ccirc;", { 0x000108, } }, /* Ĉ */
+    { "Cconint;", { 0x002230, } }, /* ∰ */
+    { "Cdot;", { 0x00010A, } }, /* Ċ */
+    { "Cedilla;", { 0x0000B8, } }, /* ¸ */
+    { "CenterDot;", { 0x0000B7, } }, /* · */
+    { "Cfr;", { 0x00212D, } }, /* ℭ */
+    { "Chi;", { 0x0003A7, } }, /* Χ */
+    { "CircleDot;", { 0x002299, } }, /* ⊙ */
+    { "CircleMinus;", { 0x002296, } }, /* ⊖ */
+    { "CirclePlus;", { 0x002295, } }, /* ⊕ */
+    { "CircleTimes;", { 0x002297, } }, /* ⊗ */
+    { "ClockwiseContourIntegral;", { 0x002232, } }, /* ∲ */
+    { "CloseCurlyDoubleQuote;", { 0x00201D, } }, /* ” */
+    { "CloseCurlyQuote;", { 0x002019, } }, /* ’ */
+    { "Colon;", { 0x002237, } }, /* ∷ */
+    { "Colone;", { 0x002A74, } }, /* ⩴ */
+    { "Congruent;", { 0x002261, } }, /* ≡ */
+    { "Conint;", { 0x00222F, } }, /* ∯ */
+    { "ContourIntegral;", { 0x00222E, } }, /* ∮ */
+    { "Copf;", { 0x002102, } }, /* ℂ */
+    { "Coproduct;", { 0x002210, } }, /* ∐ */
+    { "CounterClockwiseContourIntegral;", { 0x002233, } }, /* ∳ */
+    { "Cross;", { 0x002A2F, } }, /* ⨯ */
+    { "Cscr;", { 0x01D49E, } }, /* 𝒞 */
+    { "Cup;", { 0x0022D3, } }, /* ⋓ */
+    { "CupCap;", { 0x00224D, } }, /* ≍ */
+    { "DD;", { 0x002145, } }, /* ⅅ */
+    { "DDotrahd;", { 0x002911, } }, /* ⤑ */
+    { "DJcy;", { 0x000402, } }, /* Ђ */
+    { "DScy;", { 0x000405, } }, /* Ѕ */
+    { "DZcy;", { 0x00040F, } }, /* Џ */
+    { "Dagger;", { 0x002021, } }, /* ‡ */
+    { "Darr;", { 0x0021A1, } }, /* ↡ */
+    { "Dashv;", { 0x002AE4, } }, /* ⫤ */
+    { "Dcaron;", { 0x00010E, } }, /* Ď */
+    { "Dcy;", { 0x000414, } }, /* Д */
+    { "Del;", { 0x002207, } }, /* ∇ */
+    { "Delta;", { 0x000394, } }, /* Δ */
+    { "Dfr;", { 0x01D507, } }, /* 𝔇 */
+    { "DiacriticalAcute;", { 0x0000B4, } }, /* ´ */
+    { "DiacriticalDot;", { 0x0002D9, } }, /* ˙ */
+    { "DiacriticalDoubleAcute;", { 0x0002DD, } }, /* ˝ */
+    { "DiacriticalGrave;", { 0x000060, } }, /* ` */
+    { "DiacriticalTilde;", { 0x0002DC, } }, /* ˜ */
+    { "Diamond;", { 0x0022C4, } }, /* ⋄ */
+    { "DifferentialD;", { 0x002146, } }, /* ⅆ */
+    { "Dopf;", { 0x01D53B, } }, /* 𝔻 */
+    { "Dot;", { 0x0000A8, } }, /* ¨ */
+    { "DotDot;", { 0x0020DC, } }, /* ⃜ */
+    { "DotEqual;", { 0x002250, } }, /* ≐ */
+    { "DoubleContourIntegral;", { 0x00222F, } }, /* ∯ */
+    { "DoubleDot;", { 0x0000A8, } }, /* ¨ */
+    { "DoubleDownArrow;", { 0x0021D3, } }, /* ⇓ */
+    { "DoubleLeftArrow;", { 0x0021D0, } }, /* ⇐ */
+    { "DoubleLeftRightArrow;", { 0x0021D4, } }, /* ⇔ */
+    { "DoubleLeftTee;", { 0x002AE4, } }, /* ⫤ */
+    { "DoubleLongLeftArrow;", { 0x0027F8, } }, /* ⟸ */
+    { "DoubleLongLeftRightArrow;", { 0x0027FA, } }, /* ⟺ */
+    { "DoubleLongRightArrow;", { 0x0027F9, } }, /* ⟹ */
+    { "DoubleRightArrow;", { 0x0021D2, } }, /* ⇒ */
+    { "DoubleRightTee;", { 0x0022A8, } }, /* ⊨ */
+    { "DoubleUpArrow;", { 0x0021D1, } }, /* ⇑ */
+    { "DoubleUpDownArrow;", { 0x0021D5, } }, /* ⇕ */
+    { "DoubleVerticalBar;", { 0x002225, } }, /* ∥ */
+    { "DownArrow;", { 0x002193, } }, /* ↓ */
+    { "DownArrowBar;", { 0x002913, } }, /* ⤓ */
+    { "DownArrowUpArrow;", { 0x0021F5, } }, /* ⇵ */
+    { "DownBreve;", { 0x000311, } }, /* ̑ */
+    { "DownLeftRightVector;", { 0x002950, } }, /* ⥐ */
+    { "DownLeftTeeVector;", { 0x00295E, } }, /* ⥞ */
+    { "DownLeftVector;", { 0x0021BD, } }, /* ↽ */
+    { "DownLeftVectorBar;", { 0x002956, } }, /* ⥖ */
+    { "DownRightTeeVector;", { 0x00295F, } }, /* ⥟ */
+    { "DownRightVector;", { 0x0021C1, } }, /* ⇁ */
+    { "DownRightVectorBar;", { 0x002957, } }, /* ⥗ */
+    { "DownTee;", { 0x0022A4, } }, /* ⊤ */
+    { "DownTeeArrow;", { 0x0021A7, } }, /* ↧ */
+    { "Downarrow;", { 0x0021D3, } }, /* ⇓ */
+    { "Dscr;", { 0x01D49F, } }, /* 𝒟 */
+    { "Dstrok;", { 0x000110, } }, /* Đ */
+    { "ENG;", { 0x00014A, } }, /* Ŋ */
+    { "ETH", { 0x0000D0, } }, /* Ð */
+    { "ETH;", { 0x0000D0, } }, /* Ð */
+    { "Eacute", { 0x0000C9, } }, /* É */
+    { "Eacute;", { 0x0000C9, } }, /* É */
+    { "Ecaron;", { 0x00011A, } }, /* Ě */
+    { "Ecirc", { 0x0000CA, } }, /* Ê */
+    { "Ecirc;", { 0x0000CA, } }, /* Ê */
+    { "Ecy;", { 0x00042D, } }, /* Э */
+    { "Edot;", { 0x000116, } }, /* Ė */
+    { "Efr;", { 0x01D508, } }, /* 𝔈 */
+    { "Egrave", { 0x0000C8, } }, /* È */
+    { "Egrave;", { 0x0000C8, } }, /* È */
+    { "Element;", { 0x002208, } }, /* ∈ */
+    { "Emacr;", { 0x000112, } }, /* Ē */
+    { "EmptySmallSquare;", { 0x0025FB, } }, /* ◻ */
+    { "EmptyVerySmallSquare;", { 0x0025AB, } }, /* ▫ */
+    { "Eogon;", { 0x000118, } }, /* Ę */
+    { "Eopf;", { 0x01D53C, } }, /* 𝔼 */
+    { "Epsilon;", { 0x000395, } }, /* Ε */
+    { "Equal;", { 0x002A75, } }, /* ⩵ */
+    { "EqualTilde;", { 0x002242, } }, /* ≂ */
+    { "Equilibrium;", { 0x0021CC, } }, /* ⇌ */
+    { "Escr;", { 0x002130, } }, /* ℰ */
+    { "Esim;", { 0x002A73, } }, /* ⩳ */
+    { "Eta;", { 0x000397, } }, /* Η */
+    { "Euml", { 0x0000CB, } }, /* Ë */
+    { "Euml;", { 0x0000CB, } }, /* Ë */
+    { "Exists;", { 0x002203, } }, /* ∃ */
+    { "ExponentialE;", { 0x002147, } }, /* ⅇ */
+    { "Fcy;", { 0x000424, } }, /* Ф */
+    { "Ffr;", { 0x01D509, } }, /* 𝔉 */
+    { "FilledSmallSquare;", { 0x0025FC, } }, /* ◼ */
+    { "FilledVerySmallSquare;", { 0x0025AA, } }, /* ▪ */
+    { "Fopf;", { 0x01D53D, } }, /* 𝔽 */
+    { "ForAll;", { 0x002200, } }, /* ∀ */
+    { "Fouriertrf;", { 0x002131, } }, /* ℱ */
+    { "Fscr;", { 0x002131, } }, /* ℱ */
+    { "GJcy;", { 0x000403, } }, /* Ѓ */
+    { "GT", { 0x00003E, } }, /* > */
+    { "GT;", { 0x00003E, } }, /* > */
+    { "Gamma;", { 0x000393, } }, /* Γ */
+    { "Gammad;", { 0x0003DC, } }, /* Ϝ */
+    { "Gbreve;", { 0x00011E, } }, /* Ğ */
+    { "Gcedil;", { 0x000122, } }, /* Ģ */
+    { "Gcirc;", { 0x00011C, } }, /* Ĝ */
+    { "Gcy;", { 0x000413, } }, /* Г */
+    { "Gdot;", { 0x000120, } }, /* Ġ */
+    { "Gfr;", { 0x01D50A, } }, /* 𝔊 */
+    { "Gg;", { 0x0022D9, } }, /* ⋙ */
+    { "Gopf;", { 0x01D53E, } }, /* 𝔾 */
+    { "GreaterEqual;", { 0x002265, } }, /* ≥ */
+    { "GreaterEqualLess;", { 0x0022DB, } }, /* ⋛ */
+    { "GreaterFullEqual;", { 0x002267, } }, /* ≧ */
+    { "GreaterGreater;", { 0x002AA2, } }, /* ⪢ */
+    { "GreaterLess;", { 0x002277, } }, /* ≷ */
+    { "GreaterSlantEqual;", { 0x002A7E, } }, /* ⩾ */
+    { "GreaterTilde;", { 0x002273, } }, /* ≳ */
+    { "Gscr;", { 0x01D4A2, } }, /* 𝒢 */
+    { "Gt;", { 0x00226B, } }, /* ≫ */
+    { "HARDcy;", { 0x00042A, } }, /* Ъ */
+    { "Hacek;", { 0x0002C7, } }, /* ˇ */
+    { "Hat;", { 0x00005E, } }, /* ^ */
+    { "Hcirc;", { 0x000124, } }, /* Ĥ */
+    { "Hfr;", { 0x00210C, } }, /* ℌ */
+    { "HilbertSpace;", { 0x00210B, } }, /* ℋ */
+    { "Hopf;", { 0x00210D, } }, /* ℍ */
+    { "HorizontalLine;", { 0x002500, } }, /* ─ */
+    { "Hscr;", { 0x00210B, } }, /* ℋ */
+    { "Hstrok;", { 0x000126, } }, /* Ħ */
+    { "HumpDownHump;", { 0x00224E, } }, /* ≎ */
+    { "HumpEqual;", { 0x00224F, } }, /* ≏ */
+    { "IEcy;", { 0x000415, } }, /* Е */
+    { "IJlig;", { 0x000132, } }, /* Ĳ */
+    { "IOcy;", { 0x000401, } }, /* Ё */
+    { "Iacute", { 0x0000CD, } }, /* Í */
+    { "Iacute;", { 0x0000CD, } }, /* Í */
+    { "Icirc", { 0x0000CE, } }, /* Î */
+    { "Icirc;", { 0x0000CE, } }, /* Î */
+    { "Icy;", { 0x000418, } }, /* И */
+    { "Idot;", { 0x000130, } }, /* İ */
+    { "Ifr;", { 0x002111, } }, /* ℑ */
+    { "Igrave", { 0x0000CC, } }, /* Ì */
+    { "Igrave;", { 0x0000CC, } }, /* Ì */
+    { "Im;", { 0x002111, } }, /* ℑ */
+    { "Imacr;", { 0x00012A, } }, /* Ī */
+    { "ImaginaryI;", { 0x002148, } }, /* ⅈ */
+    { "Implies;", { 0x0021D2, } }, /* ⇒ */
+    { "Int;", { 0x00222C, } }, /* ∬ */
+    { "Integral;", { 0x00222B, } }, /* ∫ */
+    { "Intersection;", { 0x0022C2, } }, /* ⋂ */
+    { "InvisibleComma;", { 0x002063, } }, /* ⁣ */
+    { "InvisibleTimes;", { 0x002062, } }, /* ⁢ */
+    { "Iogon;", { 0x00012E, } }, /* Į */
+    { "Iopf;", { 0x01D540, } }, /* 𝕀 */
+    { "Iota;", { 0x000399, } }, /* Ι */
+    { "Iscr;", { 0x002110, } }, /* ℐ */
+    { "Itilde;", { 0x000128, } }, /* Ĩ */
+    { "Iukcy;", { 0x000406, } }, /* І */
+    { "Iuml", { 0x0000CF, } }, /* Ï */
+    { "Iuml;", { 0x0000CF, } }, /* Ï */
+    { "Jcirc;", { 0x000134, } }, /* Ĵ */
+    { "Jcy;", { 0x000419, } }, /* Й */
+    { "Jfr;", { 0x01D50D, } }, /* 𝔍 */
+    { "Jopf;", { 0x01D541, } }, /* 𝕁 */
+    { "Jscr;", { 0x01D4A5, } }, /* 𝒥 */
+    { "Jsercy;", { 0x000408, } }, /* Ј */
+    { "Jukcy;", { 0x000404, } }, /* Є */
+    { "KHcy;", { 0x000425, } }, /* Х */
+    { "KJcy;", { 0x00040C, } }, /* Ќ */
+    { "Kappa;", { 0x00039A, } }, /* Κ */
+    { "Kcedil;", { 0x000136, } }, /* Ķ */
+    { "Kcy;", { 0x00041A, } }, /* К */
+    { "Kfr;", { 0x01D50E, } }, /* 𝔎 */
+    { "Kopf;", { 0x01D542, } }, /* 𝕂 */
+    { "Kscr;", { 0x01D4A6, } }, /* 𝒦 */
+    { "LJcy;", { 0x000409, } }, /* Љ */
+    { "LT", { 0x00003C, } }, /* < */
+    { "LT;", { 0x00003C, } }, /* < */
+    { "Lacute;", { 0x000139, } }, /* Ĺ */
+    { "Lambda;", { 0x00039B, } }, /* Λ */
+    { "Lang;", { 0x0027EA, } }, /* ⟪ */
+    { "Laplacetrf;", { 0x002112, } }, /* ℒ */
+    { "Larr;", { 0x00219E, } }, /* ↞ */
+    { "Lcaron;", { 0x00013D, } }, /* Ľ */
+    { "Lcedil;", { 0x00013B, } }, /* Ļ */
+    { "Lcy;", { 0x00041B, } }, /* Л */
+    { "LeftAngleBracket;", { 0x0027E8, } }, /* ⟨ */
+    { "LeftArrow;", { 0x002190, } }, /* ← */
+    { "LeftArrowBar;", { 0x0021E4, } }, /* ⇤ */
+    { "LeftArrowRightArrow;", { 0x0021C6, } }, /* ⇆ */
+    { "LeftCeiling;", { 0x002308, } }, /* ⌈ */
+    { "LeftDoubleBracket;", { 0x0027E6, } }, /* ⟦ */
+    { "LeftDownTeeVector;", { 0x002961, } }, /* ⥡ */
+    { "LeftDownVector;", { 0x0021C3, } }, /* ⇃ */
+    { "LeftDownVectorBar;", { 0x002959, } }, /* ⥙ */
+    { "LeftFloor;", { 0x00230A, } }, /* ⌊ */
+    { "LeftRightArrow;", { 0x002194, } }, /* ↔ */
+    { "LeftRightVector;", { 0x00294E, } }, /* ⥎ */
+    { "LeftTee;", { 0x0022A3, } }, /* ⊣ */
+    { "LeftTeeArrow;", { 0x0021A4, } }, /* ↤ */
+    { "LeftTeeVector;", { 0x00295A, } }, /* ⥚ */
+    { "LeftTriangle;", { 0x0022B2, } }, /* ⊲ */
+    { "LeftTriangleBar;", { 0x0029CF, } }, /* ⧏ */
+    { "LeftTriangleEqual;", { 0x0022B4, } }, /* ⊴ */
+    { "LeftUpDownVector;", { 0x002951, } }, /* ⥑ */
+    { "LeftUpTeeVector;", { 0x002960, } }, /* ⥠ */
+    { "LeftUpVector;", { 0x0021BF, } }, /* ↿ */
+    { "LeftUpVectorBar;", { 0x002958, } }, /* ⥘ */
+    { "LeftVector;", { 0x0021BC, } }, /* ↼ */
+    { "LeftVectorBar;", { 0x002952, } }, /* ⥒ */
+    { "Leftarrow;", { 0x0021D0, } }, /* ⇐ */
+    { "Leftrightarrow;", { 0x0021D4, } }, /* ⇔ */
+    { "LessEqualGreater;", { 0x0022DA, } }, /* ⋚ */
+    { "LessFullEqual;", { 0x002266, } }, /* ≦ */
+    { "LessGreater;", { 0x002276, } }, /* ≶ */
+    { "LessLess;", { 0x002AA1, } }, /* ⪡ */
+    { "LessSlantEqual;", { 0x002A7D, } }, /* ⩽ */
+    { "LessTilde;", { 0x002272, } }, /* ≲ */
+    { "Lfr;", { 0x01D50F, } }, /* 𝔏 */
+    { "Ll;", { 0x0022D8, } }, /* ⋘ */
+    { "Lleftarrow;", { 0x0021DA, } }, /* ⇚ */
+    { "Lmidot;", { 0x00013F, } }, /* Ŀ */
+    { "LongLeftArrow;", { 0x0027F5, } }, /* ⟵ */
+    { "LongLeftRightArrow;", { 0x0027F7, } }, /* ⟷ */
+    { "LongRightArrow;", { 0x0027F6, } }, /* ⟶ */
+    { "Longleftarrow;", { 0x0027F8, } }, /* ⟸ */
+    { "Longleftrightarrow;", { 0x0027FA, } }, /* ⟺ */
+    { "Longrightarrow;", { 0x0027F9, } }, /* ⟹ */
+    { "Lopf;", { 0x01D543, } }, /* 𝕃 */
+    { "LowerLeftArrow;", { 0x002199, } }, /* ↙ */
+    { "LowerRightArrow;", { 0x002198, } }, /* ↘ */
+    { "Lscr;", { 0x002112, } }, /* ℒ */
+    { "Lsh;", { 0x0021B0, } }, /* ↰ */
+    { "Lstrok;", { 0x000141, } }, /* Ł */
+    { "Lt;", { 0x00226A, } }, /* ≪ */
+    { "Map;", { 0x002905, } }, /* ⤅ */
+    { "Mcy;", { 0x00041C, } }, /* М */
+    { "MediumSpace;", { 0x00205F, } }, /*   */
+    { "Mellintrf;", { 0x002133, } }, /* ℳ */
+    { "Mfr;", { 0x01D510, } }, /* 𝔐 */
+    { "MinusPlus;", { 0x002213, } }, /* ∓ */
+    { "Mopf;", { 0x01D544, } }, /* 𝕄 */
+    { "Mscr;", { 0x002133, } }, /* ℳ */
+    { "Mu;", { 0x00039C, } }, /* Μ */
+    { "NJcy;", { 0x00040A, } }, /* Њ */
+    { "Nacute;", { 0x000143, } }, /* Ń */
+    { "Ncaron;", { 0x000147, } }, /* Ň */
+    { "Ncedil;", { 0x000145, } }, /* Ņ */
+    { "Ncy;", { 0x00041D, } }, /* Н */
+    { "NegativeMediumSpace;", { 0x00200B, } }, /* ​ */
+    { "NegativeThickSpace;", { 0x00200B, } }, /* ​ */
+    { "NegativeThinSpace;", { 0x00200B, } }, /* ​ */
+    { "NegativeVeryThinSpace;", { 0x00200B, } }, /* ​ */
+    { "NestedGreaterGreater;", { 0x00226B, } }, /* ≫ */
+    { "NestedLessLess;", { 0x00226A, } }, /* ≪ */
+    { "NewLine;", { 0x00000A, } }, /* \n */
+    { "Nfr;", { 0x01D511, } }, /* 𝔑 */
+    { "NoBreak;", { 0x002060, } }, /* ⁠ */
+    { "NonBreakingSpace;", { 0x0000A0, } }, /*   */
+    { "Nopf;", { 0x002115, } }, /* ℕ */
+    { "Not;", { 0x002AEC, } }, /* ⫬ */
+    { "NotCongruent;", { 0x002262, } }, /* ≢ */
+    { "NotCupCap;", { 0x00226D, } }, /* ≭ */
+    { "NotDoubleVerticalBar;", { 0x002226, } }, /* ∦ */
+    { "NotElement;", { 0x002209, } }, /* ∉ */
+    { "NotEqual;", { 0x002260, } }, /* ≠ */
+    { "NotEqualTilde;", { 0x002242, 0x000338, } }, /* ≂̸ */
+    { "NotExists;", { 0x002204, } }, /* ∄ */
+    { "NotGreater;", { 0x00226F, } }, /* ≯ */
+    { "NotGreaterEqual;", { 0x002271, } }, /* ≱ */
+    { "NotGreaterFullEqual;", { 0x002267, 0x000338, } }, /* ≧̸ */
+    { "NotGreaterGreater;", { 0x00226B, 0x000338, } }, /* ≫̸ */
+    { "NotGreaterLess;", { 0x002279, } }, /* ≹ */
+    { "NotGreaterSlantEqual;", { 0x002A7E, 0x000338, } }, /* ⩾̸ */
+    { "NotGreaterTilde;", { 0x002275, } }, /* ≵ */
+    { "NotHumpDownHump;", { 0x00224E, 0x000338, } }, /* ≎̸ */
+    { "NotHumpEqual;", { 0x00224F, 0x000338, } }, /* ≏̸ */
+    { "NotLeftTriangle;", { 0x0022EA, } }, /* ⋪ */
+    { "NotLeftTriangleBar;", { 0x0029CF, 0x000338, } }, /* ⧏̸ */
+    { "NotLeftTriangleEqual;", { 0x0022EC, } }, /* ⋬ */
+    { "NotLess;", { 0x00226E, } }, /* ≮ */
+    { "NotLessEqual;", { 0x002270, } }, /* ≰ */
+    { "NotLessGreater;", { 0x002278, } }, /* ≸ */
+    { "NotLessLess;", { 0x00226A, 0x000338, } }, /* ≪̸ */
+    { "NotLessSlantEqual;", { 0x002A7D, 0x000338, } }, /* ⩽̸ */
+    { "NotLessTilde;", { 0x002274, } }, /* ≴ */
+    { "NotNestedGreaterGreater;", { 0x002AA2, 0x000338, } }, /* ⪢̸ */
+    { "NotNestedLessLess;", { 0x002AA1, 0x000338, } }, /* ⪡̸ */
+    { "NotPrecedes;", { 0x002280, } }, /* ⊀ */
+    { "NotPrecedesEqual;", { 0x002AAF, 0x000338, } }, /* ⪯̸ */
+    { "NotPrecedesSlantEqual;", { 0x0022E0, } }, /* ⋠ */
+    { "NotReverseElement;", { 0x00220C, } }, /* ∌ */
+    { "NotRightTriangle;", { 0x0022EB, } }, /* ⋫ */
+    { "NotRightTriangleBar;", { 0x0029D0, 0x000338, } }, /* ⧐̸ */
+    { "NotRightTriangleEqual;", { 0x0022ED, } }, /* ⋭ */
+    { "NotSquareSubset;", { 0x00228F, 0x000338, } }, /* ⊏̸ */
+    { "NotSquareSubsetEqual;", { 0x0022E2, } }, /* ⋢ */
+    { "NotSquareSuperset;", { 0x002290, 0x000338, } }, /* ⊐̸ */
+    { "NotSquareSupersetEqual;", { 0x0022E3, } }, /* ⋣ */
+    { "NotSubset;", { 0x002282, 0x0020D2, } }, /* ⊂⃒ */
+    { "NotSubsetEqual;", { 0x002288, } }, /* ⊈ */
+    { "NotSucceeds;", { 0x002281, } }, /* ⊁ */
+    { "NotSucceedsEqual;", { 0x002AB0, 0x000338, } }, /* ⪰̸ */
+    { "NotSucceedsSlantEqual;", { 0x0022E1, } }, /* ⋡ */
+    { "NotSucceedsTilde;", { 0x00227F, 0x000338, } }, /* ≿̸ */
+    { "NotSuperset;", { 0x002283, 0x0020D2, } }, /* ⊃⃒ */
+    { "NotSupersetEqual;", { 0x002289, } }, /* ⊉ */
+    { "NotTilde;", { 0x002241, } }, /* ≁ */
+    { "NotTildeEqual;", { 0x002244, } }, /* ≄ */
+    { "NotTildeFullEqual;", { 0x002247, } }, /* ≇ */
+    { "NotTildeTilde;", { 0x002249, } }, /* ≉ */
+    { "NotVerticalBar;", { 0x002224, } }, /* ∤ */
+    { "Nscr;", { 0x01D4A9, } }, /* 𝒩 */
+    { "Ntilde", { 0x0000D1, } }, /* Ñ */
+    { "Ntilde;", { 0x0000D1, } }, /* Ñ */
+    { "Nu;", { 0x00039D, } }, /* Ν */
+    { "OElig;", { 0x000152, } }, /* Œ */
+    { "Oacute", { 0x0000D3, } }, /* Ó */
+    { "Oacute;", { 0x0000D3, } }, /* Ó */
+    { "Ocirc", { 0x0000D4, } }, /* Ô */
+    { "Ocirc;", { 0x0000D4, } }, /* Ô */
+    { "Ocy;", { 0x00041E, } }, /* О */
+    { "Odblac;", { 0x000150, } }, /* Ő */
+    { "Ofr;", { 0x01D512, } }, /* 𝔒 */
+    { "Ograve", { 0x0000D2, } }, /* Ò */
+    { "Ograve;", { 0x0000D2, } }, /* Ò */
+    { "Omacr;", { 0x00014C, } }, /* Ō */
+    { "Omega;", { 0x0003A9, } }, /* Ω */
+    { "Omicron;", { 0x00039F, } }, /* Ο */
+    { "Oopf;", { 0x01D546, } }, /* 𝕆 */
+    { "OpenCurlyDoubleQuote;", { 0x00201C, } }, /* “ */
+    { "OpenCurlyQuote;", { 0x002018, } }, /* ‘ */
+    { "Or;", { 0x002A54, } }, /* ⩔ */
+    { "Oscr;", { 0x01D4AA, } }, /* 𝒪 */
+    { "Oslash", { 0x0000D8, } }, /* Ø */
+    { "Oslash;", { 0x0000D8, } }, /* Ø */
+    { "Otilde", { 0x0000D5, } }, /* Õ */
+    { "Otilde;", { 0x0000D5, } }, /* Õ */
+    { "Otimes;", { 0x002A37, } }, /* ⨷ */
+    { "Ouml", { 0x0000D6, } }, /* Ö */
+    { "Ouml;", { 0x0000D6, } }, /* Ö */
+    { "OverBar;", { 0x00203E, } }, /* ‾ */
+    { "OverBrace;", { 0x0023DE, } }, /* ⏞ */
+    { "OverBracket;", { 0x0023B4, } }, /* ⎴ */
+    { "OverParenthesis;", { 0x0023DC, } }, /* ⏜ */
+    { "PartialD;", { 0x002202, } }, /* ∂ */
+    { "Pcy;", { 0x00041F, } }, /* П */
+    { "Pfr;", { 0x01D513, } }, /* 𝔓 */
+    { "Phi;", { 0x0003A6, } }, /* Φ */
+    { "Pi;", { 0x0003A0, } }, /* Π */
+    { "PlusMinus;", { 0x0000B1, } }, /* ± */
+    { "Poincareplane;", { 0x00210C, } }, /* ℌ */
+    { "Popf;", { 0x002119, } }, /* ℙ */
+    { "Pr;", { 0x002ABB, } }, /* ⪻ */
+    { "Precedes;", { 0x00227A, } }, /* ≺ */
+    { "PrecedesEqual;", { 0x002AAF, } }, /* ⪯ */
+    { "PrecedesSlantEqual;", { 0x00227C, } }, /* ≼ */
+    { "PrecedesTilde;", { 0x00227E, } }, /* ≾ */
+    { "Prime;", { 0x002033, } }, /* ″ */
+    { "Product;", { 0x00220F, } }, /* ∏ */
+    { "Proportion;", { 0x002237, } }, /* ∷ */
+    { "Proportional;", { 0x00221D, } }, /* ∝ */
+    { "Pscr;", { 0x01D4AB, } }, /* 𝒫 */
+    { "Psi;", { 0x0003A8, } }, /* Ψ */
+    { "QUOT", { 0x000022, } }, /* " */
+    { "QUOT;", { 0x000022, } }, /* " */
+    { "Qfr;", { 0x01D514, } }, /* 𝔔 */
+    { "Qopf;", { 0x00211A, } }, /* ℚ */
+    { "Qscr;", { 0x01D4AC, } }, /* 𝒬 */
+    { "RBarr;", { 0x002910, } }, /* ⤐ */
+    { "REG", { 0x0000AE, } }, /* ® */
+    { "REG;", { 0x0000AE, } }, /* ® */
+    { "Racute;", { 0x000154, } }, /* Ŕ */
+    { "Rang;", { 0x0027EB, } }, /* ⟫ */
+    { "Rarr;", { 0x0021A0, } }, /* ↠ */
+    { "Rarrtl;", { 0x002916, } }, /* ⤖ */
+    { "Rcaron;", { 0x000158, } }, /* Ř */
+    { "Rcedil;", { 0x000156, } }, /* Ŗ */
+    { "Rcy;", { 0x000420, } }, /* Р */
+    { "Re;", { 0x00211C, } }, /* ℜ */
+    { "ReverseElement;", { 0x00220B, } }, /* ∋ */
+    { "ReverseEquilibrium;", { 0x0021CB, } }, /* ⇋ */
+    { "ReverseUpEquilibrium;", { 0x00296F, } }, /* ⥯ */
+    { "Rfr;", { 0x00211C, } }, /* ℜ */
+    { "Rho;", { 0x0003A1, } }, /* Ρ */
+    { "RightAngleBracket;", { 0x0027E9, } }, /* ⟩ */
+    { "RightArrow;", { 0x002192, } }, /* → */
+    { "RightArrowBar;", { 0x0021E5, } }, /* ⇥ */
+    { "RightArrowLeftArrow;", { 0x0021C4, } }, /* ⇄ */
+    { "RightCeiling;", { 0x002309, } }, /* ⌉ */
+    { "RightDoubleBracket;", { 0x0027E7, } }, /* ⟧ */
+    { "RightDownTeeVector;", { 0x00295D, } }, /* ⥝ */
+    { "RightDownVector;", { 0x0021C2, } }, /* ⇂ */
+    { "RightDownVectorBar;", { 0x002955, } }, /* ⥕ */
+    { "RightFloor;", { 0x00230B, } }, /* ⌋ */
+    { "RightTee;", { 0x0022A2, } }, /* ⊢ */
+    { "RightTeeArrow;", { 0x0021A6, } }, /* ↦ */
+    { "RightTeeVector;", { 0x00295B, } }, /* ⥛ */
+    { "RightTriangle;", { 0x0022B3, } }, /* ⊳ */
+    { "RightTriangleBar;", { 0x0029D0, } }, /* ⧐ */
+    { "RightTriangleEqual;", { 0x0022B5, } }, /* ⊵ */
+    { "RightUpDownVector;", { 0x00294F, } }, /* ⥏ */
+    { "RightUpTeeVector;", { 0x00295C, } }, /* ⥜ */
+    { "RightUpVector;", { 0x0021BE, } }, /* ↾ */
+    { "RightUpVectorBar;", { 0x002954, } }, /* ⥔ */
+    { "RightVector;", { 0x0021C0, } }, /* ⇀ */
+    { "RightVectorBar;", { 0x002953, } }, /* ⥓ */
+    { "Rightarrow;", { 0x0021D2, } }, /* ⇒ */
+    { "Ropf;", { 0x00211D, } }, /* ℝ */
+    { "RoundImplies;", { 0x002970, } }, /* ⥰ */
+    { "Rrightarrow;", { 0x0021DB, } }, /* ⇛ */
+    { "Rscr;", { 0x00211B, } }, /* ℛ */
+    { "Rsh;", { 0x0021B1, } }, /* ↱ */
+    { "RuleDelayed;", { 0x0029F4, } }, /* ⧴ */
+    { "SHCHcy;", { 0x000429, } }, /* Щ */
+    { "SHcy;", { 0x000428, } }, /* Ш */
+    { "SOFTcy;", { 0x00042C, } }, /* Ь */
+    { "Sacute;", { 0x00015A, } }, /* Ś */
+    { "Sc;", { 0x002ABC, } }, /* ⪼ */
+    { "Scaron;", { 0x000160, } }, /* Š */
+    { "Scedil;", { 0x00015E, } }, /* Ş */
+    { "Scirc;", { 0x00015C, } }, /* Ŝ */
+    { "Scy;", { 0x000421, } }, /* С */
+    { "Sfr;", { 0x01D516, } }, /* 𝔖 */
+    { "ShortDownArrow;", { 0x002193, } }, /* ↓ */
+    { "ShortLeftArrow;", { 0x002190, } }, /* ← */
+    { "ShortRightArrow;", { 0x002192, } }, /* → */
+    { "ShortUpArrow;", { 0x002191, } }, /* ↑ */
+    { "Sigma;", { 0x0003A3, } }, /* Σ */
+    { "SmallCircle;", { 0x002218, } }, /* ∘ */
+    { "Sopf;", { 0x01D54A, } }, /* 𝕊 */
+    { "Sqrt;", { 0x00221A, } }, /* √ */
+    { "Square;", { 0x0025A1, } }, /* □ */
+    { "SquareIntersection;", { 0x002293, } }, /* ⊓ */
+    { "SquareSubset;", { 0x00228F, } }, /* ⊏ */
+    { "SquareSubsetEqual;", { 0x002291, } }, /* ⊑ */
+    { "SquareSuperset;", { 0x002290, } }, /* ⊐ */
+    { "SquareSupersetEqual;", { 0x002292, } }, /* ⊒ */
+    { "SquareUnion;", { 0x002294, } }, /* ⊔ */
+    { "Sscr;", { 0x01D4AE, } }, /* 𝒮 */
+    { "Star;", { 0x0022C6, } }, /* ⋆ */
+    { "Sub;", { 0x0022D0, } }, /* ⋐ */
+    { "Subset;", { 0x0022D0, } }, /* ⋐ */
+    { "SubsetEqual;", { 0x002286, } }, /* ⊆ */
+    { "Succeeds;", { 0x00227B, } }, /* ≻ */
+    { "SucceedsEqual;", { 0x002AB0, } }, /* ⪰ */
+    { "SucceedsSlantEqual;", { 0x00227D, } }, /* ≽ */
+    { "SucceedsTilde;", { 0x00227F, } }, /* ≿ */
+    { "SuchThat;", { 0x00220B, } }, /* ∋ */
+    { "Sum;", { 0x002211, } }, /* ∑ */
+    { "Sup;", { 0x0022D1, } }, /* ⋑ */
+    { "Superset;", { 0x002283, } }, /* ⊃ */
+    { "SupersetEqual;", { 0x002287, } }, /* ⊇ */
+    { "Supset;", { 0x0022D1, } }, /* ⋑ */
+    { "THORN", { 0x0000DE, } }, /* Þ */
+    { "THORN;", { 0x0000DE, } }, /* Þ */
+    { "TRADE;", { 0x002122, } }, /* ™ */
+    { "TSHcy;", { 0x00040B, } }, /* Ћ */
+    { "TScy;", { 0x000426, } }, /* Ц */
+    { "Tab;", { 0x000009, } }, /* 	 */
+    { "Tau;", { 0x0003A4, } }, /* Τ */
+    { "Tcaron;", { 0x000164, } }, /* Ť */
+    { "Tcedil;", { 0x000162, } }, /* Ţ */
+    { "Tcy;", { 0x000422, } }, /* Т */
+    { "Tfr;", { 0x01D517, } }, /* 𝔗 */
+    { "Therefore;", { 0x002234, } }, /* ∴ */
+    { "Theta;", { 0x000398, } }, /* Θ */
+    { "ThickSpace;", { 0x00205F, 0x00200A, } }, /*    */
+    { "ThinSpace;", { 0x002009, } }, /*   */
+    { "Tilde;", { 0x00223C, } }, /* ∼ */
+    { "TildeEqual;", { 0x002243, } }, /* ≃ */
+    { "TildeFullEqual;", { 0x002245, } }, /* ≅ */
+    { "TildeTilde;", { 0x002248, } }, /* ≈ */
+    { "Topf;", { 0x01D54B, } }, /* 𝕋 */
+    { "TripleDot;", { 0x0020DB, } }, /* ⃛ */
+    { "Tscr;", { 0x01D4AF, } }, /* 𝒯 */
+    { "Tstrok;", { 0x000166, } }, /* Ŧ */
+    { "Uacute", { 0x0000DA, } }, /* Ú */
+    { "Uacute;", { 0x0000DA, } }, /* Ú */
+    { "Uarr;", { 0x00219F, } }, /* ↟ */
+    { "Uarrocir;", { 0x002949, } }, /* ⥉ */
+    { "Ubrcy;", { 0x00040E, } }, /* Ў */
+    { "Ubreve;", { 0x00016C, } }, /* Ŭ */
+    { "Ucirc", { 0x0000DB, } }, /* Û */
+    { "Ucirc;", { 0x0000DB, } }, /* Û */
+    { "Ucy;", { 0x000423, } }, /* У */
+    { "Udblac;", { 0x000170, } }, /* Ű */
+    { "Ufr;", { 0x01D518, } }, /* 𝔘 */
+    { "Ugrave", { 0x0000D9, } }, /* Ù */
+    { "Ugrave;", { 0x0000D9, } }, /* Ù */
+    { "Umacr;", { 0x00016A, } }, /* Ū */
+    { "UnderBar;", { 0x00005F, } }, /* _ */
+    { "UnderBrace;", { 0x0023DF, } }, /* ⏟ */
+    { "UnderBracket;", { 0x0023B5, } }, /* ⎵ */
+    { "UnderParenthesis;", { 0x0023DD, } }, /* ⏝ */
+    { "Union;", { 0x0022C3, } }, /* ⋃ */
+    { "UnionPlus;", { 0x00228E, } }, /* ⊎ */
+    { "Uogon;", { 0x000172, } }, /* Ų */
+    { "Uopf;", { 0x01D54C, } }, /* 𝕌 */
+    { "UpArrow;", { 0x002191, } }, /* ↑ */
+    { "UpArrowBar;", { 0x002912, } }, /* ⤒ */
+    { "UpArrowDownArrow;", { 0x0021C5, } }, /* ⇅ */
+    { "UpDownArrow;", { 0x002195, } }, /* ↕ */
+    { "UpEquilibrium;", { 0x00296E, } }, /* ⥮ */
+    { "UpTee;", { 0x0022A5, } }, /* ⊥ */
+    { "UpTeeArrow;", { 0x0021A5, } }, /* ↥ */
+    { "Uparrow;", { 0x0021D1, } }, /* ⇑ */
+    { "Updownarrow;", { 0x0021D5, } }, /* ⇕ */
+    { "UpperLeftArrow;", { 0x002196, } }, /* ↖ */
+    { "UpperRightArrow;", { 0x002197, } }, /* ↗ */
+    { "Upsi;", { 0x0003D2, } }, /* ϒ */
+    { "Upsilon;", { 0x0003A5, } }, /* Υ */
+    { "Uring;", { 0x00016E, } }, /* Ů */
+    { "Uscr;", { 0x01D4B0, } }, /* 𝒰 */
+    { "Utilde;", { 0x000168, } }, /* Ũ */
+    { "Uuml", { 0x0000DC, } }, /* Ü */
+    { "Uuml;", { 0x0000DC, } }, /* Ü */
+    { "VDash;", { 0x0022AB, } }, /* ⊫ */
+    { "Vbar;", { 0x002AEB, } }, /* ⫫ */
+    { "Vcy;", { 0x000412, } }, /* В */
+    { "Vdash;", { 0x0022A9, } }, /* ⊩ */
+    { "Vdashl;", { 0x002AE6, } }, /* ⫦ */
+    { "Vee;", { 0x0022C1, } }, /* ⋁ */
+    { "Verbar;", { 0x002016, } }, /* ‖ */
+    { "Vert;", { 0x002016, } }, /* ‖ */
+    { "VerticalBar;", { 0x002223, } }, /* ∣ */
+    { "VerticalLine;", { 0x00007C, } }, /* | */
+    { "VerticalSeparator;", { 0x002758, } }, /* ❘ */
+    { "VerticalTilde;", { 0x002240, } }, /* ≀ */
+    { "VeryThinSpace;", { 0x00200A, } }, /*   */
+    { "Vfr;", { 0x01D519, } }, /* 𝔙 */
+    { "Vopf;", { 0x01D54D, } }, /* 𝕍 */
+    { "Vscr;", { 0x01D4B1, } }, /* 𝒱 */
+    { "Vvdash;", { 0x0022AA, } }, /* ⊪ */
+    { "Wcirc;", { 0x000174, } }, /* Ŵ */
+    { "Wedge;", { 0x0022C0, } }, /* ⋀ */
+    { "Wfr;", { 0x01D51A, } }, /* 𝔚 */
+    { "Wopf;", { 0x01D54E, } }, /* 𝕎 */
+    { "Wscr;", { 0x01D4B2, } }, /* 𝒲 */
+    { "Xfr;", { 0x01D51B, } }, /* 𝔛 */
+    { "Xi;", { 0x00039E, } }, /* Ξ */
+    { "Xopf;", { 0x01D54F, } }, /* 𝕏 */
+    { "Xscr;", { 0x01D4B3, } }, /* 𝒳 */
+    { "YAcy;", { 0x00042F, } }, /* Я */
+    { "YIcy;", { 0x000407, } }, /* Ї */
+    { "YUcy;", { 0x00042E, } }, /* Ю */
+    { "Yacute", { 0x0000DD, } }, /* Ý */
+    { "Yacute;", { 0x0000DD, } }, /* Ý */
+    { "Ycirc;", { 0x000176, } }, /* Ŷ */
+    { "Ycy;", { 0x00042B, } }, /* Ы */
+    { "Yfr;", { 0x01D51C, } }, /* 𝔜 */
+    { "Yopf;", { 0x01D550, } }, /* 𝕐 */
+    { "Yscr;", { 0x01D4B4, } }, /* 𝒴 */
+    { "Yuml;", { 0x000178, } }, /* Ÿ */
+    { "ZHcy;", { 0x000416, } }, /* Ж */
+    { "Zacute;", { 0x000179, } }, /* Ź */
+    { "Zcaron;", { 0x00017D, } }, /* Ž */
+    { "Zcy;", { 0x000417, } }, /* З */
+    { "Zdot;", { 0x00017B, } }, /* Ż */
+    { "ZeroWidthSpace;", { 0x00200B, } }, /* ​ */
+    { "Zeta;", { 0x000396, } }, /* Ζ */
+    { "Zfr;", { 0x002128, } }, /* ℨ */
+    { "Zopf;", { 0x002124, } }, /* ℤ */
+    { "Zscr;", { 0x01D4B5, } }, /* 𝒵 */
+    { "aacute", { 0x0000E1, } }, /* á */
+    { "aacute;", { 0x0000E1, } }, /* á */
+    { "abreve;", { 0x000103, } }, /* ă */
+    { "ac;", { 0x00223E, } }, /* ∾ */
+    { "acE;", { 0x00223E, 0x000333, } }, /* ∾̳ */
+    { "acd;", { 0x00223F, } }, /* ∿ */
+    { "acirc", { 0x0000E2, } }, /* â */
+    { "acirc;", { 0x0000E2, } }, /* â */
+    { "acute", { 0x0000B4, } }, /* ´ */
+    { "acute;", { 0x0000B4, } }, /* ´ */
+    { "acy;", { 0x000430, } }, /* а */
+    { "aelig", { 0x0000E6, } }, /* æ */
+    { "aelig;", { 0x0000E6, } }, /* æ */
+    { "af;", { 0x002061, } }, /* ⁡ */
+    { "afr;", { 0x01D51E, } }, /* 𝔞 */
+    { "agrave", { 0x0000E0, } }, /* à */
+    { "agrave;", { 0x0000E0, } }, /* à */
+    { "alefsym;", { 0x002135, } }, /* ℵ */
+    { "aleph;", { 0x002135, } }, /* ℵ */
+    { "alpha;", { 0x0003B1, } }, /* α */
+    { "amacr;", { 0x000101, } }, /* ā */
+    { "amalg;", { 0x002A3F, } }, /* ⨿ */
+    { "amp", { 0x000026, } }, /* & */
+    { "amp;", { 0x000026, } }, /* & */
+    { "and;", { 0x002227, } }, /* ∧ */
+    { "andand;", { 0x002A55, } }, /* ⩕ */
+    { "andd;", { 0x002A5C, } }, /* ⩜ */
+    { "andslope;", { 0x002A58, } }, /* ⩘ */
+    { "andv;", { 0x002A5A, } }, /* ⩚ */
+    { "ang;", { 0x002220, } }, /* ∠ */
+    { "ange;", { 0x0029A4, } }, /* ⦤ */
+    { "angle;", { 0x002220, } }, /* ∠ */
+    { "angmsd;", { 0x002221, } }, /* ∡ */
+    { "angmsdaa;", { 0x0029A8, } }, /* ⦨ */
+    { "angmsdab;", { 0x0029A9, } }, /* ⦩ */
+    { "angmsdac;", { 0x0029AA, } }, /* ⦪ */
+    { "angmsdad;", { 0x0029AB, } }, /* ⦫ */
+    { "angmsdae;", { 0x0029AC, } }, /* ⦬ */
+    { "angmsdaf;", { 0x0029AD, } }, /* ⦭ */
+    { "angmsdag;", { 0x0029AE, } }, /* ⦮ */
+    { "angmsdah;", { 0x0029AF, } }, /* ⦯ */
+    { "angrt;", { 0x00221F, } }, /* ∟ */
+    { "angrtvb;", { 0x0022BE, } }, /* ⊾ */
+    { "angrtvbd;", { 0x00299D, } }, /* ⦝ */
+    { "angsph;", { 0x002222, } }, /* ∢ */
+    { "angst;", { 0x0000C5, } }, /* Å */
+    { "angzarr;", { 0x00237C, } }, /* ⍼ */
+    { "aogon;", { 0x000105, } }, /* ą */
+    { "aopf;", { 0x01D552, } }, /* 𝕒 */
+    { "ap;", { 0x002248, } }, /* ≈ */
+    { "apE;", { 0x002A70, } }, /* ⩰ */
+    { "apacir;", { 0x002A6F, } }, /* ⩯ */
+    { "ape;", { 0x00224A, } }, /* ≊ */
+    { "apid;", { 0x00224B, } }, /* ≋ */
+    { "apos;", { 0x000027, } }, /* ' */
+    { "approx;", { 0x002248, } }, /* ≈ */
+    { "approxeq;", { 0x00224A, } }, /* ≊ */
+    { "aring", { 0x0000E5, } }, /* å */
+    { "aring;", { 0x0000E5, } }, /* å */
+    { "ascr;", { 0x01D4B6, } }, /* 𝒶 */
+    { "ast;", { 0x00002A, } }, /* * */
+    { "asymp;", { 0x002248, } }, /* ≈ */
+    { "asympeq;", { 0x00224D, } }, /* ≍ */
+    { "atilde", { 0x0000E3, } }, /* ã */
+    { "atilde;", { 0x0000E3, } }, /* ã */
+    { "auml", { 0x0000E4, } }, /* ä */
+    { "auml;", { 0x0000E4, } }, /* ä */
+    { "awconint;", { 0x002233, } }, /* ∳ */
+    { "awint;", { 0x002A11, } }, /* ⨑ */
+    { "bNot;", { 0x002AED, } }, /* ⫭ */
+    { "backcong;", { 0x00224C, } }, /* ≌ */
+    { "backepsilon;", { 0x0003F6, } }, /* ϶ */
+    { "backprime;", { 0x002035, } }, /* ‵ */
+    { "backsim;", { 0x00223D, } }, /* ∽ */
+    { "backsimeq;", { 0x0022CD, } }, /* ⋍ */
+    { "barvee;", { 0x0022BD, } }, /* ⊽ */
+    { "barwed;", { 0x002305, } }, /* ⌅ */
+    { "barwedge;", { 0x002305, } }, /* ⌅ */
+    { "bbrk;", { 0x0023B5, } }, /* ⎵ */
+    { "bbrktbrk;", { 0x0023B6, } }, /* ⎶ */
+    { "bcong;", { 0x00224C, } }, /* ≌ */
+    { "bcy;", { 0x000431, } }, /* б */
+    { "bdquo;", { 0x00201E, } }, /* „ */
+    { "becaus;", { 0x002235, } }, /* ∵ */
+    { "because;", { 0x002235, } }, /* ∵ */
+    { "bemptyv;", { 0x0029B0, } }, /* ⦰ */
+    { "bepsi;", { 0x0003F6, } }, /* ϶ */
+    { "bernou;", { 0x00212C, } }, /* ℬ */
+    { "beta;", { 0x0003B2, } }, /* β */
+    { "beth;", { 0x002136, } }, /* ℶ */
+    { "between;", { 0x00226C, } }, /* ≬ */
+    { "bfr;", { 0x01D51F, } }, /* 𝔟 */
+    { "bigcap;", { 0x0022C2, } }, /* ⋂ */
+    { "bigcirc;", { 0x0025EF, } }, /* ◯ */
+    { "bigcup;", { 0x0022C3, } }, /* ⋃ */
+    { "bigodot;", { 0x002A00, } }, /* ⨀ */
+    { "bigoplus;", { 0x002A01, } }, /* ⨁ */
+    { "bigotimes;", { 0x002A02, } }, /* ⨂ */
+    { "bigsqcup;", { 0x002A06, } }, /* ⨆ */
+    { "bigstar;", { 0x002605, } }, /* ★ */
+    { "bigtriangledown;", { 0x0025BD, } }, /* ▽ */
+    { "bigtriangleup;", { 0x0025B3, } }, /* △ */
+    { "biguplus;", { 0x002A04, } }, /* ⨄ */
+    { "bigvee;", { 0x0022C1, } }, /* ⋁ */
+    { "bigwedge;", { 0x0022C0, } }, /* ⋀ */
+    { "bkarow;", { 0x00290D, } }, /* ⤍ */
+    { "blacklozenge;", { 0x0029EB, } }, /* ⧫ */
+    { "blacksquare;", { 0x0025AA, } }, /* ▪ */
+    { "blacktriangle;", { 0x0025B4, } }, /* ▴ */
+    { "blacktriangledown;", { 0x0025BE, } }, /* ▾ */
+    { "blacktriangleleft;", { 0x0025C2, } }, /* ◂ */
+    { "blacktriangleright;", { 0x0025B8, } }, /* ▸ */
+    { "blank;", { 0x002423, } }, /* ␣ */
+    { "blk12;", { 0x002592, } }, /* ▒ */
+    { "blk14;", { 0x002591, } }, /* ░ */
+    { "blk34;", { 0x002593, } }, /* ▓ */
+    { "block;", { 0x002588, } }, /* █ */
+    { "bne;", { 0x00003D, 0x0020E5, } }, /* =⃥ */
+    { "bnequiv;", { 0x002261, 0x0020E5, } }, /* ≡⃥ */
+    { "bnot;", { 0x002310, } }, /* ⌐ */
+    { "bopf;", { 0x01D553, } }, /* 𝕓 */
+    { "bot;", { 0x0022A5, } }, /* ⊥ */
+    { "bottom;", { 0x0022A5, } }, /* ⊥ */
+    { "bowtie;", { 0x0022C8, } }, /* ⋈ */
+    { "boxDL;", { 0x002557, } }, /* ╗ */
+    { "boxDR;", { 0x002554, } }, /* ╔ */
+    { "boxDl;", { 0x002556, } }, /* ╖ */
+    { "boxDr;", { 0x002553, } }, /* ╓ */
+    { "boxH;", { 0x002550, } }, /* ═ */
+    { "boxHD;", { 0x002566, } }, /* ╦ */
+    { "boxHU;", { 0x002569, } }, /* ╩ */
+    { "boxHd;", { 0x002564, } }, /* ╤ */
+    { "boxHu;", { 0x002567, } }, /* ╧ */
+    { "boxUL;", { 0x00255D, } }, /* ╝ */
+    { "boxUR;", { 0x00255A, } }, /* ╚ */
+    { "boxUl;", { 0x00255C, } }, /* ╜ */
+    { "boxUr;", { 0x002559, } }, /* ╙ */
+    { "boxV;", { 0x002551, } }, /* ║ */
+    { "boxVH;", { 0x00256C, } }, /* ╬ */
+    { "boxVL;", { 0x002563, } }, /* ╣ */
+    { "boxVR;", { 0x002560, } }, /* ╠ */
+    { "boxVh;", { 0x00256B, } }, /* ╫ */
+    { "boxVl;", { 0x002562, } }, /* ╢ */
+    { "boxVr;", { 0x00255F, } }, /* ╟ */
+    { "boxbox;", { 0x0029C9, } }, /* ⧉ */
+    { "boxdL;", { 0x002555, } }, /* ╕ */
+    { "boxdR;", { 0x002552, } }, /* ╒ */
+    { "boxdl;", { 0x002510, } }, /* ┐ */
+    { "boxdr;", { 0x00250C, } }, /* ┌ */
+    { "boxh;", { 0x002500, } }, /* ─ */
+    { "boxhD;", { 0x002565, } }, /* ╥ */
+    { "boxhU;", { 0x002568, } }, /* ╨ */
+    { "boxhd;", { 0x00252C, } }, /* ┬ */
+    { "boxhu;", { 0x002534, } }, /* ┴ */
+    { "boxminus;", { 0x00229F, } }, /* ⊟ */
+    { "boxplus;", { 0x00229E, } }, /* ⊞ */
+    { "boxtimes;", { 0x0022A0, } }, /* ⊠ */
+    { "boxuL;", { 0x00255B, } }, /* ╛ */
+    { "boxuR;", { 0x002558, } }, /* ╘ */
+    { "boxul;", { 0x002518, } }, /* ┘ */
+    { "boxur;", { 0x002514, } }, /* └ */
+    { "boxv;", { 0x002502, } }, /* │ */
+    { "boxvH;", { 0x00256A, } }, /* ╪ */
+    { "boxvL;", { 0x002561, } }, /* ╡ */
+    { "boxvR;", { 0x00255E, } }, /* ╞ */
+    { "boxvh;", { 0x00253C, } }, /* ┼ */
+    { "boxvl;", { 0x002524, } }, /* ┤ */
+    { "boxvr;", { 0x00251C, } }, /* ├ */
+    { "bprime;", { 0x002035, } }, /* ‵ */
+    { "breve;", { 0x0002D8, } }, /* ˘ */
+    { "brvbar", { 0x0000A6, } }, /* ¦ */
+    { "brvbar;", { 0x0000A6, } }, /* ¦ */
+    { "bscr;", { 0x01D4B7, } }, /* 𝒷 */
+    { "bsemi;", { 0x00204F, } }, /* ⁏ */
+    { "bsim;", { 0x00223D, } }, /* ∽ */
+    { "bsime;", { 0x0022CD, } }, /* ⋍ */
+    { "bsol;", { 0x00005C, } }, /* \ */
+    { "bsolb;", { 0x0029C5, } }, /* ⧅ */
+    { "bsolhsub;", { 0x0027C8, } }, /* ⟈ */
+    { "bull;", { 0x002022, } }, /* • */
+    { "bullet;", { 0x002022, } }, /* • */
+    { "bump;", { 0x00224E, } }, /* ≎ */
+    { "bumpE;", { 0x002AAE, } }, /* ⪮ */
+    { "bumpe;", { 0x00224F, } }, /* ≏ */
+    { "bumpeq;", { 0x00224F, } }, /* ≏ */
+    { "cacute;", { 0x000107, } }, /* ć */
+    { "cap;", { 0x002229, } }, /* ∩ */
+    { "capand;", { 0x002A44, } }, /* ⩄ */
+    { "capbrcup;", { 0x002A49, } }, /* ⩉ */
+    { "capcap;", { 0x002A4B, } }, /* ⩋ */
+    { "capcup;", { 0x002A47, } }, /* ⩇ */
+    { "capdot;", { 0x002A40, } }, /* ⩀ */
+    { "caps;", { 0x002229, 0x00FE00, } }, /* ∩︀ */
+    { "caret;", { 0x002041, } }, /* ⁁ */
+    { "caron;", { 0x0002C7, } }, /* ˇ */
+    { "ccaps;", { 0x002A4D, } }, /* ⩍ */
+    { "ccaron;", { 0x00010D, } }, /* č */
+    { "ccedil", { 0x0000E7, } }, /* ç */
+    { "ccedil;", { 0x0000E7, } }, /* ç */
+    { "ccirc;", { 0x000109, } }, /* ĉ */
+    { "ccups;", { 0x002A4C, } }, /* ⩌ */
+    { "ccupssm;", { 0x002A50, } }, /* ⩐ */
+    { "cdot;", { 0x00010B, } }, /* ċ */
+    { "cedil", { 0x0000B8, } }, /* ¸ */
+    { "cedil;", { 0x0000B8, } }, /* ¸ */
+    { "cemptyv;", { 0x0029B2, } }, /* ⦲ */
+    { "cent", { 0x0000A2, } }, /* ¢ */
+    { "cent;", { 0x0000A2, } }, /* ¢ */
+    { "centerdot;", { 0x0000B7, } }, /* · */
+    { "cfr;", { 0x01D520, } }, /* 𝔠 */
+    { "chcy;", { 0x000447, } }, /* ч */
+    { "check;", { 0x002713, } }, /* ✓ */
+    { "checkmark;", { 0x002713, } }, /* ✓ */
+    { "chi;", { 0x0003C7, } }, /* χ */
+    { "cir;", { 0x0025CB, } }, /* ○ */
+    { "cirE;", { 0x0029C3, } }, /* ⧃ */
+    { "circ;", { 0x0002C6, } }, /* ˆ */
+    { "circeq;", { 0x002257, } }, /* ≗ */
+    { "circlearrowleft;", { 0x0021BA, } }, /* ↺ */
+    { "circlearrowright;", { 0x0021BB, } }, /* ↻ */
+    { "circledR;", { 0x0000AE, } }, /* ® */
+    { "circledS;", { 0x0024C8, } }, /* Ⓢ */
+    { "circledast;", { 0x00229B, } }, /* ⊛ */
+    { "circledcirc;", { 0x00229A, } }, /* ⊚ */
+    { "circleddash;", { 0x00229D, } }, /* ⊝ */
+    { "cire;", { 0x002257, } }, /* ≗ */
+    { "cirfnint;", { 0x002A10, } }, /* ⨐ */
+    { "cirmid;", { 0x002AEF, } }, /* ⫯ */
+    { "cirscir;", { 0x0029C2, } }, /* ⧂ */
+    { "clubs;", { 0x002663, } }, /* ♣ */
+    { "clubsuit;", { 0x002663, } }, /* ♣ */
+    { "colon;", { 0x00003A, } }, /* : */
+    { "colone;", { 0x002254, } }, /* ≔ */
+    { "coloneq;", { 0x002254, } }, /* ≔ */
+    { "comma;", { 0x00002C, } }, /* , */
+    { "commat;", { 0x000040, } }, /* @ */
+    { "comp;", { 0x002201, } }, /* ∁ */
+    { "compfn;", { 0x002218, } }, /* ∘ */
+    { "complement;", { 0x002201, } }, /* ∁ */
+    { "complexes;", { 0x002102, } }, /* ℂ */
+    { "cong;", { 0x002245, } }, /* ≅ */
+    { "congdot;", { 0x002A6D, } }, /* ⩭ */
+    { "conint;", { 0x00222E, } }, /* ∮ */
+    { "copf;", { 0x01D554, } }, /* 𝕔 */
+    { "coprod;", { 0x002210, } }, /* ∐ */
+    { "copy", { 0x0000A9, } }, /* © */
+    { "copy;", { 0x0000A9, } }, /* © */
+    { "copysr;", { 0x002117, } }, /* ℗ */
+    { "crarr;", { 0x0021B5, } }, /* ↵ */
+    { "cross;", { 0x002717, } }, /* ✗ */
+    { "cscr;", { 0x01D4B8, } }, /* 𝒸 */
+    { "csub;", { 0x002ACF, } }, /* ⫏ */
+    { "csube;", { 0x002AD1, } }, /* ⫑ */
+    { "csup;", { 0x002AD0, } }, /* ⫐ */
+    { "csupe;", { 0x002AD2, } }, /* ⫒ */
+    { "ctdot;", { 0x0022EF, } }, /* ⋯ */
+    { "cudarrl;", { 0x002938, } }, /* ⤸ */
+    { "cudarrr;", { 0x002935, } }, /* ⤵ */
+    { "cuepr;", { 0x0022DE, } }, /* ⋞ */
+    { "cuesc;", { 0x0022DF, } }, /* ⋟ */
+    { "cularr;", { 0x0021B6, } }, /* ↶ */
+    { "cularrp;", { 0x00293D, } }, /* ⤽ */
+    { "cup;", { 0x00222A, } }, /* ∪ */
+    { "cupbrcap;", { 0x002A48, } }, /* ⩈ */
+    { "cupcap;", { 0x002A46, } }, /* ⩆ */
+    { "cupcup;", { 0x002A4A, } }, /* ⩊ */
+    { "cupdot;", { 0x00228D, } }, /* ⊍ */
+    { "cupor;", { 0x002A45, } }, /* ⩅ */
+    { "cups;", { 0x00222A, 0x00FE00, } }, /* ∪︀ */
+    { "curarr;", { 0x0021B7, } }, /* ↷ */
+    { "curarrm;", { 0x00293C, } }, /* ⤼ */
+    { "curlyeqprec;", { 0x0022DE, } }, /* ⋞ */
+    { "curlyeqsucc;", { 0x0022DF, } }, /* ⋟ */
+    { "curlyvee;", { 0x0022CE, } }, /* ⋎ */
+    { "curlywedge;", { 0x0022CF, } }, /* ⋏ */
+    { "curren", { 0x0000A4, } }, /* ¤ */
+    { "curren;", { 0x0000A4, } }, /* ¤ */
+    { "curvearrowleft;", { 0x0021B6, } }, /* ↶ */
+    { "curvearrowright;", { 0x0021B7, } }, /* ↷ */
+    { "cuvee;", { 0x0022CE, } }, /* ⋎ */
+    { "cuwed;", { 0x0022CF, } }, /* ⋏ */
+    { "cwconint;", { 0x002232, } }, /* ∲ */
+    { "cwint;", { 0x002231, } }, /* ∱ */
+    { "cylcty;", { 0x00232D, } }, /* ⌭ */
+    { "dArr;", { 0x0021D3, } }, /* ⇓ */
+    { "dHar;", { 0x002965, } }, /* ⥥ */
+    { "dagger;", { 0x002020, } }, /* † */
+    { "daleth;", { 0x002138, } }, /* ℸ */
+    { "darr;", { 0x002193, } }, /* ↓ */
+    { "dash;", { 0x002010, } }, /* ‐ */
+    { "dashv;", { 0x0022A3, } }, /* ⊣ */
+    { "dbkarow;", { 0x00290F, } }, /* ⤏ */
+    { "dblac;", { 0x0002DD, } }, /* ˝ */
+    { "dcaron;", { 0x00010F, } }, /* ď */
+    { "dcy;", { 0x000434, } }, /* д */
+    { "dd;", { 0x002146, } }, /* ⅆ */
+    { "ddagger;", { 0x002021, } }, /* ‡ */
+    { "ddarr;", { 0x0021CA, } }, /* ⇊ */
+    { "ddotseq;", { 0x002A77, } }, /* ⩷ */
+    { "deg", { 0x0000B0, } }, /* ° */
+    { "deg;", { 0x0000B0, } }, /* ° */
+    { "delta;", { 0x0003B4, } }, /* δ */
+    { "demptyv;", { 0x0029B1, } }, /* ⦱ */
+    { "dfisht;", { 0x00297F, } }, /* ⥿ */
+    { "dfr;", { 0x01D521, } }, /* 𝔡 */
+    { "dharl;", { 0x0021C3, } }, /* ⇃ */
+    { "dharr;", { 0x0021C2, } }, /* ⇂ */
+    { "diam;", { 0x0022C4, } }, /* ⋄ */
+    { "diamond;", { 0x0022C4, } }, /* ⋄ */
+    { "diamondsuit;", { 0x002666, } }, /* ♦ */
+    { "diams;", { 0x002666, } }, /* ♦ */
+    { "die;", { 0x0000A8, } }, /* ¨ */
+    { "digamma;", { 0x0003DD, } }, /* ϝ */
+    { "disin;", { 0x0022F2, } }, /* ⋲ */
+    { "div;", { 0x0000F7, } }, /* ÷ */
+    { "divide", { 0x0000F7, } }, /* ÷ */
+    { "divide;", { 0x0000F7, } }, /* ÷ */
+    { "divideontimes;", { 0x0022C7, } }, /* ⋇ */
+    { "divonx;", { 0x0022C7, } }, /* ⋇ */
+    { "djcy;", { 0x000452, } }, /* ђ */
+    { "dlcorn;", { 0x00231E, } }, /* ⌞ */
+    { "dlcrop;", { 0x00230D, } }, /* ⌍ */
+    { "dollar;", { 0x000024, } }, /* $ */
+    { "dopf;", { 0x01D555, } }, /* 𝕕 */
+    { "dot;", { 0x0002D9, } }, /* ˙ */
+    { "doteq;", { 0x002250, } }, /* ≐ */
+    { "doteqdot;", { 0x002251, } }, /* ≑ */
+    { "dotminus;", { 0x002238, } }, /* ∸ */
+    { "dotplus;", { 0x002214, } }, /* ∔ */
+    { "dotsquare;", { 0x0022A1, } }, /* ⊡ */
+    { "doublebarwedge;", { 0x002306, } }, /* ⌆ */
+    { "downarrow;", { 0x002193, } }, /* ↓ */
+    { "downdownarrows;", { 0x0021CA, } }, /* ⇊ */
+    { "downharpoonleft;", { 0x0021C3, } }, /* ⇃ */
+    { "downharpoonright;", { 0x0021C2, } }, /* ⇂ */
+    { "drbkarow;", { 0x002910, } }, /* ⤐ */
+    { "drcorn;", { 0x00231F, } }, /* ⌟ */
+    { "drcrop;", { 0x00230C, } }, /* ⌌ */
+    { "dscr;", { 0x01D4B9, } }, /* 𝒹 */
+    { "dscy;", { 0x000455, } }, /* ѕ */
+    { "dsol;", { 0x0029F6, } }, /* ⧶ */
+    { "dstrok;", { 0x000111, } }, /* đ */
+    { "dtdot;", { 0x0022F1, } }, /* ⋱ */
+    { "dtri;", { 0x0025BF, } }, /* ▿ */
+    { "dtrif;", { 0x0025BE, } }, /* ▾ */
+    { "duarr;", { 0x0021F5, } }, /* ⇵ */
+    { "duhar;", { 0x00296F, } }, /* ⥯ */
+    { "dwangle;", { 0x0029A6, } }, /* ⦦ */
+    { "dzcy;", { 0x00045F, } }, /* џ */
+    { "dzigrarr;", { 0x0027FF, } }, /* ⟿ */
+    { "eDDot;", { 0x002A77, } }, /* ⩷ */
+    { "eDot;", { 0x002251, } }, /* ≑ */
+    { "eacute", { 0x0000E9, } }, /* é */
+    { "eacute;", { 0x0000E9, } }, /* é */
+    { "easter;", { 0x002A6E, } }, /* ⩮ */
+    { "ecaron;", { 0x00011B, } }, /* ě */
+    { "ecir;", { 0x002256, } }, /* ≖ */
+    { "ecirc", { 0x0000EA, } }, /* ê */
+    { "ecirc;", { 0x0000EA, } }, /* ê */
+    { "ecolon;", { 0x002255, } }, /* ≕ */
+    { "ecy;", { 0x00044D, } }, /* э */
+    { "edot;", { 0x000117, } }, /* ė */
+    { "ee;", { 0x002147, } }, /* ⅇ */
+    { "efDot;", { 0x002252, } }, /* ≒ */
+    { "efr;", { 0x01D522, } }, /* 𝔢 */
+    { "eg;", { 0x002A9A, } }, /* ⪚ */
+    { "egrave", { 0x0000E8, } }, /* è */
+    { "egrave;", { 0x0000E8, } }, /* è */
+    { "egs;", { 0x002A96, } }, /* ⪖ */
+    { "egsdot;", { 0x002A98, } }, /* ⪘ */
+    { "el;", { 0x002A99, } }, /* ⪙ */
+    { "elinters;", { 0x0023E7, } }, /* ⏧ */
+    { "ell;", { 0x002113, } }, /* ℓ */
+    { "els;", { 0x002A95, } }, /* ⪕ */
+    { "elsdot;", { 0x002A97, } }, /* ⪗ */
+    { "emacr;", { 0x000113, } }, /* ē */
+    { "empty;", { 0x002205, } }, /* ∅ */
+    { "emptyset;", { 0x002205, } }, /* ∅ */
+    { "emptyv;", { 0x002205, } }, /* ∅ */
+    { "emsp13;", { 0x002004, } }, /*   */
+    { "emsp14;", { 0x002005, } }, /*   */
+    { "emsp;", { 0x002003, } }, /*   */
+    { "eng;", { 0x00014B, } }, /* ŋ */
+    { "ensp;", { 0x002002, } }, /*   */
+    { "eogon;", { 0x000119, } }, /* ę */
+    { "eopf;", { 0x01D556, } }, /* 𝕖 */
+    { "epar;", { 0x0022D5, } }, /* ⋕ */
+    { "eparsl;", { 0x0029E3, } }, /* ⧣ */
+    { "eplus;", { 0x002A71, } }, /* ⩱ */
+    { "epsi;", { 0x0003B5, } }, /* ε */
+    { "epsilon;", { 0x0003B5, } }, /* ε */
+    { "epsiv;", { 0x0003F5, } }, /* ϵ */
+    { "eqcirc;", { 0x002256, } }, /* ≖ */
+    { "eqcolon;", { 0x002255, } }, /* ≕ */
+    { "eqsim;", { 0x002242, } }, /* ≂ */
+    { "eqslantgtr;", { 0x002A96, } }, /* ⪖ */
+    { "eqslantless;", { 0x002A95, } }, /* ⪕ */
+    { "equals;", { 0x00003D, } }, /* = */
+    { "equest;", { 0x00225F, } }, /* ≟ */
+    { "equiv;", { 0x002261, } }, /* ≡ */
+    { "equivDD;", { 0x002A78, } }, /* ⩸ */
+    { "eqvparsl;", { 0x0029E5, } }, /* ⧥ */
+    { "erDot;", { 0x002253, } }, /* ≓ */
+    { "erarr;", { 0x002971, } }, /* ⥱ */
+    { "escr;", { 0x00212F, } }, /* ℯ */
+    { "esdot;", { 0x002250, } }, /* ≐ */
+    { "esim;", { 0x002242, } }, /* ≂ */
+    { "eta;", { 0x0003B7, } }, /* η */
+    { "eth", { 0x0000F0, } }, /* ð */
+    { "eth;", { 0x0000F0, } }, /* ð */
+    { "euml", { 0x0000EB, } }, /* ë */
+    { "euml;", { 0x0000EB, } }, /* ë */
+    { "euro;", { 0x0020AC, } }, /* € */
+    { "excl;", { 0x000021, } }, /* ! */
+    { "exist;", { 0x002203, } }, /* ∃ */
+    { "expectation;", { 0x002130, } }, /* ℰ */
+    { "exponentiale;", { 0x002147, } }, /* ⅇ */
+    { "fallingdotseq;", { 0x002252, } }, /* ≒ */
+    { "fcy;", { 0x000444, } }, /* ф */
+    { "female;", { 0x002640, } }, /* ♀ */
+    { "ffilig;", { 0x00FB03, } }, /* ﬃ */
+    { "fflig;", { 0x00FB00, } }, /* ﬀ */
+    { "ffllig;", { 0x00FB04, } }, /* ﬄ */
+    { "ffr;", { 0x01D523, } }, /* 𝔣 */
+    { "filig;", { 0x00FB01, } }, /* ﬁ */
+    { "fjlig;", { 0x000066, 0x00006A, } }, /* fj */
+    { "flat;", { 0x00266D, } }, /* ♭ */
+    { "fllig;", { 0x00FB02, } }, /* ﬂ */
+    { "fltns;", { 0x0025B1, } }, /* ▱ */
+    { "fnof;", { 0x000192, } }, /* ƒ */
+    { "fopf;", { 0x01D557, } }, /* 𝕗 */
+    { "forall;", { 0x002200, } }, /* ∀ */
+    { "fork;", { 0x0022D4, } }, /* ⋔ */
+    { "forkv;", { 0x002AD9, } }, /* ⫙ */
+    { "fpartint;", { 0x002A0D, } }, /* ⨍ */
+    { "frac12", { 0x0000BD, } }, /* ½ */
+    { "frac12;", { 0x0000BD, } }, /* ½ */
+    { "frac13;", { 0x002153, } }, /* ⅓ */
+    { "frac14", { 0x0000BC, } }, /* ¼ */
+    { "frac14;", { 0x0000BC, } }, /* ¼ */
+    { "frac15;", { 0x002155, } }, /* ⅕ */
+    { "frac16;", { 0x002159, } }, /* ⅙ */
+    { "frac18;", { 0x00215B, } }, /* ⅛ */
+    { "frac23;", { 0x002154, } }, /* ⅔ */
+    { "frac25;", { 0x002156, } }, /* ⅖ */
+    { "frac34", { 0x0000BE, } }, /* ¾ */
+    { "frac34;", { 0x0000BE, } }, /* ¾ */
+    { "frac35;", { 0x002157, } }, /* ⅗ */
+    { "frac38;", { 0x00215C, } }, /* ⅜ */
+    { "frac45;", { 0x002158, } }, /* ⅘ */
+    { "frac56;", { 0x00215A, } }, /* ⅚ */
+    { "frac58;", { 0x00215D, } }, /* ⅝ */
+    { "frac78;", { 0x00215E, } }, /* ⅞ */
+    { "frasl;", { 0x002044, } }, /* ⁄ */
+    { "frown;", { 0x002322, } }, /* ⌢ */
+    { "fscr;", { 0x01D4BB, } }, /* 𝒻 */
+    { "gE;", { 0x002267, } }, /* ≧ */
+    { "gEl;", { 0x002A8C, } }, /* ⪌ */
+    { "gacute;", { 0x0001F5, } }, /* ǵ */
+    { "gamma;", { 0x0003B3, } }, /* γ */
+    { "gammad;", { 0x0003DD, } }, /* ϝ */
+    { "gap;", { 0x002A86, } }, /* ⪆ */
+    { "gbreve;", { 0x00011F, } }, /* ğ */
+    { "gcirc;", { 0x00011D, } }, /* ĝ */
+    { "gcy;", { 0x000433, } }, /* г */
+    { "gdot;", { 0x000121, } }, /* ġ */
+    { "ge;", { 0x002265, } }, /* ≥ */
+    { "gel;", { 0x0022DB, } }, /* ⋛ */
+    { "geq;", { 0x002265, } }, /* ≥ */
+    { "geqq;", { 0x002267, } }, /* ≧ */
+    { "geqslant;", { 0x002A7E, } }, /* ⩾ */
+    { "ges;", { 0x002A7E, } }, /* ⩾ */
+    { "gescc;", { 0x002AA9, } }, /* ⪩ */
+    { "gesdot;", { 0x002A80, } }, /* ⪀ */
+    { "gesdoto;", { 0x002A82, } }, /* ⪂ */
+    { "gesdotol;", { 0x002A84, } }, /* ⪄ */
+    { "gesl;", { 0x0022DB, 0x00FE00, } }, /* ⋛︀ */
+    { "gesles;", { 0x002A94, } }, /* ⪔ */
+    { "gfr;", { 0x01D524, } }, /* 𝔤 */
+    { "gg;", { 0x00226B, } }, /* ≫ */
+    { "ggg;", { 0x0022D9, } }, /* ⋙ */
+    { "gimel;", { 0x002137, } }, /* ℷ */
+    { "gjcy;", { 0x000453, } }, /* ѓ */
+    { "gl;", { 0x002277, } }, /* ≷ */
+    { "glE;", { 0x002A92, } }, /* ⪒ */
+    { "gla;", { 0x002AA5, } }, /* ⪥ */
+    { "glj;", { 0x002AA4, } }, /* ⪤ */
+    { "gnE;", { 0x002269, } }, /* ≩ */
+    { "gnap;", { 0x002A8A, } }, /* ⪊ */
+    { "gnapprox;", { 0x002A8A, } }, /* ⪊ */
+    { "gne;", { 0x002A88, } }, /* ⪈ */
+    { "gneq;", { 0x002A88, } }, /* ⪈ */
+    { "gneqq;", { 0x002269, } }, /* ≩ */
+    { "gnsim;", { 0x0022E7, } }, /* ⋧ */
+    { "gopf;", { 0x01D558, } }, /* 𝕘 */
+    { "grave;", { 0x000060, } }, /* ` */
+    { "gscr;", { 0x00210A, } }, /* ℊ */
+    { "gsim;", { 0x002273, } }, /* ≳ */
+    { "gsime;", { 0x002A8E, } }, /* ⪎ */
+    { "gsiml;", { 0x002A90, } }, /* ⪐ */
+    { "gt", { 0x00003E, } }, /* > */
+    { "gt;", { 0x00003E, } }, /* > */
+    { "gtcc;", { 0x002AA7, } }, /* ⪧ */
+    { "gtcir;", { 0x002A7A, } }, /* ⩺ */
+    { "gtdot;", { 0x0022D7, } }, /* ⋗ */
+    { "gtlPar;", { 0x002995, } }, /* ⦕ */
+    { "gtquest;", { 0x002A7C, } }, /* ⩼ */
+    { "gtrapprox;", { 0x002A86, } }, /* ⪆ */
+    { "gtrarr;", { 0x002978, } }, /* ⥸ */
+    { "gtrdot;", { 0x0022D7, } }, /* ⋗ */
+    { "gtreqless;", { 0x0022DB, } }, /* ⋛ */
+    { "gtreqqless;", { 0x002A8C, } }, /* ⪌ */
+    { "gtrless;", { 0x002277, } }, /* ≷ */
+    { "gtrsim;", { 0x002273, } }, /* ≳ */
+    { "gvertneqq;", { 0x002269, 0x00FE00, } }, /* ≩︀ */
+    { "gvnE;", { 0x002269, 0x00FE00, } }, /* ≩︀ */
+    { "hArr;", { 0x0021D4, } }, /* ⇔ */
+    { "hairsp;", { 0x00200A, } }, /*   */
+    { "half;", { 0x0000BD, } }, /* ½ */
+    { "hamilt;", { 0x00210B, } }, /* ℋ */
+    { "hardcy;", { 0x00044A, } }, /* ъ */
+    { "harr;", { 0x002194, } }, /* ↔ */
+    { "harrcir;", { 0x002948, } }, /* ⥈ */
+    { "harrw;", { 0x0021AD, } }, /* ↭ */
+    { "hbar;", { 0x00210F, } }, /* ℏ */
+    { "hcirc;", { 0x000125, } }, /* ĥ */
+    { "hearts;", { 0x002665, } }, /* ♥ */
+    { "heartsuit;", { 0x002665, } }, /* ♥ */
+    { "hellip;", { 0x002026, } }, /* … */
+    { "hercon;", { 0x0022B9, } }, /* ⊹ */
+    { "hfr;", { 0x01D525, } }, /* 𝔥 */
+    { "hksearow;", { 0x002925, } }, /* ⤥ */
+    { "hkswarow;", { 0x002926, } }, /* ⤦ */
+    { "hoarr;", { 0x0021FF, } }, /* ⇿ */
+    { "homtht;", { 0x00223B, } }, /* ∻ */
+    { "hookleftarrow;", { 0x0021A9, } }, /* ↩ */
+    { "hookrightarrow;", { 0x0021AA, } }, /* ↪ */
+    { "hopf;", { 0x01D559, } }, /* 𝕙 */
+    { "horbar;", { 0x002015, } }, /* ― */
+    { "hscr;", { 0x01D4BD, } }, /* 𝒽 */
+    { "hslash;", { 0x00210F, } }, /* ℏ */
+    { "hstrok;", { 0x000127, } }, /* ħ */
+    { "hybull;", { 0x002043, } }, /* ⁃ */
+    { "hyphen;", { 0x002010, } }, /* ‐ */
+    { "iacute", { 0x0000ED, } }, /* í */
+    { "iacute;", { 0x0000ED, } }, /* í */
+    { "ic;", { 0x002063, } }, /* ⁣ */
+    { "icirc", { 0x0000EE, } }, /* î */
+    { "icirc;", { 0x0000EE, } }, /* î */
+    { "icy;", { 0x000438, } }, /* и */
+    { "iecy;", { 0x000435, } }, /* е */
+    { "iexcl", { 0x0000A1, } }, /* ¡ */
+    { "iexcl;", { 0x0000A1, } }, /* ¡ */
+    { "iff;", { 0x0021D4, } }, /* ⇔ */
+    { "ifr;", { 0x01D526, } }, /* 𝔦 */
+    { "igrave", { 0x0000EC, } }, /* ì */
+    { "igrave;", { 0x0000EC, } }, /* ì */
+    { "ii;", { 0x002148, } }, /* ⅈ */
+    { "iiiint;", { 0x002A0C, } }, /* ⨌ */
+    { "iiint;", { 0x00222D, } }, /* ∭ */
+    { "iinfin;", { 0x0029DC, } }, /* ⧜ */
+    { "iiota;", { 0x002129, } }, /* ℩ */
+    { "ijlig;", { 0x000133, } }, /* ĳ */
+    { "imacr;", { 0x00012B, } }, /* ī */
+    { "image;", { 0x002111, } }, /* ℑ */
+    { "imagline;", { 0x002110, } }, /* ℐ */
+    { "imagpart;", { 0x002111, } }, /* ℑ */
+    { "imath;", { 0x000131, } }, /* ı */
+    { "imof;", { 0x0022B7, } }, /* ⊷ */
+    { "imped;", { 0x0001B5, } }, /* Ƶ */
+    { "in;", { 0x002208, } }, /* ∈ */
+    { "incare;", { 0x002105, } }, /* ℅ */
+    { "infin;", { 0x00221E, } }, /* ∞ */
+    { "infintie;", { 0x0029DD, } }, /* ⧝ */
+    { "inodot;", { 0x000131, } }, /* ı */
+    { "int;", { 0x00222B, } }, /* ∫ */
+    { "intcal;", { 0x0022BA, } }, /* ⊺ */
+    { "integers;", { 0x002124, } }, /* ℤ */
+    { "intercal;", { 0x0022BA, } }, /* ⊺ */
+    { "intlarhk;", { 0x002A17, } }, /* ⨗ */
+    { "intprod;", { 0x002A3C, } }, /* ⨼ */
+    { "iocy;", { 0x000451, } }, /* ё */
+    { "iogon;", { 0x00012F, } }, /* į */
+    { "iopf;", { 0x01D55A, } }, /* 𝕚 */
+    { "iota;", { 0x0003B9, } }, /* ι */
+    { "iprod;", { 0x002A3C, } }, /* ⨼ */
+    { "iquest", { 0x0000BF, } }, /* ¿ */
+    { "iquest;", { 0x0000BF, } }, /* ¿ */
+    { "iscr;", { 0x01D4BE, } }, /* 𝒾 */
+    { "isin;", { 0x002208, } }, /* ∈ */
+    { "isinE;", { 0x0022F9, } }, /* ⋹ */
+    { "isindot;", { 0x0022F5, } }, /* ⋵ */
+    { "isins;", { 0x0022F4, } }, /* ⋴ */
+    { "isinsv;", { 0x0022F3, } }, /* ⋳ */
+    { "isinv;", { 0x002208, } }, /* ∈ */
+    { "it;", { 0x002062, } }, /* ⁢ */
+    { "itilde;", { 0x000129, } }, /* ĩ */
+    { "iukcy;", { 0x000456, } }, /* і */
+    { "iuml", { 0x0000EF, } }, /* ï */
+    { "iuml;", { 0x0000EF, } }, /* ï */
+    { "jcirc;", { 0x000135, } }, /* ĵ */
+    { "jcy;", { 0x000439, } }, /* й */
+    { "jfr;", { 0x01D527, } }, /* 𝔧 */
+    { "jmath;", { 0x000237, } }, /* ȷ */
+    { "jopf;", { 0x01D55B, } }, /* 𝕛 */
+    { "jscr;", { 0x01D4BF, } }, /* 𝒿 */
+    { "jsercy;", { 0x000458, } }, /* ј */
+    { "jukcy;", { 0x000454, } }, /* є */
+    { "kappa;", { 0x0003BA, } }, /* κ */
+    { "kappav;", { 0x0003F0, } }, /* ϰ */
+    { "kcedil;", { 0x000137, } }, /* ķ */
+    { "kcy;", { 0x00043A, } }, /* к */
+    { "kfr;", { 0x01D528, } }, /* 𝔨 */
+    { "kgreen;", { 0x000138, } }, /* ĸ */
+    { "khcy;", { 0x000445, } }, /* х */
+    { "kjcy;", { 0x00045C, } }, /* ќ */
+    { "kopf;", { 0x01D55C, } }, /* 𝕜 */
+    { "kscr;", { 0x01D4C0, } }, /* 𝓀 */
+    { "lAarr;", { 0x0021DA, } }, /* ⇚ */
+    { "lArr;", { 0x0021D0, } }, /* ⇐ */
+    { "lAtail;", { 0x00291B, } }, /* ⤛ */
+    { "lBarr;", { 0x00290E, } }, /* ⤎ */
+    { "lE;", { 0x002266, } }, /* ≦ */
+    { "lEg;", { 0x002A8B, } }, /* ⪋ */
+    { "lHar;", { 0x002962, } }, /* ⥢ */
+    { "lacute;", { 0x00013A, } }, /* ĺ */
+    { "laemptyv;", { 0x0029B4, } }, /* ⦴ */
+    { "lagran;", { 0x002112, } }, /* ℒ */
+    { "lambda;", { 0x0003BB, } }, /* λ */
+    { "lang;", { 0x0027E8, } }, /* ⟨ */
+    { "langd;", { 0x002991, } }, /* ⦑ */
+    { "langle;", { 0x0027E8, } }, /* ⟨ */
+    { "lap;", { 0x002A85, } }, /* ⪅ */
+    { "laquo", { 0x0000AB, } }, /* « */
+    { "laquo;", { 0x0000AB, } }, /* « */
+    { "larr;", { 0x002190, } }, /* ← */
+    { "larrb;", { 0x0021E4, } }, /* ⇤ */
+    { "larrbfs;", { 0x00291F, } }, /* ⤟ */
+    { "larrfs;", { 0x00291D, } }, /* ⤝ */
+    { "larrhk;", { 0x0021A9, } }, /* ↩ */
+    { "larrlp;", { 0x0021AB, } }, /* ↫ */
+    { "larrpl;", { 0x002939, } }, /* ⤹ */
+    { "larrsim;", { 0x002973, } }, /* ⥳ */
+    { "larrtl;", { 0x0021A2, } }, /* ↢ */
+    { "lat;", { 0x002AAB, } }, /* ⪫ */
+    { "latail;", { 0x002919, } }, /* ⤙ */
+    { "late;", { 0x002AAD, } }, /* ⪭ */
+    { "lates;", { 0x002AAD, 0x00FE00, } }, /* ⪭︀ */
+    { "lbarr;", { 0x00290C, } }, /* ⤌ */
+    { "lbbrk;", { 0x002772, } }, /* ❲ */
+    { "lbrace;", { 0x00007B, } }, /* { */
+    { "lbrack;", { 0x00005B, } }, /* [ */
+    { "lbrke;", { 0x00298B, } }, /* ⦋ */
+    { "lbrksld;", { 0x00298F, } }, /* ⦏ */
+    { "lbrkslu;", { 0x00298D, } }, /* ⦍ */
+    { "lcaron;", { 0x00013E, } }, /* ľ */
+    { "lcedil;", { 0x00013C, } }, /* ļ */
+    { "lceil;", { 0x002308, } }, /* ⌈ */
+    { "lcub;", { 0x00007B, } }, /* { */
+    { "lcy;", { 0x00043B, } }, /* л */
+    { "ldca;", { 0x002936, } }, /* ⤶ */
+    { "ldquo;", { 0x00201C, } }, /* “ */
+    { "ldquor;", { 0x00201E, } }, /* „ */
+    { "ldrdhar;", { 0x002967, } }, /* ⥧ */
+    { "ldrushar;", { 0x00294B, } }, /* ⥋ */
+    { "ldsh;", { 0x0021B2, } }, /* ↲ */
+    { "le;", { 0x002264, } }, /* ≤ */
+    { "leftarrow;", { 0x002190, } }, /* ← */
+    { "leftarrowtail;", { 0x0021A2, } }, /* ↢ */
+    { "leftharpoondown;", { 0x0021BD, } }, /* ↽ */
+    { "leftharpoonup;", { 0x0021BC, } }, /* ↼ */
+    { "leftleftarrows;", { 0x0021C7, } }, /* ⇇ */
+    { "leftrightarrow;", { 0x002194, } }, /* ↔ */
+    { "leftrightarrows;", { 0x0021C6, } }, /* ⇆ */
+    { "leftrightharpoons;", { 0x0021CB, } }, /* ⇋ */
+    { "leftrightsquigarrow;", { 0x0021AD, } }, /* ↭ */
+    { "leftthreetimes;", { 0x0022CB, } }, /* ⋋ */
+    { "leg;", { 0x0022DA, } }, /* ⋚ */
+    { "leq;", { 0x002264, } }, /* ≤ */
+    { "leqq;", { 0x002266, } }, /* ≦ */
+    { "leqslant;", { 0x002A7D, } }, /* ⩽ */
+    { "les;", { 0x002A7D, } }, /* ⩽ */
+    { "lescc;", { 0x002AA8, } }, /* ⪨ */
+    { "lesdot;", { 0x002A7F, } }, /* ⩿ */
+    { "lesdoto;", { 0x002A81, } }, /* ⪁ */
+    { "lesdotor;", { 0x002A83, } }, /* ⪃ */
+    { "lesg;", { 0x0022DA, 0x00FE00, } }, /* ⋚︀ */
+    { "lesges;", { 0x002A93, } }, /* ⪓ */
+    { "lessapprox;", { 0x002A85, } }, /* ⪅ */
+    { "lessdot;", { 0x0022D6, } }, /* ⋖ */
+    { "lesseqgtr;", { 0x0022DA, } }, /* ⋚ */
+    { "lesseqqgtr;", { 0x002A8B, } }, /* ⪋ */
+    { "lessgtr;", { 0x002276, } }, /* ≶ */
+    { "lesssim;", { 0x002272, } }, /* ≲ */
+    { "lfisht;", { 0x00297C, } }, /* ⥼ */
+    { "lfloor;", { 0x00230A, } }, /* ⌊ */
+    { "lfr;", { 0x01D529, } }, /* 𝔩 */
+    { "lg;", { 0x002276, } }, /* ≶ */
+    { "lgE;", { 0x002A91, } }, /* ⪑ */
+    { "lhard;", { 0x0021BD, } }, /* ↽ */
+    { "lharu;", { 0x0021BC, } }, /* ↼ */
+    { "lharul;", { 0x00296A, } }, /* ⥪ */
+    { "lhblk;", { 0x002584, } }, /* ▄ */
+    { "ljcy;", { 0x000459, } }, /* љ */
+    { "ll;", { 0x00226A, } }, /* ≪ */
+    { "llarr;", { 0x0021C7, } }, /* ⇇ */
+    { "llcorner;", { 0x00231E, } }, /* ⌞ */
+    { "llhard;", { 0x00296B, } }, /* ⥫ */
+    { "lltri;", { 0x0025FA, } }, /* ◺ */
+    { "lmidot;", { 0x000140, } }, /* ŀ */
+    { "lmoust;", { 0x0023B0, } }, /* ⎰ */
+    { "lmoustache;", { 0x0023B0, } }, /* ⎰ */
+    { "lnE;", { 0x002268, } }, /* ≨ */
+    { "lnap;", { 0x002A89, } }, /* ⪉ */
+    { "lnapprox;", { 0x002A89, } }, /* ⪉ */
+    { "lne;", { 0x002A87, } }, /* ⪇ */
+    { "lneq;", { 0x002A87, } }, /* ⪇ */
+    { "lneqq;", { 0x002268, } }, /* ≨ */
+    { "lnsim;", { 0x0022E6, } }, /* ⋦ */
+    { "loang;", { 0x0027EC, } }, /* ⟬ */
+    { "loarr;", { 0x0021FD, } }, /* ⇽ */
+    { "lobrk;", { 0x0027E6, } }, /* ⟦ */
+    { "longleftarrow;", { 0x0027F5, } }, /* ⟵ */
+    { "longleftrightarrow;", { 0x0027F7, } }, /* ⟷ */
+    { "longmapsto;", { 0x0027FC, } }, /* ⟼ */
+    { "longrightarrow;", { 0x0027F6, } }, /* ⟶ */
+    { "looparrowleft;", { 0x0021AB, } }, /* ↫ */
+    { "looparrowright;", { 0x0021AC, } }, /* ↬ */
+    { "lopar;", { 0x002985, } }, /* ⦅ */
+    { "lopf;", { 0x01D55D, } }, /* 𝕝 */
+    { "loplus;", { 0x002A2D, } }, /* ⨭ */
+    { "lotimes;", { 0x002A34, } }, /* ⨴ */
+    { "lowast;", { 0x002217, } }, /* ∗ */
+    { "lowbar;", { 0x00005F, } }, /* _ */
+    { "loz;", { 0x0025CA, } }, /* ◊ */
+    { "lozenge;", { 0x0025CA, } }, /* ◊ */
+    { "lozf;", { 0x0029EB, } }, /* ⧫ */
+    { "lpar;", { 0x000028, } }, /* ( */
+    { "lparlt;", { 0x002993, } }, /* ⦓ */
+    { "lrarr;", { 0x0021C6, } }, /* ⇆ */
+    { "lrcorner;", { 0x00231F, } }, /* ⌟ */
+    { "lrhar;", { 0x0021CB, } }, /* ⇋ */
+    { "lrhard;", { 0x00296D, } }, /* ⥭ */
+    { "lrm;", { 0x00200E, } }, /* ‎ */
+    { "lrtri;", { 0x0022BF, } }, /* ⊿ */
+    { "lsaquo;", { 0x002039, } }, /* ‹ */
+    { "lscr;", { 0x01D4C1, } }, /* 𝓁 */
+    { "lsh;", { 0x0021B0, } }, /* ↰ */
+    { "lsim;", { 0x002272, } }, /* ≲ */
+    { "lsime;", { 0x002A8D, } }, /* ⪍ */
+    { "lsimg;", { 0x002A8F, } }, /* ⪏ */
+    { "lsqb;", { 0x00005B, } }, /* [ */
+    { "lsquo;", { 0x002018, } }, /* ‘ */
+    { "lsquor;", { 0x00201A, } }, /* ‚ */
+    { "lstrok;", { 0x000142, } }, /* ł */
+    { "lt", { 0x00003C, } }, /* < */
+    { "lt;", { 0x00003C, } }, /* < */
+    { "ltcc;", { 0x002AA6, } }, /* ⪦ */
+    { "ltcir;", { 0x002A79, } }, /* ⩹ */
+    { "ltdot;", { 0x0022D6, } }, /* ⋖ */
+    { "lthree;", { 0x0022CB, } }, /* ⋋ */
+    { "ltimes;", { 0x0022C9, } }, /* ⋉ */
+    { "ltlarr;", { 0x002976, } }, /* ⥶ */
+    { "ltquest;", { 0x002A7B, } }, /* ⩻ */
+    { "ltrPar;", { 0x002996, } }, /* ⦖ */
+    { "ltri;", { 0x0025C3, } }, /* ◃ */
+    { "ltrie;", { 0x0022B4, } }, /* ⊴ */
+    { "ltrif;", { 0x0025C2, } }, /* ◂ */
+    { "lurdshar;", { 0x00294A, } }, /* ⥊ */
+    { "luruhar;", { 0x002966, } }, /* ⥦ */
+    { "lvertneqq;", { 0x002268, 0x00FE00, } }, /* ≨︀ */
+    { "lvnE;", { 0x002268, 0x00FE00, } }, /* ≨︀ */
+    { "mDDot;", { 0x00223A, } }, /* ∺ */
+    { "macr", { 0x0000AF, } }, /* ¯ */
+    { "macr;", { 0x0000AF, } }, /* ¯ */
+    { "male;", { 0x002642, } }, /* ♂ */
+    { "malt;", { 0x002720, } }, /* ✠ */
+    { "maltese;", { 0x002720, } }, /* ✠ */
+    { "map;", { 0x0021A6, } }, /* ↦ */
+    { "mapsto;", { 0x0021A6, } }, /* ↦ */
+    { "mapstodown;", { 0x0021A7, } }, /* ↧ */
+    { "mapstoleft;", { 0x0021A4, } }, /* ↤ */
+    { "mapstoup;", { 0x0021A5, } }, /* ↥ */
+    { "marker;", { 0x0025AE, } }, /* ▮ */
+    { "mcomma;", { 0x002A29, } }, /* ⨩ */
+    { "mcy;", { 0x00043C, } }, /* м */
+    { "mdash;", { 0x002014, } }, /* — */
+    { "measuredangle;", { 0x002221, } }, /* ∡ */
+    { "mfr;", { 0x01D52A, } }, /* 𝔪 */
+    { "mho;", { 0x002127, } }, /* ℧ */
+    { "micro", { 0x0000B5, } }, /* µ */
+    { "micro;", { 0x0000B5, } }, /* µ */
+    { "mid;", { 0x002223, } }, /* ∣ */
+    { "midast;", { 0x00002A, } }, /* * */
+    { "midcir;", { 0x002AF0, } }, /* ⫰ */
+    { "middot", { 0x0000B7, } }, /* · */
+    { "middot;", { 0x0000B7, } }, /* · */
+    { "minus;", { 0x002212, } }, /* − */
+    { "minusb;", { 0x00229F, } }, /* ⊟ */
+    { "minusd;", { 0x002238, } }, /* ∸ */
+    { "minusdu;", { 0x002A2A, } }, /* ⨪ */
+    { "mlcp;", { 0x002ADB, } }, /* ⫛ */
+    { "mldr;", { 0x002026, } }, /* … */
+    { "mnplus;", { 0x002213, } }, /* ∓ */
+    { "models;", { 0x0022A7, } }, /* ⊧ */
+    { "mopf;", { 0x01D55E, } }, /* 𝕞 */
+    { "mp;", { 0x002213, } }, /* ∓ */
+    { "mscr;", { 0x01D4C2, } }, /* 𝓂 */
+    { "mstpos;", { 0x00223E, } }, /* ∾ */
+    { "mu;", { 0x0003BC, } }, /* μ */
+    { "multimap;", { 0x0022B8, } }, /* ⊸ */
+    { "mumap;", { 0x0022B8, } }, /* ⊸ */
+    { "nGg;", { 0x0022D9, 0x000338, } }, /* ⋙̸ */
+    { "nGt;", { 0x00226B, 0x0020D2, } }, /* ≫⃒ */
+    { "nGtv;", { 0x00226B, 0x000338, } }, /* ≫̸ */
+    { "nLeftarrow;", { 0x0021CD, } }, /* ⇍ */
+    { "nLeftrightarrow;", { 0x0021CE, } }, /* ⇎ */
+    { "nLl;", { 0x0022D8, 0x000338, } }, /* ⋘̸ */
+    { "nLt;", { 0x00226A, 0x0020D2, } }, /* ≪⃒ */
+    { "nLtv;", { 0x00226A, 0x000338, } }, /* ≪̸ */
+    { "nRightarrow;", { 0x0021CF, } }, /* ⇏ */
+    { "nVDash;", { 0x0022AF, } }, /* ⊯ */
+    { "nVdash;", { 0x0022AE, } }, /* ⊮ */
+    { "nabla;", { 0x002207, } }, /* ∇ */
+    { "nacute;", { 0x000144, } }, /* ń */
+    { "nang;", { 0x002220, 0x0020D2, } }, /* ∠⃒ */
+    { "nap;", { 0x002249, } }, /* ≉ */
+    { "napE;", { 0x002A70, 0x000338, } }, /* ⩰̸ */
+    { "napid;", { 0x00224B, 0x000338, } }, /* ≋̸ */
+    { "napos;", { 0x000149, } }, /* ŉ */
+    { "napprox;", { 0x002249, } }, /* ≉ */
+    { "natur;", { 0x00266E, } }, /* ♮ */
+    { "natural;", { 0x00266E, } }, /* ♮ */
+    { "naturals;", { 0x002115, } }, /* ℕ */
+    { "nbsp", { 0x0000A0, } }, /*   */
+    { "nbsp;", { 0x0000A0, } }, /*   */
+    { "nbump;", { 0x00224E, 0x000338, } }, /* ≎̸ */
+    { "nbumpe;", { 0x00224F, 0x000338, } }, /* ≏̸ */
+    { "ncap;", { 0x002A43, } }, /* ⩃ */
+    { "ncaron;", { 0x000148, } }, /* ň */
+    { "ncedil;", { 0x000146, } }, /* ņ */
+    { "ncong;", { 0x002247, } }, /* ≇ */
+    { "ncongdot;", { 0x002A6D, 0x000338, } }, /* ⩭̸ */
+    { "ncup;", { 0x002A42, } }, /* ⩂ */
+    { "ncy;", { 0x00043D, } }, /* н */
+    { "ndash;", { 0x002013, } }, /* – */
+    { "ne;", { 0x002260, } }, /* ≠ */
+    { "neArr;", { 0x0021D7, } }, /* ⇗ */
+    { "nearhk;", { 0x002924, } }, /* ⤤ */
+    { "nearr;", { 0x002197, } }, /* ↗ */
+    { "nearrow;", { 0x002197, } }, /* ↗ */
+    { "nedot;", { 0x002250, 0x000338, } }, /* ≐̸ */
+    { "nequiv;", { 0x002262, } }, /* ≢ */
+    { "nesear;", { 0x002928, } }, /* ⤨ */
+    { "nesim;", { 0x002242, 0x000338, } }, /* ≂̸ */
+    { "nexist;", { 0x002204, } }, /* ∄ */
+    { "nexists;", { 0x002204, } }, /* ∄ */
+    { "nfr;", { 0x01D52B, } }, /* 𝔫 */
+    { "ngE;", { 0x002267, 0x000338, } }, /* ≧̸ */
+    { "nge;", { 0x002271, } }, /* ≱ */
+    { "ngeq;", { 0x002271, } }, /* ≱ */
+    { "ngeqq;", { 0x002267, 0x000338, } }, /* ≧̸ */
+    { "ngeqslant;", { 0x002A7E, 0x000338, } }, /* ⩾̸ */
+    { "nges;", { 0x002A7E, 0x000338, } }, /* ⩾̸ */
+    { "ngsim;", { 0x002275, } }, /* ≵ */
+    { "ngt;", { 0x00226F, } }, /* ≯ */
+    { "ngtr;", { 0x00226F, } }, /* ≯ */
+    { "nhArr;", { 0x0021CE, } }, /* ⇎ */
+    { "nharr;", { 0x0021AE, } }, /* ↮ */
+    { "nhpar;", { 0x002AF2, } }, /* ⫲ */
+    { "ni;", { 0x00220B, } }, /* ∋ */
+    { "nis;", { 0x0022FC, } }, /* ⋼ */
+    { "nisd;", { 0x0022FA, } }, /* ⋺ */
+    { "niv;", { 0x00220B, } }, /* ∋ */
+    { "njcy;", { 0x00045A, } }, /* њ */
+    { "nlArr;", { 0x0021CD, } }, /* ⇍ */
+    { "nlE;", { 0x002266, 0x000338, } }, /* ≦̸ */
+    { "nlarr;", { 0x00219A, } }, /* ↚ */
+    { "nldr;", { 0x002025, } }, /* ‥ */
+    { "nle;", { 0x002270, } }, /* ≰ */
+    { "nleftarrow;", { 0x00219A, } }, /* ↚ */
+    { "nleftrightarrow;", { 0x0021AE, } }, /* ↮ */
+    { "nleq;", { 0x002270, } }, /* ≰ */
+    { "nleqq;", { 0x002266, 0x000338, } }, /* ≦̸ */
+    { "nleqslant;", { 0x002A7D, 0x000338, } }, /* ⩽̸ */
+    { "nles;", { 0x002A7D, 0x000338, } }, /* ⩽̸ */
+    { "nless;", { 0x00226E, } }, /* ≮ */
+    { "nlsim;", { 0x002274, } }, /* ≴ */
+    { "nlt;", { 0x00226E, } }, /* ≮ */
+    { "nltri;", { 0x0022EA, } }, /* ⋪ */
+    { "nltrie;", { 0x0022EC, } }, /* ⋬ */
+    { "nmid;", { 0x002224, } }, /* ∤ */
+    { "nopf;", { 0x01D55F, } }, /* 𝕟 */
+    { "not", { 0x0000AC, } }, /* ¬ */
+    { "not;", { 0x0000AC, } }, /* ¬ */
+    { "notin;", { 0x002209, } }, /* ∉ */
+    { "notinE;", { 0x0022F9, 0x000338, } }, /* ⋹̸ */
+    { "notindot;", { 0x0022F5, 0x000338, } }, /* ⋵̸ */
+    { "notinva;", { 0x002209, } }, /* ∉ */
+    { "notinvb;", { 0x0022F7, } }, /* ⋷ */
+    { "notinvc;", { 0x0022F6, } }, /* ⋶ */
+    { "notni;", { 0x00220C, } }, /* ∌ */
+    { "notniva;", { 0x00220C, } }, /* ∌ */
+    { "notnivb;", { 0x0022FE, } }, /* ⋾ */
+    { "notnivc;", { 0x0022FD, } }, /* ⋽ */
+    { "npar;", { 0x002226, } }, /* ∦ */
+    { "nparallel;", { 0x002226, } }, /* ∦ */
+    { "nparsl;", { 0x002AFD, 0x0020E5, } }, /* ⫽⃥ */
+    { "npart;", { 0x002202, 0x000338, } }, /* ∂̸ */
+    { "npolint;", { 0x002A14, } }, /* ⨔ */
+    { "npr;", { 0x002280, } }, /* ⊀ */
+    { "nprcue;", { 0x0022E0, } }, /* ⋠ */
+    { "npre;", { 0x002AAF, 0x000338, } }, /* ⪯̸ */
+    { "nprec;", { 0x002280, } }, /* ⊀ */
+    { "npreceq;", { 0x002AAF, 0x000338, } }, /* ⪯̸ */
+    { "nrArr;", { 0x0021CF, } }, /* ⇏ */
+    { "nrarr;", { 0x00219B, } }, /* ↛ */
+    { "nrarrc;", { 0x002933, 0x000338, } }, /* ⤳̸ */
+    { "nrarrw;", { 0x00219D, 0x000338, } }, /* ↝̸ */
+    { "nrightarrow;", { 0x00219B, } }, /* ↛ */
+    { "nrtri;", { 0x0022EB, } }, /* ⋫ */
+    { "nrtrie;", { 0x0022ED, } }, /* ⋭ */
+    { "nsc;", { 0x002281, } }, /* ⊁ */
+    { "nsccue;", { 0x0022E1, } }, /* ⋡ */
+    { "nsce;", { 0x002AB0, 0x000338, } }, /* ⪰̸ */
+    { "nscr;", { 0x01D4C3, } }, /* 𝓃 */
+    { "nshortmid;", { 0x002224, } }, /* ∤ */
+    { "nshortparallel;", { 0x002226, } }, /* ∦ */
+    { "nsim;", { 0x002241, } }, /* ≁ */
+    { "nsime;", { 0x002244, } }, /* ≄ */
+    { "nsimeq;", { 0x002244, } }, /* ≄ */
+    { "nsmid;", { 0x002224, } }, /* ∤ */
+    { "nspar;", { 0x002226, } }, /* ∦ */
+    { "nsqsube;", { 0x0022E2, } }, /* ⋢ */
+    { "nsqsupe;", { 0x0022E3, } }, /* ⋣ */
+    { "nsub;", { 0x002284, } }, /* ⊄ */
+    { "nsubE;", { 0x002AC5, 0x000338, } }, /* ⫅̸ */
+    { "nsube;", { 0x002288, } }, /* ⊈ */
+    { "nsubset;", { 0x002282, 0x0020D2, } }, /* ⊂⃒ */
+    { "nsubseteq;", { 0x002288, } }, /* ⊈ */
+    { "nsubseteqq;", { 0x002AC5, 0x000338, } }, /* ⫅̸ */
+    { "nsucc;", { 0x002281, } }, /* ⊁ */
+    { "nsucceq;", { 0x002AB0, 0x000338, } }, /* ⪰̸ */
+    { "nsup;", { 0x002285, } }, /* ⊅ */
+    { "nsupE;", { 0x002AC6, 0x000338, } }, /* ⫆̸ */
+    { "nsupe;", { 0x002289, } }, /* ⊉ */
+    { "nsupset;", { 0x002283, 0x0020D2, } }, /* ⊃⃒ */
+    { "nsupseteq;", { 0x002289, } }, /* ⊉ */
+    { "nsupseteqq;", { 0x002AC6, 0x000338, } }, /* ⫆̸ */
+    { "ntgl;", { 0x002279, } }, /* ≹ */
+    { "ntilde", { 0x0000F1, } }, /* ñ */
+    { "ntilde;", { 0x0000F1, } }, /* ñ */
+    { "ntlg;", { 0x002278, } }, /* ≸ */
+    { "ntriangleleft;", { 0x0022EA, } }, /* ⋪ */
+    { "ntrianglelefteq;", { 0x0022EC, } }, /* ⋬ */
+    { "ntriangleright;", { 0x0022EB, } }, /* ⋫ */
+    { "ntrianglerighteq;", { 0x0022ED, } }, /* ⋭ */
+    { "nu;", { 0x0003BD, } }, /* ν */
+    { "num;", { 0x000023, } }, /* # */
+    { "numero;", { 0x002116, } }, /* № */
+    { "numsp;", { 0x002007, } }, /*   */
+    { "nvDash;", { 0x0022AD, } }, /* ⊭ */
+    { "nvHarr;", { 0x002904, } }, /* ⤄ */
+    { "nvap;", { 0x00224D, 0x0020D2, } }, /* ≍⃒ */
+    { "nvdash;", { 0x0022AC, } }, /* ⊬ */
+    { "nvge;", { 0x002265, 0x0020D2, } }, /* ≥⃒ */
+    { "nvgt;", { 0x00003E, 0x0020D2, } }, /* >⃒ */
+    { "nvinfin;", { 0x0029DE, } }, /* ⧞ */
+    { "nvlArr;", { 0x002902, } }, /* ⤂ */
+    { "nvle;", { 0x002264, 0x0020D2, } }, /* ≤⃒ */
+    { "nvlt;", { 0x00003C, 0x0020D2, } }, /* <⃒ */
+    { "nvltrie;", { 0x0022B4, 0x0020D2, } }, /* ⊴⃒ */
+    { "nvrArr;", { 0x002903, } }, /* ⤃ */
+    { "nvrtrie;", { 0x0022B5, 0x0020D2, } }, /* ⊵⃒ */
+    { "nvsim;", { 0x00223C, 0x0020D2, } }, /* ∼⃒ */
+    { "nwArr;", { 0x0021D6, } }, /* ⇖ */
+    { "nwarhk;", { 0x002923, } }, /* ⤣ */
+    { "nwarr;", { 0x002196, } }, /* ↖ */
+    { "nwarrow;", { 0x002196, } }, /* ↖ */
+    { "nwnear;", { 0x002927, } }, /* ⤧ */
+    { "oS;", { 0x0024C8, } }, /* Ⓢ */
+    { "oacute", { 0x0000F3, } }, /* ó */
+    { "oacute;", { 0x0000F3, } }, /* ó */
+    { "oast;", { 0x00229B, } }, /* ⊛ */
+    { "ocir;", { 0x00229A, } }, /* ⊚ */
+    { "ocirc", { 0x0000F4, } }, /* ô */
+    { "ocirc;", { 0x0000F4, } }, /* ô */
+    { "ocy;", { 0x00043E, } }, /* о */
+    { "odash;", { 0x00229D, } }, /* ⊝ */
+    { "odblac;", { 0x000151, } }, /* ő */
+    { "odiv;", { 0x002A38, } }, /* ⨸ */
+    { "odot;", { 0x002299, } }, /* ⊙ */
+    { "odsold;", { 0x0029BC, } }, /* ⦼ */
+    { "oelig;", { 0x000153, } }, /* œ */
+    { "ofcir;", { 0x0029BF, } }, /* ⦿ */
+    { "ofr;", { 0x01D52C, } }, /* 𝔬 */
+    { "ogon;", { 0x0002DB, } }, /* ˛ */
+    { "ograve", { 0x0000F2, } }, /* ò */
+    { "ograve;", { 0x0000F2, } }, /* ò */
+    { "ogt;", { 0x0029C1, } }, /* ⧁ */
+    { "ohbar;", { 0x0029B5, } }, /* ⦵ */
+    { "ohm;", { 0x0003A9, } }, /* Ω */
+    { "oint;", { 0x00222E, } }, /* ∮ */
+    { "olarr;", { 0x0021BA, } }, /* ↺ */
+    { "olcir;", { 0x0029BE, } }, /* ⦾ */
+    { "olcross;", { 0x0029BB, } }, /* ⦻ */
+    { "oline;", { 0x00203E, } }, /* ‾ */
+    { "olt;", { 0x0029C0, } }, /* ⧀ */
+    { "omacr;", { 0x00014D, } }, /* ō */
+    { "omega;", { 0x0003C9, } }, /* ω */
+    { "omicron;", { 0x0003BF, } }, /* ο */
+    { "omid;", { 0x0029B6, } }, /* ⦶ */
+    { "ominus;", { 0x002296, } }, /* ⊖ */
+    { "oopf;", { 0x01D560, } }, /* 𝕠 */
+    { "opar;", { 0x0029B7, } }, /* ⦷ */
+    { "operp;", { 0x0029B9, } }, /* ⦹ */
+    { "oplus;", { 0x002295, } }, /* ⊕ */
+    { "or;", { 0x002228, } }, /* ∨ */
+    { "orarr;", { 0x0021BB, } }, /* ↻ */
+    { "ord;", { 0x002A5D, } }, /* ⩝ */
+    { "order;", { 0x002134, } }, /* ℴ */
+    { "orderof;", { 0x002134, } }, /* ℴ */
+    { "ordf", { 0x0000AA, } }, /* ª */
+    { "ordf;", { 0x0000AA, } }, /* ª */
+    { "ordm", { 0x0000BA, } }, /* º */
+    { "ordm;", { 0x0000BA, } }, /* º */
+    { "origof;", { 0x0022B6, } }, /* ⊶ */
+    { "oror;", { 0x002A56, } }, /* ⩖ */
+    { "orslope;", { 0x002A57, } }, /* ⩗ */
+    { "orv;", { 0x002A5B, } }, /* ⩛ */
+    { "oscr;", { 0x002134, } }, /* ℴ */
+    { "oslash", { 0x0000F8, } }, /* ø */
+    { "oslash;", { 0x0000F8, } }, /* ø */
+    { "osol;", { 0x002298, } }, /* ⊘ */
+    { "otilde", { 0x0000F5, } }, /* õ */
+    { "otilde;", { 0x0000F5, } }, /* õ */
+    { "otimes;", { 0x002297, } }, /* ⊗ */
+    { "otimesas;", { 0x002A36, } }, /* ⨶ */
+    { "ouml", { 0x0000F6, } }, /* ö */
+    { "ouml;", { 0x0000F6, } }, /* ö */
+    { "ovbar;", { 0x00233D, } }, /* ⌽ */
+    { "par;", { 0x002225, } }, /* ∥ */
+    { "para", { 0x0000B6, } }, /* ¶ */
+    { "para;", { 0x0000B6, } }, /* ¶ */
+    { "parallel;", { 0x002225, } }, /* ∥ */
+    { "parsim;", { 0x002AF3, } }, /* ⫳ */
+    { "parsl;", { 0x002AFD, } }, /* ⫽ */
+    { "part;", { 0x002202, } }, /* ∂ */
+    { "pcy;", { 0x00043F, } }, /* п */
+    { "percnt;", { 0x000025, } }, /* % */
+    { "period;", { 0x00002E, } }, /* . */
+    { "permil;", { 0x002030, } }, /* ‰ */
+    { "perp;", { 0x0022A5, } }, /* ⊥ */
+    { "pertenk;", { 0x002031, } }, /* ‱ */
+    { "pfr;", { 0x01D52D, } }, /* 𝔭 */
+    { "phi;", { 0x0003C6, } }, /* φ */
+    { "phiv;", { 0x0003D5, } }, /* ϕ */
+    { "phmmat;", { 0x002133, } }, /* ℳ */
+    { "phone;", { 0x00260E, } }, /* ☎ */
+    { "pi;", { 0x0003C0, } }, /* π */
+    { "pitchfork;", { 0x0022D4, } }, /* ⋔ */
+    { "piv;", { 0x0003D6, } }, /* ϖ */
+    { "planck;", { 0x00210F, } }, /* ℏ */
+    { "planckh;", { 0x00210E, } }, /* ℎ */
+    { "plankv;", { 0x00210F, } }, /* ℏ */
+    { "plus;", { 0x00002B, } }, /* + */
+    { "plusacir;", { 0x002A23, } }, /* ⨣ */
+    { "plusb;", { 0x00229E, } }, /* ⊞ */
+    { "pluscir;", { 0x002A22, } }, /* ⨢ */
+    { "plusdo;", { 0x002214, } }, /* ∔ */
+    { "plusdu;", { 0x002A25, } }, /* ⨥ */
+    { "pluse;", { 0x002A72, } }, /* ⩲ */
+    { "plusmn", { 0x0000B1, } }, /* ± */
+    { "plusmn;", { 0x0000B1, } }, /* ± */
+    { "plussim;", { 0x002A26, } }, /* ⨦ */
+    { "plustwo;", { 0x002A27, } }, /* ⨧ */
+    { "pm;", { 0x0000B1, } }, /* ± */
+    { "pointint;", { 0x002A15, } }, /* ⨕ */
+    { "popf;", { 0x01D561, } }, /* 𝕡 */
+    { "pound", { 0x0000A3, } }, /* £ */
+    { "pound;", { 0x0000A3, } }, /* £ */
+    { "pr;", { 0x00227A, } }, /* ≺ */
+    { "prE;", { 0x002AB3, } }, /* ⪳ */
+    { "prap;", { 0x002AB7, } }, /* ⪷ */
+    { "prcue;", { 0x00227C, } }, /* ≼ */
+    { "pre;", { 0x002AAF, } }, /* ⪯ */
+    { "prec;", { 0x00227A, } }, /* ≺ */
+    { "precapprox;", { 0x002AB7, } }, /* ⪷ */
+    { "preccurlyeq;", { 0x00227C, } }, /* ≼ */
+    { "preceq;", { 0x002AAF, } }, /* ⪯ */
+    { "precnapprox;", { 0x002AB9, } }, /* ⪹ */
+    { "precneqq;", { 0x002AB5, } }, /* ⪵ */
+    { "precnsim;", { 0x0022E8, } }, /* ⋨ */
+    { "precsim;", { 0x00227E, } }, /* ≾ */
+    { "prime;", { 0x002032, } }, /* ′ */
+    { "primes;", { 0x002119, } }, /* ℙ */
+    { "prnE;", { 0x002AB5, } }, /* ⪵ */
+    { "prnap;", { 0x002AB9, } }, /* ⪹ */
+    { "prnsim;", { 0x0022E8, } }, /* ⋨ */
+    { "prod;", { 0x00220F, } }, /* ∏ */
+    { "profalar;", { 0x00232E, } }, /* ⌮ */
+    { "profline;", { 0x002312, } }, /* ⌒ */
+    { "profsurf;", { 0x002313, } }, /* ⌓ */
+    { "prop;", { 0x00221D, } }, /* ∝ */
+    { "propto;", { 0x00221D, } }, /* ∝ */
+    { "prsim;", { 0x00227E, } }, /* ≾ */
+    { "prurel;", { 0x0022B0, } }, /* ⊰ */
+    { "pscr;", { 0x01D4C5, } }, /* 𝓅 */
+    { "psi;", { 0x0003C8, } }, /* ψ */
+    { "puncsp;", { 0x002008, } }, /*   */
+    { "qfr;", { 0x01D52E, } }, /* 𝔮 */
+    { "qint;", { 0x002A0C, } }, /* ⨌ */
+    { "qopf;", { 0x01D562, } }, /* 𝕢 */
+    { "qprime;", { 0x002057, } }, /* ⁗ */
+    { "qscr;", { 0x01D4C6, } }, /* 𝓆 */
+    { "quaternions;", { 0x00210D, } }, /* ℍ */
+    { "quatint;", { 0x002A16, } }, /* ⨖ */
+    { "quest;", { 0x00003F, } }, /* ? */
+    { "questeq;", { 0x00225F, } }, /* ≟ */
+    { "quot", { 0x000022, } }, /* " */
+    { "quot;", { 0x000022, } }, /* " */
+    { "rAarr;", { 0x0021DB, } }, /* ⇛ */
+    { "rArr;", { 0x0021D2, } }, /* ⇒ */
+    { "rAtail;", { 0x00291C, } }, /* ⤜ */
+    { "rBarr;", { 0x00290F, } }, /* ⤏ */
+    { "rHar;", { 0x002964, } }, /* ⥤ */
+    { "race;", { 0x00223D, 0x000331, } }, /* ∽̱ */
+    { "racute;", { 0x000155, } }, /* ŕ */
+    { "radic;", { 0x00221A, } }, /* √ */
+    { "raemptyv;", { 0x0029B3, } }, /* ⦳ */
+    { "rang;", { 0x0027E9, } }, /* ⟩ */
+    { "rangd;", { 0x002992, } }, /* ⦒ */
+    { "range;", { 0x0029A5, } }, /* ⦥ */
+    { "rangle;", { 0x0027E9, } }, /* ⟩ */
+    { "raquo", { 0x0000BB, } }, /* » */
+    { "raquo;", { 0x0000BB, } }, /* » */
+    { "rarr;", { 0x002192, } }, /* → */
+    { "rarrap;", { 0x002975, } }, /* ⥵ */
+    { "rarrb;", { 0x0021E5, } }, /* ⇥ */
+    { "rarrbfs;", { 0x002920, } }, /* ⤠ */
+    { "rarrc;", { 0x002933, } }, /* ⤳ */
+    { "rarrfs;", { 0x00291E, } }, /* ⤞ */
+    { "rarrhk;", { 0x0021AA, } }, /* ↪ */
+    { "rarrlp;", { 0x0021AC, } }, /* ↬ */
+    { "rarrpl;", { 0x002945, } }, /* ⥅ */
+    { "rarrsim;", { 0x002974, } }, /* ⥴ */
+    { "rarrtl;", { 0x0021A3, } }, /* ↣ */
+    { "rarrw;", { 0x00219D, } }, /* ↝ */
+    { "ratail;", { 0x00291A, } }, /* ⤚ */
+    { "ratio;", { 0x002236, } }, /* ∶ */
+    { "rationals;", { 0x00211A, } }, /* ℚ */
+    { "rbarr;", { 0x00290D, } }, /* ⤍ */
+    { "rbbrk;", { 0x002773, } }, /* ❳ */
+    { "rbrace;", { 0x00007D, } }, /* } */
+    { "rbrack;", { 0x00005D, } }, /* ] */
+    { "rbrke;", { 0x00298C, } }, /* ⦌ */
+    { "rbrksld;", { 0x00298E, } }, /* ⦎ */
+    { "rbrkslu;", { 0x002990, } }, /* ⦐ */
+    { "rcaron;", { 0x000159, } }, /* ř */
+    { "rcedil;", { 0x000157, } }, /* ŗ */
+    { "rceil;", { 0x002309, } }, /* ⌉ */
+    { "rcub;", { 0x00007D, } }, /* } */
+    { "rcy;", { 0x000440, } }, /* р */
+    { "rdca;", { 0x002937, } }, /* ⤷ */
+    { "rdldhar;", { 0x002969, } }, /* ⥩ */
+    { "rdquo;", { 0x00201D, } }, /* ” */
+    { "rdquor;", { 0x00201D, } }, /* ” */
+    { "rdsh;", { 0x0021B3, } }, /* ↳ */
+    { "real;", { 0x00211C, } }, /* ℜ */
+    { "realine;", { 0x00211B, } }, /* ℛ */
+    { "realpart;", { 0x00211C, } }, /* ℜ */
+    { "reals;", { 0x00211D, } }, /* ℝ */
+    { "rect;", { 0x0025AD, } }, /* ▭ */
+    { "reg", { 0x0000AE, } }, /* ® */
+    { "reg;", { 0x0000AE, } }, /* ® */
+    { "rfisht;", { 0x00297D, } }, /* ⥽ */
+    { "rfloor;", { 0x00230B, } }, /* ⌋ */
+    { "rfr;", { 0x01D52F, } }, /* 𝔯 */
+    { "rhard;", { 0x0021C1, } }, /* ⇁ */
+    { "rharu;", { 0x0021C0, } }, /* ⇀ */
+    { "rharul;", { 0x00296C, } }, /* ⥬ */
+    { "rho;", { 0x0003C1, } }, /* ρ */
+    { "rhov;", { 0x0003F1, } }, /* ϱ */
+    { "rightarrow;", { 0x002192, } }, /* → */
+    { "rightarrowtail;", { 0x0021A3, } }, /* ↣ */
+    { "rightharpoondown;", { 0x0021C1, } }, /* ⇁ */
+    { "rightharpoonup;", { 0x0021C0, } }, /* ⇀ */
+    { "rightleftarrows;", { 0x0021C4, } }, /* ⇄ */
+    { "rightleftharpoons;", { 0x0021CC, } }, /* ⇌ */
+    { "rightrightarrows;", { 0x0021C9, } }, /* ⇉ */
+    { "rightsquigarrow;", { 0x00219D, } }, /* ↝ */
+    { "rightthreetimes;", { 0x0022CC, } }, /* ⋌ */
+    { "ring;", { 0x0002DA, } }, /* ˚ */
+    { "risingdotseq;", { 0x002253, } }, /* ≓ */
+    { "rlarr;", { 0x0021C4, } }, /* ⇄ */
+    { "rlhar;", { 0x0021CC, } }, /* ⇌ */
+    { "rlm;", { 0x00200F, } }, /* ‏ */
+    { "rmoust;", { 0x0023B1, } }, /* ⎱ */
+    { "rmoustache;", { 0x0023B1, } }, /* ⎱ */
+    { "rnmid;", { 0x002AEE, } }, /* ⫮ */
+    { "roang;", { 0x0027ED, } }, /* ⟭ */
+    { "roarr;", { 0x0021FE, } }, /* ⇾ */
+    { "robrk;", { 0x0027E7, } }, /* ⟧ */
+    { "ropar;", { 0x002986, } }, /* ⦆ */
+    { "ropf;", { 0x01D563, } }, /* 𝕣 */
+    { "roplus;", { 0x002A2E, } }, /* ⨮ */
+    { "rotimes;", { 0x002A35, } }, /* ⨵ */
+    { "rpar;", { 0x000029, } }, /* ) */
+    { "rpargt;", { 0x002994, } }, /* ⦔ */
+    { "rppolint;", { 0x002A12, } }, /* ⨒ */
+    { "rrarr;", { 0x0021C9, } }, /* ⇉ */
+    { "rsaquo;", { 0x00203A, } }, /* › */
+    { "rscr;", { 0x01D4C7, } }, /* 𝓇 */
+    { "rsh;", { 0x0021B1, } }, /* ↱ */
+    { "rsqb;", { 0x00005D, } }, /* ] */
+    { "rsquo;", { 0x002019, } }, /* ’ */
+    { "rsquor;", { 0x002019, } }, /* ’ */
+    { "rthree;", { 0x0022CC, } }, /* ⋌ */
+    { "rtimes;", { 0x0022CA, } }, /* ⋊ */
+    { "rtri;", { 0x0025B9, } }, /* ▹ */
+    { "rtrie;", { 0x0022B5, } }, /* ⊵ */
+    { "rtrif;", { 0x0025B8, } }, /* ▸ */
+    { "rtriltri;", { 0x0029CE, } }, /* ⧎ */
+    { "ruluhar;", { 0x002968, } }, /* ⥨ */
+    { "rx;", { 0x00211E, } }, /* ℞ */
+    { "sacute;", { 0x00015B, } }, /* ś */
+    { "sbquo;", { 0x00201A, } }, /* ‚ */
+    { "sc;", { 0x00227B, } }, /* ≻ */
+    { "scE;", { 0x002AB4, } }, /* ⪴ */
+    { "scap;", { 0x002AB8, } }, /* ⪸ */
+    { "scaron;", { 0x000161, } }, /* š */
+    { "sccue;", { 0x00227D, } }, /* ≽ */
+    { "sce;", { 0x002AB0, } }, /* ⪰ */
+    { "scedil;", { 0x00015F, } }, /* ş */
+    { "scirc;", { 0x00015D, } }, /* ŝ */
+    { "scnE;", { 0x002AB6, } }, /* ⪶ */
+    { "scnap;", { 0x002ABA, } }, /* ⪺ */
+    { "scnsim;", { 0x0022E9, } }, /* ⋩ */
+    { "scpolint;", { 0x002A13, } }, /* ⨓ */
+    { "scsim;", { 0x00227F, } }, /* ≿ */
+    { "scy;", { 0x000441, } }, /* с */
+    { "sdot;", { 0x0022C5, } }, /* ⋅ */
+    { "sdotb;", { 0x0022A1, } }, /* ⊡ */
+    { "sdote;", { 0x002A66, } }, /* ⩦ */
+    { "seArr;", { 0x0021D8, } }, /* ⇘ */
+    { "searhk;", { 0x002925, } }, /* ⤥ */
+    { "searr;", { 0x002198, } }, /* ↘ */
+    { "searrow;", { 0x002198, } }, /* ↘ */
+    { "sect", { 0x0000A7, } }, /* § */
+    { "sect;", { 0x0000A7, } }, /* § */
+    { "semi;", { 0x00003B, } }, /* ; */
+    { "seswar;", { 0x002929, } }, /* ⤩ */
+    { "setminus;", { 0x002216, } }, /* ∖ */
+    { "setmn;", { 0x002216, } }, /* ∖ */
+    { "sext;", { 0x002736, } }, /* ✶ */
+    { "sfr;", { 0x01D530, } }, /* 𝔰 */
+    { "sfrown;", { 0x002322, } }, /* ⌢ */
+    { "sharp;", { 0x00266F, } }, /* ♯ */
+    { "shchcy;", { 0x000449, } }, /* щ */
+    { "shcy;", { 0x000448, } }, /* ш */
+    { "shortmid;", { 0x002223, } }, /* ∣ */
+    { "shortparallel;", { 0x002225, } }, /* ∥ */
+    { "shy", { 0x0000AD, } }, /* ­ */
+    { "shy;", { 0x0000AD, } }, /* ­ */
+    { "sigma;", { 0x0003C3, } }, /* σ */
+    { "sigmaf;", { 0x0003C2, } }, /* ς */
+    { "sigmav;", { 0x0003C2, } }, /* ς */
+    { "sim;", { 0x00223C, } }, /* ∼ */
+    { "simdot;", { 0x002A6A, } }, /* ⩪ */
+    { "sime;", { 0x002243, } }, /* ≃ */
+    { "simeq;", { 0x002243, } }, /* ≃ */
+    { "simg;", { 0x002A9E, } }, /* ⪞ */
+    { "simgE;", { 0x002AA0, } }, /* ⪠ */
+    { "siml;", { 0x002A9D, } }, /* ⪝ */
+    { "simlE;", { 0x002A9F, } }, /* ⪟ */
+    { "simne;", { 0x002246, } }, /* ≆ */
+    { "simplus;", { 0x002A24, } }, /* ⨤ */
+    { "simrarr;", { 0x002972, } }, /* ⥲ */
+    { "slarr;", { 0x002190, } }, /* ← */
+    { "smallsetminus;", { 0x002216, } }, /* ∖ */
+    { "smashp;", { 0x002A33, } }, /* ⨳ */
+    { "smeparsl;", { 0x0029E4, } }, /* ⧤ */
+    { "smid;", { 0x002223, } }, /* ∣ */
+    { "smile;", { 0x002323, } }, /* ⌣ */
+    { "smt;", { 0x002AAA, } }, /* ⪪ */
+    { "smte;", { 0x002AAC, } }, /* ⪬ */
+    { "smtes;", { 0x002AAC, 0x00FE00, } }, /* ⪬︀ */
+    { "softcy;", { 0x00044C, } }, /* ь */
+    { "sol;", { 0x00002F, } }, /* / */
+    { "solb;", { 0x0029C4, } }, /* ⧄ */
+    { "solbar;", { 0x00233F, } }, /* ⌿ */
+    { "sopf;", { 0x01D564, } }, /* 𝕤 */
+    { "spades;", { 0x002660, } }, /* ♠ */
+    { "spadesuit;", { 0x002660, } }, /* ♠ */
+    { "spar;", { 0x002225, } }, /* ∥ */
+    { "sqcap;", { 0x002293, } }, /* ⊓ */
+    { "sqcaps;", { 0x002293, 0x00FE00, } }, /* ⊓︀ */
+    { "sqcup;", { 0x002294, } }, /* ⊔ */
+    { "sqcups;", { 0x002294, 0x00FE00, } }, /* ⊔︀ */
+    { "sqsub;", { 0x00228F, } }, /* ⊏ */
+    { "sqsube;", { 0x002291, } }, /* ⊑ */
+    { "sqsubset;", { 0x00228F, } }, /* ⊏ */
+    { "sqsubseteq;", { 0x002291, } }, /* ⊑ */
+    { "sqsup;", { 0x002290, } }, /* ⊐ */
+    { "sqsupe;", { 0x002292, } }, /* ⊒ */
+    { "sqsupset;", { 0x002290, } }, /* ⊐ */
+    { "sqsupseteq;", { 0x002292, } }, /* ⊒ */
+    { "squ;", { 0x0025A1, } }, /* □ */
+    { "square;", { 0x0025A1, } }, /* □ */
+    { "squarf;", { 0x0025AA, } }, /* ▪ */
+    { "squf;", { 0x0025AA, } }, /* ▪ */
+    { "srarr;", { 0x002192, } }, /* → */
+    { "sscr;", { 0x01D4C8, } }, /* 𝓈 */
+    { "ssetmn;", { 0x002216, } }, /* ∖ */
+    { "ssmile;", { 0x002323, } }, /* ⌣ */
+    { "sstarf;", { 0x0022C6, } }, /* ⋆ */
+    { "star;", { 0x002606, } }, /* ☆ */
+    { "starf;", { 0x002605, } }, /* ★ */
+    { "straightepsilon;", { 0x0003F5, } }, /* ϵ */
+    { "straightphi;", { 0x0003D5, } }, /* ϕ */
+    { "strns;", { 0x0000AF, } }, /* ¯ */
+    { "sub;", { 0x002282, } }, /* ⊂ */
+    { "subE;", { 0x002AC5, } }, /* ⫅ */
+    { "subdot;", { 0x002ABD, } }, /* ⪽ */
+    { "sube;", { 0x002286, } }, /* ⊆ */
+    { "subedot;", { 0x002AC3, } }, /* ⫃ */
+    { "submult;", { 0x002AC1, } }, /* ⫁ */
+    { "subnE;", { 0x002ACB, } }, /* ⫋ */
+    { "subne;", { 0x00228A, } }, /* ⊊ */
+    { "subplus;", { 0x002ABF, } }, /* ⪿ */
+    { "subrarr;", { 0x002979, } }, /* ⥹ */
+    { "subset;", { 0x002282, } }, /* ⊂ */
+    { "subseteq;", { 0x002286, } }, /* ⊆ */
+    { "subseteqq;", { 0x002AC5, } }, /* ⫅ */
+    { "subsetneq;", { 0x00228A, } }, /* ⊊ */
+    { "subsetneqq;", { 0x002ACB, } }, /* ⫋ */
+    { "subsim;", { 0x002AC7, } }, /* ⫇ */
+    { "subsub;", { 0x002AD5, } }, /* ⫕ */
+    { "subsup;", { 0x002AD3, } }, /* ⫓ */
+    { "succ;", { 0x00227B, } }, /* ≻ */
+    { "succapprox;", { 0x002AB8, } }, /* ⪸ */
+    { "succcurlyeq;", { 0x00227D, } }, /* ≽ */
+    { "succeq;", { 0x002AB0, } }, /* ⪰ */
+    { "succnapprox;", { 0x002ABA, } }, /* ⪺ */
+    { "succneqq;", { 0x002AB6, } }, /* ⪶ */
+    { "succnsim;", { 0x0022E9, } }, /* ⋩ */
+    { "succsim;", { 0x00227F, } }, /* ≿ */
+    { "sum;", { 0x002211, } }, /* ∑ */
+    { "sung;", { 0x00266A, } }, /* ♪ */
+    { "sup1", { 0x0000B9, } }, /* ¹ */
+    { "sup1;", { 0x0000B9, } }, /* ¹ */
+    { "sup2", { 0x0000B2, } }, /* ² */
+    { "sup2;", { 0x0000B2, } }, /* ² */
+    { "sup3", { 0x0000B3, } }, /* ³ */
+    { "sup3;", { 0x0000B3, } }, /* ³ */
+    { "sup;", { 0x002283, } }, /* ⊃ */
+    { "supE;", { 0x002AC6, } }, /* ⫆ */
+    { "supdot;", { 0x002ABE, } }, /* ⪾ */
+    { "supdsub;", { 0x002AD8, } }, /* ⫘ */
+    { "supe;", { 0x002287, } }, /* ⊇ */
+    { "supedot;", { 0x002AC4, } }, /* ⫄ */
+    { "suphsol;", { 0x0027C9, } }, /* ⟉ */
+    { "suphsub;", { 0x002AD7, } }, /* ⫗ */
+    { "suplarr;", { 0x00297B, } }, /* ⥻ */
+    { "supmult;", { 0x002AC2, } }, /* ⫂ */
+    { "supnE;", { 0x002ACC, } }, /* ⫌ */
+    { "supne;", { 0x00228B, } }, /* ⊋ */
+    { "supplus;", { 0x002AC0, } }, /* ⫀ */
+    { "supset;", { 0x002283, } }, /* ⊃ */
+    { "supseteq;", { 0x002287, } }, /* ⊇ */
+    { "supseteqq;", { 0x002AC6, } }, /* ⫆ */
+    { "supsetneq;", { 0x00228B, } }, /* ⊋ */
+    { "supsetneqq;", { 0x002ACC, } }, /* ⫌ */
+    { "supsim;", { 0x002AC8, } }, /* ⫈ */
+    { "supsub;", { 0x002AD4, } }, /* ⫔ */
+    { "supsup;", { 0x002AD6, } }, /* ⫖ */
+    { "swArr;", { 0x0021D9, } }, /* ⇙ */
+    { "swarhk;", { 0x002926, } }, /* ⤦ */
+    { "swarr;", { 0x002199, } }, /* ↙ */
+    { "swarrow;", { 0x002199, } }, /* ↙ */
+    { "swnwar;", { 0x00292A, } }, /* ⤪ */
+    { "szlig", { 0x0000DF, } }, /* ß */
+    { "szlig;", { 0x0000DF, } }, /* ß */
+    { "target;", { 0x002316, } }, /* ⌖ */
+    { "tau;", { 0x0003C4, } }, /* τ */
+    { "tbrk;", { 0x0023B4, } }, /* ⎴ */
+    { "tcaron;", { 0x000165, } }, /* ť */
+    { "tcedil;", { 0x000163, } }, /* ţ */
+    { "tcy;", { 0x000442, } }, /* т */
+    { "tdot;", { 0x0020DB, } }, /* ⃛ */
+    { "telrec;", { 0x002315, } }, /* ⌕ */
+    { "tfr;", { 0x01D531, } }, /* 𝔱 */
+    { "there4;", { 0x002234, } }, /* ∴ */
+    { "therefore;", { 0x002234, } }, /* ∴ */
+    { "theta;", { 0x0003B8, } }, /* θ */
+    { "thetasym;", { 0x0003D1, } }, /* ϑ */
+    { "thetav;", { 0x0003D1, } }, /* ϑ */
+    { "thickapprox;", { 0x002248, } }, /* ≈ */
+    { "thicksim;", { 0x00223C, } }, /* ∼ */
+    { "thinsp;", { 0x002009, } }, /*   */
+    { "thkap;", { 0x002248, } }, /* ≈ */
+    { "thksim;", { 0x00223C, } }, /* ∼ */
+    { "thorn", { 0x0000FE, } }, /* þ */
+    { "thorn;", { 0x0000FE, } }, /* þ */
+    { "tilde;", { 0x0002DC, } }, /* ˜ */
+    { "times", { 0x0000D7, } }, /* × */
+    { "times;", { 0x0000D7, } }, /* × */
+    { "timesb;", { 0x0022A0, } }, /* ⊠ */
+    { "timesbar;", { 0x002A31, } }, /* ⨱ */
+    { "timesd;", { 0x002A30, } }, /* ⨰ */
+    { "tint;", { 0x00222D, } }, /* ∭ */
+    { "toea;", { 0x002928, } }, /* ⤨ */
+    { "top;", { 0x0022A4, } }, /* ⊤ */
+    { "topbot;", { 0x002336, } }, /* ⌶ */
+    { "topcir;", { 0x002AF1, } }, /* ⫱ */
+    { "topf;", { 0x01D565, } }, /* 𝕥 */
+    { "topfork;", { 0x002ADA, } }, /* ⫚ */
+    { "tosa;", { 0x002929, } }, /* ⤩ */
+    { "tprime;", { 0x002034, } }, /* ‴ */
+    { "trade;", { 0x002122, } }, /* ™ */
+    { "triangle;", { 0x0025B5, } }, /* ▵ */
+    { "triangledown;", { 0x0025BF, } }, /* ▿ */
+    { "triangleleft;", { 0x0025C3, } }, /* ◃ */
+    { "trianglelefteq;", { 0x0022B4, } }, /* ⊴ */
+    { "triangleq;", { 0x00225C, } }, /* ≜ */
+    { "triangleright;", { 0x0025B9, } }, /* ▹ */
+    { "trianglerighteq;", { 0x0022B5, } }, /* ⊵ */
+    { "tridot;", { 0x0025EC, } }, /* ◬ */
+    { "trie;", { 0x00225C, } }, /* ≜ */
+    { "triminus;", { 0x002A3A, } }, /* ⨺ */
+    { "triplus;", { 0x002A39, } }, /* ⨹ */
+    { "trisb;", { 0x0029CD, } }, /* ⧍ */
+    { "tritime;", { 0x002A3B, } }, /* ⨻ */
+    { "trpezium;", { 0x0023E2, } }, /* ⏢ */
+    { "tscr;", { 0x01D4C9, } }, /* 𝓉 */
+    { "tscy;", { 0x000446, } }, /* ц */
+    { "tshcy;", { 0x00045B, } }, /* ћ */
+    { "tstrok;", { 0x000167, } }, /* ŧ */
+    { "twixt;", { 0x00226C, } }, /* ≬ */
+    { "twoheadleftarrow;", { 0x00219E, } }, /* ↞ */
+    { "twoheadrightarrow;", { 0x0021A0, } }, /* ↠ */
+    { "uArr;", { 0x0021D1, } }, /* ⇑ */
+    { "uHar;", { 0x002963, } }, /* ⥣ */
+    { "uacute", { 0x0000FA, } }, /* ú */
+    { "uacute;", { 0x0000FA, } }, /* ú */
+    { "uarr;", { 0x002191, } }, /* ↑ */
+    { "ubrcy;", { 0x00045E, } }, /* ў */
+    { "ubreve;", { 0x00016D, } }, /* ŭ */
+    { "ucirc", { 0x0000FB, } }, /* û */
+    { "ucirc;", { 0x0000FB, } }, /* û */
+    { "ucy;", { 0x000443, } }, /* у */
+    { "udarr;", { 0x0021C5, } }, /* ⇅ */
+    { "udblac;", { 0x000171, } }, /* ű */
+    { "udhar;", { 0x00296E, } }, /* ⥮ */
+    { "ufisht;", { 0x00297E, } }, /* ⥾ */
+    { "ufr;", { 0x01D532, } }, /* 𝔲 */
+    { "ugrave", { 0x0000F9, } }, /* ù */
+    { "ugrave;", { 0x0000F9, } }, /* ù */
+    { "uharl;", { 0x0021BF, } }, /* ↿ */
+    { "uharr;", { 0x0021BE, } }, /* ↾ */
+    { "uhblk;", { 0x002580, } }, /* ▀ */
+    { "ulcorn;", { 0x00231C, } }, /* ⌜ */
+    { "ulcorner;", { 0x00231C, } }, /* ⌜ */
+    { "ulcrop;", { 0x00230F, } }, /* ⌏ */
+    { "ultri;", { 0x0025F8, } }, /* ◸ */
+    { "umacr;", { 0x00016B, } }, /* ū */
+    { "uml", { 0x0000A8, } }, /* ¨ */
+    { "uml;", { 0x0000A8, } }, /* ¨ */
+    { "uogon;", { 0x000173, } }, /* ų */
+    { "uopf;", { 0x01D566, } }, /* 𝕦 */
+    { "uparrow;", { 0x002191, } }, /* ↑ */
+    { "updownarrow;", { 0x002195, } }, /* ↕ */
+    { "upharpoonleft;", { 0x0021BF, } }, /* ↿ */
+    { "upharpoonright;", { 0x0021BE, } }, /* ↾ */
+    { "uplus;", { 0x00228E, } }, /* ⊎ */
+    { "upsi;", { 0x0003C5, } }, /* υ */
+    { "upsih;", { 0x0003D2, } }, /* ϒ */
+    { "upsilon;", { 0x0003C5, } }, /* υ */
+    { "upuparrows;", { 0x0021C8, } }, /* ⇈ */
+    { "urcorn;", { 0x00231D, } }, /* ⌝ */
+    { "urcorner;", { 0x00231D, } }, /* ⌝ */
+    { "urcrop;", { 0x00230E, } }, /* ⌎ */
+    { "uring;", { 0x00016F, } }, /* ů */
+    { "urtri;", { 0x0025F9, } }, /* ◹ */
+    { "uscr;", { 0x01D4CA, } }, /* 𝓊 */
+    { "utdot;", { 0x0022F0, } }, /* ⋰ */
+    { "utilde;", { 0x000169, } }, /* ũ */
+    { "utri;", { 0x0025B5, } }, /* ▵ */
+    { "utrif;", { 0x0025B4, } }, /* ▴ */
+    { "uuarr;", { 0x0021C8, } }, /* ⇈ */
+    { "uuml", { 0x0000FC, } }, /* ü */
+    { "uuml;", { 0x0000FC, } }, /* ü */
+    { "uwangle;", { 0x0029A7, } }, /* ⦧ */
+    { "vArr;", { 0x0021D5, } }, /* ⇕ */
+    { "vBar;", { 0x002AE8, } }, /* ⫨ */
+    { "vBarv;", { 0x002AE9, } }, /* ⫩ */
+    { "vDash;", { 0x0022A8, } }, /* ⊨ */
+    { "vangrt;", { 0x00299C, } }, /* ⦜ */
+    { "varepsilon;", { 0x0003F5, } }, /* ϵ */
+    { "varkappa;", { 0x0003F0, } }, /* ϰ */
+    { "varnothing;", { 0x002205, } }, /* ∅ */
+    { "varphi;", { 0x0003D5, } }, /* ϕ */
+    { "varpi;", { 0x0003D6, } }, /* ϖ */
+    { "varpropto;", { 0x00221D, } }, /* ∝ */
+    { "varr;", { 0x002195, } }, /* ↕ */
+    { "varrho;", { 0x0003F1, } }, /* ϱ */
+    { "varsigma;", { 0x0003C2, } }, /* ς */
+    { "varsubsetneq;", { 0x00228A, 0x00FE00, } }, /* ⊊︀ */
+    { "varsubsetneqq;", { 0x002ACB, 0x00FE00, } }, /* ⫋︀ */
+    { "varsupsetneq;", { 0x00228B, 0x00FE00, } }, /* ⊋︀ */
+    { "varsupsetneqq;", { 0x002ACC, 0x00FE00, } }, /* ⫌︀ */
+    { "vartheta;", { 0x0003D1, } }, /* ϑ */
+    { "vartriangleleft;", { 0x0022B2, } }, /* ⊲ */
+    { "vartriangleright;", { 0x0022B3, } }, /* ⊳ */
+    { "vcy;", { 0x000432, } }, /* в */
+    { "vdash;", { 0x0022A2, } }, /* ⊢ */
+    { "vee;", { 0x002228, } }, /* ∨ */
+    { "veebar;", { 0x0022BB, } }, /* ⊻ */
+    { "veeeq;", { 0x00225A, } }, /* ≚ */
+    { "vellip;", { 0x0022EE, } }, /* ⋮ */
+    { "verbar;", { 0x00007C, } }, /* | */
+    { "vert;", { 0x00007C, } }, /* | */
+    { "vfr;", { 0x01D533, } }, /* 𝔳 */
+    { "vltri;", { 0x0022B2, } }, /* ⊲ */
+    { "vnsub;", { 0x002282, 0x0020D2, } }, /* ⊂⃒ */
+    { "vnsup;", { 0x002283, 0x0020D2, } }, /* ⊃⃒ */
+    { "vopf;", { 0x01D567, } }, /* 𝕧 */
+    { "vprop;", { 0x00221D, } }, /* ∝ */
+    { "vrtri;", { 0x0022B3, } }, /* ⊳ */
+    { "vscr;", { 0x01D4CB, } }, /* 𝓋 */
+    { "vsubnE;", { 0x002ACB, 0x00FE00, } }, /* ⫋︀ */
+    { "vsubne;", { 0x00228A, 0x00FE00, } }, /* ⊊︀ */
+    { "vsupnE;", { 0x002ACC, 0x00FE00, } }, /* ⫌︀ */
+    { "vsupne;", { 0x00228B, 0x00FE00, } }, /* ⊋︀ */
+    { "vzigzag;", { 0x00299A, } }, /* ⦚ */
+    { "wcirc;", { 0x000175, } }, /* ŵ */
+    { "wedbar;", { 0x002A5F, } }, /* ⩟ */
+    { "wedge;", { 0x002227, } }, /* ∧ */
+    { "wedgeq;", { 0x002259, } }, /* ≙ */
+    { "weierp;", { 0x002118, } }, /* ℘ */
+    { "wfr;", { 0x01D534, } }, /* 𝔴 */
+    { "wopf;", { 0x01D568, } }, /* 𝕨 */
+    { "wp;", { 0x002118, } }, /* ℘ */
+    { "wr;", { 0x002240, } }, /* ≀ */
+    { "wreath;", { 0x002240, } }, /* ≀ */
+    { "wscr;", { 0x01D4CC, } }, /* 𝓌 */
+    { "xcap;", { 0x0022C2, } }, /* ⋂ */
+    { "xcirc;", { 0x0025EF, } }, /* ◯ */
+    { "xcup;", { 0x0022C3, } }, /* ⋃ */
+    { "xdtri;", { 0x0025BD, } }, /* ▽ */
+    { "xfr;", { 0x01D535, } }, /* 𝔵 */
+    { "xhArr;", { 0x0027FA, } }, /* ⟺ */
+    { "xharr;", { 0x0027F7, } }, /* ⟷ */
+    { "xi;", { 0x0003BE, } }, /* ξ */
+    { "xlArr;", { 0x0027F8, } }, /* ⟸ */
+    { "xlarr;", { 0x0027F5, } }, /* ⟵ */
+    { "xmap;", { 0x0027FC, } }, /* ⟼ */
+    { "xnis;", { 0x0022FB, } }, /* ⋻ */
+    { "xodot;", { 0x002A00, } }, /* ⨀ */
+    { "xopf;", { 0x01D569, } }, /* 𝕩 */
+    { "xoplus;", { 0x002A01, } }, /* ⨁ */
+    { "xotime;", { 0x002A02, } }, /* ⨂ */
+    { "xrArr;", { 0x0027F9, } }, /* ⟹ */
+    { "xrarr;", { 0x0027F6, } }, /* ⟶ */
+    { "xscr;", { 0x01D4CD, } }, /* 𝓍 */
+    { "xsqcup;", { 0x002A06, } }, /* ⨆ */
+    { "xuplus;", { 0x002A04, } }, /* ⨄ */
+    { "xutri;", { 0x0025B3, } }, /* △ */
+    { "xvee;", { 0x0022C1, } }, /* ⋁ */
+    { "xwedge;", { 0x0022C0, } }, /* ⋀ */
+    { "yacute", { 0x0000FD, } }, /* ý */
+    { "yacute;", { 0x0000FD, } }, /* ý */
+    { "yacy;", { 0x00044F, } }, /* я */
+    { "ycirc;", { 0x000177, } }, /* ŷ */
+    { "ycy;", { 0x00044B, } }, /* ы */
+    { "yen", { 0x0000A5, } }, /* ¥ */
+    { "yen;", { 0x0000A5, } }, /* ¥ */
+    { "yfr;", { 0x01D536, } }, /* 𝔶 */
+    { "yicy;", { 0x000457, } }, /* ї */
+    { "yopf;", { 0x01D56A, } }, /* 𝕪 */
+    { "yscr;", { 0x01D4CE, } }, /* 𝓎 */
+    { "yucy;", { 0x00044E, } }, /* ю */
+    { "yuml", { 0x0000FF, } }, /* ÿ */
+    { "yuml;", { 0x0000FF, } }, /* ÿ */
+    { "zacute;", { 0x00017A, } }, /* ź */
+    { "zcaron;", { 0x00017E, } }, /* ž */
+    { "zcy;", { 0x000437, } }, /* з */
+    { "zdot;", { 0x00017C, } }, /* ż */
+    { "zeetrf;", { 0x002128, } }, /* ℨ */
+    { "zeta;", { 0x0003B6, } }, /* ζ */
+    { "zfr;", { 0x01D537, } }, /* 𝔷 */
+    { "zhcy;", { 0x000436, } }, /* ж */
+    { "zigrarr;", { 0x0021DD, } }, /* ⇝ */
+    { "zopf;", { 0x01D56B, } }, /* 𝕫 */
+    { "zscr;", { 0x01D4CF, } }, /* 𝓏 */
+    { "zwj;", { 0x00200D, } }, /* ‍ */
+    { "zwnj;", { 0x00200C, } }, /* ‌ */
 };
 
-#define MAX_ENTITY_TOKEN_LEN 31
+#define MAX_ENTITY_TOKEN_LEN 32
 

@@ -55,15 +55,22 @@ public:
     /**
      * Check whether the given Unicode code point is valid for HVML.
      */
-    bool isValidCharacter(Uchar32 uc);
+    static bool isValidHvmlCharacter(Uchar32 uc);
 
     /**
-     * Check if the given token is a valid named or numeric character
-     * reference. If it was (return value > 0), the function returns
-     * the character in UTF-8 encoding via mchar and mchar_len.
+     * Match a well-defined named character reference, and
+     * return the Unicode codepoint(s) if matched.
+     *
+     * The well-defined named character reference means the entity
+     * consists of a U+0026 AMPERSAND character (&) followed by a
+     * sequence of one or more alphanumeric ASCII characters and a
+     * U+003B SEMICOLON character (;).
+     *
+     * If not matched, this function returns NULL.
+     *
+     * Note that the \a entity should be encoded in UTF-8.
      */
-    size_t checkCharacterReference(const char* token, size_t len,
-            char* mchar, int* mchar_len);
+    static const Uchar32* matchNamedCharacterReference(const char* entity);
 
 protected:
     // the tokenizer states
@@ -265,11 +272,8 @@ private:
 
     bool check_adjusted_current_node();
 
-    bool is_in_attribute_value(Uchar32 last_matched, int consumed);
     bool does_characters_match_word(const char* word, int* consumed,
             bool case_insensitive = true);
-    bool try_to_match_named_character_reference(Uchar32* maped_ucs,
-            int* consumed, Uchar32* last_matched);
 
     void append_uc32_to_utf8_string(Uchar32 uc, std::string& str) {
         char utf8[7];
@@ -308,6 +312,9 @@ private:
     Uchar32 get_character_reference_code() {
         return m_ctxt_tokenizer.char_ref_code;
     }
+    bool is_in_attribute_value(Uchar32 last_matched, int consumed);
+    const Uchar32* try_to_match_named_character_reference(int* consumed,
+            Uchar32* last_matched);
 
     /* operators for character token */
     void emit_character_token(Uchar32 uc);
