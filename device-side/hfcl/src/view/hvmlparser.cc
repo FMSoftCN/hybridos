@@ -1668,7 +1668,7 @@ bool HvmlParser::does_characters_match_word(const char* word, int* consumed,
     int mstr_len = m_ctxt_tokenizer.total_len;
     int left_ucs = nr_ucs;
     int i = 0;
-    while (left_ucs > 0) {
+    while (mstr_len > 0 && left_ucs > 0) {
 
         Uchar32 uc;
         int mclen;
@@ -3498,7 +3498,7 @@ size_t HvmlParser::parse(View* parent, const char* content, size_t len,
         const char* mstr = content;
         int mstr_len = len;
 
-        while (1) {
+        while (mstr_len > 0) {
             Uchar32 uc;
             int mclen;
 
@@ -3544,7 +3544,7 @@ size_t HvmlParser::parse(View* parent, const char* content, size_t len,
 #endif
 
 done:
-    if (consumed < len) {
+    if (m_ctxt_tokenizer.errors > 0) {
         _DBG_PRINTF("%s: Parse error at %d (%c",
                 __func__, consumed, content[consumed]);
 
