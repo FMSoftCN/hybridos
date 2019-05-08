@@ -22,4 +22,5 @@ libhfcl_view_la_SOURCES = \
 
 EXTRA_DIST= \
     data \
-    make_html_entities_table.py
+    make_html_entities_table.py \
+    make_hvml_tags_table.py

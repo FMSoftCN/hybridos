@@ -549,7 +549,7 @@ hvml
     scopes: general, list-item, table, select
 
 view
-    category: special
+    category: ordinary
     scopes: select
 
 # the foreign tags
