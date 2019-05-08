@@ -1715,6 +1715,69 @@ void HvmlParser::on_bogus_comment_state()
     }
 }
 
+bool HvmlParser::does_characters_match_word(const char* word, int* consumed,
+            bool case_insensitive)
+{
+    size_t word_len = strlen(word);
+
+    *consumed = 0;
+
+    if (word_len == 0)
+        return false;
+
+    Uchar32 ucword[word_len];
+    int nr_ucs = 0;
+
+    int t;
+    while ((t = utf8_to_uc32(word, word_len, ucword + nr_ucs)) > 0) {
+        nr_ucs ++;
+        word += t;
+        word_len -= t;
+    }
+
+    if (nr_ucs == 0)
+        return false;
+
+    const char* mstr = m_ctxt_tokenizer.mchar;
+    int mstr_len = m_ctxt_tokenizer.total_len;
+    int left_ucs = nr_ucs;
+    int i = 0;
+    while (left_ucs > 0) {
+
+        Uchar32 uc;
+        int mclen;
+        mclen = GetNextUChar(m_ctxt_tokenizer.lf, mstr, mstr_len, &uc);
+
+        if (mclen > 0) {
+            Uchar32 uc0 = ucword[i];
+            if (case_insensitive) {
+                if (uc0 >= UCHAR_LATIN_CAPITAL_LETTER_A &&
+                        uc0 <= UCHAR_LATIN_CAPITAL_LETTER_Z)
+                    uc0 += 0x0020;
+
+                if (uc >= UCHAR_LATIN_CAPITAL_LETTER_A &&
+                        uc <= UCHAR_LATIN_CAPITAL_LETTER_Z)
+                    uc += 0x0020;
+            }
+
+            if (uc0 != uc)
+                return false;
+        }
+        else {
+            return false;
+        }
+
+        mstr += mclen;
+        mstr_len -= mclen;
+        left_ucs--;
+        i++;
+
+        *consumed += mclen;
+    }
+
+    return true;
+}
+
 void HvmlParser::on_markup_declaration_open_state()
 {
     int consumed;
@@ -2689,7 +2752,7 @@ bool HvmlParser::is_in_attribute_value(Uchar32 last_matched, int consumed)
             last_matched != UCHAR_SEMICOLON &&
             m_ctxt_tokenizer.total_len > consumed) {
 
-        Uchar32 next_uc = 0;    // TODO
+        Uchar32 next_uc = 0;
         if (GetNextUChar(m_ctxt_tokenizer.lf,
                     m_ctxt_tokenizer.mchar + consumed,
                     m_ctxt_tokenizer.total_len - consumed, &next_uc) > 0 &&
@@ -2702,6 +2765,26 @@ bool HvmlParser::is_in_attribute_value(Uchar32 last_matched, int consumed)
                     next_uc <= UCHAR_LATIN_SMALL_LETTER_Z))) {
             return true;
         }
+    }
+
+    return false;
+}
+
+bool HvmlParser::does_tb_consist_named_character_reference()
+{
+    const char* tb = m_ctxt_tokenizer.temp_buff.c_str();
+    size_t tb_len = strlen(tb);
+
+    if (MG_UNLIKELY (tb_len == 0))
+        return false;
+
+    if (tb[0] == '&' && tb[tb_len - 1] == ';') {
+        for (size_t i = 1; i < tb_len - 1; i++) {
+            if (!isalnum(tb[i]))
+                return false;
+        }
+
+        return true;
     }
 
     return false;

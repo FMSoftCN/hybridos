@@ -71,9 +71,23 @@ inline std::string& toupper(std::string& str)
 int uc32_to_utf8(Uint32 uc, char* outbuf);
 
 /**
- * Convert a UTF8 multi-byte character to the Unicode codepoint value.
+ * Convert a UTF8 multi-byte character to the Unicode code point value.
  */
 Uint32 utf8_to_uc32(const char* mchar, int mchar_len);
+
+/**
+ * Convert a character in UTF-8 encoding to the Unicode code point value.
+ *
+ * This function returns the length in bytes of the character correctly
+ * encoded in UTF-8. If and only if the return value is greater than 0,
+ * the Unicode code point value returned through \a uc is valid.
+ *
+ * The function may return zero under one of the following conditions:
+ *  - Bad encoded.
+ *  - The lenght in bytes of the character given by \a mchar_len is too small.
+ *  - mchar_len is 0 or mchar[0] is '\0;
+ */
+int utf8_to_uc32(const char* mchar, int mchar_len, Uint32* uc);
 
 int get_first_utf8_char_len(const char *mstr, int len);
 int get_last_utf8_char_len(const char *mstr, int len);
