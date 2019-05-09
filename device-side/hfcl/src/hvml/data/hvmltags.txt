@@ -548,7 +548,22 @@ hvml
     category: special
     scopes: general, list-item, table, select
 
+intent
+    kind: void
+    category: special
+    scopes: select
+
 view
+    category: ordinary
+    scopes: select
+
+iteration
+    kind: iteration
+    category: ordinary
+    scopes: select
+
+substitution
+    kind: substitution
     category: ordinary
     scopes: select
 

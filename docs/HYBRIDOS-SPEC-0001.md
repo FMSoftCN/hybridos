@@ -80,7 +80,7 @@ HybridOS, and the framework to define a HybridOS app.
 [HTML 5.3].
 
 The HVML tag `view` represents a complex widget which can not be described and
-rendered easily by the standard HTML 5.3 tags and CSS, for example, a chart,
+rendered easily by using the standard HTML 5.3 tags and CSS, for example, a chart,
 a calendar, a meter panel, and so on.
 
 As we know, HTML 5.3 introduced some new tags especially the ones for
@@ -94,9 +94,9 @@ tag for HVML.
 
 For example, to define a meter panel, we use the following HVML tag `view`:
 
-    <view type="meter" class="CLASS" name="<NAME>" id="<IDENTIFIER>">
-        <data name="<NAME>" value="<VALUE>" />
-        <data name="<NAME>" value="<VALUE>" />
+    <view type="meter" class="CLASS" name="NAME" id="IDENTIFIER">
+        <param name="NAME" value="VALUE">
+        <param name="NAME" value="VALUE">
     </view>
 
 HTML 5.3 also introduced the `template` tag. A template is a virtual element,
@@ -107,8 +107,8 @@ However, you still need to write a piece of script code to clone the
 template in HTML. But in HVML, you can use the following new tags to
 clone a template element without the script code:
 
-* `iterator`: define an iterator.
-* `subsitute` and `condition`: define conditional substitution.
+* `iteration`: define an iteration.
+* `substitution` and `condition`: define conditional substitution.
 
 The tags above use the intent data defined in the head element of a
 HVML document:
@@ -151,10 +151,9 @@ For example:
             </template>
 
             <template id="user-item">
-                <li>
-                    <data data-key="id" data-for="attr:value"></data>
-                    <img data-key="avatar" data-for="attr:src" />
-                    <p data-key="name" data-for="textContent"></p>
+                <li class="user-item" data-key="id" data-for="attribute::data-user-id">
+                    <img data-key="avatar" data-for="attribute::src">
+                    <span data-key="name" data-for="textContent"></span>
                 </li>
             </template>
 
@@ -171,16 +170,16 @@ For example:
 
             <main>
                 <ul>
-                    <iterator template="user-item" intent="users" alt="no-user" />
+                    <iteration template="user-item" intent="users" alt="no-user" />
                 </ul>
             </main>
 
             <footer class="footer">
-                <substitute intent="global">
-                    <condition template="footer-cn"  key="locale" value="zh_CN" />
-                    <condition template="footer-tw"  key="locale" value="zh_TW" />
+                <substitution intent="global">
+                    <condition template="footer-cn" data-key="locale" match-value="zh_CN" />
+                    <condition template="footer-tw" data-key="locale" match-value="zh_TW" />
                     <condition template="footer-def" />
-                </substitute>
+                </substitution>
             </footer>
         </body>
 
@@ -216,10 +215,9 @@ The following markup statements define the user list activity:
 
         <!-- define templates for future use -->
         <template id="user-item">
-            <li class="user-item">
-                <data data-key="id" data-attr="value"></data>
-                <img data-key="avatar" data-attr="src" />
-                <span data-key="name" data-attr="content"></span>
+            <li class="user-item" data-key="id" data-for="attribute::data-user-id">
+                <img data-key="avatar" data-for="attribute::src">
+                <span data-key="name" data-for="textContent"></span>
             </li>
         </template>
 
@@ -241,16 +239,16 @@ The following markup statements define the user list activity:
 
         <main>
             <ul>
-                <iterator template="user-item" metadata="users" />
+                <iteration template="user-item" intent="users" />
             </ul>
         </main>
 
         <footer class="footer">
-            <substitute metadata="global">
-                <condition template="footer-cn"  key="locale" value="zh_CN" />
-                <condition template="footer-tw"  key="locale" value="zh_TW" />
-                <condition template="footer-def" />
-            </substitute>
+            <substitution metadata="global">
+                <condition template="footer-cn"  data-key="locale" match-value="zh_CN">
+                <condition template="footer-tw"  data-key="locale" match-value="zh_TW">
+                <condition template="footer-def" default>
+            </substitution>
             <p content="$STRID_COPYING" class="footer-copying"></p>
         </footer>
 
@@ -313,8 +311,8 @@ An app can be defined by using the following markup statements:
     <hvml name="firstSample" lang="en">
         <!-- define the assets of the app, such as the activities, images, L10N text, CSS, and so on -->
         <head>
-            <meta name="activities:act-user-list"   content="userlist.html" default />
-            <meta name="activities:userInfo"        content="userinfo.html" />
+            <meta name="activities.act-user-list"   content="userlist.html" default />
+            <meta name="activities.userInfo"        content="userinfo.html" />
 
             <!-- the links to the localization translation files */
             <link rel="localtext" type="text/json" hreflang="zh_CN"
