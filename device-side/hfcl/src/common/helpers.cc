@@ -124,7 +124,7 @@ int utf8_to_uc32 (const char* mchar, int mchar_len, Uint32* uc)
 {
     Uint32 wc = *((unsigned char *)(mchar++));
     Uint32 t;
-    int n, ch_len = 0;
+    int n, ch_len = 1;
 
     if (wc & 0x80) {
         n = 1;
