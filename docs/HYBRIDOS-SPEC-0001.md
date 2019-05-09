@@ -22,21 +22,15 @@ for device apps and client apps. The key features follow:
    falls back to write the device apps in C++ language.
 
 2. For the device apps written in JavaScript language, the developer uses HVML
-   (HybridOS View Markup Language, which defines a set of extended HTML5 tags)
-   to describe the GUI. HybridOS provides a user agent like a Web browser. 
-   The user agent contains the V8 JS engine and a HVML (a customized
-   markup language) renderer. We name the user agent as 'HybridOS App Engine'
-   (`HAE` for short).
+   (HybridOS View Markup Language, which defines a few new tags based on HTML 5.2)
+   to describe the GUI. HybridOS provides a user agent like a Web browser, which
+   contains the V8 JS engine and the HVML renderer. We name the user agent as
+   'HybridOS App Engine' (`HAE` for short).
 
 3. The developer can always describe the UIs of a device app in HVML combined with CSS,
-   and
-    - the tags can be interpreted to one or more C++ source files, and every UI can be
-      mapped to a C++ class, the DOM elements in a UI can be mapped to the member
-      variables of the C++ class. So the developer can easily populate the UIs by using
-      C++ language.
-    - the tags can be embedded in a standard HTML5 webpage, and the developer can
-      populate the tags by using a HybridOS JavaScript library and combined with a 
-      CSS file, like AngularJS does.
+   and the HVML documents and CSS definitions can be interpreted to one or
+   more C++ source files, the developer can manipulate all DOM elements,
+   their attributes, styles, and content like JavaScript does.
 
 4. The device app written in JavaScript can run on client (Linux/Windows/macOS/Android/iOS)
    directly. Under this situation, the developer need a HAE implementation or SDK for
@@ -44,37 +38,108 @@ for device apps and client apps. The key features follow:
 
 In this way, we can use the same UI description files for device apps, client apps, and
 even web apps. When the target hardware has not enough performance, we fall back to use
-C++ language directly. However, we can still describe the UIs in HVML.
+C++ language directly. However, we can still describe the UIs in HVML and CSS.
 
-This specification describes the extended HTML5 tags (HVML tags) supported by HybridOS,
-and the framework to define a device app in JavaScript language.
+This specification describes the extended HTML 5.2 tags (HVML tags) supported by
+HybridOS, and the framework to define a device app in JavaScript language.
 
 ## The HVML Tags
 
-`HVML` means HybridOS View Markup Language, which defines some extended HTML5 tags:
+`HVML` means HybridOS View Markup Language, which defines a few new tags based on
+[HTML 5.2].
 
-* `hvml`: define a HybridOS app.
-* `activity`: define an activity.
+The HVML tag `view` represents a complex widget which can not be described and
+rendered easily by the standard HTML 5.2 tags and CSS, for example, a chart,
+a calendar, a meter panel, and so on.
 
-* `html`: define an activity.
-* `view`: define a view client; generally, all `view` elements are direct
-children of the `body` element.
-* `template`: define a template which can be cloned and inserted in the view tree.
+For example, to define a meter panel, we use the following HVML tag `view`:
 
+    <view type="meter" class="CLASS" name="NAME" id="IDENTIFIER" />
+
+As we know, HTML 5.2 introduced some new tags especially the ones for interaction,
+such as `details`, `summary`, and `dialog`. HVML provides the support for these
+tags. However, if we want to show a complex widget, we either use a plugin or
+use the `canvas` to render them by using JavaScript. In order to reduce the
+development efforts, we introduce the `view` tag for HVML.
+
+HTML 5.2 also introduced the `template` tag. A template is a virtual element,
+which can be use to generate other real elements by substituting some
+attributes and inserting them to the DOM tree.
+
+However, you still need to write a piece of script code to clone the
+template in HTML. But in HVML, you can use the following new tags to
+clone a template element without the script code:
+
+* `iterator`: define an iterator.
+* `subsitute` and `condition`: define conditional substitution.
+
+The tags above use the metadata defined in the head element of a HVML document.
+
+For example:
+
+    <!DOCTYPE hvml>
+    <hvml>
+        <head>
+            <meta name="users"  content="<JSON>" once />
+            <meta name="global" content="<JSON>" />
+        </head>
+
+        <body>
+
+            <template id="footer-cn">
+                <p><a href="http://www.baidu.com">Baidu</a></p>
+            </template>
+
+            <template id="footer-tw">
+                <p><a href="http://www.bing.com">Bing</a></p>
+            </template>
+
+            <template id="footer-def">
+                <p><a href="http://www.google.com">Google</a></p>
+            </template>
+
+            <template id="user-item">
+                <li>
+                    <data data-key="id" data-attr="value"></data>
+                    <img data-key="avatar" data-attr="src" />
+                    <p data-key="name" data-attr="content"></p>
+                </li>
+            </template>
+
+            <template id="no-user">
+                <li>
+                    <img src="def-avatar.png" />
+                    <p>Sign Up for the first user!</p>
+                </li>
+            </template>
+
+            <header>
+                <h1>User List</h1>
+            </header>
+
+            <main>
+                <ul>
+                    <iterator template="user-item" metadata="users" alt="no-user" />
+                </ul>
+            </main>
+
+            <footer class="footer">
+                <substitute metadata="global">
+                    <condition template="footer-cn"  key="locale" value="zh_CN" />
+                    <condition template="footer-tw"  key="locale" value="zh_TW" />
+                    <condition template="footer-def" />
+                </substitute>
+            </footer>
+        </body>
+
+    </hvml>
+
+
+~~
 We use a HTML document to define an activity. However, different from HTML,
 we can define multiple view clients for one activity, and at the same time,
 only one view client can be kept active. The other view clients are virtual
 and invisible from the users.
-
-A template is a virtual element, which can be use to generate other
-real elements by substituting some properties and inserting them to the
-view elements tree. Note that HTML 5.2 has introduced `template` tag.
-
-For example, to define a UI, which contains many general elements,
-we use the HVML tag `view`:
-
-    <view class="CLASS" name="NAME" id="IDENTIFIER">
-    </view>
 
 In a `view` or `template`, we use the standard sectioning and/or heading
 content tags of HTML5 to define the structure of the view:
@@ -110,59 +175,6 @@ Therefore, you can use the following HTML5 tags:
   * `math`, `svg`,
   * `audio`, `video`
 
-The following tags are specific to HVML in order to clone the template:
-
-* `iterator`: define an iterator.
-* `subsitute` and `condition`: define conditional substitution.
-
-For example:
-
-    <html>
-        <body>
-
-            <template id="footer-cn">
-                <p><a href="http://www.baidu.com">Baidu</a></p>
-            </template>
-
-            <template id="footer-tw">
-                <p><a href="http://www.bing.com">Bing</a></p>
-            </template>
-
-            <template id="footer-def">
-                <p><a href="http://www.google.com">Google</a></p>
-            </template>
-
-            <view>
-                <template id="user-item">
-                    <li>
-                        <data data-key="id" data-attr="value"></data>
-                        <img data-key="avatar" data-attr="src" />
-                        <p data-key="name" data-attr="content"></p>
-                    </li>
-                </template>
-
-                <header>
-                    <h1>User List</h1>
-                </header>
-
-                <main>
-                    <ul>
-                        <iterator data-template="user-item" data-source="users" />
-                    </ul>
-                </main>
-
-                <footer class="footer">
-                    <substitute data-source="global">
-                        <condition data-template="footer-cn"  data-if="locale=='zh_CN'" />
-                        <condition data-template="footer-tw"  data-if="locale=='zh_TW'" />
-                        <condition data-template="footer-def" data-if="true" />
-                    </substitute>
-                </footer>
-            </view>
-
-        </body>
-    </html>
-
 ### Tag properties
 
 1. `class`: A global HTML5 property, which specifies the class of the view.
@@ -178,7 +190,7 @@ will be a variable which you can refer to in your JavaScript or C++ code.
 1. `content`: A global HVML property, which specifies the content of an
 element.
 
-### Differences between HVML and HTML5
+### Differences between HVML and HTML
 
 1. HVML is defined for user interfaces not documents
 
@@ -200,6 +212,7 @@ However, in HVML, we define a text paragraph in the following way:
 
 So a JavaScript or C++ code can easily translate the content into other
 locale by using a GNU message file or a JSON table.
+~~
 
 ## A Sample
 
@@ -211,8 +224,16 @@ user item, the app will show the detailed information of the user.
 
 The following markup statements define the user list activity:
 
+    <!DOCTYPE hvml>
     <!-- The user list activity -->
-    <body id="act-user-list" hbd-app="firstSample">
+    <hvml>
+    <head>
+        <meta name="activity"   content="act-user-list" />
+        <meta name="users"      content="" />
+        <meta name="global"     content="" />
+    </head>
+
+    <body>
 
         <!-- define templates for future use -->
         <template id="user-item">
@@ -235,78 +256,48 @@ The following markup statements define the user list activity:
             <p><a href="http://www.google.com">Google</a></p>
         </template>
 
-        <view name="item-list" class="panel">
-            <header>
-                <h1 name="theHeader" content="$STRID_TITLE" class="panel-header"></h1>
-            </header>
+        <header>
+            <h1 name="theHeader" content="$STRID_TITLE" class="panel-header"></h1>
+        </header>
 
-            <main>
-                <ul>
-                    <iterator data-template="user-item" data-source="users" />
-                </ul>
-            </main>
+        <main>
+            <ul>
+                <iterator template="user-item" metadata="users" />
+            </ul>
+        </main>
 
-            <footer class="footer">
-                <substitute data-source="global">
-                    <condition data-template="footer-cn"  data-if="global.locale=='zh_CN'" />
-                    <condition data-template="footer-tw"  data-if="global.locale=='zh_TW'" />
-                    <condition data-template="footer-def" data-if="true" />
-                </substitute>
-                <p content="$STRID_COPYING" class="footer-copying"></p>
-            </footer>
-        </view>
+        <footer class="footer">
+            <substitute metadata="global">
+                <condition template="footer-cn"  key="locale" value="zh_CN" />
+                <condition template="footer-tw"  key="locale" value="zh_TW" />
+                <condition template="footer-def" />
+            </substitute>
+            <p content="$STRID_COPYING" class="footer-copying"></p>
+        </footer>
 
         <script>
-            /* get the app object */
-            var app = hybridos.app ('firstSample');
-
-            /* create the activity object and initialize the variables of the activity */
-            var activity = app.activity ('act-user-list', function ($app, $activity, $intent) {
-                $activity.users [] = {id: "1", avatar: "http://www.avatar.org/a.png", name: "John"};
-                $activity.users [] = {id: "2", avatar: "http://www.avatar.org/b.png", name: "Tom"};
-            });
-
             /* bind the click event of userItem */
-            activity.userItem.on ('click', function ($item) {
+            $(".user-item").on ('click', function ($item) {
                 /* launcher userInfo activity */
-                app.launchActivity ("act-user-info", {id: $item.id});
+                launchActivity ("act-user-info", {id: $item.id});
             });
-
-            /* show the view named 'item-list' */
-            activity.showView ("item-list");
         </script>
     </body>
+    </html>
 
 The following markup statements define the user information activity:
 
+    <!DOCTYPE hvml>
     <!-- The user information activity -->
-    <body id="act-user-info" scope="firstSample">
+    <hvml>
+    <head>
+        <meta name="activity"   content="act-user-info" />
+        <meta name="userinfo"   content="<JSON DATA>" />
+    </head>
+    <body>
 
-        <view name="user-info" class="">
-            ...
-        </view>
-
-        <script>
-            /* get the app object */
-            var app = hybridos.app ('firstSample');
-
-            /* create the activity object and initialize the variables of the activity */
-            var activity = app.activity ('act-user-list', function ($app, $activity, $intent) {
-                $activity.id = $intent.id;
-
-                /* fill the user information by calling method of $app */
-                $activity.avatar = "";
-                $activity.name = "";
-                $activity.bio = "";
-                $activity.org = "";
-                $activity.email = "";
-                $activity.link = "";
-            });
-
-            /* show the view named 'act-user-info' */
-            activity.showView ("user-info");
-        </script>
     </body>
+    </hvml>
 
 ### Define app
 
@@ -380,9 +371,8 @@ to use only one file:
         </script>
     </hvml>
 
+~~
 ## Embed App into HTML5 Pages
-
-_obsolete_
 
 It is possible to embed a HybridOS app into an existed HTML5 page:
 
@@ -433,6 +423,7 @@ It is possible to embed a HybridOS app into an existed HTML5 page:
     </html>
 
 Note that we import `hybridos.css` and `hybridos.js` in the head of the HTML5 page.
+~~
 
 ## HVML and CSS
 
@@ -501,3 +492,6 @@ Indeed, Hybrid Engine is developed based on HFCL.
 [HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
 [HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
+
+
+[HTML 5.2]: https://www.w3.org/TR/html52/index.html
