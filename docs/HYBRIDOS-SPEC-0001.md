@@ -54,7 +54,10 @@ a calendar, a meter panel, and so on.
 
 For example, to define a meter panel, we use the following HVML tag `view`:
 
-    <view type="meter" class="CLASS" name="NAME" id="IDENTIFIER" />
+    <view type="meter" class="CLASS" name="<NAME>" id="<IDENTIFIER>">
+        <data name="<NAME>" value="<VALUE>" />
+        <data name="<NAME>" value="<VALUE>" />
+    </view>
 
 As we know, HTML 5.2 introduced some new tags especially the ones for interaction,
 such as `details`, `summary`, and `dialog`. HVML provides the support for these
