@@ -13,44 +13,87 @@ All Rights Reserved.
 
 ## Introduction
 
-Considering the performance and differences in computing power of different
-IoT hardware platforms, HybridOS will provide a complete new GUI framework
-for device apps and client apps. The key features follow:
+Only a new app framework can define a new operating system,
+and the new app framework first needs to define a new GUI
+programming framework.
 
-1. If the hardware has enough computing power (at lease 64MB RAM and 600MHz CPU),
-   the developer can write the device apps in JavaScript language. Or, the developer
-   falls back to write the device apps in C++ language.
+The GUI programming framework on desktop and mobile clients
+has been based almost entirely on Toolkit, Widget, or Control
+mechanisms. Almost all common GUI systems, such as Gtk+, Qt,
+MiniGUI, Windows, Android, iOS, etc. are based on such design.
 
-2. For the device apps written in JavaScript language, the developer uses HVML
-   (HybridOS View Markup Language, which defines a few new tags based on HTML 5.2)
-   to describe the GUI. HybridOS provides a user agent like a Web browser, which
-   contains the V8 JS engine and the HVML renderer. We name the user agent as
-   'HybridOS App Engine' (`HAE` for short).
+On the other hand, the development of Web technologies,
+especially the development of HTML5 and CSS 3, makes webpages
+more interactive, and provides a simple, easy to use and flexible
+coding and implementation mechanism.
 
-3. The developer can always describe the UIs of a device app in HVML combined with CSS,
-   and the HVML documents and CSS definitions can be interpreted to one or
-   more C++ source files, the developer can manipulate all DOM elements,
-   their attributes, styles, and content like JavaScript does.
+The designers of HybridOS believe that the client GUI programming
+mechanism should learn from Web technologies. Furthermore, we
+believe that the many benefits of web client programming are not
+derived from the JavaScript language, but rather the underlying
+structured document description mechanism (DOM) and the CSS-based
+style definition mechanism.
 
-4. The device app written in JavaScript can run on client (Linux/Windows/macOS/Android/iOS)
-   directly. Under this situation, the developer need a HAE implementation or SDK for
-   the specific client operating system.
+Therefore, HybridOS's GUI programming framework no longer adheres to
+the traditional Toolkit/Widget mechanism; we choose to extend HTML5 and
+introduce the support of CSS 3. When programming is required, HybridOS
+provides the JavaScript programming interface same as Web browser
+for high-end device configurations and a C++ programming interface for
+low-end device configurations.
 
-In this way, we can use the same UI description files for device apps, client apps, and
-even web apps. When the target hardware has not enough performance, we fall back to use
-C++ language directly. However, we can still describe the UIs in HVML and CSS.
+The key features follow:
 
-This specification describes the extended HTML 5.2 tags (HVML tags) supported by
+1. The developer always use HVML (HybridOS View Markup Language, which
+   defines a few new tags based on HTML 5.3) and CSS 3 to define
+   the structure, styles, and layout of the UI elements.
+
+2. If the hardware has enough computing power (at lease 64MB RAM and 600MHz CPU),
+   the developer can write the device apps in JavaScript language. Or,
+   the developer falls back to write the device apps in C++ language.
+
+3. For the device apps written in JavaScript language, HybridOS provides a
+   user agent like a Web browser, which contains the V8 JS engine and the
+   HVML renderer. We name the user agent as 'HybridOS App Engine'
+   (`HAE` for short).
+
+4. When you write the device apps in C++ language, the HVML documents
+   and CSS definitions can be interpreted by some ready-to-use tools
+   to one or more C++ source files. The developer can manipulate all
+   DOM elements, their attributes, styles, and content like JavaScript
+   does. You even convert existed HTML webpages to the C++ source files.
+
+5. HAE will be cross-platform, the device app written in JavaScript
+   can run on any operating system (Linux/Windows/macOS/Android/iOS)
+   directly.
+
+In this way, we can use the same UI description files for device apps,
+client apps, and even web apps. When the target hardware has not enough
+performance, we fall back to use C++ language directly. However,
+we can still describe the UIs in HVML and CSS.
+
+We think this is a universal solution for the GUI programming framework,
+and never be out of date.
+
+This specification describes the extended HTML 5.3 tags (HVML tags) supported by
 HybridOS, and the framework to define a device app in JavaScript language.
 
 ## The HVML Tags
 
 `HVML` means HybridOS View Markup Language, which defines a few new tags based on
-[HTML 5.2].
+[HTML 5.3].
 
 The HVML tag `view` represents a complex widget which can not be described and
-rendered easily by the standard HTML 5.2 tags and CSS, for example, a chart,
+rendered easily by the standard HTML 5.3 tags and CSS, for example, a chart,
 a calendar, a meter panel, and so on.
+
+As we know, HTML 5.3 introduced some new tags especially the ones for
+interaction, such as `progress`, `meter`, `details`, `summary`,
+and `dialog`. HVML provides well support for these tags.
+
+However, if we want to show a complex widget, we either use a plugin or
+use the `canvas` to render them by using script. In order to reduce the
+development efforts and improve the performance, we introduce the `view`
+tag for HVML.
 
 For example, to define a meter panel, we use the following HVML tag `view`:
 
@@ -59,13 +102,7 @@ For example, to define a meter panel, we use the following HVML tag `view`:
         <data name="<NAME>" value="<VALUE>" />
     </view>
 
-As we know, HTML 5.2 introduced some new tags especially the ones for interaction,
-such as `details`, `summary`, and `dialog`. HVML provides the support for these
-tags. However, if we want to show a complex widget, we either use a plugin or
-use the `canvas` to render them by using JavaScript. In order to reduce the
-development efforts, we introduce the `view` tag for HVML.
-
-HTML 5.2 also introduced the `template` tag. A template is a virtual element,
+HTML 5.3 also introduced the `template` tag. A template is a virtual element,
 which can be used to generate other real elements by substituting some
 attributes and inserting them to the DOM tree.
 
@@ -76,15 +113,30 @@ clone a template element without the script code:
 * `iterator`: define an iterator.
 * `subsitute` and `condition`: define conditional substitution.
 
-The tags above use the metadata defined in the head element of a HVML document.
+The tags above use the intent data defined in the head element of a
+HVML document:
+
+* `intent`: like `style` or `script` tags, this tag represents the intent
+data passed to the document. We use the `textContent` of an intent
+element to define the real intent data, but the intent data must be in
+JSON format. The `name` attribute of this tag gives the name for the
+intent data, and the optional boolean attribute `once` tells the user
+agent whether to destroy the intent data after used the data.
 
 For example:
 
     <!DOCTYPE hvml>
     <hvml>
         <head>
-            <meta name="users"  content="<JSON>" once />
-            <meta name="global" content="<JSON>" />
+            <intent name="users" once>
+                [
+                    { "id": 1, "avatar": "/img/avatars/1.png", "Tom" },
+                    { "id": 2, "avatar": "/img/avatars/2.png", "Jerry" }
+                ]
+            </intent>
+            <intent name="global">
+                { "locale" : "zh_CN" }
+            </intent>
         </head>
 
         <body>
@@ -103,9 +155,9 @@ For example:
 
             <template id="user-item">
                 <li>
-                    <data data-key="id" data-attr="value"></data>
-                    <img data-key="avatar" data-attr="src" />
-                    <p data-key="name" data-attr="content"></p>
+                    <data data-key="id" data-for="attr:value"></data>
+                    <img data-key="avatar" data-for="attr:src" />
+                    <p data-key="name" data-for="textContent"></p>
                 </li>
             </template>
 
@@ -122,12 +174,12 @@ For example:
 
             <main>
                 <ul>
-                    <iterator template="user-item" metadata="users" alt="no-user" />
+                    <iterator template="user-item" intent="users" alt="no-user" />
                 </ul>
             </main>
 
             <footer class="footer">
-                <substitute metadata="global">
+                <substitute intent="global">
                     <condition template="footer-cn"  key="locale" value="zh_CN" />
                     <condition template="footer-tw"  key="locale" value="zh_TW" />
                     <condition template="footer-def" />
@@ -151,9 +203,16 @@ The following markup statements define the user list activity:
     <!-- The user list activity -->
     <hvml>
     <head>
-        <meta name="activity"   content="act-user-list" />
-        <meta name="users"      content="" />
-        <meta name="global"     content="" />
+        <meta name="activity" content="act-user-list" />
+        <intent name="users"  once>
+            [
+                { "id": 1, "avatar": "/imgs/avatar/1.png", "Tom" },
+                { "id": 2, "avatar": "/imgs/avatar/2.png", "Jerry" }
+            ]
+        </intent>
+        <intent name="global">
+            { "locale" : "zh_CN" }
+        </intent>
     </head>
 
     <body>
@@ -215,7 +274,9 @@ The following markup statements define the user information activity:
     <hvml>
     <head>
         <meta name="activity"   content="act-user-info" />
-        <meta name="userinfo"   content="<JSON DATA>" />
+        <intent name="userInfo"  once>
+            <JSON DATA>
+        </intent>
     </head>
     <body>
 
@@ -255,8 +316,8 @@ An app can be defined by using the following markup statements:
     <hvml name="firstSample" lang="en">
         <!-- define the assets of the app, such as the activities, images, L10N text, CSS, and so on -->
         <head>
-            <meta name="activities.act-user-list"   content="userlist.html" default />
-            <meta name="activities.userInfo"        content="userinfo.html" />
+            <meta name="activities:act-user-list"   content="userlist.html" default />
+            <meta name="activities:userInfo"        content="userinfo.html" />
 
             <!-- the links to the localization translation files */
             <link rel="localtext" type="text/json" hreflang="zh_CN"
@@ -272,7 +333,7 @@ An app can be defined by using the following markup statements:
 
 Obviously, if you use the method above to define the app, you need prepare three files:
 
-* `firstsample.hvml`: the app;
+* `index.hvml`: the app;
 * `userlist.hvml`: the `act-user-list` activity;
 * `userinfo.hvml`: the `act-user-info` activity.
 
@@ -486,5 +547,4 @@ _The above words are deprecated..._
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
 [HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
 
-
-[HTML 5.2]: https://www.w3.org/TR/html52/index.html
+[HTML 5.3]: https://www.w3.org/TR/html53/
