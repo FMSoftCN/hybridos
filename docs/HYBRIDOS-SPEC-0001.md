@@ -63,7 +63,7 @@ use the `canvas` to render them by using JavaScript. In order to reduce the
 development efforts, we introduce the `view` tag for HVML.
 
 HTML 5.2 also introduced the `template` tag. A template is a virtual element,
-which can be use to generate other real elements by substituting some
+which can be used to generate other real elements by substituting some
 attributes and inserting them to the DOM tree.
 
 However, you still need to write a piece of script code to clone the
@@ -133,86 +133,6 @@ For example:
         </body>
 
     </hvml>
-
-
-~~
-We use a HTML document to define an activity. However, different from HTML,
-we can define multiple view clients for one activity, and at the same time,
-only one view client can be kept active. The other view clients are virtual
-and invisible from the users.
-
-In a `view` or `template`, we use the standard sectioning and/or heading
-content tags of HTML5 to define the structure of the view:
-
-* `article`, `aside`, `nav`, `section`
-* `header`, `footer`, `main`, `div`
-* `ul`, `ol`, `dl`
-* `address`
-* `blockquote`
-* `figure`
-* `details`
-
-and use the following tags to define the text paragraphs:
-
-* `h1`, `h2`, `h3`, `h4`, `h5`, `h6`
-* `p`, `prev`
-* `li`, `dt`, `dd`
-* `summary`
-* `figcaption`
-
-In a text paragraph, we use the phrasing content elements (text-level
-elements and embedded elements) of HTML5 to define the content.
-Therefore, you can use the following HTML5 tags:
-
-* The text-level elements:
-  * `a`, `abbr`, `b`, `bdi`, `bdo`, `br`, `cite`, `code`, `data`, `datalist`
-  * `del`, `dfn`, `em`, `i`, `ins`, `kbd`, `label`, `mark`,
-  * `output`, `q`, `ruby`, `s`, `samp`, `small`, `span`
-  * `strong`, `sub`, `sup`, `time`, `u`, `var`, `wbr`
-
-* The embedded elements:
-  * `img`, `button`, `input`, `math`, `meter`, `picture`, `progress`
-  * `math`, `svg`,
-  * `audio`, `video`
-
-### Tag properties
-
-1. `class`: A global HTML5 property, which specifies the class of the view.
-
-1. `name`: A global HTML5 property, which specifies the name of an app,
-an activity, a view, or a template, Generally, the value of this property
-will be a variable which you can refer to in your JavaScript or C++ code.
-
-1. `id`: A global HTML5 property, which specifies the identifier of an app,
-an activity, a view, or a template, Generally, the value of this property
-will be a variable which you can refer to in your JavaScript or C++ code.
-
-1. `content`: A global HVML property, which specifies the content of an
-element.
-
-### Differences between HVML and HTML
-
-1. HVML is defined for user interfaces not documents
-
-1. Easy to localize
-
-In HTML5, we define a text paragraph like this:
-
-    <p>
-        Welcome to the world of <em>HybridOS</em>!
-    </p>
-
-When we want to localize the paragraph for other locale, we generally
-generate a different webpage for the locale.
-
-However, in HVML, we define a text paragraph in the following way:
-
-    <p content="$Welcome to the world of <em>HybridOS</em>!">
-    </p>
-
-So a JavaScript or C++ code can easily translate the content into other
-locale by using a GNU message file or a JSON table.
-~~
 
 ## A Sample
 
@@ -299,6 +219,28 @@ The following markup statements define the user information activity:
     </body>
     </hvml>
 
+## L10N
+
+Different from webpages, HVML handles the L10N text as an asset of an app. 
+HAE (the HVML user agent) loads the L10N file in JSON and translate the
+localization text according to the identifier.
+
+If you specify a content of `text` with a string started with `$`, the
+string will be treated as the identifier of a text instead of the literal text.
+To escape from the rule, use `\$` for the prefix.
+
+The content of a L10N text file will look like:
+
+    {
+        "app": "firstSample",
+        "locale": "zh_CN",
+        "STRID_TITLE": "HybridOS 的第一个示例应用",
+        "STRID_COPYRING": "版权所有 (C) 2018 飞漫软件",
+        "Welcome to the world of <em>HybridOS</em>!": "欢迎来到 <em>HybridOS</em> 的世界！",
+    }
+
+Obviously, `app` and `locale` are reserved keywords for L10N text file.
+
 ### Define app
 
 As you can see from the sample code above, we need to define an app object as the
@@ -310,9 +252,8 @@ An app can be defined by using the following markup statements:
     <hvml name="firstSample" lang="en">
         <!-- define the assets of the app, such as the activities, images, L10N text, CSS, and so on -->
         <head>
-            <meta name="activity:act-user-list" content="userlist.html" />
-            <meta name="activity:userInfo" content="userinfo.html" />
-            <meta name="img:defAvatar" content="/firstSample/assets/default.png" />
+            <meta name="activities.act-user-list"   content="userlist.html" default />
+            <meta name="activities.userInfo"        content="userinfo.html" />
 
             <!-- the links to the localization translation files */
             <link rel="localtext" type="text/json" hreflang="zh_CN"
@@ -324,25 +265,57 @@ An app can be defined by using the following markup statements:
 
             <link rel="stylesheet" type="text/css" href="/firstSample/assets/default.css" />
         </head>
-
-        <script>
-            /* create the app object
-             *  'firstSample': the name of app.
-             *  'zh_CN': the initial locale name. The locale name will be used to load
-             *      the real L10N text file.
-             */
-            var app = hybridos.app ('firstSample', 'zh_CN');
-
-            /* launch the act-user-list activity */
-            app.launchActivity ("act-user-list", {});
-        </script>
     </hvml>
 
 Obviously, if you use the method above to define the app, you need prepare three files:
 
 * `firstsample.hvml`: the app;
-* `userlist.html`: the `act-user-list` activity;
-* `userinfo.html`: the `act-user-info` activity.
+* `userlist.hvml`: the `act-user-list` activity;
+* `userinfo.hvml`: the `act-user-info` activity.
+
+## HVML and CSS
+
+HybridOS uses CSS to define the style of all view types. You can apply your own
+CSS to any HVML element as well.
+
+## The HTML5 Technologies Supported
+
+The following HTML5 Technologies will be supported by HVML in the first official release:
+
+* canvas and canvas object.
+* WebStorage (including localStorage and sessionStorage)
+* WebSocket
+* Geolocation
+
+The following HTML5 Technologies will be supported in the future releases:
+
+* SVG
+* MathML
+* Audio
+* Video
+
+## Extended JavaScript Objects
+
+HybridOS will provide the following extended JavaScript Objects for app:
+
+* SQLite for local database.
+* hBus for communication with the local system services.
+* MQTT for communication with the cloud and clients.
+
+## Relationship with C++ App Framework
+
+Under C++ language, we use the HybridOS Foundation C++ Class Library
+(`HFCL` for short, see [HybridOS Foundation Class Library]).
+
+HFCL is derived a C++ GUI framework called mGNGUX, which is based on MiniGUI.
+We re-designed HFCL to make this library can be ported easily to other
+host operating system, for example, Windows or macOS.
+
+Hybrid App Engine is developed based on HFCL.
+
+---
+
+_The following words are deprecated..._
 
 Otherwise, if your app is a simple one, you can organize your code in the following manner
 to use only one file:
@@ -371,7 +344,83 @@ to use only one file:
         </script>
     </hvml>
 
-~~
+We use a HTML document to define an activity. However, different from HTML,
+we can define multiple view clients for one activity, and at the same time,
+only one view client can be kept active. The other view clients are virtual
+and invisible from the users.
+
+In a `view` or `template`, we use the standard sectioning and/or heading
+content tags of HTML5 to define the structure of the view:
+
+* `article`, `aside`, `nav`, `section`
+* `header`, `footer`, `main`, `div`
+* `ul`, `ol`, `dl`
+* `address`
+* `blockquote`
+* `figure`
+* `details`
+
+and use the following tags to define the text paragraphs:
+
+* `h1`, `h2`, `h3`, `h4`, `h5`, `h6`
+* `p`, `prev`
+* `li`, `dt`, `dd`
+* `summary`
+* `figcaption`
+
+In a text paragraph, we use the phrasing content elements (text-level
+elements and embedded elements) of HTML5 to define the content.
+Therefore, you can use the following HTML5 tags:
+
+* The text-level elements:
+  * `a`, `abbr`, `b`, `bdi`, `bdo`, `br`, `cite`, `code`, `data`, `datalist`
+  * `del`, `dfn`, `em`, `i`, `ins`, `kbd`, `label`, `mark`,
+  * `output`, `q`, `ruby`, `s`, `samp`, `small`, `span`
+  * `strong`, `sub`, `sup`, `time`, `u`, `var`, `wbr`
+
+* The embedded elements:
+  * `img`, `button`, `input`, `math`, `meter`, `picture`, `progress`
+  * `math`, `svg`,
+  * `audio`, `video`
+
+### Tag properties
+
+1. `class`: A global HTML5 property, which specifies the class of the view.
+
+1. `name`: A global HTML5 property, which specifies the name of an app,
+an activity, a view, or a template, Generally, the value of this property
+will be a variable which you can refer to in your JavaScript or C++ code.
+
+1. `id`: A global HTML5 property, which specifies the identifier of an app,
+an activity, a view, or a template, Generally, the value of this property
+will be a variable which you can refer to in your JavaScript or C++ code.
+
+1. `content`: A global HVML property, which specifies the content of an
+element.
+
+### Differences between HVML and HTML
+
+1. HVML is defined for user interfaces not documents
+
+1. Easy to localize
+
+In HTML5, we define a text paragraph like this:
+
+    <p>
+        Welcome to the world of <em>HybridOS</em>!
+    </p>
+
+When we want to localize the paragraph for other locale, we generally
+generate a different webpage for the locale.
+
+However, in HVML, we define a text paragraph in the following way:
+
+    <p content="$Welcome to the world of <em>HybridOS</em>!">
+    </p>
+
+So a JavaScript or C++ code can easily translate the content into other
+locale by using a GNU message file or a JSON table.
+
 ## Embed App into HTML5 Pages
 
 It is possible to embed a HybridOS app into an existed HTML5 page:
@@ -423,67 +472,8 @@ It is possible to embed a HybridOS app into an existed HTML5 page:
     </html>
 
 Note that we import `hybridos.css` and `hybridos.js` in the head of the HTML5 page.
-~~
 
-## HVML and CSS
-
-HybridOS uses CSS to define the style of all view types. You can apply your own
-CSS to any HVML element as well.
-
-## L10N
-
-Different from webpages, HVML handles the L10N text as an asset of an app. 
-HAE (the HVML user agent) loads the L10N file in JSON and translate the
-localization text according to the identifier.
-
-If you specify a content of `text` with a string started with `$`, the
-string will be treated as the identifier of a text instead of the literal text.
-To escape from the rule, use `\$` for the prefix.
-
-The content of a L10N text file will look like:
-
-    {
-        "app": "firstSample",
-        "locale": "zh_CN",
-        "STRID_TITLE": "HybridOS 的第一个示例应用",
-        "STRID_COPYRING": "版权所有 (C) 2018 飞漫软件",
-        "Welcome to the world of <em>HybridOS</em>!": "欢迎来到 <em>HybridOS</em> 的世界！",
-    }
-
-Obviously, `app` and `locale` are reserved keywords for L10N text file.
-
-## The HTML5 Technologies Supported
-
-The following HTML5 Technologies will be supported by HVML in the first official release:
-
-* canvas and canvas object.
-* WebStorage (including localStorage and sessionStorage)
-* WebSocket
-* Geolocation
-
-The following HTML5 Technologies will be supported in the future releases:
-
-* SVG
-* Audio
-* Video
-
-## Extended JavaScript Objects
-
-HybridOS will provide the following extended JavaScript Objects for app:
-
-* SQLite for local database.
-* hBus for communication with the local system services.
-* MQTT for communication with the cloud and clients.
-
-## Relationship with C++ App Framework
-
-Under C++ language, all the view types are implemented by the HybridOS 
-Foundation C++ Class Library (`HFCL` for short, see [HybridOS Foundation Class Library]).
-HFCL is derived a C++ GUI framework called mGNGUX, which is based on MiniGUI.
-We re-designed HFCL to make this library can be ported easily to other
-host operating system, for example, Windows or macOS.
-
-Indeed, Hybrid Engine is developed based on HFCL.
+_The above words are deprecated..._
 
 [Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
 [FMSoft Technologies]: https://www.fmsoft.cn
