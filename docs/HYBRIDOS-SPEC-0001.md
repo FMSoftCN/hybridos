@@ -60,22 +60,19 @@ The key features follow:
    and CSS definitions can be interpreted by some ready-to-use tools
    to one or more C++ source files. The developer can manipulate all
    DOM elements, their attributes, styles, and content like JavaScript
-   does. You even convert existed HTML webpages to the C++ source files.
+   does. You can even convert existed HTML webpages to the C++ source files.
+   In this way, we can use the same UI description files for
+   device apps, client apps, and even web apps.
 
-5. HAE will be cross-platform, the device app written in JavaScript
+5. HAE will be cross-platform, one device app written in JavaScript
    can run on any operating system (Linux/Windows/macOS/Android/iOS)
    directly.
 
-In this way, we can use the same UI description files for device apps,
-client apps, and even web apps. When the target hardware has not enough
-performance, we fall back to use C++ language directly. However,
-we can still describe the UIs in HVML and CSS.
-
-We think this is a universal solution for the GUI programming framework,
+We think that this is a universal solution for the GUI programming framework,
 and never be out of date.
 
 This specification describes the extended HTML 5.3 tags (HVML tags) supported by
-HybridOS, and the framework to define a device app in JavaScript language.
+HybridOS, and the framework to define a HybridOS app.
 
 ## The HVML Tags
 
