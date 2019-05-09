@@ -1,4 +1,4 @@
-SUBDIRS=common resource css view activity graphics animation services mgcl
+SUBDIRS=common resource css hvml view activity graphics animation services mgcl
 
 # The directory where the include files will be installed
 myincludedir=$(includedir)/hfcl
@@ -9,6 +9,7 @@ myinclude_HEADERS= \
     common.h \
     activity.h \
     css.h \
+    hvml.h \
     view.h \
     graphics.h \
     drawable.h \

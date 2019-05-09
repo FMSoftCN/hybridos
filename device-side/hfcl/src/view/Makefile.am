@@ -11,8 +11,6 @@ libhfcl_view_la_SOURCES = \
     rootview.cc \
     panelview.cc \
     paragraphview.cc \
-    htmlentitiestable.inc \
-    hvmlparser.cc \
     textview.cc \
     atomictextview.cc \
     animatedimageview.cc \
@@ -20,7 +18,4 @@ libhfcl_view_la_SOURCES = \
     scrollbar.cc \
     transition.cc
 
-EXTRA_DIST= \
-    data \
-    make_html_entities_table.py \
-    make_hvml_tags_table.py
+EXTRA_DIST=

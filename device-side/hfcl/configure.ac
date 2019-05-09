@@ -173,7 +173,7 @@ AC_OUTPUT([
     include/Makefile
     include/common/Makefile
     include/css/Makefile
-    include/mgcl/Makefile
+    include/hvml/Makefile
     include/activity/Makefile
     include/graphics/Makefile
     include/view/Makefile
@@ -181,10 +181,11 @@ AC_OUTPUT([
     include/resource/Makefile
     include/services/Makefile
     include/drawable/Makefile
+    include/mgcl/Makefile
     src/Makefile
     src/common/Makefile
     src/css/Makefile
-    src/mgcl/Makefile
+    src/hvml/Makefile
     src/activity/Makefile
     src/graphics/Makefile
     src/view/Makefile
@@ -192,5 +193,6 @@ AC_OUTPUT([
     src/resource/Makefile
     src/services/Makefile
     src/drawable/Makefile
+    src/mgcl/Makefile
 ])
 
