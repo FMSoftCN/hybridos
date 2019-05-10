@@ -1,0 +1,174 @@
+attributename
+    canonical-name: attributeName
+
+attributetype
+    canonical-name: attributeType
+
+basefrequency
+    canonical-name: baseFrequency
+
+baseprofile
+    canonical-name: baseProfile
+
+calcmode
+    canonical-name: calcMode
+
+clippathunits
+    canonical-name: clipPathUnits
+
+diffuseconstant
+    canonical-name: diffuseConstant
+
+edgemode
+    canonical-name: edgeMode
+
+filterunits
+    canonical-name: filterUnits
+
+glyphref
+    canonical-name: glyphRef
+
+gradienttransform
+    canonical-name: gradientTransform
+
+gradientunits
+    canonical-name: gradientUnits
+
+kernelmatrix
+    canonical-name: kernelMatrix
+
+kernelunitlength
+    canonical-name: kernelUnitLength
+
+keypoints
+    canonical-name: keyPoints
+
+keysplines
+    canonical-name: keySplines
+
+keytimes
+    canonical-name: keyTimes
+
+lengthadjust
+    canonical-name: lengthAdjust
+
+limitingconeangle
+    canonical-name: limitingConeAngle
+
+markerheight
+    canonical-name: markerHeight
+
+markerunits
+    canonical-name: markerUnits
+
+markerwidth
+    canonical-name: markerWidth
+
+maskcontentunits
+    canonical-name: maskContentUnits
+
+maskunits
+    canonical-name: maskUnits
+
+numoctaves
+    canonical-name: numOctaves
+
+pathlength
+    canonical-name: pathLength
+
+patterncontentunits
+    canonical-name: patternContentUnits
+
+patterntransform
+    canonical-name: patternTransform
+
+patternunits
+    canonical-name: patternUnits
+
+pointsatx
+    canonical-name: pointsAtX
+
+pointsaty
+    canonical-name: pointsAtY
+
+pointsatz
+    canonical-name: pointsAtZ
+
+preservealpha
+    canonical-name: preserveAlpha
+
+preserveaspectratio
+    canonical-name: preserveAspectRatio
+
+primitiveunits
+    canonical-name: primitiveUnits
+
+refx
+    canonical-name: refX
+
+refy
+    canonical-name: refY
+
+repeatcount
+    canonical-name: repeatCount
+
+repeatdur
+    canonical-name: repeatDur
+
+requiredextensions
+    canonical-name: requiredExtensions
+
+requiredfeatures
+    canonical-name: requiredFeatures
+
+specularconstant
+    canonical-name: specularConstant
+
+specularexponent
+    canonical-name: specularExponent
+
+spreadmethod
+    canonical-name: spreadMethod
+
+startoffset
+    canonical-name: startOffset
+
+stddeviation
+    canonical-name: stdDeviation
+
+stitchtiles
+    canonical-name: stitchTiles
+
+surfacescale
+    canonical-name: surfaceScale
+
+systemlanguage
+    canonical-name: systemLanguage
+
+tablevalues
+    canonical-name: tableValues
+
+targetx
+    canonical-name: targetX
+
+targety
+    canonical-name: targetY
+
+textlength
+    canonical-name: textLength
+
+viewbox
+    canonical-name: viewBox
+
+viewtarget
+    canonical-name: viewTarget
+
+xchannelselector
+    canonical-name: xChannelSelector
+
+ychannelselector
+    canonical-name: yChannelSelector
+
+zoomandpan
+    canonical-name: zoomAndPan
+

@@ -1,0 +1,3 @@
+definitionurl
+    type:url
+    canonical-name: definitionURL
