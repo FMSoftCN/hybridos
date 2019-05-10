@@ -1,0 +1,55 @@
+xlink:actuate
+    prefix: xlink
+    local-name: actuate
+    namespace: XLink
+
+xlink:arcrole
+    prefix: xlink
+    local-name: arcrole
+    namespace: XLink
+
+xlink:href
+    prefix: xlink
+    local-name: href
+    namespace: XLink
+
+xlink:role
+    prefix: xlink
+    local-name: role
+    namespace: XLink
+
+xlink:show
+    prefix: xlink
+    local-name: show
+    namespace: XLink
+
+xlink:title
+    prefix: xlink
+    local-name: title
+    namespace: XLink
+
+xlink:type
+    prefix: xlink
+    local-name: type
+    namespace: XLink
+
+xml:lang
+    prefix: xml
+    local-name: lang
+    namespace: XML
+
+xml:space
+    prefix: xml
+    local-name: space
+    namespace: XML
+
+xmlns
+    prefix: NULL
+    local-name: xmlns
+    namespace: XMLNS
+
+xmlns:xlink
+    prefix: xmlns
+    local-name: xlink
+    namespace: XMLNS
+
