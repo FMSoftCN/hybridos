@@ -356,4 +356,9 @@ The components of HFCL are classified into the folllowing categories:
 
 [HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
+[HybridOS View Markup Language]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001-A.md
 [HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
+[HybridOS Security Design]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0003.md
+[HybridOS Device Simulation Environment]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0004.md
+[HybridOS Code and Development Convention]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0005.md
+

@@ -27,23 +27,28 @@ At present, when we want to develop a consumer IoT (Internet of Things) device,
 we have to build a software team which has five engineers at least due to
 the complex software stack and protocol stack of IoT computing environment:
 
-* At least one firmware engineer who writes programs in C/C++ for the IoT device, which
-  generally runs a RTOS or Linux.
-* At least one server engineer who writes programs in Java/PHP/Python for the cloud services.
-* At least one front-end engineer who writes webpages in JavaScript/CSS/HTML5 for webpages.
-* At least two client-end engineers who write apps in Java, Objective C, or Swift
-  for smart phones, which run Android or iOS.
+* At least one firmware engineer who writes programs in C/C++ for
+the IoT device, which generally runs a RTOS or Linux.
+* At least one server engineer who writes programs in Java/PHP/Python
+for the cloud services.
+* At least one front-end engineer who writes webpages in
+JavaScript/CSS/HTML5 for webpages.
+* At least two client-end engineers who write apps in Java,
+Objective C, or Swift for smart phones, which run Android or iOS.
 
-In addition, for some devices which are used for business, we need one or two engineers
-to write desktop apps in C/C++ for Windows, macOS, or Linux.
+In addition, for some devices which are used for business, we need one
+or two engineers to write desktop apps in C/C++ for Windows, macOS,
+or Linux.
 
-Obviously, the development cost of an IoT device is much higher than a traditional
-embedded device. We need a new operating system to simplify the software and protocol
-stack of IoT applications, and reduce the development cost.
+Obviously, the development cost of an IoT device is much higher
+than a traditional embedded device. We need a new operating system to
+simplify the software and protocol stack of IoT applications,
+reduce the development cost, and improve the productivity.
 
-Not only that, the popular cloud computing services we can get from AWS, Ali, or Huawei
-are not dedicated for IoT applications. We have to develop some cloud services by ourselves
-to implement some features for our IoT devices. Moreover, the security of an IoT service
+Not only that, the popular cloud computing services we can get from
+AWS, Ali, or Huawei are not dedicated for IoT applications. We have
+to develop some cloud services by ourselves to implement some features
+for our IoT devices. Moreover, the security of an IoT service
 is being seriously challenged.
 
 For example, with the development of IoT technologies, we can now use our
@@ -91,7 +96,7 @@ in order that the developers can focus on their applications.
 
 HybridOS provides a new software stack for IoT applications:
 
-* A new implemantaion for common server, such as MQTT, WebSocket, HTTP,
+* A new implementation for common server, such as MQTT, WebSocket, HTTP,
   CoAP, and streaming servers. HybridOS provides a different
   architecture for the implementation of the servers: any HybridOS app or
   service can register and work as a real service provider or a request provider
@@ -100,12 +105,11 @@ HybridOS provides a new software stack for IoT applications:
 * A new and universal app framework for IoT devices and client apps.
   The developers can write device app and client apps for Linux, Windows, macOS,
   Android, and iOS operating systems by using a set of extended HTML5 tags
-  and JavaScript/CSS. You can even embed your HybridOS app directly
-  in your webpages which are written in standard HTML5 by importing the HybridOS
-  JavaScript and CSS library.
+  and CSS 3. On low-end IoT devices, you use C++ as the script language of HVML,
+  while you use JavaScript on high-end IoT devices and/or clients.
 
 Finally, the application programming languages of HybridOS will be reduced to two:
-JavaScript for apps and Python for services. As a result, the development cost of
+JavaScript for apps and C/C++ for services. As a result, the development cost of
 an IoT application will be reduced greatly by using HybridOS.
 
 ### IoT-dedicated cloud computing services and security implementation
@@ -144,6 +148,7 @@ thus reducing development cost.
 
 * [HybridOS Architecture]
 * [HybridOS App Framework]
+* [HybridOS View Markup Language]
 * [HybridOS Foundation Class Library]
 * [HybridOS Security Design]
 * [HybridOS Device Simulation Environment]
@@ -180,6 +185,7 @@ please refer to the README or LICENSE files contained in the source trees.
 
 [HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
+[HybridOS View Markup Language]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001-A.md
 [HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
 [HybridOS Security Design]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0003.md
 [HybridOS Device Simulation Environment]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0004.md

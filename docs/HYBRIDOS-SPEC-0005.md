@@ -188,10 +188,12 @@ Please make sure that you have installed the following packages:
 
 [HybridOS Architecture]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0000.md
 [HybridOS App Framework]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001.md
+[HybridOS View Markup Language]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0001-A.md
 [HybridOS Foundation Class Library]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0002.md
 [HybridOS Security Design]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0003.md
 [HybridOS Device Simulation Environment]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0004.md
-[HybridOS Code and Development Convention]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0005.md
+[HybridOS Code Convention]: https://github.com/VincentWei/hybridos/blob/master/docs/HYBRIDOS-SPEC-0005.md
+
 
 [Linux Kernel Coding Style]: https://www.kernel.org/doc/html/latest/process/coding-style.html
 [Google C++ Style Guide]: https://google.github.io/styleguide/cppguide.html
