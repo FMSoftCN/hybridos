@@ -1,0 +1,1300 @@
+# List of attributes (excluding event handler content attributes)
+
+abbr
+    elements: th
+# Alternative label to use for the header cell when referencing the cell in other contexts
+# Text
+    type: text
+
+accept
+    elements: input
+# Hint for expected file type in File Upload controls
+# Set of comma-separated tokens consisting of valid MIME types with no parameters or audio/*, video/*, or image/*
+    type: comma-separated-tokens
+
+accept-charset
+    elements: form
+# Character encodings to use for form submission
+# Ordered set of unique space-separated tokens, ASCII case-insensitive, consisting of labels of ASCII-compatible encodings
+    type: unique-space-separated-tokens
+    case: insensitive
+
+accesskey
+    elements: HTML-elements
+# Keyboard shortcut to activate or focus element
+# Ordered set of unique space-separated tokens, case-sensitive, consisting of one Unicode code point in length
+    type: space-separated-tokens
+
+action
+    elements: form
+# URL to use for form submission
+# Valid non-empty URL potentially surrounded by spaces
+    type: url
+
+allowfullscreen
+    elements: iframe
+# Whether to allow the iframe's contents to use requestFullscreen()
+# Boolean attribute
+    type: boolean
+
+allowpaymentrequest
+    elements: iframe
+# Whether to allow the iframe's browsing context to use the PaymentRequest interface to make payment requests.
+# Boolean attribute
+    type: boolean
+
+allowusermedia
+    elements: iframe
+# Whether to allow the iframe's browsing context to use getUserMedia().
+# Boolean attribute
+    type: boolean
+
+alt
+    elements: area; img; input
+# Replacement text for use when images are not available
+# Text*
+    type: text
+
+async
+    elements: script
+# Execute script asynchronously
+# Boolean attribute
+    type: boolean
+
+autocapitalize
+    elements: input; textarea
+# Hint for the capitalization of the inputted text
+# "sentences"; "words"; "characters"
+    type: enum
+    values: "sentences"; "words"; "characters"
+
+autocomplete
+    elements: form
+# Default setting for autofill feature for controls in the form
+# "on"; "off"
+    type: enum
+    values: "on"; "off"
+
+autocomplete
+    elements: input; select; textarea
+# Hint for form autofill feature
+# Autofill field name and related tokens*
+    type: text
+
+autofocus
+    elements: button; input; select; textarea
+# Automatically focus the form control when the page is loaded
+# Boolean attribute
+    type: boolean
+
+autoplay
+    elements: audio; video
+# Hint that the media resource can be started automatically when the page is loaded
+# Boolean attribute
+    type: boolean
+
+border
+    elements: table
+# Explicit indication that the table element is not being used for layout purposes
+# The empty string, or "1"
+    type: enum
+    values: ""; "1"
+
+charset
+    elements: meta
+# Character encoding declaration
+# utf-8
+    type: fixed-text
+    value: utf-8
+
+charset
+    elements: script
+# Character encoding of the external script resource
+# utf-8
+    type: fixed-text
+    value: utf-8
+
+checked
+    elements: input
+# Whether the command or control is checked
+# Boolean attribute
+    type: boolean
+
+cite
+    elements: blockquote; del; ins; q
+# Link to the source of the quotation or more information about the edit
+# Valid URL potentially surrounded by spaces
+    type: url
+
+class
+    elements: HTML-elements
+# Classes to which the element belongs
+# Set of space-separated tokens
+    type: space-separated-tokens
+
+cols
+    elements: textarea
+# Maximum number of characters per line
+# Valid non-negative integer greater than zero
+    type: natural-number
+
+colspan
+    elements: td; th
+# Number of columns that the cell is to span
+# Valid non-negative integer greater than zero
+    type: natural-number
+
+content
+    elements: meta
+# Value of the element
+# Text*
+    type: text
+
+contenteditable
+    elements: HTML-elements
+# Whether the element is editable
+# "true"; "false"
+    type: enum
+    values: "true"; "false"
+
+controls
+    elements: audio; video
+# Show user agent controls
+# Boolean attribute
+    type: boolean
+
+coords
+    elements: area
+# Coordinates for the shape to be created in an image map
+# Valid list of floating-point numbers*
+    type: float-list
+
+crossorigin
+    elements: audio; img; link; script; video
+# How the element handles crossorigin requests
+    type: enum
+    values: "anonymous"; "use-credentials"
+
+data
+    elements: object
+# Address of the resource
+# Valid non-empty URL potentially surrounded by spaces
+    type: text
+
+datetime
+    elements: del; ins
+# Date and (optionally) time of the change
+# Valid date string with optional time
+    type: date
+
+datetime
+    elements: time
+# Machine-readable value
+# Valid month string, valid date string, valid yearless date string, valid time string, valid floating date and time string, valid time-zone offset string, valid global date and time string, valid week string, valid non-negative integer, or valid duration string
+    type: time
+
+decoding
+    elements: img
+# A hint to request a/synchronous loading of images
+# "sync", "async", "auto"
+    type: enum
+    values: "sync"; "async"; "auto"
+
+default
+    elements: track
+# Enable the track if no other text track is more suitable
+# Boolean attribute
+    type: boolean
+
+defer
+    elements: script
+# Defer script execution
+# Boolean attribute
+    type: boolean
+
+dir
+    elements: HTML-elements
+# The text directionality of the element
+    type: enum
+    values: "ltr"; "rtl"; "auto"
+
+dir
+    elements: bdo
+# The text directionality of the element
+# "ltr"; "rtl"
+    type: enum
+    values: "ltr"; "rtl"
+
+dirname
+    elements: input; textarea
+# Name of form field to use for sending the element’s directionality in form submission
+# Text*
+    type: enum
+
+disabled
+    elements: button; fieldset; input; optgroup; option; select; textarea
+# Whether the form control is disabled
+# Boolean attribute
+    type: boolean
+
+disableRemotePlayback
+    elements: audio; video
+# Whether the remote playback of a media element is disabled
+# Boolean attribute
+    type: boolean
+
+download
+    elements: a; area
+# Whether to download the resource instead of navigating to it, and its file name if so
+# Text
+    type: text
+
+draggable
+    elements: HTML-elements
+# Whether the element is draggable
+    type: enum
+    values: "true"; "false"
+
+enctype
+    elements: form
+# Form data set encoding type to use for form submission
+# "application/x-www-form-urlencoded"; "multipart/form-data"; "text/plain"
+    type: enum
+    values: "application/x-www-form-urlencoded"; "multipart/form-data"; "text/plain"
+
+for
+    elements: label
+# Associate the label with form control
+# ID*
+    type: text
+
+for
+    elements: output
+# Specifies controls from which the output was calculated
+# Unordered set of unique space-separated tokens, case-sensitive, consisting of IDs*
+    type: unique-space-separated-tokens
+
+form
+    elements: button; fieldset; input; label; object; output; select; textarea
+# Associates the control with a form element
+# ID*
+    type: text
+
+formaction
+    elements: button; input
+# URL to use for form submission
+# Valid non-empty URL potentially surrounded by spaces
+    type: url
+
+formenctype
+    elements: button; input
+# Form data set encoding type to use for form submission
+# "application/x-www-form-urlencoded"; "multipart/form-data"; "text/plain"
+    type: enum
+    values: "application/x-www-form-urlencoded"; "multipart/form-data"; "text/plain"
+
+formmethod
+    elements: button; input
+# HTTP method to use for form submission
+# "GET"; "POST"
+    type: enum
+    values: "GET"; "POST"
+
+formnovalidate
+    elements: button; input
+# Bypass form control validation for form submission
+# Boolean attribute
+    type: boolean
+
+formtarget
+    elements: button; input
+# Browsing context for form submission
+# Valid browsing context name or keyword
+    type: text
+
+headers
+    elements: td; th
+# The header cells for this cell
+# Unordered set of unique space-separated tokens, case-sensitive, consisting of IDs*
+    type: unique-space-separated-tokens
+
+height
+    elements: canvas; embed; iframe; img; input; object; video
+# Vertical dimension
+# Valid non-negative integer
+    type: unsigned-integer
+
+hidden
+    elements: HTML-elements
+# Whether the element is relevant
+# Boolean attribute
+    type: boolean
+
+high
+    elements: meter
+# Low limit of high range
+# Valid floating-point number*
+    type: floating
+
+href
+    elements: a; area
+# Address of the hyperlink
+# Valid URL potentially surrounded by spaces
+    type: url
+
+href
+    elements: link; base
+# Address of the hyperlink/Document base URL
+# Valid non-empty URL potentially surrounded by spaces
+    type: url
+
+hreflang
+    elements: a; area; link
+# Language of the linked resource
+# Valid BCP 47 language tag
+    type: language-tag
+
+http-equiv
+    elements: meta
+# Pragma directive
+# Text*
+    type: text
+
+id
+    elements: HTML-elements
+# The element’s ID
+# Text*
+    type: text
+
+integrity
+    elements: link; script
+# Integrity metadata used in Subresource Integrity checks [SRI]
+# Text
+    type: text
+
+is
+    elements: customized-built-in-elements
+# The local name of the element
+# A valid custom element name
+    type: text
+
+ismap
+    elements: img
+# Whether the image is a server-side image map
+# Boolean attribute
+    type: boolean
+
+kind
+    elements: track
+# The type of text track
+# "subtitles"; "captions"; "descriptions"; "chapters"; "metadata"
+    type: enum
+    values: "subtitles"; "captions"; "descriptions"; "chapters"; "metadata"
+
+label
+    elements: optgroup; option; track
+# User-visible label
+# Text
+    type text
+
+lang
+    elements: HTML-elements
+# Language of the element
+# Valid BCP 47 language tag or the empty string
+    type: enum
+    values: <language-tags> ""
+
+list
+    elements: input
+# List of autocomplete options
+# ID*
+    type: text
+
+longdesc
+    elements: img
+# A link to a fuller description of the image
+# Valid non-empty URL potentially surrounded by spaces
+    type: url
+
+loop
+    elements: audio; video
+# Whether to loop the media resource
+# Boolean attribute
+    type: boolean
+
+low
+    elements: meter
+# High limit of low range
+# Valid floating-point number*
+    type: float
+
+manifest
+    elements: html
+# Application cache manifest
+# Valid non-empty URL potentially surrounded by spaces
+    type: url
+
+max
+    elements: input
+# Maximum value
+# Varies*
+    type: text
+
+max
+    elements: meter; progress
+# Upper bound of range
+# Valid floating-point number*
+    type: float
+
+maxlength
+    elements: input; textarea
+# Maximum length of value
+# Valid non-negative integer
+    type: unsigned-integer
+
+media
+    elements: link; style
+# Applicable media
+# Valid media query list
+    type: text
+
+method
+    elements: form
+# HTTP method to use for form submission
+# "get"; "post"; "dialog"
+    type: enum
+    values: "get"; "post"; "dialog"
+
+min
+    elements: input
+# Minimum value
+# Varies*
+    type: text
+
+min
+    elements: meter
+# Lower bound of range
+# Valid floating-point number*
+    type: float
+
+minlength
+    elements: input; textarea
+# Minimum length of value
+# Valid non-negative integer
+    type: unsigned-integer
+
+multiple
+    elements: input; select
+# Whether to allow multiple values
+# Boolean attribute
+    type: boolean
+
+muted
+    elements: audio; video
+# Whether to mute the media resource by default
+# Boolean attribute
+    type: boolean
+
+name
+    elements: button; fieldset; input; output; select; textarea
+# Name of form control to use for form submission and in the form.elements API
+# Text*
+    elements: form
+# Name of form to use in the document.forms API
+# Text*
+    elements: iframe; object
+# Name of nested browsing context
+# Valid browsing context name or keyword
+    elements: map
+# Name of image map to reference from the usemap attribute
+# Text*
+    elements: meta
+# Metadata name
+# Text*
+    elements: param
+# Name of parameter
+# Text
+    type: text
+
+nonce
+    elements: HTML-elements
+# Cryptographic nonce used in Content Security Policy checks [CSP3]
+# Text
+    type: text
+
+novalidate
+    elements: form
+# Bypass form control validation for form submission
+# Boolean attribute
+    type: boolean
+
+open
+    elements: details
+# Whether the details are visible
+# Boolean attribute
+    type: boolean
+
+open
+    elements: dialog
+# Whether the dialog box is showing
+# Boolean attribute
+    type: boolean
+
+optimum
+    elements: meter
+# Optimum value in gauge
+# Valid floating-point number*
+    type: float
+
+pattern
+    elements: input
+# Pattern to be matched by the form control’s value
+# Regular expression matching the JavaScript Pattern production
+    type: text
+
+ping
+    elements: a; area
+# URLs to ping
+# Set of comma-separated tokens consisting of valid non-empty URLs
+    type: comma-separated-url
+
+placeholder
+    elements: input; textarea
+# User-visible label to be placed within the form control
+# Text*
+    type: text
+
+poster
+    elements: video
+# Poster frame to show prior to video playback
+# Valid non-empty URL potentially surrounded by spaces
+    type: url
+
+preload
+    elements: audio; video
+# Hints how much buffering the media resource will likely need
+# "none"; "metadata"; "auto"
+    type: enum
+    values: "none"; "metadata"; "auto"
+
+readonly
+    elements: input; textarea
+# Whether to allow the value to be edited by the user
+# Boolean attribute
+    type: boolean
+
+referrerpolicy
+    elements: a; area; iframe; img; link
+# Referrer policy for fetches initiated by the element
+# Referrer policy
+    type: text
+
+rel
+    elements: a; area; link
+# Relationship of this document (or subsection/topic) to the destination resource
+# Set of space-separated tokens*
+    type: space-separated-tokens
+
+required
+    elements: input; select; textarea
+# Whether the control is required for form submission
+# Boolean attribute
+    type: boolean
+
+rev
+    elements: a; link
+# Reverse link relationship of the destination resource to this document (or subsection/topic)
+# Set of space-separated tokens
+    type: space-separated-tokens
+
+reversed
+    elements: ol
+# Number the list backwards
+# Boolean attribute
+    type: boolean
+
+rows
+    elements: textarea
+# Number of lines to show
+# Valid non-negative integer greater than zero
+    type: natural-number
+
+rowspan
+    elements: td; th
+# Number of rows that the cell is to span
+# Valid non-negative integer
+    type: unsigned-integer
+
+sandbox
+    elements: iframe
+# Security rules for nested content
+# Unordered set of unique space-separated tokens, ASCII case-insensitive, consisting of "allow-forms", "allow-pointer-lock", "allow-popups", "allow-presentation", "allow-same-origin", "allow-scripts and "allow-top-navigation"
+    type: unique-space-separated-tokens
+    values: "allow-forms"; "allow-pointer-lock"; "allow-popups"; "allow-presentation"; "allow-same-origin"; "allow-scripts"; "allow-top-navigation"
+    case: insensitive
+
+scope
+    elements: th
+# Specifies which cells the header cell applies to
+# "row"; "col"; "rowgroup"; "colgroup"
+    type: enum
+    values: "row"; "col"; "rowgroup"; "colgroup"
+
+selected
+    elements: option
+# Whether the option is selected by default
+# Boolean attribute
+    type: boolean
+
+shape
+    elements: area
+# The kind of shape to be created in an image map
+# "circle"; "default"; "poly"; "rect"
+    type: enum
+    values: "circle"; "default"; "poly"; "rect"
+
+size
+    elements: input; select
+# Size of the control
+# Valid non-negative integer greater than zero
+    type: natural-number
+
+sizes
+    elements: link
+# Sizes of the icons (for rel="icon")
+# Unordered set of unique space-separated tokens, ASCII case-insensitive, consisting of sizes*
+    type: unique-space-separated-tokens
+    case: insensitive
+
+sizes
+    elements: img; source
+# Image sizes for different page layouts
+# Valid source size list
+    type: size-list
+
+span
+    elements: col; colgroup
+# Number of columns spanned by the element
+# Valid non-negative integer greater than zero
+    type: natural-number
+
+spellcheck
+    elements: HTML-elements
+# Whether the element is to have its spelling and grammar checked
+# "true"; "false"
+    type: enum
+    values: "true"; "false"
+
+src
+    elements: audio; embed; iframe; img; input; script; source; track; video
+# Address of the resource
+# Valid non-empty URL potentially surrounded by spaces
+    type: url
+
+srcdoc
+    elements: iframe
+# A document to render in the iframe
+# The source of an iframe srcdoc document*
+    type: text
+
+srclang
+    elements: track
+# Language of the text track
+# Valid BCP 47 language tag
+    type: enum
+    values: <language-tags>
+
+srcset
+    elements: img; source
+# Images to use in different situations (e.g., high-resolution displays, small monitors, etc)
+# Comma-separated list of image candidate strings
+    type: comma-separated-list
+
+start
+    elements: ol
+# Ordinal value of the first item
+# Valid integer
+    type: integer
+
+step
+    elements: input
+# Granularity to be matched by the form control’s value
+# Valid floating-point number greater than zero, or "any"
+    type: float
+
+style
+    elements: HTML-elements
+# Presentational and formatting instructions
+# CSS declarations*
+    type: text
+
+tabindex
+    elements: HTML-elements
+# Whether the element is focusable, and the relative order of the element for the purposes of sequential focus navigation
+# Valid integer
+    type: integer
+
+target
+    elements: a; area
+# Browsing context for hyperlink navigation
+# Valid browsing context name or keyword
+    type: text
+
+target
+    elements: base
+# Default browsing context for hyperlink navigation and form submission
+# Valid browsing context name or keyword
+    type: text
+
+target
+    elements: form
+# Browsing context for form submission
+# Valid browsing context name or keyword
+    type: text
+
+title
+    elements: HTML-elements
+# Advisory information for the element
+# Text
+    elements: abbr; dfn
+# Full term or expansion of abbreviation
+# Text
+    elements: input
+# Description of pattern (when used with pattern attribute)
+# Text
+# Title of the link
+# Text
+    elements: link
+# Alternative style sheet set name
+# Text
+    elements: style
+    type: text
+
+translate
+    elements: HTML-elements
+# Whether the element is to be translated when the page is localized
+# "yes"; "no"
+    type: enum
+    values: "yes"; "no"
+
+type
+    elements: a; area; link
+# Hint for the type of the referenced resource
+# Valid MIME type
+    type: text
+
+type
+    elements: button
+# Type of button
+# "submit"; "reset"; "button"
+    type: enum
+    values: "submit"; "reset"; "button"
+
+type
+    elements: embed; object; script; source; style
+# Type of embedded resource
+# Valid MIME type
+    type: text
+
+type
+    elements: input
+# Type of form control
+# input type keyword
+    type: text
+
+type
+    elements: ol
+# Kind of list marker
+# "1"; "a"; "A"; "i"; "I"
+    type: enum
+    values: "1"; "a"; "A"; "i"; "I"
+
+typemustmatch
+    elements: object
+# Whether the type attribute and the Content-Type value need to match for the resource to be used
+# Boolean attribute
+    type: boolean
+
+usemap
+    elements: img
+# Name of image map to use
+# Valid hash-name reference*
+    type: text
+
+value
+    elements: button; option
+# Value to be used for form submission
+# Text
+    type: text
+
+value
+    elements: data
+# Machine-readable value
+# Text*
+    elements: input
+# Value of the form control
+# Varies*
+    elements: li
+# Ordinal value of the list item
+# Valid integer
+    elements: meter; progress
+# Current value of the element
+# Valid floating-point number
+    elements: param
+# Value of parameter
+# Text
+    type: text
+
+width
+    elements: canvas; embed; iframe; img; input; object; video
+# Horizontal dimension
+# Valid non-negative integer
+    type: unsigned-integer
+
+wrap
+    elements: textarea
+# How the value of the form control is to be wrapped for form submission
+# "soft"; "hard"
+    type: enum
+    values: "soft"; "hard"
+
+# List of event handler content attributes
+# Attribute   Element(s)  Description Value
+onabort
+    elements: HTML-elements
+# abort event handler
+# Event handler content attribute
+    type: handler
+
+onafterprint
+    elements: body
+# afterprint event handler for Window object
+# Event handler content attribute
+    type: handler
+
+onbeforeprint
+    elements: body
+# beforeprint event handler for Window object
+# Event handler content attribute
+    type: handler
+
+onbeforeunload
+    elements: body
+# beforeunload event handler for Window object
+# Event handler content attribute
+    type: handler
+
+onblur
+    elements: HTML-elements
+# blur event handler
+# Event handler content attribute
+    type: handler
+
+oncancel
+    elements: HTML-elements
+# cancel event handler
+# Event handler content attribute
+    type: handler
+
+oncanplay
+    elements: HTML-elements
+# canplay event handler
+# Event handler content attribute
+    type: handler
+
+oncanplaythrough
+    elements: HTML-elements
+# canplaythrough event handler
+# Event handler content attribute
+    type: handler
+
+onchange
+    elements: HTML-elements
+# change event handler
+# Event handler content attribute
+    type: handler
+
+onclick
+    elements: HTML-elements
+# click event handler
+# Event handler content attribute
+    type: handler
+
+onclose
+    elements: HTML-elements
+# close event handler
+# Event handler content attribute
+    type: handler
+
+oncopy
+    elements: HTML-elements
+# copy event handler
+# Event handler content attribute
+    type: handler
+
+oncuechange
+    elements: HTML-elements
+# cuechange event handler
+# Event handler content attribute
+    type: handler
+
+oncut
+    elements: HTML-elements
+# cut event handler
+# Event handler content attribute
+    type: handler
+
+ondblclick
+    elements: HTML-elements
+# dblclick event handler
+# Event handler content attribute
+    type: handler
+
+ondrag
+    elements: HTML-elements
+# drag event handler
+# Event handler content attribute
+    type: handler
+
+ondragend
+    elements: HTML-elements
+# dragend event handler
+# Event handler content attribute
+    type: handler
+
+ondragenter
+    elements: HTML-elements
+# dragenter event handler
+# Event handler content attribute
+    type: handler
+
+ondragexit
+    elements: HTML-elements
+# dragexit event handler
+# Event handler content attribute
+    type: handler
+
+ondragleave
+    elements: HTML-elements
+# dragleave event handler
+# Event handler content attribute
+    type: handler
+
+ondragover
+    elements: HTML-elements
+# dragover event handler
+# Event handler content attribute
+    type: handler
+
+ondragstart
+    elements: HTML-elements
+# dragstart event handler
+# Event handler content attribute
+    type: handler
+
+ondrop
+    elements: HTML-elements
+# drop event handler
+# Event handler content attribute
+    type: handler
+
+ondurationchange
+    elements: HTML-elements
+# durationchange event handler
+# Event handler content attribute
+    type: handler
+
+onended
+    elements: HTML-elements
+# ended event handler
+# Event handler content attribute
+    type: handler
+
+onerror
+    elements: HTML-elements
+# error event handler
+# Event handler content attribute
+    type: handler
+
+onfocus
+    elements: HTML-elements
+# focus event handler
+# Event handler content attribute
+    type: handler
+
+onhashchange
+    elements: body
+# hashchange event handler for Window object
+# Event handler content attribute
+    type: handler
+
+oninput
+    elements: HTML-elements
+# input event handler
+# Event handler content attribute
+    type: handler
+
+oninvalid
+    elements: HTML-elements
+# invalid event handler
+# Event handler content attribute
+    type: handler
+
+onkeydown
+    elements: HTML-elements
+# keydown event handler
+# Event handler content attribute
+    type: handler
+
+onkeypress
+    elements: HTML-elements
+# keypress event handler
+# Event handler content attribute
+    type: handler
+
+onkeyup
+    elements: HTML-elements
+# keyup event handler
+# Event handler content attribute
+    type: handler
+
+onlanguagechange
+    elements: body
+# languagechange event handler for Window object
+# Event handler content attribute
+    type: handler
+
+onload
+    elements: HTML-elements
+# load event handler
+# Event handler content attribute
+    type: handler
+
+onloadeddata
+    elements: HTML-elements
+# loadeddata event handler
+# Event handler content attribute
+    type: handler
+
+onloadedmetadata
+    elements: HTML-elements
+# loadedmetadata event handler
+# Event handler content attribute
+    type: handler
+
+onloadstart
+    elements: HTML-elements
+# loadstart event handler
+# Event handler content attribute
+    type: handler
+
+onmessage
+    elements: body
+# message event handler for Window object
+# Event handler content attribute
+    type: handler
+
+onmousedown
+    elements: HTML-elements
+# mousedown event handler
+# Event handler content attribute
+    type: handler
+
+onmouseenter
+    elements: HTML-elements
+# mouseenter event handler
+# Event handler content attribute
+    type: handler
+
+onmouseleave
+    elements: HTML-elements
+# mouseleave event handler
+# Event handler content attribute
+    type: handler
+
+onmousemove
+    elements: HTML-elements
+# mousemove event handler
+# Event handler content attribute
+    type: handler
+
+onmouseout
+    elements: HTML-elements
+# mouseout event handler
+# Event handler content attribute
+    type: handler
+
+onmouseover
+    elements: HTML-elements
+# mouseover event handler
+# Event handler content attribute
+    type: handler
+
+onmouseup
+    elements: HTML-elements
+# mouseup event handler
+# Event handler content attribute
+    type: handler
+
+onwheel
+    elements: HTML-elements
+# wheel event handler
+# Event handler content attribute
+    type: handler
+
+onoffline
+    elements: body
+# offline event handler for Window object
+# Event handler content attribute
+    type: handler
+
+ononline
+    elements: body
+# online event handler for Window object
+# Event handler content attribute
+    type: handler
+
+onpagehide
+    elements: body
+# pagehide event handler for Window object
+# Event handler content attribute
+    type: handler
+
+onpageshow
+    elements: body
+# pageshow event handler for Window object
+# Event handler content attribute
+    type: handler
+
+onpaste
+    elements: HTML-elements
+# paste event handler
+# Event handler content attribute
+    type: handler
+
+onpause
+    elements: HTML-elements
+# pause event handler
+# Event handler content attribute
+    type: handler
+
+onplay
+    elements: HTML-elements
+# play event handler
+# Event handler content attribute
+    type: handler
+
+onplaying
+    elements: HTML-elements
+# playing event handler
+# Event handler content attribute
+    type: handler
+
+onpopstate
+    elements: body
+# popstate event handler for Window object
+# Event handler content attribute
+    type: handler
+
+onprogress
+    elements: HTML-elements
+# progress event handler
+# Event handler content attribute
+    type: handler
+
+onratechange
+    elements: HTML-elements
+# ratechange event handler
+# Event handler content attribute
+    type: handler
+
+onreset
+    elements: HTML-elements
+# reset event handler
+# Event handler content attribute
+    type: handler
+
+onresize
+    elements: HTML-elements
+# resize event handler
+# Event handler content attribute
+    type: handler
+
+onscroll
+    elements: HTML-elements
+# scroll event handler
+# Event handler content attribute
+    type: handler
+
+onseeked
+    elements: HTML-elements
+# seeked event handler
+# Event handler content attribute
+    type: handler
+
+onseeking
+    elements: HTML-elements
+# seeking event handler
+# Event handler content attribute
+    type: handler
+
+onselect
+    elements: HTML-elements
+# select event handler
+# Event handler content attribute
+    type: handler
+
+onstalled
+    elements: HTML-elements
+# stalled event handler
+# Event handler content attribute
+    type: handler
+
+onstorage
+    elements: body
+# storage event handler for Window object
+# Event handler content attribute
+    type: handler
+
+onsubmit
+    elements: HTML-elements
+# submit event handler
+# Event handler content attribute
+    type: handler
+
+onsuspend
+    elements: HTML-elements
+# suspend event handler
+# Event handler content attribute
+    type: handler
+
+ontimeupdate
+    elements: HTML-elements
+# timeupdate event handler
+# Event handler content attribute
+    type: handler
+
+ontoggle
+    elements: HTML-elements
+# toggle event handler
+# Event handler content attribute
+    type: handler
+
+onunload
+    elements: body
+# unload event handler for Window object
+# Event handler content attribute
+    type: handler
+
+onvolumechange
+    elements: HTML-elements
+# volumechange event handler
+# Event handler content attribute
+    type: handler
+
+onwaiting
+    elements: HTML-elements
+# waiting event handler
+# Event handler content attribute
+    type: handler
+
