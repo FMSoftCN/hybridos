@@ -1,0 +1,615 @@
+address
+    category: special
+    scopes: select
+
+applet
+    category: special
+    scopes: general, list-item
+    marker: yes
+
+area
+    kind: void
+    category: special
+    scopes: select
+
+article
+    category: special
+    scopes: select
+
+aside
+    category: special
+    scopes: select
+
+base
+    kind: void
+    category: special
+    scopes: select
+
+basefont
+    category: special
+    scopes: select
+
+bgsound
+    category: special
+    scopes: select
+
+blockquote
+    category: special
+    scopes: select
+
+body
+    category: special
+    scopes: select
+
+br
+    kind: void
+    category: special
+    scopes: select
+
+button
+    category: special
+    scopes: button, select
+
+caption
+    category: special
+    scopes: general, list-item
+    marker: yes
+
+center
+    category: special
+    scopes: select
+
+col
+    kind: void
+    category: special
+    scopes: select
+
+colgroup
+    category: special
+    scopes: select
+
+dd
+    category: special
+    scopes: select
+
+dialog
+    category: ordinary
+    scopes: select
+
+details
+    category: special
+    scopes: select
+
+dir
+    category: special
+    scopes: select
+
+div
+    category: special
+    scopes: select
+
+dl
+    category: special
+    scopes: select
+
+dt
+    category: special
+    scopes: select
+
+embed
+    kind: void
+    category: special
+    scopes: select
+
+fieldset
+    category: special
+    scopes: select
+
+figcaption
+    category: special
+    scopes: select
+
+figure
+    category: special
+    scopes: select
+
+footer
+    category: special
+    scopes: select
+
+form
+    category: special
+    scopes: select
+
+frame
+    category: special
+    scopes: select
+
+frameset
+    category: special
+    scopes: select
+
+h1
+    category: special
+    scopes: select
+
+h2
+    category: special
+    scopes: select
+
+h3
+    category: special
+    scopes: select
+
+h4
+    category: special
+    scopes: select
+
+h5
+    category: special
+    scopes: select
+
+h6
+    category: special
+    scopes: select
+
+head
+    category: special
+    scopes: select
+
+header
+    category: special
+    scopes: select
+
+hr
+    kind: void
+    category: special
+    scopes: select
+
+#html
+#    category: special
+#    scopes: general, list-item, table, select
+
+iframe
+    category: special
+    scopes: select
+
+img
+    kind: void
+    category: special
+    scopes: select
+
+input
+    kind: void
+    category: special
+    scopes: select
+
+li
+    category: special
+    scopes: select
+
+link
+    kind: void
+    category: special
+    scopes: select
+
+listing
+    category: special
+    scopes: select
+
+main
+    category: special
+    scopes: select
+
+marquee
+    category: special
+    scopes: general, list-item, select
+    marker: yes
+
+meta
+    kind: void
+    category: special
+    scopes: select
+
+nav
+    category: special
+    scopes: select
+
+noembed
+    category: special
+    scopes: select
+
+noframes
+    category: special
+    scopes: select
+
+noscript
+    category: special
+    scopes: select
+
+object
+    category: special
+    scopes: general, list-item, select
+    marker: yes
+
+ol
+    category: special
+    scopes: list-item, select
+
+p
+    category: special
+    scopes: select
+
+param
+    kind: void
+    category: special
+    scopes: select
+
+plaintext
+    category: special
+    scopes: select
+
+pre
+    category: special
+    scopes: select
+
+script
+    kind: rawtext
+    category: special
+    scopes: select
+
+section
+    category: special
+    scopes: select
+
+select
+    category: special
+    scopes: select
+
+source
+    kind: void
+    category: special
+    scopes: select
+
+style
+    kind: rawtext
+    category: special
+    scopes: select
+
+summary
+    category: special
+    scopes: select
+
+table
+    category: special
+    scopes: general, list-item, table, select
+
+tbody
+    category: special
+    scopes: select
+
+td
+    category: special
+    scopes: general, list-item, select
+    marker: yes
+
+template
+    kind: template
+    category: special
+    scopes: general, list-item, table, select
+    marker: yes
+
+textarea
+    kind: escapable-rawtext
+    category: special
+    scopes: select
+
+tfoot
+    category: special
+    scopes: select
+
+th
+    category: special
+    scopes: general, list-item, select
+    marker: yes
+
+thead
+    category: special
+    scopes: select
+
+title
+    kind: escapable-rawtext
+    category: special
+    scopes: select
+
+tr
+    category: special
+    scopes: select
+
+track
+    kind: void
+    category: special
+    scopes: select
+
+ul
+    category: special
+    scopes: list-item, select
+
+wbr
+    kind: void
+    category: special
+    scopes: select
+
+xmp
+    category: special
+    scopes: select
+
+a
+    category: formatting
+    scopes: select
+
+b
+    category: formatting
+    scopes: select
+
+big
+    category: formatting
+    scopes: select
+    obsolete: true
+
+code
+    category: formatting
+    scopes: select
+
+em
+    category: formatting
+    scopes: select
+
+font
+    category: formatting
+    scopes: select
+    obsolete: true
+
+i
+    category: formatting
+    scopes: select
+
+nobr
+    category: formatting
+    scopes: select
+    obsolete: true
+
+s
+    category: formatting
+    scopes: select
+
+small
+    category: formatting
+    scopes: select
+
+strike
+    category: formatting
+    scopes: select
+    obsolete: true
+
+strong
+    category: formatting
+    scopes: select
+    obsolete: true
+
+tt
+    category: formatting
+    scopes: select
+
+u
+    category: formatting
+    scopes: select
+
+cite
+    category: ordinary
+    scopes: select
+
+q
+    category: ordinary
+    scopes: select
+
+dfn
+    category: ordinary
+    scopes: select
+
+abbr
+    category: ordinary
+    scopes: select
+
+ruby
+    category: ordinary
+    scopes: select
+
+rb
+    category: ordinary
+    scopes: select
+
+rt
+    category: ordinary
+    scopes: select
+
+rtc
+    category: ordinary
+    scopes: select
+
+rp
+    category: ordinary
+    scopes: select
+
+data
+    category: ordinary
+    scopes: select
+
+time
+    category: ordinary
+    scopes: select
+
+var
+    category: ordinary
+    scopes: select
+
+samp
+    category: ordinary
+    scopes: select
+
+kbd
+    category: ordinary
+    scopes: select
+
+sub
+    category: ordinary
+    scopes: select
+
+sup
+    category: ordinary
+    scopes: select
+
+mark
+    category: ordinary
+    scopes: select
+
+bdi
+    category: ordinary
+    scopes: select
+
+bdo
+    category: ordinary
+    scopes: select
+
+span
+    category: ordinary
+    scopes: select
+
+ins
+    category: ordinary
+    scopes: select
+
+del
+    category: ordinary
+    scopes: select
+
+picture
+    category: ordinary
+    scopes: select
+
+video
+    category: ordinary
+    scopes: select
+
+audio
+    category: ordinary
+    scopes: select
+
+map
+    category: ordinary
+    scopes: select
+
+label
+    category: ordinary
+    scopes: select
+
+datalist
+    category: ordinary
+    scopes: select
+
+optgroup
+    category: ordinary
+
+option
+    category: ordinary
+
+output
+    category: ordinary
+    scopes: select
+
+progress
+    category: ordinary
+    scopes: select
+
+meter
+    category: ordinary
+    scopes: select
+
+legend
+    category: ordinary
+    scopes: select
+
+canvas
+    category: ordinary
+    scopes: select
+
+# the HVML specific tags
+hvml
+    category: special
+    scopes: general, list-item, table, select
+
+intent
+    kind: void
+    category: special
+    scopes: select
+
+view
+    category: ordinary
+    scopes: select
+
+iteration
+    kind: iteration
+    category: ordinary
+    scopes: select
+
+substitution
+    kind: substitution
+    category: ordinary
+    scopes: select
+
+# the foreign tags
+MathML mi
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+
+MathML mo
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+
+MathML mn
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+
+MathML ms
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+
+MathML mtext
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+
+MathML annotation-xml
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+
+SVG foreignObject
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+
+SVG desc
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+
+SVG title
+    kind: foreign
+    category: special
+    scopes: general, list-item, select
+

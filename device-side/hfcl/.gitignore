@@ -1,0 +1,25 @@
+# generated files by automake/autoconf 
+*.lo
+*.la
+*.al
+.dirstamp
+Makefile
+Makefile.in
+.deps/
+.libs/
+/acinclude.m4
+/aclocal.m4
+/autom4te.cache
+/compile
+/missing
+/stamp-h1
+/config.*
+/configure
+/depcomp
+/install-sh
+/libtool
+/*.pc
+/*config.h
+/*config.h.in
+/*~
+

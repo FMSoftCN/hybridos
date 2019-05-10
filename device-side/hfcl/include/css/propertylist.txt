@@ -1,0 +1,551 @@
+<length>: <%-em> <%-ex> <%-ch> <%-rem> <%-vw> <%-vh> <%-vmin> <%-vmax> <%-cm> <%-mm> <%-Q> <%-in> <%-pc> <%-pt> <%-px>
+<array-length>: <%-em> <%-ex> <%-ch> <%-rem> <%-vw> <%-vh> <%-vmin> <%-vmax> <%-cm> <%-mm> <%-Q> <%-in> <%-pc> <%-pt> <%-px>
+
+<color>: color-aqua color-black color-blue color-fuchsia color-gray color-green color-lime color-maroon color-navy color-olive color-orange color-purple color-red color-silver color-teal color-white color-yellow color-aliceblue color-antiquewhite color-aquamarine color-azure color-beige color-bisque color-blanchedalmond color-blueviolet color-brown color-burlywood color-cadetblue color-chartreuse color-chocolate color-coral color-cornflowerblue color-cornsilk color-crimson color-cyan color-darkblue color-darkcyan color-darkgoldenrod color-darkgray color-darkgreen color-darkgrey color-darkkhaki color-darkmagenta color-darkolivegreen color-darkorange color-darkorchid color-darkred color-darksalmon color-darkseagreen color-darkslateblue color-darkslategray color-darkslategrey color-darkturquoise color-darkviolet color-deeppink color-deepskyblue color-dimgray color-dimgrey color-dodgerblue color-firebrick color-floralwhite color-forestgreen color-gainsboro color-ghostwhite color-gold color-goldenrod color-greenyellow color-grey color-honeydew color-hotpink color-indianred color-indigo color-ivory color-khaki color-lavender color-lavenderblush color-lawngreen color-lemonchiffon color-lightblue color-lightcoral color-lightcyan color-lightgoldenrodyellow color-lightgray color-lightgreen color-lightgrey color-lightpink color-lightsalmon color-lightseagreen color-lightskyblue color-lightslategray color-lightslategrey color-lightsteelblue color-lightyellow color-limegreen color-linen color-magenta color-mediumaquamarine color-mediumblue color-mediumorchid color-mediumpurple color-mediumseagreen color-mediumslateblue color-mediumspringgreen color-mediumturquoise color-mediumvioletred color-midnightblue color-mintcream color-mistyrose color-moccasin color-navajowhite color-oldlace color-olivedrab color-orangered color-orchid color-palegoldenrod color-palegreen color-paleturquoise color-palevioletred color-papayawhip color-peachpuff color-peru color-pink color-plum color-powderblue color-rosybrown color-royalblue color-saddlebrown color-salmon color-sandybrown color-seagreen color-seashell color-sienna color-skyblue color-slateblue color-slategray color-slategrey color-snow color-springgreen color-steelblue color-tan color-thistle color-tomato color-turquoise color-violet color-wheat color-whitesmoke color-yellowgreen current-color transparent <rgb> <rgba> <hsl> <hsla>
+
+<border-style>: bs-none bs-hidden bs-dotted bs-dashed bs-solid bs-double bs-groove bs-ridge bs-inset bs-outset
+<border-width>: bw-thin bw-medium bw-thick <length>
+<width-height>: <length> <percentage>
+
+<angle>: <%-deg> <%-grad> <%-rad> <%-turn>
+<time>: <%-s> <%-ms>
+<frequency>: <%-hz> <%-khz>
+<resolution>: <%-dpi> <%-dpcm> <%-dppx>
+
+background-attachment
+    values: scroll fixed inherit
+    initial: scroll
+    inherited: no
+
+background-color
+    values: <color> inherit
+    initial: transparent
+    inherited: no
+
+background-image
+    values: <url> <sysid> none inherit
+    initial: none
+    inherited: no
+
+background-position-x
+    values: <percentage> <length> left center right inherit
+    initial: <percentage>=0
+    inherited: no
+
+background-position-y
+    values: <percentage> <length> top center bottom inherit
+    initial: <percentage>=0
+    inherited: no
+
+background-repeat
+    values: repeat repeat-x repeat-y no-repeat inherit
+    initial: repeat
+    inherited: no
+
+#border-collapse
+#    values: collapse separate inherit
+#    initial: separate
+#    inherited: yes
+#    appliesto: table
+
+#border-spacing
+#    values: <length> inherit
+#    initial: <length-px>=0
+#    inherited: yes
+#    appliesto: table
+
+border-left-color
+    values: <color> inherit
+    initial: <rgb>=0
+    inherited: no
+
+border-top-color
+    values: <color> inherit
+    initial: <rgb>=0
+    inherited: no
+
+border-right-color
+    values: <color> inherit
+    initial: <rgb>=0
+    inherited: no
+
+border-bottom-color
+    values: <color> inherit
+    initial: <rgb>=0
+    inherited: no
+
+border-left-style
+    values: <border-style> inherit
+    initial: none
+    inherited: no
+
+border-top-style
+    values: <border-style> inherit
+    initial: none
+    inherited: no
+
+border-right-style
+    values: <border-style> inherit
+    initial: none
+    inherited: no
+
+border-bottom-style
+    values: <border-style> inherit
+    initial: none
+    inherited: no
+
+border-left-width
+    values: inherit
+    initial: medium
+    inherited: no
+
+border-top-width
+    values: <border-width> inherit
+    initial: medium
+    inherited: no
+
+border-right-width
+    values: <border-width> inherit
+    initial: medium
+    inherited: no
+
+border-bottom-width
+    values: <border-width> inherit
+    initial: medium
+    inherited: no
+
+border-top-left-radius
+    values: <length> <percentage> <array-length> <array-percentage>
+    initial: <length-px>=0
+    inherited: no
+    arraysize: 2
+
+border-top-right-radius
+    values: <length> <percentage> <array-length> <array-percentage>
+    initial: <length-px>=0
+    inherited: no
+    arraysize: 2
+
+border-bottom-right-radius
+    values: <length> <percentage> <array-length> <array-percentage>
+    initial: <length-px>=0
+    inherited: no
+    arraysize: 2
+
+border-bottom-left-radius
+    values: <length> <percentage> <array-length> <array-percentage>
+    initial: <length-px>=0
+    inherited: no
+    arraysize: 2
+
+bottom
+    values: <length> <percentage> auto inherit
+    initial: auto
+    inherited: no
+    appliesto: positioned
+
+#caption-side
+#    values: top bottom inherit
+#    initial: top
+#    inherited: yes
+#    appliesto: table-caption
+
+clear
+    values: none left right both inherit
+    initial: none
+    inherited: no
+
+clip
+    values: <shape> auto inherit
+    initial: auto
+    inherited: no
+    appliesto: absolutely-positioned
+
+color
+    values: <color> inherit
+    initial: <rgb>=0
+    inherited: yes
+
+content
+    values: normal none <string> <url> <counter> open-quote close-quote no-open-quote no-close-quote inherit
+    initial: normal
+    inherited: no
+    appliesto: pseudo
+
+counter-increment
+    values: <counter> none inherit
+    initial: none
+    inherited: no
+
+counter-reset
+    values: <counter> none inherit
+    initial: none
+    inherited: no
+
+cursor
+    values: <url> auto crosshair default pointer move e-resize ne-resize nw-resize n-resize se-resize sw-resize s-resize w-resize text wait help progress inherit
+    initial: auto
+    inherited: yes
+
+direction
+    values: ltr rtl inherit
+    initial: ltr
+    inherited: yes
+
+display
+    values: inline block list-item inline-block none inherit
+    initial: inline
+    inherited: no
+
+# disable table related values
+# table inline-table table-row-group table-header-group table-footer-group table-row table-column-group table-column table-cell table-caption
+
+#empty-cells
+#    values: show hide inherit
+#    initial: show
+#    inherited: yes
+#    appliesto: table-cell
+
+float
+    values: left right none inherit
+    initial: none
+    inherited: no
+
+font-family
+    values: serif sans-serif cursive fantasy monospace <string> inherit
+    initial: serif
+    inherited: yes
+
+# CSS specification defines the initial value of font-size is medium, we use an absolute length value here
+font-size
+    values: xx-small x-small small medium large x-large xx-large larger smaller <length> <percentage> inherit
+    initial: <length-px>=14
+    inherited: yes
+
+font-style
+    values: normal italic oblique inherit
+    initial: normal
+    inherited: yes
+
+font-variant
+    values: normal small-caps inherit
+    initial: normal
+    inherited: yes
+
+font-weight
+    values: normal bold bolder lighter 100 200 300 400 500 600 700 800 900 inherit
+    initial: normal
+    inherited: yes
+
+font
+    values: use-others <string> <sysid> inherit
+    initial: use-others
+    inherited: yes
+
+height
+    values: <width-height> auto inherit
+    initial: auto
+    inherited: no
+
+left
+    values: <length> <percentage> auto inherit
+    initial: auto
+    inherited: no
+    appliesto: positioned
+
+letter-spacing
+    values: normal <length> inherit
+    initial: normal
+    inherited: yes
+
+line-height
+    values: normal <number> <length> <percentage> inherit
+    initial: normal
+    inherited: yes
+
+list-style-image
+    values: <url> <sysid> none inherit
+    initial: none
+    inherited: yes
+
+list-style-position
+    values: inside outside inherit
+    initial: outside
+    inherited: yes
+
+list-style-type
+    values: disc circle square decimal decimal-leading-zero lower-roman upper-roman lower-greek lower-latin upper-latin armenian georgian lower-alpha upper-alpha none inherit
+    initial: disc
+    inherited: yes
+
+margin-left
+    values: <length> <percentage> auto inherit
+    initial: <length-px>=0
+    inherited: no
+
+margin-top
+    values: <length> <percentage> auto inherit
+    initial: <length-px>=0
+    inherited: no
+
+margin-right
+    values: <length> <percentage> auto inherit
+    initial: <length-px>=0
+    inherited: no
+
+margin-bottom
+    values: <length> <percentage> auto inherit
+    initial: <length-px>=0
+    inherited: no
+
+max-height
+    values: <width-height> none inherit
+    initial: none
+    inherited: no
+
+max-width
+    values: <width-height> none inherit
+    initial: none
+    inherited: no
+
+min-height
+    values: <width-height> inherit
+    initial: <length-px>=0
+    inherited: no
+
+min-width
+    values: <width-height> inherit
+    initial: <length-px>=0
+    inherited: no
+
+opacity
+    values: <alphavalue> inherit
+    initial: <alphavalue>=1
+    inherited: no
+
+orphans
+    values: <integer> inherit
+    initial: <integer>=2
+    inherited: yes
+    appliesto: block-container
+
+outline-color
+    values: <color> invert inherit
+    initial: invert
+    inherited: no
+
+outline-style
+    values: <border-style> inherit
+    initial: invert
+    inherited: no
+
+outline-width
+    values: <border-width> inherit
+    initial: medium
+    inherited: no
+
+overflow
+    values: visible hidden scroll auto inherit
+    initial: visible
+    inherited: no
+
+padding-left
+    values: <length> <percentage> inherit
+    initial: <length-px>=0
+    inherited: no
+
+padding-top
+    values: <length> <percentage> inherit
+    initial: <length-px>=0
+    inherited: no
+
+padding-right
+    values: <length> <percentage> inherit
+    initial: <length-px>=0
+    inherited: no
+
+padding-bottom
+    values: <length> <percentage> inherit
+    initial: <length-px>=0
+    inherited: no
+
+page-break-after
+    values: auto always avoid left right inherit
+    initial: auto
+    inherited: no
+    appliesto: block-level
+
+page-break-before
+    values: auto always avoid left right inherit
+    initial: auto
+    inherited: no
+    appliesto: block-level
+
+page-break-inside
+    values: avoid auto inherit
+    initial: auto
+    inherited: no
+    appliesto: block-level
+
+position
+    values: static relative absolute fixed inherit
+    initial: static
+    inherited: no
+
+quotes
+    values: <array-string> none inherit
+    initial: none
+    inherited: yes
+
+right
+    values: <length> <percentage> auto inherit
+    initial: auto
+    inherited: no
+    appliesto: positioned
+
+#table-layout
+#    values: auto fixed inherit
+#    initial: auto
+#    inherited: no
+
+# In CSS3 or later, text-align is defined as a shorthand of text-align-all and text-align-last
+# text-align
+#    values: start end left right center justify match-parent justify-all inherit
+#    initial: left
+#    inherited: yes
+
+text-decoration
+    values: none underline overline line-through blink inherit
+    initial: none
+    inherited: no
+
+text-indent
+    values: <length> <percentage> &hanging &each-line inherit
+    initial: <length-px>=0
+    inherited: yes
+
+text-transform
+    values: none capitalize uppercase lowercase &full-width &full-size-kana inherit
+    initial: none
+    inherited: yes
+
+top
+    values: <length> <percentage> auto inherit
+    initial: auto
+    inherited: no
+    appliesto: positioned
+
+unicode-bidi
+    values: normal embed isolate bidi-override isolate-override plaintext inherit
+    initial: normal
+    inherited: no
+
+vertical-align
+    values: baseline sub super top text-top middle bottom text-bottom <percentage> <length> inherit
+    initial: baseline
+    inherited: no
+    appliesto: inline-level
+
+visibility
+    values: visible hidden collapse inherit
+    initial: visible
+    inherited: yes
+
+white-space
+    values: normal pre nowrap pre-wrap break-spaces pre-line inherit
+    initial: normal
+    inherited: yes
+
+widows
+    values: <integer> inherit
+    initial: <integer>=2
+    inherited: yes
+
+width
+    values: <width-height> auto inherit
+    initial: auto
+    inherited: no
+
+word-spacing
+    values: normal <length> inherit
+    initial: normal
+    inherited: yes
+
+z-index
+    values: auto <integer> inherit
+    initial: auto
+    inherited: no
+    appliesto: positioned
+
+# CSS3 properties
+tab-size
+    values: <number> <length> inherit
+    initial: <number>=8
+    inherited: yes
+
+line-break
+    values: auto loose normal strict anywhere inherit
+    initial: auto
+    inherited: yes
+
+word-break
+    values: normal keep-all break-all inherit
+    initial: normal
+    inherited: yes
+
+hyphens
+    values: none manual auto inherit
+    initial: manual
+    inherited: yes
+
+overflow-wrap
+    values: normal break-word anywhere inherit
+    initial: normal
+    inherited: yes
+
+text-align-all
+    values: start end left right center justify match-parent inherit
+    initial: start
+    inherited: yes
+
+text-align-last
+    values: auto start end left right center justify match-parent inherit
+    initial: auto
+    inherited: yes
+
+text-justify
+    values: auto none inter-word inter-character inherit
+    initial: auto
+    inherited: yes
+
+hanging-punctuation
+    values: none force-end allow-end &first &last inherit
+    initial: none
+    inherited: yes
+
+writing-mode
+    values: horizontal-tb vertical-rl vertical-lr inherit
+    initial: horizontal-tb
+    inherited: yes
+
+text-orientation
+    values: mixed upright sideways inherit
+    initial: mixed
+    inherited: yes
+
+text-combine-upright
+    values: none all inherit
+    initial: none
+    inherited: yes
+
+text-overflow
+    values: clip ellipsis
+    initial: clip
+    inherited: no
+
+# A pseudo property to define some values for shorthand properties
+hvml-pseudo
+    values: justify-all
+    initial: justify-all
+    inherited: no
+

@@ -1,0 +1,1823 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-11-11 16:30+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: apps/settings/SettingCheckNetworkActivity.cc:50
+#: apps/settings/SettingCheckNetworkActivity.cc:47
+#: apps/settings/SettingCheckNetworkActivity.cc:102
+#: apps/settings/SettingCheckNetworkActivity.cc:100
+msgid "Checking Network…"
+msgstr "正在检查网络…"
+
+#: apps/settings/SettingWifiActivity.cc:178
+#: apps/settings/SettingWifiActivity.cc:331
+#: apps/settings/SettingWifiActivity.cc:357
+#: apps/settings/SettingWifiListActivity.cc:383
+#: apps/settings/SettingWifiListActivity.cc:384
+#: apps/settings/SettingWifiListActivity.cc:389
+#: apps/settings/SettingWifiListActivity.cc:391
+msgid "Set up WiFi"
+msgstr "设置 WiFi"
+
+#: main.cc:477 main.cc:478 main.cc:479
+msgid "This is a test"
+msgstr "测试用"
+
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:39
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:62
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:41
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:67
+msgid "No Internet access"
+msgstr "无法连接互联网"
+
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:42
+msgid "Please set up a WiFi connection"
+msgstr "您可使用WiFi连接互联网"
+
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:45
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:49
+#: apps/settings/SettingPairActivity.cc:286
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:44
+#: apps/settings/SettingPairActivity.cc:295
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:48
+#: apps/settings/SettingPairActivity.cc:302
+#: apps/settings/SettingPairActivity.cc:305
+#: apps/settings/SettingPairActivity.cc:308
+msgid "Retry"
+msgstr "重试"
+
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:48
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:52
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:47
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:51
+msgid "Setup WiFi"
+msgstr "设置WiFi"
+
+#: apps/settings/SettingWifiPasswordActivity.cc:68
+#: apps/settings/SettingWifiPasswordActivity.cc:60
+#: apps/settings/SettingWifiPasswordActivity.cc:59
+#: apps/settings/SettingWifiPasswordActivity.cc:74
+msgid "Input Password"
+msgstr "输入密码"
+
+#: apps/settings/SettingWifiPasswordActivity.cc:76
+#: apps/settings/SettingWifiPasswordActivity.cc:68
+#: apps/settings/SettingWifiPasswordActivity.cc:67
+msgid "Tap to input WiFi password"
+msgstr "点按此处输入 WiFi 密码"
+
+#: apps/settings/SettingWifiPasswordActivity.cc:82
+#: apps/settings/SettingWifiPasswordActivity.cc:74
+#: apps/settings/SettingWifiPasswordActivity.cc:73
+#: apps/settings/SettingWifiPasswordActivity.cc:91
+msgid "Cancel"
+msgstr "取消"
+
+#: apps/settings/SettingWifiPasswordActivity.cc:88
+#: apps/settings/SettingWifiPasswordActivity.cc:80
+#: apps/settings/SettingWifiPasswordActivity.cc:79
+#: apps/settings/SettingWifiPasswordActivity.cc:97
+msgid "Join"
+msgstr "加入"
+
+#: apps/settings/SettingFirmwareActivity.cc:246
+#: apps/settings/SettingFirmwareActivity.cc:247
+#: apps/settings/SettingFirmwareActivity.cc:249
+#: apps/settings/SettingFirmwareActivity.cc:254
+#: apps/settings/SettingFirmwareActivity.cc:259
+#: apps/settings/SettingFirmwareActivity.cc:364
+#: apps/settings/SettingFirmwareActivity.cc:365
+msgid "Do you want to update the firmware immediately?"
+msgstr "是否立即更新固件？"
+
+#: apps/settings/SettingFirmwareActivity.cc:311
+#: apps/settings/SettingFirmwareActivity.cc:312
+#: apps/settings/SettingFirmwareActivity.cc:314
+#: apps/settings/SettingFirmwareActivity.cc:319
+#: apps/settings/SettingFirmwareActivity.cc:324
+#: apps/settings/SettingFirmwareActivity.cc:429
+#: apps/settings/SettingFirmwareActivity.cc:430
+msgid ""
+"Do not power off the device. Your CBPlus will reboot automatically after "
+"upgraded."
+msgstr "请不要关闭设备，升级成功后将自动重启。"
+
+#: apps/settings/SettingFirmwareActivity.cc:362
+#: apps/settings/SettingFirmwareActivity.cc:363
+#: apps/settings/SettingFirmwareActivity.cc:365
+#: apps/settings/SettingFirmwareActivity.cc:370
+#: apps/settings/SettingFirmwareActivity.cc:375
+#: apps/settings/SettingFirmwareActivity.cc:520
+#: apps/settings/SettingFirmwareActivity.cc:521
+msgid "The firmware is up to date."
+msgstr "固件已是最新。"
+
+#: apps/settings/SettingFirmwareActivity.cc:378
+#: apps/settings/SettingFirmwareActivity.cc:417
+#: apps/settings/SettingFirmwareActivity.cc:456
+#: apps/settings/SettingPairActivity.cc:208
+#: apps/settings/SettingFirmwareActivity.cc:379
+#: apps/settings/SettingFirmwareActivity.cc:418
+#: apps/settings/SettingFirmwareActivity.cc:457
+#: apps/settings/SettingFirmwareActivity.cc:381
+#: apps/settings/SettingFirmwareActivity.cc:420
+#: apps/settings/SettingFirmwareActivity.cc:459
+#: apps/settings/SettingFirmwareActivity.cc:386
+#: apps/settings/SettingFirmwareActivity.cc:425
+#: apps/settings/SettingFirmwareActivity.cc:464
+#: apps/settings/SettingFirmwareActivity.cc:391
+#: apps/settings/SettingFirmwareActivity.cc:430
+#: apps/settings/SettingFirmwareActivity.cc:469
+#: apps/settings/SettingFirmwareActivity.cc:536
+#: apps/settings/SettingFirmwareActivity.cc:575
+#: apps/settings/SettingFirmwareActivity.cc:614
+#: apps/settings/SettingFirmwareActivity.cc:537
+#: apps/settings/SettingFirmwareActivity.cc:576
+#: apps/settings/SettingFirmwareActivity.cc:615
+msgid "I see"
+msgstr "知道了"
+
+#: apps/settings/SettingFirmwareActivity.cc:401
+#: apps/settings/SettingFirmwareActivity.cc:402
+#: apps/settings/SettingFirmwareActivity.cc:404
+#: apps/settings/SettingFirmwareActivity.cc:409
+#: apps/settings/SettingFirmwareActivity.cc:414
+#: apps/settings/SettingFirmwareActivity.cc:559
+#: apps/settings/SettingFirmwareActivity.cc:560
+msgid "The battery is low. Upgrade of firmware was canceled."
+msgstr "电量低，已取消升级。"
+
+#: apps/settings/SettingFirmwareActivity.cc:440
+msgid "Failed to download firmware. Please try later."
+msgstr "下载固件出错，请稍后再试。"
+
+#: apps/settings/SettingFirmwareActivity.cc:557
+#: apps/settings/SettingFirmwareActivity.cc:617
+#: apps/settings/SettingFirmwareActivity.cc:558
+#: apps/settings/SettingFirmwareActivity.cc:618
+#: apps/settings/SettingFirmwareActivity.cc:615
+#: apps/settings/SettingFirmwareActivity.cc:559
+#: apps/settings/SettingFirmwareActivity.cc:565
+#: apps/settings/SettingFirmwareActivity.cc:623
+#: apps/settings/SettingFirmwareActivity.cc:573
+#: apps/settings/SettingFirmwareActivity.cc:631
+#: apps/settings/SettingFirmwareActivity.cc:735
+#: apps/settings/SettingFirmwareActivity.cc:798
+#: apps/settings/SettingFirmwareActivity.cc:736
+#: apps/settings/SettingFirmwareActivity.cc:799
+#: apps/settings/SettingFirmwareActivity.cc:737
+#: apps/settings/SettingFirmwareActivity.cc:800
+msgid "Checking Firmware…"
+msgstr "检查固件中…"
+
+#: apps/settings/SettingFirmwareActivity.cc:562
+#: apps/settings/SettingFirmwareActivity.cc:563
+#: apps/settings/SettingFirmwareActivity.cc:564
+#: apps/settings/SettingFirmwareActivity.cc:570
+#: apps/settings/SettingFirmwareActivity.cc:578
+#: apps/settings/SettingFirmwareActivity.cc:745
+#: apps/settings/SettingFirmwareActivity.cc:746
+#: apps/settings/SettingFirmwareActivity.cc:747
+msgid "Downloading Firmware…"
+msgstr "下载固件中…"
+
+#: apps/settings/SettingFirmwareActivity.cc:567
+#: apps/settings/SettingFirmwareActivity.cc:568
+#: apps/settings/SettingFirmwareActivity.cc:569
+#: apps/settings/SettingFirmwareActivity.cc:575
+#: apps/settings/SettingFirmwareActivity.cc:583
+#: apps/settings/SettingFirmwareActivity.cc:750
+#: apps/settings/SettingFirmwareActivity.cc:751
+#: apps/settings/SettingFirmwareActivity.cc:752
+msgid "New Firmware Ready"
+msgstr "新固件已就绪"
+
+#: apps/settings/SettingFirmwareActivity.cc:572
+#: apps/settings/SettingFirmwareActivity.cc:573
+#: apps/settings/SettingFirmwareActivity.cc:574
+#: apps/settings/SettingFirmwareActivity.cc:580
+#: apps/settings/SettingFirmwareActivity.cc:588
+#: apps/settings/SettingFirmwareActivity.cc:755
+#: apps/settings/SettingFirmwareActivity.cc:756
+#: apps/settings/SettingFirmwareActivity.cc:757
+msgid "Upgrading Firmware…"
+msgstr "升级固件中…"
+
+#: apps/settings/SettingFirmwareActivity.cc:577
+#: apps/settings/SettingFirmwareActivity.cc:578
+#: apps/settings/SettingFirmwareActivity.cc:579
+#: apps/settings/SettingFirmwareActivity.cc:585
+#: apps/settings/SettingFirmwareActivity.cc:593
+#: apps/settings/SettingFirmwareActivity.cc:760
+#: apps/settings/SettingFirmwareActivity.cc:761
+#: apps/settings/SettingFirmwareActivity.cc:762
+msgid "No New Firmware"
+msgstr "没有新固件"
+
+#: apps/settings/SettingFirmwareActivity.cc:582
+#: apps/settings/SettingFirmwareActivity.cc:583
+#: apps/settings/SettingFirmwareActivity.cc:584
+#: apps/settings/SettingFirmwareActivity.cc:590
+#: apps/settings/SettingFirmwareActivity.cc:598
+#: apps/settings/SettingFirmwareActivity.cc:765
+#: apps/settings/SettingFirmwareActivity.cc:766
+#: apps/settings/SettingFirmwareActivity.cc:767
+msgid "Low Battery"
+msgstr "低电量"
+
+#: apps/settings/SettingFirmwareActivity.cc:587
+#: apps/settings/SettingPairActivity.cc:322
+#: apps/settings/SettingFirmwareActivity.cc:588
+#: apps/settings/SettingPairActivity.cc:401
+#: apps/settings/SettingPairActivity.cc:406
+#: apps/settings/SettingFirmwareActivity.cc:589
+#: apps/settings/SettingFirmwareActivity.cc:595
+#: apps/settings/SettingPairActivity.cc:414
+#: apps/settings/SettingPairActivity.cc:420
+#: apps/settings/SettingFirmwareActivity.cc:603
+#: apps/settings/SettingFirmwareActivity.cc:770
+#: apps/settings/SettingPairActivity.cc:423
+msgid "Network Error"
+msgstr "网络错误"
+
+#: apps/settings/SettingFirmwareActivity.cc:611
+#: apps/settings/SettingFirmwareActivity.cc:612
+#: apps/settings/SettingFirmwareActivity.cc:609
+#: apps/settings/SettingFirmwareActivity.cc:617
+#: apps/settings/SettingFirmwareActivity.cc:625
+#: apps/settings/SettingFirmwareActivity.cc:792
+#: apps/settings/SettingFirmwareActivity.cc:793
+#: apps/settings/SettingFirmwareActivity.cc:794
+msgid "Update Firmware"
+msgstr "更新固件"
+
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:46
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:42
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:41
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:45
+msgid "Please set up WiFi"
+msgstr "请设置 WiFi"
+
+#: apps/settings/SettingFirmwareActivity.cc:440
+#: apps/settings/SettingFirmwareActivity.cc:441
+#: apps/settings/SettingFirmwareActivity.cc:443
+#: apps/settings/SettingFirmwareActivity.cc:448
+#: apps/settings/SettingFirmwareActivity.cc:453
+#: apps/settings/SettingFirmwareActivity.cc:598
+#: apps/settings/SettingFirmwareActivity.cc:599
+msgid "Failed to download firmware. Please check your network settings."
+msgstr "下载固件失败。请检查您的网络设置。"
+
+#: apps/settings/SettingPairActivity.cc:72
+#: apps/settings/SettingPairActivity.cc:82
+#: apps/settings/SettingPairActivity.cc:83
+msgid "Scan QRCode to pair"
+msgstr "扫描二维码完成配对"
+
+#: apps/settings/SettingPairActivity.cc:169
+#: apps/settings/SettingPairActivity.cc:208
+#: apps/settings/SettingPairActivity.cc:217
+#: apps/settings/SettingPairActivity.cc:224
+#: apps/settings/SettingPairActivity.cc:227
+#: apps/settings/SettingPairActivity.cc:230
+msgid "Close"
+msgstr "关闭"
+
+#: apps/settings/SettingPairActivity.cc:192
+#: apps/settings/SettingPairActivity.cc:231
+#: apps/settings/SettingPairActivity.cc:240
+#: apps/settings/SettingPairActivity.cc:247
+#: apps/settings/SettingPairActivity.cc:250
+#: apps/settings/SettingPairActivity.cc:253
+msgid "Failed to pair your CBPlus. Please check your network settings."
+msgstr "配对失败，请检查您的网络设置。"
+
+#: apps/settings/SettingPairActivity.cc:312
+#: apps/settings/SettingPairActivity.cc:344
+#: apps/settings/SettingPairActivity.cc:391
+#: apps/settings/SettingPairActivity.cc:428
+#: apps/settings/SettingPairActivity.cc:396
+#: apps/settings/SettingPairActivity.cc:433
+#: apps/settings/SettingPairActivity.cc:404
+#: apps/settings/SettingPairActivity.cc:441
+#: apps/settings/SettingPairActivity.cc:410
+#: apps/settings/SettingPairActivity.cc:447
+#: apps/settings/SettingPairActivity.cc:413
+#: apps/settings/SettingPairActivity.cc:450
+msgid "Checking Pair…"
+msgstr "准备配对…"
+
+#: apps/settings/SettingPairActivity.cc:317
+#: apps/settings/SettingPairActivity.cc:396
+#: apps/settings/SettingPairActivity.cc:401
+#: apps/settings/SettingPairActivity.cc:409
+#: apps/settings/SettingPairActivity.cc:415
+#: apps/settings/SettingPairActivity.cc:418
+msgid "Paired!"
+msgstr "配对成功！"
+
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:67
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:66
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:70
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:76
+msgid "No 4G module equipped for this device."
+msgstr "本设备未配备 4G 模块。"
+
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:72
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:71
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:75
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:81
+msgid "4G module is disabled."
+msgstr "4G 模块被禁用。"
+
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:77
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:76
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:80
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:86
+msgid "No SIM card present."
+msgstr "未插入 SIM 卡。"
+
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:81
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:80
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:84
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:90
+msgid "Mobile network is unavailable."
+msgstr "移动网络不可用。"
+
+#: apps/settings/SettingWifiActivity.cc:233
+#: apps/settings/SettingWifiActivity.cc:247
+#: apps/settings/SettingWifiListActivity.cc:272
+#: apps/settings/SettingWifiListActivity.cc:273
+msgid "Hotspots List"
+msgstr "热点列表"
+
+#: apps/settings/SettingWifiActivity.cc:242
+#: apps/settings/SettingWifiActivity.cc:256
+#: apps/settings/SettingWifiListActivity.cc:281
+#: apps/settings/SettingWifiListActivity.cc:282
+msgid "WiFi disabled. Please turn on it in Network Settings."
+msgstr "WiFi 被禁用。请在网络设置中打开 WiFi。"
+
+#: apps/settings/SettingWifiActivity.cc:246
+#: apps/settings/SettingWifiActivity.cc:286
+#: apps/settings/SettingWifiActivity.cc:260
+#: apps/settings/SettingWifiActivity.cc:300
+#: apps/settings/SettingWifiListActivity.cc:285
+#: apps/settings/SettingWifiListActivity.cc:325
+#: apps/settings/SettingWifiListActivity.cc:286
+#: apps/settings/SettingWifiListActivity.cc:326
+#: apps/settings/SettingWifiListActivity.cc:290
+msgid "System error!"
+msgstr "系统错误！"
+
+#: apps/settings/SettingWifiActivity.cc:250
+#: apps/settings/SettingWifiActivity.cc:264
+#: apps/settings/SettingWifiListActivity.cc:289
+#: apps/settings/SettingWifiListActivity.cc:290
+msgid "Bad data. please retry."
+msgstr "错误数据，请重试。"
+
+#: apps/settings/SettingWifiActivity.cc:254
+#: apps/settings/SettingWifiActivity.cc:281
+#: apps/settings/SettingWifiActivity.cc:268
+#: apps/settings/SettingWifiActivity.cc:295
+#: apps/settings/SettingWifiListActivity.cc:293
+#: apps/settings/SettingWifiListActivity.cc:320
+#: apps/settings/SettingWifiListActivity.cc:294
+#: apps/settings/SettingWifiListActivity.cc:321
+msgid "Unknown error. please retry."
+msgstr "未知错误，请重试。"
+
+#: apps/settings/SettingWifiActivity.cc:264
+#: apps/settings/SettingWifiActivity.cc:278
+#: apps/settings/SettingWifiListActivity.cc:303
+#: apps/settings/SettingWifiListActivity.cc:304
+msgid "Connect WiFi"
+msgstr "连接WiFi"
+
+#: apps/settings/SettingWifiActivity.cc:273
+#: apps/settings/SettingWifiActivity.cc:287
+#: apps/settings/SettingWifiListActivity.cc:312
+#: apps/settings/SettingWifiListActivity.cc:313
+msgid "Password error, please retry."
+msgstr "密码错误，请重试。"
+
+#: apps/settings/SettingWifiActivity.cc:277
+#: apps/settings/SettingWifiActivity.cc:291
+#: apps/settings/SettingWifiListActivity.cc:316
+#: apps/settings/SettingWifiListActivity.cc:317
+msgid "Hotspot specified does not existe."
+msgstr "指定的热点不存在。"
+
+#: apps/settings/SettingPairActivity.cc:247
+#: apps/settings/SettingPairActivity.cc:256
+#: apps/settings/SettingPairActivity.cc:263
+#: apps/settings/SettingPairActivity.cc:266
+#: apps/settings/SettingPairActivity.cc:269
+msgid "Check Network"
+msgstr "检查网络"
+
+#: apps/settings/SettingPairActivity.cc:270
+#: apps/settings/SettingPairActivity.cc:279
+#: apps/settings/SettingPairActivity.cc:286
+#: apps/settings/SettingPairActivity.cc:289
+#: apps/settings/SettingPairActivity.cc:292
+msgid "Please use Joopic App to scan the QRCode."
+msgstr "请使用久拍 App 扫描二维码以完成配对。"
+
+#: apps/settings/SettingPairActivity.cc:406
+#: apps/settings/SettingPairActivity.cc:411
+#: apps/settings/SettingPairActivity.cc:419
+#: apps/settings/SettingPairActivity.cc:425
+#: apps/settings/SettingPairActivity.cc:428
+msgid "Timeout"
+msgstr "超时"
+
+#: misc/SoftKeyboard.c:434 misc/SoftKeyboard.c:436
+#, c-format
+msgid "You need to enter at least %d letters, numbers, or characters."
+msgstr "您需要输入至少 %d 个字母、数字或字符。"
+
+#: misc/SoftKeyboard.c:439 misc/SoftKeyboard.c:441
+msgid "Input Error"
+msgstr "输入错误"
+
+#: misc/ScreenLock.cc:208 misc/ScreenLock.cc:207 misc/ScreenLock.cc:511
+#: misc/ScreenLock.cc:536 misc/ScreenLock.cc:663
+msgid "Not matched, input again"
+msgstr "前后两次不匹配，请重新输入"
+
+#: misc/ScreenLock.cc:221 misc/ScreenLock.cc:220 misc/ScreenLock.cc:525
+#: misc/ScreenLock.cc:550 misc/ScreenLock.cc:677
+msgid "Input new password again"
+msgstr "重新输入新密码"
+
+#: misc/ScreenLock.cc:234 misc/ScreenLock.cc:337 misc/ScreenLock.cc:232
+#: misc/ScreenLock.cc:335 misc/ScreenLock.cc:303 misc/ScreenLock.cc:538
+#: misc/ScreenLock.cc:328 misc/ScreenLock.cc:563 misc/ScreenLock.cc:457
+#: misc/ScreenLock.cc:690
+msgid "Input new password"
+msgstr "输入新密码"
+
+#: misc/ScreenLock.cc:243 misc/ScreenLock.cc:241 misc/ScreenLock.cc:549
+#: misc/ScreenLock.cc:574 misc/ScreenLock.cc:701
+msgid "Wrong password, input again"
+msgstr "密码错误，请重试"
+
+#: misc/ScreenLock.cc:341 misc/ScreenLock.cc:339 misc/ScreenLock.cc:307
+#: misc/ScreenLock.cc:332 misc/ScreenLock.cc:461
+msgid "Input password"
+msgstr "输入密码"
+
+#: main.cc:412 main.cc:559 main.cc:571 main.cc:578 main.cc:636 main.cc:667
+#: main.cc:682 main.cc:778 main.cc:785 main.cc:810 main.cc:824 main.cc:828
+msgid "System Error"
+msgstr "系统错误"
+
+#: main.cc:412 main.cc:559 main.cc:571 main.cc:578 main.cc:636 main.cc:667
+#: main.cc:682 main.cc:778 main.cc:785 main.cc:810 main.cc:824 main.cc:828
+msgid "Failed to connect uBus. Please check the system configuration."
+msgstr "连接到 uBus 时失败，请检查系统配置。"
+
+#: apps/settings/SettingMainActivity.cc:172
+#: apps/settings/SettingMainActivity.cc:162
+#: apps/settings/SettingMainActivity.cc:166
+#: apps/settings/SettingMainActivity.cc:55
+#: apps/settings/SettingMainActivity.cc:226
+#: apps/settings/SettingMainActivity.cc:276
+#: apps/settings/SettingMainActivity.cc:68
+#: apps/settings/SettingMainActivity.cc:290
+#: apps/settings/SettingMainActivity.cc:293
+msgid "4G Network"
+msgstr "4G 网络"
+
+#: apps/settings/SettingMainActivity.cc:180
+#: apps/settings/SettingMainActivity.cc:170
+#: apps/settings/SettingWifiActivity.cc:83
+#: apps/settings/SettingWifiActivity.cc:104
+#: apps/settings/SettingMainActivity.cc:174
+#: apps/settings/SettingMainActivity.cc:63
+#: apps/settings/SettingMainActivity.cc:234
+#: apps/settings/SettingWifiActivity.cc:85
+#: apps/settings/SettingWifiActivity.cc:110
+#: apps/settings/SettingMainActivity.cc:284
+#: apps/settings/SettingWifiActivity.cc:153
+#: apps/settings/SettingWifiActivity.cc:183
+#: apps/settings/SettingMainActivity.cc:76
+#: apps/settings/SettingMainActivity.cc:298
+#: apps/settings/SettingWifiActivity.cc:163
+#: apps/settings/SettingWifiActivity.cc:193
+#: apps/settings/SettingWifiActivity.cc:76
+#: apps/settings/SettingWifiActivity.cc:195
+#: apps/settings/SettingMainActivity.cc:301
+#: apps/settings/SettingWifiActivity.cc:197
+#: apps/settings/SettingWifiActivity.cc:216
+msgid "WLAN"
+msgstr "无线局域网"
+
+#: apps/settings/SettingMainActivity.cc:182
+#: apps/settings/SettingMainActivity.cc:172
+#: apps/settings/SettingMainActivity.cc:176
+#: apps/settings/SettingMainActivity.cc:65
+#: apps/settings/SettingMainActivity.cc:236
+#: apps/settings/SettingMainActivity.cc:286
+#: apps/settings/SettingMainActivity.cc:78
+#: apps/settings/SettingMainActivity.cc:300
+#: apps/settings/SettingWifiActivity.cc:82
+#: apps/settings/SettingMainActivity.cc:303
+#: apps/settings/SettingWifiActivity.cc:84
+msgid "Closed"
+msgstr "已关闭"
+
+#: apps/settings/SettingMainActivity.cc:188
+#: apps/settings/SettingMainActivity.cc:195
+#: apps/settings/SettingMainActivity.cc:178
+#: apps/settings/SettingMainActivity.cc:182
+#: apps/settings/SettingMainActivity.cc:71
+#: apps/settings/SettingMainActivity.cc:242
+#: apps/settings/SettingMainActivity.cc:292
+#: apps/settings/SettingMainActivity.cc:84
+#: apps/settings/SettingMainActivity.cc:306
+#: apps/settings/SettingMainActivity.cc:309
+msgid "Unset"
+msgstr "未设置"
+
+#: apps/settings/SettingMainActivity.cc:191
+#: apps/settings/SettingMainActivity.cc:184
+#: apps/settings/SettingMainActivity.cc:188
+#: apps/settings/SettingMainActivity.cc:77
+#: apps/settings/SettingMainActivity.cc:248
+#: apps/settings/SettingMainActivity.cc:298
+#: apps/settings/SettingMainActivity.cc:91
+#: apps/settings/SettingMainActivity.cc:312
+#: apps/settings/SettingMainActivity.cc:94
+#: apps/settings/SettingMainActivity.cc:315
+msgid "Language"
+msgstr "语言"
+
+#: apps/settings/SettingMainActivity.cc:194
+msgid "Timezone"
+msgstr "时区"
+
+#: apps/settings/SettingMainActivity.cc:197
+#: apps/settings/SettingMainActivity.cc:193
+#: apps/settings/SettingPairActivity.cc:531
+#: apps/settings/SettingMainActivity.cc:88
+#: apps/settings/SettingMainActivity.cc:259
+#: apps/settings/SettingPairActivity.cc:534
+#: apps/settings/SettingMainActivity.cc:309
+#: apps/settings/SettingMainActivity.cc:104
+#: apps/settings/SettingMainActivity.cc:323
+#: apps/settings/SettingMainActivity.cc:107
+#: apps/settings/SettingMainActivity.cc:326
+msgid "Pair"
+msgstr "配对"
+
+#: apps/settings/SettingMainActivity.cc:198
+#: apps/settings/SettingMainActivity.cc:194
+#: apps/settings/SettingMainActivity.cc:93
+#: apps/settings/SettingMainActivity.cc:260
+#: apps/settings/SettingMainActivity.cc:310
+#: apps/settings/SettingMainActivity.cc:109
+#: apps/settings/SettingMainActivity.cc:324
+#: apps/settings/SettingMainActivity.cc:112
+#: apps/settings/SettingMainActivity.cc:327
+msgid "Paired"
+msgstr "已配对"
+
+#: apps/settings/SettingMainActivity.cc:200
+#: apps/settings/SettingMainActivity.cc:196
+#: apps/settings/SettingMainActivity.cc:98
+#: apps/settings/SettingMainActivity.cc:264
+#: apps/settings/SettingMainActivity.cc:314
+#: apps/settings/SettingMainActivity.cc:115
+#: apps/settings/SettingMainActivity.cc:328
+#: apps/settings/SettingMainActivity.cc:118
+#: apps/settings/SettingMainActivity.cc:331
+msgid "Firmware"
+msgstr "固件"
+
+#: apps/settings/SettingMainActivity.cc:203
+#: apps/settings/SettingMainActivity.cc:199
+#: apps/settings/SettingAboutActivity.cc:148
+#: apps/settings/SettingAboutActivity.cc:151
+#: apps/settings/SettingMainActivity.cc:101
+#: apps/settings/SettingMainActivity.cc:267
+#: apps/settings/SettingAboutActivity.cc:155
+#: apps/settings/SettingAboutActivity.cc:157
+#: apps/settings/SettingMainActivity.cc:317
+#: apps/settings/SettingMainActivity.cc:118
+#: apps/settings/SettingMainActivity.cc:331
+#: apps/settings/SettingAboutActivity.cc:164
+#: apps/settings/SettingAboutActivity.cc:175
+#: apps/settings/SettingMainActivity.cc:121
+#: apps/settings/SettingMainActivity.cc:334
+msgid "About"
+msgstr "关于"
+
+#: apps/settings/SettingMainActivity.cc:230
+#: apps/settings/SettingMainActivity.cc:228
+#: apps/settings/SettingMainActivity.cc:234
+#: apps/settings/SettingMainActivity.cc:289
+#: apps/settings/SettingMainActivity.cc:301
+#: apps/settings/SettingMainActivity.cc:361
+#: apps/settings/SettingMainActivity.cc:432
+#: apps/settings/SettingMainActivity.cc:375
+#: apps/settings/SettingMainActivity.cc:444
+#: apps/settings/SettingMainActivity.cc:378
+#: apps/settings/SettingMainActivity.cc:447
+msgid "Settings"
+msgstr "设置"
+
+#: apps/auto-upload-cloud/AUCActivity.cc:184
+#: apps/auto-upload-cloud/AUCActivity.cc:92
+#: apps/manual-upload-cloud/MUCActivity.cc:242
+#: apps/auto-upload-cloud/AUCActivity.cc:94
+#: apps/manual-upload-cloud/MUCActivity.cc:281
+#: apps/manual-upload-cloud/MUCActivity.cc:285
+#: apps/auto-upload-cloud/AUCActivity.cc:95
+#: apps/manual-upload-cloud/MUCActivity.cc:341
+#: apps/manual-upload-cloud/MUCActivity.cc:345
+#: apps/auto-upload-cloud/AUCActivity.cc:123
+msgid "To Upload"
+msgstr "待上传"
+
+#: apps/auto-upload-cloud/AUCActivity.cc:217
+#: apps/auto-upload-cloud/AUCActivity.cc:103
+#: apps/manual-upload-cloud/MUCActivity.cc:253
+#: apps/auto-upload-cloud/AUCActivity.cc:105
+#: apps/manual-upload-cloud/MUCActivity.cc:292
+#: apps/manual-upload-cloud/MUCActivity.cc:296
+#: apps/auto-upload-cloud/AUCActivity.cc:106
+#: apps/manual-upload-cloud/MUCActivity.cc:352
+#: apps/manual-upload-cloud/MUCActivity.cc:356
+#: apps/auto-upload-cloud/AUCActivity.cc:134
+msgid "Uploaded"
+msgstr "已上传"
+
+#: apps/auto-upload-cloud/AUCActivity.cc:248
+#: apps/auto-upload-cloud/AUCActivity.cc:375
+#: apps/auto-upload-cloud/AUCActivity.cc:378
+#: apps/auto-upload-cloud/AUCActivity.cc:379
+#: apps/auto-upload-cloud/AUCActivity.cc:399
+#: apps/auto-upload-cloud/AUCActivity.cc:400
+#: apps/auto-upload-cloud/AUCActivity.cc:396
+#: apps/auto-upload-cloud/AUCActivity.cc:416
+#: apps/auto-upload-cloud/AUCActivity.cc:417
+msgid "Auto Upload Cloud"
+msgstr "自动云传"
+
+#: apps/settings/SettingMainActivity.cc:194
+#: apps/settings/SettingMainActivity.cc:187
+#: apps/settings/SettingTimeActivity.cc:104
+#: apps/settings/SettingGPSActivity.cc:103
+#: apps/settings/SettingMainActivity.cc:191
+#: apps/settings/SettingMainActivity.cc:82
+#: apps/settings/SettingMainActivity.cc:253
+#: apps/settings/SettingMainActivity.cc:303
+#: apps/settings/SettingMainActivity.cc:96
+#: apps/settings/SettingMainActivity.cc:317
+#: apps/settings/SettingMainActivity.cc:99
+#: apps/settings/SettingMainActivity.cc:320
+msgid "Time"
+msgstr "时间"
+
+#: apps/settings/SettingMainActivity.cc:195
+#: apps/settings/SettingMainActivity.cc:188
+#: apps/settings/SettingTimeActivity.cc:86
+#: apps/settings/SettingMainActivity.cc:192
+#: apps/settings/SettingMainActivity.cc:83
+#: apps/settings/SettingMainActivity.cc:254
+#: apps/settings/SettingMainActivity.cc:304
+#: apps/settings/SettingMainActivity.cc:97
+#: apps/settings/SettingMainActivity.cc:318
+#: apps/settings/SettingMainActivity.cc:100
+#: apps/settings/SettingMainActivity.cc:321
+msgid "Auto"
+msgstr "自动"
+
+#: apps/launcher/LauncherActivity.cc:121 apps/launcher/LauncherActivity.cc:204
+#: apps/launcher/LauncherActivity.cc:122 apps/launcher/LauncherActivity.cc:205
+#: apps/launcher/LauncherActivity.cc:197 apps/launcher/LauncherActivity.cc:139
+#: apps/launcher/LauncherActivity.cc:234 apps/launcher/LauncherActivity.cc:238
+#: apps/launcher/LauncherActivity.cc:138 apps/launcher/LauncherActivity.cc:233
+#: apps/launcher/LauncherActivity.cc:237
+#: apps/remote-control-wlan/RmtCtlWLANActivity.cc:259
+#: apps/launcher/LauncherActivity.cc:133 apps/launcher/LauncherActivity.cc:137
+#: apps/remote-control-cloud/RmtCtlCloudActivity.cc:259
+#: apps/live-push-cloud/LivePushCloudActivity.cc:259
+#: apps/launcher/LauncherActivity.cc:134
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:289
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:292
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:301
+msgid "Disconnected"
+msgstr "断开"
+
+#: apps/settings/SettingMainActivity.cc:181
+#: apps/settings/SettingGPSActivity.cc:82
+#: apps/settings/SettingMainActivity.cc:185
+#: apps/settings/SettingMainActivity.cc:74
+#: apps/settings/SettingMainActivity.cc:245
+#: apps/settings/SettingMainActivity.cc:295
+#: apps/settings/SettingGPSActivity.cc:103
+#: apps/settings/SettingMainActivity.cc:88
+#: apps/settings/SettingMainActivity.cc:309
+#: apps/settings/SettingMainActivity.cc:91
+#: apps/settings/SettingMainActivity.cc:312
+#: apps/settings/SettingFunctionActivity.cc:31
+msgid "GPS"
+msgstr "GPS"
+
+#: apps/settings/SettingMainActivity.cc:182
+#: apps/settings/SettingMainActivity.cc:186
+#: apps/settings/SettingMainActivity.cc:75
+#: apps/settings/SettingMainActivity.cc:246
+#: apps/settings/SettingMainActivity.cc:296
+#: apps/settings/SettingMainActivity.cc:89
+#: apps/settings/SettingMainActivity.cc:310
+#: apps/settings/SettingMainActivity.cc:92
+#: apps/settings/SettingMainActivity.cc:313
+msgid "Opened"
+msgstr "已打开"
+
+#: apps/settings/SettingMainActivity.cc:190
+#: apps/settings/SettingScreenActivity.cc:116
+#: apps/settings/SettingMainActivity.cc:194
+#: apps/settings/SettingMainActivity.cc:85
+#: apps/settings/SettingMainActivity.cc:256
+#: apps/settings/SettingScreenActivity.cc:138
+#: apps/settings/SettingMainActivity.cc:306
+#: apps/settings/SettingMainActivity.cc:100
+#: apps/settings/SettingMainActivity.cc:320
+#: apps/settings/SettingScreenActivity.cc:130
+#: apps/settings/SettingMainActivity.cc:103
+#: apps/settings/SettingMainActivity.cc:323
+msgid "Screen"
+msgstr "屏幕"
+
+#: apps/settings/SettingScreenLockTimeActivity.cc:108
+#: apps/settings/SettingScreenActivity.cc:92
+#: apps/settings/SettingScreenLockTimeActivity.cc:158
+#: apps/settings/SettingScreenActivity.cc:114
+#: apps/settings/SettingScreenLockTimeActivity.cc:116
+#: apps/settings/SettingScreenLockTimeActivity.cc:166
+#: apps/settings/SettingScreenActivity.cc:101
+#: apps/settings/SettingScreenLockTimeActivity.cc:120
+#: apps/settings/SettingScreenLockTimeActivity.cc:170
+#: apps/settings/SettingTimeZoneActivity.cc:348
+msgid "Screen Lock Time"
+msgstr "锁屏时间"
+
+#: apps/settings/SettingMainActivity.cc:191
+#: apps/settings/SettingScreenActivity.cc:93
+#: apps/settings/SettingScreenLockTimeActivity.cc:34
+#: apps/settings/SettingMainActivity.cc:195
+#: apps/settings/SettingMainActivity.cc:86
+#: apps/settings/SettingMainActivity.cc:257
+#: apps/settings/SettingScreenLockTimeActivity.cc:35
+#: apps/settings/SettingScreenActivity.cc:88
+#: apps/settings/SettingMainActivity.cc:307 apps/RuntimeConfService.cc:240
+#: apps/settings/SettingMainActivity.cc:321
+#: apps/settings/SettingMainActivity.cc:324
+msgid "30 seconds"
+msgstr "30 秒"
+
+#: apps/settings/SettingScreenActivity.cc:94
+#: apps/settings/SettingScreenActivity.cc:116
+#: apps/settings/SettingScreenActivity.cc:103
+msgid "Screen Lock Password"
+msgstr "锁屏密码"
+
+#: apps/settings/SettingScreenActivity.cc:96
+#: apps/settings/SettingScreenActivity.cc:118
+#: apps/settings/SettingScreenActivity.cc:110
+msgid "Auto Turn-off Screen"
+msgstr "自动关闭屏幕"
+
+#: apps/settings/SettingTimeActivity.cc:83
+msgid "24 Hours"
+msgstr "24 小时"
+
+#: apps/settings/SettingTimeActivity.cc:85
+#: apps/settings/SettingTimeZoneActivity.cc:297
+msgid "Time Zone"
+msgstr "时区"
+
+#: apps/settings/SettingScreenLockTimeActivity.cc:35
+#: apps/settings/SettingScreenLockTimeActivity.cc:36
+#: apps/settings/SettingScreenActivity.cc:86 apps/RuntimeConfService.cc:238
+msgid "60 seconds"
+msgstr "60 秒"
+
+#: apps/settings/SettingScreenLockTimeActivity.cc:36
+#: apps/settings/SettingScreenActivity.cc:84
+#: apps/settings/SettingScreenLockTimeActivity.cc:37
+#: apps/RuntimeConfService.cc:236
+msgid "5 minutes"
+msgstr "5 分钟"
+
+#: apps/settings/SettingScreenLockTimeActivity.cc:37
+#: apps/settings/SettingScreenActivity.cc:82
+#: apps/settings/SettingScreenLockTimeActivity.cc:38
+#: apps/RuntimeConfService.cc:234
+msgid "15 minutes"
+msgstr "15 分钟"
+
+#: apps/settings/SettingScreenLockTimeActivity.cc:38
+#: apps/settings/SettingScreenActivity.cc:80
+#: apps/settings/SettingScreenActivity.cc:88
+#: apps/settings/SettingScreenLockTimeActivity.cc:39
+#: apps/RuntimeConfService.cc:232
+msgid "30 minutes"
+msgstr "30 分钟"
+
+#: apps/settings/SettingAboutActivity.cc:72
+#: apps/settings/SettingAboutActivity.cc:73
+#: apps/settings/SettingAboutActivity.cc:77
+#: apps/settings/SettingAboutActivity.cc:79
+#: apps/settings/SettingAboutActivity.cc:84
+#: apps/settings/SettingAboutActivity.cc:95
+msgid "Device Name"
+msgstr "设备名称"
+
+#: apps/settings/SettingAboutActivity.cc:74
+#: apps/settings/SettingAboutActivity.cc:75
+#: apps/settings/SettingAboutActivity.cc:79
+#: apps/settings/SettingAboutActivity.cc:81
+#: apps/settings/SettingAboutActivity.cc:86
+#: apps/settings/SettingAboutActivity.cc:97
+msgid "Model"
+msgstr "型号"
+
+#: apps/settings/SettingAboutActivity.cc:76
+#: apps/settings/SettingAboutActivity.cc:77
+#: apps/settings/SettingAboutActivity.cc:81
+#: apps/settings/SettingAboutActivity.cc:83
+#: apps/settings/SettingAboutActivity.cc:88
+#: apps/settings/SettingAboutActivity.cc:99
+msgid "Serial Number"
+msgstr "序列号"
+
+#: apps/settings/SettingAboutActivity.cc:78
+#: apps/settings/SettingAboutActivity.cc:79
+#: apps/settings/SettingAboutActivity.cc:83
+#: apps/settings/SettingAboutActivity.cc:85
+#: apps/settings/SettingAboutActivity.cc:90
+#: apps/settings/SettingAboutActivity.cc:101
+msgid "Version"
+msgstr "版本"
+
+#: apps/settings/SettingAboutActivity.cc:80
+#: apps/settings/SettingAboutActivity.cc:81
+#: apps/settings/SettingAboutActivity.cc:85
+#: apps/settings/SettingAboutActivity.cc:87
+#: apps/settings/SettingAboutActivity.cc:93
+#: apps/settings/SettingAboutActivity.cc:104
+msgid "Copyright"
+msgstr "版权所有"
+
+#: apps/settings/SettingAboutActivity.cc:81
+#: apps/settings/SettingAboutActivity.cc:82
+#: apps/settings/SettingAboutActivity.cc:86
+#: apps/settings/SettingAboutActivity.cc:88
+#: apps/settings/SettingAboutActivity.cc:94
+#: apps/settings/SettingAboutActivity.cc:105
+msgid "Joobot Inc."
+msgstr "玖柏图公司"
+
+#: apps/settings/SettingAboutActivity.cc:99
+#: apps/settings/SettingAboutActivity.cc:100
+#: apps/settings/SettingAboutActivity.cc:104
+#: apps/settings/SettingAboutActivity.cc:106
+#: apps/settings/SettingAboutActivity.cc:113
+#: apps/settings/SettingAboutActivity.cc:124
+msgid "About Device"
+msgstr "关于设备"
+
+#: apps/settings/SettingGPSActivity.cc:84
+#: apps/auto-upload-cloud/AUCSettingsActivity.cc:38
+#: apps/auto-upload-cloud/AUCSettingsActivity.cc:44
+#: apps/manual-upload-cloud/MUCSettingsActivity.cc:45
+#: apps/settings/SettingFunctionActivity.cc:32
+msgid "Write Location to Photos"
+msgstr "将位置信息写入照片"
+
+#: apps/manual-upload-cloud/MUCActivity.cc:138
+#: apps/manual-upload-cloud/MUCActivity.cc:166
+#: apps/manual-upload-cloud/MUCActivity.cc:170
+#: apps/manual-upload-cloud/MUCActivity.cc:224
+#: apps/manual-upload-cloud/MUCActivity.cc:228
+msgid "Upload Photos"
+msgstr "上传照片时间段"
+
+#: apps/manual-upload-cloud/MUCActivity.cc:139
+#: apps/manual-upload-cloud/MUCActivity.cc:167
+#: apps/manual-upload-cloud/MUCActivity.cc:78
+#: apps/manual-upload-cloud/MUCActivity.cc:171
+#: apps/manual-upload-cloud/MUCActivity.cc:79
+#: apps/manual-upload-cloud/MUCActivity.cc:225
+#: apps/manual-upload-cloud/MUCActivity.cc:229
+msgid "in 1 hour"
+msgstr "一个小时内"
+
+#: apps/manual-upload-cloud/MUCActivity.cc:145
+#: apps/manual-upload-cloud/MUCActivity.cc:173
+#: apps/manual-upload-cloud/MUCActivity.cc:177
+#: apps/manual-upload-cloud/MUCActivity.cc:231
+#: apps/manual-upload-cloud/MUCActivity.cc:235
+msgid "Start"
+msgstr "开始"
+
+#: apps/manual-upload-cloud/MUCActivity.cc:263
+#: apps/manual-upload-cloud/MUCActivity.cc:309
+#: apps/manual-upload-cloud/MUCActivity.cc:313
+#: apps/manual-upload-cloud/MUCActivity.cc:369
+#: apps/manual-upload-cloud/MUCActivity.cc:373
+msgid "Stop"
+msgstr "停止"
+
+#: apps/manual-upload-cloud/MUCActivity.cc:573
+#: apps/manual-upload-cloud/MUCActivity.cc:620
+#: apps/manual-upload-cloud/MUCActivity.cc:624
+#: apps/manual-upload-cloud/MUCActivity.cc:727
+#: apps/manual-upload-cloud/MUCActivity.cc:731
+#: apps/manual-upload-cloud/MUCActivity.cc:733
+msgid "Manual Upload Cloud"
+msgstr "手动云端"
+
+#: apps/settings/SettingGPSActivity.cc:153
+msgid "GPS Settings"
+msgstr "GPS 设置"
+
+#: apps/launcher/LauncherActivity.cc:363 apps/launcher/LauncherActivity.cc:355
+#: apps/launcher/LauncherActivity.cc:469 apps/launcher/LauncherActivity.cc:496
+#: apps/launcher/LauncherActivity.cc:515 apps/launcher/LauncherActivity.cc:521
+msgid "Launcher"
+msgstr "启动器"
+
+#: apps/settings/SettingWifiPasswordActivity.cc:210
+#: apps/settings/SettingWifiPasswordActivity.cc:242
+msgid "WiFi Pasword"
+msgstr "WiFi 密码"
+
+#: apps/settings/SettingLanguageActivity.cc:167
+#: apps/settings/SettingLanguageActivity.cc:169
+msgid "Language Setting"
+msgstr "语言设置"
+
+#: apps/settings/SettingScreenActivity.cc:166
+#: apps/settings/SettingScreenActivity.cc:188
+#: apps/settings/SettingScreenActivity.cc:180
+msgid "Screen Settings"
+msgstr "屏幕设置"
+
+#: apps/settings/SettingWifiListActivity.cc:439
+#: apps/settings/SettingWifiListActivity.cc:444
+#: apps/settings/SettingWifiListActivity.cc:446
+msgid "WiFi Hotspots"
+msgstr "WiFi 热点"
+
+#: apps/settings/SettingCheckNetworkActivity.cc:239
+#: apps/settings/SettingCheckNetworkActivity.cc:241
+msgid "Checking Network"
+msgstr "检查网络"
+
+#: apps/settings/SettingWifiActivity.cc:154
+#: apps/settings/SettingWifiActivity.cc:160
+#: apps/settings/SettingWifiActivity.cc:245
+#: apps/settings/SettingWifiActivity.cc:255
+#: apps/settings/SettingWifiActivity.cc:257
+#: apps/settings/SettingWifiActivity.cc:259
+#: apps/settings/SettingWifiActivity.cc:279
+msgid "WLAN Settings"
+msgstr "无线局域网设置"
+
+#: apps/settings/SettingTimeActivity.cc:154
+msgid "Time Settings"
+msgstr "时间设置"
+
+#: apps/settings/SettingFirmwareActivity.cc:708
+#: apps/settings/SettingFirmwareActivity.cc:979
+#: apps/settings/SettingFirmwareActivity.cc:980
+#: apps/settings/SettingFirmwareActivity.cc:981
+msgid "Checking Firmware"
+msgstr "检查固件"
+
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:190
+#: apps/settings/SettingCheckNetworkPromptActivity.cc:202
+msgid "Checking Network Prompt"
+msgstr "检查网络提示"
+
+#: apps/auto-upload-cloud/AUCActivity.cc:117
+#: apps/manual-upload-cloud/MUCActivity.cc:302
+#: apps/manual-upload-cloud/MUCActivity.cc:306
+#: apps/manual-upload-cloud/MUCActivity.cc:362
+#: apps/manual-upload-cloud/MUCActivity.cc:366
+msgid "Preparing…"
+msgstr "准备中…"
+
+#: apps/manual-upload-cloud/MUCTimeActivity.cc:73
+#: apps/manual-upload-cloud/MUCTimeActivity.cc:124
+#: apps/auto-upload-cloud/UploadFormatActivity.cc:131
+#: apps/UploadFormatActivity.cc:131
+msgid "Upload Period"
+msgstr "上传时间段"
+
+#: apps/manual-upload-cloud/MUCActivity.cc:78
+msgid "1 hour"
+msgstr "一小时"
+
+#: apps/manual-upload-cloud/MUCActivity.cc:79
+msgid "2 hours"
+msgstr "两小时"
+
+#: apps/manual-upload-cloud/MUCActivity.cc:80
+msgid "4 hours"
+msgstr "四小时"
+
+#: apps/manual-upload-cloud/MUCActivity.cc:81
+msgid "8 hours"
+msgstr "八小时"
+
+#: apps/manual-upload-cloud/MUCActivity.cc:82
+#: apps/manual-upload-cloud/MUCActivity.cc:83
+msgid "All photos"
+msgstr "全部照片"
+
+#: apps/auto-upload-cloud/AUCActivity.cc:117
+#: apps/remote-control-wlan/RmtCtlWLANActivity.cc:105
+#: apps/remote-control-cloud/RmtCtlCloudActivity.cc:105
+#: apps/live-push-cloud/LivePushCloudActivity.cc:105
+#: apps/auto-upload-cloud/AUCActivity.cc:118
+#: apps/remote-control-wlan/RmtCtlWLANActivity.cc:106
+#: apps/remote-control-cloud/RmtCtlCloudActivity.cc:106
+#: apps/live-push-cloud/LivePushCloudActivity.cc:106
+#: apps/auto-upload-cloud/AUCActivity.cc:146
+msgid "Idle"
+msgstr "空闲"
+
+#: apps/auto-upload-cloud/AUCSettingsActivity.cc:34
+#: apps/auto-upload-cloud/UploadFormatActivity.cc:61
+#: apps/auto-upload-cloud/AUCSettingsActivity.cc:40
+#: apps/manual-upload-cloud/MUCSettingsActivity.cc:40
+#: apps/UploadFormatActivity.cc:61
+msgid "Upload Format"
+msgstr "上传格式"
+
+#: apps/auto-upload-cloud/AUCSettingsActivity.cc:35
+#: apps/auto-upload-cloud/AUCSettingsActivity.cc:41
+#: apps/manual-upload-cloud/MUCSettingsActivity.cc:41
+msgid "The file in the specified format will be uploaded to cloud."
+msgstr "指定格式的文件将被上传到云端。"
+
+#: apps/auto-upload-cloud/AUCSettingsActivity.cc:36
+#: apps/auto-upload-cloud/AUCSettingsActivity.cc:42
+#: apps/manual-upload-cloud/MUCSettingsActivity.cc:42
+msgid "Auto Delete"
+msgstr "自动删除"
+
+#: apps/auto-upload-cloud/AUCSettingsActivity.cc:37
+#: apps/auto-upload-cloud/AUCSettingsActivity.cc:43
+#: apps/manual-upload-cloud/MUCSettingsActivity.cc:43
+msgid ""
+"The photo will be deleted automatically from your camera after the photo "
+"were uploaded cloud."
+msgstr "当照片上传到云端后，自动移除相机中的照片。"
+
+#: apps/auto-upload-cloud/AUCSettingsActivity.cc:39
+#: apps/auto-upload-cloud/AUCSettingsActivity.cc:45
+#: apps/manual-upload-cloud/MUCSettingsActivity.cc:46
+msgid ""
+"Write the GPS location data to the JPEG files before uploading the photos."
+msgstr "在上传照片之前，将 GPS 位置数据写入照片文件中。"
+
+#: apps/auto-upload-cloud/AUCSettingsActivity.cc:149
+#: apps/auto-upload-cloud/AUCSettingsActivity.cc:198
+#: apps/manual-upload-cloud/MUCSettingsActivity.cc:199
+msgid "Upload Settings"
+msgstr "上传设置"
+
+#: apps/auto-upload-cloud/UploadFormatActivity.cc:27
+#: apps/UploadFormatActivity.cc:27
+msgid "JPEG"
+msgstr "JPEG"
+
+#: apps/auto-upload-cloud/UploadFormatActivity.cc:28
+#: apps/UploadFormatActivity.cc:28
+msgid "Raw"
+msgstr "Raw"
+
+#: apps/auto-upload-cloud/UploadFormatActivity.cc:29
+#: apps/UploadFormatActivity.cc:29
+msgid "Raw + JPEG"
+msgstr "Raw + JPEG"
+
+#: apps/auto-upload-cloud/UploadFormatActivity.cc:30
+#: apps/UploadFormatActivity.cc:30
+msgid "Inner JPEG in Raw"
+msgstr "Raw 中的内嵌 JPEG"
+
+#: apps/remote-control-wlan/RmtCtlWLANActivity.cc:99
+#: apps/remote-control-wlan/RmtCtlWLANActivity.cc:370
+#: apps/remote-control-wlan/RmtCtlWLANActivity.cc:100
+#: apps/remote-control-wlan/RmtCtlWLANActivity.cc:406
+#: apps/remote-control-wlan/RmtCtlWLANActivity.cc:408
+msgid "Remote Control via WLAN"
+msgstr "遥控相机（无线局域网）"
+
+#: apps/remote-control-wlan/RmtCtlWLANActivity.cc:155
+#: apps/remote-control-cloud/RmtCtlCloudActivity.cc:155
+#: apps/live-push-cloud/LivePushCloudActivity.cc:155
+#: apps/remote-control-wlan/RmtCtlWLANActivity.cc:156
+#: apps/remote-control-cloud/RmtCtlCloudActivity.cc:156
+#: apps/live-push-cloud/LivePushCloudActivity.cc:156
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:186
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:189
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:198
+msgid "Quit"
+msgstr "退出"
+
+#: apps/remote-control-cloud/RmtCtlCloudActivity.cc:99
+#: apps/remote-control-cloud/RmtCtlCloudActivity.cc:370
+#: apps/remote-control-cloud/RmtCtlCloudActivity.cc:100
+#: apps/remote-control-cloud/RmtCtlCloudActivity.cc:405
+#: apps/remote-control-cloud/RmtCtlCloudActivity.cc:407
+msgid "Remote Control via Cloud"
+msgstr "遥控相机（云）"
+
+#: apps/live-push-cloud/LivePushCloudActivity.cc:99
+#: apps/live-push-cloud/LivePushCloudActivity.cc:370
+#: apps/live-push-cloud/LivePushCloudActivity.cc:100
+#: apps/live-push-cloud/LivePushCloudActivity.cc:406
+#: apps/live-push-cloud/LivePushCloudActivity.cc:408
+msgid "Live Push via Cloud"
+msgstr "直播推送（云）"
+
+#: apps/settings/SettingFirmwareActivity.cc:740
+#: apps/settings/SettingFirmwareActivity.cc:741
+#: apps/settings/SettingFirmwareActivity.cc:742
+msgid "Found New Firmware"
+msgstr "发现新固件"
+
+#: apps/settings/SettingFirmwareActivity.cc:811
+#: apps/settings/SettingFirmwareActivity.cc:812
+#: apps/settings/SettingFirmwareActivity.cc:813
+msgid "Failed to write data to root filesystem."
+msgstr "写入根文件系统时失败。"
+
+#: apps/settings/SettingFirmwareActivity.cc:812
+#: apps/settings/SettingFirmwareActivity.cc:813
+#: apps/settings/SettingFirmwareActivity.cc:814
+msgid "Failed to write data to boot filesystem."
+msgstr "写入引导文件系统时失败。"
+
+#: apps/settings/SettingFirmwareActivity.cc:813
+#: apps/settings/SettingFirmwareActivity.cc:814
+#: apps/settings/SettingFirmwareActivity.cc:815
+msgid "Failed to write data to recovery filesystem."
+msgstr "写入复原文件系统时失败。"
+
+#: apps/settings/SettingFirmwareActivity.cc:814
+#: apps/settings/SettingFirmwareActivity.cc:815
+#: apps/settings/SettingFirmwareActivity.cc:816
+msgid "Failed to check system data."
+msgstr "校验系统数据时失败。"
+
+#: apps/settings/SettingFirmwareActivity.cc:815
+#: apps/settings/SettingFirmwareActivity.cc:816
+#: apps/settings/SettingFirmwareActivity.cc:817
+msgid "Failed to unpack system data."
+msgstr "解压系统数据时失败。"
+
+#: apps/settings/SettingFirmwareActivity.cc:816
+#: apps/settings/SettingFirmwareActivity.cc:817
+#: apps/settings/SettingFirmwareActivity.cc:818
+msgid "Failed to check recovery data."
+msgstr "校验复原数据时失败。"
+
+#: apps/settings/SettingFirmwareActivity.cc:817
+#: apps/settings/SettingFirmwareActivity.cc:818
+#: apps/settings/SettingFirmwareActivity.cc:819
+msgid "Failed to unpack recovery data."
+msgstr "解压复原数据时失败。"
+
+#: apps/settings/SettingFirmwareActivity.cc:818
+#: apps/settings/SettingFirmwareActivity.cc:819
+#: apps/settings/SettingFirmwareActivity.cc:820
+msgid "Failed to download firmware package."
+msgstr "下载固件升级包时失败。"
+
+#: apps/settings/SettingFirmwareActivity.cc:819
+#: apps/settings/SettingFirmwareActivity.cc:820
+#: apps/settings/SettingFirmwareActivity.cc:821
+msgid "Failed to unpack firmware package."
+msgstr "解压固件升级包时失败。"
+
+#: apps/settings/SettingFirmwareActivity.cc:820
+#: apps/settings/SettingFirmwareActivity.cc:821
+#: apps/settings/SettingFirmwareActivity.cc:822
+msgid "Failed to check firmware package."
+msgstr "校验固件升级包时失败。"
+
+#: apps/settings/SettingFirmwareActivity.cc:825
+#: apps/settings/SettingFirmwareActivity.cc:826
+#: apps/settings/SettingFirmwareActivity.cc:827
+msgid "Download completed!"
+msgstr "下载完成！"
+
+#: apps/settings/SettingFirmwareActivity.cc:826
+#: apps/settings/SettingFirmwareActivity.cc:827
+#: apps/settings/SettingFirmwareActivity.cc:828
+msgid "Preparing download…"
+msgstr "准备下载…"
+
+#: apps/settings/SettingFirmwareActivity.cc:827
+#: apps/settings/SettingFirmwareActivity.cc:828
+#: apps/settings/SettingFirmwareActivity.cc:829
+msgid "Downlaoding package…"
+msgstr "正在下载…"
+
+#: apps/settings/SettingFirmwareActivity.cc:828
+#: apps/settings/SettingFirmwareActivity.cc:829
+#: apps/settings/SettingFirmwareActivity.cc:830
+msgid "Checking package…"
+msgstr "正在校验升级包…"
+
+#: apps/settings/SettingFirmwareActivity.cc:829
+#: apps/settings/SettingFirmwareActivity.cc:830
+#: apps/settings/SettingFirmwareActivity.cc:831
+msgid "Unpacking package…"
+msgstr "正在解压升级包…"
+
+#: apps/settings/SettingFirmwareActivity.cc:830
+#: apps/settings/SettingFirmwareActivity.cc:831
+#: apps/settings/SettingFirmwareActivity.cc:832
+msgid "Upgrade completed!"
+msgstr "升级完成！将自动重启。"
+
+#: apps/settings/SettingFirmwareActivity.cc:831
+#: apps/settings/SettingFirmwareActivity.cc:832
+#: apps/settings/SettingFirmwareActivity.cc:833
+msgid "Unpacking recovery data…"
+msgstr "正在解压复原数据…"
+
+#: apps/settings/SettingFirmwareActivity.cc:832
+#: apps/settings/SettingFirmwareActivity.cc:833
+#: apps/settings/SettingFirmwareActivity.cc:834
+msgid "Checking recovery data…"
+msgstr "正在校验复原数据…"
+
+#: apps/settings/SettingFirmwareActivity.cc:833
+#: apps/settings/SettingFirmwareActivity.cc:834
+#: apps/settings/SettingFirmwareActivity.cc:835
+msgid "Unpacking system data…"
+msgstr "正在解压系统数据…"
+
+#: apps/settings/SettingFirmwareActivity.cc:834
+#: apps/settings/SettingFirmwareActivity.cc:835
+#: apps/settings/SettingFirmwareActivity.cc:836
+msgid "Checking system data…"
+msgstr "正在校验系统数据…"
+
+#: apps/settings/SettingFirmwareActivity.cc:835
+#: apps/settings/SettingFirmwareActivity.cc:836
+#: apps/settings/SettingFirmwareActivity.cc:837
+msgid "Writting recovery filesystem…"
+msgstr "正在写入复原文件系统…"
+
+#: apps/settings/SettingFirmwareActivity.cc:836
+#: apps/settings/SettingFirmwareActivity.cc:837
+#: apps/settings/SettingFirmwareActivity.cc:838
+msgid "Writting boot filesystem…"
+msgstr "正在写入引导文件系统…"
+
+#: apps/settings/SettingFirmwareActivity.cc:837
+#: apps/settings/SettingFirmwareActivity.cc:838
+#: apps/settings/SettingFirmwareActivity.cc:839
+msgid "Writing root filesystem…"
+msgstr "正在写入根文件系统…"
+
+#: apps/settings/SettingFirmwareActivity.cc:770
+#: apps/settings/SettingFirmwareActivity.cc:771
+#: apps/settings/SettingFirmwareActivity.cc:772
+msgid "Error"
+msgstr "错误"
+
+#: apps/settings/SettingMainActivity.cc:90
+#: apps/settings/SettingMainActivity.cc:106
+#: apps/settings/SettingMainActivity.cc:109
+msgid "Not Paired"
+msgstr "未配对"
+
+#: apps/settings/SettingAboutActivity.cc:75
+#: apps/settings/SettingAboutActivity.cc:76
+#: apps/settings/SettingAboutActivity.cc:81
+#: apps/settings/SettingAboutActivity.cc:91
+msgid "User"
+msgstr "用户"
+
+#: apps/settings/SettingScreenActivity.cc:93 apps/RuntimeConfService.cc:245
+msgid "Unknown"
+msgstr "未知"
+
+#: apps/settings/SettingWifiActivity.cc:91
+#: apps/settings/SettingWifiActivity.cc:115
+#: apps/settings/SettingWifiActivity.cc:164
+#: apps/settings/SettingScreenActivity.cc:51
+#: apps/settings/SettingScreenActivity.cc:105
+#: apps/settings/SettingWifiActivity.cc:103
+#: apps/settings/SettingWifiActivity.cc:125
+#: apps/settings/SettingWifiActivity.cc:174
+msgid "Not set"
+msgstr "未设置"
+
+#: apps/SysConfService.hh:71 apps/settings/SettingAboutActivity.cc:77
+#: apps/settings/SettingAboutActivity.cc:82
+#: apps/settings/SettingAboutActivity.cc:92
+msgid "(Not Paired)"
+msgstr "(未配对)"
+
+#: apps/settings/SettingWifiPasswordActivity.cc:85
+msgid "Tap WiFi logo to input password"
+msgstr "点按WiFi图标输入密码"
+
+#: apps/manual-upload-cloud/MUCActivity.cc:79
+#: apps/manual-upload-cloud/MUCActivity.cc:80
+msgid "in 2 hours"
+msgstr "两小时内"
+
+#: apps/manual-upload-cloud/MUCActivity.cc:80
+#: apps/manual-upload-cloud/MUCActivity.cc:81
+msgid "in 4 hours"
+msgstr "四小时内"
+
+#: apps/manual-upload-cloud/MUCActivity.cc:81
+#: apps/manual-upload-cloud/MUCActivity.cc:82
+msgid "in 8 hours"
+msgstr "八小时内"
+
+#: apps/settings/SettingMainActivity.cc:241
+#: apps/settings/SettingMainActivity.cc:258
+#: apps/settings/SettingMainActivity.cc:261
+msgid "Failed to enable LTE."
+msgstr "开启 LTE 失败。"
+
+#: apps/settings/SettingMainActivity.cc:245
+#: apps/settings/SettingMainActivity.cc:262
+#: apps/settings/SettingMainActivity.cc:265
+msgid "Failed to disable LTE."
+msgstr "关闭 LTE 失败。"
+
+#: apps/settings/SettingWifiActivity.cc:87
+#: apps/settings/SettingWifiActivity.cc:118
+#: apps/settings/SettingWifiActivity.cc:120
+#: apps/settings/SettingWifiActivity.cc:128
+msgid "Failed to enable WiFi."
+msgstr "开启 WiFi 失败。"
+
+#: apps/settings/SettingWifiActivity.cc:91
+#: apps/settings/SettingWifiActivity.cc:121
+#: apps/settings/SettingWifiActivity.cc:123
+#: apps/settings/SettingWifiActivity.cc:131
+msgid "Failed to disable WiFi."
+msgstr "关闭 WiFi 失败。"
+
+#: apps/settings/SettingScreenActivity.cc:54
+#: apps/settings/SettingScreenActivity.cc:108
+msgid "Has set"
+msgstr "已设置"
+
+#: apps/settings/SettingWifiListActivity.cc:286
+msgid "Failed to scan WiFi hotspots, please try again."
+msgstr "扫描 WiFi 热点失败，请重试。"
+
+#: apps/settings/SettingWifiActivity.cc:90
+#: apps/settings/SettingMainActivity.cc:81
+#: apps/settings/SettingWifiActivity.cc:92
+#: apps/settings/SettingWifiActivity.cc:89
+#: apps/settings/SettingWifiActivity.cc:97
+msgid "Connecting…"
+msgstr "连接中…"
+
+#: apps/settings/SettingWifiActivity.cc:94
+#: apps/settings/SettingMainActivity.cc:87
+#: apps/settings/SettingWifiActivity.cc:96
+#: apps/settings/SettingWifiActivity.cc:101
+msgid "Not connected"
+msgstr "未连接"
+
+#: apps/auto-upload-cloud/AUCActivity.cc:429
+#: apps/manual-upload-cloud/MUCActivity.cc:750
+#: apps/auto-upload-cloud/AUCActivity.cc:430
+#: apps/remote-control-wlan/RmtCtlWLANActivity.cc:421
+#: apps/remote-control-cloud/RmtCtlCloudActivity.cc:420
+#: apps/manual-upload-cloud/MUCActivity.cc:752
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:451
+#: apps/live-push-cloud/LivePushCloudActivity.cc:421
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:513
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:530
+msgid "Please Confirm"
+msgstr "请确认"
+
+#: apps/auto-upload-cloud/AUCActivity.cc:429
+#: apps/manual-upload-cloud/MUCActivity.cc:750
+#: apps/auto-upload-cloud/AUCActivity.cc:430
+#: apps/remote-control-wlan/RmtCtlWLANActivity.cc:421
+#: apps/remote-control-cloud/RmtCtlCloudActivity.cc:420
+#: apps/manual-upload-cloud/MUCActivity.cc:752
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:451
+#: apps/live-push-cloud/LivePushCloudActivity.cc:421
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:513
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:530
+msgid "Exit the current work mode?"
+msgstr "退出当前工作模式？"
+
+#: apps/remote-control-wlan/RmtCtlWLANActivity.cc:260
+#: apps/remote-control-cloud/RmtCtlCloudActivity.cc:260
+#: apps/live-push-cloud/LivePushCloudActivity.cc:260
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:290
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:293
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:302
+msgid "N/A"
+msgstr "未知"
+
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:124
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:127
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:72
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:136
+msgid "Starting Hotspot…"
+msgstr "正在启动WiFi热点…"
+
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:130
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:133
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:77
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:142
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:533
+msgid "Please wait a moment."
+msgstr "请稍候。"
+
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:136
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:139
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:148
+msgid "Regenerate Password"
+msgstr "重新生成密码"
+
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:438
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:500
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:517
+msgid "Remote Control via Hotspot"
+msgstr "通过热点遥控"
+
+#: apps/settings/SettingMainActivity.cc:91
+#: apps/settings/SettingMainActivity.cc:312
+msgid "Function"
+msgstr "功能"
+
+#: apps/settings/SettingFunctionActivity.cc:33
+msgid ""
+"Write GPS location to the photo files (only JPEG) before uploading them to "
+"the cloud."
+msgstr "在上传照片到云端之前，将 GPS 位置信息写入照片文件（仅 JPEG）。"
+
+#: apps/settings/SettingFunctionActivity.cc:34
+msgid "Push Raw Files"
+msgstr "推送Raw文件"
+
+#: apps/settings/SettingFunctionActivity.cc:35
+msgid "Push the raw files to your app when working in shot-and-push mode."
+msgstr "在即拍推送工作模式下，推送Raw格式文件到App客户端。"
+
+#: apps/settings/SettingFunctionActivity.cc:112
+#: apps/settings/SettingFunctionActivity.cc:162
+msgid "Function Settings"
+msgstr "功能设置"
+
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:399
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:412
+#, c-format
+msgid "WiFi: %s"
+msgstr "热点：%s"
+
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:405
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:418
+#, c-format
+msgid "Password: %s"
+msgstr "密码：%s"
+
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:412
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:425
+msgid "Failed to create WiFi hotspot!"
+msgstr "创建 WiFi 热点失败！"
+
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:417
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:430
+msgid "Please try again."
+msgstr "请重试。"
+
+#: apps/remote-control-hotspot/RmtCtlHotspotActivity.cc:533
+msgid "Stopping WiFi hotspot…"
+msgstr "正在停止 WiFi 热点…"
+
+#: apps/settings/SettingTimeZoneActivity.cc:40
+msgid "GMT -12 IDL West"
+msgstr "GMT-12国际日期变更线以西"
+
+#: apps/settings/SettingTimeZoneActivity.cc:42
+msgid "GMT -11 Samoa"
+msgstr "GMT-11萨摩亚"
+
+#: apps/settings/SettingTimeZoneActivity.cc:44
+msgid "GMT -11 Mid. Isl."
+msgstr "GMT-11中途岛"
+
+#: apps/settings/SettingTimeZoneActivity.cc:46
+msgid "GMT -10 Honolulu"
+msgstr "GMT-10檀香山"
+
+#: apps/settings/SettingTimeZoneActivity.cc:48
+msgid "GMT -9:30 Ma. Isl."
+msgstr "GMT-9:30马克萨斯群岛"
+
+#: apps/settings/SettingTimeZoneActivity.cc:50
+msgid "GMT -9 Alaska"
+msgstr "GMT-9阿拉斯加"
+
+#: apps/settings/SettingTimeZoneActivity.cc:52
+msgid "GMT -9 Anchorage"
+msgstr "GMT-9安克雷奇"
+
+#: apps/settings/SettingTimeZoneActivity.cc:54
+msgid "GMT -8 San Francisco"
+msgstr "GMT-8旧金山"
+
+#: apps/settings/SettingTimeZoneActivity.cc:56
+msgid "GMT -8 Seattle"
+msgstr "GMT-8西雅图"
+
+#: apps/settings/SettingTimeZoneActivity.cc:58
+msgid "GMT -8 Vancouver"
+msgstr "GMT-8温哥华"
+
+#: apps/settings/SettingTimeZoneActivity.cc:60
+msgid "GMT -7 Phoenix"
+msgstr "GMT-7菲尼克斯"
+
+#: apps/settings/SettingTimeZoneActivity.cc:62
+msgid "GMT -6 Chicago"
+msgstr "GMT-6芝加哥"
+
+#: apps/settings/SettingTimeZoneActivity.cc:64
+msgid "GMT -6 Mexico City"
+msgstr "GMT-6墨西哥城"
+
+#: apps/settings/SettingTimeZoneActivity.cc:66
+msgid "GMT -5 New York"
+msgstr "GMT-5纽约"
+
+#: apps/settings/SettingTimeZoneActivity.cc:68
+msgid "GMT -5 Toronto"
+msgstr "GMT-5多伦多"
+
+#: apps/settings/SettingTimeZoneActivity.cc:70
+msgid "GMT -5 Washington D.C."
+msgstr "GMT-5华盛顿特区"
+
+#: apps/settings/SettingTimeZoneActivity.cc:72
+msgid "GMT -4:30 Caracas"
+msgstr "GMT-4:30加拉加斯"
+
+#: apps/settings/SettingTimeZoneActivity.cc:74
+msgid "GMT -4 La Paz"
+msgstr "GMT-4拉巴斯"
+
+#: apps/settings/SettingTimeZoneActivity.cc:76
+msgid "GMT -4 Santiago"
+msgstr "GMT-4圣地亚哥"
+
+#: apps/settings/SettingTimeZoneActivity.cc:78
+msgid "GMT -3:30 Saint John's"
+msgstr "GMT-3:30圣约翰"
+
+#: apps/settings/SettingTimeZoneActivity.cc:80
+msgid "GMT -3 Brasilia"
+msgstr "GMT-3巴西利亚"
+
+#: apps/settings/SettingTimeZoneActivity.cc:82
+msgid "GMT -3 Bs. As. City"
+msgstr "GMT-3布宜诺斯艾利斯"
+
+#: apps/settings/SettingTimeZoneActivity.cc:84
+msgid "GMT -2 Mid-Atlantic"
+msgstr "GMT-2中大西洋"
+
+#: apps/settings/SettingTimeZoneActivity.cc:86
+msgid "GMT -1 Azores"
+msgstr "GMT-1亚速尔群岛"
+
+#: apps/settings/SettingTimeZoneActivity.cc:88
+msgid "GMT -1 Cape Verde"
+msgstr "GMT-1佛得角群岛"
+
+#: apps/settings/SettingTimeZoneActivity.cc:90
+msgid "GMT London"
+msgstr "GMT伦敦"
+
+#: apps/settings/SettingTimeZoneActivity.cc:92
+msgid "GMT Casablanca"
+msgstr "GMT卡萨布兰卡"
+
+#: apps/settings/SettingTimeZoneActivity.cc:94
+msgid "GMT +1 Berlin"
+msgstr "GMT+1柏林"
+
+#: apps/settings/SettingTimeZoneActivity.cc:96
+msgid "GMT +1 Lagos"
+msgstr "GMT+1拉各斯"
+
+#: apps/settings/SettingTimeZoneActivity.cc:98
+msgid "GMT +1 Paris"
+msgstr "GMT+1巴黎"
+
+#: apps/settings/SettingTimeZoneActivity.cc:100
+msgid "GMT +1 Rome"
+msgstr "GMT+1罗马"
+
+#: apps/settings/SettingTimeZoneActivity.cc:102
+msgid "GMT +1 Warsaw"
+msgstr "GMT+1华沙"
+
+#: apps/settings/SettingTimeZoneActivity.cc:104
+msgid "GMT +2 Athens"
+msgstr "GMT+2雅典"
+
+#: apps/settings/SettingTimeZoneActivity.cc:106
+msgid "GMT +2 Cairo"
+msgstr "GMT+2开罗"
+
+#: apps/settings/SettingTimeZoneActivity.cc:108
+msgid "GMT +2 Helsinki"
+msgstr "GMT+2赫尔辛基"
+
+#: apps/settings/SettingTimeZoneActivity.cc:110
+msgid "GMT +2 Istanbul"
+msgstr "GMT+2伊斯坦布尔"
+
+#: apps/settings/SettingTimeZoneActivity.cc:112
+msgid "GMT +2 Jerusalem"
+msgstr "GMT+2耶路撒冷"
+
+#: apps/settings/SettingTimeZoneActivity.cc:114
+msgid "GMT +2 Pretoria"
+msgstr "GMT+2比陀"
+
+#: apps/settings/SettingTimeZoneActivity.cc:116
+msgid "GMT +3 Baghdad"
+msgstr "GMT+3巴格达"
+
+#: apps/settings/SettingTimeZoneActivity.cc:118
+msgid "GMT +3 Kuwait"
+msgstr "GMT+3科威特"
+
+#: apps/settings/SettingTimeZoneActivity.cc:120
+msgid "GMT +3 Moscow"
+msgstr "GMT+3莫斯科"
+
+#: apps/settings/SettingTimeZoneActivity.cc:122
+msgid "GMT +3 Nairobi"
+msgstr "GMT+3内罗毕"
+
+#: apps/settings/SettingTimeZoneActivity.cc:124
+msgid "GMT +3:30 Tehran"
+msgstr "GMT+3:30德黑兰"
+
+#: apps/settings/SettingTimeZoneActivity.cc:126
+msgid "GMT +4 Dubai"
+msgstr "GMT+4迪拜"
+
+#: apps/settings/SettingTimeZoneActivity.cc:129
+msgid "GMT +4 Muscat"
+msgstr "GMT+4马斯喀特"
+
+#: apps/settings/SettingTimeZoneActivity.cc:131
+msgid "GMT +4:30 Kabul"
+msgstr "GMT+4:30喀布尔"
+
+#: apps/settings/SettingTimeZoneActivity.cc:133
+msgid "GMT +4:30 Tashkent"
+msgstr "GMT+4:30塔什干"
+
+#: apps/settings/SettingTimeZoneActivity.cc:135
+msgid "GMT +5 Ekaterinburg"
+msgstr "GMT+5叶卡特琳堡"
+
+#: apps/settings/SettingTimeZoneActivity.cc:137
+msgid "GMT +5 Islamabad"
+msgstr "GMT+5伊斯兰堡"
+
+#: apps/settings/SettingTimeZoneActivity.cc:139
+msgid "GMT +5:30 Kolkata"
+msgstr "GMT+5:30加尔各答"
+
+#: apps/settings/SettingTimeZoneActivity.cc:141
+msgid "GMT +5:30 Mumbai"
+msgstr "GMT+5:30孟买"
+
+#: apps/settings/SettingTimeZoneActivity.cc:143
+msgid "GMT +6 Almaty"
+msgstr "GMT+6阿尔马蒂"
+
+#: apps/settings/SettingTimeZoneActivity.cc:145
+msgid "GMT +6 Dhaka"
+msgstr "GMT+6达卡"
+
+#: apps/settings/SettingTimeZoneActivity.cc:148
+msgid "GMT +6 Novosibirsk"
+msgstr "GMT+6新西伯利亚"
+
+#: apps/settings/SettingTimeZoneActivity.cc:150
+msgid "GMT +6:30 Yangon"
+msgstr "GMT+6:30仰光"
+
+#: apps/settings/SettingTimeZoneActivity.cc:152
+msgid "GMT +7 Bangkok"
+msgstr "GMT+7曼谷"
+
+#: apps/settings/SettingTimeZoneActivity.cc:154
+msgid "GMT +7 Hanoi"
+msgstr "GMT+7河内"
+
+#: apps/settings/SettingTimeZoneActivity.cc:156
+msgid "GMT +7 Jakarta"
+msgstr "GMT+7雅加达"
+
+#: apps/settings/SettingTimeZoneActivity.cc:158
+msgid "GMT +8 Beijing"
+msgstr "GMT+8北京"
+
+#: apps/settings/SettingTimeZoneActivity.cc:160
+msgid "GMT +8 Hong Kong"
+msgstr "GMT+8香港"
+
+#: apps/settings/SettingTimeZoneActivity.cc:162
+msgid "GMT +9 Seoul"
+msgstr "GMT+9首尔"
+
+#: apps/settings/SettingTimeZoneActivity.cc:164
+msgid "GMT +9 Tokyo"
+msgstr "GMT+9东京"
+
+#: apps/settings/SettingTimeZoneActivity.cc:166
+msgid "GMT +9:30 Adelaide"
+msgstr "GMT+9:30阿德莱德"
+
+#: apps/settings/SettingTimeZoneActivity.cc:168
+msgid "GMT +9:30 Darwin"
+msgstr "GMT+9:30达尔文"
+
+#: apps/settings/SettingTimeZoneActivity.cc:170
+msgid "GMT +10 Brisbane"
+msgstr "GMT+10布里斯班"
+
+#: apps/settings/SettingTimeZoneActivity.cc:172
+msgid "GMT +10 Canberra"
+msgstr "GMT+10堪培拉"
+
+#: apps/settings/SettingTimeZoneActivity.cc:174
+msgid "GMT +10:30 LDH"
+msgstr "GMT+10:30豪勋爵岛"
+
+#: apps/settings/SettingTimeZoneActivity.cc:176
+msgid "GMT +11:30 Norfolk Is."
+msgstr "GMT+11:30诺福克岛"
+
+#: apps/settings/SettingTimeZoneActivity.cc:178
+msgid "GMT +12 Anadyr"
+msgstr "GMT+12阿纳德尔"
+
+#: apps/settings/SettingTimeZoneActivity.cc:180
+msgid "GMT +12 Auckland"
+msgstr "GMT+12奥克兰"
+
+#: apps/settings/SettingTimeZoneActivity.cc:182
+msgid "GMT +12 Fiji"
+msgstr "GMT+12斐济"
+
+#: apps/settings/SettingTimeZoneActivity.cc:184
+msgid "GMT +12 Magadan"
+msgstr "GMT+12马加丹"
+

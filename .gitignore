@@ -1,5 +1,6 @@
 # Prerequisites
 *.d
+*.swp
 
 # Object files
 *.o
@@ -50,3 +51,7 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Executables
+device-side/hfcl/src/css/test-cssselector
+
