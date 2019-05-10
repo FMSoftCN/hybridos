@@ -8,18 +8,18 @@ traditional operating system for a stand-alone hardware environment.
 
 HybridOS not only runs on smart IoT devices to support application development
 on devices, but also provides programming interfaces for the cloud and the clients.
-It tries to give the developers a new complete software stack and protocol stack 
+It tries to give the developers a new complete software stack and protocol stack
 from devices to the cloud and the clients.
 
 ## Table of Contents
 
-[Why We Design a New OS for IoT?](#why-we-design-a-new-os-for-iot) 
-[Technical Terminologies](#technical-terminologies) 
-[Goals of HybridOS](#goals-of-hybridos) 
-[Design Documents and Specifications](#design-documents-and-specifications) 
-[Source Tree](#source-tree) 
-[Current Status](#current-status) 
-[Copying](#copying) 
+[Why We Design a New OS for IoT?](#why-we-design-a-new-os-for-iot)  
+[Technical Terminologies](#technical-terminologies)  
+[Goals of HybridOS](#goals-of-hybridos)  
+[Design Documents and Specifications](#design-documents-and-specifications)  
+[Source Tree](#source-tree)  
+[Current Status](#current-status)  
+[Copying](#copying)  
 
 ## Why We Design a New OS for IoT?
 
