@@ -42,10 +42,10 @@ typedef int   (*CB_ON_NEW_CHAR)(void* context, const char* text);
 class View;
 class ViewContainer;
 
-class HvmlParser {
+class HVMLParser {
 public:
-    HvmlParser(size_t stackSize, const char* encoding = "UTF-8");
-    ~HvmlParser();
+    HVMLParser(size_t stackSize, const char* encoding = "UTF-8");
+    ~HVMLParser();
 
     bool reset(size_t stackSize, const char* encoding = "UTF-8");
     size_t parse(View* parent, const char* content, size_t len,

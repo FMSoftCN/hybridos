@@ -20,7 +20,7 @@
 */
 
 /*
-** htmlparaparser.cc: The implementation of HvmlParser class.
+** htmlparaparser.cc: The implementation of HVMLParser class.
 **
 ** Create by WEI Yongming at 2019/04/26
 */
@@ -39,7 +39,7 @@
 
 namespace hfcl {
 
-HvmlParser::HvmlParser(size_t stackSize, const char* encoding)
+HVMLParser::HVMLParser(size_t stackSize, const char* encoding)
 {
     INIT_LIST_HEAD(&m_stack_oe);
 
@@ -55,7 +55,7 @@ HvmlParser::HvmlParser(size_t stackSize, const char* encoding)
     memset(&m_ctxt_tokenizer, 0, sizeof(TokenizerContext));
 }
 
-HvmlParser::~HvmlParser()
+HVMLParser::~HVMLParser()
 {
     reset_stack_oe(0);
     reset_stack_tim(0);
@@ -63,7 +63,7 @@ HvmlParser::~HvmlParser()
     reset_tokenizer(NULL);
 }
 
-void HvmlParser::reset_stack_oe(int stackSize)
+void HVMLParser::reset_stack_oe(int stackSize)
 {
     while (!list_empty(&m_stack_oe)) {
         OpenElementNode* oes = (OpenElementNode*)m_stack_oe.next;
@@ -74,7 +74,7 @@ void HvmlParser::reset_stack_oe(int stackSize)
     INIT_LIST_HEAD(&m_stack_oe);
 }
 
-void HvmlParser::reset_stack_tim(int stackSize)
+void HVMLParser::reset_stack_tim(int stackSize)
 {
     delete [] m_stack_tim;
 
@@ -89,7 +89,7 @@ void HvmlParser::reset_stack_tim(int stackSize)
     }
 }
 
-void HvmlParser::reset_list_afe()
+void HVMLParser::reset_list_afe()
 {
     while (!list_empty(&m_list_afe)) {
         ActiveFormattingEle* afe = (ActiveFormattingEle*)m_list_afe.next;
@@ -100,7 +100,7 @@ void HvmlParser::reset_list_afe()
     INIT_LIST_HEAD(&m_list_afe);
 }
 
-bool HvmlParser::reset_tokenizer(const char* encoding)
+bool HVMLParser::reset_tokenizer(const char* encoding)
 {
     if (m_ctxt_tokenizer.dt) {
         delete m_ctxt_tokenizer.dt;
@@ -123,7 +123,7 @@ bool HvmlParser::reset_tokenizer(const char* encoding)
     return true;
 }
 
-bool HvmlParser::reset(size_t stackSize, const char* encoding)
+bool HVMLParser::reset(size_t stackSize, const char* encoding)
 {
     reset_stack_oe(stackSize);
     reset_stack_tim(stackSize);
@@ -135,7 +135,7 @@ bool HvmlParser::reset(size_t stackSize, const char* encoding)
     return reset_tokenizer(encoding);
 }
 
-void HvmlParser::push_new_afe(const View* view, bool isMarker)
+void HVMLParser::push_new_afe(const View* view, bool isMarker)
 {
     list_t* pos;
     int nr_elements;
@@ -181,7 +181,7 @@ void HvmlParser::push_new_afe(const View* view, bool isMarker)
     list_add_tail(&afe->list, &m_list_afe);
 }
 
-void HvmlParser::rebuild_afe_list()
+void HVMLParser::rebuild_afe_list()
 {
     if (list_empty(&m_list_afe))
         return;
@@ -211,7 +211,7 @@ rewind:
     }
 }
 
-void HvmlParser::clear_up_to_last_marker()
+void HVMLParser::clear_up_to_last_marker()
 {
     while (!list_empty(&m_list_afe)) {
         bool is_marker;
@@ -226,7 +226,7 @@ void HvmlParser::clear_up_to_last_marker()
     }
 }
 
-bool HvmlParser::isValidHvmlCharacter(Uchar32 uc)
+bool HVMLParser::isValidHvmlCharacter(Uchar32 uc)
 {
     if (MG_UNLIKELY((uc >= 0x0001 && uc <= 0x0008) || uc == 0x000B ||
             (uc >= 0x000E && uc <= 0x001F) ||
@@ -307,12 +307,12 @@ bool HvmlParser::isValidHvmlCharacter(Uchar32 uc)
 #define UCHAR_REPLACEMENT               0xFFFD
 #define UCHAR_EOF                       0xFFFFFFFF
 
-void HvmlParser::on_parse_error()
+void HVMLParser::on_parse_error()
 {
     m_ctxt_tokenizer.errors++;
 }
 
-void HvmlParser::on_data_state()
+void HVMLParser::on_data_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -342,7 +342,7 @@ void HvmlParser::on_data_state()
     }
 }
 
-void HvmlParser::on_rcdata_state()
+void HVMLParser::on_rcdata_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -372,7 +372,7 @@ void HvmlParser::on_rcdata_state()
     }
 }
 
-void HvmlParser::on_rawtext_state()
+void HVMLParser::on_rawtext_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -397,7 +397,7 @@ void HvmlParser::on_rawtext_state()
     }
 }
 
-void HvmlParser::on_script_data_state()
+void HVMLParser::on_script_data_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -422,7 +422,7 @@ void HvmlParser::on_script_data_state()
     }
 }
 
-void HvmlParser::on_plaintext_state()
+void HVMLParser::on_plaintext_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -443,7 +443,7 @@ void HvmlParser::on_plaintext_state()
     }
 }
 
-void HvmlParser::on_tag_open_state()
+void HVMLParser::on_tag_open_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -483,7 +483,7 @@ void HvmlParser::on_tag_open_state()
     }
 }
 
-void HvmlParser::on_end_tag_open_state()
+void HVMLParser::on_end_tag_open_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -519,7 +519,7 @@ void HvmlParser::on_end_tag_open_state()
     }
 }
 
-void HvmlParser::on_tag_name_state()
+void HVMLParser::on_tag_name_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -562,7 +562,7 @@ void HvmlParser::on_tag_name_state()
     }
 }
 
-void HvmlParser::on_rcdata_less_than_sign_state()
+void HVMLParser::on_rcdata_less_than_sign_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -582,7 +582,7 @@ void HvmlParser::on_rcdata_less_than_sign_state()
     }
 }
 
-void HvmlParser::on_rcdata_end_tag_open_state()
+void HVMLParser::on_rcdata_end_tag_open_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -606,7 +606,7 @@ void HvmlParser::on_rcdata_end_tag_open_state()
     }
 }
 
-void HvmlParser::on_rcdata_end_tag_name_state()
+void HVMLParser::on_rcdata_end_tag_name_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -665,7 +665,7 @@ anythingelse:
     }
 }
 
-void HvmlParser::on_rawtext_less_than_sign_state()
+void HVMLParser::on_rawtext_less_than_sign_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -684,7 +684,7 @@ void HvmlParser::on_rawtext_less_than_sign_state()
     }
 }
 
-void HvmlParser::on_rawtext_end_tag_open_state()
+void HVMLParser::on_rawtext_end_tag_open_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -706,7 +706,7 @@ void HvmlParser::on_rawtext_end_tag_open_state()
     }
 }
 
-void HvmlParser::on_rawtext_end_tag_name_state()
+void HVMLParser::on_rawtext_end_tag_name_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -765,7 +765,7 @@ anythingelse:
     }
 }
 
-void HvmlParser::on_script_data_less_than_sign_state()
+void HVMLParser::on_script_data_less_than_sign_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -790,7 +790,7 @@ void HvmlParser::on_script_data_less_than_sign_state()
     }
 }
 
-void HvmlParser::on_script_data_end_tag_open_state()
+void HVMLParser::on_script_data_end_tag_open_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -812,7 +812,7 @@ void HvmlParser::on_script_data_end_tag_open_state()
     }
 }
 
-void HvmlParser::on_script_data_end_tag_name_state()
+void HVMLParser::on_script_data_end_tag_name_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -870,7 +870,7 @@ anythingelse:
     }
 }
 
-void HvmlParser::on_script_data_escape_start_state()
+void HVMLParser::on_script_data_escape_start_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -888,7 +888,7 @@ void HvmlParser::on_script_data_escape_start_state()
     }
 }
 
-void HvmlParser::on_script_data_escape_start_dash_state()
+void HVMLParser::on_script_data_escape_start_dash_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -906,7 +906,7 @@ void HvmlParser::on_script_data_escape_start_dash_state()
     }
 }
 
-void HvmlParser::on_script_data_escaped_state()
+void HVMLParser::on_script_data_escaped_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -937,7 +937,7 @@ void HvmlParser::on_script_data_escaped_state()
     }
 }
 
-void HvmlParser::on_script_data_escaped_dash_state()
+void HVMLParser::on_script_data_escaped_dash_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -970,7 +970,7 @@ void HvmlParser::on_script_data_escaped_dash_state()
     }
 }
 
-void HvmlParser::on_script_data_escaped_dash_dash_state()
+void HVMLParser::on_script_data_escaped_dash_dash_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1007,7 +1007,7 @@ void HvmlParser::on_script_data_escaped_dash_dash_state()
     }
 }
 
-void HvmlParser::on_script_data_escaped_less_than_sign_state()
+void HVMLParser::on_script_data_escaped_less_than_sign_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1034,7 +1034,7 @@ void HvmlParser::on_script_data_escaped_less_than_sign_state()
     }
 }
 
-void HvmlParser::on_script_data_escaped_end_tag_open_state()
+void HVMLParser::on_script_data_escaped_end_tag_open_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1056,7 +1056,7 @@ void HvmlParser::on_script_data_escaped_end_tag_open_state()
     }
 }
 
-void HvmlParser::on_script_data_escaped_end_tag_name_state()
+void HVMLParser::on_script_data_escaped_end_tag_name_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1114,7 +1114,7 @@ anythingelse:
     }
 }
 
-void HvmlParser::on_script_data_double_escape_start_state()
+void HVMLParser::on_script_data_double_escape_start_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1152,7 +1152,7 @@ void HvmlParser::on_script_data_double_escape_start_state()
     }
 }
 
-void HvmlParser::on_script_data_double_escaped_state()
+void HVMLParser::on_script_data_double_escaped_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1184,7 +1184,7 @@ void HvmlParser::on_script_data_double_escaped_state()
     }
 }
 
-void HvmlParser::on_script_data_double_escaped_dash_state()
+void HVMLParser::on_script_data_double_escaped_dash_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1218,7 +1218,7 @@ void HvmlParser::on_script_data_double_escaped_dash_state()
     }
 }
 
-void HvmlParser::on_script_data_double_escaped_dash_dash_state()
+void HVMLParser::on_script_data_double_escaped_dash_dash_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1256,7 +1256,7 @@ void HvmlParser::on_script_data_double_escaped_dash_dash_state()
     }
 }
 
-void HvmlParser::on_script_data_double_escaped_less_than_sign_state()
+void HVMLParser::on_script_data_double_escaped_less_than_sign_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1275,7 +1275,7 @@ void HvmlParser::on_script_data_double_escaped_less_than_sign_state()
     }
 }
 
-void HvmlParser::on_script_data_double_escape_end_state()
+void HVMLParser::on_script_data_double_escape_end_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1313,7 +1313,7 @@ void HvmlParser::on_script_data_double_escape_end_state()
     }
 }
 
-void HvmlParser::on_before_attribute_name_state()
+void HVMLParser::on_before_attribute_name_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1346,7 +1346,7 @@ void HvmlParser::on_before_attribute_name_state()
     }
 }
 
-void HvmlParser::on_attribute_name_state()
+void HVMLParser::on_attribute_name_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1387,7 +1387,7 @@ void HvmlParser::on_attribute_name_state()
     }
 }
 
-void HvmlParser::on_after_attribute_name_state()
+void HVMLParser::on_after_attribute_name_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1425,7 +1425,7 @@ void HvmlParser::on_after_attribute_name_state()
     }
 }
 
-void HvmlParser::on_before_attribute_value_state()
+void HVMLParser::on_before_attribute_value_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1455,7 +1455,7 @@ void HvmlParser::on_before_attribute_value_state()
     }
 }
 
-void HvmlParser::on_attribute_value_double_quoted_state()
+void HVMLParser::on_attribute_value_double_quoted_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1486,7 +1486,7 @@ void HvmlParser::on_attribute_value_double_quoted_state()
     }
 }
 
-void HvmlParser::on_attribute_value_single_quoted_state()
+void HVMLParser::on_attribute_value_single_quoted_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1517,7 +1517,7 @@ void HvmlParser::on_attribute_value_single_quoted_state()
     }
 }
 
-void HvmlParser::on_attribute_value_unquoted_state()
+void HVMLParser::on_attribute_value_unquoted_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1563,7 +1563,7 @@ void HvmlParser::on_attribute_value_unquoted_state()
     }
 }
 
-void HvmlParser::on_after_attribute_value_quoted_state()
+void HVMLParser::on_after_attribute_value_quoted_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1598,7 +1598,7 @@ void HvmlParser::on_after_attribute_value_quoted_state()
     }
 }
 
-void HvmlParser::on_self_closing_start_tag_state()
+void HVMLParser::on_self_closing_start_tag_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1623,7 +1623,7 @@ void HvmlParser::on_self_closing_start_tag_state()
     }
 }
 
-void HvmlParser::on_bogus_comment_state()
+void HVMLParser::on_bogus_comment_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1649,7 +1649,7 @@ void HvmlParser::on_bogus_comment_state()
     }
 }
 
-bool HvmlParser::does_characters_match_word(const char* word, int* consumed,
+bool HVMLParser::does_characters_match_word(const char* word, int* consumed,
             bool case_insensitive)
 {
     size_t word_len = strlen(word);
@@ -1712,7 +1712,7 @@ bool HvmlParser::does_characters_match_word(const char* word, int* consumed,
     return true;
 }
 
-void HvmlParser::on_markup_declaration_open_state()
+void HVMLParser::on_markup_declaration_open_state()
 {
     int consumed;
 
@@ -1737,7 +1737,7 @@ void HvmlParser::on_markup_declaration_open_state()
     }
 }
 
-void HvmlParser::on_comment_start_state()
+void HVMLParser::on_comment_start_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1760,7 +1760,7 @@ void HvmlParser::on_comment_start_state()
     }
 }
 
-void HvmlParser::on_comment_start_dash_state()
+void HVMLParser::on_comment_start_dash_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1790,7 +1790,7 @@ void HvmlParser::on_comment_start_dash_state()
     }
 }
 
-void HvmlParser::on_comment_state()
+void HVMLParser::on_comment_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1824,7 +1824,7 @@ void HvmlParser::on_comment_state()
     }
 }
 
-void HvmlParser::on_comment_less_than_sign_state()
+void HVMLParser::on_comment_less_than_sign_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1846,7 +1846,7 @@ void HvmlParser::on_comment_less_than_sign_state()
     }
 }
 
-void HvmlParser::on_comment_less_than_sign_bang_state()
+void HVMLParser::on_comment_less_than_sign_bang_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1863,7 +1863,7 @@ void HvmlParser::on_comment_less_than_sign_bang_state()
     }
 }
 
-void HvmlParser::on_comment_less_than_sign_bang_dash_state()
+void HVMLParser::on_comment_less_than_sign_bang_dash_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1880,7 +1880,7 @@ void HvmlParser::on_comment_less_than_sign_bang_dash_state()
     }
 }
 
-void HvmlParser::on_comment_less_than_sign_bang_dash_dash_state()
+void HVMLParser::on_comment_less_than_sign_bang_dash_dash_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1900,7 +1900,7 @@ void HvmlParser::on_comment_less_than_sign_bang_dash_dash_state()
     }
 }
 
-void HvmlParser::on_comment_end_dash_state()
+void HVMLParser::on_comment_end_dash_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1924,7 +1924,7 @@ void HvmlParser::on_comment_end_dash_state()
     }
 }
 
-void HvmlParser::on_comment_end_state()
+void HVMLParser::on_comment_end_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1957,7 +1957,7 @@ void HvmlParser::on_comment_end_state()
     }
 }
 
-void HvmlParser::on_comment_end_bang_state()
+void HVMLParser::on_comment_end_bang_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -1994,7 +1994,7 @@ void HvmlParser::on_comment_end_bang_state()
     }
 }
 
-void HvmlParser::on_doctype_state()
+void HVMLParser::on_doctype_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2023,7 +2023,7 @@ void HvmlParser::on_doctype_state()
     }
 }
 
-void HvmlParser::on_before_doctype_name_state()
+void HVMLParser::on_before_doctype_name_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2071,7 +2071,7 @@ void HvmlParser::on_before_doctype_name_state()
     }
 }
 
-void HvmlParser::on_doctype_name_state()
+void HVMLParser::on_doctype_name_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2112,7 +2112,7 @@ void HvmlParser::on_doctype_name_state()
     }
 }
 
-void HvmlParser::on_after_doctype_name_state()
+void HVMLParser::on_after_doctype_name_state()
 {
     int consumed;
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
@@ -2155,7 +2155,7 @@ void HvmlParser::on_after_doctype_name_state()
     }
 }
 
-void HvmlParser::on_after_doctype_public_keyword_state()
+void HVMLParser::on_after_doctype_public_keyword_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2202,7 +2202,7 @@ void HvmlParser::on_after_doctype_public_keyword_state()
     }
 }
 
-void HvmlParser::on_before_doctype_public_identifier_state()
+void HVMLParser::on_before_doctype_public_identifier_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2246,7 +2246,7 @@ void HvmlParser::on_before_doctype_public_identifier_state()
     }
 }
 
-void HvmlParser::on_doctype_public_identifier_double_quoted_state()
+void HVMLParser::on_doctype_public_identifier_double_quoted_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2281,7 +2281,7 @@ void HvmlParser::on_doctype_public_identifier_double_quoted_state()
     }
 }
 
-void HvmlParser::on_doctype_public_identifier_single_quoted_state()
+void HVMLParser::on_doctype_public_identifier_single_quoted_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2316,7 +2316,7 @@ void HvmlParser::on_doctype_public_identifier_single_quoted_state()
     }
 }
 
-void HvmlParser::on_after_doctype_public_identifier_state()
+void HVMLParser::on_after_doctype_public_identifier_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2361,7 +2361,7 @@ void HvmlParser::on_after_doctype_public_identifier_state()
     }
 }
 
-void HvmlParser::on_between_doctype_public_system_identifiers_state()
+void HVMLParser::on_between_doctype_public_system_identifiers_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2403,7 +2403,7 @@ void HvmlParser::on_between_doctype_public_system_identifiers_state()
     }
 }
 
-void HvmlParser::on_after_doctype_system_keyword_state()
+void HVMLParser::on_after_doctype_system_keyword_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2450,7 +2450,7 @@ void HvmlParser::on_after_doctype_system_keyword_state()
     }
 }
 
-void HvmlParser::on_before_doctype_system_identifier_state()
+void HVMLParser::on_before_doctype_system_identifier_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2494,7 +2494,7 @@ void HvmlParser::on_before_doctype_system_identifier_state()
     }
 }
 
-void HvmlParser::on_doctype_system_identifier_double_quoted_state()
+void HVMLParser::on_doctype_system_identifier_double_quoted_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2529,7 +2529,7 @@ void HvmlParser::on_doctype_system_identifier_double_quoted_state()
     }
 }
 
-void HvmlParser::on_doctype_system_identifier_single_quoted_state()
+void HVMLParser::on_doctype_system_identifier_single_quoted_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2564,7 +2564,7 @@ void HvmlParser::on_doctype_system_identifier_single_quoted_state()
     }
 }
 
-void HvmlParser::on_after_doctype_system_identifier_state()
+void HVMLParser::on_after_doctype_system_identifier_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2595,7 +2595,7 @@ void HvmlParser::on_after_doctype_system_identifier_state()
     }
 }
 
-void HvmlParser::on_bogus_doctype_state()
+void HVMLParser::on_bogus_doctype_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2616,7 +2616,7 @@ void HvmlParser::on_bogus_doctype_state()
     }
 }
 
-void HvmlParser::on_cdata_section_state()
+void HVMLParser::on_cdata_section_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2637,7 +2637,7 @@ void HvmlParser::on_cdata_section_state()
     }
 }
 
-void HvmlParser::on_cdata_section_bracket_state()
+void HVMLParser::on_cdata_section_bracket_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2655,7 +2655,7 @@ void HvmlParser::on_cdata_section_bracket_state()
     }
 }
 
-void HvmlParser::on_cdata_section_end_state()
+void HVMLParser::on_cdata_section_end_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2678,7 +2678,7 @@ void HvmlParser::on_cdata_section_end_state()
     }
 }
 
-bool HvmlParser::is_in_attribute_value(Uchar32 last_matched, int consumed)
+bool HVMLParser::is_in_attribute_value(Uchar32 last_matched, int consumed)
 {
     if ((m_ctxt_tokenizer.ts_return == TS_ATTRIBUTE_VALUE_DOUBLE_QUOTED ||
             m_ctxt_tokenizer.ts_return == TS_ATTRIBUTE_VALUE_SINGLE_QUOTED ||
@@ -2704,7 +2704,7 @@ bool HvmlParser::is_in_attribute_value(Uchar32 last_matched, int consumed)
     return false;
 }
 
-bool HvmlParser::does_tb_consist_named_character_reference()
+bool HVMLParser::does_tb_consist_named_character_reference()
 {
     const char* tb = m_ctxt_tokenizer.temp_buff.c_str();
     size_t tb_len = strlen(tb);
@@ -2732,7 +2732,7 @@ static int entity_token_cmp(const void *a, const void *b)
             ((struct _HtmlEntity*)b)->token);
 }
 
-const Uchar32* HvmlParser::matchNamedCharacterReference(const char* entity)
+const Uchar32* HVMLParser::matchNamedCharacterReference(const char* entity)
 {
     size_t len = strlen(entity);
 
@@ -2755,7 +2755,7 @@ const Uchar32* HvmlParser::matchNamedCharacterReference(const char* entity)
 #if 0
 #define MAX_ENTITY_NUMERIC_CHAR_LEN     15
 
-size_t HvmlParser::checkCharacterReference(const char* token, size_t len,
+size_t HVMLParser::checkCharacterReference(const char* token, size_t len,
         char* mchar, int* mchar_len)
 {
     size_t token_len = 0;
@@ -2826,7 +2826,7 @@ static int match_entity(const char *token, int start_pos)
     return -1;
 }
 
-const Uchar32* HvmlParser::try_to_match_named_character_reference(
+const Uchar32* HVMLParser::try_to_match_named_character_reference(
             int* consumed, Uchar32* last_matched)
 {
     int start_match_pos = 0;
@@ -2874,7 +2874,7 @@ const Uchar32* HvmlParser::try_to_match_named_character_reference(
     }
 }
 
-void HvmlParser::on_character_reference_state()
+void HVMLParser::on_character_reference_state()
 {
     clear_temporary_buffer();
     append_to_temporary_buffer(UCHAR_AMPERSAND);
@@ -2935,7 +2935,7 @@ void HvmlParser::on_character_reference_state()
     }
 }
 
-void HvmlParser::on_numeric_character_reference_state()
+void HVMLParser::on_numeric_character_reference_state()
 {
     set_character_reference_code(0);
 
@@ -2956,7 +2956,7 @@ void HvmlParser::on_numeric_character_reference_state()
     }
 }
 
-void HvmlParser::on_hexadecimal_character_reference_start_state()
+void HVMLParser::on_hexadecimal_character_reference_start_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2977,7 +2977,7 @@ void HvmlParser::on_hexadecimal_character_reference_start_state()
     }
 }
 
-void HvmlParser::on_decimal_character_reference_start_state()
+void HVMLParser::on_decimal_character_reference_start_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -2996,7 +2996,7 @@ void HvmlParser::on_decimal_character_reference_start_state()
     }
 }
 
-void HvmlParser::on_hexadecimal_character_reference_state()
+void HVMLParser::on_hexadecimal_character_reference_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -3029,7 +3029,7 @@ void HvmlParser::on_hexadecimal_character_reference_state()
     }
 }
 
-void HvmlParser::on_decimal_character_reference_state()
+void HVMLParser::on_decimal_character_reference_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -3113,7 +3113,7 @@ static bool correct_char_ref_code (Uchar32 uc, Uchar32* corrected)
     return false;
 }
 
-void HvmlParser::on_numeric_character_reference_end_state()
+void HVMLParser::on_numeric_character_reference_end_state()
 {
     Uchar32 uc = get_character_reference_code();
 
@@ -3133,7 +3133,7 @@ void HvmlParser::on_numeric_character_reference_end_state()
     m_ctxt_tokenizer.ts = TS_NUMERIC_CHARACTER_REFERENCE_END;
 }
 
-void HvmlParser::on_character_reference_end_state()
+void HVMLParser::on_character_reference_end_state()
 {
     m_ctxt_tokenizer.consumed = m_ctxt_tokenizer.mclen;
     m_ctxt_tokenizer.curr_uc = m_ctxt_tokenizer.next_uc;
@@ -3153,7 +3153,7 @@ void HvmlParser::on_character_reference_end_state()
     m_ctxt_tokenizer.ts = m_ctxt_tokenizer.ts_return;
 }
 
-bool HvmlParser::tokenize()
+bool HVMLParser::tokenize()
 {
     switch (m_ctxt_tokenizer.ts) {
     case TS_DATA:
@@ -3476,7 +3476,7 @@ bool HvmlParser::tokenize()
     return true;
 }
 
-size_t HvmlParser::parse(View* parent, const char* content, size_t len,
+size_t HVMLParser::parse(View* parent, const char* content, size_t len,
             CB_ON_NEW_NODE on_new_node,
             CB_ON_NEW_ATTR on_new_attr,
             CB_ON_NEW_CHAR on_new_char)
@@ -3577,7 +3577,7 @@ done:
  *
  * https://www.w3.org/TR/html52/syntax.html#the-insertion-mode
  */
-void HvmlParser::reset_inserting_mode()
+void HVMLParser::reset_inserting_mode()
 {
     bool last = false;
     OpenElementNode* node = (OpenElementNode*)m_stack_oe.prev;
@@ -3687,27 +3687,27 @@ done:
     return;
 }
 
-bool HvmlParser::is_open_element(const View* view)
+bool HVMLParser::is_open_element(const View* view)
 {
     return false;
 }
 
-View* HvmlParser::insert_new_element(const View* view)
+View* HVMLParser::insert_new_element(const View* view)
 {
     return NULL;
 }
 
-bool HvmlParser::check_adjusted_current_node()
+bool HVMLParser::check_adjusted_current_node()
 {
     return false;
 }
 
-void HvmlParser::emit_character_token(Uchar32 uc)
+void HVMLParser::emit_character_token(Uchar32 uc)
 {
     // TODO
 }
 
-void HvmlParser::emit_character_token(const std::string& utf8_str)
+void HVMLParser::emit_character_token(const std::string& utf8_str)
 {
     const char* utf8 = utf8_str.c_str();
 
@@ -3719,12 +3719,12 @@ void HvmlParser::emit_character_token(const std::string& utf8_str)
     }
 }
 
-void HvmlParser::emit_eof_token()
+void HVMLParser::emit_eof_token()
 {
     // TODO
 }
 
-void HvmlParser::emit_tag_token()
+void HVMLParser::emit_tag_token()
 {
     assert(m_ctxt_tokenizer.dt);
 
@@ -3744,7 +3744,7 @@ void HvmlParser::emit_tag_token()
     // TODO
 }
 
-void HvmlParser::emit_doctype_token()
+void HVMLParser::emit_doctype_token()
 {
     assert(m_ctxt_tokenizer.dt);
 
