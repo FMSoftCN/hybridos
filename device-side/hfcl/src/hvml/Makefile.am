@@ -5,6 +5,8 @@ noinst_LTLIBRARIES=libhfcl_hvml.la
 
 AM_CPPFLAGS=-D__HFCL_LIB__ -I../../include
 libhfcl_hvml_la_SOURCES = \
+    dom.cc \
+    dom-event.cc \
     htmlentitiestable.inc \
     hvmlparser.cc
 

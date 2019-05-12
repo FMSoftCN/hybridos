@@ -19,8 +19,8 @@
 ** along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef HFCL_VIEW_HVMLPARSER_H_
-#define HFCL_VIEW_HVMLPARSER_H_
+#ifndef HFCL_HVML_HVMLPARSER_H_
+#define HFCL_HVML_HVMLPARSER_H_
 
 #include "../common/common.h"
 #include "../common/helpers.h"
@@ -584,5 +584,5 @@ private:
 
 } // namespace hfcl
 
-#endif /* HFCL_VIEW_HVMLPARSER_H_ */
+#endif /* HFCL_HVML_HVMLPARSER_H_ */
 
