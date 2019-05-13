@@ -75,11 +75,26 @@ static const char* _error_names_table [] =
     "NotAllowedError",          // The request is not allowed by the user agent or the platform in the current context, possibly because the user denied permission.   —
 };
 
+DOMException::DOMException(const char* message, const char* name)
+{
+    m_name = name;
+    m_message = message;
+
+    m_code = UNKNOWN_ERR;
+    // TODO: optimize
+    // set m_name from name by looking up the _error_names_table.
+
+    for (size_t i = 0; i < TABLESIZE(_error_names_table); i++) {
+        if (strcmp(name, _error_names_table[i]) == 0) {
+            m_code = i;
+            break;
+        }
+    }
+}
+
 const char* DOMException::what() const throw()
 {
-    if (m_code < TABLESIZE(_error_names_table))
-        return _error_names_table[m_code];
-    return "UnknownError";
+    return m_name.c_str();
 }
 
 } // namespace dom

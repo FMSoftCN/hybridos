@@ -75,11 +75,7 @@ public:
  */
 class DOMException : public std::exception {
 public:
-    DOMException(const DOMString& message = "" , const DOMString& name = "Error") {
-        m_message = message;
-        m_name = name;
-        m_code = NO_ERR;
-    }
+    DOMException(const char* message = "", const char* name = "Error");
 
     /* readonly attribute DOMString name; */
     const DOMString& getName() const {
@@ -96,7 +92,7 @@ public:
         return m_code;
     }
 
-    const unsigned short NO_ERR = 0;
+    const unsigned short UNKNOWN_ERR = 0;
     const unsigned short INDEX_SIZE_ERR = 1;
     const unsigned short DOMSTRING_SIZE_ERR = 2;
     const unsigned short HIERARCHY_REQUEST_ERR = 3;

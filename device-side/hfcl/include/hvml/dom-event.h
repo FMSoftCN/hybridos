@@ -22,9 +22,7 @@
 #ifndef HFCL_HVML_DOM_EVENT_H_
 #define HFCL_HVML_DOM_EVENT_H_
 
-#include <iostream>
-#include <exception>
-#include <string>
+#include <map>
 #include <vector>
 #include <list>
 
@@ -38,7 +36,7 @@ class Event;
 typedef void (*EventListener)(const Event& event);
 
 typedef struct _EventListenerEntry {
-    const DOMString*    type;
+    const char*         type;
     EventListener       callback;
     unsigned char       capture:1;
     unsigned char       passive:1;
@@ -46,7 +44,17 @@ typedef struct _EventListenerEntry {
     unsigned char       removed:1;
 } EventListenerEntry;
 
-typedef std::list<EventListenerEntry*> EventListenerList;
+typedef std::map<DOMString, EventListenerEntry*> EventListenerList;
+
+typedef struct _EventListenerOptions {
+    bool capture;
+} EventListenerOptions;
+
+typedef struct _AddEventListenerOptions {
+    bool capture;
+    bool passive;
+    bool once;
+} AddEventListenerOptions;
 
 class EventTarget {
 public:
@@ -54,12 +62,47 @@ public:
     virtual ~EventTarget();
 
     void addEventListener(const DOMString& type, EventListener callback,
-            bool passive = false, bool once = false);
+            const AddEventListenerOptions* options) {
+        add_event_listener(type, callback, options);
+    }
+
+    // for compatibility
+    void addEventListener(const DOMString& type, EventListener callback,
+            bool option) {
+        AddEventListenerOptions options;
+        options.capture = option;
+        options.passive = false;
+        options.once = false;
+        add_event_listener(type, callback, &options);
+    }
+
     void removeEventListener(const DOMString& type, EventListener callback,
-            bool capture = false);
-    bool dispatchEvent(const Event& event);
+            const EventListenerOptions* options) {
+        remove_event_listener(type, callback, options);
+    }
+
+    // for compatibility
+    void removeEventListener(const DOMString& type, EventListener callback,
+            bool option) {
+        EventListenerOptions options;
+        options.capture = option;
+        remove_event_listener(type, callback, &options);
+    }
+
+    bool dispatchEvent(Event& event);
+
+    static bool real_dispatch_event(Event& event, EventTarget& eventTarget,
+            bool legacyTargetOverride = false,
+            bool legacyOutputDidListenersThrow = false);
 
 private:
+    bool check_type();
+    void add_event_listener(const DOMString& type, EventListener callback,
+            const AddEventListenerOptions* options);
+    void remove_event_listener(const DOMString& type, EventListener callback,
+            const EventListenerOptions* options);
+    void remove_all_event_listener();
+
     EventListenerList m_event_listener_list;
 };
 
@@ -226,6 +269,8 @@ public:
         m_cancelable = cancelable;
     }
 #endif
+
+    friend class EventTarget;
 
 private:
     DOMString       m_type;

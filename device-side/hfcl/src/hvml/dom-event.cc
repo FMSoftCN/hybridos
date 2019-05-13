@@ -28,9 +28,17 @@
 #include "hvml/dom-event.h"
 
 #include <minigui/common.h>
+#include <minigui/minigui.h>
+
+#include "hvml/dom.h"
 
 namespace hfcl {
 namespace dom {
+
+EventTarget::~EventTarget()
+{
+    remove_all_event_listener();
+}
 
 const EventTargetSeq& Event::composedPath()
 {
@@ -107,29 +115,113 @@ const EventTargetSeq& Event::composedPath()
     return m_composed_path;
 }
 
-void EventTarget::addEventListener(const DOMString& type, EventListener callback,
-            bool passive, bool once)
+bool EventTarget::check_type()
 {
+    // TODO: If eventTarget’s relevant global object is a
+    // ServiceWorkerGlobalScope object and its associated service worker’s
+    // script resource’s has ever been evaluated flag is set, then throw
+    // a TypeError.
+
+    return true;
 }
 
-void EventTarget::removeEventListener(const DOMString& type, EventListener callback,
-            bool capture)
+void EventTarget::add_event_listener(const DOMString& type,
+        EventListener callback, const AddEventListenerOptions* options)
 {
+    if (MG_UNLIKELY (check_type())) {
+        throw TypeError();
+    }
+
+    if (callback == NULL)
+        return;
+
+    DOMString key(type);
+
+    char buff[33];
+    memset(buff, 0, 33);
+    snprintf(buff, 32, "%p", callback);
+    key += buff;
+    if (options->capture)
+        key += '1';
+    else
+        key += '0';
+
+    EventListenerList::iterator it = m_event_listener_list.find(key);
+    if (it == m_event_listener_list.end()) {
+        EventListenerEntry* entry = mg_slice_new(EventListenerEntry);
+        entry->type = strdup (type.c_str());
+        entry->callback = callback;
+        entry->capture = options->capture;
+        entry->passive = options->passive;
+        entry->once = options->once;
+        entry->removed = 0;
+        m_event_listener_list[key] = entry;
+    }
 }
 
-bool EventTarget::dispatchEvent(const Event& event)
+void EventTarget::remove_event_listener(const DOMString& type,
+        EventListener callback, const EventListenerOptions* options)
 {
-    return false;
+    if (MG_UNLIKELY (check_type())) {
+        throw TypeError();
+    }
+
+    if (callback == NULL)
+        return;
+
+    DOMString key(type);
+
+    char buff[33];
+    memset(buff, 0, 33);
+    snprintf(buff, 32, "%p", callback);
+    key += buff;
+    if (options->capture)
+        key += '1';
+    else
+        key += '0';
+
+    EventListenerList::iterator it = m_event_listener_list.find(key);
+    if (it != m_event_listener_list.end()) {
+        EventListenerEntry* entry = it->second;
+        m_event_listener_list.erase(key);
+
+        entry->removed = 1;
+    }
 }
 
-EventTarget::~EventTarget()
+void EventTarget::remove_all_event_listener()
 {
-    std::list<EventListenerEntry*>::iterator it;
+    EventListenerList::iterator it;
     for (it = m_event_listener_list.begin();
             it != m_event_listener_list.end(); ++it) {
-        EventListenerEntry* entry = *it;
-        delete entry;
+        EventListenerEntry* entry = it->second;
+        m_event_listener_list.erase(it->first);
+
+        entry->removed = 1;
+        // TODO: Who is responsible for deleting the entry?
+        // free (entry->type);
+        // mg_slice_delete(EventListenerEntry, entry);
     }
+}
+
+bool EventTarget::dispatchEvent(Event& event)
+{
+    if (event.m_flags & Event::DISPATCH_FLAG ||
+            !(event.m_flags & Event::INITIALIZED_FLAG)) {
+        throw DOMException(__func__, "InvalidStateError");
+    }
+
+    event.m_is_trusted = false;
+
+    return real_dispatch_event(event, *this);
+}
+
+bool EventTarget::real_dispatch_event(Event& event, EventTarget& eventTarget,
+        bool legacyTargetOverride, bool legacyOutputDidListenersThrow)
+{
+    event.m_flags |= Event::DISPATCH_FLAG;
+
+    return false;
 }
 
 } // namespace dom
