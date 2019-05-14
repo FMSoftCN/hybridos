@@ -81,6 +81,13 @@ refer to the `README.md` file.
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+Note that HFCL uses some open source libraries in different licenses.
+These software are located in `thirdparty/`, and will be built and
+installed as self-contained headers and/or libraries.
+
+For the copyright owners and licenses for these software, please refer to
+the README or LICENSE files contained in the source tree.
+
 ## Authors
 
 The following people are the main developers of HFCL:
