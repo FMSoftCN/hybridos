@@ -23,3 +23,7 @@ Makefile.in
 /*config.h.in
 /*~
 
+DerivedSources/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
