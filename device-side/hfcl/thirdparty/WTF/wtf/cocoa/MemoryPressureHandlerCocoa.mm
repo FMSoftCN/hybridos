@@ -108,8 +108,8 @@ void MemoryPressureHandler::install()
         dispatch_resume(memoryPressureEventSource);
     });
 
-    // Allow simulation of memory pressure with "notifyutil -p org.WebKit.lowMemory"
-    notify_register_dispatch("org.WebKit.lowMemory", &notifyTokens[0], m_dispatchQueue, ^(int) {
+    // Allow simulation of memory pressure with "notifyutil -p org.Hfcl.lowMemory"
+    notify_register_dispatch("org.Hfcl.lowMemory", &notifyTokens[0], m_dispatchQueue, ^(int) {
 #if ENABLE(FMW_FOOTPRINT_COMPARISON)
         auto footprintBefore = pagesPerVMTag();
 #endif
@@ -128,10 +128,10 @@ void MemoryPressureHandler::install()
         });
     });
 
-    notify_register_dispatch("org.WebKit.lowMemory.begin", &notifyTokens[1], m_dispatchQueue, ^(int) {
+    notify_register_dispatch("org.Hfcl.lowMemory.begin", &notifyTokens[1], m_dispatchQueue, ^(int) {
         beginSimulatedMemoryPressure();
     });
-    notify_register_dispatch("org.WebKit.lowMemory.end", &notifyTokens[2], m_dispatchQueue, ^(int) {
+    notify_register_dispatch("org.Hfcl.lowMemory.end", &notifyTokens[2], m_dispatchQueue, ^(int) {
         endSimulatedMemoryPressure();
     });
 

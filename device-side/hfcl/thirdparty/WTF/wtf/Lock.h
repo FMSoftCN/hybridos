@@ -29,7 +29,7 @@
 #include <wtf/Locker.h>
 #include <wtf/Noncopyable.h>
 
-namespace TestWebKitAPI {
+namespace TestHfclAPI {
 struct LockInspector;
 }
 
@@ -112,7 +112,7 @@ public:
     }
 
 private:
-    friend struct TestWebKitAPI::LockInspector;
+    friend struct TestHfclAPI::LockInspector;
     
     static const uint8_t isHeldBit = 1;
     static const uint8_t hasParkedBit = 2;

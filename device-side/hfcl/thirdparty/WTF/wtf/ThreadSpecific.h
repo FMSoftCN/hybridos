@@ -36,7 +36,7 @@
  *   @ In Windows native implementation, the destructor function will be called
  *     only once.
  * This semantic discrepancy does not impose any problem because nowhere in
- * WebKit the repeated call bahavior is utilized.
+ * Hfcl the repeated call bahavior is utilized.
  */
 
 #pragma once

@@ -195,8 +195,8 @@
 
         Reverted changeset:
 
-        "[CMake] Refactor WEBKIT_MAKE_FORWARDING_HEADERS into
-        WEBKIT_COPY_FILES"
+        "[CMake] Refactor HFCL_MAKE_FORWARDING_HEADERS into
+        HFCL_COPY_FILES"
         https://bugs.webkit.org/show_bug.cgi?id=197174
         https://trac.webkit.org/changeset/244881
 
@@ -213,18 +213,18 @@
 
 2019-05-02  Don Olmstead  <don.olmstead@sony.com>
 
-        [CMake] Refactor WEBKIT_MAKE_FORWARDING_HEADERS into WEBKIT_COPY_FILES
+        [CMake] Refactor HFCL_MAKE_FORWARDING_HEADERS into HFCL_COPY_FILES
         https://bugs.webkit.org/show_bug.cgi?id=197174
 
         Reviewed by Alex Christensen.
 
-        Replace WEBKIT_MAKE_FORWARDING_HEADERS with WEBKIT_COPY_FILES.
+        Replace HFCL_MAKE_FORWARDING_HEADERS with HFCL_COPY_FILES.
 
         * wtf/CMakeLists.txt:
 
 2019-05-01  Darin Adler  <darin@apple.com>
 
-        WebKit has too much of its own UTF-8 code and should rely more on ICU's UTF-8 support
+        Hfcl has too much of its own UTF-8 code and should rely more on ICU's UTF-8 support
         https://bugs.webkit.org/show_bug.cgi?id=195535
 
         Reviewed by Alexey Proskuryakov.
@@ -286,7 +286,7 @@
         (WTF::Unicode::equalUTF16WithUTF8): Ditto.
 
         * wtf/unicode/UTF8Conversion.h: Removed UTF8SequenceLength and
-        decodeUTF8Sequence. Changed the ConversionResult to match WebKit coding
+        decodeUTF8Sequence. Changed the ConversionResult to match Hfcl coding
         style, with an eye toward perhaps removing it in the future. Changed
         the convertUTF8ToUTF16 return value to a boolean and removed the "strict"
         argument since no caller was passing false. Changed the convertLatin1ToUTF8
@@ -300,7 +300,7 @@
 
         Reverted changeset:
 
-        "WebKit has too much of its own UTF-8 code and should rely
+        "Hfcl has too much of its own UTF-8 code and should rely
         more on ICU's UTF-8 support"
         https://bugs.webkit.org/show_bug.cgi?id=195535
         https://trac.webkit.org/changeset/244821
@@ -317,7 +317,7 @@
 
 2019-04-29  Darin Adler  <darin@apple.com>
 
-        WebKit has too much of its own UTF-8 code and should rely more on ICU's UTF-8 support
+        Hfcl has too much of its own UTF-8 code and should rely more on ICU's UTF-8 support
         https://bugs.webkit.org/show_bug.cgi?id=195535
 
         Reviewed by Alexey Proskuryakov.
@@ -379,7 +379,7 @@
         (WTF::Unicode::equalUTF16WithUTF8): Ditto.
 
         * wtf/unicode/UTF8Conversion.h: Removed UTF8SequenceLength and
-        decodeUTF8Sequence. Changed the ConversionResult to match WebKit coding
+        decodeUTF8Sequence. Changed the ConversionResult to match Hfcl coding
         style, with an eye toward perhaps removing it in the future. Changed
         the convertUTF8ToUTF16 return value to a boolean and removed the "strict"
         argument since no caller was passing false. Changed the convertLatin1ToUTF8
@@ -1028,7 +1028,7 @@
 
         Reviewed by Darin Adler.
 
-        It seems WebKit hasn't built with clang 3.8 in a while, no devs are using this compiler, we
+        It seems Hfcl hasn't built with clang 3.8 in a while, no devs are using this compiler, we
         don't know how much effort it would be to make JSC work again, and it's making the code
         worse. Remove my hacks to support clang 3.8 from WTF.
 
@@ -1052,7 +1052,7 @@
 
 2019-03-31  Andy Estes  <aestes@apple.com>
 
-        [iOS] WebKit should consult the navigation response policy delegate before previewing a QuickLook document
+        [iOS] Hfcl should consult the navigation response policy delegate before previewing a QuickLook document
         https://bugs.webkit.org/show_bug.cgi?id=196433
         <rdar://problem/49293305>
 
@@ -1333,12 +1333,12 @@
 
 2019-03-20  Keith Rollin  <krollin@apple.com>
 
-        Update checks that determine if WebKit is system WebKit
+        Update checks that determine if Hfcl is system Hfcl
         https://bugs.webkit.org/show_bug.cgi?id=195756
 
         Reviewed by Alexey Proskuryakov.
 
-        The system WebKit can be installed in additional locations, so check
+        The system Hfcl can be installed in additional locations, so check
         for and allow those, too.
 
         * wtf/Platform.h:
@@ -1378,7 +1378,7 @@
 
         Reviewed by Chris Dumez.
 
-        WebKit triggers three new GCC 9 warnings:
+        Hfcl triggers three new GCC 9 warnings:
 
         """
         -Wdeprecated-copy, implied by -Wextra, warns about the C++11 deprecation of implicitly
@@ -2047,7 +2047,7 @@
 
 2019-03-04  Andy Estes  <aestes@apple.com>
 
-        [Apple Pay] Move WebPaymentCoordinatorProxy from Source/WebKit/UIProcess to Source/WebKit/Shared
+        [Apple Pay] Move WebPaymentCoordinatorProxy from Source/Hfcl/UIProcess to Source/Hfcl/Shared
         https://bugs.webkit.org/show_bug.cgi?id=195080
         <rdar://problem/48421558>
 
@@ -2287,7 +2287,7 @@
 
         Reviewed by Yusuke Suzuki.
 
-        First, move data members to the end of the class per WebKit
+        First, move data members to the end of the class per Hfcl
         style. Also, add forbid heap allocation since we expect the
         NeverDestroyed classes to be static.
 
@@ -2624,7 +2624,7 @@
 
         Reviewed by Yusuke Suzuki.
 
-        First, move data members to the end of the class per WebKit
+        First, move data members to the end of the class per Hfcl
         style. Also, add forbid heap allocation since we expect the
         NeverDestroyed classes to be static.
 
@@ -3093,10 +3093,10 @@
         Previously, every use of clampTo() was converting the input to double,
         doing the comparison in double, then casting back to whatever type was needed.
 
-        In many case, that was very wasteful. WebKit has many cases of clampTo() with
+        In many case, that was very wasteful. Hfcl has many cases of clampTo() with
         the same type as input/output, or with integer types of different size/sign.
 
-        This patch adds a few versions of clampTo() for the common cases seen in WebKit.
+        This patch adds a few versions of clampTo() for the common cases seen in Hfcl.
         In each case, I tried to minimize the amount of conversion needed at runtime.
 
         * wtf/MathExtras.h:
@@ -3279,14 +3279,14 @@
         Reverted changeset:
 
         "Leak of WTF::StringImpl under SymbolImpl::createNullSymbol()
-        (48 bytes) in com.apple.WebKit.WebContent running layout
+        (48 bytes) in com.apple.Hfcl.WebContent running layout
         tests"
         https://bugs.webkit.org/show_bug.cgi?id=193291
         https://trac.webkit.org/changeset/240896
 
 2019-02-02  David Kilzer  <ddkilzer@apple.com>
 
-        Leak of WTF::StringImpl under SymbolImpl::createNullSymbol() (48 bytes) in com.apple.WebKit.WebContent running layout tests
+        Leak of WTF::StringImpl under SymbolImpl::createNullSymbol() (48 bytes) in com.apple.Hfcl.WebContent running layout tests
         <https://webkit.org/b/193291>
         <rdar://problem/46655953>
 
@@ -3532,7 +3532,7 @@
 
 2019-01-23  David Kilzer  <ddkilzer@apple.com>
 
-        Switch remaining CoreMedia soft-linking in WebKit over to CoreMediaSoftLink.{cpp,h}
+        Switch remaining CoreMedia soft-linking in Hfcl over to CoreMediaSoftLink.{cpp,h}
         <https://webkit.org/b/193694>
         <rdar://problem/47464025>
 
@@ -4336,7 +4336,7 @@
 
 2018-12-12  Alex Christensen  <achristensen@webkit.org>
 
-        Implement safe browsing in WebKit on WatchOS
+        Implement safe browsing in Hfcl on WatchOS
         https://bugs.webkit.org/show_bug.cgi?id=192641
         <rdar://problem/46376188>
 
@@ -4415,7 +4415,7 @@
 
 2018-12-10  Alexey Proskuryakov  <ap@apple.com>
 
-        Move ENABLE_SEC_ITEM_SHIM out of WebKit's config.h
+        Move ENABLE_SEC_ITEM_SHIM out of Hfcl's config.h
         https://bugs.webkit.org/show_bug.cgi?id=192428
 
         Reviewed by Tim Horton.
@@ -4424,7 +4424,7 @@
 
 2018-12-10  Alexey Proskuryakov  <ap@apple.com>
 
-        Move more macros out of WebKit's config.h
+        Move more macros out of Hfcl's config.h
         https://bugs.webkit.org/show_bug.cgi?id=192430
 
         Reviewed by Tim Horton.
@@ -5223,7 +5223,7 @@
 
 2018-10-29  Tim Horton  <timothy_horton@apple.com>
 
-        Modernize WebKit nibs and lprojs for localization's sake
+        Modernize Hfcl nibs and lprojs for localization's sake
         https://bugs.webkit.org/show_bug.cgi?id=190911
         <rdar://problem/45349466>
 
@@ -5450,7 +5450,7 @@
 
         This functionality is currently only enabled in debug mode since dbghelp is not threadsafe.
         The DbgHelper class attempts to synchronize calls to dbghelp.dll but external code
-        can still attempt to call the library at the same time as WebKit.
+        can still attempt to call the library at the same time as Hfcl.
 
         * wtf/CMakeLists.txt:
         * wtf/PlatformWin.cmake:
@@ -5929,7 +5929,7 @@
 
         Reviewed by Saam Barati.
 
-        Use WTF::currentStackPointer more in WebKit to adopt ASAN detect_stack_use_after_return option.
+        Use WTF::currentStackPointer more in Hfcl to adopt ASAN detect_stack_use_after_return option.
 
         * wtf/StackBounds.cpp:
         (WTF::testStackDirection2):
@@ -6534,7 +6534,7 @@
 
         Unreviewed, rolling out r235990.
 
-        Introduced TestWebKitAPI.NowPlayingTest timeouts on iOS
+        Introduced TestHfclAPI.NowPlayingTest timeouts on iOS
 
         Reverted changeset:
 

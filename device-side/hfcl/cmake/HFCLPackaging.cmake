@@ -1,24 +1,24 @@
 # -----------------------------------------------------------------------------
-# This file defines the basics of CPack behavior for WebKit
+# This file defines the basics of CPack behavior for Hfcl
 #
 # The following CPack variables will be defined if they were unset:
-#   - CPACK_PACKAGE_NAME to WebKit-${PORT}
+#   - CPACK_PACKAGE_NAME to Hfcl-${PORT}
 #   - CPACK_SOURCE_IGNORE_FILES to a known pattern of good files
 #
 # The following variables affect the behavior of packaging:
-#   - WEBKIT_CPACK_ALL_PORTS if defined and true, will not limit packaging
+#   - HFCL_CPACK_ALL_PORTS if defined and true, will not limit packaging
 #     to just include files of the port (affects CPACK_SOURCE_IGNORE_FILES,
 #     just if this variable was not defined before).
-#   - WEBKIT_CPACK_ADD_TESTS if defined and true, will also add tests
+#   - HFCL_CPACK_ADD_TESTS if defined and true, will also add tests
 #     (affects CPACK_SOURCE_IGNORE_FILES, just if this variable was
 #     not defined before)
-#   - WEBKIT_CPACK_ADD_TOOLS if defined and true, will also add tools
+#   - HFCL_CPACK_ADD_TOOLS if defined and true, will also add tools
 #     (affects CPACK_SOURCE_IGNORE_FILES, just if this variable was
 #     not defined before)
 # -----------------------------------------------------------------------------
 
 if (NOT DEFINED CPACK_PACKAGE_NAME)
-    set(CPACK_PACKAGE_NAME WebKit-${PORT})
+    set(CPACK_PACKAGE_NAME Hfcl-${PORT})
 endif ()
 
 if (NOT DEFINED CPACK_SOURCE_IGNORE_FILES)
@@ -63,29 +63,29 @@ if (NOT DEFINED CPACK_SOURCE_IGNORE_FILES)
         "\\\\.pyo$"
         "/cmake-build/"
         "/build/"
-        "/WebKitBuild/"
+        "/HfclBuild/"
         "/Tools/Scripts/webkitpy/thirdparty/autoinstalled/"
         )
 
-    if (NOT WEBKIT_CPACK_ADD_TESTS)
+    if (NOT HFCL_CPACK_ADD_TESTS)
         list(APPEND CPACK_SOURCE_IGNORE_FILES
           "/LayoutTests/"
           "/ManualTests/"
           "/tests/"
           )
-    endif (NOT WEBKIT_CPACK_ADD_TESTS)
+    endif (NOT HFCL_CPACK_ADD_TESTS)
 
-    if (NOT WEBKIT_CPACK_ADD_TOOLS)
+    if (NOT HFCL_CPACK_ADD_TOOLS)
         list(APPEND CPACK_SOURCE_IGNORE_FILES
         "/Tools/"
         "/manual-tools/"
         "/tools/"
         "/PageLoadTools/"
         )
-    endif (NOT WEBKIT_CPACK_ADD_TOOLS)
+    endif (NOT HFCL_CPACK_ADD_TOOLS)
 
 
-    if (NOT WEBKIT_CPACK_ALL_PORTS)
+    if (NOT HFCL_CPACK_ALL_PORTS)
         # File and Directory patterns that no CMake-ified port uses
         set(FILE_PATTERNS_UNKNOWN_PORTS
             "/carbon/" "/Carbon/" "carbon\\\\." "Carbon\\\\."
@@ -108,9 +108,9 @@ if (NOT DEFINED CPACK_SOURCE_IGNORE_FILES)
             "/qt4/" "/Qt4/" "qt4\\\\." "Qt4\\\\."
             "/win/" "/Win/" "win\\\\." "Win\\\\."
             "/wxcode/" "/Wxcode/" "wxcode\\\\." "Wxcode\\\\."
-            "/WebKitLibraries/"
+            "/HfclLibraries/"
             "/English\\\\.lproj/"
-            "/Source/WebKitLegacy/"
+            "/Source/HfclLegacy/"
             "\\\\.a$"
             "\\\\.exe$"
             "\\\\.mm$"
@@ -141,7 +141,7 @@ if (NOT DEFINED CPACK_SOURCE_IGNORE_FILES)
             endif ()
         endforeach ()
 
-    endif (NOT WEBKIT_CPACK_ALL_PORTS)
+    endif (NOT HFCL_CPACK_ALL_PORTS)
 
 endif (NOT DEFINED CPACK_SOURCE_IGNORE_FILES)
 

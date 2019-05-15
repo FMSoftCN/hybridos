@@ -373,7 +373,7 @@ String String::stripWhiteSpace() const
     // FIXME: Should this function, and the many others like it, be inlined?
     // FIXME: This function needs a new name. For one thing, "whitespace" is a single
     // word so the "s" should be lowercase. For another, it's not clear from this name
-    // that the function uses the Unicode definition of whitespace. Most WebKit callers
+    // that the function uses the Unicode definition of whitespace. Most Hfcl callers
     // don't want that and eventually we should consider deleting this.
     return m_impl ? m_impl->stripWhiteSpace() : String { };
 }
@@ -389,7 +389,7 @@ String String::simplifyWhiteSpace() const
     // FIXME: Should this function, and the many others like it, be inlined?
     // FIXME: This function needs a new name. For one thing, "whitespace" is a single
     // word so the "s" should be lowercase. For another, it's not clear from this name
-    // that the function uses the Unicode definition of whitespace. Most WebKit callers
+    // that the function uses the Unicode definition of whitespace. Most Hfcl callers
     // don't want that and eventually we should consider deleting this.
     return m_impl ? m_impl->simplifyWhiteSpace() : String { };
 }

@@ -33,7 +33,7 @@
 // No namespaces because this file has to be includable from C and Objective-C.
 
 // Reserved component code. Do not change this.
-#define WEBKIT_COMPONENT 47
+#define HFCL_COMPONENT 47
 
 // Trace point codes can be up to 14 bits (0-16383).
 // When adding or changing these codes, update Tools/Tracing/SystemTracePoints.plist to match.
@@ -82,11 +82,11 @@ enum TracePointCode {
     RenderingUpdateStart,
     RenderingUpdateEnd,
 
-    WebKitRange = 10000,
+    HfclRange = 10000,
     WebHTMLViewPaintStart,
     WebHTMLViewPaintEnd,
 
-    WebKit2Range = 12000,
+    Hfcl2Range = 12000,
     BackingStoreFlushStart,
     BackingStoreFlushEnd,
     BuildTransactionStart,
@@ -114,7 +114,7 @@ namespace WTF {
 inline void tracePoint(TracePointCode code, uint64_t data1 = 0, uint64_t data2 = 0, uint64_t data3 = 0, uint64_t data4 = 0)
 {
 #if HAVE(KDEBUG_H)
-    kdebug_trace(ARIADNEDBG_CODE(WEBKIT_COMPONENT, code), data1, data2, data3, data4);
+    kdebug_trace(ARIADNEDBG_CODE(HFCL_COMPONENT, code), data1, data2, data3, data4);
 #else
     UNUSED_PARAM(code);
     UNUSED_PARAM(data1);

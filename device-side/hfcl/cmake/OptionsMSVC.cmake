@@ -56,7 +56,7 @@ if (NOT ${CMAKE_CXX_FLAGS} STREQUAL "")
     # More warnings. /W4 should be specified before -Wno-* options for clang-cl.
     string(REGEX REPLACE "/W3" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
     string(REGEX REPLACE "/W3" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-    WEBKIT_PREPEND_GLOBAL_COMPILER_FLAGS(/W4)
+    HFCL_PREPEND_GLOBAL_COMPILER_FLAGS(/W4)
 endif ()
 
 if (MSVC_STATIC_RUNTIME)
@@ -109,5 +109,5 @@ if (COMPILER_IS_CLANG_CL)
 
     # FIXME: Building with clang-cl seemed to fail with 128 bit int support
     set(HAVE_INT128_T OFF)
-    list(REMOVE_ITEM _WEBKIT_CONFIG_FILE_VARIABLES HAVE_INT128_T)
+    list(REMOVE_ITEM _HFCL_CONFIG_FILE_VARIABLES HAVE_INT128_T)
 endif ()

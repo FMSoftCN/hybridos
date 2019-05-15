@@ -42,7 +42,7 @@ void RefCountedLeakCounter::decrement() { }
 #if RELEASE_LOG_DISABLED
 static WTFLogChannel LogRefCountedLeaks = { WTFLogChannelState::On, "RefCountedLeaks", WTFLogLevel::Error };
 #else
-static WTFLogChannel LogRefCountedLeaks = { WTFLogChannelState::On, "RefCountedLeaks", WTFLogLevel::Error, LOG_CHANNEL_WEBKIT_SUBSYSTEM, OS_LOG_DEFAULT };
+static WTFLogChannel LogRefCountedLeaks = { WTFLogChannelState::On, "RefCountedLeaks", WTFLogLevel::Error, LOG_CHANNEL_HFCL_SUBSYSTEM, OS_LOG_DEFAULT };
 #endif
 
 typedef HashCountedSet<const char*, PtrHash<const char*>> ReasonSet;

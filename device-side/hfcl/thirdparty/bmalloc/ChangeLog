@@ -512,7 +512,7 @@
         Reviewed by Saam Barati.
 
         As the same to bmalloc, bmalloc::DebugHeap should have scavenge feature to make it scavengable if we want.
-        We also add DebugHeap::dump feature which dumps system malloc data in the WebKit Malloc zone.
+        We also add DebugHeap::dump feature which dumps system malloc data in the Hfcl Malloc zone.
 
         * bmalloc/DebugHeap.cpp:
         (bmalloc::DebugHeap::scavenge):
@@ -1194,7 +1194,7 @@
 
 2018-09-25  Alex Christensen  <achristensen@webkit.org>
 
-        Allow for suffixes to com.apple.WebKit.WebContent
+        Allow for suffixes to com.apple.Hfcl.WebContent
         https://bugs.webkit.org/show_bug.cgi?id=189972
 
         Reviewed by Chris Dumez.
@@ -1716,7 +1716,7 @@
 
 2018-04-18  Jer Noble  <jer.noble@apple.com>
 
-        Don't put build products into WK_ALTERNATE_WEBKIT_SDK_PATH for engineering builds
+        Don't put build products into WK_ALTERNATE_HFCL_SDK_PATH for engineering builds
         https://bugs.webkit.org/show_bug.cgi?id=184762
 
         Reviewed by Dan Bernstein.
@@ -2555,8 +2555,8 @@
 
         For now I've chosen the following bundles:
 
-          - com.apple.WebKit.WebContent.Development
-          - com.apple.WebKit.WebContent
+          - com.apple.Hfcl.WebContent.Development
+          - com.apple.Hfcl.WebContent
           - com.apple.WebProcess
 
         And the following processes:
@@ -2724,7 +2724,7 @@
 
 2017-12-14  David Kilzer  <ddkilzer@apple.com>
 
-        Enable -Wstrict-prototypes for WebKit
+        Enable -Wstrict-prototypes for Hfcl
         <https://webkit.org/b/180757>
         <rdar://problem/36024132>
 
@@ -4185,7 +4185,7 @@
 
 2017-07-14  Filip Pizlo  <fpizlo@apple.com>
 
-        It should be easy to decide how WebKit yields
+        It should be easy to decide how Hfcl yields
         https://bugs.webkit.org/show_bug.cgi?id=174298
 
         Reviewed by Saam Barati.
@@ -4765,7 +4765,7 @@
 
 2017-05-05  Joseph Pecoraro  <pecoraro@apple.com>
 
-        Leaks always reports "WebKit Malloc Memory Pressure Handler" dispatch_queue/source as leaking
+        Leaks always reports "Hfcl Malloc Memory Pressure Handler" dispatch_queue/source as leaking
         https://bugs.webkit.org/show_bug.cgi?id=171532
 
         Reviewed by Geoffrey Garen.
@@ -4875,7 +4875,7 @@
 
         Reviewed by Filip Pizlo.
 
-        Harris asked for this so he could separate Safari and WebKit memory use
+        Harris asked for this so he could separate Safari and Hfcl memory use
         when doing memory analysis.
 
         This patch adds an explicit DebugHeap class that contains all our
@@ -5052,7 +5052,7 @@
 
         Revert to using yield() instead of swtch() because very low priority
         background tasks can cause priority inversion and deadlock. In the
-        network process, that happened with com.apple.WebKit.Cache.Storage.serialBackground.
+        network process, that happened with com.apple.Hfcl.Cache.Storage.serialBackground.
 
         Still a big speedup on MallocBench.
 
@@ -5360,7 +5360,7 @@
 
 2016-06-12  David Kilzer  <ddkilzer@apple.com>
 
-        Crash in com.apple.WebKit.WebContent at std::__1::__call_once_proxy<std::__1::tuple<CrashReporterSupportLibrary()::$_0&&> >
+        Crash in com.apple.Hfcl.WebContent at std::__1::__call_once_proxy<std::__1::tuple<CrashReporterSupportLibrary()::$_0&&> >
         <https://webkit.org/b/158660>
         <rdar://problem/25652686>
 
@@ -5416,7 +5416,7 @@
         File bmalloc/Zone.cpp is required on Darwin irrespectively from what
         port is being built.
 
-        Also I removed WEBKIT_INCLUDE_CONFIG_FILES_IF_EXISTS() because it's
+        Also I removed HFCL_INCLUDE_CONFIG_FILES_IF_EXISTS() because it's
         unlikely that bmalloc will ever need port-specific customizations (as
         opposed to OS-specific customizations which should be done in
         CMakeLists.txt).
@@ -5457,7 +5457,7 @@
 
 2016-05-16  Geoffrey Garen  <ggaren@apple.com>
 
-        REGRESSION (200035): changes in "WebKit Malloc" VM regions are causing 'leaks' to spew "Failed to map remote region" messages
+        REGRESSION (200035): changes in "Hfcl Malloc" VM regions are causing 'leaks' to spew "Failed to map remote region" messages
         https://bugs.webkit.org/show_bug.cgi?id=157764
 
         Reviewed by Gavin Barraclough.
@@ -5684,7 +5684,7 @@
         It also eliminates inline metadata for large objects, fixing the
         regression introduced in r198675, and more:
 
-            run-malloc-benchmarks Baseline:~/OpenSource/WebKitBuildBaseline/Release/ Patch:~/OpenSource/WebKitBuild/Release/
+            run-malloc-benchmarks Baseline:~/OpenSource/HfclBuildBaseline/Release/ Patch:~/OpenSource/HfclBuild/Release/
 
                                                                   Baseline                          Patch                              Δ
             Memory at End:
@@ -5696,7 +5696,7 @@
 
         Overall memory use looks OK:
 
-            run-malloc-benchmarks --memory_warning Baseline:~/OpenSource/WebKitBuildBaseline/Release/ Patch:~/OpenSource/WebKitBuild/Release/
+            run-malloc-benchmarks --memory_warning Baseline:~/OpenSource/HfclBuildBaseline/Release/ Patch:~/OpenSource/HfclBuild/Release/
 
                                                         Baseline                               Patch                                   Δ
             Memory at End:
@@ -5704,7 +5704,7 @@
 
         Overall throughput looks OK:
 
-            run-malloc-benchmarks Baseline:~/OpenSource/WebKitBuildBaseline/Release/ Patch:~/OpenSource/WebKitBuild/Release/
+            run-malloc-benchmarks Baseline:~/OpenSource/HfclBuildBaseline/Release/ Patch:~/OpenSource/HfclBuild/Release/
 
                                                                   Baseline                          Patch                              Δ
             Execution Time:
@@ -7737,7 +7737,7 @@
 
 2015-12-19  Dan Bernstein  <mitz@apple.com>
 
-        [Mac] WebKit contains dead source code for OS X Mavericks and earlier
+        [Mac] Hfcl contains dead source code for OS X Mavericks and earlier
         https://bugs.webkit.org/show_bug.cgi?id=152462
 
         Reviewed by Alexey Proskuryakov.
@@ -7834,7 +7834,7 @@
 
         (bmalloc::Function>::run):
         (bmalloc::Function>::runSlowCase): Updated for interface changes. Also
-        changed to use our WebKit style for condition signal: Hold the lock
+        changed to use our Hfcl style for condition signal: Hold the lock
         during the signal and always notify all. Technically, neither is necessary,
         but it is easier to understand the code this way, and harder to make
         mistakes.
@@ -8072,7 +8072,7 @@
         FWIW, TCMalloc used to have an xLargeMax too, which it called kMaxValidPages.
 
         No test because this bug was found by code inspection and I don't know
-        of a practical way to convince WebKit to make an allocation this large.
+        of a practical way to convince Hfcl to make an allocation this large.
 
         * bmalloc/Allocator.cpp:
         (bmalloc::Allocator::tryAllocate):
@@ -8095,7 +8095,7 @@
 
 2015-05-23  Dan Bernstein  <mitz@apple.com>
 
-        Remove unused definitions of WEBKIT_VERSION_MIN_REQUIRED
+        Remove unused definitions of HFCL_VERSION_MIN_REQUIRED
         https://bugs.webkit.org/show_bug.cgi?id=145345
 
         Reviewed by Sam Weinig.
@@ -8104,7 +8104,7 @@
 
 2015-05-07  Geoffrey Garen  <ggaren@apple.com>
 
-        Release assert in com.apple.WebKit.WebContent under JavaScriptCore: JSC::JSONProtoFuncStringify
+        Release assert in com.apple.Hfcl.WebContent under JavaScriptCore: JSC::JSONProtoFuncStringify
         https://bugs.webkit.org/show_bug.cgi?id=144758
 
         Reviewed by Andreas Kling.
@@ -8882,7 +8882,7 @@
 
         Build bmalloc through CMake as a static library. It's then linked either
         into the WTF library (if built as a shared library) or into the JSC and
-        WebKit2 libraries. There's no need to build it as a standalone shared library.
+        Hfcl2 libraries. There's no need to build it as a standalone shared library.
 
         Rubber-stamped by Carlos Garcia Campos.
 
@@ -9250,7 +9250,7 @@
         (bmalloc::PerThreadStorage::init): Added a catch-all cross-platform Unix
         way to do fast per-thread access without taking a lock every time. This
         probably works on all the platforms we care about, and it matches other
-        techniques we use elsewhere in WebKit.
+        techniques we use elsewhere in Hfcl.
 
         (bmalloc::PerThread<T>::getFastCase): Removed the conditional from
         this class because PerThreadStorage now encapsulates everything that
@@ -10295,7 +10295,7 @@
 
         Full set of benchmark results:
 
-                bmalloc> ~/webkit/PerformanceTests/MallocBench/run-malloc-benchmarks --measure-heap nopatch:~/scratch/Build-nopatch/Release/ patch:~/webkit/WebKitBuild/Release/
+                bmalloc> ~/webkit/PerformanceTests/MallocBench/run-malloc-benchmarks --measure-heap nopatch:~/scratch/Build-nopatch/Release/ patch:~/webkit/HfclBuild/Release/
                                                                                                 
                                                                nopatch                      patch                                Δ
                 Peak Memory:
@@ -10316,7 +10316,7 @@
                     <arithmetic mean>                         11,516kB                   10,473kB                   ^ 1.1x smaller
                     <harmonic mean>                           10,350kB                    9,485kB                  ^ 1.09x smaller
 
-                MallocBench> ~/webkit/PerformanceTests/MallocBench/run-malloc-benchmarks nopatch:~/scratch/Build-nopatch/Release/ patch:~/webkit/WebKitBuild/Release/
+                MallocBench> ~/webkit/PerformanceTests/MallocBench/run-malloc-benchmarks nopatch:~/scratch/Build-nopatch/Release/ patch:~/webkit/HfclBuild/Release/
                                                                                                 
                                                    nopatch                patch                         Δ
                 Execution Time:
@@ -10336,7 +10336,7 @@
                     <arithmetic mean>                152ms                171ms            ! 1.12x slower
                     <harmonic mean>                  137ms                156ms            ! 1.14x slower
 
-                MallocBench> ~/webkit/PerformanceTests/MallocBench/run-malloc-benchmarks nopatch:~/scratch/Build-nopatch/Release/ patch:~/webkit/WebKitBuild/Release/
+                MallocBench> ~/webkit/PerformanceTests/MallocBench/run-malloc-benchmarks nopatch:~/scratch/Build-nopatch/Release/ patch:~/webkit/HfclBuild/Release/
                                                                                                 
                                                                        nopatch                          patch                                     Δ
                 Execution Time:
@@ -10365,7 +10365,7 @@
                     <arithmetic mean>                                    167ms                          214ms                        ! 1.28x slower
                     <harmonic mean>                                      117ms                          148ms                        ! 1.26x slower
 
-                MallocBench> ~/webkit/PerformanceTests/MallocBench/run-malloc-benchmarks TC:~/scratch/Build-TCMalloc/Release/ patch:~/webkit/WebKitBuild/Release/
+                MallocBench> ~/webkit/PerformanceTests/MallocBench/run-malloc-benchmarks TC:~/scratch/Build-TCMalloc/Release/ patch:~/webkit/HfclBuild/Release/
 
                                                                     TC                      patch                                Δ
                 Peak Memory:
@@ -10386,7 +10386,7 @@
                     <arithmetic mean>                         13,005kB                   15,516kB                   ! 1.19x bigger
                     <harmonic mean>                           11,813kB                   13,867kB                   ! 1.17x bigger
 
-                MallocBench> ~/webkit/PerformanceTests/MallocBench/run-malloc-benchmarks TC:~/scratch/Build-TCMalloc/Release/ patch:~/webkit/WebKitBuild/Release/
+                MallocBench> ~/webkit/PerformanceTests/MallocBench/run-malloc-benchmarks TC:~/scratch/Build-TCMalloc/Release/ patch:~/webkit/HfclBuild/Release/
                                                                                                 
                                                         TC                patch                         Δ
                 Execution Time:
@@ -10688,7 +10688,7 @@
 
         * Makefile: Added. For make clients.
 
-        These files are required for building any project in WebKit. I copied
+        These files are required for building any project in Hfcl. I copied
         them from WTF:
         * Configurations: Added.
         * Configurations/Base.xcconfig: Added.

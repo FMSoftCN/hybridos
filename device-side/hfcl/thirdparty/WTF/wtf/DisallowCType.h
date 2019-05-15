@@ -30,7 +30,7 @@
 
 // The behavior of many of the functions in the <ctype.h> header is dependent
 // on the current locale. But almost all uses of these functions are for
-// locale-independent, ASCII-specific purposes. In WebKit code we use our own
+// locale-independent, ASCII-specific purposes. In Hfcl code we use our own
 // ASCII-specific functions instead. This header makes sure we get a compile-time
 // error if we use one of the <ctype.h> functions by accident.
 

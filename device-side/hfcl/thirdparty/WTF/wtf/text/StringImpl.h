@@ -587,7 +587,7 @@ template<typename CharacterType1, typename CharacterType2> int codePointCompare(
 int codePointCompare(const StringImpl*, const StringImpl*);
 
 // FIXME: Should rename this to make clear it uses the Unicode definition of whitespace.
-// Most WebKit callers don't want that would use isASCIISpace or isHTMLSpace instead.
+// Most Hfcl callers don't want that would use isASCIISpace or isHTMLSpace instead.
 bool isSpaceOrNewline(UChar32);
 
 template<typename CharacterType> unsigned lengthOfNullTerminatedString(const CharacterType*);

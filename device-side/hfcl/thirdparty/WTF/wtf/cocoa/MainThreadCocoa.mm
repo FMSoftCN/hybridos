@@ -89,7 +89,7 @@ void initializeMainThreadPlatform()
 void initializeMainThreadToProcessMainThreadPlatform()
 {
     if (!pthread_main_np())
-        NSLog(@"WebKit Threading Violation - initial use of WebKit from a secondary thread.");
+        NSLog(@"Hfcl Threading Violation - initial use of Hfcl from a secondary thread.");
 
     ASSERT(!staticMainThreadCaller);
     staticMainThreadCaller = [[JSWTFMainThreadCaller alloc] init];

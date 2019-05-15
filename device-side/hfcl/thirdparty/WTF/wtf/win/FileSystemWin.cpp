@@ -326,7 +326,7 @@ String directoryName(const String& path)
 static String bundleName()
 {
     static const NeverDestroyed<String> name = [] {
-        String name { "WebKit"_s };
+        String name { "Hfcl"_s };
 
 #if USE(CF)
         if (CFBundleRef bundle = CFBundleGetMainBundle()) {

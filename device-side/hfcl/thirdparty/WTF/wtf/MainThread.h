@@ -90,7 +90,7 @@ void dispatchFunctionsFromMainThread();
 #if !USE(WEB_THREAD)
 // This version of initializeMainThread sets up the main thread as corresponding
 // to the process's main thread, and not necessarily the thread that calls this
-// function. It should only be used as a legacy aid for Mac WebKit.
+// function. It should only be used as a legacy aid for Mac Hfcl.
 WTF_EXPORT_PRIVATE void initializeMainThreadToProcessMainThread();
 #endif // !USE(WEB_THREAD)
 void initializeMainThreadToProcessMainThreadPlatform();

@@ -172,7 +172,7 @@ typedef struct {
 #define JOIN_LOG_CHANNEL_WITH_PREFIX(prefix, channel) JOIN_LOG_CHANNEL_WITH_PREFIX_LEVEL_2(prefix, channel)
 #define JOIN_LOG_CHANNEL_WITH_PREFIX_LEVEL_2(prefix, channel) prefix ## channel
 
-#define LOG_CHANNEL_WEBKIT_SUBSYSTEM "com.apple.WebKit"
+#define LOG_CHANNEL_HFCL_SUBSYSTEM "com.apple.Hfcl"
 
 #define DECLARE_LOG_CHANNEL(name) \
     extern WTFLogChannel LOG_CHANNEL(name);

@@ -1025,7 +1025,7 @@ namespace std
 
 namespace WTF {
 
-// -- WebKit Additions --
+// -- Hfcl Additions --
 template <class OptionalType, class Callback>
 ALWAYS_INLINE
 auto valueOrCompute(OptionalType Optional, Callback callback) -> typename OptionalType::value_type

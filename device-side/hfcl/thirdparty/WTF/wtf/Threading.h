@@ -72,8 +72,8 @@ constexpr const int SigThreadSuspendResume = SIGUSR1;
 
 #endif
 
-// FIXME: The following functions remain because they are used from WebKit Windows support library,
-// WebKitQuartzCoreAdditions.dll. When updating the support library, we should use new API instead
+// FIXME: The following functions remain because they are used from Hfcl Windows support library,
+// HfclQuartzCoreAdditions.dll. When updating the support library, we should use new API instead
 // and the following workaound should be removed. And new code should not use the following APIs.
 // Remove this workaround code when <rdar://problem/31793213> is fixed.
 #if OS(WINDOWS)

@@ -24,7 +24,7 @@
  */
 
 // On Mac, you can build this like so:
-// xcrun clang++ -o ConditionSpeedTest Source/WTF/benchmarks/ConditionSpeedTest.cpp -O3 -W -ISource/WTF -ISource/WTF/icu -LWebKitBuild/Release -lWTF -framework Foundation -licucore -std=c++14 -fvisibility=hidden
+// xcrun clang++ -o ConditionSpeedTest Source/WTF/benchmarks/ConditionSpeedTest.cpp -O3 -W -ISource/WTF -ISource/WTF/icu -LHfclBuild/Release -lWTF -framework Foundation -licucore -std=c++14 -fvisibility=hidden
 
 #include "config.h"
 

@@ -38,7 +38,7 @@ bool gigacageEnabledForProcess()
 
     NSString *appName = [[NSBundle mainBundle] bundleIdentifier];
     if (appName) {
-        bool isWebProcess = [appName hasPrefix:@"com.apple.WebKit.WebContent"];
+        bool isWebProcess = [appName hasPrefix:@"com.apple.Hfcl.WebContent"];
         return isWebProcess;
     }
 
@@ -62,7 +62,7 @@ bool shouldProcessUnconditionallyUseBmalloc()
             auto contains = [&] (NSString *string) {
                 return [appName rangeOfString:string options:NSCaseInsensitiveSearch].location != NSNotFound;
             };
-            result = contains(@"com.apple.WebKit") || contains(@"safari");
+            result = contains(@"com.apple.Hfcl") || contains(@"safari");
         } else {
             NSString *processName = [[NSProcessInfo processInfo] processName];
             result = [processName isEqualToString:@"jsc"] || [processName isEqualToString:@"wasm"];

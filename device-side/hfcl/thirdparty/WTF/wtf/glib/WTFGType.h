@@ -22,11 +22,11 @@
 #include <glib.h>
 #include <wtf/Compiler.h>
 
-#define WEBKIT_PARAM_READABLE (static_cast<GParamFlags>(G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB))
-#define WEBKIT_PARAM_WRITABLE (static_cast<GParamFlags>(G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB))
-#define WEBKIT_PARAM_READWRITE (static_cast<GParamFlags>(G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB))
+#define HFCL_PARAM_READABLE (static_cast<GParamFlags>(G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB))
+#define HFCL_PARAM_WRITABLE (static_cast<GParamFlags>(G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB))
+#define HFCL_PARAM_READWRITE (static_cast<GParamFlags>(G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB))
 
-#define WEBKIT_DEFINE_ASYNC_DATA_STRUCT(structName) \
+#define HFCL_DEFINE_ASYNC_DATA_STRUCT(structName) \
 static structName* create##structName() \
 { \
     structName* data = static_cast<structName*>(fastZeroedMalloc(sizeof(structName))); \
@@ -39,12 +39,12 @@ static void destroy##structName(structName* data) \
     fastFree(data); \
 }
 
-#define WEBKIT_DEFINE_TYPE(TypeName, type_name, TYPE_PARENT) _WEBKIT_DEFINE_TYPE_EXTENDED(TypeName, type_name, TYPE_PARENT, 0, { })
-#define WEBKIT_DEFINE_ABSTRACT_TYPE(TypeName, type_name, TYPE_PARENT) _WEBKIT_DEFINE_TYPE_EXTENDED(TypeName, type_name, TYPE_PARENT, G_TYPE_FLAG_ABSTRACT, { })
-#define WEBKIT_DEFINE_TYPE_WITH_CODE(TypeName, type_name, TYPE_PARENT, Code) _WEBKIT_DEFINE_TYPE_EXTENDED_BEGIN(TypeName, type_name, TYPE_PARENT, 0) {Code;} _WEBKIT_DEFINE_TYPE_EXTENDED_END()
+#define HFCL_DEFINE_TYPE(TypeName, type_name, TYPE_PARENT) _HFCL_DEFINE_TYPE_EXTENDED(TypeName, type_name, TYPE_PARENT, 0, { })
+#define HFCL_DEFINE_ABSTRACT_TYPE(TypeName, type_name, TYPE_PARENT) _HFCL_DEFINE_TYPE_EXTENDED(TypeName, type_name, TYPE_PARENT, G_TYPE_FLAG_ABSTRACT, { })
+#define HFCL_DEFINE_TYPE_WITH_CODE(TypeName, type_name, TYPE_PARENT, Code) _HFCL_DEFINE_TYPE_EXTENDED_BEGIN(TypeName, type_name, TYPE_PARENT, 0) {Code;} _HFCL_DEFINE_TYPE_EXTENDED_END()
 
-#define _WEBKIT_DEFINE_TYPE_EXTENDED(TypeName, type_name, TYPE_PARENT, flags, Code) _WEBKIT_DEFINE_TYPE_EXTENDED_BEGIN(TypeName, type_name, TYPE_PARENT, flags) {Code;} _WEBKIT_DEFINE_TYPE_EXTENDED_END()
-#define _WEBKIT_DEFINE_TYPE_EXTENDED_BEGIN(TypeName, type_name, TYPE_PARENT, flags) \
+#define _HFCL_DEFINE_TYPE_EXTENDED(TypeName, type_name, TYPE_PARENT, flags, Code) _HFCL_DEFINE_TYPE_EXTENDED_BEGIN(TypeName, type_name, TYPE_PARENT, flags) {Code;} _HFCL_DEFINE_TYPE_EXTENDED_END()
+#define _HFCL_DEFINE_TYPE_EXTENDED_BEGIN(TypeName, type_name, TYPE_PARENT, flags) \
 \
 static void type_name##_class_init(TypeName##Class* klass); \
 static GType type_name##_get_type_once(void); \
@@ -94,6 +94,6 @@ NEVER_INLINE static GType type_name##_get_type_once(void) \
             (GInstanceInitFunc)(void (*)(void))type_name##_init, \
             (GTypeFlags)flags); \
     /* Custom code follows. */
-#define _WEBKIT_DEFINE_TYPE_EXTENDED_END() \
+#define _HFCL_DEFINE_TYPE_EXTENDED_END() \
     return g_define_type_id; \
 } /* Closes type_name##_get_type_once() */

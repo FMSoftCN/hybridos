@@ -62,7 +62,7 @@ RunLoop::RunLoop()
 
     m_source = adoptGRef(g_source_new(&runLoopSourceFunctions, sizeof(GSource)));
     g_source_set_priority(m_source.get(), RunLoopSourcePriority::RunLoopDispatcher);
-    g_source_set_name(m_source.get(), "[WebKit] RunLoop work");
+    g_source_set_name(m_source.get(), "[Hfcl] RunLoop work");
     g_source_set_can_recurse(m_source.get(), TRUE);
     g_source_set_callback(m_source.get(), [](gpointer userData) -> gboolean {
         static_cast<RunLoop*>(userData)->performWork();
@@ -144,7 +144,7 @@ void RunLoop::dispatchAfter(Seconds duration, Function<void()>&& function)
 {
     GRefPtr<GSource> source = adoptGRef(g_source_new(&runLoopSourceFunctions, sizeof(GSource)));
     g_source_set_priority(source.get(), RunLoopSourcePriority::RunLoopTimer);
-    g_source_set_name(source.get(), "[WebKit] RunLoop dispatchAfter");
+    g_source_set_name(source.get(), "[Hfcl] RunLoop dispatchAfter");
     g_source_set_ready_time(source.get(), g_get_monotonic_time() + duration.microsecondsAs<gint64>());
 
     std::unique_ptr<DispatchAfterContext> context = std::make_unique<DispatchAfterContext>(WTFMove(function));
@@ -161,7 +161,7 @@ RunLoop::TimerBase::TimerBase(RunLoop& runLoop)
     , m_source(adoptGRef(g_source_new(&runLoopSourceFunctions, sizeof(GSource))))
 {
     g_source_set_priority(m_source.get(), RunLoopSourcePriority::RunLoopTimer);
-    g_source_set_name(m_source.get(), "[WebKit] RunLoop::Timer work");
+    g_source_set_name(m_source.get(), "[Hfcl] RunLoop::Timer work");
     g_source_set_callback(m_source.get(), [](gpointer userData) -> gboolean {
         // fired() executes the user's callback. It may destroy timer,
         // so we must check if the source is still active afterwards

@@ -126,7 +126,7 @@
         Reviewed by David Kilzer.
 
         This is a speculative fix for resolving build errors arising from conflicting
-        definitions of bad_optional_access when building WebKit with the latest clang.
+        definitions of bad_optional_access when building Hfcl with the latest clang.
 
         * wtf/Optional.h:
         (std::bad_optional_access::bad_optional_access): Deleted.
@@ -194,7 +194,7 @@
 
         * Scripts/generate-unified-source-bundles.rb:
         It turns out our plan to switch unified source bundle every time the directory
-        changes is not a good fit for projects like WebKit2 with many small directories.
+        changes is not a good fit for projects like Hfcl2 with many small directories.
         It leaves many unified source bundles with only a single source file,
         achieving only ~40% density.
 
@@ -772,7 +772,7 @@
         Reviewed by Filip Pizlo.
 
         Remove lfence instruction because it is crashing systems without SSE2 and
-        this is not the way how WebKit mitigates Spectre.
+        this is not the way how Hfcl mitigates Spectre.
 
         * wtf/Atomics.h:
         (WTF::crossModifyingCodeFence):
@@ -1278,7 +1278,7 @@
 
 2018-07-14  Kocsen Chung  <kocsen_chung@apple.com>
 
-        Ensure WebKit stack is ad-hoc signed
+        Ensure Hfcl stack is ad-hoc signed
         https://bugs.webkit.org/show_bug.cgi?id=187667
 
         Reviewed by Alexey Proskuryakov.
@@ -1677,7 +1677,7 @@
 
 2018-06-27  Jonathan Bedard  <jbedard@apple.com>
 
-        Enable WebKit iOS 12 build
+        Enable Hfcl iOS 12 build
         https://bugs.webkit.org/show_bug.cgi?id=187024
         <rdar://problem/39759057>
 
@@ -1829,7 +1829,7 @@
 
 2018-06-21  Carlos Garcia Campos  <cgarcia@igalia.com>
 
-        [GLIB] improve get_type() fast path in WEBKIT_DEFINE_TYPE
+        [GLIB] improve get_type() fast path in HFCL_DEFINE_TYPE
         https://bugs.webkit.org/show_bug.cgi?id=186885
 
         Reviewed by Anders Carlsson.
@@ -2087,7 +2087,7 @@
 
         Reviewed by Mark Lam.
 
-        Move processHasEntitlement from Source/WebKit/Shared/mac/SandboxUtilities.h
+        Move processHasEntitlement from Source/Hfcl/Shared/mac/SandboxUtilities.h
         into WTF so JavaScriptCore can also use it.
 
         * WTF.xcodeproj/project.pbxproj:
@@ -2114,7 +2114,7 @@
 
 2018-06-05  Darin Adler  <darin@apple.com>
 
-        [Cocoa] More preparation for ARC, focusing on WebKit and smart pointers
+        [Cocoa] More preparation for ARC, focusing on Hfcl and smart pointers
         https://bugs.webkit.org/show_bug.cgi?id=186314
 
         Reviewed by Anders Carlsson.
@@ -2301,7 +2301,7 @@
 
         Reviewed by Carlos Garcia Campos.
 
-        Receive the memory pressure notifications from the UIProcess memory monitor via WebKit IPC.
+        Receive the memory pressure notifications from the UIProcess memory monitor via Hfcl IPC.
 
         * wtf/MemoryPressureHandler.h:
         * wtf/linux/MemoryPressureHandlerLinux.cpp:
@@ -2413,11 +2413,11 @@
 
         Reviewed by Geoffrey Garen.
 
-        Moved WeakObjCPtr.h from WebKit2 to WTF with RetainPtr.h, so that it can be used
-        in WebKitLegacy code.
+        Moved WeakObjCPtr.h from Hfcl2 to WTF with RetainPtr.h, so that it can be used
+        in HfclLegacy code.
 
         * WTF.xcodeproj/project.pbxproj:
-        * wtf/WeakObjCPtr.h: Renamed from Source/WebKit/Shared/mac/WeakObjCPtr.h.
+        * wtf/WeakObjCPtr.h: Renamed from Source/Hfcl/Shared/mac/WeakObjCPtr.h.
 
 2018-05-22  Filip Pizlo  <fpizlo@apple.com>
 
@@ -2517,7 +2517,7 @@
 
         Reviewed by Alex Christensen.
 
-        Disable some WebKit defined C++17 features for MSVC.
+        Disable some Hfcl defined C++17 features for MSVC.
 
         * wtf/StdLibExtras.h:
 
@@ -3051,7 +3051,7 @@
         If we define std::optional regardless of the existence of the standard library's <optional>,
         it causes compile errors. For example, in GCC 7 (specifically GCC 7.3.0) environment,
         <optional> is included in <unordered_map>.
-        We do not define std::optional in WebKit side if <optional> is offered.
+        We do not define std::optional in Hfcl side if <optional> is offered.
 
         And we also remove std::optional<T&> use since this is not accepted in C++17. Use
         std::optional<std::reference_wrapper<T>> instead.
@@ -3422,7 +3422,7 @@
 
 2018-04-18  Jer Noble  <jer.noble@apple.com>
 
-        Don't put build products into WK_ALTERNATE_WEBKIT_SDK_PATH for engineering builds
+        Don't put build products into WK_ALTERNATE_HFCL_SDK_PATH for engineering builds
         https://bugs.webkit.org/show_bug.cgi?id=184762
 
         Reviewed by Dan Bernstein.
@@ -3455,7 +3455,7 @@
 
 2018-04-19  Brady Eidson  <beidson@apple.com>
 
-        Add globally-unique HistoryItem identifiers (and have WebKit2 adopt them).
+        Add globally-unique HistoryItem identifiers (and have Hfcl2 adopt them).
         <rdar://problem/39533949> and https://bugs.webkit.org/show_bug.cgi?id=184750
 
         Reviewed by Ryosuke Niwa.
@@ -3505,7 +3505,7 @@
         This patch adds TracePointCodes to measure process launch time and
         WebProcess::initializeWebProcess time.
         
-        It also renames the TracePoint function to tracePoint since WebKit style
+        It also renames the TracePoint function to tracePoint since Hfcl style
         does not capitalize the first letter in function names.
 
         * wtf/SystemTracing.h:
@@ -3897,7 +3897,7 @@
         Reviewed by Yusuke Suzuki.
 
         Remove COMPILER_SUPPORTS(CXX_REFERENCE_QUALIFIED_FUNCTIONS), it's
-        supported by all compilers WebKit supports (it's a C++11 feature,
+        supported by all compilers Hfcl supports (it's a C++11 feature,
         *detection* of it with __has_extension was added to clang on May
         13th 2011, and VS2015 / GCC support it).
 
@@ -4247,13 +4247,13 @@
 
 2018-03-20  Brent Fulgham  <bfulgham@apple.com>
 
-        Create an assertion mechanism to ensure proper WebCore use in each WebKit Process
+        Create an assertion mechanism to ensure proper WebCore use in each Hfcl Process
         https://bugs.webkit.org/show_bug.cgi?id=183806
         <rdar://problem/38694251>
 
         Reviewed by Ryosuke Niwa.
 
-        Part of our security improvements involve better isolation between the different WebKit
+        Part of our security improvements involve better isolation between the different Hfcl
         processes (UIProcess, WebContent, Networking, Storage, etc.).
 
         We need an assertion language we can use to protect certain critical APIs and code paths
@@ -4713,7 +4713,7 @@
         (WTF::StackShot::operator=):
         * wtf/SystemFree.h:
         (WTF::SystemFree<T::operator() const):
-        * wtf/UniqueArray.h: Copied from Source/WebKit/Platform/win/LoggingWin.cpp.
+        * wtf/UniqueArray.h: Copied from Source/Hfcl/Platform/win/LoggingWin.cpp.
         (WTF::makeUniqueArray):
         * wtf/Vector.h:
         (WTF::VectorTypeOperations::forceInitialize):
@@ -4814,7 +4814,7 @@
         GCC and Clang has the builtins for arithmetic operations with overflow flags.
         CheckedArithmetic operations can be done with this builtins. Since the compiler
         can use overflow flags, potentially this is more efficient. CheckedArithmetic
-        already has TestWebKitAPI tests and we ensured the tests pass.
+        already has TestHfclAPI tests and we ensured the tests pass.
 
         * wtf/CheckedArithmetic.h:
 
@@ -5191,7 +5191,7 @@
 
 2018-02-14  Michael Saboff  <msaboff@apple.com>
 
-        REGRESSION(225695) : com.apple.WebKit.WebContent at com.apple.JavaScriptCore: JSC::RegExp::match + 630 :: stack overflow
+        REGRESSION(225695) : com.apple.Hfcl.WebContent at com.apple.JavaScriptCore: JSC::RegExp::match + 630 :: stack overflow
         https://bugs.webkit.org/show_bug.cgi?id=182705
 
         Reviewed by Mark Lam.
@@ -5390,7 +5390,7 @@
 
         Reviewed by Alex Christensen.
 
-        WebKit has CollatorDefault.cpp providing necessary stubs when
+        Hfcl has CollatorDefault.cpp providing necessary stubs when
         UCONFIG_NO_COLLATION is defined, however it is not included in cmake
         file list.
 
@@ -5782,8 +5782,8 @@
 
         Reviewed by Tim Horton.
 
-        Include AdditionalFeatureDefines.h, if possible. This allows WebKitAdditions to override
-        the value of certain feature flags in the OpenSource WebKit repository.
+        Include AdditionalFeatureDefines.h, if possible. This allows HfclAdditions to override
+        the value of certain feature flags in the OpenSource Hfcl repository.
 
         * wtf/Platform.h:
 
@@ -6254,7 +6254,7 @@
         due to overflow of std::chrono::time_point. So we intentionally avoid using
         std::chrono, and use WallTime, MonotonicTime, Seconds instead.
 
-        This patch removes all the remaining use of std::chrono from WebKit tree.
+        This patch removes all the remaining use of std::chrono from Hfcl tree.
 
         [1]: https://lists.webkit.org/pipermail/webkit-dev/2016-May/028242.html
 
@@ -6366,7 +6366,7 @@
 
         Reviewed by Brent Fulgham.
 
-        * wtf/PlatformWin.cmake: Use WEBKIT_MAKE_FORWARDING_HEADERS.
+        * wtf/PlatformWin.cmake: Use HFCL_MAKE_FORWARDING_HEADERS.
 
 2017-12-27  Yusuke Suzuki  <utatane.tea@gmail.com>
 
@@ -6428,10 +6428,10 @@
         Reviewed by Dan Bernstein and Tim Horton.
 
         When building with older macOS SDKs where some AppKit constants don't exist, define the modern constants to be
-        equal to their deprecated counterparts. This allows us to just have the modern types in WebKit sources while
+        equal to their deprecated counterparts. This allows us to just have the modern types in Hfcl sources while
         avoiding breakage on old SDKs.
 
-        This, along with many other symbols in the compability header, can be removed once WebKit stops supporting macOS
+        This, along with many other symbols in the compability header, can be removed once Hfcl stops supporting macOS
         10.11.
 
         * wtf/mac/AppKitCompatibilityDeclarations.h:
@@ -6682,7 +6682,7 @@
 
 2017-12-14  David Kilzer  <ddkilzer@apple.com>
 
-        Enable -Wstrict-prototypes for WebKit
+        Enable -Wstrict-prototypes for Hfcl
         <https://webkit.org/b/180757>
         <rdar://problem/36024132>
 
@@ -6705,7 +6705,7 @@
 
         Reviewed by Darin Adler.
 
-        We remove Thread::tryCreate. When thread creation fails, we have no way to keep WebKit working.
+        We remove Thread::tryCreate. When thread creation fails, we have no way to keep Hfcl working.
         Compared to tryMalloc, Thread::create always consumes fixed size of resource. If it fails,
         this is not due to arbitrary large user request. It is not reasonable that some thread creations
         are handled gracefully while the other thread creations are not.
@@ -6982,7 +6982,7 @@
 
         Many callers of Thread::create assume that it returns non-nullptr Thread.
         But if the number of threads hits the limit in the system, creating Thread
-        would fail. In that case, it is really difficult to keep WebKit working.
+        would fail. In that case, it is really difficult to keep Hfcl working.
 
         We introduce Thread::tryCreate, and change the returned value from Thread::create
         from RefPtr<Thread> to Ref<Thread>. In Thread::create, we ensure thread creation
@@ -7003,7 +7003,7 @@
 
 2017-12-11  Eric Carlson  <eric.carlson@apple.com>
 
-        Web Inspector: Optionally log WebKit log parameters as JSON
+        Web Inspector: Optionally log Hfcl log parameters as JSON
         https://bugs.webkit.org/show_bug.cgi?id=180529
         <rdar://problem/35909462>
 
@@ -7133,7 +7133,7 @@
 
         Reviewed by JF Bastien.
 
-        Now VC++ is updated and all the WebKit compilers support C++14 relaxed constexpr.
+        Now VC++ is updated and all the Hfcl compilers support C++14 relaxed constexpr.
         This patch uses relaxed constexpr for StringHasher constexpr implementation
 
         * wtf/text/StringHasher.h:
@@ -7258,7 +7258,7 @@
 
 2017-12-08  Yusuke Suzuki  <utatane.tea@gmail.com>
 
-        Use StaticLock and Lock instead of Mutex in Windows WebKitLegacy
+        Use StaticLock and Lock instead of Mutex in Windows HfclLegacy
         https://bugs.webkit.org/show_bug.cgi?id=180572
 
         Reviewed by Mark Lam.
@@ -7447,7 +7447,7 @@
 
 2017-12-02  Darin Adler  <darin@apple.com>
 
-        Modernize some aspects of text codecs, eliminate WebKit use of strcasecmp
+        Modernize some aspects of text codecs, eliminate Hfcl use of strcasecmp
         https://bugs.webkit.org/show_bug.cgi?id=180009
 
         Reviewed by Alex Christensen.
@@ -7603,7 +7603,7 @@
 
 2017-12-05  Michael Saboff  <msaboff@apple.com>
 
-        Make WebKit build for ARM64_32
+        Make Hfcl build for ARM64_32
         https://bugs.webkit.org/show_bug.cgi?id=180447
 
         Reviewed by Mark Lam.
@@ -7783,7 +7783,7 @@
         - Add mild support for an exception-based implementation, but
           don't do noexcept yet.
         - Rename everything to follow STL style, and keep a global using
-          or variable alias where possible to reduce WebKit code churn.
+          or variable alias where possible to reduce Hfcl code churn.
         - Minor API updates to remove things that aren't in the proposal
           anymore.
 
@@ -8531,7 +8531,7 @@
         Reviewed by JF Bastien.
 
         Currently, we use known CPU information to determine endianess of the current
-        architecture. But this means that unknown CPU does not work well in WebKit
+        architecture. But this means that unknown CPU does not work well in Hfcl
         withou modifying code. Instead, we use compiler or system's macro to determine
         endianess. This paves the way to dropping many CPUs in Platform.h by replacing
         them with CPU(UNKNOWN)[1].
@@ -8863,7 +8863,7 @@
 
 2017-11-08  Tim Horton  <timothy_horton@apple.com>
 
-        [ios-simulator] API test WebKit.BundleParameters is a flaky failure
+        [ios-simulator] API test Hfcl.BundleParameters is a flaky failure
         https://bugs.webkit.org/show_bug.cgi?id=178363
         <rdar://problem/35043144>
 
@@ -8926,7 +8926,7 @@
 
         Reviewed by Saam Barati, Simon Fraser, and Ryosuke Niwa.
         
-        This just adds an easy way of using the bmalloc IsoHeap API in WebKit. If bmalloc is not
+        This just adds an easy way of using the bmalloc IsoHeap API in Hfcl. If bmalloc is not
         enabled, these macros will just make the object FastMalloced.
 
         * WTF.xcodeproj/project.pbxproj:
@@ -9530,7 +9530,7 @@
         this function would remove trailing zeroes from the exponent if
         present instead of from the mantissa. This meant that it would
         format 1e10 as "1.00000e+1" instead of "1e+10". Added regression
-        tests for this to TestWebKitAPI.
+        tests for this to TestHfclAPI.
 
         * wtf/dtoa/utils.h:
         (WTF::double_conversion::StringBuilder::RemoveCharacters): Added.
@@ -9614,7 +9614,7 @@
         For GCC and Clang, generate an error at build time that will alert
         the developer that she is trying to build Release without any compiler
         optimization. A build time error is much better than an unexpected
-        "oh, WebKit is really slow ..."  situation later.
+        "oh, Hfcl is really slow ..."  situation later.
 
         If this was intended, then we tell the developer that she can continue
         by just setting -DRELEASE_WITHOUT_OPTIMIZATIONS in the list of build
@@ -9716,7 +9716,7 @@
         For GCC and Clang, generate an error at build time that will alert
         the developer that she is trying to build Release without any compiler
         optimization. A build time error is much better than an unexpected
-        "oh, WebKit is really slow ..."  situation later.
+        "oh, Hfcl is really slow ..."  situation later.
 
         If this was intended, then we tell the developer that she can continue
         by just setting -DRELEASE_WITHOUT_OPTIMIZATIONS in the list of build
@@ -10072,7 +10072,7 @@
 
 2017-09-18  Andy Estes  <aestes@apple.com>
 
-        [Cocoa] Upstream sandbox-related WebKitSystemInterface functions
+        [Cocoa] Upstream sandbox-related HfclSystemInterface functions
         https://bugs.webkit.org/show_bug.cgi?id=177047
 
         Reviewed by Daniel Bates.
@@ -10392,13 +10392,13 @@
 
         Reviewed by Sam Weinig.
 
-        WebKit project does not have stake holders supporting Solaris right now.
+        Hfcl project does not have stake holders supporting Solaris right now.
         And Solaris + SPARC in 64bit environment does not work well since its
         address space includes non-48bit area. It breaks our JSVALUE64 in JSC.
         In addition, Solaris a bit complicates our threading implementation
         because of its special threading stack.
 
-        This patch removes OS(SOLARIS) and COMPILER(SUNCC) support from WebKit.
+        This patch removes OS(SOLARIS) and COMPILER(SUNCC) support from Hfcl.
 
         * wtf/Compiler.h:
         * wtf/InlineASM.h:
@@ -10956,7 +10956,7 @@
         We change escape operation of JSON Quote from branch-based to table-based.
         This patch partially adopts SpiderMonkey's change to StringBuilderJSON.cpp
         to optimize this escaping operation. We separate changes from StringBuilder.cpp
-        to apply MPL to StringBuilderJSON.cpp file. Since WebKit already adopts MPL in
+        to apply MPL to StringBuilderJSON.cpp file. Since Hfcl already adopts MPL in
         some files (like, DateMath.h), it is acceptable.
 
         Kraken json-stringify-tinderbox shows 7.2% improvement.
@@ -11318,7 +11318,7 @@
 
         Reviewed by Darin Adler.
 
-        There are many places in WebCore/WebKit that we call functions like, 
+        There are many places in WebCore/Hfcl that we call functions like, 
         WebCore::stripLeadingAndTrailingHTMLSpaces,  or String::stripWhiteSpace() only to use 
         the allocated String as a temporary for either another transformation or a comparison.
         Now that we have StringView, we can avoid that extra allocation, by having returning a
@@ -12569,7 +12569,7 @@
 
 2017-07-14  Filip Pizlo  <fpizlo@apple.com>
 
-        It should be easy to decide how WebKit yields
+        It should be easy to decide how Hfcl yields
         https://bugs.webkit.org/show_bug.cgi?id=174298
 
         Reviewed by Saam Barati.
@@ -12631,7 +12631,7 @@
         Unreviewed, rolling out r219732.
         https://bugs.webkit.org/show_bug.cgi?id=174748
 
-        static is not threadsafe in WebKit tree (Requested by
+        static is not threadsafe in Hfcl tree (Requested by
         yusukesuzuki on #webkit).
 
         Reverted changeset:
@@ -13039,7 +13039,7 @@
 
 2017-07-17  Konstantin Tokarev  <annulen@yandex.ru>
 
-        [CMake] Create targets before WEBKIT_INCLUDE_CONFIG_FILES_IF_EXISTS is called
+        [CMake] Create targets before HFCL_INCLUDE_CONFIG_FILES_IF_EXISTS is called
         https://bugs.webkit.org/show_bug.cgi?id=174557
 
         Reviewed by Michael Catanzaro.
@@ -13725,7 +13725,7 @@
 
 2017-07-03  Myles C. Maxfield  <mmaxfield@apple.com>
 
-        Remove copy of ICU headers from WebKit
+        Remove copy of ICU headers from Hfcl
         https://bugs.webkit.org/show_bug.cgi?id=116407
 
         Reviewed by Alex Christensen.
@@ -13734,7 +13734,7 @@
         to DSTROOT/usr/local/include/. These headers already live inside a
         "unicode" folder, so an example path of a header is
         DSTROOT/usr/local/include/unicode/uchar.h. This is already in the search
-        path of the other WebKit projects, so those other projects can remove
+        path of the other Hfcl projects, so those other projects can remove
         their explicit listing of the old place these headers lived.
 
         Also add the remaining ICU 55.1 headers which the other projects (like
@@ -14057,13 +14057,13 @@
 
         Reverted changeset:
 
-        "Remove copy of ICU headers from WebKit"
+        "Remove copy of ICU headers from Hfcl"
         https://bugs.webkit.org/show_bug.cgi?id=116407
         http://trac.webkit.org/changeset/219103
 
 2017-07-03  Myles C. Maxfield  <mmaxfield@apple.com>
 
-        Remove copy of ICU headers from WebKit
+        Remove copy of ICU headers from Hfcl
         https://bugs.webkit.org/show_bug.cgi?id=116407
 
         Reviewed by Alex Christensen.
@@ -14072,7 +14072,7 @@
         to DSTROOT/usr/local/include/. These headers already live inside a
         "unicode" folder, so an example path of a header is
         DSTROOT/usr/local/include/unicode/uchar.h. This is already in the search
-        path of the other WebKit projects, so those other projects can remove
+        path of the other Hfcl projects, so those other projects can remove
         their explicit listing of the old place these headers lived.
 
         Also add the remaining ICU 55.1 headers which the other projects (like
@@ -14524,7 +14524,7 @@
 
         Reviewed by Chris Dumez.
 
-        * wtf/DispatchPtr.h: Added (moved from WebKit2)
+        * wtf/DispatchPtr.h: Added (moved from Hfcl2)
         * wtf/Platform.h: Make sure USE_FILE_LOCK is enabled.
 
 2017-06-28  David Kilzer  <ddkilzer@apple.com>
@@ -14622,8 +14622,8 @@
 
         Add
 
-        notifyutil -p org.WebKit.lowMemory.begin
-        notifyutil -p org.WebKit.lowMemory.end
+        notifyutil -p org.Hfcl.lowMemory.begin
+        notifyutil -p org.Hfcl.lowMemory.end
 
         for debugging.
 
@@ -14650,7 +14650,7 @@
 
         This function is counting WebCore::Page objects (excluding utility Pages used
         by SVG-as-image and the web inspector) so let's name it appropriately.
-        Not all WebKit clients have tabs.
+        Not all Hfcl clients have tabs.
 
         * wtf/MemoryPressureHandler.cpp:
         (WTF::MemoryPressureHandler::setPageCount):
@@ -14829,7 +14829,7 @@
 
 2017-06-16  Wenson Hsieh  <wenson_hsieh@apple.com>
 
-        [iOS DnD] Upstream iOS drag and drop implementation into OpenSource WebKit
+        [iOS DnD] Upstream iOS drag and drop implementation into OpenSource Hfcl
         https://bugs.webkit.org/show_bug.cgi?id=173366
         <rdar://problem/32767014>
 
@@ -14946,14 +14946,14 @@
 
 2017-06-12  Carlos Garcia Campos  <cgarcia@igalia.com>
 
-        [GTK] Move WebKit GType macros to WTF
+        [GTK] Move Hfcl GType macros to WTF
         https://bugs.webkit.org/show_bug.cgi?id=173249
 
         Reviewed by Žan Doberšek.
 
         They can be used by glib-based ports and eventually by JavaScriptCore glib bindings too.
 
-        * wtf/glib/WTFGType.h: Copied from Source/WebKit2/UIProcess/API/gtk/WebKitPrivate.h.
+        * wtf/glib/WTFGType.h: Copied from Source/Hfcl2/UIProcess/API/gtk/HfclPrivate.h.
 
 2017-06-11  Yusuke Suzuki  <utatane.tea@gmail.com>
 
@@ -15575,7 +15575,7 @@
 
         Reviewed by Antti Koivisto.
 
-        If someone is using WebKit with a non-standard allocator, they are likely trying to debug
+        If someone is using Hfcl with a non-standard allocator, they are likely trying to debug
         or test something, and suddenly getting killed is not gonna help with that.
 
         * wtf/MemoryPressureHandler.cpp:
@@ -16515,12 +16515,12 @@
 
 2017-04-24  Yusuke Suzuki  <utatane.tea@gmail.com>
 
-        [AppleWin] The procedure entry point ?waitForThreadCompletion@WTF@@YAHI@Z could not be located in the dynamic link library WebKitQuartzCoreAdditions.dll
+        [AppleWin] The procedure entry point ?waitForThreadCompletion@WTF@@YAHI@Z could not be located in the dynamic link library HfclQuartzCoreAdditions.dll
         https://bugs.webkit.org/show_bug.cgi?id=171029
 
         Reviewed by Brent Fulgham.
 
-        While WTF Threading APIs are updated, WebKitQuartzCoreAdditions.dll in Windows uses some of the old APIs,
+        While WTF Threading APIs are updated, HfclQuartzCoreAdditions.dll in Windows uses some of the old APIs,
         waitForThreadCompletion and createThread. This patch implements both on top of the new APIs.
         These APIs are only exposed in Windows for this compatibility problem and new code should not use it.
 
@@ -16900,13 +16900,13 @@
 
         Reviewed by Sam Weinig.
 
-        Test: TestWebKitAPI/Tests/WTF/darwin/WeakLinking.cpp
+        Test: TestHfclAPI/Tests/WTF/darwin/WeakLinking.cpp
 
         * WTF.xcodeproj/project.pbxproj: Added reference to new file.
         * wtf/darwin: Added.
         * wtf/darwin/WeakLinking.h: Added.
         (WTF::isNullFunctionPointer): Copied from ResourceLoadStatisticsClassifierCocoa.cpp in
-          WebKit2 and changed into a function template that works with any function pointer.
+          Hfcl2 and changed into a function template that works with any function pointer.
 
 2017-04-17  Ryan Haddad  <ryanhaddad@apple.com>
 
@@ -17743,7 +17743,7 @@
         to avoid repeatedly open and close urandom file descriptor in Linux.
 
         The purpose is similar to std::random_device, but WTF::RandomDevice explicitly
-        avoids using ARC4, which is recently attempted to be removed from the WebKit
+        avoids using ARC4, which is recently attempted to be removed from the Hfcl
         tree[1].
 
         [1]: https://trac.webkit.org/r214329
@@ -17946,7 +17946,7 @@
         Unreviewed, rolling out r214351.
 
         This change caused API test
-        WebKit1.DidCreateJavaScriptContextBackForwardCacheTest to
+        Hfcl1.DidCreateJavaScriptContextBackForwardCacheTest to
         fail.
 
         Reverted changeset:
@@ -18093,7 +18093,7 @@
         Reviewed by Zalan Bujtas.
 
         Use a more cohesive set of system trace points that give a good overview of what
-        WebKit is doing. Added points for resource loading, render tree building, sync messages
+        Hfcl is doing. Added points for resource loading, render tree building, sync messages
         to the web process, async image decode, WASM and fetching cookies.
 
         * wtf/SystemTracing.h:
@@ -18906,7 +18906,7 @@
         Make initialization functions more independent so that they can run in different
         order. WTF::initializeMainThread initializes WTF threading, so that neither WTF nor JSC theading need to be
         initialized before. RunLoop::initializeMainRunLoop() requires main thread to be initialized in some
-        ports, so it initializes main thread too. WebKit1 always calls WTF::initializeMainThreadToProcessMainThread()
+        ports, so it initializes main thread too. Hfcl1 always calls WTF::initializeMainThreadToProcessMainThread()
         before RunLoop::initializeMainRunLoop() so there's no problem there. GC threads are initialized alwayas by the
         main thread. The rules should be simpler now:
 
@@ -18915,7 +18915,7 @@
             initialize a main thread or main run loop.
           - WTF::initializeMainThread: only needs to be explicitly called if process initializes a main thread but not a
             main run loop.
-          - WTF::initializeMainThreadToProcessMainThread(): should always be called in WebKit1 before
+          - WTF::initializeMainThreadToProcessMainThread(): should always be called in Hfcl1 before
             RunLoop::initializeMainRunLoop().
           - RunLoop::initializeMainRunLoop(): to initialize the main run loop. The only requirement is JSC::initializeThreading()
             to be called before if JSC is used.
@@ -19281,7 +19281,7 @@
 
 2017-02-13  Brady Eidson  <beidson@apple.com>
 
-        Followup to: Replace all WebKit Library Version checks in WK2 with SDK version checks.
+        Followup to: Replace all Hfcl Library Version checks in WK2 with SDK version checks.
         https://bugs.webkit.org/show_bug.cgi?id=168124
 
         Reviewed by Geoffrey Garen.
@@ -19373,7 +19373,7 @@
 
 2017-02-09  Brady Eidson  <beidson@apple.com>
 
-        Transition "WebKit Library Version" checks to SDK version checks.
+        Transition "Hfcl Library Version" checks to SDK version checks.
         <rdar://problem/30313696> and https://bugs.webkit.org/show_bug.cgi?id=168056
 
         Reviewed by Geoffrey Garen.
@@ -19385,12 +19385,12 @@
         Unreviewed, rolling out r211980 and r211987.
         https://bugs.webkit.org/show_bug.cgi?id=168072
 
-        Caused API test WebKit2.DuplicateCompletionHandlerCalls to
+        Caused API test Hfcl2.DuplicateCompletionHandlerCalls to
         fail (Requested by ryanhaddad on #webkit).
 
         Reverted changesets:
 
-        "Transition "WebKit Library Version" checks to SDK version
+        "Transition "Hfcl Library Version" checks to SDK version
         checks."
         https://bugs.webkit.org/show_bug.cgi?id=168056
         http://trac.webkit.org/changeset/211980
@@ -19418,7 +19418,7 @@
 
 2017-02-09  Brady Eidson  <beidson@apple.com>
 
-        Transition "WebKit Library Version" checks to SDK version checks.
+        Transition "Hfcl Library Version" checks to SDK version checks.
         <rdar://problem/30313696> and https://bugs.webkit.org/show_bug.cgi?id=168056
 
         Reviewed by Geoffrey Garen.
@@ -19525,7 +19525,7 @@
         Unreviewed, rolling out r211571 and r211582.
         https://bugs.webkit.org/show_bug.cgi?id=167751
 
-        This change caused API test WebKit1.MemoryPressureHandler to
+        This change caused API test Hfcl1.MemoryPressureHandler to
         fail with an assertion. (Requested by ryanhaddad on #webkit).
 
         Reverted changesets:
@@ -19556,10 +19556,10 @@
 
 2017-02-01  Wenson Hsieh  <wenson_hsieh@apple.com>
 
-        Unreviewed, fix the WebKit nightly open source build
+        Unreviewed, fix the Hfcl nightly open source build
         <rdar://problem/30308635>
 
-        We cannot assume all internal SDKs have the latest WebKitAdditions, so we need an explicit header check here.
+        We cannot assume all internal SDKs have the latest HfclAdditions, so we need an explicit header check here.
 
         * wtf/Platform.h:
 
@@ -19627,12 +19627,12 @@
 
 2017-01-28  Wenson Hsieh  <wenson_hsieh@apple.com>
 
-        Check USE(APPLE_INTERNAL_SDK) instead of specific headers when importing from WebKitAdditions
+        Check USE(APPLE_INTERNAL_SDK) instead of specific headers when importing from HfclAdditions
         https://bugs.webkit.org/show_bug.cgi?id=167555
 
         Reviewed by Dan Bernstein.
 
-        Instead of guarding #import <WebKitAdditions/*> on the existence of the imported file, consult
+        Instead of guarding #import <HfclAdditions/*> on the existence of the imported file, consult
         USE(APPLE_INTERNAL_SDK) instead.
 
         * wtf/Platform.h:
@@ -19964,54 +19964,54 @@
 
         * WTF.xcodeproj/project.pbxproj:
         * wtf/persistence: Added.
-        * wtf/persistence/Coder.h: Copied from Source/WebKit2/NetworkProcess/cache/NetworkCacheCoder.h.
-        (WebKit::NetworkCache::Coder::encode): Deleted.
-        (WebKit::NetworkCache::Coder::decode): Deleted.
-        * wtf/persistence/Coders.cpp: Copied from Source/WebKit2/NetworkProcess/cache/NetworkCacheCoders.cpp.
-        (WebKit::NetworkCache::Coder<AtomicString>::encode): Deleted.
-        (WebKit::NetworkCache::Coder<AtomicString>::decode): Deleted.
-        (WebKit::NetworkCache::Coder<CString>::encode): Deleted.
-        (WebKit::NetworkCache::Coder<CString>::decode): Deleted.
-        (WebKit::NetworkCache::Coder<String>::encode): Deleted.
-        (WebKit::NetworkCache::decodeStringText): Deleted.
-        (WebKit::NetworkCache::Coder<String>::decode): Deleted.
-        (WebKit::NetworkCache::Coder<SHA1::Digest>::encode): Deleted.
-        (WebKit::NetworkCache::Coder<SHA1::Digest>::decode): Deleted.
-        (WebKit::NetworkCache::Coder<WebCore::HTTPHeaderMap>::encode): Deleted.
-        (WebKit::NetworkCache::Coder<WebCore::HTTPHeaderMap>::decode): Deleted.
-        * wtf/persistence/Coders.h: Copied from Source/WebKit2/NetworkProcess/cache/NetworkCacheCoders.h.
-        (WebKit::NetworkCache::Coder<std::optional<T>>::encode): Deleted.
-        (WebKit::NetworkCache::Coder<std::optional<T>>::decode): Deleted.
-        * wtf/persistence/Decoder.cpp: Copied from Source/WebKit2/NetworkProcess/cache/NetworkCacheDecoder.cpp.
-        (WebKit::NetworkCache::Decoder::Decoder): Deleted.
-        (WebKit::NetworkCache::Decoder::~Decoder): Deleted.
-        (WebKit::NetworkCache::Decoder::bufferIsLargeEnoughToContain): Deleted.
-        (WebKit::NetworkCache::Decoder::decodeFixedLengthData): Deleted.
-        (WebKit::NetworkCache::Decoder::decodeNumber): Deleted.
-        (WebKit::NetworkCache::Decoder::decode): Deleted.
-        (WebKit::NetworkCache::Decoder::verifyChecksum): Deleted.
-        * wtf/persistence/Decoder.h: Copied from Source/WebKit2/NetworkProcess/cache/NetworkCacheDecoder.h.
-        (WebKit::NetworkCache::Decoder::length): Deleted.
-        (WebKit::NetworkCache::Decoder::currentOffset): Deleted.
-        (WebKit::NetworkCache::Decoder::decodeEnum): Deleted.
-        (WebKit::NetworkCache::Decoder::decode): Deleted.
-        (WebKit::NetworkCache::Decoder::bufferIsLargeEnoughToContain): Deleted.
-        * wtf/persistence/Encoder.cpp: Copied from Source/WebKit2/NetworkProcess/cache/NetworkCacheEncoder.cpp.
-        (WebKit::NetworkCache::Encoder::Encoder): Deleted.
-        (WebKit::NetworkCache::Encoder::~Encoder): Deleted.
-        (WebKit::NetworkCache::Encoder::grow): Deleted.
-        (WebKit::NetworkCache::Encoder::updateChecksumForData): Deleted.
-        (WebKit::NetworkCache::Encoder::encodeFixedLengthData): Deleted.
-        (WebKit::NetworkCache::Encoder::encodeNumber): Deleted.
-        (WebKit::NetworkCache::Encoder::encode): Deleted.
-        (WebKit::NetworkCache::Encoder::encodeChecksum): Deleted.
-        * wtf/persistence/Encoder.h: Copied from Source/WebKit2/NetworkProcess/cache/NetworkCacheEncoder.h.
-        (WebKit::NetworkCache::Encoder::encodeEnum): Deleted.
-        (WebKit::NetworkCache::Encoder::encode): Deleted.
-        (WebKit::NetworkCache::Encoder::operator<<): Deleted.
-        (WebKit::NetworkCache::Encoder::buffer): Deleted.
-        (WebKit::NetworkCache::Encoder::bufferSize): Deleted.
-        (WebKit::NetworkCache::Encoder::updateChecksumForNumber): Deleted.
+        * wtf/persistence/Coder.h: Copied from Source/Hfcl2/NetworkProcess/cache/NetworkCacheCoder.h.
+        (Hfcl::NetworkCache::Coder::encode): Deleted.
+        (Hfcl::NetworkCache::Coder::decode): Deleted.
+        * wtf/persistence/Coders.cpp: Copied from Source/Hfcl2/NetworkProcess/cache/NetworkCacheCoders.cpp.
+        (Hfcl::NetworkCache::Coder<AtomicString>::encode): Deleted.
+        (Hfcl::NetworkCache::Coder<AtomicString>::decode): Deleted.
+        (Hfcl::NetworkCache::Coder<CString>::encode): Deleted.
+        (Hfcl::NetworkCache::Coder<CString>::decode): Deleted.
+        (Hfcl::NetworkCache::Coder<String>::encode): Deleted.
+        (Hfcl::NetworkCache::decodeStringText): Deleted.
+        (Hfcl::NetworkCache::Coder<String>::decode): Deleted.
+        (Hfcl::NetworkCache::Coder<SHA1::Digest>::encode): Deleted.
+        (Hfcl::NetworkCache::Coder<SHA1::Digest>::decode): Deleted.
+        (Hfcl::NetworkCache::Coder<WebCore::HTTPHeaderMap>::encode): Deleted.
+        (Hfcl::NetworkCache::Coder<WebCore::HTTPHeaderMap>::decode): Deleted.
+        * wtf/persistence/Coders.h: Copied from Source/Hfcl2/NetworkProcess/cache/NetworkCacheCoders.h.
+        (Hfcl::NetworkCache::Coder<std::optional<T>>::encode): Deleted.
+        (Hfcl::NetworkCache::Coder<std::optional<T>>::decode): Deleted.
+        * wtf/persistence/Decoder.cpp: Copied from Source/Hfcl2/NetworkProcess/cache/NetworkCacheDecoder.cpp.
+        (Hfcl::NetworkCache::Decoder::Decoder): Deleted.
+        (Hfcl::NetworkCache::Decoder::~Decoder): Deleted.
+        (Hfcl::NetworkCache::Decoder::bufferIsLargeEnoughToContain): Deleted.
+        (Hfcl::NetworkCache::Decoder::decodeFixedLengthData): Deleted.
+        (Hfcl::NetworkCache::Decoder::decodeNumber): Deleted.
+        (Hfcl::NetworkCache::Decoder::decode): Deleted.
+        (Hfcl::NetworkCache::Decoder::verifyChecksum): Deleted.
+        * wtf/persistence/Decoder.h: Copied from Source/Hfcl2/NetworkProcess/cache/NetworkCacheDecoder.h.
+        (Hfcl::NetworkCache::Decoder::length): Deleted.
+        (Hfcl::NetworkCache::Decoder::currentOffset): Deleted.
+        (Hfcl::NetworkCache::Decoder::decodeEnum): Deleted.
+        (Hfcl::NetworkCache::Decoder::decode): Deleted.
+        (Hfcl::NetworkCache::Decoder::bufferIsLargeEnoughToContain): Deleted.
+        * wtf/persistence/Encoder.cpp: Copied from Source/Hfcl2/NetworkProcess/cache/NetworkCacheEncoder.cpp.
+        (Hfcl::NetworkCache::Encoder::Encoder): Deleted.
+        (Hfcl::NetworkCache::Encoder::~Encoder): Deleted.
+        (Hfcl::NetworkCache::Encoder::grow): Deleted.
+        (Hfcl::NetworkCache::Encoder::updateChecksumForData): Deleted.
+        (Hfcl::NetworkCache::Encoder::encodeFixedLengthData): Deleted.
+        (Hfcl::NetworkCache::Encoder::encodeNumber): Deleted.
+        (Hfcl::NetworkCache::Encoder::encode): Deleted.
+        (Hfcl::NetworkCache::Encoder::encodeChecksum): Deleted.
+        * wtf/persistence/Encoder.h: Copied from Source/Hfcl2/NetworkProcess/cache/NetworkCacheEncoder.h.
+        (Hfcl::NetworkCache::Encoder::encodeEnum): Deleted.
+        (Hfcl::NetworkCache::Encoder::encode): Deleted.
+        (Hfcl::NetworkCache::Encoder::operator<<): Deleted.
+        (Hfcl::NetworkCache::Encoder::buffer): Deleted.
+        (Hfcl::NetworkCache::Encoder::bufferSize): Deleted.
+        (Hfcl::NetworkCache::Encoder::updateChecksumForNumber): Deleted.
 
 2017-01-08  Konstantin Tokarev  <annulen@yandex.ru>
 
@@ -20110,7 +20110,7 @@
         In some platform, the max length of thread names are limited.
         For example, the number of the max length is 32 in Windows and
         16 in Linux. But the specified thread name is typically long
-        in WebKit like "com.apple.CoreIPC.ReceiveQueue"
+        in Hfcl like "com.apple.CoreIPC.ReceiveQueue"
 
         We port the logic substring the thread name in
         generic/WorkQueueGeneric.cpp to Threading. It retrieves the name
@@ -20135,7 +20135,7 @@
 
 2017-01-04  Sam Weinig  <sam@webkit.org>
 
-        REGRESSION (r210257): com.apple.WebKit.WebContent.Development crashed in com.apple.WebCore: WebCore::ExceptionOr<WTF::Ref<WebCore::Database> >::operator= + 14
+        REGRESSION (r210257): com.apple.Hfcl.WebContent.Development crashed in com.apple.WebCore: WebCore::ExceptionOr<WTF::Ref<WebCore::Database> >::operator= + 14
         <rdar://problem/29866398> 
 
         * wtf/Expected.h:
@@ -20187,7 +20187,7 @@
 
         Reviewed by Alex Christensen.
 
-        Tests: Added to TestWebKitAPI/Expected.cpp
+        Tests: Added to TestHfclAPI/Expected.cpp
 
         * wtf/Expected.h:
         (WTF::UnexpectedType::value):
@@ -21062,7 +21062,7 @@
 
 2016-12-05  Joseph Pecoraro  <pecoraro@apple.com>
 
-        REGRESSION(r208985): SafariForWebKitDevelopment Symbol Not Found looking for method with WTF::Optional
+        REGRESSION(r208985): SafariForHfclDevelopment Symbol Not Found looking for method with WTF::Optional
         https://bugs.webkit.org/show_bug.cgi?id=165351
 
         Reviewed by Yusuke Suzuki.
@@ -21388,9 +21388,9 @@
         original proposal paper. It has the same interface and functionality
         to the C++17's one. Previous WTF::Optional lacks several functionalities.
         The largest one is the correct constexpr constructors. This fact prevents
-        us from using Optional<literal type> in constexpr context in WebKit.
+        us from using Optional<literal type> in constexpr context in Hfcl.
 
-        In WebKit, we do not allow global constructors. So only the constexpr
+        In Hfcl, we do not allow global constructors. So only the constexpr
         constructor is the way to use WTF::Optional in the static const
         global variables. WTF::Optional is used in DOMJIT::Effect and
         we would like to emit static const global variables that includes
@@ -21400,7 +21400,7 @@
 
         We import the reference implementation one instead of LLVM libc++'s one.
         This is because LLVM libc++'s one depends on many macro and type_traits
-        offered by libc++ implementation. And adopting it to WebKit requires
+        offered by libc++ implementation. And adopting it to Hfcl requires
         large modification compared to this reference implementation one.
         Furthermore, it is difficult to compile libc++'s optional in old GCC and VC++.
         It also requires some more modifications. To keep the thing simple,

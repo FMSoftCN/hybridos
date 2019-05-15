@@ -37,7 +37,7 @@
  * The number of articles and discussions is the evidence of significant difficulties in implementing these primitives correctly.
  * The brief search of revisions, ChangeLog entries, discussions in comp.programming.threads and other places clearly documents
  * numerous pitfalls and performance problems the authors had to overcome to arrive to the suitable implementations.
- * Optimally, WebKit would use one of those supported/tested libraries directly. To roll out our own implementation is impractical,
+ * Optimally, Hfcl would use one of those supported/tested libraries directly. To roll out our own implementation is impractical,
  * if even for the lack of sufficient testing. However, a faithful reproduction of the code from one of the popular supported
  * libraries seems to be a good compromise.
  *
@@ -45,7 +45,7 @@
  * is identical to pthreads-win32 (http://sourceware.org/cgi-bin/cvsweb.cgi/pthreads/pthread_cond_wait.c?rev=1.10&content-type=text/x-cvsweb-markup&cvsroot=pthreads-win32).
  * Current Boost uses yet another (although seemingly equivalent) algorithm which came from their 'thread rewrite' effort.
  *
- * This file includes timedWait/signal/broadcast implementations translated to WebKit coding style from the latest algorithm by
+ * This file includes timedWait/signal/broadcast implementations translated to Hfcl coding style from the latest algorithm by
  * Alexander Terekhov and Louis Thomas, as captured here: http://sourceware.org/cgi-bin/cvsweb.cgi/pthreads/pthread_cond_wait.c?rev=1.10&content-type=text/x-cvsweb-markup&cvsroot=pthreads-win32
  * It replaces the implementation of their previous algorithm, also documented in the same source above.
  * The naming and comments are left very close to original to enable easy cross-check.

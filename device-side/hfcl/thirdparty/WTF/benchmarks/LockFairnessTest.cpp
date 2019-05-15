@@ -24,7 +24,7 @@
  */
 
 // On Mac, you can build this like so:
-// xcrun clang++ -o LockFairnessTest Source/WTF/benchmarks/LockFairnessTest.cpp -O3 -W -ISource/WTF -ISource/WTF/icu -ISource/WTF/benchmarks -LWebKitBuild/Release -lWTF -framework Foundation -licucore -std=c++14 -fvisibility=hidden
+// xcrun clang++ -o LockFairnessTest Source/WTF/benchmarks/LockFairnessTest.cpp -O3 -W -ISource/WTF -ISource/WTF/icu -ISource/WTF/benchmarks -LHfclBuild/Release -lWTF -framework Foundation -licucore -std=c++14 -fvisibility=hidden
 
 #include "config.h"
 

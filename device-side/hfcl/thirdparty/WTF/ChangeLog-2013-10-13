@@ -66,7 +66,7 @@
 
         * wtf/unicode/wchar/UnicodeWchar.cpp: Tried to do the right thing in this file, but
         I did not actually compile it. Also, the implementations here aren't really sufficient
-        to make WebKit work broadly. There are many things that just aren't working with this
+        to make Hfcl work broadly. There are many things that just aren't working with this
         implementation, such as parsing that uses u_charType to figure out which characters are valid.
         (unorm_normalize): Added.
         (u_charDirection): Added.
@@ -112,7 +112,7 @@
 
 2013-10-10  Mark Rowe  <mrowe@apple.com>
 
-        <rdar://problem/13341666> WebKit should always build against an SDK.
+        <rdar://problem/13341666> Hfcl should always build against an SDK.
 
         Have all projects default to building against the OS X Internal SDK for the Production
         configuration. For the Debug and Release configurations, look for UseInternalSDK.xcconfig
@@ -581,7 +581,7 @@
         For HashTable, always call the destructor; if it is trivial then no code will be generated for it and the loops will be folded away. 
 
         Removing this does break the ability to store objects with non-trivial destructors in vectors and hash maps
-        and have their destructors not be called when removed, but we've never used this feature in WebKit so the extra
+        and have their destructors not be called when removed, but we've never used this feature in Hfcl so the extra
         code complexity is not worth it.
 
         * wtf/HashTable.h:
@@ -698,7 +698,7 @@
 
 2013-09-24  Mark Rowe  <mrowe@apple.com>
 
-        <rdar://problem/14971518> WebKit should build against the Xcode default toolchain when targeting OS X 10.8
+        <rdar://problem/14971518> Hfcl should build against the Xcode default toolchain when targeting OS X 10.8
 
         Reviewed by Dan Bernstein.
 
@@ -1113,7 +1113,7 @@
 
 2013-09-17  Mihnea Ovidenie  <mihnea@adobe.com>
 
-        REGRESSION(r155910): WebKit nightly builds don't load any page
+        REGRESSION(r155910): Hfcl nightly builds don't load any page
         https://bugs.webkit.org/show_bug.cgi?id=121482
 
         Reviewed by Andreas Kling.
@@ -1147,11 +1147,11 @@
 
 2013-09-16  Benjamin Poulain  <benjamin@webkit.org>
 
-        Fix WebKit1 build after r155910
+        Fix Hfcl1 build after r155910
 
         Reviewed by Anders Carlsson.
 
-        * wtf/Platform.h: Some files in WebKit include system headers before
+        * wtf/Platform.h: Some files in Hfcl include system headers before
         WTF headers, causing the macro to be defined twice. #undef the macro
         to support that case.
 
@@ -1833,7 +1833,7 @@
 
         Fixes the following build failure:
 
-            WebKitBuild/Debug/usr/local/include/wtf/StdLibExtras.h:266:23: error: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'unsigned int' [-Werror,-Wshorten-64-to-32]
+            HfclBuild/Debug/usr/local/include/wtf/StdLibExtras.h:266:23: error: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'unsigned int' [-Werror,-Wshorten-64-to-32]
             for (unsigned i = size; i-- > index + 1;)
                           ~   ^~~~
 
@@ -2058,7 +2058,7 @@
         - Replace WTF_COMPILER_SUPPORTS_CXX_FINAL_CONTROL with a compiler quirk for versions of clang
           that have a buggy final implementation and fix a bug in the macro where final would be disabled
           for versions of clang where __clang_minor__ is less than 2, regardless of the major version.
-        - Fail if someone tries to compile the WebKit stack with a compiler that doesn't support rvalue
+        - Fail if someone tries to compile the Hfcl stack with a compiler that doesn't support rvalue
           references or static_assert.
 
         * wtf/Compiler.h:
@@ -2695,7 +2695,7 @@
 
         Reviewed by Benjamin Poulain.
 
-        Upstream iOS WebKit Source/WTF.
+        Upstream iOS Hfcl Source/WTF.
 
         * Configurations/Base.xcconfig:
         JavaScriptCore.framework is a public framework.
@@ -2938,7 +2938,7 @@
         <http://webkit.org/b/119031>
 
         Implement shared logic for initializing logging channels based on human-readable channel names in WTF,
-        and rework the WebCore, WebKit and WebKit2 logging initialization on top of it.
+        and rework the WebCore, Hfcl and Hfcl2 logging initialization on top of it.
 
         Logging channels may now be enabled by providing a comma-separated list of channel names, with the special
         "all" name enabling all channels. Channel names prefixed with a leading "-" will result in the named channel
@@ -2946,11 +2946,11 @@
         for history and loading being enabled.
 
         For OS X developers, this also changes the name of the user defaults used to enable logging. This is done to allow
-        the old user defaults to remain set for those people that need to switch between version of WebKit before and
-        after this change. Where the old user default keys were WebCoreLogLevel, WebKitLogLevel and WebKit2LogLevel,
-        the new user default keys are WebCoreLogging, WebKitLogging and WebKit2Logging.
+        the old user defaults to remain set for those people that need to switch between version of Hfcl before and
+        after this change. Where the old user default keys were WebCoreLogLevel, HfclLogLevel and Hfcl2LogLevel,
+        the new user default keys are WebCoreLogging, HfclLogging and Hfcl2Logging.
 
-        For GTK developers, this changes the separator used in the WEBKIT_DEBUG environment variable to a comma for
+        For GTK developers, this changes the separator used in the HFCL_DEBUG environment variable to a comma for
         consistency with the other platforms and to enable more code sharing.
 
         While doing this work I've also taken the opportunity to eliminate the need to touch multiple files when
@@ -3219,7 +3219,7 @@
 
         Reviewed by Andreas Kling.
 
-        This bug was caused by r153380. The bug doesn't reproduce as long as WebKit is built by clang 4.2 and later
+        This bug was caused by r153380. The bug doesn't reproduce as long as Hfcl is built by clang 4.2 and later
         or final is disabled (it could be clang 4.1 and later but we don't have information about that).
 
         Fix the bug by disabling final on earlier versions of clang. Unfortunately we can only check versions of
@@ -4062,7 +4062,7 @@
         
         Deque can remove both the first and the last element efficiently.
         
-        Test: TestWebKitAPI/Tests/WTF/Deque.cpp
+        Test: TestHfclAPI/Tests/WTF/Deque.cpp
 
         * wtf/Deque.h:
         (WTF::::takeLast):
@@ -4489,7 +4489,7 @@
 
 2013-06-19  David Kilzer  <ddkilzer@apple.com>
 
-        BUILD FIX (r151663): Fix build for iOS WebKit
+        BUILD FIX (r151663): Fix build for iOS Hfcl
 
         * wtf/text/AtomicStringTable.cpp: Include MainThread.h.
         (WTF::AtomicStringTable::create): Use AtomicStringTable::destroy
@@ -4497,7 +4497,7 @@
 
 2013-06-18  Roger Fong  <roger_fong@apple.com>
 
-        Replace tools32 folder with tools and update WebKit Windows solution accordingly.
+        Replace tools32 folder with tools and update Hfcl Windows solution accordingly.
         <rdar://problem/14118143>.
 
         Rubberstamped by Brent Fulgham.
@@ -4615,7 +4615,7 @@
 
         Reviewed by Anders Carlsson.
 
-        Enable GRAMMAR_CHECKING for WebKit ports that use/implement it.
+        Enable GRAMMAR_CHECKING for Hfcl ports that use/implement it.
 
         * wtf/Platform.h:
 
@@ -4813,12 +4813,12 @@
 
 2013-05-31  Zan Dobersek  <zdobersek@igalia.com>
 
-        Move MD5, SHA1 unit tests from WTF to TestWebKitAPI
+        Move MD5, SHA1 unit tests from WTF to TestHfclAPI
         https://bugs.webkit.org/show_bug.cgi?id=116445
 
         Reviewed by Benjamin Poulain.
 
-        Remove the MD5 and SHA1 test cases from the WTF code. The same cases are now built and run under TestWebKitAPI.
+        Remove the MD5 and SHA1 test cases from the WTF code. The same cases are now built and run under TestHfclAPI.
 
         * wtf/MD5.cpp:
         (WTF::MD5::MD5):
@@ -5207,7 +5207,7 @@
 
 2013-05-15  Nico Weber  <thakis@chromium.org>
 
-        WebKit doesn't support MSVS2003 any more, remove preprocessor checks for older versions.
+        Hfcl doesn't support MSVS2003 any more, remove preprocessor checks for older versions.
         https://bugs.webkit.org/show_bug.cgi?id=116157
 
         Reviewed by Anders Carlsson.
@@ -5864,7 +5864,7 @@
 
 2013-04-30  Anders Carlsson  <andersca@apple.com>
 
-        Remove the WebKit2 BinarySemaphore class
+        Remove the Hfcl2 BinarySemaphore class
         https://bugs.webkit.org/show_bug.cgi?id=115458
 
         Reviewed by Benjamin Poulain.
@@ -6114,7 +6114,7 @@
 
 2013-04-26  Andreas Kling  <akling@apple.com>
 
-        Remove wxWebKit from WTF.
+        Remove wxHfcl from WTF.
         <http://webkit.org/b/115249>
 
         Reviewed by Antti Koivisto.
@@ -6199,7 +6199,7 @@
 
 2013-04-24  Roger Fong  <roger_fong@apple.com>
 
-        Have VS2010 WebKit solution look in WebKit_Libraries/lib32 for dependencies.
+        Have VS2010 Hfcl solution look in Hfcl_Libraries/lib32 for dependencies.
 
         * WTF.vcxproj/build-generated-files.sh:
 
@@ -6462,7 +6462,7 @@
 
 2013-04-19  Roger Fong  <roger_fong@apple.com>
 
-        Remove uses of WebKit_Source from AppleWin build in WTF.
+        Remove uses of Hfcl_Source from AppleWin build in WTF.
 
         * WTF.vcxproj/WTF.make:
         * WTF.vcxproj/copy-files.cmd:
@@ -6491,7 +6491,7 @@
 
 2013-04-19  Roger Fong  <roger_fong@apple.com>
 
-        Unreviewed. WebKit_Source is incorrectly set.
+        Unreviewed. Hfcl_Source is incorrectly set.
 
         * WTF.vcxproj/WTF.make:
 
@@ -6539,12 +6539,12 @@
 
 2013-04-17  Ryosuke Niwa  <rniwa@webkit.org>
 
-        REGRESSION(r148584): WebKit nightly builds don't load any page
+        REGRESSION(r148584): Hfcl nightly builds don't load any page
         https://bugs.webkit.org/show_bug.cgi?id=114752
 
         Reviewed by Anders Carlsson.
 
-        We can't use C++ style (//) comments in Platform.h because WebKit2/DerivedSource.make doesn't know
+        We can't use C++ style (//) comments in Platform.h because Hfcl2/DerivedSource.make doesn't know
         how to strip it to be merged with *.sb.in to generate *.sb files. Specifically, we have:
         
         # Some versions of clang incorrectly strip out // comments in c89 code.
@@ -6668,7 +6668,7 @@
         pthread_setspecific with threadSpecificSet from ThreadSpecific.h.
         These functions provide a windows-specific implementation for the pthread functions,
         but require that the thread has been created with WTF::createThread(),
-        which is the case for all threads created within WebKit.
+        which is the case for all threads created within Hfcl.
         To call this function from fastMalloc we must not call fastMalloc in them.
         To fulfill this constraint ThreadSpecificWin will allocated its memory through the
         original malloc implementation and use the stack for local and static variables.
@@ -6901,7 +6901,7 @@
 
 2013-04-07  Benjamin Poulain  <benjamin@webkit.org>
 
-        Remove the android code from WebKit Template Framework
+        Remove the android code from Hfcl Template Framework
         https://bugs.webkit.org/show_bug.cgi?id=114138
 
         Reviewed by Dirk Schulze.
@@ -7102,7 +7102,7 @@
 
 2013-04-05  Benjamin Poulain  <bpoulain@apple.com>
 
-        Remove WTFURL from WebKit
+        Remove WTFURL from Hfcl
         https://bugs.webkit.org/show_bug.cgi?id=113994
 
         Reviewed by Ryosuke Niwa.
@@ -7205,7 +7205,7 @@
 
 2013-04-02  Ryosuke Niwa  <rniwa@webkit.org>
 
-        Remove code for Mac 10.5 and earlier from WTF and WebKit2
+        Remove code for Mac 10.5 and earlier from WTF and Hfcl2
         https://bugs.webkit.org/show_bug.cgi?id=113844
 
         Reviewed by Benjamin Poulain.
@@ -8084,7 +8084,7 @@
         JSC_OBJC_API_ENABLED flag was added to FeatureDefines.h (r143637) 
         so that it could be used in WebCore.exp.in to determine whether 
         or not we should be exporting certain symbols based on whether 
-        the WebKit-related portion of the JSC ObjC API was enabled.
+        the Hfcl-related portion of the JSC ObjC API was enabled.
         
         It turned out conditionally including certain symbols didn't
         work when building fat binaries, so it's not even necessary any more.
@@ -8321,7 +8321,7 @@
 
 2013-02-25  Roger Fong  <roger_fong@apple.com>
 
-        Unreviewed. Fix script to use WEBKIT_SOURCE for VS2010 property sheets instead of WEBKIT_LIBRARIES.
+        Unreviewed. Fix script to use HFCL_SOURCE for VS2010 property sheets instead of HFCL_LIBRARIES.
 
         * WTF.vcxproj/work-around-vs-dependency-tracking-bugs.py:
 
@@ -8412,7 +8412,7 @@
 
 2013-02-19  Mark Hahnenberg  <mhahnenberg@apple.com>
 
-        Objective-C API: Need a way to use the Objective-C JavaScript API with WebKit
+        Objective-C API: Need a way to use the Objective-C JavaScript API with Hfcl
         https://bugs.webkit.org/show_bug.cgi?id=106059
 
         Reviewed by Geoffrey Garen.
@@ -8422,7 +8422,7 @@
 
 2013-02-21  Martin Robinson  <mrobinson@igalia.com>
 
-        A couple more 'make dist' fixes for WebKitGTK+.
+        A couple more 'make dist' fixes for HfclGTK+.
 
         * GNUmakefile.list.am: Add a missing file to the source list.
 
@@ -8671,7 +8671,7 @@
 
         Reviewed by Dirk Pranke.
 
-        * WTF.gyp/WTFGTK.gyp: Renamed from Source/WebKit/gtk/gyp/WTF.gyp.
+        * WTF.gyp/WTFGTK.gyp: Renamed from Source/Hfcl/gtk/gyp/WTF.gyp.
 
 2013-02-15  Anders Carlsson  <andersca@apple.com>
 
@@ -9182,7 +9182,7 @@
 
         From Platform.h
         USE() - use a particular third-party library or optional OS service
-        ENABLE() - turn on a specific feature of WebKit
+        ENABLE() - turn on a specific feature of Hfcl
 
         * WTF.pri:
         * wtf/Platform.h:
@@ -9206,7 +9206,7 @@
 
 2013-02-08  Jer Noble  <jer.noble@apple.com>
 
-        Bring WebKit up to speed with latest Encrypted Media spec.
+        Bring Hfcl up to speed with latest Encrypted Media spec.
         https://bugs.webkit.org/show_bug.cgi?id=97037
 
         Reviewed by Eric Carlson.
@@ -9246,7 +9246,7 @@
 
         * WTF.gyp/WTF.gyp: Filter out MetaAllocator.(cpp/h) from the Chromium
         build. It's only necessary for GTK+.
-        * WTF.gypi: Add MetaAllocator to the build for WebKitGTK+.
+        * WTF.gypi: Add MetaAllocator to the build for HfclGTK+.
 
 2013-02-06  Ilya Tikhonovsky  <loislo@chromium.org>
 
@@ -9308,7 +9308,7 @@
 
         Now that Coordinated Graphics was moved to WebCore, we need to explicitly enable
         it when we have 3D_GRAPHICS. This dependency was implicitly by the fact that
-        3D_GRAPHICS is a dependency of WebKit2 and Coordinated Graphics was only
+        3D_GRAPHICS is a dependency of Hfcl2 and Coordinated Graphics was only
         available there. This should fix build for Qt SH4 Linux.
 
         * wtf/Platform.h:
@@ -9981,8 +9981,8 @@
         Reviewed by Benjamin Poulain.
 
         Adding int64_t type atomicIncrement and atomicDecrement implementations for Windows
-        into Atomics.h required by WebKit2 after r139514. Separating WinCE implementation
-        that does not support WebKit2 and has no support for 64 bit interlocked methods.
+        into Atomics.h required by Hfcl2 after r139514. Separating WinCE implementation
+        that does not support Hfcl2 and has no support for 64 bit interlocked methods.
 
         Increasing WINVER and _WIN32_WINNT to XP SP2, because the 64 bit type interlocked methods
         are not supported on previous versions on 32 bit target.
@@ -10119,7 +10119,7 @@
 
 2013-01-22  Roger Fong  <roger_fong@apple.com>
 
-        WTF project files and property sheets for getting WebKit to compile in VS2010.
+        WTF project files and property sheets for getting Hfcl to compile in VS2010.
         https://bugs.webkit.org/show_bug.cgi?id=106986
 
         Reviewed by Timothy Horton and Brent Fulgham.
@@ -10643,7 +10643,7 @@
         Source argument were removed from reportEdge, reportLeaf and other edge related methods because it is not necessary.
         MemberType argument was propagated from MemoryInstrumentation down to HeapGraphSerializer.
 
-        The changes covered by tests in TestWebKitAPI.
+        The changes covered by tests in TestHfclAPI.
 
         * wtf/MemoryInstrumentation.cpp:
         (WTF::MemoryInstrumentation::reportEdge):
@@ -11079,7 +11079,7 @@
 
 2012-12-08  Patrick Gansterer  <paroga@webkit.org>
 
-        Compiling WTF outside of WebKit failed on Windows
+        Compiling WTF outside of Hfcl failed on Windows
         https://bugs.webkit.org/show_bug.cgi?id=100201
 
         Reviewed by Darin Adler.
@@ -11373,16 +11373,16 @@
 
 2012-11-30  Simon Hausmann  <simon.hausmann@digia.com>, Pierre Rossi  <pierre.rossi@digia.com>
 
-        [Qt] Separate Qt WebKit into Qt WebKit and Qt WebKit Widgets
+        [Qt] Separate Qt Hfcl into Qt Hfcl and Qt Hfcl Widgets
         https://bugs.webkit.org/show_bug.cgi?id=99314
 
         Reviewed by Tor Arne Vestbø.
 
-        This big change separates QtWebKit into QtWebKit and QtWebKitWidgets as
+        This big change separates QtHfcl into QtHfcl and QtHfclWidgets as
         shared libraries.
 
         It's a big refactoring that mostly involves moving WebCore dependent
-        code into QtWebKit and accessing it through exported QWebFrameAdapter
+        code into QtHfcl and accessing it through exported QWebFrameAdapter
         and QWebPageAdapter classes.
 
 
@@ -11536,7 +11536,7 @@
         http://trac.webkit.org/changeset/135828
         https://bugs.webkit.org/show_bug.cgi?id=103405
 
-        [Chromium] Multiple ASAN errors after a WebKit roll due to
+        [Chromium] Multiple ASAN errors after a Hfcl roll due to
         mismatched malloc/delete (not free) resulting from
         StringImpl::deref() (Requested by apavlov on #webkit).
 
@@ -11603,7 +11603,7 @@
 
         Reviewed by Eric Seidel.
 
-        This patch enables TCMalloc for some WebKit objects. It improves
+        This patch enables TCMalloc for some Hfcl objects. It improves
         dom-modify on Mac by 5-10%.
 
         On non-Mac platforms, Chromium already uses TCMalloc throughout the
@@ -11611,12 +11611,12 @@
         on globally on Mac because the approach we use for other platforms makes
         some OS X APIs sad.
 
-        The next best thing would be to enable TCMalloc for WebKit by
+        The next best thing would be to enable TCMalloc for Hfcl by
         overriding the global new and delete operator, as is done on apple-mac
         and other platforms. Unfortunately, we cannot use that approach either
-        because the Chromium WebKit API is not memory tight.
+        because the Chromium Hfcl API is not memory tight.
 
-        Fortunately, WebKit has a mechanism for selectively enabling TCMalloc
+        Fortunately, Hfcl has a mechanism for selectively enabling TCMalloc
         for a selection of objects by overriding the new and delete operators
         on those objects. This patch opts chromium-mac into that scheme by
         setting the appropriate preprocessor macros.
@@ -11638,7 +11638,7 @@
         to use it to send logging to a string, for example.
         
         We could get around this by using <iostream> and <sstream>, but so far this aspect of
-        C++ has not been part of the WebKit coding conventions. Personally I find <iostream>
+        C++ has not been part of the Hfcl coding conventions. Personally I find <iostream>
         awkward due to its abuse of operator overloading.
         
         So this patch introduces the PrintStream abstract class, which offers printf-like
@@ -11954,7 +11954,7 @@
 
         A quick fix would be to always get a fresh StackBounds data structure when asking for it 
         instead of using the cached version from the thread local storage. There is a larger problem 
-        in that these fibers can corrupt other WebKit data that uses thread local storage. We'll leave 
+        in that these fibers can corrupt other Hfcl data that uses thread local storage. We'll leave 
         those theoretical fixes for future theoretical bugs.
 
         * wtf/WTFThreadData.h:
@@ -12001,7 +12001,7 @@
         Reviewed by Benjamin Poulain.
 
         Use prefix form of increment / decrement operators whenever possible in
-        WTF String classes as this seems to be the convention in WebKit.
+        WTF String classes as this seems to be the convention in Hfcl.
 
         * wtf/text/ASCIIFastPath.h:
         (WTF::copyLCharsFromUCharSource):
@@ -12146,7 +12146,7 @@
         Angle includes STL's <memory> header file, which with MSVC 2012 includes stdint.h. MSVC 2012
         does ship stdint.h, but it's lacking other headers such as inttypes.h.
 
-        So for the rest of WebKit we have to continue to use our own versions of these files from
+        So for the rest of Hfcl we have to continue to use our own versions of these files from
         JavaScriptCore/os-win32. But for Angle we are just including a shipped STL header file (memory)
         and so it's up to the compiler to make that work, i.e. using the stdint.h it ships.
 
@@ -12170,7 +12170,7 @@
         'result' was a bool, but the asm was expecting a 32-bit register. A
         recent version of Clang warned about this:
 
-          WebKit/Source/WTF/wtf/Atomics.h:163:34: error: the size being stored
+          Hfcl/Source/WTF/wtf/Atomics.h:163:34: error: the size being stored
           is truncated, use a modifier to specify the size [-Werror,-Wasm-operand-widths]
 
         This patch fixes it by making 'result' an unsigned. It does not change
@@ -12410,7 +12410,7 @@
 
 2012-10-29  Anders Carlsson  <andersca@apple.com>
 
-        Build WebKit as C++11 on Mac
+        Build Hfcl as C++11 on Mac
         https://bugs.webkit.org/show_bug.cgi?id=100720
 
         Reviewed by Daniel Bates.
@@ -12604,7 +12604,7 @@
         Reviewed by Simon Hausmann.
 
         It works fine on Linux x86, x86_64 just needs to be enabled in the
-        QtWebKit build system.
+        QtHfcl build system.
 
         * wtf/Platform.h:
 
@@ -12895,7 +12895,7 @@
         Reviewed by Benjamin Poulain.
 
         Remove unused member functions from Vector and get rid of the std::max and std::min using declarations
-        (as per the WebKit coding style guidelines).
+        (as per the Hfcl coding style guidelines).
 
         * WTF.xcodeproj/project.pbxproj:
         Turns out StreamBuffer.h was never added to the Xcode project; add it. Also go ahead and sort the project file.
@@ -12995,7 +12995,7 @@
 
         Reviewed by Eric Seidel.
 
-        We don't want other clients that include WebKit headers to know about Platform.h.
+        We don't want other clients that include Hfcl headers to know about Platform.h.
 
         * wtf/Assertions.h:
         * wtf/MainThread.h:
@@ -13070,7 +13070,7 @@
 
 2012-10-15  Ilya Tikhonovsky  <loislo@chromium.org>
 
-        Web Inspector: convert manual size calculation of different WebKit things into MemoryInstrumentation.
+        Web Inspector: convert manual size calculation of different Hfcl things into MemoryInstrumentation.
         https://bugs.webkit.org/show_bug.cgi?id=99309
 
         Reviewed by Yury Semikhatsky.
@@ -13296,7 +13296,7 @@
 
         One potential downside of this change would be the confusion between std::map and
         HashMap interfaces. However, they are already different in other aspects and the
-        usage of std::map is more an exception than a rule in WebKit code, so we consider
+        usage of std::map is more an exception than a rule in Hfcl code, so we consider
         the confusion will be less likely to happen.
 
         * wtf/HashCountedSet.h:
@@ -13378,7 +13378,7 @@
         Remove LowerCaseEqualsASCII() from the interface, make it an internal template.
 
         (WTF::URLUtilities::isStandard):
-        Since in WebKit, LChar is a superset of char, expose LChar and cast char* to LChar*.
+        Since in Hfcl, LChar is a superset of char, expose LChar and cast char* to LChar*.
 
 2012-10-06  Ilya Tikhonovsky  <loislo@chromium.org>
 
@@ -14240,8 +14240,8 @@
         -Adopt URLBuffer and RawURLBuffer instead of the CanonOutputT and RawCanonOutputT.
         -Use URLCharacterTypes instead of the litany of characters functions.
         -Some more code cleaning.
-        -Fix the style to match WebKit as much as possible.
-        -Rename the files to match WebKit style.
+        -Fix the style to match Hfcl as much as possible.
+        -Rename the files to match Hfcl style.
 
         * WTF.xcodeproj/project.pbxproj:
         * wtf/url/api/ParsedURL.cpp:
@@ -14767,7 +14767,7 @@
 
         We had to move a few LIBS += around that were in the wrong place,
         and not caught when everything was just linked into the final
-        QtWebKit library.
+        QtHfcl library.
 
         Reviewed by Simon Hausmann.
 
@@ -15197,17 +15197,17 @@
 
         [Qt] Add a configure step to the Qt build system
 
-        This allows building the Qt port using just 'qmake WebKit.pro'. Using
+        This allows building the Qt port using just 'qmake Hfcl.pro'. Using
         the build-webkit script is still supported, and will add slightly more
         logic to the build, such as detecting the need for clean or incremental
         builds.
 
-        Internally, the build system now uses a new variable, WEBKIT_CONFIG, for
+        Internally, the build system now uses a new variable, HFCL_CONFIG, for
         all things related to configuring the build, such as use/have/enable flags,
         and these are translated to defines in default_post. Project files should
         no longer check contains(DEFINES,...) to detect features, but use the new
         enable?(), use?(), and have?() functions. The no_webkit1 and no_webkit2
-        options have been translated into WEBKIT_CONFIG options as well, and can
+        options have been translated into HFCL_CONFIG options as well, and can
         be checked using build?().
 
         Reviewed by Simon Hausmann.
@@ -15510,7 +15510,7 @@
         Reviewed by Kenneth Rohde Christiansen.
 
         For the Qt build on Windows, do not enable WTF_USE_UNIX_DOMAIN_SOCKETS for
-        WebKit2 IPC.
+        Hfcl2 IPC.
 
         * wtf/Platform.h:
 
@@ -16018,7 +16018,7 @@
 
         Rubber-stamped by Simon Hausmann.
 
-        When building QtWebKit with a Qt5 which was not configured with libICU support
+        When building QtHfcl with a Qt5 which was not configured with libICU support
         the error message is somewhat ambiguous about the indirect dependency.
 
         * WTF.pri:
@@ -16051,7 +16051,7 @@
 
         Add support functions for saturated addition and subtraction.
 
-        Test: TestWebKitAPI/Tests/WTF/SaturatedArithmeticOperations.cpp
+        Test: TestHfclAPI/Tests/WTF/SaturatedArithmeticOperations.cpp
 
         * GNUmakefile.list.am:
         * WTF.gypi:
@@ -16117,7 +16117,7 @@
 
         Reviewed by Mark Hahnenberg.
 
-        WebKit's JavaScript engine supports use on multiple threads, so default-on
+        Hfcl's JavaScript engine supports use on multiple threads, so default-on
         is not appropriate for most of our objects, and it causes lots of suprious
         assertions.
 
@@ -16770,7 +16770,7 @@
         Reviewed by Hajime Morita.
 
         When we switch the windows port to USE(EXPORT_MACROS) we
-        need to export all functions referenced by WebKit.dll.
+        need to export all functions referenced by Hfcl.dll.
 
         * wtf/ThreadingPrimitives.h:
         (WTF):
@@ -17721,7 +17721,7 @@
 
 2012-07-12  Carlos Garcia Campos  <cgarcia@igalia.com>
 
-        [GTK] Add API to get HTTPS status to WebKit2 GTK+
+        [GTK] Add API to get HTTPS status to Hfcl2 GTK+
         https://bugs.webkit.org/show_bug.cgi?id=91100
 
         Reviewed by Martin Robinson.
@@ -17885,7 +17885,7 @@
         The declarative module has been renamed to quick1 in Qt 5, and the
         engine-only module for Qt 5 is named 'qml'. For many of the instances
         we could just remove 'declarative', since the project file was only
-        used for Qt5/WebKit2 builds. In the other cases the module was wrapped
+        used for Qt5/Hfcl2 builds. In the other cases the module was wrapped
         in a haveQt(4) scope.
 
         Reviewed by Csaba Osztrogonác.
@@ -17917,7 +17917,7 @@
         a bunch of checks), we now run feature detection as part of configure.pro,
         and have build-webkit write the computed feature-defines and CONFIG to
         .qmake.cache, which is then loaded by qmake _before_ even defaults_pre
-        when building WebKit.pro.
+        when building Hfcl.pro.
 
         At some point we'll be able to selectivly prevent running of config tests
         in configure.pro, which means we don't need a separate code-path for
@@ -17952,7 +17952,7 @@
         a bunch of checks), we now run feature detection as part of configure.pro,
         and have build-webkit write the computed feature-defines and CONFIG to
         .qmake.cache, which is then loaded by qmake _before_ even defaults_pre
-        when building WebKit.pro.
+        when building Hfcl.pro.
 
         At some point we'll be able to selectivly prevent running of config tests
         in configure.pro, which means we don't need a separate code-path for
@@ -17970,7 +17970,7 @@
 
 2012-07-03  Jocelyn Turcotte  <jocelyn.turcotte@nokia.com>  Joel Dillon <joel.dillon@codethink.co.uk>
 
-        [Qt][Win] Fix broken QtWebKit5.lib linking
+        [Qt][Win] Fix broken QtHfcl5.lib linking
         https://bugs.webkit.org/show_bug.cgi?id=88321
 
         Reviewed by Kenneth Rohde Christiansen.
@@ -18011,7 +18011,7 @@
         http://trac.webkit.org/changeset/121529
         https://bugs.webkit.org/show_bug.cgi?id=90260
 
-        Failed to compile on Chromium WebKitMacBuilder (Requested by
+        Failed to compile on Chromium HfclMacBuilder (Requested by
         keishi on #webkit).
 
         * wtf/FastMalloc.cpp:
@@ -18751,12 +18751,12 @@
 
 2012-05-29  Alexandre Elias  <aelias@google.com>
 
-        Support WebKit log messages on Android
+        Support Hfcl log messages on Android
         https://bugs.webkit.org/show_bug.cgi?id=87773
 
         Reviewed by Darin Adler.
 
-        This sends WebKit log messages to the Android "logcat" facility, as
+        This sends Hfcl log messages to the Android "logcat" facility, as
         Android sends stderr to /dev/null.
 
         * wtf/Assertions.cpp:
@@ -19269,7 +19269,7 @@
 
 2012-05-02  Nico Weber  <thakis@chromium.org>
 
-        Let WebKit parse with clang on windows with -std=c++11
+        Let Hfcl parse with clang on windows with -std=c++11
         https://bugs.webkit.org/show_bug.cgi?id=85398
 
         Reviewed by Ryosuke Niwa.
@@ -19378,7 +19378,7 @@
 
 2012-04-26  Carlos Garcia Campos  <cgarcia@igalia.com>
 
-        [SOUP] Add a way to register custom uri schemes in WebKit2
+        [SOUP] Add a way to register custom uri schemes in Hfcl2
         https://bugs.webkit.org/show_bug.cgi?id=84130
 
         Reviewed by Martin Robinson.
@@ -19688,7 +19688,7 @@
 
 2012-04-12  Balazs Kelemen  <kbalazs@webkit.org>
 
-        [Qt] Fix WebKit1 build with V8
+        [Qt] Fix Hfcl1 build with V8
         https://bugs.webkit.org/show_bug.cgi?id=83322
 
         Reviewed by Adam Barth.
@@ -19714,7 +19714,7 @@
 
 2012-04-10  Mark Rowe  <mrowe@apple.com>
 
-        <rdar://problem/10583749> WebKit2 should log to both ASL and stderr
+        <rdar://problem/10583749> Hfcl2 should log to both ASL and stderr
 
         Reviewed by Sam Weinig.
 
@@ -23085,7 +23085,7 @@
         (string):
         (asciiDebug):
         * wtf/text/WTFString.h: Renamed from Source/JavaScriptCore/wtf/text/WTFString.h.
-        (WebKit):
+        (Hfcl):
         (WTF):
         (String):
         (WTF::String::String):
@@ -23766,9 +23766,9 @@
 
         This adds an Xcode project that includes only Stub.cpp and Stub.h.
         They’re built in to a library at the appropriate path for each
-        configuration (WebKitBuild/{Debug,Release}/libWTF.a and
+        configuration (HfclBuild/{Debug,Release}/libWTF.a and
         /usr/local/lib/libWTF.a) and headers are installed in to the
-        appropriate location (WebKitBuild/{Debug,Release}/usr/local/include/wtf
+        appropriate location (HfclBuild/{Debug,Release}/usr/local/include/wtf
         and /usr/local/include/wtf). I tested building WTF in this project and
         everything appears to build except for DateMath.cpp (due to bug 71747).
         I have not yet done any work on making JavaScriptCore and other
@@ -23778,7 +23778,7 @@
         * Configurations/Base.xcconfig: Copied from Source/JavaScriptCore/Configurations/Base.xcconfig.
         * Configurations/CompilerVersion.xcconfig: Copied from Source/JavaScriptCore/Configurations/CompilerVersion.xcconfig.
         * Configurations/DebugRelease.xcconfig: Copied from Source/JavaScriptCore/Configurations/DebugRelease.xcconfig.
-        * Configurations/WTF.xcconfig: Copied from Source/WebKit2/Configurations/Shim.xcconfig.
+        * Configurations/WTF.xcconfig: Copied from Source/Hfcl2/Configurations/Shim.xcconfig.
         * WTF.xcodeproj: Added.
         * WTF.xcodeproj/project.pbxproj: Added.
         * config.h: Copied from Source/JavaScriptCore/config.h.

@@ -32,7 +32,7 @@ namespace WTF {
 namespace DbgHelper {
 
 // We are only calling these DbgHelp.dll functions in debug mode since the library is not threadsafe.
-// It's possible for external code to call the library at the same time as WebKit and cause memory corruption.
+// It's possible for external code to call the library at the same time as Hfcl and cause memory corruption.
 
 #if !defined(NDEBUG)
 

@@ -905,7 +905,7 @@
 
 2016-08-31  Keith Rollin  <krollin@apple.com>
 
-        WebKit should set a subsystem for os_log so it's easier to filter for WebKit log messages
+        Hfcl should set a subsystem for os_log so it's easier to filter for Hfcl log messages
         https://bugs.webkit.org/show_bug.cgi?id=160969
         <rdar://problem/26068734>
 
@@ -1261,7 +1261,7 @@
 
         Reviewed by Tim Horton.
 
-        This will make some security-related code from WebKitSystemInterface easier to port.
+        This will make some security-related code from HfclSystemInterface easier to port.
 
         * wtf/HashIterators.h:
         (WTF::HashTableValuesIterator::get):
@@ -1329,7 +1329,7 @@
 
 2016-08-14  Daniel Bates  <dabates@apple.com>
 
-        Fix compiler errors when building iOS WebKit using the iOS 10 beta SDK
+        Fix compiler errors when building iOS Hfcl using the iOS 10 beta SDK
         https://bugs.webkit.org/show_bug.cgi?id=160725
 
         Reviewed by Sam Weinig.
@@ -1659,7 +1659,7 @@
 
 2016-07-18  Anders Carlsson  <andersca@apple.com>
 
-        WebKit nightly fails to build on macOS Sierra
+        Hfcl nightly fails to build on macOS Sierra
         https://bugs.webkit.org/show_bug.cgi?id=159902
         rdar://problem/27365672
 
@@ -1806,7 +1806,7 @@
         
         This change is good for three reasons:
         
-        - We do have long critical sections in WebKit and we don't want to have to worry about
+        - We do have long critical sections in Hfcl and we don't want to have to worry about
           starvation. This reduces the likelihood that we will see starvation due to our lock
           strategy.
         
@@ -2016,7 +2016,7 @@
 
 2016-07-13  Carlos Garcia Campos  <cgarcia@igalia.com>
 
-        [GTK] WebKitGtk+ uses too many file descriptors
+        [GTK] HfclGtk+ uses too many file descriptors
         https://bugs.webkit.org/show_bug.cgi?id=152316
 
         Reviewed by Michael Catanzaro.
@@ -3939,7 +3939,7 @@
           use this to detect the platform user preferred language when running standalone.
 
         Moving the dependencies accounts for a huge chunk of this change, since we have to rewire
-        all of the references to those headers in all of WebKit.
+        all of the references to those headers in all of Hfcl.
 
         Moving platformUserPreferredLanguages() is mostly easy except for the weird callback.
         That function would call languageDidChange(), which needs to stay in WebCore. So, this
@@ -4416,7 +4416,7 @@
 
         Reviewed by Mark Lam.
 
-        WebKit uses CRT static library on Windows.  Each copy of the CRT
+        Hfcl uses CRT static library on Windows.  Each copy of the CRT
         library has its own heap manager, allocating memory in one CRT
         library and passing the pointer across a DLL boundary to be freed
         by a different copy of the CRT library is a potential cause for
@@ -4427,7 +4427,7 @@
 
         JSGlobalObject::createRareDataIfNeeded is inlined but
         JSGlobalObject::~JSGlobalObject is not.  Then, the heap of
-        allocating JSGlobalObjectRareData is WebKit.dll, but deallocating
+        allocating JSGlobalObjectRareData is Hfcl.dll, but deallocating
         JavaScriptCore.dll.  Adding WTF_MAKE_FAST_ALLOCATED to
         JSGlobalObjectRareData ensures heap consistency of it.  WTF::Lock
         also needs WTF_MAKE_FAST_ALLOCATED because it is allocated from
@@ -4475,7 +4475,7 @@
         a thread exiting callback the way that pthread_create_key does.
 
         The fix is to change from using TLS to using FLS (Fiber Local Storage).  Although
-        Windows allows multiple fibers per thread, WebKit is not designed to work with a
+        Windows allows multiple fibers per thread, Hfcl is not designed to work with a
         multiple fibers per thread.  When there is only one fiber per thread, FLS works just
         like TLS, but it has the destroy callback.
 
@@ -4559,7 +4559,7 @@
         Unreviewed, rolling out r199726.
         https://bugs.webkit.org/show_bug.cgi?id=156748
 
-        WebKit tests crash on Windows 32 (Requested by msaboff on
+        Hfcl tests crash on Windows 32 (Requested by msaboff on
         #webkit).
 
         Reverted changeset:
@@ -4586,7 +4586,7 @@
         a thread exiting callback the way that pthread_create_key.
 
         The fix is to change from using TLS to using FLS (Fiber Local Storage).  Although
-        Windows allows multiple fibers per thread, WebKit is not designed to work with a
+        Windows allows multiple fibers per thread, Hfcl is not designed to work with a
         multiple fibers per thread.  When there is only one fiber per thread, FLS works just
         like TLS, but it has the destroy callback.
 
@@ -4675,7 +4675,7 @@
         We clean up event loop ifdefs by introducing USE_XXX_EVENT_LOOP flags.
         USE(XXX_EVENT_LOOP) is exclusive to each other. So from now, we do not need to take care
         of the order of if-defs for the event loops. (For example, USE(GLIB) should have lead before
-        OS(DARWIN) in WorkQueue.h for WebKitGTK on Darwin.)
+        OS(DARWIN) in WorkQueue.h for HfclGTK on Darwin.)
 
         EVENT_LOOP determination is done in Platform.h. This follows the style of WTF PLATFORM.
 
@@ -4768,7 +4768,7 @@
         a thread exiting callback the way that pthread_create_key.
 
         The fix is to change from using TLS to using FLS (Fiber Local Storage).  Although
-        Windows allows multiple fibers per thread, WebKit is not designed to work with a
+        Windows allows multiple fibers per thread, Hfcl is not designed to work with a
         multiple fibers per thread.  When ther is only one fiber per thread, FLS works just
         like TLS, but it has the destroy callback.
 
@@ -4856,7 +4856,7 @@
 
 2016-04-08  Alex Christensen  <achristensen@webkit.org>
 
-        Progress towards running CMake WebKit2 on Mac
+        Progress towards running CMake Hfcl2 on Mac
         https://bugs.webkit.org/show_bug.cgi?id=156426
 
         Reviewed by Tim Horton.
@@ -5376,8 +5376,8 @@
         REGRESSION (r198079): Windows build broke because of "%PRId64" format specifier
 
         This fixes the following build failure in WebCore for Windows:
-            C:\Source\WebCore\page\DOMTimer.cpp(396): error C2146: syntax error: missing ')' before identifier 'PRId64' [C:\WebKitBuild\Debug\Source\WebCore\WebCore.vcxproj]
-            C:\Source\WebCore\page\DOMTimer.cpp(399): error C2146: syntax error: missing ')' before identifier 'PRId64' [C:\WebKitBuild\Debug\Source\WebCore\WebCore.vcxproj]
+            C:\Source\WebCore\page\DOMTimer.cpp(396): error C2146: syntax error: missing ')' before identifier 'PRId64' [C:\HfclBuild\Debug\Source\WebCore\WebCore.vcxproj]
+            C:\Source\WebCore\page\DOMTimer.cpp(399): error C2146: syntax error: missing ')' before identifier 'PRId64' [C:\HfclBuild\Debug\Source\WebCore\WebCore.vcxproj]
 
         * wtf/StdLibExtras.h: Define "PRId64" for Windows here so it may
         be shared.  This should fix DOMTimer.cpp after r198079 since it
@@ -5609,7 +5609,7 @@
 
 2016-03-04  Alex Christensen  <achristensen@webkit.org>
 
-        Use NSURLSession for loading in WebKit2
+        Use NSURLSession for loading in Hfcl2
         https://bugs.webkit.org/show_bug.cgi?id=154993
 
         Reviewed by Sam Weinig.
@@ -5642,12 +5642,12 @@
 
 2016-03-02  Konstantin Tokarev  <annulen@yandex.ru>
 
-        [cmake] Moved PRE/POST_BUILD_COMMAND to WEBKIT_FRAMEWORK.
+        [cmake] Moved PRE/POST_BUILD_COMMAND to HFCL_FRAMEWORK.
         https://bugs.webkit.org/show_bug.cgi?id=154651
 
         Reviewed by Alex Christensen.
 
-        * CMakeLists.txt: Moved shared code to WEBKIT_FRAMEWORK macro.
+        * CMakeLists.txt: Moved shared code to HFCL_FRAMEWORK macro.
 
 2016-03-01  Commit Queue  <commit-queue@webkit.org>
 
@@ -5684,7 +5684,7 @@
 
         Reverted changeset:
 
-        "[cmake] Moved PRE/POST_BUILD_COMMAND to WEBKIT_FRAMEWORK."
+        "[cmake] Moved PRE/POST_BUILD_COMMAND to HFCL_FRAMEWORK."
         https://bugs.webkit.org/show_bug.cgi?id=154651
         http://trac.webkit.org/changeset/197056
 
@@ -5751,7 +5751,7 @@
 
         * WTF.xcodeproj/project.pbxproj:
         * wtf/Forward.h:
-        * wtf/OptionSet.h: Copied from Source/WebKit2/Shared/WebsiteData/WebsiteData.h.
+        * wtf/OptionSet.h: Copied from Source/Hfcl2/Shared/WebsiteData/WebsiteData.h.
         (WTF::OptionSet::fromRaw):
         (WTF::OptionSet::OptionSet):
         (WTF::OptionSet::toRaw):
@@ -5931,12 +5931,12 @@
 
 2016-02-24  Konstantin Tokarev  <annulen@yandex.ru>
 
-        [cmake] Moved PRE/POST_BUILD_COMMAND to WEBKIT_FRAMEWORK.
+        [cmake] Moved PRE/POST_BUILD_COMMAND to HFCL_FRAMEWORK.
         https://bugs.webkit.org/show_bug.cgi?id=154651
 
         Reviewed by Alex Christensen.
 
-        * CMakeLists.txt: Moved shared code to WEBKIT_FRAMEWORK macro.
+        * CMakeLists.txt: Moved shared code to HFCL_FRAMEWORK macro.
 
 2016-02-23  Dan Bernstein  <mitz@apple.com>
 
@@ -5960,7 +5960,7 @@
 
 2016-02-22  Konstantin Tokarev  <annulen@yandex.ru>
 
-        [cmake] Moved library setup code to WEBKIT_FRAMEWORK macro.
+        [cmake] Moved library setup code to HFCL_FRAMEWORK macro.
         https://bugs.webkit.org/show_bug.cgi?id=154450
 
         Reviewed by Alex Christensen.
@@ -5994,7 +5994,7 @@
 
         Reviewed by Geoffrey Garen.
 
-        Tested by new TestWebKitAPI tests.
+        Tested by new TestHfclAPI tests.
 
         Update the HashCountedSet class with a new 'add' method to support efficient initialization of
         the count of a given key. Also provide move and pointer template specializations to expand the
@@ -6025,7 +6025,7 @@
 
         Reviewed by Geoffrey Garen.
 
-        Tested by new TestWebKitAPI tests.
+        Tested by new TestHfclAPI tests.
 
         Update the HashCountedSet class with a new 'add' method to support efficient initialization of
         the count of a given key. Also provide move and pointer template specializations to expand the
@@ -6037,7 +6037,7 @@
 
 2016-02-17  Filip Pizlo  <fpizlo@apple.com>
 
-        Remove LLVM dependencies from WebKit
+        Remove LLVM dependencies from Hfcl
         https://bugs.webkit.org/show_bug.cgi?id=154323
 
         Reviewed by Antti Koivisto and Benjamin Poulain.
@@ -6164,14 +6164,14 @@
 
 2016-02-11  Mark Lam  <mark.lam@apple.com>
 
-        Need WTFCrash workaround for shipping SafariForWebKitDevelopment binaries.
+        Need WTFCrash workaround for shipping SafariForHfclDevelopment binaries.
         https://bugs.webkit.org/show_bug.cgi?id=154125
 
         Reviewed by Joseph Pecoraro.
 
-        Presently shipping SafariForWebKitDevelopment binaries still expect to link to a
+        Presently shipping SafariForHfclDevelopment binaries still expect to link to a
         WTFCrash function.  We need to provide this function as a workaround until we can
-        update SafariForWebKitDevelopment to use the new inlined version.
+        update SafariForHfclDevelopment to use the new inlined version.
 
         We do this by doing:
         1. Make WTFCrashImpl() the sole function for implementing a crash.
@@ -6180,11 +6180,11 @@
            For (non-debug && OS(DARWIN)) builds, WTFCrashImpl() will be an inlined
            function with an asm statement that issues a breakpoint trap.
         3. Implement WTFCrash() as a function that calls CRASH().
-           This satisfies the need of shipping SafariForWebKitDevelopment binaries.
+           This satisfies the need of shipping SafariForHfclDevelopment binaries.
         4. Change WTFCrashWithSecurityImplication() to call CRASH().
            This ensures that we have a consistent implementation of how we crash.
         5. Changed WTFLogAlwaysAndCrash() to call CRASH() instead of WTFCrash().
-           This is just to have consistency in that all code in the WebKit project
+           This is just to have consistency in that all code in the Hfcl project
            now crashes by calling CRASH(), not WTFCrash().
 
         * wtf/Assertions.cpp:
@@ -6891,11 +6891,11 @@
 
         Reviewed by Sam Weinig.
         
-        New header with the reserved WebKit component code, trace point codes, and
+        New header with the reserved Hfcl component code, trace point codes, and
         a stack-based helper that traces scope entry and exit.
         
         The available range of trace point codes is arbitrarily segmented into WTF, JSC,
-        WebCore, WebKit and WebKit2.
+        WebCore, Hfcl and Hfcl2.
 
         * WTF.xcodeproj/project.pbxproj:
         * wtf/CMakeLists.txt:
@@ -7316,7 +7316,7 @@
 
 2016-01-03  Khem Raj  <raj.khem@gmail.com>
 
-        WebKit fails to build with musl libc library
+        Hfcl fails to build with musl libc library
         https://bugs.webkit.org/show_bug.cgi?id=152625
 
         Reviewed by Daniel Bates.
@@ -7554,7 +7554,7 @@
 
 2015-12-19  Dan Bernstein  <mitz@apple.com>
 
-        [Mac] WebKit contains dead source code for OS X Mavericks and earlier
+        [Mac] Hfcl contains dead source code for OS X Mavericks and earlier
         https://bugs.webkit.org/show_bug.cgi?id=152462
 
         Reviewed by Alexey Proskuryakov.
@@ -7731,7 +7731,7 @@
         didn't compile when I started using it from B3.
 
         Also renamed immediateDominatorOf() to idom(). This is the sort of abbreviation that we
-        wouldn't ordinarily want to have in WebKit. But WebKit does allow for abbreviations that are
+        wouldn't ordinarily want to have in Hfcl. But Hfcl does allow for abbreviations that are
         "more canonical". The term "idom" is definitely more canonical than "immediateDominatorOf".
 
         * wtf/Dominators.h:
@@ -8368,7 +8368,7 @@
         Reviewed by Anders Carlsson.
 
         It doesn't really belong to the WorkQueue, it's only used by the
-        WebKit2 connection, so it can be moved there.
+        Hfcl2 connection, so it can be moved there.
 
         * wtf/WorkQueue.h:
         * wtf/glib/WorkQueueGLib.cpp:
@@ -8769,7 +8769,7 @@
 
 2015-10-06  Daniel Bates  <dbates@webkit.org>
 
-        Enable XSLT when building WebKit for iOS using the public iOS SDK
+        Enable XSLT when building Hfcl for iOS using the public iOS SDK
         https://bugs.webkit.org/show_bug.cgi?id=149827
 
         Reviewed by Alexey Proskuryakov.
@@ -9174,7 +9174,7 @@
 
         * wtf/ParkingLot.cpp:
         (WTF::ParkingLot::parkConditionally): Adjust the comment about the workaround for
-        the libstdc++ std::condition_variable implementation, linking to the WebKit bug
+        the libstdc++ std::condition_variable implementation, linking to the Hfcl bug
         that dissected the problem and the GCC bug that originally reported the problem.
 
 2015-08-28  Anders Carlsson  <andersca@apple.com>
@@ -9377,7 +9377,7 @@
         Reviewed by Geoffrey Garen.
 
         Remove the SpinLock.h file and remove references to the SpinLock class. Put the old SpinLock
-        algorithm in LockSpeedTest.cpp - which isn't compiled as part of a WTF or WebKit build - just
+        algorithm in LockSpeedTest.cpp - which isn't compiled as part of a WTF or Hfcl build - just
         so we can still benchmark our locking algorithms against a spinlock baseline.
 
         * WTF.vcxproj/WTF.vcxproj:
@@ -9944,7 +9944,7 @@
 
         Reviewed by Mark Lam.
 
-        This change adds a major new abstraction for concurrency algorithms in WebKit. It's called a
+        This change adds a major new abstraction for concurrency algorithms in Hfcl. It's called a
         ParkingLot, and it makes available a thread parking queue for each virtual address in memory.
         The queues are maintained by a data-access-parallel concurrent hashtable implementation. The
         memory usage is bounded at around half a KB per thread.
@@ -10017,17 +10017,17 @@
 
         Reviewed by Geoffrey Garen.
 
-        A common idiom in WebKit is to use spinlocks. We use them because the lock acquisition
+        A common idiom in Hfcl is to use spinlocks. We use them because the lock acquisition
         overhead is lower than system locks and because they take dramatically less space than system
         locks. The speed and space advantages of spinlocks can be astonishing: an uncontended spinlock
         acquire is up to 10x faster and under microcontention - short critical section with two or
         more threads taking turns - spinlocks are up to 100x faster. Spinlocks take only 1 byte or 4
-        bytes depending on the flavor, while system locks take 64 bytes or more. Clearly, WebKit
+        bytes depending on the flavor, while system locks take 64 bytes or more. Clearly, Hfcl
         should continue to avoid system locks - they are just far too slow and far too big.
 
         But there is a problem with this idiom. System lock implementations will sleep a thread when
         it attempts to acquire a lock that is held, while spinlocks will cause the thread to burn CPU.
-        In WebKit spinlocks, the thread will repeatedly call sched_yield(). This is awesome for
+        In Hfcl spinlocks, the thread will repeatedly call sched_yield(). This is awesome for
         microcontention, but awful when the lock will not be released for a while. In fact, when
         critical sections take tens of microseconds or more, the CPU time cost of our spinlocks is
         almost 100x more than the CPU time cost of a system lock. This case doesn't arise too
@@ -10608,7 +10608,7 @@
 
 2015-07-25  Carlos Alberto Lopez Perez  <clopez@igalia.com>
 
-        REGRESSION (bmalloc): WebKit performance tests don't report memory stats.
+        REGRESSION (bmalloc): Hfcl performance tests don't report memory stats.
         https://bugs.webkit.org/show_bug.cgi?id=141247
 
         Reviewed by Geoffrey Garen.
@@ -10665,7 +10665,7 @@
 
 2015-07-21  Daniel Bates  <dabates@apple.com>
 
-        WTFCrash() in WebKit::WebProcess::networkConnection()
+        WTFCrash() in Hfcl::WebProcess::networkConnection()
         https://bugs.webkit.org/show_bug.cgi?id=147112
         <rdar://problem/18477459>
 
@@ -10967,7 +10967,7 @@
         Reviewed by Andreas Kling.
 
         The fact that the Windows implementation uses a HEVENT internally was only useful
-        to the Windows port of WebKit2; we can get rid of it now.
+        to the Windows port of Hfcl2; we can get rid of it now.
 
         * WTF.vcxproj/WTF.vcxproj:
         * WTF.vcxproj/WTF.vcxproj.filters:
@@ -11075,7 +11075,7 @@
         Reviewed by Tim Horton.
 
         * wtf/FeatureDefines.h: Moved the definition of ENABLE_PRIMARY_SNAPSHOTTED_PLUGIN_HEURISTIC
-        here from Source/WebKit2/WebProcess/WebPage/WebPage.h
+        here from Source/Hfcl2/WebProcess/WebPage/WebPage.h
 
 2015-06-17  Andreas Kling  <akling@apple.com>
 
@@ -11616,7 +11616,7 @@
 
 2015-05-23  Dan Bernstein  <mitz@apple.com>
 
-        Remove unused definitions of WEBKIT_VERSION_MIN_REQUIRED
+        Remove unused definitions of HFCL_VERSION_MIN_REQUIRED
         https://bugs.webkit.org/show_bug.cgi?id=145345
 
         Reviewed by Sam Weinig.
@@ -11882,7 +11882,7 @@
 
         Reviewed by Darin Adler.
 
-        Separate include directories into WebKit project includes and system includes. Suppress all
+        Separate include directories into Hfcl project includes and system includes. Suppress all
         warnings from headers in system include directories using the SYSTEM argument to
         the include_directories command.
 
@@ -11923,7 +11923,7 @@
         It is silly we see fastMallocGoodSize in profiles, it does absolutely nothing.
 
         This patch keeps fastMallocGoodSize() around for older code linking
-        with newer WebKit, but remove any use of it inside WebKit.
+        with newer Hfcl, but remove any use of it inside Hfcl.
 
         * wtf/FastMalloc.cpp:
         (WTF::fastMallocGoodSize):
@@ -12115,7 +12115,7 @@
 
         No reason why StringView shouldn't have a StringImpl* constructor.
 
-        Test: StringView8Bit in TestWebKitAPI
+        Test: StringView8Bit in TestHfclAPI
 
         * wtf/text/StringView.h: Add the constructor.
 
@@ -12141,7 +12141,7 @@
 
         No reason why StringView shouldn't have a StringImpl* constructor.
 
-        Test: StringView8Bit in TestWebKitAPI
+        Test: StringView8Bit in TestHfclAPI
 
         * wtf/text/StringView.h: Add the constructor.
 
@@ -12600,7 +12600,7 @@
 
 2015-04-23  Alexey Proskuryakov  <ap@apple.com>
 
-        [iOS] WebKit services should inherit environment variables for home
+        [iOS] Hfcl services should inherit environment variables for home
         https://bugs.webkit.org/show_bug.cgi?id=144078
         rdar://problem/20571678
 
@@ -12655,7 +12655,7 @@
 
 2015-04-22  Alexey Proskuryakov  <ap@apple.com>
 
-        [Mac] In nightlies and local builds, WebKit services can get terminated under memory pressure
+        [Mac] In nightlies and local builds, Hfcl services can get terminated under memory pressure
         https://bugs.webkit.org/show_bug.cgi?id=144052
         rdar://problem/19754404
 
@@ -12820,7 +12820,7 @@
         Harmonize binary semaphore ifdefs
 
         They should be either OS(WINDOWS) (in which case we'd need
-        BinarySemaphoreWin.cpp, which is not shipped by WebKitGTK)
+        BinarySemaphoreWin.cpp, which is not shipped by HfclGTK)
         or PLATFORM(WIN) (in which case Mutex/ThreadCondition-based
         implementation is used).
 
@@ -13213,7 +13213,7 @@
         StringView::startsWithIgnoringASCIICase, StringView::endsWith and 
         StringView::endsWithIgnoringASCIICase implementations.
 
-        [1] Tools/TestWebKitAPI/Tests/WTF/StringView.cpp.
+        [1] Tools/TestHfclAPI/Tests/WTF/StringView.cpp.
 
         * wtf/text/StringView.cpp:
         (WTF::StringView::startsWithIgnoringASCIICase):
@@ -13695,9 +13695,9 @@
         Reviewed by Csaba Osztrogonác.
 
         * wtf/PlatformEfl.cmake: Add DispatchQueue to the source list.
-        * wtf/efl/DispatchQueueEfl.cpp: Renamed from Source/WebKit2/Platform/efl/DispatchQueueEfl.cpp.
-        * wtf/efl/DispatchQueueEfl.h: Renamed from Source/WebKit2/Platform/efl/DispatchQueueEfl.h.
-        * wtf/efl/DispatchQueueWorkItemEfl.h: Renamed from Source/WebKit2/Platform/efl/DispatchQueueWorkItemEfl.h.
+        * wtf/efl/DispatchQueueEfl.cpp: Renamed from Source/Hfcl2/Platform/efl/DispatchQueueEfl.cpp.
+        * wtf/efl/DispatchQueueEfl.h: Renamed from Source/Hfcl2/Platform/efl/DispatchQueueEfl.h.
+        * wtf/efl/DispatchQueueWorkItemEfl.h: Renamed from Source/Hfcl2/Platform/efl/DispatchQueueWorkItemEfl.h.
 
 2015-03-08  Brent Fulgham  <bfulgham@apple.com>
 
@@ -14165,7 +14165,7 @@
 
         Unreviewed, EFL build fix since r180410.
 
-        * wtf/PlatformEfl.cmake: Add WEBKIT2/Platform/efl path in order to include DispatchQueueEfl.h.
+        * wtf/PlatformEfl.cmake: Add HFCL2/Platform/efl path in order to include DispatchQueueEfl.h.
 
 2015-02-20  Antti Koivisto  <antti@apple.com>
 
@@ -14181,12 +14181,12 @@
         * WTF.xcodeproj/project.pbxproj:
         * wtf/CMakeLists.txt:
         * wtf/PlatformGTK.cmake:
-        * wtf/WorkQueue.cpp: Copied from Source/WebKit2/Platform/WorkQueue.cpp.
-        * wtf/WorkQueue.h: Copied from Source/WebKit2/Platform/WorkQueue.h.
+        * wtf/WorkQueue.cpp: Copied from Source/Hfcl2/Platform/WorkQueue.cpp.
+        * wtf/WorkQueue.h: Copied from Source/Hfcl2/Platform/WorkQueue.h.
         * wtf/cocoa: Added.
-        * wtf/cocoa/WorkQueueCocoa.cpp: Copied from Source/WebKit2/Platform/mac/WorkQueueMac.cpp.
-        * wtf/efl/WorkQueueEfl.cpp: Copied from Source/WebKit2/Platform/efl/WorkQueueEfl.cpp.
-        * wtf/gtk/WorkQueueGtk.cpp: Copied from Source/WebKit2/Platform/gtk/WorkQueueGtk.cpp.
+        * wtf/cocoa/WorkQueueCocoa.cpp: Copied from Source/Hfcl2/Platform/mac/WorkQueueMac.cpp.
+        * wtf/efl/WorkQueueEfl.cpp: Copied from Source/Hfcl2/Platform/efl/WorkQueueEfl.cpp.
+        * wtf/gtk/WorkQueueGtk.cpp: Copied from Source/Hfcl2/Platform/gtk/WorkQueueGtk.cpp.
 
 2015-02-13  Gyuyoung Kim  <gyuyoung.kim@samsung.com>
 
@@ -14295,7 +14295,7 @@
 
         Reviewed by Darin Adler.
 
-        This causes crashes on some WebKit regression test bots.
+        This causes crashes on some Hfcl regression test bots.
 
         * wtf/FastMalloc.cpp: (WTF::tryFastCalloc): Fix what looks like a copy/paste mistake.
 
@@ -14327,7 +14327,7 @@
         Unreviewed, rolling out r179743.
         https://bugs.webkit.org/show_bug.cgi?id=141335
 
-        caused missing symbols in non-WebKit clients of WTF::Vector
+        caused missing symbols in non-Hfcl clients of WTF::Vector
         (Requested by kling on #webkit).
 
         Reverted changeset:
@@ -14915,7 +14915,7 @@
 
 2015-01-20  Csaba Osztrogonác  <ossy@webkit.org>
 
-        Remove non-Windows cruft from WebKit/win/Plugins
+        Remove non-Windows cruft from Hfcl/win/Plugins
         https://bugs.webkit.org/show_bug.cgi?id=140675
 
         Reviewed by Anders Carlsson.
@@ -14973,7 +14973,7 @@
 
         Reviewed by Darin Adler.
 
-        In the WebKit2/UIProcess/WebProcessLifetimeObserver.cpp, std::all_of
+        In the Hfcl2/UIProcess/WebProcessLifetimeObserver.cpp, std::all_of
         is used for HashIterators. However, std::all_of requires the complete
         C++ iterator interface including iterator_category typedef member and
         it raises compile error in GCC 4.8 (and libstdc++) environment.
@@ -15083,7 +15083,7 @@
 
 2015-01-07  Daniel Bates  <dabates@apple.com>
 
-        [iOS] Make WebKit2 build with public iOS SDK and more build fixes for DRT
+        [iOS] Make Hfcl2 build with public iOS SDK and more build fixes for DRT
         https://bugs.webkit.org/show_bug.cgi?id=137371
 
         As pointed out by Tim Horton, use C-style comment instead of C++-style comment as
@@ -15094,12 +15094,12 @@
 
 2015-01-07  Daniel Bates  <dabates@apple.com>
 
-        [iOS] Make WebKit2 build with public iOS SDK and more build fixes for DRT
+        [iOS] Make Hfcl2 build with public iOS SDK and more build fixes for DRT
         https://bugs.webkit.org/show_bug.cgi?id=137371
 
         Reviewed by David Kilzer.
 
-        Move EXTERN_C_BEGIN and EXTERN_C_END macros from file WebKit2/config.h to here and
+        Move EXTERN_C_BEGIN and EXTERN_C_END macros from file Hfcl2/config.h to here and
         rename them to WTF_EXTERN_C_BEGIN and WTF_EXTERN_C_END, respectively, so that we
         can make use of these macros in SPI wrapper headers (e.g. UIKitSPI.h).
 
@@ -15117,19 +15117,19 @@
 
         Reverted changeset:
 
-        "[iOS] Make WebKit2 build with public iOS SDK and more build
+        "[iOS] Make Hfcl2 build with public iOS SDK and more build
         fixes for DRT"
         https://bugs.webkit.org/show_bug.cgi?id=137371
         http://trac.webkit.org/changeset/178068
 
 2015-01-07  Daniel Bates  <dabates@apple.com>
 
-        [iOS] Make WebKit2 build with public iOS SDK and more build fixes for DRT
+        [iOS] Make Hfcl2 build with public iOS SDK and more build fixes for DRT
         https://bugs.webkit.org/show_bug.cgi?id=137371
 
         Reviewed by David Kilzer.
 
-        Move EXTERN_C_BEGIN and EXTERN_C_END macros from file WebKit2/config.h to here and
+        Move EXTERN_C_BEGIN and EXTERN_C_END macros from file Hfcl2/config.h to here and
         rename them to WTF_EXTERN_C_BEGIN and WTF_EXTERN_C_END, respectively, so that we
         can make use of these macros in SPI wrapper headers (e.g. UIKitSPI.h).
 
@@ -15446,7 +15446,7 @@
         Reviewed by Chris Dumez.
 
         Add USE(APPLE_INTERNAL_SDK)-guard around iOS-specific feature counter implementation
-        as we are only interested in counting features in builds of iOS WebKit that were built
+        as we are only interested in counting features in builds of iOS Hfcl that were built
         with the Apple Internal SDK.
 
         * wtf/FeatureCounter.cpp:
@@ -15796,13 +15796,13 @@
 
 2014-12-09  Alberto Garcia  <berto@igalia.com>
 
-        Undefined Symbol build error "_objc_registerThreadWithCollector" when building WebKit GTK Mac OS X on Snow Leopard
+        Undefined Symbol build error "_objc_registerThreadWithCollector" when building Hfcl GTK Mac OS X on Snow Leopard
         https://bugs.webkit.org/show_bug.cgi?id=58737
 
         Reviewed by Darin Adler.
 
         Replace OS(MAC_OS_X) with PLATFORM(MAC) to prevent using
-        osx-specific code in WebKitGTK+ builds.
+        osx-specific code in HfclGTK+ builds.
 
         * wtf/ThreadingPthreads.cpp:
         (WTF::initializeCurrentThreadInternal):
@@ -16614,7 +16614,7 @@
 
         Rolled in r175389.
 
-        WebKit was failing to build 32bit on some Apple internal systems because
+        Hfcl was failing to build 32bit on some Apple internal systems because
         those systems were configured to build bmalloc 64-bit-only. Those systems
         have been updated to build bmalloc as a universal binary, so everything
         should work fine now.
@@ -17333,9 +17333,9 @@
         Reviewed by Alexey Proskuryakov.
 
         Towards centralizing the declarations of XPC functions used in JavaScriptCore
-        and WebKit2, add a header that wraps these function declarations called XPCSPI.h
+        and Hfcl2, add a header that wraps these function declarations called XPCSPI.h
         and use it instead of including the corresponding XPC API/SPI headers/forward
-        declaring XPC functions. This will also aid in the effort to make WebKit2 build
+        declaring XPC functions. This will also aid in the effort to make Hfcl2 build
         for iOS with the public iOS SDK.
 
         * WTF.xcodeproj/project.pbxproj:
@@ -17425,9 +17425,9 @@
         Reviewed by Alexey Proskuryakov.
 
         Towards centralizing the declarations of XPC functions used in JavaScriptCore
-        and WebKit2, add a header that wraps these function declarations called XPCSPI.h
+        and Hfcl2, add a header that wraps these function declarations called XPCSPI.h
         and use it instead of including the corresponding XPC API/SPI headers/forward
-        declaring XPC functions. This will also aid in the effort to make WebKit2 build
+        declaring XPC functions. This will also aid in the effort to make Hfcl2 build
         for iOS with the public iOS SDK.
 
         * WTF.xcodeproj/project.pbxproj:
@@ -17851,7 +17851,7 @@
 
         GMainLoopSource objects can be dispatching tasks on one thread
         while having a new task scheduled on a different thread. This
-        can for instance occur in WebKitVideoSink, where the timeout
+        can for instance occur in HfclVideoSink, where the timeout
         callback can be called on main thread while at the same time
         it is being rescheduled on a different thread (created through
         GStreamer).
@@ -17903,7 +17903,7 @@
 
         Unreviewed, rolling out r173695.
 
-        Broke building third-party Legacy WebKit apps; will
+        Broke building third-party Legacy Hfcl apps; will
         investigate offline
 
         Reverted changeset:
@@ -18063,12 +18063,12 @@
 
 2014-09-08  Dan Bernstein  <mitz@apple.com>
 
-        HAVE(VOUCHERS) is not available outside of WebKit2
+        HAVE(VOUCHERS) is not available outside of Hfcl2
         https://bugs.webkit.org/show_bug.cgi?id=136637
 
         Reviewed by Tim Horton.
 
-        * wtf/Platform.h: Moved the definition of HAVE_VOUCHERS from WebKit2’s config.h here.
+        * wtf/Platform.h: Moved the definition of HAVE_VOUCHERS from Hfcl2’s config.h here.
 
 2014-09-08  Tim Horton  <timothy_horton@apple.com>
 
@@ -18134,7 +18134,7 @@
         Reviewed by Darin Adler.
 
         * WTF.xcodeproj/project.pbxproj:
-        * wtf/OSObjectPtr.h: Copied from Source/WebKit2/Platform/IPC/mac/XPCPtr.h.
+        * wtf/OSObjectPtr.h: Copied from Source/Hfcl2/Platform/IPC/mac/XPCPtr.h.
         (WTF::retainOSObject):
         (WTF::releaseOSObject):
         (WTF::OSObjectPtr::OSObjectPtr):
@@ -18301,7 +18301,7 @@
         Reviewed by Antti Koivisto.
 
         Disk image cache code unnecessarily complicates SharedBuffer implementation. We can remove
-        this now since we don't enable it in WebKit2 on iOS.
+        this now since we don't enable it in Hfcl2 on iOS.
 
         * wtf/FeatureDefines.h:
 
@@ -18323,7 +18323,7 @@
 
         GMainLoopSource objects can be dispatching tasks on one thread
         while having a new task scheduled on a different thread. This
-        can for instance occur in WebKitVideoSink, where the timeout
+        can for instance occur in HfclVideoSink, where the timeout
         callback can be called on main thread while at the same time
         it is being rescheduled on a different thread (created through
         GStreamer).
@@ -18371,7 +18371,7 @@
         Reviewed by Pratik Solanki.
 
         Disable USE(CFNETWORK) and use the Foundation networking code by default when building
-        iOS WebKit without the Apple Internal SDK.
+        iOS Hfcl without the Apple Internal SDK.
 
         * wtf/Platform.h:
 
@@ -18636,7 +18636,7 @@
 
 2014-08-18  Maciej Stachowiak  <mjs@apple.com>
 
-        Use NSURLFileTypeMappings directly instead of depending on WebKitSystemInterface wrappers for it
+        Use NSURLFileTypeMappings directly instead of depending on HfclSystemInterface wrappers for it
         https://bugs.webkit.org/show_bug.cgi?id=136035
 
         Reviewed by Dan Bernstein.
@@ -18868,7 +18868,7 @@
         Reviewed by Tim Horton.
 
         We now support two different platform content filters, and will soon support a mock content filter (as part of
-        webkit.org/b/128858). This makes content filtering a feature of WebKit, not just an adoption of a third-party
+        webkit.org/b/128858). This makes content filtering a feature of Hfcl, not just an adoption of a third-party
         library. ENABLE() is the correct macro to use for such a feature.
 
         * wtf/Platform.h:
@@ -19320,7 +19320,7 @@
 
 2014-06-26  Chris Fleizach  <cfleizach@apple.com>
 
-        Add an undo group for each dictated utterance in WebKit
+        Add an undo group for each dictated utterance in Hfcl
         https://bugs.webkit.org/show_bug.cgi?id=134086
 
         Applied review comments from Sam Weinig.
@@ -19503,7 +19503,7 @@
 
 2014-06-18  Anders Carlsson  <andersca@apple.com>
 
-        Add CF type cast function templates and use them in KeyedDecoder in WebKit2
+        Add CF type cast function templates and use them in KeyedDecoder in Hfcl2
         https://bugs.webkit.org/show_bug.cgi?id=134033
 
         Reviewed by Sam Weinig.
@@ -20061,7 +20061,7 @@
         HW_AVAILCPU is more canonical than HW_NCPU. For example if you use hacks to tell Darwin
         to make it seem like there are fewer CPUs, HW_AVAILCPU will change but HW_NCPU won't.
         HW_NCPU doesn't reflect how much actual paralellism you'll get; it's merely reporting
-        facts about the machine you're running on. HW_AVAILCPU is almost always what WebKit
+        facts about the machine you're running on. HW_AVAILCPU is almost always what Hfcl
         wants since it uses this information to decide how many threads to launch for various
         things.
 
@@ -20079,7 +20079,7 @@
 
 2014-04-21  Eric Carlson  <eric.carlson@apple.com>
 
-        [Mac] implement WebKitDataCue
+        [Mac] implement HfclDataCue
         https://bugs.webkit.org/show_bug.cgi?id=131799
 
         Reviewed by Dean Jackson.
@@ -20129,13 +20129,13 @@
 
         Reverted changeset:
 
-        "[Mac] implement WebKitDataCue"
+        "[Mac] implement HfclDataCue"
         https://bugs.webkit.org/show_bug.cgi?id=131799
         http://trac.webkit.org/changeset/167527
 
 2014-04-18  Eric Carlson  <eric.carlson@apple.com>
 
-        [Mac] implement WebKitDataCue
+        [Mac] implement HfclDataCue
         https://bugs.webkit.org/show_bug.cgi?id=131799
 
         Reviewed by Dean Jackson.
@@ -20539,7 +20539,7 @@
         * WTF.vcxproj/WTF.vcxproj.filters:
         Add all gobject source files in WinCairo build.
         * wtf/gobject/GRefPtr.h:
-        Export refGPtr and derefGPtr overloads in WTF.dll to fix linker errors with WebKit.dll when using soup.
+        Export refGPtr and derefGPtr overloads in WTF.dll to fix linker errors with Hfcl.dll when using soup.
 
 2014-03-31  Zan Dobersek  <zdobersek@igalia.com>
 
@@ -21159,7 +21159,7 @@
 
 2014-03-15  Darin Adler  <darin@apple.com>
 
-        Remove all uses of deprecatedCharacters from WebKit2
+        Remove all uses of deprecatedCharacters from Hfcl2
         https://bugs.webkit.org/show_bug.cgi?id=130197
 
         Reviewed by Andreas Kling.
@@ -21766,7 +21766,7 @@
         delete in it's std::thread implementation for example.
         
         The only supported way to override operator new and operator delete globally is to not use inline
-        functions, but that would mean that any application using WebKit would not be able to provide custom
+        functions, but that would mean that any application using Hfcl would not be able to provide custom
         operator new/operator delete functions so we'll just reuse the already existing infrastructure consisting
         of the WTF_MAKE_FAST_ALLOCATED macro.
 
@@ -22879,7 +22879,7 @@
         Reviewed by Anders Carlsson.
 
         * wtf/Assertions.h: Remove COMPILER_SUPPORTS(CXX_STATIC_ASSERT), since
-        we now have that for all compilers that can build WebKit.
+        we now have that for all compilers that can build Hfcl.
 
         * wtf/Compiler.h: Removed always true feature flags, including:
         COMPILER_SUPPORTS(CXX_VARIADIC_TEMPLATES), COMPILER_SUPPORTS(CXX_RVALUE_REFERENCES),
@@ -22891,7 +22891,7 @@
         check for COMPILER(RVCT). Removed unused COMPILER(GCCE) detection.
 
         * wtf/RefPtr.h: Remove COMPILER_SUPPORTS(CXX_NULLPTR), since we now have
-        that for all compilers that can build WebKit.
+        that for all compilers that can build Hfcl.
         * wtf/RetainPtr.h: Ditto.
 
 2014-01-23  Max Vujovic  <mvujovic@adobe.com>
@@ -23744,11 +23744,11 @@
         that a user initiated activity is taking place, and as such that resources should be
         made available to the process accordingly.
 
-        Currently we hold a single NSActivity, at the WebKit layer. This refactoring allows us
+        Currently we hold a single NSActivity, at the Hfcl layer. This refactoring allows us
         to hold different activity tokens for different user actions (which simplifies the
         handling, and aides debugging since the token can more accurately express the activity
         taking place), and also will allow us to avoid the layering difficulty of calling back
-        up the stack to WebKit to register that an activity is taking place.
+        up the stack to Hfcl to register that an activity is taking place.
 
         * wtf/Platform.h:
             - added HAVE_NS_ACTIVITY.
@@ -23765,7 +23765,7 @@
         http://trac.webkit.org/changeset/161165
         https://bugs.webkit.org/show_bug.cgi?id=126332
 
-        Broke WebKit2 on Mountain Lion (Requested by ap on #webkit).
+        Broke Hfcl2 on Mountain Lion (Requested by ap on #webkit).
 
         * GNUmakefile.list.am:
         * WTF.vcxproj/WTF.vcxproj:
@@ -23869,8 +23869,8 @@
         Remove the old implementation of keys() and values() and replace it with one
         that uses IteratorPair.
         
-        * wtf/FilterIterator.h: Copied from Source/WebKit2/Shared/FilterIterator.h.
-        * wtf/IteratorPair.h: Copied from Source/WebKit2/Shared/IteratorPair.h.
+        * wtf/FilterIterator.h: Copied from Source/Hfcl2/Shared/FilterIterator.h.
+        * wtf/IteratorPair.h: Copied from Source/Hfcl2/Shared/IteratorPair.h.
 
 2013-12-27  Daniel Bates  <dabates@apple.com>
 
@@ -24193,7 +24193,7 @@
 
 2013-12-13  Anders Carlsson  <andersca@apple.com>
 
-        Require variadic templates to build WebKit
+        Require variadic templates to build Hfcl
         https://bugs.webkit.org/show_bug.cgi?id=125701
 
         Reviewed by Andreas Kling.
@@ -24218,7 +24218,7 @@
 
 2013-12-13  Brent Fulgham  <bfulgham@apple.com>
 
-        [Win] Switch WebKit solution to Visual Studio 2013
+        [Win] Switch Hfcl solution to Visual Studio 2013
         https://bugs.webkit.org/show_bug.cgi?id=125192
 
         Reviewed by Anders Carlsson.
@@ -25856,7 +25856,7 @@
 
 2013-10-14  Anders Carlsson  <andersca@apple.com>
 
-        WebKit Nightlies broken by r157374
+        Hfcl Nightlies broken by r157374
         https://bugs.webkit.org/show_bug.cgi?id=122736
 
         Reviewed by Andreas Kling.

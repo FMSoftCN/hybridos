@@ -28,7 +28,7 @@
 #include <wtf/text/LChar.h>
 
 // The behavior of many of the functions in the <ctype.h> header is dependent
-// on the current locale. But in the WebKit project, all uses of those functions
+// on the current locale. But in the Hfcl project, all uses of those functions
 // are in code processing something that's not locale-specific. These equivalents
 // for some of the <ctype.h> functions are named more explicitly, not dependent
 // on the C library locale, and we should also optimize them as needed.
