@@ -109,7 +109,7 @@ HybridOS provides a new software stack for IoT applications:
   while you use JavaScript on high-end IoT devices and/or clients.
 
 Finally, the application programming languages of HybridOS will be reduced to two:
-JavaScript for apps and C/C++ for services. As a result, the development cost of
+JavaScript or C/C++ for apps. As a result, the development cost of
 an IoT application will be reduced greatly by using HybridOS.
 
 ### IoT-dedicated cloud computing services and security implementation
@@ -149,6 +149,7 @@ thus reducing development cost.
 * [HybridOS Architecture]
 * [HybridOS App Framework]
 * [HybridOS View Markup Language]
+* [hiWebKit]
 * [HybridOS Foundation Class Library]
 * [HybridOS Security Design]
 * [HybridOS Device Simulation Environment]
@@ -158,6 +159,7 @@ thus reducing development cost.
 
     `
     |-- docs/           # The design documents for HybridOS.
+    |-- hiwebkit/       # The source for hiWebKit, both for device-side and server-side.
     |-- device-side/    # The source for device side.
     |-- server-side/    # The source for server side.
     |-- client-side/    # The source for client side.
@@ -175,17 +177,23 @@ Copyright (C) 2018 [Beijing FMSoft Technologies Co., Ltd.]
 * For server side, HybridOS uses AGPL v3.
 * For documents, GPL v3 applies.
 
-Note that HybridOS integrates many mature open source software, such as SQLite, FreeType,
-V8 JavaScript engine, and so on. For the copyright owners and licenses for these software,
-please refer to the README or LICENSE files contained in the source trees.
+Note that HybridOS integrates many mature open source software, such as WebKit,
+SQLite, FreeType, V8 JavaScript engine, and so on. For the copyright owners and
+licenses for these software, please refer to the README or LICENSE files
+contained in the source trees.
 
 [Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
 [FMSoft Technologies]: https://www.fmsoft.cn
 [HybridOS Official Site]: https://hybrid.fmsoft.cn
 
+[MiniGUI]: http:/www.minigui.com
+[WebKit]: https://webkit.org
+[HTML 5.3]: https://www.w3.org/TR/html53/
+
 [HybridOS Architecture]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-Architecture
 [HybridOS App Framework]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-App-Framework
 [HybridOS View Markup Language]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-View-Markup-Language
+[hiWebKit]: https://github.com/FMSoftCN/hybridos/wiki/hiWebKit:-An-WebKit-Derivative-for-HybridOS
 [HybridOS Foundation Class Library]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-Foundation-Class-Library
 [HybridOS Security Design]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-Security-Design
 [HybridOS Device Simulation Environment]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-Device-Simulation-Environment
