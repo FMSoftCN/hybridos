@@ -149,7 +149,7 @@ thus reducing development cost.
 [HybridOS Architecture] gives you a whole picture of HybridOS.
 
 For more information, please visit
-[Home of HybridOS Wiki](wikis/Home).
+[Home of HybridOS Wiki](/hybridos/hybridos/wikis/Home).
 
 ## Source Tree
 
@@ -186,7 +186,7 @@ contained in the source trees.
 [WebKit]: https://webkit.org
 [HTML 5.3]: https://www.w3.org/TR/html53/
 
-[HybridOS Architecture]: wikis/HybridOS-Architecture
+[HybridOS Architecture]: /hybridos/hybridos/wikis/HybridOS-Architecture
 [HybridOS App Framework]: HybridOS-App-Framework
 [HybridOS View Markup Language]: HybridOS-View-Markup-Language
 [hiWebKit]: hiWebKit-An-WebKit-Derivative-for-HybridOS
