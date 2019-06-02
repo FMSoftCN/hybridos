@@ -189,8 +189,8 @@ contained in the source trees.
 [HybridOS Architecture]: HybridOS-Architecture
 [HybridOS App Framework]: HybridOS-App-Framework
 [HybridOS View Markup Language]: HybridOS-View-Markup-Language
-[hiWebKit]: hiWebKit:-An-WebKit-Derivative-for-HybridOS
-[hiBus]: hiBus:-A-Secure-Data-Bus-Mechanism
+[hiWebKit]: hiWebKit-An-WebKit-Derivative-for-HybridOS
+[hiBus]: hiBus-A-Secure-Data-Bus-Mechanism
 [HybridOS Foundation Class Library]: HybridOS-Foundation-Class-Library
 [HybridOS Security Design]: HybridOS-Security-Design
 [HybridOS Device Simulation Environment]: HybridOS-Device-Simulation-Environment
