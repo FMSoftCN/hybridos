@@ -149,7 +149,7 @@ thus reducing development cost.
 [HybridOS Architecture] gives you a whole picture of HybridOS.
 
 For more information, please visit
-[Home of HybridOS Wiki](https://github.com/FMSoftCN/hybridos/wiki).
+[Home of HybridOS Wiki](Home).
 
 ## Source Tree
 
@@ -186,13 +186,13 @@ contained in the source trees.
 [WebKit]: https://webkit.org
 [HTML 5.3]: https://www.w3.org/TR/html53/
 
-[HybridOS Architecture]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-Architecture
-[HybridOS App Framework]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-App-Framework
-[HybridOS View Markup Language]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-View-Markup-Language
-[hiWebKit]: https://github.com/FMSoftCN/hybridos/wiki/hiWebKit:-An-WebKit-Derivative-for-HybridOS
-[hiBus]: https://github.com/FMSoftCN/hybridos/wiki/hiBus:-A-Secure-Data-Bus-Mechanism
-[HybridOS Foundation Class Library]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-Foundation-Class-Library
-[HybridOS Security Design]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-Security-Design
-[HybridOS Device Simulation Environment]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-Device-Simulation-Environment
-[HybridOS Code and Development Convention]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-Code-and-Development-Convention
+[HybridOS Architecture]: HybridOS-Architecture
+[HybridOS App Framework]: HybridOS-App-Framework
+[HybridOS View Markup Language]: HybridOS-View-Markup-Language
+[hiWebKit]: hiWebKit:-An-WebKit-Derivative-for-HybridOS
+[hiBus]: hiBus:-A-Secure-Data-Bus-Mechanism
+[HybridOS Foundation Class Library]: HybridOS-Foundation-Class-Library
+[HybridOS Security Design]: HybridOS-Security-Design
+[HybridOS Device Simulation Environment]: HybridOS-Device-Simulation-Environment
+[HybridOS Code and Development Convention]: HybridOS-Code-and-Development-Convention
 
