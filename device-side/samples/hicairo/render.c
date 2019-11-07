@@ -22,7 +22,7 @@ static struct animal_list {
     size_t              size;
 } animal_list[] = {
     { "tiger", tiger_commands, ARRAY_LENGTH (tiger_commands) },
-    //{ "lion",  lion_commands, ARRAY_LENGTH (lion_commands) },
+    { "lion",  lion_commands, ARRAY_LENGTH (lion_commands) },
 };
 
 static int

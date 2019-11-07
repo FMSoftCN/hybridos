@@ -52,8 +52,6 @@
 #include <cairo/cairo.h>
 #include <cairo/cairo-minigui.h>
 
-#include "lion.inc"
-
 #define WIDTH 800
 #define HEIGHT 600
 
