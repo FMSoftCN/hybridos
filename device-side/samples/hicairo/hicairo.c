@@ -54,6 +54,21 @@
 
 #include "lion.inc"
 
+#define WIDTH 800
+#define HEIGHT 600
+
+static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
+{
+    if (hdc == HDC_INVALID) {
+        return cairo_minigui_surface_create_with_memdc (CAIRO_FORMAT_RGB24, width, height);
+    }
+    else if (width > 0 && height > 0) {
+        return cairo_minigui_surface_create_with_memdc2 (hdc, width, height);
+    }
+
+    return cairo_minigui_surface_create (hdc);
+}
+
 static LRESULT SampleWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message) {
@@ -101,9 +116,27 @@ int MiniGUIMain(int argc, const char *argv[])
     HWND    hMainWnd;
     MAINWINCREATE CreateInfo;
 
+    int retval = 0;
+    cairo_surface_t* surface = NULL;
+    cairo_t* cr = NULL;
+
 #ifdef _MGRM_PROCESSES
     JoinLayer(NAME_DEF_LAYER, "hicairo", 0, 0);
 #endif
+
+    surface = create_cairo_surface (HDC_SCREEN, WIDTH, HEIGHT);
+    if (surface == NULL) {
+        _ERR_PRINTF("hicairo: failed when creating surface\n");
+        retval = 1;
+        goto FAIL;
+    }
+
+    cr = cairo_create (surface);
+    if (cr == NULL) {
+        _ERR_PRINTF("hicairo: failed when creating cairo context\n");
+        retval = 2;
+        goto FAIL;
+    }
 
     CreateInfo.dwStyle = WS_VISIBLE;
     CreateInfo.dwExStyle = WS_EX_NONE;
@@ -115,27 +148,39 @@ int MiniGUIMain(int argc, const char *argv[])
     CreateInfo.MainWindowProc = SampleWinProc;
     CreateInfo.lx = 0;
     CreateInfo.ty = 0;
-    CreateInfo.rx = 400;
-    CreateInfo.by = 300;
+    CreateInfo.rx = WIDTH;
+    CreateInfo.by = HEIGHT;
     CreateInfo.iBkColor = COLOR_lightwhite;
-    CreateInfo.dwAddData = 0;
+    CreateInfo.dwAddData = (DWORD)cr;
     CreateInfo.hHosting = HWND_DESKTOP;
 
     hMainWnd = CreateMainWindow(&CreateInfo);
 
-    if (hMainWnd == HWND_INVALID)
-        return -1;
+    if (hMainWnd == HWND_INVALID) {
+        retval = 3;
+    }
 
     ShowWindow(hMainWnd, SW_SHOWNORMAL);
 
-    while (GetMessage(&Msg, hMainWnd))
-    {
+    while (GetMessage(&Msg, hMainWnd)) {
         TranslateMessage(&Msg);
         DispatchMessage(&Msg);
     }
 
     MainWindowThreadCleanup(hMainWnd);
-    return 0;
+    retval = 0;
+
+FAIL:
+    if (cr) {
+        cairo_destroy(cr);
+    }
+
+    if (surface) {
+        cairo_surface_finish(surface);
+        cairo_surface_destroy(surface);
+    }
+
+    return retval;
 }
 
 #ifndef _LITE_VERSION
