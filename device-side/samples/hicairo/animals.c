@@ -1,8 +1,35 @@
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
+///////////////////////////////////////////////////////////////////////////////
+//
+//                          IMPORTANT NOTICE
+//
+// The following open source license statement does not apply to any
+// entity in the Exception List published by FMSoft.
+//
+// For more information, please visit:
+//
+// https://www.fmsoft.cn/exception-list
+//
+//////////////////////////////////////////////////////////////////////////////
+/*
+** animals.c:
+**  Funtions to render animals.
+**
+** Copyright (C) 2019 FMSoft (http://www.fmsoft.cn).
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
 
-#include <cairo/cairo.h>
+#include "hicairo.h"
 
 typedef struct command {
   char type;
@@ -25,8 +52,8 @@ static struct animal_list {
     { "lion",  lion_commands, ARRAY_LENGTH (lion_commands) },
 };
 
-static int
-draw (cairo_t *cr, const char* which, int width, int height)
+int
+draw_animal (cairo_t *cr, const char* which, int width, int height)
 {
     const command_t* cmds = NULL;
     unsigned int size;
