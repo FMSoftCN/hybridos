@@ -52,25 +52,18 @@ static struct animal_list {
     { "lion",  lion_commands, ARRAY_LENGTH (lion_commands) },
 };
 
-int
-draw_animal (cairo_t *cr, const char* which, int width, int height)
+static int
+draw_animal (cairo_t *cr, int idx, int width, int height)
 {
-    const command_t* cmds = NULL;
-    unsigned int size;
-    unsigned int i;
+    const command_t* cmds;
+    size_t size;
+    size_t i;
 
-    for (i = 0; i < ARRAY_LENGTH(animal_list); i++) {
-        if (strcasecmp (animal_list[i].name, which) == 0) {
-            cmds = animal_list[i].cmds;
-            size = animal_list[i].size;
-            break;
-        }
-    }
+    if (idx >= ARRAY_LENGTH(animal_list) || idx < 0)
+        idx = 0;
 
-    if (cmds == NULL) {
-        cmds = animal_list[0].cmds;
-        size = animal_list[0].size;
-    }
+    cmds = animal_list[idx].cmds;
+    size = animal_list[idx].size;
 
     cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
     cairo_set_source_rgba (cr, 0.1, 0.2, 0.3, 1.0);
@@ -104,5 +97,15 @@ draw_animal (cairo_t *cr, const char* which, int width, int height)
     }
 
     return 0;
+}
+
+int draw_tiger(cairo_t *cr, int width, int height)
+{
+    return draw_animal (cr, 0, width, height);
+}
+
+int draw_lion(cairo_t *cr, int width, int height)
+{
+    return draw_animal (cr, 1, width, height);
 }
 

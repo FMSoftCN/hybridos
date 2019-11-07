@@ -38,14 +38,18 @@
 
 #include <cairo/cairo.h>
 
-#define HEIGHT  800
-#define WIDTH   600
+#define WIDTH   800
+#define HEIGHT  600
 
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */
 
-int draw_animal (cairo_t *cr, const char* which, int width, int height);
+int draw_tiger (cairo_t *cr, int width, int height);
+int draw_lion (cairo_t *cr, int width, int height);
+int draw_world_map_stroke (cairo_t *cr, int width, int height);
+int draw_world_map_fill (cairo_t *cr, int width, int height);
+int draw_world_map_both (cairo_t *cr, int width, int height);
 
 #ifdef __cplusplus
 }
