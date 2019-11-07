@@ -31,6 +31,7 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include <math.h>
 
 #include <minigui/common.h>
 #include <minigui/minigui.h>
@@ -56,7 +57,9 @@ static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
 
 typedef int (*draw_func_t)(cairo_t *, int, int);
 
-static void paint (HWND hwnd, HDC hdc, draw_func_t draw_func, int width, int height)
+static void paint (HWND hwnd, HDC hdc, draw_func_t draw_func,
+        double sx, double sy, double angle,
+        int width, int height)
 {
     HDC csdc;
 
@@ -68,6 +71,8 @@ static void paint (HWND hwnd, HDC hdc, draw_func_t draw_func, int width, int hei
 
     cairo_save(cr);
 
+    cairo_scale(cr, sx, sy);
+    cairo_rotate(cr, angle);
     draw_func(cr, width, height);
 
     csdc = cairo_minigui_surface_get_dc (cairo_get_target(cr));
@@ -96,6 +101,9 @@ static draw_func_t _draw_func_list [] = {
 
 static int _curr_width = WIDTH;
 static int _curr_height = HEIGHT;
+static double _curr_scale_x = 1.0;
+static double _curr_scale_y = 1.0;
+static double _curr_rotate_angle = 0.0;
 
 static LRESULT SampleWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -105,13 +113,16 @@ static LRESULT SampleWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 
     case MSG_PAINT: {
         HDC hdc = BeginPaint(hWnd);
-        paint (hWnd, hdc, _draw_func_list[_curr_draw_func_idx], _curr_width, _curr_height);
+        paint (hWnd, hdc, _draw_func_list[_curr_draw_func_idx],
+            _curr_scale_x, _curr_scale_y, _curr_rotate_angle,
+            _curr_width, _curr_height);
         TextOut (hdc, 10, 10, "Drag the mouse up and down." );
         EndPaint(hWnd, hdc);
         return 0;
     }
 
     case MSG_KEYDOWN: {
+        BOOL repaint = FALSE;
         switch (wParam) {
         case SCANCODE_ESCAPE:
             SendNotifyMessage(hWnd, MSG_CLOSE, 0, 0);
@@ -120,9 +131,43 @@ static LRESULT SampleWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
         case SCANCODE_ENTER:
             _curr_draw_func_idx++;
             _curr_draw_func_idx %= TABLESIZE(_draw_func_list);
-            InvalidateRect(hWnd, NULL, FALSE);
+            repaint = TRUE;
             break;
+
+        case SCANCODE_CURSORBLOCKLEFT:
+            _curr_scale_x /= 1.2;
+            repaint = TRUE;
+            break;
+
+        case SCANCODE_CURSORBLOCKRIGHT:
+            _curr_scale_x *= 1.2;
+            repaint = TRUE;
+            break;
+
+        case SCANCODE_CURSORBLOCKUP:
+            _curr_scale_y *= 1.2;
+            repaint = TRUE;
+            break;
+
+        case SCANCODE_CURSORBLOCKDOWN:
+            _curr_scale_y /= 1.2;
+            repaint = TRUE;
+            break;
+
+        case SCANCODE_PAGEUP:
+            _curr_rotate_angle += acos(-1.0)/6;
+            repaint = TRUE;
+            break;
+
+        case SCANCODE_PAGEDOWN:
+            _curr_rotate_angle -= acos(-1.0)/6;
+            repaint = TRUE;
+            break;
+
         }
+
+        if (repaint)
+            InvalidateRect(hWnd, NULL, FALSE);
         break;
     }
 
