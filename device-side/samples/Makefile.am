@@ -1,3 +1,3 @@
-SUBDIRS=m4 hybridrun
+SUBDIRS=m4 hicairo
 
 EXTRA_DIST=README.md

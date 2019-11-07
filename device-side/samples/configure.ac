@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.60)
-AC_INIT(hfcl-samples,0.1.0)
-AC_CONFIG_SRCDIR(hybridrun/hybridrun.cc)
+AC_INIT(hisamples,0.1.0)
+AC_CONFIG_SRCDIR(hicairo/hicairo.c)
 
 dnl ========================================================================
 dnl Need for cross-compiling
@@ -16,9 +16,6 @@ dnl Checks for programs.
 AC_PROG_MAKE_SET
 AC_PROG_CC
 AC_PROG_CXX
-AC_PROG_LD
-AC_PROG_RANLIB
-AC_PROG_LIBTOOL
 
 dnl ========================================================================
 dnl Checks for typedefs, structures, and compiler characteristics.
@@ -27,7 +24,6 @@ AC_C_CONST
 dnl ========================================================================
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
 AC_CHECK_HEADERS(sys/time.h unistd.h)
 
@@ -49,11 +45,11 @@ fi
 dnl ========================================================================
 dnl check for installation of MiniGUI
 dnl ========================================================================
-PKG_CHECK_MODULES([MINIGUI], [minigui >= 3.2.1])
+PKG_CHECK_MODULES([MINIGUI], [minigui >= 4.0.3])
 PKG_CHECK_MODULES([MGEFF], [mgeff >= 1.2.0])
-PKG_CHECK_MODULES([HFCL], [hfcl >= 0.1.0])
+PKG_CHECK_MODULES([HICAIRO], [cairo-minigui >= 1.17.3])
 
-LIBS="$LIBS $MINIGUI_LIBS $MGPLUS_LIBS $MGEFF_LIBS $HFCL_LIBS -lefence"
+LIBS="$LIBS $MINIGUI_LIBS $MGEFF_LIBS $HICAIRO_LIBS"
 
 dnl ========================================================================
 dnl Write Output
@@ -64,6 +60,5 @@ AM_CONDITIONAL(MGRM_PROCESSES, test "x$minigui_runmode" = "xprocs")
 AC_OUTPUT(
     Makefile
     m4/Makefile
-    hybridrun/Makefile
-    hybridrun/res/Makefile
+    hicairo/Makefile
 )
