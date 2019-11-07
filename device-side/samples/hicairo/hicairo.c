@@ -47,14 +47,16 @@ static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
     if (hdc == HDC_INVALID) {
         return cairo_minigui_surface_create_with_memdc (CAIRO_FORMAT_RGB24, width, height);
     }
-    else if (width > 0 && height > 0) {
+    else if (hdc != HDC_SCREEN && width > 0 && height > 0) {
         return cairo_minigui_surface_create_with_memdc2 (hdc, width, height);
     }
 
     return cairo_minigui_surface_create (hdc);
 }
 
-static void paint (HWND hwnd, HDC hdc, int width, int height)
+typedef int (*draw_func_t)(cairo_t *, int, int);
+
+static void paint (HWND hwnd, HDC hdc, draw_func_t draw_func, int width, int height)
 {
     HDC csdc;
 
@@ -64,7 +66,9 @@ static void paint (HWND hwnd, HDC hdc, int width, int height)
         exit (1);
     }
 
-    draw_tiger(cr, width, height);
+    cairo_save(cr);
+
+    draw_func(cr, width, height);
 
     csdc = cairo_minigui_surface_get_dc (cairo_get_target(cr));
     if (csdc == HDC_INVALID) {
@@ -72,8 +76,26 @@ static void paint (HWND hwnd, HDC hdc, int width, int height)
         exit (1);
     }
 
-    BitBlt(csdc, 0, 0, width, height, hdc, 0, 0, 0);
+    if (csdc != HDC_SCREEN)
+        BitBlt(csdc, 0, 0, width, height, hdc, 0, 0, 0);
+    else {
+        Rectangle (HDC_SCREEN, 0, 0, width, height);
+    }
+
+    cairo_restore(cr);
 }
+
+static int _curr_draw_func_idx = 0;
+static draw_func_t _draw_func_list [] = {
+    draw_tiger,
+    draw_lion,
+    draw_world_map_stroke,
+    draw_world_map_fill,
+    draw_world_map_both,
+};
+
+static int _curr_width = WIDTH;
+static int _curr_height = HEIGHT;
 
 static LRESULT SampleWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -83,10 +105,25 @@ static LRESULT SampleWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 
     case MSG_PAINT: {
         HDC hdc = BeginPaint(hWnd);
-        paint (hWnd, hdc, WIDTH, HEIGHT);
+        paint (hWnd, hdc, _draw_func_list[_curr_draw_func_idx], _curr_width, _curr_height);
         TextOut (hdc, 10, 10, "Drag the mouse up and down." );
         EndPaint(hWnd, hdc);
         return 0;
+    }
+
+    case MSG_KEYDOWN: {
+        switch (wParam) {
+        case SCANCODE_ESCAPE:
+            SendNotifyMessage(hWnd, MSG_CLOSE, 0, 0);
+            break;
+
+        case SCANCODE_ENTER:
+            _curr_draw_func_idx++;
+            _curr_draw_func_idx %= TABLESIZE(_draw_func_list);
+            InvalidateRect(hWnd, NULL, FALSE);
+            break;
+        }
+        break;
     }
 
     case MSG_LBUTTONDOWN: {
@@ -131,7 +168,7 @@ int MiniGUIMain(int argc, const char *argv[])
     JoinLayer(NAME_DEF_LAYER, "hicairo", 0, 0);
 #endif
 
-    surface = create_cairo_surface (HDC_SCREEN, WIDTH, HEIGHT);
+    surface = create_cairo_surface (HDC_INVALID, WIDTH, HEIGHT);
     if (surface == NULL) {
         _ERR_PRINTF("hicairo: failed when creating surface\n");
         retval = 1;
