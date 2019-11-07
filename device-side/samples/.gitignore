@@ -25,4 +25,5 @@ Makefile.in
 # executables
 hybridrun/hybridrun
 hicairo/hicairo
+hicairo/gen-lion-cmds
 
