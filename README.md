@@ -154,7 +154,7 @@ For all documents, please refer to [HybridOS Documents].
 
 ### Main Repository
 
-The main repository of HybridOS is <https://github.com/FMSoftCN/hybridos>
+The main repository of HybridOS is <https://github.com/FMSoftCN/hybridos>.
 It mainly contains building scripts, tools, documents, and samples for
 HybridOS:
 
@@ -172,11 +172,23 @@ optimizations for some of the key software. We call the changed versions
 of the software as derivatives for HybridOS and maintain them
 through the following public repositories:
 
-- MiniGUI: the windowing system for HybridOS:
+- App Framework
+   + hiWebKit: the HybridOS derivative of [WebKit]: N/a.
+
+- Graphics Stack:
+   + hiCairo: the HybridOS derivative of [Cairo]:
+<https://github.com/FMSoftCN/hicairo>
+   + MiniGUI: the windowing system for HybridOS:
 <https://github.com/VincentWei/minigui>
 
-- hiCairo: the derivative of [Cairo] for HybridOS:
-<https://github.com/FMSoftCN/hicairo>
+- System Servers: N/a.
+
+- System Daemons:
+   + hiBus: the HybridOS derivative of uBus:
+<https://github.com/FMSoftCN/hibus>
+   + hiLogged: the HybridOS logging service: N/a.
+   + hiSecd (the HybridOS security service): N/a.
+
 
 ## Current Status
 
