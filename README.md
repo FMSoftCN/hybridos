@@ -13,13 +13,13 @@ from devices to the cloud and the clients.
 
 ## Table of Contents
 
-[Why We Design a New OS for IoT?](#why-we-design-a-new-os-for-iot)  
-[Technical Terminologies](#technical-terminologies)  
-[Goals of HybridOS](#goals-of-hybridos)  
-[Design Documents and Specifications](#design-documents-and-specifications)  
-[Source Tree](#source-tree)  
-[Current Status](#current-status)  
-[Copying](#copying)  
+- [Why We Design a New OS for IoT?](#why-we-design-a-new-os-for-iot)
+- [Technical Terminologies](#technical-terminologies)
+- [Goals of HybridOS](#goals-of-hybridos)
+- [Design Documents and Specifications](#design-documents-and-specifications)
+- [Organization of Source Code](#organization-of-source-code)
+- [Current Status](#current-status)
+- [Copying](#copying)
 
 ## Why We Design a New OS for IoT?
 
@@ -146,30 +146,43 @@ thus reducing development cost.
 
 ## Design Documents and Specifications
 
-[HybridOS Architecture](https://gitlab.fmsoft.cn/hybridos/hybridos/wikis/HybridOS-Architecture) gives you a whole picture of HybridOS.
+[HybridOS Architecture] gives you a whole picture of HybridOS.
 
-For more information, please visit
-[Home of HybridOS Wiki](https://gitlab.fmsoft.cn/hybridos/hybridos/wikis/home).
+## Organization of Source Code
 
-## Source Tree
+### Main Repository
+
+This is the main repository of HybridOS. It mainly contains building scripts,
+tools, documents, and samples:
 
     `
     |-- docs/           # The design documents for HybridOS.
-    |-- hiwebkit/       # The source for hiWebKit, both for device-side and server-side.
     |-- device-side/    # The source for device side.
     |-- server-side/    # The source for server side.
     |-- client-side/    # The source for client side.
 
+### Infrastructure Software
+
+We use some popular open source software as the public infrastructure
+of HybridOS. However, we have done a lot of adjustments and
+optimizations for some of the key software. We call the changed versions
+of the software as derivatives for HybridOS and maintain them
+through the following public repositories:
+
+- [hiCairo]: The Cairo Derivative for HybridOS.
 
 ## Current Status
 
-* Nov. 2018: Initiate this project and organize specifications and design documents.
+* Nov. 2019:  
+Initial release of hiCairo.
+* Nov. 2018:  
+Initiate this project and organize specifications and design documents.
 
 ## Copying
 
-Copyright (C) 2018 [Beijing FMSoft Technologies Co., Ltd.]
+Copyright (C) 2018 \~ 2019 [Beijing FMSoft Technologies Co., Ltd.]
 
-* For device side and client side, HybridOS uses GPL v3.
+* For device side and client side, HybridOS uses LGPL v3.
 * For server side, HybridOS uses AGPL v3.
 * For documents, GPL v3 applies.
 
@@ -177,6 +190,13 @@ Note that HybridOS integrates many mature open source software, such as WebKit,
 SQLite, FreeType, V8 JavaScript engine, and so on. For the copyright owners and
 licenses for these software, please refer to the README or LICENSE files
 contained in the source trees.
+
+---
+
+[hiCairo]: /hicairo
+
+[HybridOS Architecture]: /docs/HybridOS-Architecture.md
+[HybridOS Architecture]: /docs/HybridOS-Architecture.md
 
 [Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
 [FMSoft Technologies]: https://www.fmsoft.cn
