@@ -148,6 +148,8 @@ thus reducing development cost.
 
 [HybridOS Architecture] gives you a whole picture of HybridOS.
 
+For all documents, please refer to [HybridOS Documents].
+
 ## Organization of Source Code
 
 ### Main Repository
@@ -169,22 +171,26 @@ optimizations for some of the key software. We call the changed versions
 of the software as derivatives for HybridOS and maintain them
 through the following public repositories:
 
-- [hiCairo]: The Cairo Derivative for HybridOS.
+- MiniGUI: the windowing system for HybridOS:
+<https://github.com/VincentWei/minigui>
+
+- hiCairo: the derivative of [Cairo] for HybridOS:
+<https://github.com/FMSoftCN/hicairo>
 
 ## Current Status
 
-* Nov. 2019:  
+- Nov. 2019:  
 Initial release of hiCairo.
-* Nov. 2018:  
+- Nov. 2018:  
 Initiate this project and organize specifications and design documents.
 
 ## Copying
 
 Copyright (C) 2018 \~ 2019 [Beijing FMSoft Technologies Co., Ltd.]
 
-* For device side and client side, HybridOS uses LGPL v3.
-* For server side, HybridOS uses AGPL v3.
-* For documents, GPL v3 applies.
+- For device side and client side, HybridOS uses LGPL v3.
+- For server side, HybridOS uses AGPL v3.
+- For documents, GPL v3 applies.
 
 Note that HybridOS integrates many mature open source software, such as WebKit,
 SQLite, FreeType, V8 JavaScript engine, and so on. For the copyright owners and
@@ -193,10 +199,11 @@ contained in the source trees.
 
 ---
 
-[hiCairo]: /hicairo
+[Cairo]: https://www.cairographics.org/
 
-[HybridOS Architecture]: /docs/specs/HybridOS-Architecture.md
-[HybridOS-Code-and-Development-Convention]: /docs/specs/HybridOS-Code-and-Development-Convention.md
+[HybridOS Documents]: docs/README.md
+[HybridOS Architecture]: docs/specs/HybridOS-Architecture.md
+[HybridOS Code and Development Convention]: docs/specs/HybridOS-Code-and-Development-Convention.md
 
 [Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
 [FMSoft Technologies]: https://www.fmsoft.cn
