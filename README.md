@@ -163,7 +163,7 @@ tools, documents, and samples:
 
 ### Infrastructure Software
 
-We use some popular open source software as the public infrastructure
+We use some popular open source software as the common infrastructure
 of HybridOS. However, we have done a lot of adjustments and
 optimizations for some of the key software. We call the changed versions
 of the software as derivatives for HybridOS and maintain them
@@ -195,8 +195,8 @@ contained in the source trees.
 
 [hiCairo]: /hicairo
 
-[HybridOS Architecture]: /docs/HybridOS-Architecture.md
-[HybridOS Architecture]: /docs/HybridOS-Architecture.md
+[HybridOS Architecture]: /docs/specs/HybridOS-Architecture.md
+[HybridOS-Code-and-Development-Convention]: /docs/specs/HybridOS-Code-and-Development-Convention.md
 
 [Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
 [FMSoft Technologies]: https://www.fmsoft.cn
