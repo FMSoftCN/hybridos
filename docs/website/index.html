@@ -86,7 +86,7 @@
         </div>
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 text-center" data-anijs="if: scroll, on: window, do: rubberBand animated, before: scrollReveal">
-                <a href="http://store.fmsoft.cn/campaign/denoteoss-lt" class="btn btn-lg btn-outline">Donate HybridOS <i class="fa fa-money"></i></a>
+                <a href="https://store.fmsoft.cn/campaign/denoteoss-lt" class="btn btn-lg btn-outline">Donate HybridOS <i class="fa fa-money"></i></a>
             </div>
         </div>
     </div>
@@ -275,14 +275,14 @@
         <div class="container text-center">
             <div class="row">
                 <div class="footer-col col-sm-12">
-                    <a target="_blank" class="btn btn-md btn-outline" href="https://github.com/FMSoftCN/hybridos">
-                            Repo on GitHub <i class="fa fa-github"></i>
+                    <a target="_blank" class="btn btn-md btn-outline"
+                            href="https://github.com/FMSoftCN/hybridos">Repo on GitHub <i class="fa fa-github"></i>
                     </a>
-                    <a target="_blank" class="link-not-ready btn btn-md btn-outline" href="#" data-target="#">
-                            Download Tarballs <i class="fa fa-floppy-o"></i>
-                    </a>
-                    <a target="_blank" class="link-not-ready btn btn-md btn-outline" href="#" data-target="#">
-                            Documentation <i class="fa fa-book"></i>
+                    <a target="_blank" class="link-not-ready btn btn-md btn-outline"
+                            href="#" data-target="#">Download Tarballs <i class="fa fa-floppy-o"></i></a>
+                    <a target="_blank" class="link-not-ready btn btn-md btn-outline"
+                            href="https://github.com/FMSoftCN/hybridos/blob/master/docs/README.md"
+                            data-target="#">Documentation <i class="fa fa-book"></i>
                     </a>
                 </div>
             </div>
@@ -293,7 +293,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; 2018 <a style="color:#CCB2A3;" href="http://www.fmsoft.cn">FMSoft</a>. </p>
+                    <p>Copyright &copy; 2019 <a style="color:#CCB2A3;" href="https://www.fmsoft.cn">FMSoft</a>. </p>
                 </div>
             </div>
         </div>
@@ -325,11 +325,11 @@ if (!currentLang) {
     currentLang = navigator.browserLanguage;
 }
 
-var prefix = 'http://www.minigui.com/en/';
+var prefix = '/en/';
 
 var idx = currentLang.indexOf ("zh");
 if (idx == 0) {
-    prefix = 'http://www.minigui.com/zhcn/';
+    prefix = '/zhcn/';
 }
 
 $('.href-lang-prefix').each (function () {

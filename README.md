@@ -205,8 +205,8 @@ Copyright (C) 2018 \~ 2019 [Beijing FMSoft Technologies Co., Ltd.]
 - For server side, all new components uses AGPLv3.
 - For documents, GPLv3 applies.
 
-Note that if a component of HybridOS is a derivative of an existing
-open source software, we generally inherit the original license.
+If a component of HybridOS is a derivative of an existing
+open source software, we generally continue to use the original license.
 
 Also note that HybridOS integrates many mature open source software,
 such as SQLite, FreeType, V8 JavaScript engine, and so on. For the
