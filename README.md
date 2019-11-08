@@ -154,8 +154,9 @@ For all documents, please refer to [HybridOS Documents].
 
 ### Main Repository
 
-This is the main repository of HybridOS. It mainly contains building scripts,
-tools, documents, and samples:
+The main repository of HybridOS is <https://github.com/FMSoftCN/hybridos>
+It mainly contains building scripts, tools, documents, and samples for
+HybridOS:
 
     `
     |-- docs/           # The design documents for HybridOS.
@@ -163,7 +164,7 @@ tools, documents, and samples:
     |-- server-side/    # The source for server side.
     |-- client-side/    # The source for client side.
 
-### Infrastructure Software
+### Other Repositories
 
 We use some popular open source software as the common infrastructure
 of HybridOS. However, we have done a lot of adjustments and
