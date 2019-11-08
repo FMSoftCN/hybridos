@@ -201,14 +201,17 @@ Initiate this project and organize specifications and design documents.
 
 Copyright (C) 2018 \~ 2019 [Beijing FMSoft Technologies Co., Ltd.]
 
-- For device side and client side, HybridOS uses LGPL v3.
-- For server side, HybridOS uses AGPL v3.
-- For documents, GPL v3 applies.
+- For device side and client side, all new components use LGPLv3.
+- For server side, all new components uses AGPLv3.
+- For documents, GPLv3 applies.
 
-Note that HybridOS integrates many mature open source software, such as WebKit,
-SQLite, FreeType, V8 JavaScript engine, and so on. For the copyright owners and
-licenses for these software, please refer to the README or LICENSE files
-contained in the source trees.
+Note that if a component of HybridOS is a derivative of an existing
+open source software, we generally inherit the original license.
+
+Also note that HybridOS integrates many mature open source software,
+such as SQLite, FreeType, V8 JavaScript engine, and so on. For the
+copyright owners and licenses for these software, please refer to
+the README or LICENSE files contained in the source tarballs.
 
 ---
 
