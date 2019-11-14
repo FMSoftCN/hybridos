@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <math.h>
+#include <time.h>
 
 #include <minigui/common.h>
 #include <minigui/minigui.h>
@@ -42,6 +43,86 @@
 #include <cairo/cairo-minigui.h>
 
 #include "hicairo.h"
+
+#ifdef _MGGAL_DRI
+
+#include <cairo/cairo-drm.h>
+#include <minigui/exstubs.h>
+
+static void _destroy_memdc (void *data)
+{
+    HDC hdc = (HDC)data;
+
+    if (hdc != HDC_INVALID) {
+        DeleteMemDC(hdc);
+    }
+
+    _WRN_PRINTF("_destroy_memdc: invalid DC passed");
+}
+
+static cairo_user_data_key_t _dc_key = { _MINIGUI_VERSION_CODE };
+
+/* this function always create memdc */
+static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
+{
+    GHANDLE sh;
+    int fd;
+    static cairo_device_t* cd = NULL;
+    cairo_surface_t* cs;
+    DriSurfaceInfo info;
+
+    if (cd == NULL) {
+        sh = GetSurfaceHandle(HDC_SCREEN);
+        if (!sh) {
+            _ERR_PRINTF("hicairo: failed to get the surface handle of screen\n");
+            goto fallback;
+        }
+
+        fd = driGetDeviceFD(sh);
+        if (fd < 0) {
+            _ERR_PRINTF("hicairo: failed to get the DRI device fd: %m\n");
+            goto fallback;
+        }
+
+        cd = cairo_drm_device_get_for_fd (fd);
+        if (cd == NULL) {
+            _ERR_PRINTF("hicairo: failed to create cairo_device object: %m\n");
+            goto fallback;
+        }
+    }
+
+    hdc = CreateMemDC (width, height,
+            32, MEMDC_FLAG_HWSURFACE,
+            0x00FF0000, 0x0000FF00, 0x000000FF, 0x00000000);
+    if (hdc == HDC_INVALID) {
+        _ERR_PRINTF("hicairo: failed to create memory DC\n");
+        goto fallback;
+    }
+
+    sh = GetSurfaceHandle(hdc);
+    if (!sh) {
+        _ERR_PRINTF("hicairo: failed to get the surface handle of memory DC\n");
+        goto fallback;
+    }
+
+    if (driGetSurfaceInfo(sh, &info)) {
+        cs = cairo_drm_surface_create_for_handle(cd, info.handle, info.size,
+                CAIRO_FORMAT_RGB24, info.width, info.height, info.pitch);
+    }
+
+    if (cs) {
+        cairo_surface_set_user_data(cs, &_dc_key, (void*)hdc, _destroy_memdc);
+        return cs;
+    }
+
+    _ERR_PRINTF("hicairo: failed to create cairo drm surface\n");
+
+fallback:
+    _WRN_PRINTF("hicairo: use fallback cairo surface");
+    return cairo_minigui_surface_create_with_memdc (CAIRO_FORMAT_RGB24, width, height);
+}
+
+#else
 
 static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
 {
@@ -54,14 +135,18 @@ static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
 
     return cairo_minigui_surface_create (hdc);
 }
+#endif
 
 typedef int (*draw_func_t)(cairo_t *, int, int);
 
-static void paint (HWND hwnd, HDC hdc, draw_func_t draw_func,
+static float paint (HWND hwnd, HDC hdc, draw_func_t draw_func,
         double sx, double sy, double angle,
         int width, int height)
 {
     HDC csdc;
+    int count = 100;
+    struct timespec start_ts, end_ts;
+    float time_ms;
 
     cairo_t* cr = (cairo_t*)GetWindowAdditionalData(hwnd);
     if (cr == NULL) {
@@ -69,25 +154,57 @@ static void paint (HWND hwnd, HDC hdc, draw_func_t draw_func,
         exit (1);
     }
 
-    cairo_save(cr);
+    clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start_ts);
+    while (count--) {
+        cairo_save(cr);
 
-    cairo_scale(cr, sx, sy);
-    cairo_rotate(cr, angle);
-    draw_func(cr, width, height);
+        cairo_scale(cr, sx, sy);
+        cairo_rotate(cr, angle);
+        draw_func(cr, width, height);
+        cairo_restore(cr);
+    }
+    clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end_ts);
 
-    csdc = cairo_minigui_surface_get_dc (cairo_get_target(cr));
-    if (csdc == HDC_INVALID) {
-        _ERR_PRINTF("hicairo: failed to get the DC associated with the target surface\n");
-        exit (1);
+    {
+        DWORD ds, dms;
+
+        ds = (end_ts.tv_sec - start_ts.tv_sec);
+
+        if (end_ts.tv_sec == start_ts.tv_sec) {
+            dms = (end_ts.tv_nsec - start_ts.tv_nsec) / 1000000L;
+        }
+        else if (end_ts.tv_nsec >= start_ts.tv_nsec) {
+            dms = (end_ts.tv_nsec - start_ts.tv_nsec) / 1000000L;
+        }
+        else {
+            assert(ds > 0);
+
+            ds--;
+            dms = 1000L - (start_ts.tv_nsec - end_ts.tv_nsec) / 1000000L;
+        }
+
+        time_ms = ds * 1000 + dms / 1000.0;
+    }
+
+    {
+        cairo_surface_t* cs = cairo_get_target(cr);
+        cairo_surface_type_t cst = cairo_surface_get_type (cs);
+        if (cst == CAIRO_SURFACE_TYPE_MINIGUI)
+            csdc = cairo_minigui_surface_get_dc (cs);
+        else if (cst == CAIRO_SURFACE_TYPE_DRM) {
+            csdc = (HDC)cairo_surface_get_user_data(cs, &_dc_key);
+        }
+
+        if (csdc == HDC_INVALID) {
+            _ERR_PRINTF("hicairo: failed to get the DC associated with the target surface\n");
+            exit (1);
+        }
     }
 
     if (csdc != HDC_SCREEN)
         BitBlt(csdc, 0, 0, width, height, hdc, 0, 0, 0);
-    else {
-        Rectangle (HDC_SCREEN, 0, 0, width, height);
-    }
 
-    cairo_restore(cr);
+    return time_ms;
 }
 
 static int _curr_draw_func_idx = 0;
@@ -112,12 +229,16 @@ static LRESULT SampleWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
         break;
 
     case MSG_PAINT: {
-        HDC hdc = BeginPaint(hWnd);
-        paint (hWnd, hdc, _draw_func_list[_curr_draw_func_idx],
+        float time_ms;
+        char buff[256];
+
+        HDC hdc = BeginPaint (hWnd);
+        time_ms = paint (hWnd, hdc, _draw_func_list[_curr_draw_func_idx],
             _curr_scale_x, _curr_scale_y, _curr_rotate_angle,
             _curr_width, _curr_height);
-        TextOut (hdc, 10, 10, "Drag the mouse up and down." );
-        EndPaint(hWnd, hdc);
+        sprintf (buff, "One hundred renderings took %.6f micro seconds", time_ms);
+        TextOut (hdc, 10, 10, buff);
+        EndPaint (hWnd, hdc);
         return 0;
     }
 
