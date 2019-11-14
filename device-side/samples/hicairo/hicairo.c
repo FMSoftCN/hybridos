@@ -106,7 +106,9 @@ static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
     }
 
     if (driGetSurfaceInfo(sh, &info)) {
-        cs = cairo_drm_surface_create_for_handle(cd, info.handle, info.size,
+        _WRN_PRINTF("hicairo: calling cairo_drm_surface_create_for_handle with handle (%u), size (%lu), width(%u), height(%u), pitch(%u)",
+                info.handle, info.size, info.width, info.height, info.pitch);
+        cs = cairo_drm_surface_create_for_handle (cd, info.handle, info.size,
                 CAIRO_FORMAT_RGB24, info.width, info.height, info.pitch);
     }
 
@@ -115,6 +117,7 @@ static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
         return cs;
     }
 
+    DeleteMemDC(hdc);
     _ERR_PRINTF("hicairo: failed to create cairo drm surface\n");
 
 fallback:
