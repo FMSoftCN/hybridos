@@ -183,7 +183,7 @@ static float paint (HWND hwnd, HDC hdc, draw_func_t draw_func,
             dms = 1000L - (start_ts.tv_nsec - end_ts.tv_nsec) / 1000000L;
         }
 
-        time_ms = ds * 1000 + dms / 1000.0;
+        time_ms = ds * 1000 + dms;
     }
 
     {
