@@ -62,13 +62,15 @@ static void _destroy_memdc (void *data)
 
 static cairo_user_data_key_t _dc_key = { _MINIGUI_VERSION_CODE };
 
+#undef MEMDC_TO_SURFACE
+
 /* this function always create memdc */
 static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
 {
     GHANDLE sh;
     int fd;
     static cairo_device_t* cd = NULL;
-    cairo_surface_t* cs;
+    cairo_surface_t* cs = NULL;
     DriSurfaceInfo info;
 
     if (cd == NULL) {
@@ -84,6 +86,7 @@ static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
             goto fallback;
         }
 
+        _WRN_PRINTF ("calling cairo_drm_device_get_for_fd with fd (%d)", fd);
         cd = cairo_drm_device_get_for_fd (fd);
         if (cd == NULL) {
             _ERR_PRINTF("hicairo: failed to create cairo_device object: %m\n");
@@ -91,6 +94,7 @@ static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
         }
     }
 
+#ifdef MEMDC_TO_SURFACE
     hdc = CreateMemDC (width, height,
             32, MEMDC_FLAG_HWSURFACE,
             0x00FF0000, 0x0000FF00, 0x000000FF, 0x00000000);
@@ -99,22 +103,33 @@ static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
         goto fallback;
     }
 
-    sh = GetSurfaceHandle(hdc);
+    SetBrushColor (hdc, RGB2Pixel (hdc, 0xFF, 0x00, 0x00));
+    FillBox (hdc, 0, 0, 200, 200);
+
+    sh = GetSurfaceHandle (hdc);
     if (!sh) {
-        _ERR_PRINTF("hicairo: failed to get the surface handle of memory DC\n");
+        _ERR_PRINTF ("hicairo: failed to get the surface handle of memory DC\n");
         goto fallback;
     }
 
-    if (driGetSurfaceInfo(sh, &info)) {
-        _WRN_PRINTF("hicairo: calling cairo_drm_surface_create_for_handle with handle (%u), size (%lu), width(%u), height(%u), pitch(%u)",
+    if (driGetSurfaceInfo (sh, &info)) {
+        _WRN_PRINTF ("calling cairo_drm_surface_create_for_handle with handle (%u), size (%lu), width(%u), height(%u), pitch(%u)",
                 info.handle, info.size, info.width, info.height, info.pitch);
         cs = cairo_drm_surface_create_for_handle (cd, info.handle, info.size,
                 CAIRO_FORMAT_RGB24, info.width, info.height, info.pitch);
     }
+#else
+    cs = cairo_drm_surface_create (cd, CAIRO_FORMAT_RGB24, width, height);
+#endif
 
-    if (cs) {
+    if (cairo_surface_get_type (cs) == CAIRO_SURFACE_TYPE_DRM) {
         cairo_surface_set_user_data(cs, &_dc_key, (void*)hdc, _destroy_memdc);
         return cs;
+    }
+    else {
+        _MG_PRINTF ("hicairo: the status of newly created surface is: %d\n",
+                cairo_surface_status (cs));
+        cairo_surface_destroy (cs);
     }
 
     DeleteMemDC(hdc);
@@ -142,11 +157,46 @@ static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
 
 typedef int (*draw_func_t)(cairo_t *, int, int);
 
+static HDC create_memdc_from_drm_surface(cairo_surface_t* drm_surface,
+        cairo_surface_t** image_surface)
+{
+    cairo_status_t status;
+    MYBITMAP my_bmp = {
+        flags: MYBMP_TYPE_RGB | MYBMP_FLOW_DOWN,
+        frames: 1,
+        depth: 32,
+    };
+
+    *image_surface = cairo_drm_surface_map_to_image(drm_surface);
+    status = cairo_surface_status (*image_surface);
+    if (status) {
+        _WRN_PRINTF("failed to map DRM surface: status (%d)", status);
+    }
+
+    my_bmp.w = cairo_image_surface_get_width (*image_surface);
+    my_bmp.h = cairo_image_surface_get_height (*image_surface);
+    my_bmp.pitch = cairo_image_surface_get_stride (*image_surface);
+    my_bmp.bits = cairo_image_surface_get_data (*image_surface);
+    my_bmp.size = my_bmp.pitch * my_bmp.h;
+
+    _WRN_PRINTF("mapped surface info: width (%d), height (%d), pitch (%d), bits (%p)",
+            my_bmp.w, my_bmp.h, my_bmp.pitch, my_bmp.bits);
+
+    return CreateMemDCFromMyBitmap(&my_bmp, NULL);
+}
+
+static HDC destroy_memdc_for_drm_surface(HDC hdc,
+        cairo_surface_t* drm_surface, cairo_surface_t* image_surface)
+{
+    DeleteMemDC (hdc);
+    cairo_drm_surface_unmap(drm_surface, image_surface);
+}
+
 static float paint (HWND hwnd, HDC hdc, draw_func_t draw_func,
         double sx, double sy, double angle,
         int width, int height)
 {
-    HDC csdc;
+    HDC csdc = HDC_INVALID;
     int count = 100;
     struct timespec start_ts, end_ts;
     float time_ms;
@@ -190,22 +240,40 @@ static float paint (HWND hwnd, HDC hdc, draw_func_t draw_func,
     }
 
     {
-        cairo_surface_t* cs = cairo_get_target(cr);
-        cairo_surface_type_t cst = cairo_surface_get_type (cs);
-        if (cst == CAIRO_SURFACE_TYPE_MINIGUI)
-            csdc = cairo_minigui_surface_get_dc (cs);
-        else if (cst == CAIRO_SURFACE_TYPE_DRM) {
-            csdc = (HDC)cairo_surface_get_user_data(cs, &_dc_key);
+        cairo_surface_t* image_surface = NULL;
+        cairo_surface_t* target_surface = cairo_get_target(cr);
+        //cairo_surface_flush (target_surface);
+        cairo_surface_type_t cst = cairo_surface_get_type (target_surface);
+        if (cst == CAIRO_SURFACE_TYPE_MINIGUI) {
+            csdc = cairo_minigui_surface_get_dc (target_surface);
+        }
+        else {
+            _WRN_PRINTF("surface type: %d", cst);
+#ifdef MEMDC_TO_SURFACE
+            csdc = (HDC)cairo_surface_get_user_data(target_surface, &_dc_key);
+#else
+            csdc = create_memdc_from_drm_surface (target_surface, &image_surface);
+
+            SetBrushColor (csdc, RGB2Pixel (csdc, 0xFF, 0x00, 0x00));
+            FillBox (csdc, 0, 0, 200, 200);
+#endif
         }
 
         if (csdc == HDC_INVALID) {
             _ERR_PRINTF("hicairo: failed to get the DC associated with the target surface\n");
             exit (1);
         }
-    }
 
-    if (csdc != HDC_SCREEN)
-        BitBlt(csdc, 0, 0, width, height, hdc, 0, 0, 0);
+        if (csdc != HDC_SCREEN && csdc != HDC_INVALID) {
+            _MG_PRINTF("calling BitBlt\n");
+            BitBlt(csdc, 0, 0, width, height, hdc, 0, 0, 0);
+        }
+
+        if (image_surface) {
+            _MG_PRINTF("calling destroy_memdc_for_drm_surface\n");
+            destroy_memdc_for_drm_surface (csdc, target_surface, image_surface);
+        }
+    }
 
     return time_ms;
 }
