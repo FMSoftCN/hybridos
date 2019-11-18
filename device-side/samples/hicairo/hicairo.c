@@ -70,7 +70,7 @@ static cairo_user_data_key_t _dc_key = { _MINIGUI_VERSION_CODE };
 /* this function always create memdc */
 static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
 {
-    GHANDLE sh;
+    GHANDLE vh;
     int fd;
     static cairo_device_t* cd = NULL;
     cairo_surface_t* cs = NULL;
@@ -78,13 +78,13 @@ static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
 
     if (cd == NULL) {
 #ifdef CAIRO_HAS_MINIGUI_SURFACE
-        sh = GetSurfaceHandle(HDC_SCREEN);
-        if (!sh) {
+        vh = GetVideoHandle(HDC_SCREEN);
+        if (!vh) {
             _ERR_PRINTF("hicairo: failed to get the surface handle of screen\n");
             goto fallback;
         }
 
-        fd = driGetDeviceFD(sh);
+        fd = driGetDeviceFD(vh);
         if (fd < 0) {
             _ERR_PRINTF("hicairo: failed to get the DRI device fd: %m\n");
             goto fallback;
@@ -117,13 +117,13 @@ static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
     SetBrushColor (hdc, RGB2Pixel (hdc, 0xFF, 0x00, 0x00));
     FillBox (hdc, 0, 0, 200, 200);
 
-    sh = GetSurfaceHandle (hdc);
-    if (!sh) {
+    vh = GetVideoHandle (hdc);
+    if (!vh) {
         _ERR_PRINTF ("hicairo: failed to get the surface handle of memory DC\n");
         goto fallback;
     }
 
-    if (driGetSurfaceInfo (sh, &info)) {
+    if (driGetSurfaceInfo (vh, hdc, &info)) {
         _WRN_PRINTF ("calling cairo_drm_surface_create_for_handle with handle (%u), size (%lu), width(%u), height(%u), pitch(%u)",
                 info.handle, info.size, info.width, info.height, info.pitch);
         cs = cairo_drm_surface_create_for_handle (cd, info.handle, info.size,
@@ -240,7 +240,7 @@ static float paint (HWND hwnd, HDC hdc, draw_func_t draw_func,
         int width, int height)
 {
     HDC csdc = HDC_INVALID;
-    int count = 1;
+    int count = 100;
     struct timespec start_ts, end_ts;
     float time_ms;
 
