@@ -34,6 +34,8 @@
 #include <math.h>
 #include <time.h>
 
+#define _DEBUG
+
 #include <minigui/common.h>
 #include <minigui/minigui.h>
 #include <minigui/gdi.h>
@@ -41,29 +43,15 @@
 
 #include <cairo/cairo.h>
 
-#ifdef CAIRO_HAS_MINIGUI_SURFACE
 #include <cairo/cairo-minigui.h>
+
+#ifdef CAIRO_HAS_DRM_SURFACE
+#include <cairo/cairo-drm.h>
 #endif
 
 #include "hicairo.h"
 
-#ifdef _MGGAL_DRI
-
-#include <cairo/cairo-drm.h>
-#include <minigui/exstubs.h>
-
-static void _destroy_memdc (void *data)
-{
-    HDC hdc = (HDC)data;
-
-    if (hdc != HDC_INVALID) {
-        DeleteMemDC(hdc);
-    }
-
-    _WRN_PRINTF("_destroy_memdc: invalid DC passed");
-}
-
-static cairo_user_data_key_t _dc_key = { _MINIGUI_VERSION_CODE };
+#if 0
 
 #undef MEMDC_TO_SURFACE
 
@@ -77,32 +65,11 @@ static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
     DriSurfaceInfo info;
 
     if (cd == NULL) {
-#ifdef CAIRO_HAS_MINIGUI_SURFACE
-        vh = GetVideoHandle(HDC_SCREEN);
-        if (!vh) {
-            _ERR_PRINTF("hicairo: failed to get the surface handle of screen\n");
-            goto fallback;
-        }
-
-        fd = driGetDeviceFD(vh);
-        if (fd < 0) {
-            _ERR_PRINTF("hicairo: failed to get the DRI device fd: %m\n");
-            goto fallback;
-        }
-
-        _WRN_PRINTF ("calling cairo_drm_device_get_for_fd with fd (%d)", fd);
-        cd = cairo_drm_device_get_for_fd (fd);
-        if (cd == NULL) {
-            _ERR_PRINTF("hicairo: failed to create cairo_device object: %m\n");
-            goto fallback;
-        }
-#else
         cd = cairo_drm_device_default ();
         if (cd == NULL) {
             _ERR_PRINTF("hicairo: failed to create cairo_device object: %m\n");
             goto fallback;
         }
-#endif
     }
 
 #ifdef MEMDC_TO_SURFACE
@@ -157,20 +124,36 @@ fallback:
 #endif
 }
 
-#else
+#endif
 
 static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
 {
+    static cairo_device_t* cd = NULL;
+
+#ifdef CAIRO_HAS_DRM_SURFACE
+    if (cd == NULL) {
+        cd = cairo_drm_device_default ();
+        if (cairo_device_status (cd)) {
+            _ERR_PRINTF("hicairo: failed to create cairo_device object: %m\n");
+            cairo_device_destroy (cd);
+            cd = NULL;
+        }
+    }
+#endif
+
     if (hdc == HDC_INVALID) {
-        return cairo_minigui_surface_create_with_memdc (CAIRO_FORMAT_RGB24, width, height);
+        _DBG_PRINTF("hicairo: calling cairo_minigui_surface_create_with_memdc\n");
+        return cairo_minigui_surface_create_with_memdc (cd, CAIRO_FORMAT_RGB24, width, height);
     }
     else if (hdc != HDC_SCREEN && width > 0 && height > 0) {
-        return cairo_minigui_surface_create_with_memdc2 (hdc, width, height);
+        _DBG_PRINTF("hicairo: cairo_minigui_surface_create_with_memdc_similar\n");
+        return cairo_minigui_surface_create_with_memdc_similar (cd, hdc, width, height);
     }
 
-    return cairo_minigui_surface_create (hdc);
+    _DBG_PRINTF("hicairo: cairo_minigui_surface_create\n");
+    return cairo_minigui_surface_create (cd, hdc);
 }
-#endif
+
 
 typedef int (*draw_func_t)(cairo_t *, int, int);
 
@@ -287,22 +270,21 @@ static float paint (HWND hwnd, HDC hdc, draw_func_t draw_func,
         cairo_surface_t* target_surface = cairo_get_target(cr);
         //cairo_surface_flush (target_surface);
         cairo_surface_type_t cst = cairo_surface_get_type (target_surface);
-#ifdef CAIRO_HAS_MINIGUI_SURFACE
         if (cst == CAIRO_SURFACE_TYPE_MINIGUI) {
+            _DBG_PRINTF("hicairo: calling cairo_minigui_surface_get_dc\n");
             csdc = cairo_minigui_surface_get_dc (target_surface);
         }
-#else
-        if (cst == CAIRO_SURFACE_TYPE_IMAGE) {
+        else if (cst == CAIRO_SURFACE_TYPE_IMAGE) {
+            _DBG_PRINTF("hicairo: calling create_memdc_from_image_surface\n");
             csdc = create_memdc_from_image_surface (target_surface);
         }
-#endif
-        else {
-            _WRN_PRINTF("surface type: %d", cst);
-#ifdef MEMDC_TO_SURFACE
-            csdc = (HDC)cairo_surface_get_user_data(target_surface, &_dc_key);
-#else
-            csdc = create_memdc_from_drm_surface (target_surface, &image_surface);
-#endif
+        else if (cst == CAIRO_SURFACE_TYPE_DRM) {
+            _DBG_PRINTF("hicairo: calling cairo_drm_surface_get_minigui_dc\n");
+            csdc = (HDC)cairo_drm_surface_get_minigui_dc (target_surface);
+            if (csdc == HDC_INVALID) {
+                _DBG_PRINTF("hicairo: calling create_memdc_from_drm_surface\n");
+                csdc = create_memdc_from_drm_surface (target_surface, &image_surface);
+            }
         }
 
         if (csdc == HDC_INVALID) {
@@ -311,19 +293,17 @@ static float paint (HWND hwnd, HDC hdc, draw_func_t draw_func,
         }
 
         if (csdc != HDC_SCREEN && csdc != HDC_INVALID) {
-            _MG_PRINTF("calling BitBlt\n");
+            _DBG_PRINTF("calling BitBlt\n");
             BitBlt(csdc, 0, 0, width, height, hdc, 0, 0, 0);
         }
 
         if (image_surface) {
-            _MG_PRINTF("calling destroy_memdc_for_drm_surface\n");
+            _DBG_PRINTF("calling destroy_memdc_for_drm_surface\n");
             destroy_memdc_for_drm_surface (csdc, target_surface, image_surface);
         }
-#ifndef CAIRO_HAS_MINIGUI_SURFACE
-        else {
+        else if (cst == CAIRO_SURFACE_TYPE_IMAGE) {
             destroy_memdc_for_image_surface (csdc, target_surface);
         }
-#endif
     }
 
     return time_ms;
@@ -521,7 +501,9 @@ FAIL:
     }
 
     if (surface) {
+        _DBG_PRINTF("calling cairo_surface_finish\n");
         cairo_surface_finish(surface);
+        _DBG_PRINTF("calling cairo_surface_destroy\n");
         cairo_surface_destroy(surface);
     }
 
@@ -529,6 +511,8 @@ FAIL:
 }
 
 #ifndef CAIRO_HAS_MINIGUI_SURFACE
+
+#include <minigui/exstubs.h>
 DriDriverOps* __dri_ex_driver_get(const char* driver_name)
 {
     return NULL;
