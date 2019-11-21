@@ -10,6 +10,8 @@ hicairo_SOURCES = \
     world-map.inc \
     $(NULL)
 
+hicairo_LDADD = $(HICAIRO_LIBS)
+
 gen_lion_cmds_SOURCES = gen-lion-cmds.c
 
 EXTRA_DIST=
