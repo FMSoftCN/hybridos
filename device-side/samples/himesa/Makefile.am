@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
-SUBDIRS = eglut opengl opengles2
+SUBDIRS = eglut opengl opengles1 opengles2 openvg
 
 AM_CFLAGS = \
     $(EGL_CFLAGS) \
