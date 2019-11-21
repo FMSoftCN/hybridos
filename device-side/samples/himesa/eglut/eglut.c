@@ -199,7 +199,7 @@ eglutInitWindowSize(int width, int height)
 }
 
 void
-eglutInit(int argc, char **argv)
+eglutInit(int argc, const char **argv)
 {
    int i;
 
@@ -211,7 +211,7 @@ eglutInit(int argc, char **argv)
       }
    }
 
-   _eglutNativeInitDisplay();
+   _eglutNativeInitDisplay(argc, argv);
    _eglut->dpy = eglGetDisplay(_eglut->native_dpy);
 
    if (!eglInitialize(_eglut->dpy, &_eglut->major, &_eglut->minor))

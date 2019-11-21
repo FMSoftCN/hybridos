@@ -20,9 +20,10 @@ noinst_PROGRAMS += \
 endif
 
 es2info_SOURCES = es2info.c
+es2info_LDADD = ../eglut/libeglut.la
 
 es2gears_SOURCES = es2gears.c
-es2gears_LDADD = ../eglut/libeglut_x11.la
+es2gears_LDADD = ../eglut/libeglut.la
 
 es2tri_SOURCES = es2tri.c
-es2tri_LDADD = ../eglut/libeglut_x11.la
+es2tri_LDADD = ../eglut/libeglut.la

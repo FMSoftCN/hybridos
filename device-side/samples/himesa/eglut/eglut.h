@@ -70,7 +70,7 @@ typedef void (*EGLUTspecialCB)(int);
 
 void eglutInitAPIMask(int mask);
 void eglutInitWindowSize(int width, int height);
-void eglutInit(int argc, char **argv);
+void eglutInit(int argc, const char **argv);
 
 int eglutGet(int state);
 

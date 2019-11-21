@@ -85,7 +85,7 @@ int
 _eglutNow(void);
 
 void
-_eglutNativeInitDisplay(void);
+_eglutNativeInitDisplay(int argc, const char** argv);
 
 void
 _eglutNativeFiniDisplay(void);

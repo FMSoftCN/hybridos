@@ -510,16 +510,6 @@ FAIL:
     return retval;
 }
 
-#ifndef CAIRO_HAS_MINIGUI_SURFACE
-
-#include <minigui/exstubs.h>
-DriDriverOps* __dri_ex_driver_get(const char* driver_name)
-{
-    return NULL;
-}
-
-#endif
-
 #ifndef _LITE_VERSION
 #include <minigui/dti.c>
 #endif
