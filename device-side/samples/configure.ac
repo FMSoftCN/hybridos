@@ -165,6 +165,8 @@ AC_OUTPUT(
     hicairo/Makefile
     himesa/Makefile
     himesa/eglut/Makefile
+    himesa/opengl/Makefile
+    himesa/opengles2/Makefile
 )
 
 AC_MSG_NOTICE([
