@@ -26,4 +26,7 @@ Makefile.in
 hybridrun/hybridrun
 hicairo/hicairo
 hicairo/gen-lion-cmds
+himesa/opengl/glgears
+himesa/opengl/gltri
+himesa/opengles2/es2gears
 
