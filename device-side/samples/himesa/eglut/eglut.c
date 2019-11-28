@@ -255,7 +255,7 @@ eglutIdleFunc(EGLUTidleCB func)
 void
 eglutPostRedisplay(void)
 {
-   _eglut->redisplay = 1;
+   _eglutNativeDamageWindow(_eglut->current);
 }
 
 void

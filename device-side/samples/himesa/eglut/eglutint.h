@@ -72,8 +72,6 @@ struct eglut_state {
    EGLint major, minor;
 
    struct eglut_window *current;
-
-   int redisplay;
 };
 
 extern struct eglut_state *_eglut;
@@ -93,6 +91,9 @@ _eglutNativeFiniDisplay(void);
 void
 _eglutNativeInitWindow(struct eglut_window *win, const char *title,
                        int x, int y, int w, int h);
+
+void
+_eglutNativeDamageWindow(struct eglut_window *win);
 
 void
 _eglutNativeFiniWindow(struct eglut_window *win);

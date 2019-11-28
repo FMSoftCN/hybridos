@@ -20,7 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  * Authors:
- *    Chia-I Wu <olv@lunarg.com>
+ *    Vincent Wei <vincent@minigui.org>
  */
 
 #include <minigui/common.h>
@@ -58,13 +58,67 @@ static LRESULT eglWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
     case MSG_PAINT: {
         struct eglut_window *win =
             (struct eglut_window *)GetWindowAdditionalData(hWnd);
+
         HDC hdc = BeginPaint (hWnd);
+        if (win->display_cb) {
+            win->display_cb();
+        }
         eglSwapBuffers (_eglut->dpy, win->surface);
         EndPaint (hWnd, hdc);
         return 0;
     }
 
     case MSG_KEYDOWN: {
+        struct eglut_window *win =
+            (struct eglut_window *)GetWindowAdditionalData(hWnd);
+        int key = 0;
+
+        if (win->special_cb == NULL)
+            break;
+
+        switch (wParam) {
+        case SCANCODE_ESCAPE:
+            key = EGLUT_KEY_ESC;
+            break;
+        case SCANCODE_F1 ... SCANCODE_F10:
+            key = EGLUT_KEY_F1 + (wParam - SCANCODE_F1);
+            break;
+        case SCANCODE_F11:
+            key = EGLUT_KEY_F11;
+            break;
+        case SCANCODE_F12:
+            key = EGLUT_KEY_F12;
+            break;
+        case SCANCODE_CURSORBLOCKLEFT:
+            key = EGLUT_KEY_LEFT;
+            break;
+        case SCANCODE_CURSORBLOCKUP:
+            key = EGLUT_KEY_UP;
+            break;
+        case SCANCODE_CURSORBLOCKRIGHT:
+            key = EGLUT_KEY_RIGHT;
+            break;
+        case SCANCODE_CURSORBLOCKDOWN:
+            key = EGLUT_KEY_DOWN;
+            break;
+        default:
+            key = 0;
+            break;
+        }
+
+        if (key)
+            win->special_cb(key);
+        break;
+    }
+
+    case MSG_CHAR: {
+        struct eglut_window *win =
+            (struct eglut_window *)GetWindowAdditionalData(hWnd);
+        int key = 0;
+
+        if (win->keyboard_cb) {
+            win->keyboard_cb((unsigned char)wParam);
+        }
         break;
     }
 
@@ -141,6 +195,14 @@ _eglutNativeInitWindow(struct eglut_window *win, const char *title,
 }
 
 void
+_eglutNativeDamageWindow(struct eglut_window *win)
+{
+    HWND mgwin = (HWND)win->native.u.window;
+
+    InvalidateRect(mgwin, NULL, FALSE);
+}
+
+void
 _eglutNativeFiniWindow(struct eglut_window *win)
 {
     HWND mgwin = (HWND)win->native.u.window;
@@ -157,33 +219,13 @@ _eglutNativeEventLoop(void)
     HWND mgwin = (HWND)win->native.u.window;
     MSG msg;
 
-    while (TRUE) {
-        if (!HavePendingMessage(mgwin)) {
-            /* there is an idle callback */
-            if (_eglut->idle_cb) {
-                _eglut->idle_cb();
-                continue;
-            }
+    while (GetMessage(&msg, mgwin)) {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
 
-            /* the app requests re-display */
-            if (_eglut->redisplay)
-                continue;
+        if (_eglut->idle_cb) {
+            _eglut->idle_cb();
         }
-        else if (GetMessage(&msg, mgwin)) {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-            if (_eglut->redisplay) {
-                _eglut->redisplay = 0;
-
-                if (win->display_cb)
-                    win->display_cb();
-
-                InvalidateRect(mgwin, NULL, FALSE);
-                //eglSwapBuffers(_eglut->dpy, win->surface);
-            }
-        }
-        else
-            break;
     }
 }
 

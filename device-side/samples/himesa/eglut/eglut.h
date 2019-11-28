@@ -37,6 +37,7 @@ enum {
 /* used by EGLUTspecialCB */
 enum {
    /* function keys */
+   EGLUT_KEY_ESC = 1,
    EGLUT_KEY_F1,
    EGLUT_KEY_F2,
    EGLUT_KEY_F3,
