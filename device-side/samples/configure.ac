@@ -181,6 +181,7 @@ AC_MSG_NOTICE([
   * OpenGL ES 1.x:      ${glesv1_enabled}
   * OpenGL ES 2.x:      ${glesv2_enabled}
   * OpenVG:             ${vg_enabled}
+  * EGL:                ${EGL_LIBS}
   * FreeType2:          ${freetype2_enabled}
   * DRM:                ${drm_enabled}
 

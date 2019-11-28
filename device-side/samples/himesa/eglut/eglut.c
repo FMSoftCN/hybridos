@@ -199,7 +199,7 @@ eglutInitWindowSize(int width, int height)
 }
 
 void
-eglutInit(int argc, const char **argv)
+eglutInit(int argc, char *argv[])
 {
    int i;
 
@@ -367,3 +367,65 @@ eglutSpecialFunc(EGLUTspecialCB func)
    struct eglut_window *win = _eglut->current;
    win->special_cb = func;
 }
+
+/*
+ * Print a list of extensions, with word-wrapping.
+ */
+static void
+print_extension_list(const char *ext)
+{
+   const char indentString[] = "    ";
+   const int indent = 4;
+   const int max = 79;
+   int width, i, j;
+
+   if (!ext || !ext[0])
+      return;
+
+   width = indent;
+   printf("%s", indentString);
+   i = j = 0;
+   while (1) {
+      if (ext[j] == ' ' || ext[j] == 0) {
+         /* found end of an extension name */
+         const int len = j - i;
+         if (width + len > max) {
+            /* start a new line */
+            printf("\n");
+            width = indent;
+            printf("%s", indentString);
+         }
+         /* print the extension name between ext[i] and ext[j] */
+         while (i < j) {
+            printf("%c", ext[i]);
+            i++;
+         }
+         /* either we're all done, or we'll continue with next extension */
+         width += len + 1;
+         if (ext[j] == 0) {
+            break;
+         }
+         else {
+            i++;
+            j++;
+            if (ext[j] == 0)
+               break;
+            printf(", ");
+            width += 2;
+         }
+      }
+      j++;
+   }
+   printf("\n");
+}
+
+void eglutPrintInfo(void)
+{
+   printf("EGL_VERSION = %s\n", eglQueryString(_eglut->dpy, EGL_VERSION));
+   printf("EGL_VENDOR = %s\n", eglQueryString(_eglut->dpy, EGL_VENDOR));
+   printf("EGL_EXTENSIONS = %s\n", eglQueryString(_eglut->dpy, EGL_EXTENSIONS));
+   printf("EGL_CLIENT_APIS = %s\n", eglQueryString(_eglut->dpy, EGL_CLIENT_APIS));
+
+   print_extension_list((char *) eglQueryString(_eglut->dpy, EGL_EXTENSIONS));
+}
+

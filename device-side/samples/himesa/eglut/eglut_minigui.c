@@ -31,9 +31,9 @@
 #include "eglutint.h"
 
 void
-_eglutNativeInitDisplay(int argc, const char** argv)
+_eglutNativeInitDisplay(int argc, char* argv[])
 {
-    if (InitGUI (argc, argv) != 0)
+    if (InitGUI (argc, (const char**)argv) != 0)
         _eglutFatal("failed to initialize native display");
 
     _eglut->native_dpy = GetVideoHandle(HDC_SCREEN);
@@ -133,7 +133,7 @@ _eglutNativeInitWindow(struct eglut_window *win, const char *title,
         _eglutFatal ("failed to create a window");
     }
 
-    ShowWindow (mgwin, SW_SHOWNORMAL);
+    ShowWindow(mgwin, SW_SHOWNORMAL);
 
     win->native.u.window = (EGLNativeWindowType)mgwin;
     win->native.width = w;
@@ -178,7 +178,8 @@ _eglutNativeEventLoop(void)
                 if (win->display_cb)
                     win->display_cb();
 
-                eglSwapBuffers (_eglut->dpy, win->surface);
+                InvalidateRect(mgwin, NULL, FALSE);
+                //eglSwapBuffers(_eglut->dpy, win->surface);
             }
         }
         else

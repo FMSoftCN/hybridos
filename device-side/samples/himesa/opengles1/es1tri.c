@@ -138,7 +138,7 @@ static void
 test_query_matrix(void)
 {
    PFNGLQUERYMATRIXXOESPROC procQueryMatrixx;
-   typedef void (*voidproc)();
+   typedef void (*voidproc)(void);
    GLfixed mantissa[16];
    GLint exponent[16];
    GLbitfield rv;
