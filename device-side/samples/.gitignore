@@ -23,7 +23,19 @@ Makefile.in
 /*config.h.in
 
 # executables
+himesa/eglinfo
 hybridrun/hybridrun
 hicairo/hicairo
 hicairo/gen-lion-cmds
+himesa/opengl/glgears
+himesa/opengl/gltri
+himesa/opengles2/es2gears
+himesa/opengles1/es1drawtex
+himesa/opengles1/es1gears
+himesa/opengles1/es1info
+himesa/opengles1/es1torus
+himesa/opengles1/es1tri
+himesa/opengles2/es2info
+himesa/opengles2/es2tri
+
 
