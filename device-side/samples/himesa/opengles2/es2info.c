@@ -105,7 +105,7 @@ const char *glGetString (int name);
    print_extension_list((char *) glGetString(GL_EXTENSIONS));
 }
 
-static void
+static int
 make_minigui_window(EGLDisplay egl_dpy,
               const char *name,
               int x, int y, int width, int height, int es_ver,
@@ -142,7 +142,7 @@ make_minigui_window(EGLDisplay egl_dpy,
 
    if (!eglChooseConfig( egl_dpy, attribs, &config, 1, &num_configs)) {
       printf("Error: couldn't get an EGL visual config\n");
-      exit(1);
+      return 1;
    }
 
    assert(config);
@@ -150,7 +150,7 @@ make_minigui_window(EGLDisplay egl_dpy,
 
    if (!eglGetConfigAttrib(egl_dpy, config, EGL_NATIVE_VISUAL_ID, &vid)) {
       printf("Error: eglGetConfigAttrib() failed\n");
-      exit(1);
+      return 1;
    }
 
    create_info.dwStyle = WS_VISIBLE;
@@ -172,7 +172,7 @@ make_minigui_window(EGLDisplay egl_dpy,
 
    if (win == HWND_INVALID) {
       printf ("fatal: failed to create a window\n");
-      exit(1);
+      return 1;
    }
    ShowWindow(win, SW_SHOWNORMAL);
 
@@ -181,18 +181,20 @@ make_minigui_window(EGLDisplay egl_dpy,
    ctx = eglCreateContext(egl_dpy, config, EGL_NO_CONTEXT, ctx_attribs);
    if (!ctx) {
       printf("Error: eglCreateContext failed\n");
-      exit(1);
+      return 1;
    }
 
    *surfRet = eglCreateWindowSurface(egl_dpy, config, (EGLNativeWindowType)win, NULL);
 
    if (!*surfRet) {
       printf("Error: eglCreateWindowSurface failed\n");
-      exit(1);
+      return 1;
    }
 
    *winRet = win;
    *ctxRet = ctx;
+
+   return 0;
 }
 
 
@@ -210,42 +212,53 @@ main(int argc, char *argv[])
 
    if (InitGUI (argc, (const char**)argv) != 0) {
       printf("Error: InitGUI() failed\n");
-      return -1;
+      return 1;
    }
 
    egl_dpy = eglGetDisplay(GetVideoHandle(HDC_SCREEN));
    if (!egl_dpy) {
       printf("Error: eglGetDisplay() failed\n");
-      return -1;
+      goto fail_sys;
    }
 
    if (!eglInitialize(egl_dpy, &egl_major, &egl_minor)) {
       printf("Error: eglInitialize() failed\n");
-      return -1;
+      goto fail_dpy;
    }
 
    es_ver = 1;
    /* decide the version from the executable's name */
    if (argc > 0 && argv[0] && strstr(argv[0], "es2"))
       es_ver = 2;
-   make_minigui_window(egl_dpy,
+
+   if (make_minigui_window(egl_dpy,
                  "ES info", 0, 0, winWidth, winHeight, es_ver,
-                 &win, &egl_ctx, &egl_surf);
+                 &win, &egl_ctx, &egl_surf)) {
+      printf("Error: make_minigui_window() failed\n");
+      goto fail_dpy;
+   }
+
 
    if (!eglMakeCurrent(egl_dpy, egl_surf, egl_surf, egl_ctx)) {
       printf("Error: eglMakeCurrent() failed\n");
-      return -1;
+      goto fail_win;
    }
 
    info(egl_dpy);
 
+fail_win:
    eglDestroyContext(egl_dpy, egl_ctx);
    eglDestroySurface(egl_dpy, egl_surf);
-   eglTerminate(egl_dpy);
 
    DestroyMainWindow(win);
    MainWindowThreadCleanup(win);
-   TerminateGUI (0);
+
+fail_dpy:
+   eglTerminate(egl_dpy);
+
+fail_sys:
+   ExitGUISafely(0);
+   TerminateGUI(0);
 
    return 0;
 }

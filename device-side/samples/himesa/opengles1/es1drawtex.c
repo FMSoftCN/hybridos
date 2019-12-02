@@ -118,29 +118,28 @@ make_smile_texture(void)
 #undef SZ
 }
 
-
-
-static void
+static int
 init(void)
 {
    const char *ext = (char *) glGetString(GL_EXTENSIONS);
 
    if (!strstr(ext, "GL_OES_draw_texture")) {
       fprintf(stderr, "Sorry, this program requires GL_OES_draw_texture\n");
-      exit(1);
+      return 1;
    }
 
    glDrawTexfOES_func = (PFNGLDRAWTEXFOESPROC) eglGetProcAddress("glDrawTexfOES");
 
    if (!glDrawTexfOES_func) {
       fprintf(stderr, "Sorry, failed to resolve glDrawTexfOES function\n");
-      exit(1);
+      return 1;
    }
 
    glClearColor(0.4, 0.4, 0.4, 0.0);
 
    make_smile_texture();
    glEnable(GL_TEXTURE_2D);
+   return 0;
 }
 
 
@@ -175,7 +174,6 @@ key(unsigned char key)
       break;
    case 27:
       eglutDestroyWindow(win);
-      exit(0);
       break;
    default:
       break;
@@ -218,7 +216,10 @@ main(int argc, char *argv[])
    eglutKeyboardFunc(key);
    eglutSpecialFunc(special_key);
 
-   init();
+   if (init()) {
+      eglutDestroyWindow(win);
+      eglutFini(1);
+   }
 
    eglutMainLoop();
 

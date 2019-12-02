@@ -44,9 +44,11 @@ _eglutNativeInitDisplay(int argc, char* argv[])
 }
 
 void
-_eglutNativeFiniDisplay(void)
+_eglutNativeFiniDisplay(int exitcode)
 {
-    TerminateGUI (0);
+    ExitGUISafely(exitcode);
+    TerminateGUI(exitcode);
+    exit(exitcode);
 }
 
 static LRESULT eglWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

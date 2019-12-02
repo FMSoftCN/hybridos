@@ -293,8 +293,9 @@ main(int argc, char *argv[])
    eglutDisplayFunc(draw);
 
    init();
+
    glDrawBuffer(GL_BACK);
-	
+
    eglutMainLoop();
 
    return 0;

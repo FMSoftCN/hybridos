@@ -86,7 +86,7 @@ void
 _eglutNativeInitDisplay(int argc, char* argv[]);
 
 void
-_eglutNativeFiniDisplay(void);
+_eglutNativeFiniDisplay(int exitcode);
 
 void
 _eglutNativeInitWindow(struct eglut_window *win, const char *title,
@@ -100,5 +100,8 @@ _eglutNativeFiniWindow(struct eglut_window *win);
 
 void
 _eglutNativeEventLoop(void);
+
+void
+_eglutNativeExit(int exitcode);
 
 #endif /* _EGLUTINT_H_ */

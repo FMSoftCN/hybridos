@@ -272,11 +272,10 @@ eglutMainLoop(void)
    _eglutNativeEventLoop();
 }
 
-static void
-_eglutFini(void)
+void eglutFini(int exitcode)
 {
    eglTerminate(_eglut->dpy);
-   _eglutNativeFiniDisplay();
+   _eglutNativeFiniDisplay(exitcode);
 }
 
 void
@@ -298,7 +297,7 @@ _eglutDefaultKeyboard(unsigned char key)
    if (key == 27) {
       if (_eglut->current)
          eglutDestroyWindow(_eglut->current->index);
-      _eglutFini();
+      eglutFini(0);
    }
 }
 

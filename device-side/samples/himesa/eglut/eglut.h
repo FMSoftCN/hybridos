@@ -92,5 +92,6 @@ void eglutKeyboardFunc(EGLUTkeyboardCB func);
 void eglutSpecialFunc(EGLUTspecialCB func);
 
 void eglutPrintInfo(void);
+void eglutFini(int exitcode);
 
 #endif /* EGLUT_H */

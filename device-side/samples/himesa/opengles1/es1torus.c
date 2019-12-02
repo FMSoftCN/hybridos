@@ -402,7 +402,7 @@ key(unsigned char key)
       break;
    case 27:
       eglutDestroyWindow(win);
-      exit(0);
+      eglutFini(0);
       break;
    default:
       break;
