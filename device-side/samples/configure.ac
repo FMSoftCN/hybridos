@@ -46,8 +46,8 @@ dnl ========================================================================
 dnl check for installation of MiniGUI
 dnl ========================================================================
 PKG_CHECK_MODULES([MINIGUI], [minigui >= 4.0.3])
-PKG_CHECK_MODULES([MGEFF], [mgeff >= 1.2.0])
 PKG_CHECK_MODULES([HICAIRO], [cairo-minigui >= 2.17.3])
+dnl PKG_CHECK_MODULES([MGEFF], [mgeff >= 1.2.0])
 
 LIBS="$LIBS $MINIGUI_LIBS $MGEFF_LIBS $HICAIRO_LIBS"
 

@@ -336,9 +336,9 @@ static int draw_test (cairo_t *cr, int width, int height)
     cairo_set_line_width (cr, 2.0);
     cairo_stroke (cr);
 
-    cairo_set_source_rgba (cr, 1.0, 1.0, 0, 0.5);
-    cairo_rectangle (cr, width * 0.50, height * 0.50, width * 0.5, height * 0.5);
-    cairo_fill (cr);
+    //cairo_set_source_rgba (cr, 1.0, 1.0, 0, 0.5);
+    //cairo_rectangle (cr, width * 0.50, height * 0.50, width * 0.5, height * 0.5);
+    //cairo_fill (cr);
 }
 
 static int _curr_draw_func_idx = 0;
