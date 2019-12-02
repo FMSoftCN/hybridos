@@ -243,7 +243,7 @@ int
 main(int argc, char *argv[])
 {
    /* Initialize the window */
-   eglutInitWindowSize(300, 300);
+   eglutInitWindowSize(320, 400);
    eglutInitAPIMask(EGLUT_OPENGL_ES2_BIT);
    eglutInit(argc, argv);
    eglutPrintInfo();

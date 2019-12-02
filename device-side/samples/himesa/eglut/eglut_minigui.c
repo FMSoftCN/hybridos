@@ -152,6 +152,16 @@ static LRESULT eglWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         break;
     }
 
+    case MSG_CLOSE: {
+        struct eglut_window *win =
+            (struct eglut_window *)GetWindowAdditionalData(hWnd);
+        if (win->keyboard_cb) {
+             win->keyboard_cb(27); // simulate escape key
+        }
+
+        return 0;
+    }
+
     default:
         break;
     }
@@ -166,7 +176,7 @@ _eglutNativeInitWindow(struct eglut_window *win, const char *title,
     HWND    mgwin;
     MAINWINCREATE create_info;
 
-    create_info.dwStyle = WS_VISIBLE;
+    create_info.dwStyle = WS_VISIBLE | WS_CAPTION;
     create_info.dwExStyle = WS_EX_USEPRIVATECDC;
     create_info.spCaption = title;
     create_info.hMenu = 0;
@@ -176,8 +186,8 @@ _eglutNativeInitWindow(struct eglut_window *win, const char *title,
     create_info.MainWindowProc = eglWinProc;
     create_info.lx = x;
     create_info.ty = y;
-    create_info.rx = x + w;
-    create_info.by = y + h;
+    create_info.rx = x + ClientWidthToWindowWidth(create_info.dwStyle, w);
+    create_info.by = y + ClientHeightToWindowHeight(create_info.dwStyle, h, FALSE);
     create_info.iBkColor = COLOR_lightwhite;
     create_info.dwAddData = (DWORD)win;
     create_info.hHosting = HWND_DESKTOP;

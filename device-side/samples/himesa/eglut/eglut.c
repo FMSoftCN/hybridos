@@ -299,8 +299,6 @@ _eglutDefaultKeyboard(unsigned char key)
       if (_eglut->current)
          eglutDestroyWindow(_eglut->current->index);
       _eglutFini();
-
-      exit(0);
    }
 }
 
