@@ -1,0 +1,147 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style type="text/css">
+            body
+            {
+                text-align:center;
+            }
+
+			hipicker
+			{
+                text-align:center;
+                display:inline-block;
+                outline:none;
+			}
+            
+            ::-hi-picker-selected
+            {
+                border-style: solid none solid none;
+                border-width: 1px;
+                border-color: gray;
+                font-size: 14px;
+                color: black;
+            }
+
+            ::-hi-picker-items
+            {
+                color: gray;
+                font-size: 12px;
+            }
+
+            ::-hi-picker-selected-before
+            {
+            }
+
+            hipicker.province::-hi-picker-selected-after
+            {
+                font-size: 16px;
+            }
+
+            hipicker.region::-hi-picker-selected-after
+            {
+                font-size: 16px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <hipicker type="text" class="province"
+                  width="100" height="240"
+                  id="province" value="2"
+                  sound="picker.wav"
+                  endtoend="endtoend"
+                  onchange="pickchange(this.value)"
+                  >
+            <hiitem value="北京市">北京市</hiitem>
+            <hiitem value="天津市">天津市</hiitem>
+        </hipicker>
+
+        <hipicker type="text" class="region"
+                  width="100" height="240"
+                  name="region" id="region"
+                  endtoend="endtoend"
+                  sound="picker.wav"
+                  onchange="updateStatus()"
+                  >
+        </hipicker>
+        
+        <div id="paramStatus"></div>
+
+        <script type="text/javascript">
+
+            function createItem(title, value){
+                var y=document.getElementById("region");
+                var item=document.createElement("hiitem");
+                item.text=title;
+                item.value=value;
+                y.add(item, null);
+            }
+
+            function createForTj() {
+                createItem("东丽区", "东丽区");
+                createItem("和平区", "和平区");
+                createItem("河北区", "河北区");
+                createItem("河东区", "河东区");
+                createItem("河西区", "河西区");
+                createItem("红桥区", "红桥区");
+                createItem("蓟州区", "蓟州区");
+                createItem("静海区", "静海区");
+                createItem("南开区", "南开区");
+                createItem("滨海新区", "滨海新区");
+                createItem("西青区", "西青区");
+                createItem("武清区", "武清区");
+                createItem("津南区", "津南区");
+                createItem("汉沽区", "汉沽区");
+                createItem("大港区", "大港区");
+                createItem("北辰区", "北辰区");
+                createItem("宝坻区", "宝坻区");
+                createItem("宁河区", "宁河区");
+            }
+
+            function createForBj() {
+                createItem("朝阳区", "朝阳区");
+                createItem("海淀区", "海淀区");
+                createItem("西城区", "西城区");
+                createItem("东城区", "东城区");
+                createItem("崇文区", "崇文区");
+                createItem("宣武区", "宣武区");
+                createItem("丰台区", "丰台区");
+                createItem("石景山区", "石景山区");
+                createItem("门头沟房山区", "门头沟房山区");
+                createItem("通州区", "通州区");
+                createItem("大兴区", "大兴区");
+                createItem("顺义区", "顺义区");
+                createItem("怀柔区", "怀柔区");
+                createItem("密云区", "密云区");
+                createItem("昌平区", "昌平区");
+                createItem("平谷区", "平谷区");
+                createItem("延庆区", "延庆区");
+            }
+
+            function pickchange(value)
+            {
+                var p = document.getElementById("region");
+                p.length = 0;
+                if (value == "北京市")
+                    createForBj();
+                else
+                    createForTj();
+
+                updateStatus();
+            }
+
+            function updateStatus()
+            {
+                var p = document.getElementById("province");
+                var r = document.getElementById("region");
+                document.getElementById("paramStatus").innerText = p.value + r.value;
+            }
+
+            var p = document.getElementById("province");
+            pickchange(p.value);
+            updateStatus();
+
+        </script>
+    </body>
+</html>

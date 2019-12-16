@@ -1,0 +1,116 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style type="text/css">
+            body
+            {
+                text-align:center;
+            }
+
+			hipicker
+			{
+                text-align:center;
+                display:inline-block;
+                outline:none;
+			}
+            
+            ::-hi-picker-selected
+            {
+                border-style: solid none solid none;
+                border-width: 1px;
+                border-color: gray;
+                font-size: 14px;
+                color: black;
+            }
+
+            ::-hi-picker-items
+            {
+                color: gray;
+                font-size: 12px;
+            }
+
+            ::-hi-picker-selected-before
+            {
+            }
+
+            hipicker.hour::-hi-picker-selected-after
+            {
+                content:"小时";
+                font-size: 16px;
+            }
+
+            hipicker.miniute::-hi-picker-selected-after
+            {
+                content:"分";
+                font-size: 16px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <hipicker type="text" class="hour"
+                  width="100" height="240"
+                  name="hour" value="2"
+                  sound="picker.wav"
+                  endtoend="endtoend"
+                  onchange="pickchange(this.value)"
+                  onpickstart="pickstart(event)"
+                  onpickend="pickend(event)"
+                  >
+            <hiitem value="0">00</hiitem>
+            <hiitem value="1">01</hiitem>
+            <hiitem value="2">02</hiitem>
+            <hiitem value="3">03</hiitem>
+            <hiitem value="4">04</hiitem>
+            <hiitem value="5">05</hiitem>
+            <hiitem value="6">06</hiitem>
+            <hiitem value="7">07</hiitem>
+            <hiitem value="8">08</hiitem>
+            <hiitem value="9">09</hiitem>
+            <hiitem value="10">10</hiitem>
+            <hiitem value="11">11</hiitem>
+            <hiitem value="12">12</hiitem>
+            <hiitem value="13">13</hiitem>
+            <hiitem value="14">14</hiitem>
+            <hiitem value="15">15</hiitem>
+            <hiitem value="16">16</hiitem>
+            <hiitem value="17">17</hiitem>
+            <hiitem value="18">18</hiitem>
+            <hiitem value="19">19</hiitem>
+            <hiitem value="20">20</hiitem>
+            <hiitem value="21">21</hiitem>
+            <hiitem value="22">22</hiitem>
+            <hiitem value="23">23</hiitem>
+        </hipicker>
+
+        <hipicker type="integer" class="miniute"
+                  width="100" height="240"
+                  name="month" value="2"
+                  endtoend="endtoend"
+                  sound="picker.wav"
+                  min="1" max="31" step="1"
+                  >
+        </hipicker>
+        
+        <div id="paramStatus"></div>
+
+        <script type="text/javascript">
+
+            function pickstart()
+            {
+                document.getElementById("paramStatus").innerText = parseInt(event.timeStamp) + " Event: onpickstart" + "\n" + document.getElementById("paramStatus").innerText;
+            }
+
+            function pickend()
+            {
+                document.getElementById("paramStatus").innerText = parseInt(event.timeStamp) + " Event: onpickend" + "\n" + document.getElementById("paramStatus").innerText;
+            }
+
+            function pickchange(value)
+            {
+                document.getElementById("paramStatus").innerText = parseInt(event.timeStamp) + " Event: onpickchange : " + value  + "\n" + document.getElementById("paramStatus").innerText;
+            }
+
+        </script>
+    </body>
+</html>
