@@ -49,7 +49,7 @@ fi
 dnl ========================================================================
 dnl check for installation of MiniGUI
 dnl ========================================================================
-PKG_CHECK_MODULES([MINIGUI], [minigui >= 4.1.0])
+PKG_CHECK_MODULES([MINIGUI], [minigui >= 4.0.4])
 PKG_CHECK_MODULES([EGL], [egl])
 
 AC_ARG_ENABLE([cairo],
