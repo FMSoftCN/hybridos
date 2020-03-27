@@ -36,6 +36,10 @@ _eglutNativeInitDisplay(int argc, char* argv[])
     if (InitGUI (argc, (const char**)argv) != 0)
         _eglutFatal("failed to initialize native display");
 
+#ifdef _MGRM_PROCESSES
+    JoinLayer(NAME_DEF_LAYER, argv[0], 0, 0);
+#endif
+
     _eglut->native_dpy = GetVideoHandle(HDC_SCREEN);
     if (!_eglut->native_dpy)
         _eglutFatal("failed to get the handle of native display");
@@ -55,7 +59,14 @@ static LRESULT eglWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 {
     switch (message) {
     case MSG_CREATE:
+        SetTimer (hWnd, 100, 1);
         break;
+
+    case MSG_TIMER:
+        if (_eglut->idle_cb) {
+            _eglut->idle_cb();
+        }
+        return 0;
 
     case MSG_PAINT: {
         struct eglut_window *win =
@@ -161,6 +172,7 @@ static LRESULT eglWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
              win->keyboard_cb(27); // simulate escape key
         }
 
+        KillTimer (hWnd, 100);
         return 0;
     }
 
@@ -234,10 +246,6 @@ _eglutNativeEventLoop(void)
     while (GetMessage(&msg, mgwin)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
-
-        if (_eglut->idle_cb) {
-            _eglut->idle_cb();
-        }
     }
 }
 
