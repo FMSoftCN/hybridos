@@ -1678,7 +1678,7 @@ HVML 为不同的数据类型提供了如下操作：
 
 ```html
     <init as="regionStats">
-        { 'zh_CN' : 100, 'zh_TW' : 90，'zh_HK': 90, 'zh_SG': 90, 'zh_MO': 80, 'en_US': 70, 'en_UK': 80 }
+        { "zh_CN" : 100, "zh_TW" : 90，"zh_HK": 90, "zh_SG": 90, "zh_MO": 80, "en_US": 70, "en_UK": 80 }
     </init>
 ```
 
@@ -1714,7 +1714,7 @@ HVML 为不同的数据类型提供了如下操作：
 
 ```html
     <init as="regionStats">
-        [ 'zh_CN', 100, 'zh_TW', 90, 'zh_HK', 90, 'zh_SG', 90, 'zh_MO', 80, 'en_US', 30, 'en_UK', 20 ]
+        [ "zh_CN", 100, "zh_TW", 90, "zh_HK", 90, "zh_SG", 90, "zh_MO", 80, "en_US", 30, "en_UK", 20 ]
     </init>
 ```
 
