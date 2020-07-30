@@ -80,7 +80,7 @@ lsql:///data/testdb/db?sqlQuery=SELECT%20a%2C%20b%2C%20sum(c)%20FROM%20tab1%20GR
 
 上述 URL 指定了如下信息：
 
-1. `lsql` 是本发明引入的新的 URL 图式（schema），用于指定本 URL 将直接在本地的 SQL 数据库上执行 SQL 查询；
+1. `lsql` 是合璧引入的新的 URL 图式（schema），用于指定本 URL 将直接在本地的 SQL 数据库上执行 SQL 查询；
 1. `/data/testdb` 指定了本地 SQL 数据库文件的路径；
 1. `db` 指定了其后要执行的 SQL 语句的目标数据库名称；
 1. `sqlQuery` 参数的值是一条经过 URI 编码（对 URL 中特殊字符，如空格、逗号、分号等做转义处理）后的 SQL 语句，解码后的内容为：
@@ -99,7 +99,7 @@ rsql://username:password@foo.bar.com:3306/mysql/db?sqlQuery=SELECT%20a%2C%20b%2C
 
 上述 URL 指定了如下信息：
 
-1. `rsql` 是本发明引入的新的 URL 图式（schema），用于指定本 URL 将直接在远程 SQL 数据库上执行 SQL 查询；
+1. `rsql` 是合璧引入的新的 URL 图式（schema），用于指定本 URL 将直接在远程 SQL 数据库上执行 SQL 查询；
 1. `username` 是用户账号名称；
 1. `password` 是用户账号对应的密码；
 1. `foo.bar.com` 是运行 SQL 数据库的主机名称；
@@ -210,7 +210,7 @@ lsql:///data/testdb/db?sqlQuery=DELETE%20FROM%20Books%20WHERE%20Id%3D1%3B%20SELE
 }
 ```
 
-为方便对 `lsql` 等请求的结果集作后续处理，除了 `sqlQuery` 参数用于传递 SQL 查询语句之外，本发明引入另外一个参数 `sqlRowFormat`，用于指定结果集的行输出格式，可取 `dict` 和 `array` 两个值之一，后者表示使用数组作为结果集的行输出格式。不指定 `sqlRowFormat` 或指定错误的值时，采取字典数据结构。比如，对上述结果，如果 `lsql` URL 中包含 `sqlRowFormat=array` 参数，则返回的结果为：
+为方便对 `lsql` 等请求的结果集作后续处理，除了 `sqlQuery` 参数用于传递 SQL 查询语句之外，合璧引入另外一个参数 `sqlRowFormat`，用于指定结果集的行输出格式，可取 `dict` 和 `array` 两个值之一，后者表示使用数组作为结果集的行输出格式。不指定 `sqlRowFormat` 或指定错误的值时，采取字典数据结构。比如，对上述结果，如果 `lsql` URL 中包含 `sqlRowFormat=array` 参数，则返回的结果为：
 
 ```json
 {
@@ -328,7 +328,7 @@ lcmd:///bin/ls?cmdFilter=delimiter('%20')&cmdLine=ls%20--color%3Dnever%20-l%20%2
 
 上述 URL 指定了如下信息：
 
-1. `lcmd` 是本发明引入的新的 URL 图式（schema），用于指定本 URL 用于执行本地命令。
+1. `lcmd` 是合璧引入的新的 URL 图式（schema），用于指定本 URL 用于执行本地命令。
 1. `/bin/ls` 指定了要运行的程序文件之路径。
 1. `cmdFilter` 参数指定对命令行输出结果进行 JSON 化处理时的过滤器名称及参数；本例指定的过滤器为 `delimiter(' ')`，即列分割符过滤器，所使用的分割符在 `()` 中定义，上例中为空格（` `）。
 1. `cmdLine` 参数指定命令行，经过 URI 编码（对 URL 中特殊字符，如空格、逗号、分号等做转义）处理，解码后的内容为：
@@ -379,11 +379,11 @@ drwxr-xr-x   2 root root  4096 Dec  2 15:29 bin
 drwxr-xr-x 143 root root 12288 Dec  9 09:33 etc
 ```
 
-为了便于 HTML 页面处理，本发明要求对上述输出进行 JSON 化处理。为此，我们通过在 `lcmd` URL 中指定过滤器实现该目的。
+为了便于 HTML 页面处理，合璧要求对上述输出进行 JSON 化处理。为此，我们通过在 `lcmd` URL 中指定过滤器实现该目的。
 
 一个过滤器通常有一个名称以及一项参数或多项参数，比如 `delimiter('\t ')`，表示过滤器名称为 `delimiter`，分割符为制表符（`\t`）或空格（` `）。在 `lcmd` URL 中，我们还可以指定多个过滤器依次对命令行输出进行处理，多个过滤器之间用分号（`;`）分割。
 
-本发明预定义如下几类过滤器：
+合璧预定义如下几类过滤器：
 
 1. 行分割过滤器：
    - `split(D)`：使用 `D` 中任意一个字符作为分割符分割行，该过滤器用于将单个行分割成多个行。`split('\t.')` 表示在行中遇到制表符（`\t`）或者句点（`.`）时会将当前行分割为两行。比如对 "Hello, world!" 执行 `split(' ')`，会将这行分割为 "Hello," 和 "world!" 两行。
@@ -548,12 +548,12 @@ cat /$$path/$
 如下所示：
 
 ```html
-            <form action="lcmd:///bin/rm" method="get" destination="/files.html">
-                <input type="hidden" name="cmdFilter" value="head(0)" />
-                <input type="hidden" name="cmdLine" value="rm $FILE" />
-                <input type="hidden" name="FILE" value="test.txt" />
-                <input type="submit" value="Delete" />
-            </form>
+    <form action="lcmd:///bin/rm" method="get" destination="/files.html">
+        <input type="hidden" name="cmdFilter" value="head(0)" />
+        <input type="hidden" name="cmdLine" value="rm $FILE" />
+        <input type="hidden" name="FILE" value="test.txt" />
+        <input type="submit" value="Delete" />
+    </form>
 ```
 
 我们在上面的 `form` 元素中使用 `destination` 属性定义了目标 URL。当表单提交成功（即 `lcmd:///bin/rm?cmdFilter=head(0)&cmdLine=rm%20%24FILE&FILE=test.txt` 的状态码为 2xx 时），用户代理应该导航到 `destination` 属性定义的目标 URL（`/files.html`）上。
