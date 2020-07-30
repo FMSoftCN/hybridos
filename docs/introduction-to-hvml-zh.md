@@ -1115,8 +1115,8 @@ HVML 定义的上下文变量可罗列如下：
 
 ```json
     {
-        'count': 19,
-        'regions': { '中国大陆': 10, '中国台湾': 7, '其他': 2 }
+        "count": 19,
+        "regions": { "中国大陆": 10, "中国台湾": 7, "其他": 2 }
     }
 ```
 
@@ -1206,13 +1206,13 @@ HVML 定义的上下文变量可罗列如下：
 
 ```json
     {
-        'event' : 'battery',
-        'source': '/system/status',
-        'time': 20200616100207.567,
-        'signature': 'XXXXX',
-        'payload' : {
-            'level': 80,
-            'charging': False,
+        "event" : "battery",
+        "source": "/system/status",
+        "time": 20200616100207.567,
+        "signature": "XXXXX",
+        "payload" : {
+            "level": 80,
+            "charging": false,
         },
     }
 ```
@@ -1723,13 +1723,13 @@ HVML 为不同的数据类型提供了如下操作：
 如果我们要获得前四个数组单元，则使用 `RANGE: FROM 0 TO 4`，返回的数据为：
 
 ```json
-    [ 'zh_CN', 100, 'zh_TW', 90 ]
+    [ "zh_CN", 100, "zh_TW", 90 ]
 ```
 
 如果我们要获得索引下标为偶数的数组单元，则使用 `RANGE: FROM 0, ADVANCE 2`，返回的数据为：
 
 ```json
-    [ 'zh_CN', 'zh_TW', 'zh_HK', 'zh_SG', 'zh_MO', 'en_US', 'en_UK' ]
+    [ "zh_CN", "zh_TW", "zh_HK", "zh_SG", "zh_MO", "en_US", "en_UK" ]
 ```
 
 如果我们要获得索引下标为奇数的数组单元，则使用 `RANGE: FROM 1, ADVANCE 2`，返回的数据为：
@@ -1829,13 +1829,13 @@ SQL（structured query language）是关系型数据库管理系统用来查询�
 ```html
     <init as="regionStats">
         [
-            { 'locale' : 'zh_CN', 'rank' : 100 },
-            { 'locale' : 'zh_TW', 'rank' : 90 },
-            { 'locale' : 'zh_HK', 'rank' : 90 },
-            { 'locale' : 'zh_SG', 'rank' : 90 },
-            { 'locale' : 'zh_MO', 'rank' : 80 },
-            { 'locale' : 'en_US', 'rank' : 30 },
-            { 'locale' : 'en_UK', 'rank' : 20 },
+            { "locale" : "zh_CN", "rank" : 100 },
+            { "locale" : "zh_TW", "rank" : 90 },
+            { "locale" : "zh_HK", "rank" : 90 },
+            { "locale" : "zh_SG", "rank" : 90 },
+            { "locale" : "zh_MO", "rank" : 80 },
+            { "locale" : "en_US", "rank" : 30 },
+            { "locale" : "en_UK", "rank" : 20 },
         ]
     </init>
 ```
@@ -1966,18 +1966,18 @@ SQL（structured query language）是关系型数据库管理系统用来查询�
 
 ```json
 [
-    { 'tag': 'ul', 'attr.id': null, 'textContent': null },
-    { 'tag': 'li', 'attr.id': 'user-1', 'textContent': null },
-    { 'tag': 'img', 'attr.id': null, 'textContent': null },
-    { 'tag': 'span', 'attr.id': null, 'textContent': null },
-    { 'tag': 'txt', 'attr.id': null, 'textContent': null },
-    { 'tag': 'txt', 'attr.id': null, 'textContent': '（中国大陆）' },
+    { "tag": "ul", "attr.id": null, "textContent": null },
+    { "tag": "li", "attr.id": "user-1", "textContent": null },
+    { "tag": "img", "attr.id": null, "textContent": null },
+    { "tag": "span", "attr.id": null, "textContent": null },
+    { "tag": "txt", "attr.id": null, "textContent": null },
+    { "tag": "txt", "attr.id": null, "textContent": "（中国大陆）" },
 
-    { 'tag': 'li', 'attr.id': 'user-2', 'textContent': null },
-    { 'tag': 'img', 'attr.id': null, 'textContent': null },
-    { 'tag': 'span', 'attr.id': null, 'textContent': null },
-    { 'tag': 'txt', 'attr.id': null, 'textContent': null },
-    { 'tag': 'txt', 'attr.id': null, 'textContent': '（中国台湾）' },
+    { "tag": "li", "attr.id": "user-2", "textContent": null },
+    { "tag": "img", "attr.id": null, "textContent": null },
+    { "tag": "span", "attr.id": null, "textContent": null },
+    { "tag": "txt", "attr.id": null, "textContent": null },
+    { "tag": "txt", "attr.id": null, "textContent": "（中国台湾）" },
 ]
 ```
 
@@ -1985,20 +1985,20 @@ SQL（structured query language）是关系型数据库管理系统用来查询�
 
 ```json
 [
-    { 'tag': 'ul', 'attr.id': null, 'textContent': null },
+    { "tag": "ul", "attr.id": null, "textContent": null },
 
-    { 'tag': 'li', 'attr.id': 'user-1', 'textContent': null },
-    { 'tag': 'li', 'attr.id': 'user-2', 'textContent': null },
+    { "tag": "li", "attr.id": "user-1", "textContent": null },
+    { "tag": "li", "attr.id": "user-2", "textContent": null },
 
-    { 'tag': 'img', 'attr.id': null, 'textContent': null },
-    { 'tag': 'span', 'attr.id': null, 'textContent': null },
-    { 'tag': 'txt', 'attr.id': null, 'textContent': null },
-    { 'tag': 'txt', 'attr.id': null, 'textContent': '（中国大陆）' },
+    { "tag": "img", "attr.id": null, "textContent": null },
+    { "tag": "span", "attr.id": null, "textContent": null },
+    { "tag": "txt", "attr.id": null, "textContent": null },
+    { "tag": "txt", "attr.id": null, "textContent": "（中国大陆）" },
 
-    { 'tag': 'img', 'attr.id': null, 'textContent': null },
-    { 'tag': 'span', 'attr.id': null, 'textContent': null },
-    { 'tag': 'txt', 'attr.id': null, 'textContent': null },
-    { 'tag': 'txt', 'attr.id': null, 'textContent': '（中国台湾）' },
+    { "tag": "img", "attr.id": null, "textContent": null },
+    { "tag": "span", "attr.id": null, "textContent": null },
+    { "tag": "txt", "attr.id": null, "textContent": null },
+    { "tag": "txt", "attr.id": null, "textContent": "（中国台湾）" },
 ]
 ```
 
@@ -2006,13 +2006,13 @@ SQL（structured query language）是关系型数据库管理系统用来查询�
 
 ```json
 [
-    { 'tag': 'img', 'attr.id': null, 'textContent': null },
-    { 'tag': 'txt', 'attr.id': null, 'textContent': null },
-    { 'tag': 'txt', 'attr.id': null, 'textContent': '（中国大陆）' },
+    { "tag": "img", "attr.id": null, "textContent": null },
+    { "tag": "txt", "attr.id": null, "textContent": null },
+    { "tag": "txt", "attr.id": null, "textContent": "（中国大陆）" },
 
-    { 'tag': 'img', 'attr.id': null, 'textContent': null },
-    { 'tag': 'txt', 'attr.id': null, 'textContent': null },
-    { 'tag': 'txt', 'attr.id': null, 'textContent': '（中国台湾）' },
+    { "tag": "img", "attr.id": null, "textContent": null },
+    { "tag": "txt", "attr.id": null, "textContent": null },
+    { "tag": "txt", "attr.id": null, "textContent": "（中国台湾）" },
 ]
 ```
 
@@ -2020,8 +2020,8 @@ SQL（structured query language）是关系型数据库管理系统用来查询�
 
 ```json
 [
-    { 'tag': 'li', 'attr.id': 'user-1', 'textContent': null },
-    { 'tag': 'li', 'attr.id': 'user-2', 'textContent': null },
+    { "tag": "li", "attr.id": "user-1", "textContent": null },
+    { "tag": "li", "attr.id": "user-2", "textContent": null },
 ]
 ```
 
