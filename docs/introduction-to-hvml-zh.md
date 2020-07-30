@@ -491,7 +491,7 @@ HVML 解释器按照固定的策略将 DOM 子树（文档片段）视作一个�
                 "attr": {
                     "class": "avatar",
                     "src": "foo/bar.png",
-                }
+                },
                 "children": null
             },
 
@@ -499,10 +499,12 @@ HVML 解释器按照固定的策略将 DOM 子树（文档片段）视作一个�
                 "tag": "span",
                 "attr": null,
                 "children": [
-                    "tag": "txt",
-                    "attr": null,
-                    "content": "foo",
-                    "children": null
+                    {
+                        "tag": "txt",
+                         "attr": null,
+                         "content": "foo",
+                         "children": null
+                    }
                 ]
             },
 
