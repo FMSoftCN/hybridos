@@ -2610,7 +2610,7 @@ def on_battery_changed (on_value, root_in_scope, source, event, time_stamp, even
 
 
 
-## 5) 总结
+## 4) 总结
 
 本文所描述的 HVML，是一种通用、完备、优雅的数据驱动动态标记语言。其主要优点可总结如下：
 
