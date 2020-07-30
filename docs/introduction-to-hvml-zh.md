@@ -1,9 +1,9 @@
 HybridOS Specification No. 04
 Topic: App Programming Language  
 Author: Vincent Wei  
-Category: Programming Language
+Category: Programming Language  
 Date: July, 2020  
-Status: Proposal
+Status: Proposal  
 Lanuage: Chinese
 
 *Copyright Notice*
@@ -11,9 +11,64 @@ Lanuage: Chinese
 Copyright (C) 2020 [FMSoft Technologies]  
 All Rights Reserved.
 
++ [1) 基本原理及术语](#1-基本原理及术语)
+   * [1.1) 整体结构](#11-整体结构)
+   * [1.2) 数据和变量](#12-数据和变量)
+      - [1.2.1) `$_REQUEST`](#121-_request)
+      - [1.2.2) `$_SYSTEM`](#122-_system)
+      - [1.2.3) `$_TIMERS`](#123-_timers)
+      - [1.2.4) `$_L`](#124-_l)
+      - [1.2.5) `$_`](#125-_)
+      - [1.2.6) 集合](#126-集合)
+   * [1.3) 动态 JSON 对象和 `bind` 标签](#13-动态-json-对象和-bind-标签)
+   * [1.4) 文档片段的 JSON 数据表达](#14-文档片段的-json-数据表达)
+   * [1.5) 数据模板和文档片段模板](#15-数据模板和文档片段模板)
+   * [1.6) 用来操作数据或元素的动作标签](#16-用来操作数据或元素的动作标签)
+   * [1.7) 其他动作标签](#17-其他动作标签)
+   * [1.8) 错误和异常标签](#18-错误和异常标签)
+   * [1.9) 介词属性](#19-介词属性)
+   * [1.10) 副词属性](#110-副词属性)
+   * [1.11) 引用元素或数据](#111-引用元素或数据)
+   * [1.12) JSON 求值表达式](#112-json-求值表达式)
++ [2) 动作标签详解](#2-动作标签详解)
+   * [2.1) `update` 标签](#21-update-标签)
+   * [2.2) `remove` 标签](#22-remove-标签)
+   * [2.3) `empty` 标签](#23-empty-标签)
+   * [2.4) `test` 标签和 `match` 标签](#24-test-标签和-match-标签)
+   * [2.5) `choose` 标签](#25-choose-标签)
+   * [2.6) `iterate` 标签](#26-iterate-标签)
+   * [2.7) `reduce` 标签](#27-reduce-标签)
+   * [2.8) `observe` 和 `fire` 标签](#28-observe-和-fire-标签)
+   * [2.9) `request` 标签](#29-request-标签)
+   * [2.10) `set` 标签](#210-set-标签)
+   * [2.11) `listen` 和 `close` 标签](#211-listen-和-close-标签)
+   * [2.12) `load` 和 `back` 标签](#212-load-和-back-标签)
+   * [2.13) `define` 和 `include` 标签](#213-define-和-include-标签)
+   * [2.14) `call` 和 `return` 标签](#214-call-和-return-标签)
++ [3) 执行器](#3-执行器)
+   * [3.1) 内建执行器](#31-内建执行器)
+      - [3.1.1) `KEY` 执行器](#311-key-执行器)
+      - [3.1.2) `RANGE` 执行器](#312-range-执行器)
+      - [3.1.3) 用于字符串的内建执行器](#313-用于字符串的内建执行器)
+      - [3.1.4) 用于数值的内建执行器](#314-用于数值的内建执行器)
+      - [3.1.5) `SQL` 执行器](#315-sql-执行器)
+      - [3.1.6) `TRAVEL` 执行器](#316-travel-执行器)
+      - [3.1.7) 内部执行器的使用](#317-内部执行器的使用)
+   * [3.2) 外部执行器](#32-外部执行器)
+      - [3.2.1) 外部选择器](#321-外部选择器)
+      - [3.2.2) 外部迭代器](#322-外部迭代器)
+      - [3.2.3) 外部规约器](#323-外部规约器)
+      - [3.2.4) 外部函数](#324-外部函数)
+   * [3.3) 响应式处理](#33-响应式处理)
++ [4) 应用示例](#4-应用示例)
+   * [4.1) 使用 HVML 开发传统 GUI 应用](#41-使用-hvml-开发传统-gui-应用)
+   * [4.2) 云端数据处理](#42-云端数据处理)
+- [5) 总结](#5-总结)
+
+
 ## 1) 简介
 
-HybridOS 提出的的 HVML（Hybrid Virtual Markup Language），是一种通用的动态标记语言，主要用于生成实际的 XML/HTML 文档内容。HVML 通过数据驱动的动作标签和介词属性，实现了 XML/HTML 文档的动态生成和更新能力；HVML 还提供了和已有编程语言，如 C/C++、Python、Lua、JavaScript 等进行结合的方法，从而可以支持更加复杂的功能。
+HybridOS 提出的 HVML（Hybrid Virtual Markup Language），是一种通用的动态标记语言，主要用于生成实际的 XML/HTML 文档内容。HVML 通过数据驱动的动作标签和介词属性，实现了 XML/HTML 文档的动态生成和更新能力；HVML 还提供了和已有编程语言，如 C/C++、Python、Lua、JavaScript 等进行结合的方法，从而可以支持更加复杂的功能。
 
 HVML 的设计思想来源于 React、Vue 等最新的 Web 前端框架。但是，相比基于虚拟 DOM 的 Web 前端技术，HVML 提供了更加系统和完备的低代码（low code，指使用更少的代码来编写程序）编程方法，并扩展了其用途。
 
