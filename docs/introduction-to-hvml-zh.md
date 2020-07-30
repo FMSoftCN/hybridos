@@ -62,15 +62,49 @@ All Rights Reserved.
          - [2.3.2.3) 外部规约器](#2323-外部规约器)
          - [2.3.2.4) 外部函数](#2324-外部函数)
       * [2.3.3) 响应式处理](#233-响应式处理)
-- [4) 应用示例](#4-应用示例)
-   * [4.1) 使用 HVML 开发传统 GUI 应用](#41-使用-hvml-开发传统-gui-应用)
-   * [4.2) 云端数据处理](#42-云端数据处理)
-- [5) 总结](#5-总结)
+- [3) 应用示例](#3-应用示例)
+   * [3.1) 使用 HVML 开发传统 GUI 应用](#31-使用-hvml-开发传统-gui-应用)
+   * [3.2) 待补充](#32-待补充)
+- [4) 总结](#4-总结)
 
 
 ### 背景
 
-HybridOS 提出的 HVML（Hybrid Virtual Markup Language），是一种通用的动态标记语言，主要用于生成实际的 XML/HTML 文档内容。HVML 通过数据驱动的动作标签和介词属性，实现了 XML/HTML 文档的动态生成和更新能力；HVML 还提供了和已有编程语言，如 C/C++、Python、Lua、JavaScript 等进行结合的方法，从而可以支持更加复杂的功能。
+本文涉及的背景技术、术语及其最新规范如下：
+
+- HTML 及其规范。HTML 和 CSS 等规范和标准是由 W3C <https://www.w3.org> 组织制定的，用来规范 Web 页面内容的编写和渲染行为。关键规范如下：
+   * HTML：超文本标记语言（HyperText Markup Language），用于表述网页内容结构的标准。最新的发布标准是 HTML 5.3：<https://www.w3.org/TR/html53/index.html>；
+   * CSS：级联样式表（Cascading Style Sheets），用于定义 HTML 页面元素布局、渲染效果等的规范。在 CSS 2.2 <https://www.w3.org/TR/CSS22/> 之后，CSS 规范开始按照模块划分，各模块分头演进，目前普遍支持到 Level 3。在如下网页中可以看到 CSS 各模块的规范进展情况：<https://drafts.csswg.org>；
+   * JavaScript/ECMAScript：一种符合 ECMAScript 规范的脚本编程语言，最初由网景公司设计给浏览器使用，用于操控 HTML 页面中的内容和渲染行为，现在由欧洲计算机制造商协会和国际标准化组织负责制定相关标准，最新的标准为 ECMA-262：<http://www.ecma-international.org/publications/standards/Ecma-262.htm>。
+   * DOM：文档对象模型（Document Object Model），用于 XML/HTML 文档结构的内部表达。一个 XML/HTML 文档，会被 XML/HTML 解析器解析并生成一个 DOM 树，XML/HTML 文档中的每个元素构成 DOM 树上的元素结点，而每个元素的子元素、属性、文本内容等，又构成了这个元素节点的子节点。有关 DOM 的最新的规范可见：<https://dom.spec.whatwg.org/>。
+   * JSON：JavaScript 对象表述法（JavaScript Object Notation）是一种轻量级的信息互换格式。最初被用于 JavaScript 对象的字符串表达，易于被 JavaScript 脚本代码使用，现在被广泛使用在不同编程语言之间的数据交换。有关 JSON 的描述，可见：<https://json.org/>。
+- 用户代理（User Agent）是 HTML 规范的一个术语，用来指代可以解析 HTML、CSS 等 W3C 规范，并对 HTML 文档内容进行渲染，进而呈现给用户并实现用户交互的计算机程序。我们熟知的浏览器就是用户代理。但用户代理不限于浏览器，可以是一个软件组件，也可以是一个应用框架。比如，内嵌到电子邮件客户端程序中，用以解析和渲染 HTML 格式邮件的软件组件，本质上也是 HTML 用户代理。
+- XML：可扩展标记语言（The Extensible Markup Language）是由 W3C 组织制定的，用来表述结构化信息的一种简单文本格式。和 HTML 相比，XML 使用类似的结构，但更加严格且更为通用。XML 是当今共享结构化信息的最广泛使用的格式之一，不论是在程序之间，人与人之间，计算机与人之间，也不论是在本地还是跨网络共享信息。有关 XML 的介绍和规范可参阅：<https://www.w3.org/standards/xml/>。
+- 脚本语言。指类似 JavaScript 的高级计算机编程语言，通常解释执行，具有动态特征。除 JavaScript 之外，常见的脚本语言有 Python、Lua 等。
+- SQL：结构化查询语言（Structured Query Language），用于关系型数据库的数据操作语言，目前几乎所有的关系数据库均支持 SQL。和一般的编程语言不同，SQL 具有非过程性特征，基本的 SQL 代码中不包括 if-else 这种流程控制语句。
+
+随着互联网技术和应用的发展，围绕 HTML/CSS/JavaScript 发展出来的 Web 前端开发技术发展迅猛，甚至可以用“一日千里”来形容。五年前，基于 jQuery 和 Bootstrap 的前端框架大行其道，而从 2019 年开始，基于虚拟 DOM 技术的框架又受到前端开发者的青睐，比如著名的 React.js（<https://reactjs.org/>）、Vue.js（<https://cn.vuejs.org>）等。值得注意的是，微信小程序、快应用等，也不约而同使用了这种虚拟 DOM 技术来构建应用框架。
+
+所谓“虚拟 DOM” 是指前端应用程序通过 JavaScript 来创建和维护一个虚拟的文档对象树，应用脚本并不直接操作真实的 DOM 树。在虚拟 DOM 树中，通过一些特别的属性实现了基于数据的一些流程控制，如条件、循环等。虚拟 DOM 技术提供如下一些好处：
+
+1. 由于脚本并不使用脚本程序直接操作真实的 DOM 树，故而一方面通过现有的框架简化了前端开发的复杂性，另一方面通过优化对真实 DOM 数的操作而减少了由于动态修改页面内容而对 DOM 树的频繁操作，从而提高页面的渲染效率和用户体验。
+1. 通过虚拟 DOM 技术，程序对某个数据的修改，可以直接反应到该数据绑定的页面内容上，开发者无需主动或直接地调用相关接口来操作 DOM 树。这种技术提供了所谓的“响应式”编程，极大降低了开发者的工作量。
+
+以 React.js、Vue.js 为代表的前端框架取得了巨大成功，但存在如下缺陷和不足：
+
+- 这些技术建立在已有成熟的 Web 标准之上，需要完整支持相关前端规范的浏览器才能运行，因此无法应用于其他场合。比如要在 Python 脚本中使用这类技术，目前没有任何解决方案；再比如在传统的 GUI 应用编程中，也无法使用这一技术带来的好处。
+- 这些技术通过引入 `v-if`、`v-else`、`v-for` 等虚拟属性实现了基于数据的条件和循环流程控制，但这种方法带来代码可读性的极具下降，代码可读性的下降带来代码可维护性的下降。如下面 Vue 的一个示例：
+
+```html
+<div v-if="Math.random() > 0.5">
+  Now you see "{{ name }}"
+</div>
+<div v-else>
+  Now you don't
+</div>
+```
+
+在合璧操作系统的开发过程中，我们在虚拟 DOM 思想的基础上，发展了一套完备、通用、优雅、易学的标记语言 HVML（Hybrid Virtual Markup Language），是一种通用的动态标记语言，主要用于生成实际的 XML/HTML 文档内容。HVML 通过数据驱动的动作标签和介词属性，实现了 XML/HTML 文档的动态生成和更新能力；HVML 还提供了和已有编程语言，如 C/C++、Python、Lua、JavaScript 等进行结合的方法，从而可以支持更加复杂的功能。
 
 HVML 的设计思想来源于 React、Vue 等最新的 Web 前端框架。但是，相比基于虚拟 DOM 的 Web 前端技术，HVML 提供了更加系统和完备的低代码（low code，指使用更少的代码来编写程序）编程方法，并扩展了其用途。
 
@@ -495,6 +529,20 @@ HVML 解释器按照固定的策略将 DOM 子树（文档片段）视作一个�
 - 当我们在一个元素上设置 `textContent` 键值时，相当于移除该元素的所有子元素（若有），并设置该元素的文本内容为对应的键值。
 - 当我们在一个元素上获得 `xmlContent`、`htmlContent`、`jsonContent` 键名的键值时，相当于获得这个元素所有子元素的 XML、HTML 或者 JSON 表达；在设置该键名的键值时，相当于使用 XML、HTML 或者 JSON 表述的文本来创建该元素的子元素（替换掉原有子元素）。
 - 我们可以使用 `attr.class` 这样的复合键名来引用一个元素的特定属性，从而将其看成是一个描述该元素的字典的一个键值。引用一个未定义的属性时，按属性值为 null 值对待。
+
+在数据上执行选择、迭代或者规约操作时，上述方案只支持使用 `on` 属性指定单个数据项。我们也可以使用类似 CSS 选择器的方式来引用某个数据项或者某个数据项的集合，比如：
+
+- 针对基于字典数据的树形结构或者数组：
+    - `$users[locale]`：表示选择 `$users` 中定义有 `locale` 键名的数据项。
+    - `$users[locale = 'abc']`：表示选择 `$users` 中所有 `locale` 键值等于 `abc` 的数据项。
+    - `$users[locale *= 'abc']`：表示选择 `$users` 中所有 `locale` 键值包含 `abc` 子字符串的数据项。
+    - `$users[locale ^= 'abc']`：表示选择 `$users` 中所有 `locale` 键值以 `abc` 打头的数据项。
+    - `$users[locale $= 'abc']`：表示选择 `$users` 中所有 `locale` 键值以 `abc` 结尾的数据项。
+    - `$users[locale ~= 'abc']`：表示选择 `$users` 中所有 `locale` 键值中以 `abc` 作为一个而完整词法单元的数据项。
+- 针对数组：
+    - `$users:nth-child(3n+1)`：表示当前数组中所有索引下标匹配 4、7、10 等的数据项。
+
+使用上述选择器之后，相当于对原有单个数据项做了一些过滤。比如 `<choose on="$users" ... />` 选择了整个 `$users` 数组内容做后续处理，但如果使用 `<choose on="$users:nth-child(2n)"` 则仅选择下标为偶数的数组单元。
 
 #### 2.2.1.5) 数据模板和文档片段模板
 
@@ -2414,11 +2462,11 @@ def on_battery_changed (on_value, root_in_scope, source, event, time_stamp, even
 上述代码，使用 `databind` 属性定义了元素属性 `value` 和变量 `$user_name` 的绑定关系。如此，我们不需要使用 `observe` 和 `update` 标签。
 
 
-## 4) 应用示例
+## 3) 应用示例
 
 本文档所有示例是针对 Web 应用的。在这种应用场景中，我们可以使用 Python 或者其他任意的脚本程序来替代 JavaScript 开发 Web 前端应用。本节我们介绍 HVML 的其他一些应用场景。
 
-### 4.1) 使用 HVML 开发传统 GUI 应用
+### 3.1) 使用 HVML 开发传统 GUI 应用
 
 我们假设有一个 GUI 系统，使用 XML 来描述界面上的构件（widget）。现在，我们要使用这个 GUI 系统开发一个简单的文件打开对话框，大致的界面需求如下：
 
@@ -2558,7 +2606,7 @@ def on_battery_changed (on_value, root_in_scope, source, event, time_stamp, even
 
 如此，开发者不需要做编写任何程序，即可实现一个简单的文件浏览和打开对话框。
 
-### 4.2) 云端数据处理
+### 3.2) 待补充
 
 
 
