@@ -760,7 +760,7 @@ HVML 定义的上下文变量可罗列如下：
 
 当我们要指代普通的 `$` 字符时，我们使用 `\` 做转义字符。
 
-#### 2.12) JSON 求值表达式
+#### 2.1.12) JSON 求值表达式
 
 在上面的例子中，我们在文档片段模板或者数据模板中使用 `$` 前缀指定一个基于 JSON 数据的求值表达式。该求值表达式需要符合如下规则：
 
@@ -2452,7 +2452,7 @@ def on_battery_changed (on_value, root_in_scope, source, event, time_stamp, even
 
 如此，开发者不需要显式增加 `observe` 标签即可获得相同的响应式处理效果，只需要对相应的表达式增加响应式标记即可。但需要注意的是，HVML 会忽略在上下文变量上使用的响应式标记。
 
-另外，我们还可以使用权利人提交的另外一项专利申请《一种HTML元素属性或内容的绑定机制》中描述的方法，实现元素属性或内容到变量的响应式处理。比如，就上面的 HVML 代码，我们希望实现用户输入框中的内容和变量 `$user_name` 绑定。只要用户修改了输入框中的内容，将自动修改 `$user_name` 的值，而无需使用 `observe` 标签。为此，我们可以如下编写 HVML 代码：
+另外，我们还可以使用 HybridOS 提出的数据绑定机制实现元素属性或内容到变量的响应式处理。比如，就上面的 HVML 代码，我们希望实现用户输入框中的内容和变量 `$user_name` 绑定。只要用户修改了输入框中的内容，将自动修改 `$user_name` 的值，而无需使用 `observe` 标签。为此，我们可以如下编写 HVML 代码：
 
 ```html
     <input type="text" name="user-name" placeholder="Your Name" value="$user_name"
@@ -2460,7 +2460,6 @@ def on_battery_changed (on_value, root_in_scope, source, event, time_stamp, even
 ```
 
 上述代码，使用 `databind` 属性定义了元素属性 `value` 和变量 `$user_name` 的绑定关系。如此，我们不需要使用 `observe` 和 `update` 标签。
-
 
 ## 3) 应用示例
 
