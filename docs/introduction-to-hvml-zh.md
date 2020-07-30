@@ -1,4 +1,4 @@
-HybridOS Specification No. 04
+HybridOS Specification No. 04 
 Topic: App Programming Language  
 Author: Vincent Wei  
 Category: Programming Language  
