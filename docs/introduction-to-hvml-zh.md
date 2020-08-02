@@ -104,7 +104,7 @@ All Rights Reserved.
 </div>
 ```
 
-在合璧操作系统的开发过程中，我们在虚拟 DOM 思想的基础上，发展了一套完备、通用、优雅、易学的标记语言 HVML（Hybrid Virtual Markup Language），是一种通用的动态标记语言，主要用于生成实际的 XML/HTML 文档内容。HVML 通过数据驱动的动作标签和介词属性，实现了 XML/HTML 文档的动态生成和更新能力；HVML 还提供了和已有编程语言，如 C/C++、Python、Lua、JavaScript 等进行结合的方法，从而可以支持更加复杂的功能。
+在合璧操作系统的开发过程中，我们在虚拟 DOM 思想的基础上，发展了一套完备、通用、优雅、易学的标记语言 HVML（Hybrid Virtual Markup Language）。HVML 是一种通用的动态标记语言，主要用于生成实际的 XML/HTML 文档内容。HVML 通过数据驱动的动作标签和介词属性，实现了 XML/HTML 文档的动态生成和更新能力；HVML 还提供了和已有编程语言，如 C/C++、Python、Lua、JavaScript 等进行结合的方法，从而可以支持更加复杂的功能。
 
 HVML 的设计思想来源于 React、Vue 等最新的 Web 前端框架。但是，相比基于虚拟 DOM 的 Web 前端技术，HVML 提供了更加系统和完备的低代码（low code，指使用更少的代码来编写程序）编程方法，并扩展了其用途。
 
@@ -320,12 +320,12 @@ hvml.load ("a.hvml", { "nrUsers" : 10 })
 
 ##### 2.1.2.4) `$_L`
 
-`$_L` 是一个动态 JSON 对象，该对象完成数值对比、字符串对比以及逻辑与、或、亦或、取反等逻辑操作：
+`$_L` 是一个动态 JSON 对象，该对象完成数值对比、字符串对比以及逻辑与、或、异或、取反等逻辑操作：
 
 1. `$_L.NOT(<json_evaluation_expression>)`：用于逻辑取反操作。
 1. `$_L.AND(<json_evaluation_expression>, <json_evaluation_expression>, ...)`：用于逻辑与运算。
 1. `$_L.OR(<json_evaluation_expression>, <json_evaluation_expression>, ...)`：用于逻辑或运算。
-1. `$_L.XOR(<json_evaluation_expression>, <json_evaluation_expression>)`：用于逻辑亦或运算。
+1. `$_L.XOR(<json_evaluation_expression>, <json_evaluation_expression>)`：用于逻辑异或运算。
 1. `$_L.NUMCMP(< '>' | '>=' | '==' | '<=' | '<' | '!=' >, <json_evaluation_expression>, <json_evaluation_expression>)`：用于比较两个数值；第一个参数用来表示比较运算符，其后的两个参数用来传递两个数值。
 1. `$_L.STRCMP(< 'case' | 'wildcard' | 'reg' >, <json_evaluation_expression>, <json_evaluation_expression>)`：用于对比两个字符串；第一个参数用来表示字符串的匹配方式（区分大小写、通配符、正则表达式），其后的两个参数用来传递两个字符串。
 
@@ -432,7 +432,7 @@ hvml.load ("a.hvml", { "nrUsers" : 10 })
 
 注意，内置全局变量 `$_TIMERS` 本质上就是一个使用键名 `id` 的键值作为唯一性判断条件的字典集合。
 
-HVML 为集合类数据提供了若干抽象的数据操作方法，比如求并集、交集、差集、亦或集等。详情见 `set` 标签的描述。
+HVML 为集合类数据提供了若干抽象的数据操作方法，比如求并集、交集、差集、异或集等。详情见 `set` 标签的描述。
 
 #### 2.1.3) 动态 JSON 对象和 `bind` 标签
 
@@ -1433,7 +1433,7 @@ HVML 为不同的数据类型提供了如下操作：
 - `union`：表示执行合并操作，作用于集合，相当于求并集。
 - `intersect`：在集合上执行相交操作，作用于集合，相当于求交集。
 - `subtract`：在集合上执行相减操作，作用于集合，相当于求差集。
-- `xor`：在集合上执行亦或操作，作用于集合，相当于并集和交集之差。
+- `xor`：在集合上执行异或操作，作用于集合，相当于并集和交集之差。
 - `update`：在集合上匹配给定的键值并更新其他键值，作用于基于字典的集合。
 
 比如修改全局定时器的操作，我们可以使用 `set` 标签完成：
