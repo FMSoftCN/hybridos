@@ -4,7 +4,7 @@ Author: Vincent Wei
 Category: App Framework
 Date: July, 2020  
 Status: Proposal  
-Lanuage: Chinese
+Language: Chinese
 
 *Copyright Notice*
 
