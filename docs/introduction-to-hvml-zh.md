@@ -1,7 +1,7 @@
 HybridOS Specification No. 04  
 Topic: App Programming Language  
 Author: Vincent Wei  
-Category: App Framework
+Category: App Framework  
 Date: July, 2020  
 Status: Proposal  
 Language: Chinese
