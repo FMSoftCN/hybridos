@@ -199,7 +199,7 @@ Initiate this project and organize specifications and design documents.
 
 ## Copying
 
-Copyright (C) 2018 \~ 2019 [Beijing FMSoft Technologies Co., Ltd.]
+Copyright (C) 2018 \~ 2020 [Beijing FMSoft Technologies Co., Ltd.]
 
 - For device side and client side, all new components use LGPLv3.
 - For server side, all new components uses AGPLv3.
