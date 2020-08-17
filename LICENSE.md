@@ -15,30 +15,30 @@ the source trees.
 ```
 Copyright (C) 2019 ~ 2020, Beijing FMSoft Technologies Co., Ltd.
 
-This library is free software: you can redistribute it and/or modify
+This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
-along with this library.  If not, see <https://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 Or,
 
-As this component is a library released under LGPLv3, which claims
-explicitly that the library could be modified by any end user
-even if the library is conveyed in non-source form on the system it runs. 
-Generally, if you distribute this library in embedded devices,
-you might not satisfy this condition. Under this situation, you need
-to get a commercial license from FMSoft, along with a patent license
-for the patents which owned by FMSoft.
+As this component is a program released under LGPLv3, which claims
+explicitly that the program could be modified by any end user
+even if the program is conveyed in non-source form on the system it runs. 
+Generally, if you distribute this program in embedded devices,
+you might not satisfy this condition. Under this situation or you can
+not accept any condition of LGPLv3, you need to get a commercial license
+from FMSoft, along with a patent license for the patents owned by FMSoft.
 
-If you have got a commercial license of this library, please use it
+If you have got a commercial/patent license of this program, please use it
 under the terms and conditions of the commercial license.
 
 For more information about the commercial license and patent license,
