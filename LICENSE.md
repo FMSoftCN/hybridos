@@ -32,7 +32,7 @@ Or,
 
 As this component is a library released under LGPLv3, which claims
 explicitly that the library could be modified by any end user
-even if the library is conveyed in non-source on the device it runs. 
+even if the library is conveyed in non-source on the system it runs. 
 Generally, if you distribute this library in embedded devices,
 you might not satisfy this condition. Under this situation, you need
 to get a commercial license from FMSoft, along with a patent license
