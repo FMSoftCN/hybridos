@@ -20,13 +20,13 @@ it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
+along with this library.  If not, see <https://www.gnu.org/licenses/>.
 
 Or,
 
@@ -38,7 +38,7 @@ you might not satisfy this condition. Under this situation, you need
 to get a commercial license from FMSoft, along with a patent license
 for the patents which owned by FMSoft.
 
-If you have got a commercial license of this program, please use it
+If you have got a commercial license of this library, please use it
 under the terms and conditions of the commercial license.
 
 For more information about the commercial license and patent license,
