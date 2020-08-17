@@ -43,7 +43,7 @@ under the terms and conditions of the commercial license.
 
 For more information about the commercial license and patent license,
 please refer to
-<https://hybridos.fmsoft.cn/blog/hybridos-licensing-policy/>.
+<https://hybridos.fmsoft.cn/blog/hybridos-licensing-policy>.
 
 Also note that the LGPLv3 license does not apply to any entity in the
 Exception List published by Beijing FMSoft Technologies Co., Ltd.
