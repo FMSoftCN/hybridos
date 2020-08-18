@@ -48,7 +48,7 @@
 
 作为有着多年 GUI 开发经验的我们来讲，我们深知以上这些方案都不是好方案。因此，我们在 hiWebKit 中引入了一个新的标签 `view`，通过其 `type` 属性来指代控件的类型，通过 `design` 和 `vendor` 属性指代系统功能的不同设计（外观），通过 `param` 子元素来传递参数，通过 `value` 属性和 `state` 属性获得控件的工作状态等。而特定类型的 `view` 元素之实现，则通过使用 C/C++ 开发的动态库或者跨进程的共享缓冲区同步机制来提供。这样，我们可以将 `view` 元素整合到现有的 Web 开发框架中，比如我们可以使用 JavaScript 语言来和某个 `view` 元素交互，但其性能远超上述三种技术方案中的任何一种。
 
-![同一表盘的不同设计](https://gitlab.fmsoft.cn/patents/hvml/raw/master/view/figure-1.png)
+![同一表盘的不同设计](figure-1-1.webp)
 
 ### 旋转滚轮控件
 
@@ -56,7 +56,7 @@
 
 但这种实现方式使用了大量的 DOM 节点，通过 CSS 来控制其旋转等效果，故而会占用大量的系统内存，交互迟滞感非常严重。为了解决这一问题，我们在 hiWebKit 中增加了两个新的标签 `hipicher` 和 `hiitem`。前者用于定义滚轮，后者用来定义一个选择项。更重要的是，我们引入了新的 CSS 属性以及交互事件，使得我们可以非常轻松地使用 JavaScript 语言来设定滚轮空间的外观并和用户进行交互。
 
-![典型的滚轮控件](https://gitlab.fmsoft.cn/patents/hvml/raw/master/picker/figure-1.jpg)
+![典型的滚轮控件](figure-1-2.webp)
 
 ### 旋转指针控件
 
@@ -75,7 +75,7 @@
 
 这带给前端开发者极大的便利。由于这些 CSS 属性的引入，我们甚至可以利用现有的 CSS3 动画框架来实现指针位置改变时的动画效果。
 
-![指针控件的典型应用](https://gitlab.fmsoft.cn/patents/hvml/raw/master/needle-hand/figure.png)
+![指针控件的典型应用](figure-1-3.webp)
 
 ---
 
