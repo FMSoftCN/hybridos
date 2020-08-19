@@ -172,13 +172,11 @@ HVML 是笔者在开发合璧操作系统的过程中提出的一种新型的高
 
 我们对照上述示例，介绍 HVML 的一些特点。
 
-首先是数据驱动编程。通过基于数据的迭代、插入、更新、清除等操作，开发者不需要编写程序或者只要少量编写程序即可动态生成最终的 XML/HTML 文档。比如下面的上面示例代码中的 `iterate` 标签，就在`$users` 变量代表的数据（在 `header` 中使用 `init` 标签定义）上做迭代，然后在最终文档的 `ul` 元素中插入了若干 `li` 元素。而 `li` 元素的属性（包括子元素）由一个 `archetype` 标签定义，其中使用 `$？` 来指代被迭代的 `$users` 中的一个数据单元。
+首先是数据驱动编程（data-driven programming）。通过基于数据的迭代、插入、更新、清除等操作，开发者不需要编写程序或者只要少量编写程序即可动态生成最终的 XML/HTML 文档。比如下面的上面示例代码中的 `iterate` 标签，就在`$users` 变量代表的数据（在 `header` 中使用 `init` 标签定义）上做迭代，然后在最终文档的 `ul` 元素中插入了若干 `li` 元素。而 `li` 元素的属性（包括子元素）由一个 `archetype` 标签定义，其中使用 `$？` 来指代被迭代的 `$users` 中的一个数据单元。
 
 在上面的示例代码中，我们使用了系统内置变量 `$_TIMERS` 来定义定时器，每个定时器有一个全局的标识符，间隔时间以及是否激活的标志。如果要激活一个定时器，我们只需要使用 HVML 的 `update` 或 `set` 标签来修改对应的键值，而不需要调用某个特定的编程接口。这是数据驱动编程的另一个用法——我们不需要为定时器或者其他的类似模块的操作提供额外的 API。
 
 另外，在上面的示例代码中，我们通过 `observe` 标签观察新的数据或文档本身的变化以及用户交互事件，可实现 XML/HTML 文档或数据的动态更新。比如在最后一个 `observe` 标签中，通过监听用户头像上的点击事件来装载一个新的 `user.hvml` 文件，以模态对话框的形式展示对应用户的详细信息。
-
-我们将这种编程方式称为数据驱动的编程（data-driven programming）。
 
 其次是界面、交互和数据之间的耦合。通过 HVML 引入的编程模型和方法，用于表述界面的 XML/HTML 文档内容可完全由 HVML 生成和动态调整，这避免了在程序代码中直接操作文档的数据结构（即文档对象树，或简称 DOM 树），而程序只需要关注数据本身的产生和处理即可。这样，就实现了界面和数据的解耦。比如：
    - HVML 可在文档片段模板或者数据模板中定义数据和 DOM 元素之间的映射关系（如示例代码中的 `archetype` 或 `archedata` 标签），而无需编写额外的代码完成数据到 DOM 元素属性、内容等的赋值操作。
@@ -218,8 +216,6 @@ HVML 是笔者在开发合璧操作系统的过程中提出的一种新型的高
     </button>
 </ui>
 ```
-
-注意：为简单起见，我们没有引入有关构件布局的描述信息。
 
 为满足以上的交互处理需求，我们使用 HVML 来描述这个界面的动态生成以及交互过程：
 
@@ -315,14 +311,10 @@ HVML 是笔者在开发合璧操作系统的过程中提出的一种新型的高
 
 在上述代码中，外部选择器 `CDirEntries` 的实现非常简单，就是列出给定路径下的目录项，并按照要求返回一个字典数组。使用 Python 实现时非常简单，所以这里略去不谈。
 
-如果我们使用 HybridOS 中提到的直接执行本地系统命令的扩展图式（lcmd），我们甚至都不需要编写任何代码，而只需要使用 `request`：
+如果我们使用 HybridOS 中提到的直接执行本地系统命令的扩展 URL 图式（lcmd），我们甚至都不需要编写任何代码，而只需要使用 `request`：
 
 ```html
-        <init as="lcmdParams">
-            { "cmdLine": "ls $fileInfo.curr_path" }
-        <init>
-
-        <requset on="lcmd:///bin/ls" with="$lcmdParams">
+        <requset on="lcmd:///bin/ls" with="{ "cmdLine": "ls $fileInfo.curr_path" }">
             <iterate on="$?" to="append" in="#entries" with="#dir-entry" by="RANGE: 0">
             </iterate>
         </request>
@@ -330,32 +322,93 @@ HVML 是笔者在开发合璧操作系统的过程中提出的一种新型的高
 
 如此，开发者不需要做编写任何程序，即可实现一个简单的文件浏览和打开对话框。
 
-## HVML 的未来
+显然，如果使用 HVML，将大大提高传统 GUI 应用的开发效率，缩短开发周期。当然，传统的 GUI 支持系统，需要提供基于 XML 的 UI 描述支持以及类似 CSS 的布局、样式、动画等的渲染效果支持。
 
-## 总结
+## HVML 的未来：云应用
 
-本文所描述的 HVML，是一种通用、完备、优雅的数据驱动动态标记语言。其主要优点可总结如下：
+HVML 的潜力绝对不止上述示例所说的那样。在未来，我们甚至可以将 HVML 代码运行在云端，通过云端控制设备上的界面显示，从而形成一个新的云应用解决方案。
 
-1. 通过为数不多的动作标签定义了数据驱动的 HTML/XML 文档生成规则，避免使用基于流程控制的传统编程方法，开启了一种新的低代码编程模式。
-1. 通过动作标签的介词属性和副词属性，规定了执行动作所需要的数据和动作类型以及规则，便于开发者理解和掌握，从而降低了学习门槛。
-1. 为除了 JavaScript 脚本语言之外的其他脚本语言（或编程语言），提供了利用 Web 技术（HTML、CSS、HTTP、WebSocket 等）开发应用程序的框架和设施。
-1. 通过丰富的内建执行器，通过诸如 KEY、RANGE、TRAVEL、SQL 等语句在元素和数据上执行迭代、过滤、排序、规约等操作，使开发者可以专心于业务逻辑的实现，而非具体的算法。
-1. 通过外部执行器，为复杂数据的处理提供了使用外部脚本或者模块实现相应功能的方法，提供了可扩展性。
-1. 通过绑定外部程序模块，提供了可扩展、灵活的动态 JSON 对象实现方法，结合本文定义的 JSON 求值表达式，可用于满足各种基于函数调用的计算需求。
-1. 解决了构建在现有 Web 技术之上的虚拟 DOM 技术存在的打补丁式解决方案引入的问题，比如代码的可读性降低，结构不清晰等问题。
+我们假设一个智能手环上显示当前时间、当地气温、佩戴者的心跳信息和步数信息等信息，而这个智能手环通过 MQTT（一种轻量级消息通讯协议）和云端服务器交换信息，比如向云端服务器发送佩戴者的心跳和步数信息、地理位置信息，获得时间以及当前位置的气象条件等信息。在传统的实现方式中，我们一般需要开发一个在智能手环上运行的 GUI 系统，然后和云端通讯获得数据，界面的修改完全由设备端代码负责。如果要改变界面的样式，大部分情况下需要升级整个智能手环的固件（firmware）。
 
-[Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
-[FMSoft Technologies]: https://www.fmsoft.cn
-[HybridOS Official Site]: https://hybrid.fmsoft.cn
+但如果我们使用 HVML，则可以通过云端来控制设备的界面显示。运行在云端的 HVML 代码如下所示：
 
-[MiniGUI]: http:/www.minigui.com
-[WebKit]: https://webkit.org
-[HTML 5.3]: https://www.w3.org/TR/html53/
-[DOM Specification]: https://dom.spec.whatwg.org/
-[WebIDL Specification]: https://heycam.github.io/webidl/
-[CSS 2.2]: https://www.w3.org/TR/CSS22/
-[CSS Box Model Module Level 3]: https://www.w3.org/TR/css-box-3/
+```html
+<!DOCTYPE hvml>
+<hvml target="html" script="python">
+    <head>
+        <listen on="mqtt://foo.bar/bracelet" as="braceletInfo">
 
-[HybridOS Architecture]: HybridOS-Architecture
-[HybridOS Code and Development Convention]: HybridOS-Code-and-Development-Convention
+        <init as="_TIMERS" uniquely on="id">
+            [
+                { "id" : "clock", "interval" : 1000, "active" : "yes" },
+            ]
+        </init>
+
+        <link rel="stylesheet" type="text/css" href="/foo/bar/bracelet.css">
+    </head>
+
+    <body>
+        <div class="clock" id="clock">
+            <observe on="$_TIMERS" for="clock">
+                <update on="#clock" textContent="$_SYSTEM.time('%H:%m')" />
+            </observe>
+        </div>
+
+        <div class="temperature" id="temperature">
+            <observe on="$braceletInfo" for="temperature">
+                <update on="#temperature" textContent="$?.value ℃" />
+            </observe>
+        </div>
+
+        <div class="heartbeat" id="heartbeat">
+            <observe on="$braceletInfo" for="heartbeat">
+                <update on="#heartbeat" textContent="$?.value BPM" />
+            </observe>
+        </div>
+
+        <div class="steps" id="steps">
+            <observe on="$braceletInfo" for="steps">
+                <update on="#steps" textContent="$?.value" />
+            </observe>
+        </div>
+
+        <observe on="$braceletInfo">
+            <choose on="$?" to="noop" by="CLASS: CDumpEvent" />
+        </observe>
+    </body>
+</hvml>
+```
+
+其要点如下：
+
+1. 该代码生成的 HTML 文档或者对 HTML 文档的改变，将通过类似 WebSocket 的长连接发送给设备，设备根据此信息重新渲染用户界面。
+1. 该代码监听智能手环（设备）通过 MQTT 发送给云端的数据，包括心跳、气温、步数等信息，并更新相应的标签内容。
+1. 该代码设定了一个定时器，每隔 1 秒运行一次，并更新时钟对应的标签内容。
+1. 该代码使用了一个外部选择执行器 `CDumpEvent` 将所有来自 `mqtt` 的事件转储到了云端数据库中。
+
+这带来了如下显著的改变：
+
+1. 复杂的逻辑代码将全部运行在云端，设备端只要有一个足够功能的 HTML/XML 用户代理即可，通常只需要包含一个根据 DOM 树和 CSS 来渲染最终用户界面的渲染器。
+1. 当我们需要调整设备端的显示效果或者功能时，我们只需要修改 HVML 代码，而不需要更新设备端的固件。
+1. 我们还可以通过外部脚本，将运行在云端的其他功能，如数据库存储、数据的分析以及人工智能等要素有机整合在一起。
+
+写到这里，笔者真的被自己一贯强调的观点打动了：**编程语言才是决定操作系统灵魂和基因的那个东西，才是基础软件生态皇冠上的那颗明珠！**
+
+## HVML 参考实现开发小组
+
+HVML 长成什么样子，现在大概有了。可实现 HVML，则是一个不亚于浏览器引擎的大软件工程。另外，HVML 可以用在各种场景下，和不同的外部脚本语言绑定，就可以形成不同的系统。如果要将 HVML 应用到云环境中，我们还需要开发应用服务器。
+
+如笔者在《考鼎记》小说中所讲：**所谓纲举目张，这编程语言就是那个纲。**一个新的编程语言带来的改变，涉及到基础软件的重构、开发模型的改变、开发工具的变化，以及新的协议和软件的产生。同时还涉及到产业界上下游的改变。试想，假如本文描述的云应用成为现实，我们现在在物联网操作系统当中所做的很多努力，是不是将一文不值？
+
+为了尽快让大家看到 HVML 实际转起来的样子，笔者组织了一个小型的开源协作小组来开发 HVML 的 Python 参考实现，其目标是为 Python 生态提供可直接利用 Web 前端技术的解决方案。这个开发小组现在已经开始工作了，我们一旦有了成果，会立即向大家汇报。
+
+我们期待更多的人或者企业加入到 HVML 参考实现的开发当中。但是，一个新编程语言从诞生到成熟，需要一个较长的周期。在还没有看到 HVML 运行起来的样子之前，大多数人会抱着围观和观望的态度。这是人之常情。但机会一定是留给有心人的。
+
+- 假如您是有雄心的基础软件企业，您可以加入到 HybridOS 的合作伙伴计划（详情见 <https://hybridos.fmsoft.cn/members>）中，派几个工程师参与到 HVML 参考实现的开发当中。笔者相信，您的团队和企业，将因此获得莫大的收益。
+- 假如您代表个人，可以打个赏给 HVML 参考实现项目（文末打赏或到网页<https://store.fmsoft.cn/campaign/denoteoss-lt>）。您或大或小的鼓励，都将化成我们前进的绵绵动力！
+
+---
+
+原文链接：<https://gitlab.fmsoft.cn/hybridos/hybridos/blob/master/docs/introduction-to-hvml-zh.md>
+
 
