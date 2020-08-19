@@ -415,6 +415,6 @@ HVML 长成什么样子，现在大概有了。可实现 HVML，则是一个不�
 
 ---
 
-原文链接：<https://gitlab.fmsoft.cn/hybridos/hybridos/blob/master/docs/introduction-to-hvml-zh.md>
+原文链接：<https://github.com/FMSoftCN/hybridos/blob/master/docs/introduction-to-hvml-zh.md>
 
 
