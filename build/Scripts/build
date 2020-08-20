@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+export BUILD_BY_FMSOFT=1
+
+BASE_DIR=`dirname $0`
+JHBUILD_WRAPPER_PATH="$BASE_DIR/../jhbuild/jhbuild-wrapper"
+$JHBUILD_WRAPPER_PATH --hbd build

@@ -55,3 +55,8 @@ dkms.conf
 # Executables
 device-side/hfcl/src/css/test-cssselector
 
+# Python
+*.pyc
+
+#
+/Output/
