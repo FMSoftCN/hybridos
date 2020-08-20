@@ -56,11 +56,11 @@
 
 下图给出了正常运行情况下的界面效果：
 
-![正常运行情况下的界面效果](figure-shell-1.png)
+![正常运行情况下的界面效果](hybridos-gui-shell.png)
 
 下图给出了进入切换应用主窗口模式下的界面效果：
 
-![切换应用主窗口模式下的界面效果](figure-shell-2.png)
+![切换应用主窗口模式下的界面效果](hybridos-switch-main-windows.jpg)
 
 ### 第一阶段完成
 
