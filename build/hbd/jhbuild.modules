@@ -5,6 +5,7 @@
 
   <metamodule id="hybridoshbd-testing-dependencies">
     <dependencies>
+      <dep package="hiwebkit"/>
       <dep package="minigui"/>
       <dep package="hidrm"/>
       <dep package="hidrmdrivers"/>
@@ -126,7 +127,6 @@
       href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
   <repository type="tarball" name="wpewebkit"
       href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-
 
   <autotools id="minigui" supports-non-srcdir-builds="no"
       autogen-sh="./autogen.sh; ./configure --enable-procs --enable-compositing --enable-virtualwindow">
@@ -573,6 +573,12 @@
     <dependencies>
       <dep package="glib"/>
     </dependencies>
+  </autotools>
+
+  <autotools id="hiwebkit" supports-non-srcdir-builds="no"
+      autogen-sh="./Tools/Scripts/build-webkit --hbd --makeargs='-j16' --accelerated-2d-canvas --no-webgl --no-webgl2">
+    <branch repo="hybridos" module="hiwebkit" checkoutdir="hiwebkit" branch="hybridos-cmake"  revision="hybridos-cmake" >
+    </branch>
   </autotools>
 
 </moduleset>

@@ -15,7 +15,14 @@ def top_level_path(*args):
 
 
 def get_dependencies_path(platform):
-    dependencies_dir = "%s%s" % ('Dependencies', platform.upper())
+    dependencies_dir = "%s" % (platform.upper())
+    if 'HYBRIDOS_OUTPUTDIR' in os.environ:
+        return os.path.abspath(os.path.join(os.environ['HYBRIDOS_OUTPUTDIR'], dependencies_dir))
+    else:
+        return os.path.abspath(top_level_path('Output', dependencies_dir))
+
+def get_output_path(platform):
+    dependencies_dir = "%s" % (platform.upper())
     if 'HYBRIDOS_OUTPUTDIR' in os.environ:
         return os.path.abspath(os.path.join(os.environ['HYBRIDOS_OUTPUTDIR'], dependencies_dir))
     else:

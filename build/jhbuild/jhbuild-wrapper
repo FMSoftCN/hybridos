@@ -18,19 +18,17 @@ try:
 except ValueError as e:
     sys.exit(e)
 
-dependencies_path = jhbuildutils.get_dependencies_path(platform)
-installation_prefix = os.path.abspath(os.path.join(dependencies_path, 'Root'))
-source_path = os.path.abspath(os.path.join(dependencies_path, 'Source'))
+output_path = jhbuildutils.get_output_path(platform)
+installation_prefix = os.path.abspath(os.path.join(output_path, 'tools', 'Root'))
+source_path = os.path.abspath(os.path.join(output_path, 'tools', 'Source'))
 jhbuild_source_path = os.path.join(source_path, 'jhbuild')
 jhbuild_path = os.path.join(installation_prefix, 'bin', 'jhbuild')
 
 def jhbuild_installed():
     return os.path.exists(jhbuild_path)
 
-
 def jhbuild_cloned():
     return os.path.exists(jhbuild_source_path)
-
 
 def jhbuild_at_expected_revision():
     process = subprocess.Popen(['git', 'rev-list', 'HEAD^..'], cwd=jhbuild_source_path,

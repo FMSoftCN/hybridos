@@ -39,11 +39,11 @@ def init(jhbuildrc_globals, jhbuild_platform):
         jhbuildrc_globals["modules"].extend(__extra_modules)
 
     if 'HYBRIDOS_OUTPUTDIR' in os.environ:
-        jhbuildrc_globals["checkoutroot"] = checkoutroot = os.path.abspath(os.path.join(os.environ['HYBRIDOS_OUTPUTDIR'], 'Dependencies' + jhbuild_platform.upper(), 'Source'))
-        jhbuildrc_globals["prefix"] = os.path.abspath(os.path.join(os.environ['HYBRIDOS_OUTPUTDIR'], 'Dependencies' + jhbuild_platform.upper(), 'Root'))
+        jhbuildrc_globals["checkoutroot"] = checkoutroot = os.path.abspath(os.path.join(os.environ['HYBRIDOS_OUTPUTDIR'], jhbuild_platform.upper(), 'Source'))
+        jhbuildrc_globals["prefix"] = os.path.abspath(os.path.join(os.environ['HYBRIDOS_OUTPUTDIR'], jhbuild_platform.upper(), 'Root'))
     else:
-        jhbuildrc_globals["checkoutroot"] = checkoutroot = os.path.abspath(top_level_path('Output', 'Dependencies' + jhbuild_platform.upper(), 'Source'))
-        jhbuildrc_globals["prefix"] = os.path.abspath(top_level_path('Output', 'Dependencies' + jhbuild_platform.upper(), 'Root'))
+        jhbuildrc_globals["checkoutroot"] = checkoutroot = os.path.abspath(top_level_path('Source'))
+        jhbuildrc_globals["prefix"] = os.path.abspath(top_level_path('Output', jhbuild_platform.upper(), 'Root'))
 
     jhbuildrc_globals["nonotify"] = True
     jhbuildrc_globals["notrayicon"] = True
