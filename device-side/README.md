@@ -5,7 +5,7 @@ This directory contains the source for device side of HybridOS.
 ```
     `
     |-- build/          # The building scripts.
-    |-- daemons/        # The source for HybridOS daemons.
+    |-- daemons/        # The source for HybridOS daemons/servers.
     |-- samples/        # The source for HybridOS device-side samples.
     |-- thirdparty/     # The source for the third party librairies and tools.
 ```
