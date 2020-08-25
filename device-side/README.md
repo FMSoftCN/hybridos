@@ -15,11 +15,11 @@ This directory contains the source for device side of HybridOS.
 
 ## Copying
 
-Copyright (C) 2018 \~ 2019 [Beijing FMSoft Technologies Co., Ltd.]
+Copyright (C) 2018 \~ 2020 [Beijing FMSoft Technologies Co., Ltd.]
 
-* For device side and client side, HybridOS uses GPLv3 and LGPLv3.
-* For server side, HybridOS uses AGPL v3.
-* For documents, GPL v3 applies.
+* For device side and client side, HybridOS uses GPLv3 or LGPLv3.
+* For server side, HybridOS uses AGPLv3.
+* For documents, GPLv3 applies.
 
 Note that HybridOS integrates many mature open source software, such as SQLite, FreeType,
 V8 JavaScript engine, and so on. For the copyright owners and licenses for these software,

@@ -208,8 +208,8 @@ Initiate this project and organize specifications and design documents.
 
 Copyright (C) 2018 \~ 2020 [Beijing FMSoft Technologies Co., Ltd.]
 
-- For device side and client side, all new components use LGPLv3.
-- For server side, all new components uses AGPLv3.
+- For device side and client side, HybridOS uses GPLv3 or LGPLv3.
+- For server side, HybridOS uses AGPLv3.
 - For documents, GPLv3 applies.
 
 If a component of HybridOS is a derivative of an existing
