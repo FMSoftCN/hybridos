@@ -185,7 +185,7 @@ Please make sure that you have installed the following packages:
 
 [Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
 [FMSoft Technologies]: https://www.fmsoft.cn
-[HybridOS Official Site]: https://hybrid.fmsoft.cn
+[HybridOS Official Site]: https://hybridos.fmsoft.cn
 
 [MiniGUI]: http:/www.minigui.com
 [WebKit]: https://webkit.org

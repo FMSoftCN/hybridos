@@ -2625,7 +2625,7 @@ def on_battery_changed (on_value, root_in_scope, source, event, time_stamp, even
 
 [Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
 [FMSoft Technologies]: https://www.fmsoft.cn
-[HybridOS Official Site]: https://hybrid.fmsoft.cn
+[HybridOS Official Site]: https://hybridos.fmsoft.cn
 
 [MiniGUI]: http:/www.minigui.com
 [WebKit]: https://webkit.org

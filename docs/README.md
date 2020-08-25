@@ -13,7 +13,7 @@ All right reserved.
 
 [Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
 [FMSoft Technologies]: https://www.fmsoft.cn
-[HybridOS Official Site]: https://hybrid.fmsoft.cn
+[HybridOS Official Site]: https://hybridos.fmsoft.cn
 
 [HybridOS Architecture]: specs/HybridOS-Architecture.md
 [HybridOS App Framework]: specs/HybridOS-App-Framework.md
