@@ -1,9 +1,10 @@
 #!/bin/bash
 
-BASE_DIR=`dirname $0`
+BASE_DIR=$(dirname $(readlink -f "$0"))
 
 export BUILD_BY_FMSOFT=1
 export WEBKIT_OUTPUTDIR="$BASE_DIR/../../Output/HBD/"
 
+echo $WEBKIT_OUTPUTDIR
 JHBUILD_WRAPPER_PATH="$BASE_DIR/../jhbuild/jhbuild-wrapper"
 $JHBUILD_WRAPPER_PATH --hbd build

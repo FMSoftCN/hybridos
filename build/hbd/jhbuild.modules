@@ -575,10 +575,10 @@
     </dependencies>
   </autotools>
 
-  <autotools id="hiwebkit" supports-non-srcdir-builds="no"
-      autogen-sh="./Tools/Scripts/build-webkit --hbd --makeargs='-j16' --accelerated-2d-canvas --no-webgl --no-webgl2">
+  <cmake id="hiwebkit"
+         cmakeargs="-DPORT='HBD' -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug -DDEVELOPER_MODE=ON -DENABLE_EXPERIMENTAL_FEATURES=ON -DENABLE_ACCELERATED_2D_CANVAS=ON -DENABLE_WEBGL=OFF -DENABLE_WEBGL2=OFF -DENABLE_MINIBROWSER=ON">
     <branch repo="hybridos" module="hiwebkit" checkoutdir="hiwebkit" branch="hybridos-cmake"  revision="hybridos-cmake" >
     </branch>
-  </autotools>
+  </cmake>
 
 </moduleset>
