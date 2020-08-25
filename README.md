@@ -159,7 +159,7 @@ It mainly contains building scripts, tools, documents, and samples for
 HybridOS:
 
     `
-    |-- docs/           # The design documents for HybridOS.
+    |-- docs/           # The design documents and specifications of HybridOS.
     |-- device-side/    # The source for device side.
     |-- server-side/    # The source for server side.
     |-- client-side/    # The source for client side.
@@ -173,25 +173,32 @@ of the software as derivatives for HybridOS and maintain them
 through the following public repositories:
 
 - App Framework
-   + hiWebKit: the HybridOS derivative of [WebKit]: N/a.
+   + hiWebKit: the HybridOS derivative of [WebKit] \(only tarball).
 
 - Graphics Stack:
+   + hiMesa: the HybridOS derivative of [Mesa]:
+<https://github.com/FMSoftCN/himesa>
    + hiCairo: the HybridOS derivative of [Cairo]:
 <https://github.com/FMSoftCN/hicairo>
+   + hiDRMDrivers: DRM Drivers for HybridOS:
+<https://github.com/FMSoftCN/hidrmdrivers>
    + MiniGUI: the windowing system for HybridOS:
 <https://github.com/VincentWei/minigui>
 
-- System Servers: N/a.
+- System Servers: (Stay tuned).
 
 - System Daemons:
    + hiBus: the HybridOS derivative of uBus:
 <https://github.com/FMSoftCN/hibus>
-   + hiLogged: the HybridOS logging service: N/a.
-   + hiSecd (the HybridOS security service): N/a.
-
+   + hiLogged: the HybridOS logging service: (Stay tuned).
+   + hiSecd (the HybridOS security service): (Stay tuned).
 
 ## Current Status
 
+- Aug. 2020:  
+FMSoft announces the availability of the key component of HybridOS for device-side: hiWebKit.
+- Mar. 2020:  
+FMSoft announces the availability of MiniGUI 5.0 and the updated graphics stack of HybridOS for device-side.
 - Nov. 2019:  
 Initial release of hiCairo.
 - Nov. 2018:  
@@ -215,6 +222,7 @@ the README or LICENSE files contained in the source tarballs.
 
 ---
 
+[Mesa]: https://mesa3d.org/
 [Cairo]: https://www.cairographics.org/
 
 [HybridOS Documents]: docs/README.md
@@ -223,7 +231,7 @@ the README or LICENSE files contained in the source tarballs.
 
 [Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
 [FMSoft Technologies]: https://www.fmsoft.cn
-[HybridOS Official Site]: https://hybrid.fmsoft.cn
+[HybridOS Official Site]: https://hybridos.fmsoft.cn
 
 [MiniGUI]: http:/www.minigui.com
 [WebKit]: https://webkit.org

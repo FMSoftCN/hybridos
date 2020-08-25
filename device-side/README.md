@@ -2,18 +2,22 @@
 
 This directory contains the source for device side of HybridOS.
 
+```
     `
-    |-- hfcl/           # The source for HybridOS Foundation Class Library.
+    |-- build/          # The building scripts.
     |-- daemons/        # The source for HybridOS daemons.
     |-- samples/        # The source for HybridOS device-side samples.
     |-- thirdparty/     # The source for the third party librairies and tools.
+```
+
+## Building
 
 
 ## Copying
 
-Copyright (C) 2018, 2019 [Beijing FMSoft Technologies Co., Ltd.]
+Copyright (C) 2018 \~ 2019 [Beijing FMSoft Technologies Co., Ltd.]
 
-* For device side and client side, HybridOS uses GPL v3.
+* For device side and client side, HybridOS uses GPLv3 and LGPLv3.
 * For server side, HybridOS uses AGPL v3.
 * For documents, GPL v3 applies.
 
@@ -23,7 +27,7 @@ please refer to the README or LICENSE files contained in the source trees.
 
 [Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
 [FMSoft Technologies]: https://www.fmsoft.cn
-[HybridOS Official Site]: https://hybrid.fmsoft.cn
+[HybridOS Official Site]: https://hybridos.fmsoft.cn
 
 [HybridOS Architecture]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-Architecture
 [HybridOS App Framework]: https://github.com/FMSoftCN/hybridos/wiki/HybridOS-App-Framework
