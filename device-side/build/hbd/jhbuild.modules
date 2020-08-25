@@ -5,7 +5,6 @@
 
   <metamodule id="hybridoshbd-testing-dependencies">
     <dependencies>
-      <dep package="hiwebkit"/>
       <dep package="minigui"/>
       <dep package="hidrm"/>
       <dep package="hidrmdrivers"/>
@@ -43,6 +42,7 @@
       <if condition-set="macos">
           <dep package="gsettings-desktop-schemas"/>
       </if>
+      <dep package="hiwebkit"/>
     </dependencies>
   </metamodule>
 
@@ -579,6 +579,46 @@
          cmakeargs="-DPORT='HBD' -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug -DDEVELOPER_MODE=ON -DENABLE_EXPERIMENTAL_FEATURES=ON -DENABLE_ACCELERATED_2D_CANVAS=ON -DENABLE_WEBGL=OFF -DENABLE_WEBGL2=OFF -DENABLE_MINIBROWSER=ON">
     <branch repo="hybridos" module="hiwebkit" checkoutdir="hiwebkit" branch="hybridos-cmake"  revision="hybridos-cmake" >
     </branch>
+    <dependencies>
+      <dep package="hiwebkit"/>
+      <dep package="minigui"/>
+      <dep package="hidrm"/>
+      <dep package="hidrmdrivers"/>
+      <dep package="cairo"/>
+      <dep package="fonts"/>
+      <dep package="dicts"/>
+      <dep package="fontconfig"/>
+      <dep package="freetype6"/>
+      <dep package="harfbuzz"/>
+      <dep package="libxml2"/>
+      <dep package="gdk-pixbuf"/>
+      <dep package="glib"/>
+      <dep package="glib-networking"/>
+      <dep package="adwaita-icon-theme"/>
+      <dep package="icu"/>
+      <dep package="libsoup"/>
+      <dep package="atk"/>
+      <dep package="pango"/>
+      <dep package="llvm"/>
+      <dep package="shared-mime-info"/>
+      <dep package="libsecret"/>
+      <dep package="libgpg-error"/>
+      <dep package="libgcrypt"/>
+      <dep package="manette"/>
+      <dep package="openjpeg"/>
+      <dep package="wpebackend-fdo"/>
+      <if condition-set="linux">
+          <dep package="xdg-dbus-proxy"/>
+          <dep package="xserver"/>
+          <dep package="mesa"/>
+          <dep package="at-spi2-core"/>
+          <dep package="at-spi2-atk"/>
+          <dep package="weston"/>
+      </if>
+      <if condition-set="macos">
+          <dep package="gsettings-desktop-schemas"/>
+      </if>
+    </dependencies>
   </cmake>
 
 </moduleset>
