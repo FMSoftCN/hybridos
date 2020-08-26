@@ -1,6 +1,7 @@
 # HybridOS Device Side
 
-This directory contains the building scripts and source of daemons and servers for device side of HybridOS.
+This directory contains the building scripts, the source of daemons and
+servers, and the samples for device side of HybridOS.
 
 ```
     `
@@ -21,9 +22,10 @@ Copyright (C) 2018 \~ 2020 [Beijing FMSoft Technologies Co., Ltd.]
 * For server side, HybridOS uses AGPLv3.
 * For documents, GPLv3 applies.
 
-Note that HybridOS integrates many mature open source software, such as SQLite, FreeType,
-V8 JavaScript engine, and so on. For the copyright owners and licenses for these software,
-please refer to the README or LICENSE files contained in the source trees.
+Note that HybridOS integrates many mature open source software, such as SQLite,
+FreeType, V8 JavaScript engine, and so on. For the copyright owners and licenses
+for these software, please refer to the README or LICENSE files contained in
+the source trees.
 
 [Beijing FMSoft Technologies Co., Ltd.]: https://www.fmsoft.cn
 [FMSoft Technologies]: https://www.fmsoft.cn
