@@ -13,7 +13,7 @@ jhbuildrc_common.init(globals(), "hbd")
 
 # LLVM requires that builddir != srcdir, and it's not possible to do that in jhbuild only
 # for a module, so we do it here globally since it's a good idea for all other modules as well.
-buildroot = os.path.join(os.path.dirname(checkoutroot), "Build")
+buildroot = os.path.join(os.path.dirname(checkoutroot), "Output/HBD/Build")
 
 # For the layout tests: path where llvmpipe/software-only mesa libraries are installed.
 os.environ['LLVMPIPE_LIBGL_PATH'] = os.path.abspath(os.path.join(prefix, 'softGL', 'lib'))

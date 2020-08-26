@@ -580,7 +580,6 @@
     <branch repo="hybridos" module="hiwebkit" checkoutdir="hiwebkit" branch="hybridos-cmake"  revision="hybridos-cmake" >
     </branch>
     <dependencies>
-      <dep package="hiwebkit"/>
       <dep package="minigui"/>
       <dep package="hidrm"/>
       <dep package="hidrmdrivers"/>
