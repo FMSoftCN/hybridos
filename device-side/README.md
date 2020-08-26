@@ -1,6 +1,6 @@
 # HybridOS Device Side
 
-This directory contains the source for device side of HybridOS.
+This directory contains the building scripts and source of daemons and servers for device side of HybridOS.
 
 ```
     `
