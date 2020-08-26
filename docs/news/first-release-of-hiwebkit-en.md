@@ -1,4 +1,4 @@
-# hiWebKit, the Key Component of HybridOS, Released
+# hiWebKit, the Key Component of HybridOS, Released Yesterday
 
 On Aug. 28, 2020, FMSoft released hiWebKit, the key component of the HybridOS.
 This is another masterpiece of the development team since it announced
