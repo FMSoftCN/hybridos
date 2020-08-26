@@ -1,0 +1,6 @@
+#!/bin/bash
+
+BASE_DIR=$(dirname $(readlink -f "$0"))
+
+WEBKIT_OUTPUTDIR="$BASE_DIR/../../Output/HBD/"
+LD_LIBRARY_PATH="$WEBKIT_OUTPUTDIR/Root/lib/" $WEBKIT_OUTPUTDIR/Root/libexec/webkit2hbd-1.0/MiniBrowser 
