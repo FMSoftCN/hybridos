@@ -1,6 +1,6 @@
-合璧操作系统发布关键组件：hiWebKit
+# 合璧操作系统发布关键组件：hiWebKit
 
-2020 年 8 月 31 日，飞漫软件发布了 HybridOS 的关键组件 hiWebKit。
+2020 年 8 月 31 日，飞漫软件发布了合璧操作系统（HybridOS）的关键组件 hiWebKit。
 
 hiWebKit 是知名开源浏览器引擎 WebKit 的合璧操作系统派生版本，其中包括飞漫软件近一年来在现有 HTML/CSS 标准和规范基础上所做的诸多扩展：
 
@@ -22,10 +22,15 @@ hiWebKit 是知名开源浏览器引擎 WebKit 的合璧操作系统派生版本
 
 <https://github.com/FMSoftCN/hybridos/tree/master/device-side>
 
+麻烦随手点亮 HybridOS 项目仓库的星星哦。
+
 目前，飞漫开发团队正在进一步完善 hiWebKit；配合合璧操作系统的其他组件（如 MiniGUI、hiBus 等），我们的目标是不使用 JavaScript 也能满足 80% 以上的物联网应用开发需求。
 
 我们预计将在 2020 年年底发布合璧操作系统的第一个正式版本，并将优先支持各芯片合作伙伴。
 
-点击文末链接，为合璧操作系统打赏吧！
+点击文末链接，为合璧操作系统呐喊助威吧！
 
+---
+
+原文链接：<https://store.fmsoft.cn/campaign/denoteoss-lt>
 
