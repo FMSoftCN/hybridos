@@ -13,6 +13,35 @@ servers, and the samples for device side of HybridOS.
 
 ## Building
 
+* Install the base dependencies
+
+```
+$ build/hbd/install-dependencies
+```
+
+* Build
+
+```
+$ build/Scripts/build
+```
+
+* Run
+
+```
+$ build/Script/run
+```
+
+* Modify build option
+
+Modify the configuration file build/hbd/jhbuild.modules to change the compiler options.
+
+JHBuild is a tool designed to ease building collections of source packages, called "modules".
+JHBuild uses “module set” files to describe the modules available to build. The "module set"
+files include dependency information that allows JHBuild to discover what modules need to be
+built and in what order.
+
+Learn more about [JHBuild](https://developer.gnome.org/jhbuild/stable/introduction.html.en).
+
 
 ## Copying
 
