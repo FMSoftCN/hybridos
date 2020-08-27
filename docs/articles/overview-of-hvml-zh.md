@@ -196,9 +196,9 @@ HVML 的设计思想来源于 React.js、Vue.js 等最新的 Web 前端框架。
 
         <ul class="user-list">
             <iterate on="$users" with="#user-item" to="append" by="CLASS: IUser">
-                <nodata>
+                <error on="nodata">
                     <img src="wait.png" />
-                </nodata>
+                </error>
                 <except on="StopIteration">
                     <p>Bad user data!</p>
                 </except>
