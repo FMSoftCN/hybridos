@@ -2,7 +2,8 @@
 
 On Aug. 28, 2020, FMSoft released hiWebKit, the key component of the HybridOS.
 This is another masterpiece of the development team since it announced
-the open source collaboration plan for HybridOS in 2018.
+the open source collaboration plan for HybridOS in 2018. The team released
+Graphics Stack for HybridOS in Dec. 2019, and released MiniGUI 5.0 in Mar. 2020.
 
 hiWebKit is a derivative version of the well-known open source browser engine
 [WebKit](https://www.webkit.org), which includes many extensions made by the
@@ -38,7 +39,7 @@ and use its output as the input of the web page to generate page content in plac
 without the need for background scripts.
 
 The technical details of these extensions and the benefits to developers are
-introduced in the album [Technical Breakthroughs in HybridOS (Chinese)](https://mp.weixin.qq.com/mp/appmsgalbum?action=getalbum&album_id=1442713925182767106&__biz=MzA5MTYwNTA3MA==#wechat_redirect). Interested readers can click to read.
+introduced in the album [Technical Breakthroughs in HybridOS (Chinese Version)](https://mp.weixin.qq.com/mp/appmsgalbum?action=getalbum&album_id=1442713925182767106&__biz=MzA5MTYwNTA3MA==#wechat_redirect). Interested readers can click to read.
 
 To try hiWebKit, please visit the code repository on GitHub of HybridOS (**Please light up the stars in the HybridOS project repository**):
 
