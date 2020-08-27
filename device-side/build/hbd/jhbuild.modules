@@ -5,6 +5,7 @@
 
   <metamodule id="hybridoshbd-testing-dependencies">
     <dependencies>
+      <dep package="gvfb"/>
       <dep package="minigui"/>
       <dep package="hidrm"/>
       <dep package="hidrmdrivers"/>
@@ -95,7 +96,7 @@
       href="ssh://git4os@gitlab.fmsoft.cn/3rd-party"/>
   <repository type="git" name="hybridos"
       href="ssh://git4os@gitlab.fmsoft.cn/hybridos"/>
-  <repository type="git" name="vw"
+  <repository type="git" name="minigui-repo"
       href="ssh://git4os@gitlab.fmsoft.cn/VincentWei"/>
 
   <repository type="tarball" name="github-tarball"
@@ -131,9 +132,16 @@
   <repository type="tarball" name="wpewebkit"
       href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
 
+  <cmake id="gvfb">
+    <branch repo="minigui-repo" module="gvfb" checkoutdir="gvfb" branch="master"  revision="master" />
+  </cmake>
+
   <autotools id="minigui" supports-non-srcdir-builds="no"
       autogen-sh="./autogen.sh; ./configure --enable-procs --enable-compositing --enable-virtualwindow">
-    <branch repo="vw" module="minigui" checkoutdir="minigui" branch="rel-5-0"  revision="rel-5-0" />
+    <branch repo="minigui-repo" module="minigui" checkoutdir="minigui" branch="rel-5-0"  revision="rel-5-0" />
+    <dependencies>
+      <dep package="gvfb"/>
+    </dependencies>
   </autotools>
 
   <meson id="hidrm">

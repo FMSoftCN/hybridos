@@ -134,6 +134,7 @@ function installDependenciesWithApt {
         libsqlite3-dev \
         libmysqlclient-dev \
         libcap-dev \
+        libgtk2.0-dev \
         libsrtp2-dev \
         libsystemd-dev \
         libtasn1-6-dev \
