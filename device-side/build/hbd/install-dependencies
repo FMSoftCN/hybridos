@@ -133,6 +133,7 @@ function installDependenciesWithApt {
         libsoup2.4-dev \
         libsqlite3-dev \
         libmysqlclient-dev \
+        libcap-dev \
         libsrtp2-dev \
         libsystemd-dev \
         libtasn1-6-dev \
