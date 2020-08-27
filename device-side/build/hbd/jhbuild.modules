@@ -8,6 +8,7 @@
       <dep package="minigui"/>
       <dep package="hidrm"/>
       <dep package="hidrmdrivers"/>
+      <dep package="bwrap" />
       <dep package="cairo"/>
       <dep package="fonts"/>
       <dep package="dicts"/>
@@ -87,6 +88,8 @@
   <repository type="tarball" name="wpewebkit"
       href="https://wpewebkit.org/releases/"/>
   -->
+  <repository type="git" name="github.com-bwrap"
+      href="https://github.com/projectatomic"/>
 
   <repository type="git" name="gitlab.fmsoft.cn"
       href="ssh://git4os@gitlab.fmsoft.cn/3rd-party"/>
@@ -149,6 +152,11 @@
       <dep package="minigui"/>
       <dep package="hidrm"/>
     </dependencies>
+  </autotools>
+
+  <autotools id="bwrap">
+    <branch repo="github.com-bwrap" module="bubblewrap" checkoutdir="bubblewrap" branch="master"  revision="master" >
+    </branch>
   </autotools>
 
   <autotools id="cairo" supports-non-srcdir-builds="no"
@@ -583,6 +591,7 @@
       <dep package="minigui"/>
       <dep package="hidrm"/>
       <dep package="hidrmdrivers"/>
+      <dep package="bwrap" />
       <dep package="cairo"/>
       <dep package="fonts"/>
       <dep package="dicts"/>
