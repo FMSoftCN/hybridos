@@ -7,6 +7,13 @@
     <dependencies>
       <dep package="gvfb"/>
       <dep package="minigui"/>
+      <dep package="minigui-res"/>
+      <dep package="mgutils"/>
+      <dep package="mgplus"/>
+      <dep package="mgeff"/>
+      <dep package="mgncs"/>
+      <dep package="mg-tools"/>
+      <dep package="mg-samples"/>
       <dep package="hidrm"/>
       <dep package="hidrmdrivers"/>
       <dep package="bwrap" />
@@ -141,6 +148,78 @@
     <branch repo="minigui-repo" module="minigui" checkoutdir="minigui" branch="rel-5-0"  revision="rel-5-0" />
     <dependencies>
       <dep package="gvfb"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="minigui-res"  supports-non-srcdir-builds="no"
+      autogen-sh="./autogen.sh; ./configure --disable-static">
+    <branch repo="minigui-repo" module="minigui-res" checkoutdir="minigui-res" branch="rel-5-0"  revision="rel-5-0" />
+    <dependencies>
+      <dep package="gvfb"/>
+      <dep package="minigui"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="mgutils"  supports-non-srcdir-builds="no"
+      autogen-sh="./autogen.sh; ./configure --disable-static">
+    <branch repo="minigui-repo" module="mgutils" checkoutdir="mgutils" branch="rel-5-0"  revision="rel-5-0" />
+    <dependencies>
+      <dep package="gvfb"/>
+      <dep package="minigui"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="mgplus"  supports-non-srcdir-builds="no"
+      autogen-sh="./autogen.sh; ./configure --disable-static">
+    <branch repo="minigui-repo" module="mgplus" checkoutdir="mgplus" branch="rel-5-0"  revision="rel-5-0" />
+    <dependencies>
+      <dep package="gvfb"/>
+      <dep package="minigui"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="mgeff"  supports-non-srcdir-builds="no"
+      autogen-sh="./autogen.sh; ./configure --disable-static">
+    <branch repo="minigui-repo" module="mgeff" checkoutdir="mgeff" branch="rel-5-0"  revision="rel-5-0" />
+    <dependencies>
+      <dep package="gvfb"/>
+      <dep package="minigui"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="mgncs"  supports-non-srcdir-builds="no"
+      autogen-sh="./autogen.sh; ./configure --disable-static">
+    <branch repo="minigui-repo" module="mgncs" checkoutdir="mgncs" branch="rel-5-0"  revision="rel-5-0" />
+    <dependencies>
+      <dep package="gvfb"/>
+      <dep package="minigui"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="mg-tools"  supports-non-srcdir-builds="no"
+      autogen-sh="./autogen.sh; ./configure --disable-static">
+    <branch repo="minigui-repo" module="mg-tools" checkoutdir="mg-tools" branch="master"  revision="master" />
+    <dependencies>
+      <dep package="gvfb"/>
+      <dep package="minigui"/>
+      <dep package="mgutils"/>
+      <dep package="mgplus"/>
+      <dep package="mgeff"/>
+      <dep package="mgncs"/>
+    </dependencies>
+  </autotools>
+
+
+  <autotools id="mg-samples"  supports-non-srcdir-builds="no"
+      autogen-sh="./autogen.sh; ./configure --disable-static">
+    <branch repo="minigui-repo" module="mg-samples" checkoutdir="mg-samples" branch="rel-5-0"  revision="rel-5-0" />
+    <dependencies>
+      <dep package="gvfb"/>
+      <dep package="minigui"/>
+      <dep package="mgutils"/>
+      <dep package="mgplus"/>
+      <dep package="mgeff"/>
+      <dep package="mgncs"/>
     </dependencies>
   </autotools>
 
