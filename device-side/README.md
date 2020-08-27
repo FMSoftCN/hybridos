@@ -31,6 +31,10 @@ $ build/Scripts/build
 * Run
 
 ```
+# 1. run mginit
+$ build/Scripts/run-mginit
+
+# 2. run hiwebkit
 $ build/Script/run
 ```
 
