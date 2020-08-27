@@ -13,6 +13,9 @@ servers, and the samples for device side of HybridOS.
 
 ## Building
 
+We recommend that you use a latest Linux distribution with long term support,
+for example, Ubuntu Linux LTS 18.04.
+
 * Install the base dependencies
 
 ```
