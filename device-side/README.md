@@ -16,40 +16,46 @@ servers, and the samples for device side of HybridOS.
 We recommend that you use a latest Linux distribution with long term support,
 for example, Ubuntu Linux 18.04 LTS.
 
-1) Install the base dependencies
+Note that:
+
+1. You need to reserve at least 30GB of disk space for downloading
+   the source code and building the entire system.
+1. Depending on your network connection speed (especially the speed of
+   accessing GitHub) and the hardware configuration of your computer,
+   it may take 2 hours or more to download the source code and build
+   the system. **Please be patient.**
+
+Building steps:
+
+1) Clone this repository to your local system:
 
 ```
+$ cd </path/to/your/working/directory/>
+$ git clone https://github.com/FMSoftCN/hybridos.git
+```
+
+2) Install dependencies
+
+```
+$ cd hybridos/device-side/
 $ build/hbd/install-dependencies
 ```
 
-2) Build
+3) Build the system
 
 ```
 $ build/Scripts/build
 ```
 
-3) Run
+4) Run the executables
 
 ```
-# run mginit
+# Run mginit first
 $ build/Scripts/run-mginit
 
-# run hiwebkit
-$ build/Script/run
+# Run hiwebkit then
+$ build/Scripts/run
 ```
-
-4) Modify the building options
-
-Modify the configuration file `build/hbd/jhbuild.modules` to change the building options.
-
-Note that the building script uses JHBuild.
-
-JHBuild is a tool designed to easily build a collection of source packages, called "modules".
-JHBuild uses “module set” files to describe the modules available to build. The "module set"
-files include dependency information that allows JHBuild to discover what modules need to be
-built and in what order.
-
-Learn more about [JHBuild](https://developer.gnome.org/jhbuild/stable/introduction.html.en).
 
 ## Copying
 
