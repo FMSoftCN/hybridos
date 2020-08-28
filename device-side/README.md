@@ -16,7 +16,12 @@ servers, and the samples for device side of HybridOS.
 We recommend that you use a latest Linux distribution with long term support,
 for example, Ubuntu Linux 18.04 LTS.
 
-1) Install the base dependencies
+**Depending on your network connection speed (especially the speed of
+accessing GitHub) and the hardware configuration of your computer, it
+may take 2 hours or more to download the source code and build the system.
+Please be patient.**
+
+1) Install dependencies
 
 ```
 $ build/hbd/install-dependencies
