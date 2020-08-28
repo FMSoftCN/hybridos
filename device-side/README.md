@@ -27,11 +27,11 @@ Note that:
 
 Building steps:
 
-1) Clone this repository to your local system (use `release` branch):
+1) Clone this repository to your local system:
 
 ```
 $ cd </path/to/your/working/directory/>
-$ git clone https://github.com/FMSoftCN/hybridos.git -b release
+$ git clone https://github.com/FMSoftCN/hybridos.git
 ```
 
 2) Install dependencies
