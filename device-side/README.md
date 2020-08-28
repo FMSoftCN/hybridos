@@ -57,20 +57,6 @@ $ build/Scripts/run-mginit
 $ build/Scripts/run
 ```
 
-5) Modify the building options
-
-Modify the configuration file `build/hbd/jhbuild.modules` to change the building options.
-After modified, run `build/Scripts/build` to build the system under new options.
-
-Note that the building script uses JHBuild.
-
-JHBuild is a tool designed to easily build a collection of source packages, called "modules".
-JHBuild uses “module set” files to describe the modules available to build. The "module set"
-files include dependency information that allows JHBuild to discover what modules need to be
-built and in what order.
-
-Learn more about [JHBuild](https://developer.gnome.org/jhbuild/stable/introduction.html.en).
-
 ## Copying
 
 Copyright (C) 2018 \~ 2020 [Beijing FMSoft Technologies Co., Ltd.]
