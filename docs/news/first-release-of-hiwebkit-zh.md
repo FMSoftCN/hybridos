@@ -16,7 +16,7 @@ hiWebKit 是知名开源浏览器引擎 WebKit 的合璧操作系统派生版本
 
 有关这些扩展的技术细节以及给开发者带来的好处，在专辑[《合璧操作系统的技术突破》](https://mp.weixin.qq.com/mp/appmsgalbum?action=getalbum&album_id=1442713925182767106&__biz=MzA5MTYwNTA3MA==#wechat_redirect)中有介绍，感兴趣的读者可以点击阅读。
 
-要尝试 hiWebKit，请访问合璧操作系统的在 GitHub 上的代码仓库（**麻烦随手点亮 HybridOS 项目仓库的星星哦**）：
+要尝试 hiWebKit，请访问合璧操作系统在 GitHub 上的代码仓库（**麻烦随手点亮 HybridOS 项目仓库的星星哦**）：
 
 <https://github.com/FMSoftCN/hybridos>
 
