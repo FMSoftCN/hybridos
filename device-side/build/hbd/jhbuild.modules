@@ -56,7 +56,6 @@
   </metamodule>
 
   <!-- Please use http/https to access repositories to be friendly to users stuck behind firewalls. -->
-  <!--
   <repository type="git" name="github.com"
       href="https://github.com"/>
   <repository type="tarball" name="github-tarball"
@@ -95,51 +94,15 @@
       href="https://www.gnupg.org/ftp/gcrypt/"/>
   <repository type="tarball" name="wpewebkit"
       href="https://wpewebkit.org/releases/"/>
-  -->
   <repository type="git" name="github.com-bwrap"
       href="https://github.com/projectatomic"/>
 
-  <repository type="git" name="gitlab.fmsoft.cn"
-      href="ssh://git4os@gitlab.fmsoft.cn/3rd-party"/>
   <repository type="git" name="hybridos"
-      href="ssh://git4os@gitlab.fmsoft.cn/hybridos"/>
+      href="https://github.com/FMSoftCN"/>
   <repository type="git" name="minigui-repo"
-      href="ssh://git4os@gitlab.fmsoft.cn/VincentWei"/>
+      href="https://github.com/VincentWei"/>
   <repository type="tarball" name="hiwebkit-release"
       href="https://hybridos.fmsoft.cn/downloads/"/>
-
-  <repository type="tarball" name="github-tarball"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-  <repository type="tarball" name="sourceware.org-mirror"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-  <repository type="tarball" name="ftp.gnome.org"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-  <repository type="tarball" name="download.gnome.org"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-  <repository type="tarball" name="cairographics.org"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-  <repository type="tarball" name="freedesktop.org"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-  <repository type="tarball" name="xorg"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-  <repository type="tarball" name="xmlsoft.org"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-  <repository type="tarball" name="savannah.gnu.org"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
- <repository type="tarball" name="dri.freedesktop.org"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-  <repository type="tarball" name="mesa.freedesktop.org"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-  <repository type="tarball" name="wayland.freedesktop.org"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-  <repository type="tarball" name="llvm.org"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-  <repository type="tarball" name="webkitgtk-jhbuild-mirror"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-  <repository type="tarball" name="gnupg.org"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
-  <repository type="tarball" name="wpewebkit"
-      href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
 
   <cmake id="gvfb">
     <branch repo="minigui-repo" module="gvfb" checkoutdir="gvfb" branch="master"  revision="master" />
@@ -272,12 +235,12 @@
 
   <autotools id="fonts" supports-non-srcdir-builds="no"
              skip-autogen="true">
-    <branch repo="gitlab.fmsoft.cn" module="webkitgtk-test-fonts.git" checkoutdir="webkitgtk-test-fonts" tag="0.0.8"/>
+    <branch repo="github.com" module="WebKitGTK/webkitgtk-test-fonts.git" checkoutdir="webkitgtk-test-fonts" tag="0.0.8"/>
   </autotools>
 
   <autotools id="dicts" supports-non-srcdir-builds="no"
              skip-autogen="true">
-    <branch repo="gitlab.fmsoft.cn" module="webkitgtk-test-dicts.git" checkoutdir="webkitgtk-test-dicts" tag="0.0.1"/>
+    <branch repo="github.com" module="mrobinson/webkitgtk-test-dicts.git" checkoutdir="webkitgtk-test-dicts" tag="0.0.1"/>
   </autotools>
 
   <autotools id="freetype6" autogen-sh="configure"
@@ -312,8 +275,8 @@
   </autotools>
 
   <meson id="graphene">
-    <branch repo="gitlab.fmsoft.cn"
-            module="graphene.git"
+    <branch repo="github.com"
+            module="ebassi/graphene.git"
             tag="1.6.0"/>
     <dependencies>
       <dep package="glib"/>
