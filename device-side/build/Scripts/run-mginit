@@ -15,7 +15,7 @@ export NCS_CFG_PATH=$WEBKIT_OUTPUTDIR/Root/etc/
 
 # Modify MiniGUI.cfg 
 MG_CFG_FILE=$MG_CFG_PATH/MiniGUI.cfg
-sed -i -e "s:exec_file=.*:exec_file=$WEBKIT_OUTPUTDIR/Root/bin/gvfb:g" -e "s:cursorpath=.*:cursorpath=$WEBKIT_OUTPUTDIR/Root/share/minigui/res/cursor/:g" -e "s:respath=.*:respath=$WEBKIT_OUTPUTDIR/Root/share/minigui/res/:g"  $MG_CFG_FILE
+sed -i -e "s:exec_file=.*:exec_file=$WEBKIT_OUTPUTDIR/Root/bin/gvfb:g" -e "s:cursorpath=.*:cursorpath=$WEBKIT_OUTPUTDIR/Root/share/minigui/res/cursor/:g" -e "s:respath=.*:respath=$WEBKIT_OUTPUTDIR/Root/share/minigui/res/:g"  -e "s:MiniGUI-3.2:MiniGUI-5.0:g" $MG_CFG_FILE
 
 # mginit
 $SOURCE_DIR/mg-samples/src/mginit
