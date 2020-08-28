@@ -60,6 +60,7 @@ $ build/Scripts/run
 5) Modify the building options
 
 Modify the configuration file `build/hbd/jhbuild.modules` to change the building options.
+After modified, run `build/Scripts/build` to build the system under new options.
 
 Note that the building script uses JHBuild.
 
