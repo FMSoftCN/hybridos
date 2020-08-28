@@ -59,11 +59,7 @@ def clone_jhbuild():
     if not os.path.exists(installation_prefix):
         os.makedirs(installation_prefix)
 
-    __build_by_fmsoft = os.environ.get("BUILD_BY_FMSOFT", "0")
-    if __build_by_fmsoft == "1":
-        process = subprocess.Popen(['git', 'clone', '--config', 'pack.threads=1', 'ssh://git4os@gitlab.fmsoft.cn/3rd-party/jhbuild'], cwd=source_path)
-    else:
-        process = subprocess.Popen(['git', 'clone', '--config', 'pack.threads=1', 'https://github.com/GNOME/jhbuild'], cwd=source_path)
+    process = subprocess.Popen(['git', 'clone', '--config', 'pack.threads=1', 'https://github.com/GNOME/jhbuild'], cwd=source_path)
     process.wait()
     if process.returncode != 0:
         raise Exception('jhbuild git clone failed with return code: %i' % process.returncode)
