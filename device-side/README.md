@@ -14,41 +14,42 @@ servers, and the samples for device side of HybridOS.
 ## Building
 
 We recommend that you use a latest Linux distribution with long term support,
-for example, Ubuntu Linux LTS 18.04.
+for example, Ubuntu Linux 18.04 LTS.
 
-* Install the base dependencies
+1) Install the base dependencies
 
 ```
 $ build/hbd/install-dependencies
 ```
 
-* Build
+2) Build
 
 ```
 $ build/Scripts/build
 ```
 
-* Run
+3) Run
 
 ```
-# 1. run mginit
+# run mginit
 $ build/Scripts/run-mginit
 
-# 2. run hiwebkit
+# run hiwebkit
 $ build/Script/run
 ```
 
-* Modify build option
+4) Modify the building options
 
-Modify the configuration file build/hbd/jhbuild.modules to change the compiler options.
+Modify the configuration file `build/hbd/jhbuild.modules` to change the building options.
 
-JHBuild is a tool designed to ease building collections of source packages, called "modules".
+Note that the building script uses JHBuild.
+
+JHBuild is a tool designed to easily build a collection of source packages, called "modules".
 JHBuild uses “module set” files to describe the modules available to build. The "module set"
 files include dependency information that allows JHBuild to discover what modules need to be
 built and in what order.
 
 Learn more about [JHBuild](https://developer.gnome.org/jhbuild/stable/introduction.html.en).
-
 
 ## Copying
 
