@@ -106,7 +106,7 @@
   <repository type="git" name="minigui-repo"
       href="ssh://git4os@gitlab.fmsoft.cn/VincentWei"/>
   <repository type="tarball" name="hiwebkit-release"
-      href="https://files.fmsoft.cn/hiwebkit/releases/"/>
+      href="https://hybridos.fmsoft.cn/downloads/"/>
 
   <repository type="tarball" name="github-tarball"
       href="https://files.fmsoft.cn/hiwebkit/dependencies/"/>
@@ -673,15 +673,11 @@
   </autotools>
 
   <cmake id="hiwebkit"
-         cmakeargs="-DPORT='HBD' -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENABLE_ACCELERATED_2D_CANVAS=ON -DENABLE_WEBGL=OFF -DENABLE_WEBGL2=OFF -DENABLE_MINIBROWSER=ON">
-    <!--
-    <branch repo="hybridos" module="hiwebkit" checkoutdir="hiwebkit" branch="hybridos-cmake"  revision="hybridos-cmake" >
-    </branch>
-    -->
-    <branch module="hiwebkit-${version}.tar.xz"
+     cmakeargs="-DPORT='HBD' -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DDEVELOPER_MODE=ON -DENABLE_ACCELERATED_2D_CANVAS=ON -DENABLE_WEBGL=OFF -DENABLE_WEBGL2=OFF -DENABLE_MINIBROWSER=ON">
+    <branch module="r2008/hiwebkit-${version}.tar.xz"
             version="1.0"
             repo="hiwebkit-release"
-            hash="sha256:2d0c7dbdf60e1f4e03bc94404d94df2ead31a27dccf9a3e2de05b877b9c47177"/>
+            hash="sha256:9b50ce125ecd78020d4ba4edc12b808f006be9f29b310661db09b885e7b1901e"/>
     <dependencies>
       <dep package="minigui"/>
       <dep package="hidrm"/>
