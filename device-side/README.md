@@ -16,34 +16,48 @@ servers, and the samples for device side of HybridOS.
 We recommend that you use a latest Linux distribution with long term support,
 for example, Ubuntu Linux 18.04 LTS.
 
-**Depending on your network connection speed (especially the speed of
-accessing GitHub) and the hardware configuration of your computer, it
-may take 2 hours or more to download the source code and build the system.
-Please be patient.**
+Note that:
 
-1) Install dependencies
+1. You need to reserve at least 30GB of disk space for downloading
+   the source code and building the entire system.
+1. Depending on your network connection speed (especially the speed of
+   accessing GitHub) and the hardware configuration of your computer,
+   it may take 2 hours or more to download the source code and build
+   the system. **Please be patient.**
+
+Building steps:
+
+1) Clone this repository to your local system:
 
 ```
+$ cd </path/to/your/working/directory/>
+$ git clone https://github.com/FMSoftCN/hybridos.git
+```
+
+2) Install dependencies
+
+```
+$ cd hybridos/device-side/
 $ build/hbd/install-dependencies
 ```
 
-2) Build
+3) Build the system
 
 ```
 $ build/Scripts/build
 ```
 
-3) Run
+4) Run the executables
 
 ```
-# run mginit
+# Run mginit first
 $ build/Scripts/run-mginit
 
-# run hiwebkit
+# Run hiwebkit then
 $ build/Scripts/run
 ```
 
-4) Modify the building options
+5) Modify the building options
 
 Modify the configuration file `build/hbd/jhbuild.modules` to change the building options.
 
