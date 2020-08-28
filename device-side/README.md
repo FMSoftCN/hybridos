@@ -35,7 +35,7 @@ $ build/Scripts/build
 $ build/Scripts/run-mginit
 
 # run hiwebkit
-$ build/Script/run
+$ build/Scripts/run
 ```
 
 4) Modify the building options
