@@ -159,9 +159,9 @@ It mainly contains documents, specifications, and building scripts for HybridOS.
 
 The source code of HybridOS is divided into three parts:
 
-- Device Side: The part running on devices which uses Linux kernel.
-- Server Side: The part running on servers in cloud.
-- Client Side: The part running on an existing operating system,
+- [Device Side](device-side/): The part running on devices which uses Linux kernel.
+- [Server Side](server-side/): The part running on servers in cloud.
+- [Client Side](client-side/): The part running on an existing operating system,
     such as Windows, GNU/Linux, iOS, or Android.
 
 The building scripts and samples are located in the following directories for
@@ -202,18 +202,18 @@ through the following public repositories:
    + hiBus: the HybridOS derivative of uBus:
 <https://github.com/FMSoftCN/hibus>
    + hiLogged: the HybridOS logging service: (Stay tuned).
-   + hiSecd (the HybridOS security service): (Stay tuned).
+   + hiSecd: the HybridOS security service: (Stay tuned).
 
 ## Current Status
 
 - Aug. 2020:  
-FMSoft announces the availability of the key component of HybridOS for device-side: hiWebKit.
+   FMSoft announces the availability of the key component of HybridOS for device-side: hiWebKit.
 - Mar. 2020:  
-FMSoft announces the availability of MiniGUI 5.0 and the updated graphics stack of HybridOS for device-side.
+   FMSoft announces the availability of MiniGUI 5.0 and the updated graphics stack of HybridOS for device-side.
 - Nov. 2019:  
-Initial release of hiCairo.
+   Initial release of hiCairo.
 - Nov. 2018:  
-Initiate this project and organize specifications and design documents.
+   Initiate this project and organize specifications and design documents.
 
 ## Copying
 
