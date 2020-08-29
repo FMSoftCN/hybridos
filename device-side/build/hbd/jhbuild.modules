@@ -677,7 +677,7 @@
     <branch module="r2008/hiwebkit-${version}.tar.xz"
             version="1.0"
             repo="hiwebkit-release"
-            hash="sha256:37a3226f08999d390b5dfc752014263475a72059d650b01a4e7faa6e3862dab5"/>
+            hash="sha256:1a4fad77dfa2097a6b659360e7af53b1f3d09b4333fcdace3413895b82c652a9"/>
     <dependencies>
       <dep package="minigui"/>
       <dep package="hidrm"/>
