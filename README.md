@@ -155,14 +155,25 @@ For all documents, please refer to [HybridOS Documents].
 ### Main Repository
 
 The main repository of HybridOS is <https://github.com/FMSoftCN/hybridos>.
-It mainly contains building scripts, tools, documents, and samples for
-HybridOS:
+It mainly contains documents, specifications, and building scripts for HybridOS.
 
+The source code of HybridOS is divided into three parts:
+
+- Device Side: The part running on devices which uses Linux kernel.
+- Server Side: The part running on servers in cloud.
+- Client Side: The part running on an existing operating system,
+    such as Windows, GNU/Linux, iOS, or Android.
+
+The building scripts and samples are located in the following directories for
+different sides:
+
+```
     `
-    |-- docs/           # The design documents and specifications of HybridOS.
     |-- device-side/    # The source for device side.
     |-- server-side/    # The source for server side.
     |-- client-side/    # The source for client side.
+    |-- docs/           # The design documents and specifications of HybridOS.
+```
 
 ### Other Repositories
 
@@ -182,7 +193,7 @@ through the following public repositories:
 <https://github.com/FMSoftCN/hicairo>
    + hiDRMDrivers: DRM Drivers for HybridOS:
 <https://github.com/FMSoftCN/hidrmdrivers>
-   + MiniGUI: the windowing system for HybridOS:
+   + MiniGUI: the window system for HybridOS:
 <https://github.com/VincentWei/minigui>
 
 - System Servers: (Stay tuned).
@@ -216,8 +227,8 @@ If a component of HybridOS is a derivative of an existing
 open source software, we generally continue to use the original license.
 
 Also note that HybridOS integrates many mature open source software,
-such as SQLite, FreeType, V8 JavaScript engine, and so on. For the
-copyright owners and licenses for these software, please refer to
+such as ZLib, LibPNG, LibJPEG, SQLite, FreeType, HarfBuzz, and so on.
+For the copyright owners and licenses for these software, please refer to
 the README or LICENSE files contained in the source tarballs.
 
 ---
