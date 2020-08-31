@@ -159,7 +159,7 @@ It mainly contains documents, specifications, and building scripts for HybridOS.
 
 The source code of HybridOS is divided into three parts:
 
-- [Device Side](device-side/): The part running on devices which uses Linux kernel.
+- [Device Side](device-side/): The part running on devices which use Linux kernel.
 - [Server Side](server-side/): The part running on servers in cloud.
 - [Client Side](client-side/): The part running on an existing operating system,
     such as Windows, GNU/Linux, iOS, or Android.
