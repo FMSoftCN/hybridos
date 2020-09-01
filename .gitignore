@@ -59,4 +59,6 @@ device-side/hfcl/src/css/test-cssselector
 *.pyc
 
 #
-/Output/
+device-side/Output
+device-side/Source
+
