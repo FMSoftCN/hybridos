@@ -35,18 +35,53 @@
 #include <minigui/minigui.h>
 #include <minigui/gdi.h>
 #include <minigui/window.h>
+#include <mgeff/mgeff.h>
 
-static int load_wallpaper (HDC hdc, const char* top, const char* bottom,  double scale)
+#define WALLPAPER_FILE_TOP          "res/wallpaper-top.jpg"
+#define WALLPAPER_FILE_BOTTOM       "res/wallpaper-bottom.jpg"
+
+BITMAP bmpTop;
+BITMAP bmpBottom;
+
+int start = 0;
+int end = 20;
+int duration = 200;
+enum EffMotionType motionType = InOutQuart;
+
+void loadBitmap(void)
 {
-    BITMAP bmp;
-    BITMAP bmpBottom;
+    bmpTop.bmWidth = 0;
+    bmpBottom.bmWidth = 0;
+    LoadBitmapFromFile(HDC_SCREEN, &bmpTop, WALLPAPER_FILE_TOP);
+    LoadBitmapFromFile(HDC_SCREEN, &bmpBottom, WALLPAPER_FILE_BOTTOM);
+}
+
+void clearBitmap(void)
+{
+    if (bmpTop.bmWidth > 0)
+    {
+        UnloadBitmap(&bmpTop);
+    }
+
+    if (bmpBottom.bmWidth > 0)
+    {
+        UnloadBitmap(&bmpBottom);
+    }
+}
+
+int paintWallpaper (HDC hdc, int space)
+{
+    static int lastSpace = -1;
     int ret = 0;
 
-    int loadRet = LoadBitmapFromFile(HDC_SCREEN, &bmp, top);
-    int loadRetBottom = LoadBitmapFromFile(HDC_SCREEN, &bmpBottom, bottom);
+    if (lastSpace == space)
+    {
+        return ret;
+    }
+    lastSpace = space;
 
-    if (bmp.bmWidth > 0 && bmp.bmHeight > 0 && bmpBottom.bmWidth > 0 && bmpBottom.bmHeight > 0) {
-        int x, y, w, h, y2, space;
+    if (bmpTop.bmWidth > 0 && bmpTop.bmHeight > 0 && bmpBottom.bmWidth > 0 && bmpBottom.bmHeight > 0) {
+        int x, y, w, h, y2;
         static int wp_w = 0, wp_h = 0, wp_half_h = 0;
 
         if (wp_w == 0) {
@@ -58,16 +93,14 @@ static int load_wallpaper (HDC hdc, const char* top, const char* bottom,  double
         SetBrushColor(hdc, 0xFFFFFF);
         FillBox(hdc, 0, 0, wp_w, wp_h);
 
-        w = bmp.bmWidth;
-        h = bmp.bmHeight;
+        w = bmpTop.bmWidth;
+        h = bmpTop.bmHeight;
 
         x = (wp_w - w) >> 1;
         y = wp_half_h - h;
         y2 = wp_half_h;
 
-        space = (wp_half_h >> 2) * (1 - scale);
-
-        FillBoxWithBitmap(hdc, x, y - space, bmp.bmWidth, bmp.bmHeight, &bmp);
+        FillBoxWithBitmap(hdc, x, y - space, bmpTop.bmWidth, bmpTop.bmHeight, &bmpTop);
         FillBoxWithBitmap(hdc, x, y2 + space, bmpBottom.bmWidth, bmpBottom.bmHeight, &bmpBottom);
 
         SyncUpdateDC (hdc);
@@ -79,64 +112,54 @@ static int load_wallpaper (HDC hdc, const char* top, const char* bottom,  double
     }
 
 ret:
-    if (loadRet == 0)
-        UnloadBitmap(&bmp);
-
-    if (loadRetBottom == 0)
-        UnloadBitmap(&bmpBottom);
-
     return ret;
 }
 
-#define WALLPAPER_FILE_TOP          "res/wallpaper-top.jpg"
-#define WALLPAPER_FILE_BOTTOM       "res/wallpaper-bottom.jpg"
+static void animated_cb(MGEFF_ANIMATION handle, HWND hwnd, int id, int *value)
+{
+    paintWallpaper(HDC_SCREEN, *value);
+}
+
+static void animated_end(MGEFF_ANIMATION handle)
+{
+}
+
+void startAnimation (HWND hwnd)
+{
+    MGEFF_ANIMATION animation;
+    animation = mGEffAnimationCreate((void *)hwnd, (void *)animated_cb, 1, MGEFF_INT);
+    if (animation) {
+        mGEffAnimationSetStartValue(animation, &start);
+        mGEffAnimationSetEndValue(animation, &end);
+        mGEffAnimationSetDuration(animation, duration);
+        mGEffAnimationSetCurve(animation, motionType);
+        mGEffAnimationSetProperty(animation, MGEFF_PROP_LOOPCOUNT, -1);
+        mGEffAnimationSetFinishedCb(animation, animated_end);
+        mGEffAnimationSyncRun(animation);
+        mGEffAnimationDelete(animation);
+    }
+}
 
 int MiniGUIMain (int argc, const char* argv[])
 {
-    double scale = 1.0;
-    double step = 0.1;
     MSG msg;
-    RECT rc_scr = GetScreenRect();
-    DWORD old_tick_count;
-
-    _MG_PRINTF("Screen rect: %d, %d, %d, %d\n",
-            rc_scr.left, rc_scr.top,
-            rc_scr.right, rc_scr.bottom);
-
-    _MG_PRINTF("Wallpaper pattern size: %d, %d\n",
-            GetGDCapability (HDC_SCREEN, GDCAP_HPIXEL),
-            GetGDCapability (HDC_SCREEN, GDCAP_VPIXEL));
-
     JoinLayer(NAME_DEF_LAYER , "wallpaper" , 0 , 0);
 
-    if (load_wallpaper (HDC_SCREEN, WALLPAPER_FILE_TOP, WALLPAPER_FILE_BOTTOM, scale) < 0)
+    loadBitmap();
+    if (paintWallpaper(HDC_SCREEN, 0) < 0)
+    {
+        clearBitmap();
         exit (1);
+    }
 
-    old_tick_count = GetTickCount ();
-
-    /* this is a trick in order that GetMessage can return fast */
-    SetTimer (HWND_DESKTOP, (LINT)&old_tick_count, 2);
+    mGEffInit();
+    startAnimation(NULL);
 
     while (GetMessage (&msg, HWND_DESKTOP)) {
-        DWORD curr_tick_count = GetTickCount ();
-        if (curr_tick_count > old_tick_count + 20) {
-            scale += step;
-            if (scale >= 1.0) {
-                step = -0.1;
-            }
-            if (scale < 0.1) {
-                step = 0.1;
-            }
-
-            _DBG_PRINTF("It is time to load another wallpaper.\n");
-            if (load_wallpaper (HDC_SCREEN, WALLPAPER_FILE_TOP, WALLPAPER_FILE_BOTTOM, scale) < 0)
-                exit (1);
-            old_tick_count = curr_tick_count;
-        }
-
         DispatchMessage (&msg);
     }
 
+    clearBitmap();
     return 0;
 }
 
