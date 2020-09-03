@@ -42,6 +42,7 @@
 #include <minigui/window.h>
 #include <minigui/control.h>
 
+#include "../include/sysconfig.h"
 #include "statusbar.h"
 
 static BOOL quit = FALSE;
@@ -322,6 +323,8 @@ HWND create_status_bar (void)
 {
     MAINWINCREATE CreateInfo;
     HWND hStatusBar;
+    REQUEST request;
+    int znode = 10;
 
     CreateInfo.dwStyle = WS_ABSSCRPOS | WS_VISIBLE;
     CreateInfo.dwExStyle = WS_EX_TOOLWINDOW;
@@ -340,6 +343,12 @@ HWND create_status_bar (void)
     CreateInfo.hHosting = HWND_DESKTOP;
 
     hStatusBar = CreateMainWindow (&CreateInfo);
+
+    
+    request.id = GET_STATUSBAR_ZNODE_REQID;
+    request.data = (void *)znode;
+    request.len_data = sizeof(void *);
+    ClientRequestEx2(&request, NULL, 0, -1, NULL, 0, NULL);
 
     return hStatusBar;
 }

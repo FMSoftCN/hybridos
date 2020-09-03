@@ -39,7 +39,7 @@
 #define _LEFT_BOXES     (_MARGIN + _WIDTH_START + _MARGIN + _WIDTH_APPS + _MARGIN)
 #define _WIDTH_BOXES    (g_rcScr.right - _WIDTH_TIME - _MARGIN - _MARGIN - _LEFT_BOXES)
 
-#define APP_INFO_FILE   "mginit.rc"
+#define APP_INFO_FILE   "main.rc"
 
 #define TIP_MAX         255
 

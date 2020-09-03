@@ -60,6 +60,7 @@
     #error "*******************************************************************"
 #else
 
+#include "../include/sysconfig.h"
 #include "config.h"
 
 static const char* new_del_client_info [] =
@@ -239,10 +240,25 @@ static LRESULT HelloWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
     return DefaultMainWinProc(hWnd, message, wParam, lParam);
 }
 
+
+static int GetStatusBarZnode(int cli, int clifd, void* buff, size_t len)
+{
+printf("============== in GetStatusBarZnode.\n");
+    return 0;
+}
+
+static int GetTopMostTitle(int cli, int clifd, void* buff, size_t len)
+{
+printf("============== in GetTopMostTitle.\n");
+    return 0;
+}
+
 int MiniGUIMain (int args, const char* arg[])
 {
     struct sigaction siga;
     MSG msg;
+    HWND hMainWnd;
+    MAINWINCREATE CreateInfo;
 
     siga.sa_handler = child_wait;
     siga.sa_flags  = 0;
@@ -258,8 +274,15 @@ int MiniGUIMain (int args, const char* arg[])
         return 1;
     }
 
-    HWND hMainWnd;
-    MAINWINCREATE CreateInfo;
+    if(!RegisterRequestHandler(GET_STATUSBAR_ZNODE_REQID, GetStatusBarZnode))
+    {
+        return 2;
+    }
+
+    if(!RegisterRequestHandler(GET_TITLE_REQID, GetTopMostTitle))
+    {
+        return 2;
+    }
 
     CreateInfo.dwStyle = WS_ABSSCRPOS | WS_VISIBLE;
 //        WS_VISIBLE | WS_BORDER | WS_CAPTION;

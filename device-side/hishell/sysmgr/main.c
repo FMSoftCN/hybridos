@@ -249,7 +249,7 @@ int MiniGUIMain (int args, const char* arg[])
         fprintf (stderr, "Can not create Status bar.\n");
         return 2;
     }
-
+    
     if ((hDockBar = create_dock_bar ()) == HWND_INVALID) {
         fprintf (stderr, "Can not create Dock bar.\n");
         return 2;
