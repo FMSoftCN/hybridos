@@ -203,7 +203,7 @@ static void ask_for_quit (HWND hwnd)
 }
 
 static BITMAP * plogo = NULL;
-static LRESULT TaskBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     char buff [20];
 
@@ -218,14 +218,13 @@ static LRESULT TaskBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
         CreateWindow (CTRL_BUTTON, "Start", WS_CHILD | WS_VISIBLE, _ID_START_BUTTON, 
                     _MARGIN, _MARGIN, _WIDTH_START, _HEIGHT_CTRL, hWnd, 0);
                     */
-        CreateWindow (CTRL_STATIC, "", SS_REALSIZEIMAGE | SS_CENTERIMAGE | SS_BITMAP | WS_CHILD | WS_VISIBLE, _ID_START_BUTTON, 
-                    _MARGIN, _MARGIN, _WIDTH_START, _HEIGHT_CTRL, hWnd, (DWORD)plogo);
+        CreateWindow (CTRL_STATIC, "", SS_REALSIZEIMAGE | SS_CENTERIMAGE | SS_BITMAP | WS_CHILD | WS_VISIBLE | WS_BORDER, _ID_START_BUTTON, 
+                    _MARGIN, _MARGIN, g_rcScr.right / 2, /*_WIDTH_START,*/ _HEIGHT_CTRL, hWnd, (DWORD)plogo);
 
         CreateWindow (CTRL_STATIC, mk_time (buff), WS_CHILD | WS_BORDER | WS_VISIBLE | SS_CENTER, 
-                    _ID_TIME_STATIC, g_rcScr.right - _WIDTH_TIME - _MARGIN, _MARGIN, 
-                    _WIDTH_TIME, _HEIGHT_CTRL, hWnd, 0);
+                    _ID_TIME_STATIC, g_rcScr.right / 2, _MARGIN, g_rcScr.right / 2 - _MARGIN, _HEIGHT_CTRL, hWnd, 0);
 
-        create_app_coolbar (hWnd);
+//        create_app_coolbar (hWnd);
 
 #ifdef _MGTIMER_UNIT_10MS
         SetTimer (hWnd, _ID_TIMER, 100);
@@ -283,30 +282,43 @@ static LRESULT TaskBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
     return DefaultMainWinProc (hWnd, message, wParam, lParam);
 }
 
-HWND create_task_bar (void)
+static int number = 0;
+
+HWND create_status_bar (void)
 {
     MAINWINCREATE CreateInfo;
-    HWND hTaskBar;
+    HWND hStatusBar;
 
     CreateInfo.dwStyle = WS_ABSSCRPOS | WS_VISIBLE;
     CreateInfo.dwExStyle = WS_EX_TOOLWINDOW;
-    CreateInfo.spCaption = "TaskBar" ;
+    CreateInfo.spCaption = "StatusBar" ;
     CreateInfo.hMenu = 0;
     CreateInfo.hCursor = GetSystemCursor (0);
     CreateInfo.hIcon = 0;
-    CreateInfo.MainWindowProc = TaskBarWinProc;
+    CreateInfo.MainWindowProc = StatusBarWinProc;
     CreateInfo.lx = g_rcScr.left; 
+if(number == 0)
     CreateInfo.ty = 0;  // g_rcScr.bottom - HEIGHT_TASKBAR;
+else
+    CreateInfo.ty = g_rcScr.bottom - HEIGHT_TASKBAR;
+
     CreateInfo.rx = g_rcScr.right;
+
+if(number == 0)
     CreateInfo.by = HEIGHT_TASKBAR; // g_rcScr.bottom;
+else
+    CreateInfo.by = g_rcScr.bottom;
+
     CreateInfo.iBkColor =
         GetWindowElementPixelEx (HWND_NULL, HDC_SCREEN, WE_MAINC_THREED_BODY); 
     CreateInfo.dwAddData = 0;
     CreateInfo.hHosting = HWND_DESKTOP;
 
-    hTaskBar = CreateMainWindow (&CreateInfo);
+    hStatusBar = CreateMainWindow (&CreateInfo);
 
-    return hTaskBar;
+    number ++;
+
+    return hStatusBar;
 }
 
 pid_t exec_app (int app)

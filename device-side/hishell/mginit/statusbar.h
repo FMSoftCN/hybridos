@@ -66,7 +66,7 @@ extern APPINFO app_info;
 extern "C" {
 #endif  /* __cplusplus */
 
-HWND create_task_bar (void);
+HWND create_status_bar (void);
 pid_t exec_app (int app);
 
 #ifdef __cplusplus

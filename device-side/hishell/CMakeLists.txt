@@ -10,5 +10,4 @@ set(MINIGUI_INCLUDE_DIRS ${MiniGUI_INCLUDE_DIRS})
 add_subdirectory(mginit)
 add_subdirectory(sysmgr)
 add_subdirectory(dybkgnd)
-
-#add_subdirectory(appagent)
+add_subdirectory(appagent)

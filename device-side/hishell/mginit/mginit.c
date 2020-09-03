@@ -61,9 +61,10 @@
 #else
 
 #include "statusbar.h"
+//#include "dockbar.h"
 
 static HWND hStatusBar;
-static HWND hDockerBar;
+static HWND hDockBar;
 
 static const char* new_del_client_info [] =
 {
@@ -221,6 +222,26 @@ static void child_wait (int sig)
     }
 }
 
+static LRESULT HelloWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+
+    switch (message) {
+        case MSG_CREATE:
+            break;
+        case MSG_TIMER:
+            break;
+        case MSG_PAINT:
+            break;
+        case MSG_CLOSE:
+            DestroyMainWindow (hWnd);
+            PostQuitMessage (hWnd);
+            return 0;
+    }
+
+    return DefaultMainWinProc(hWnd, message, wParam, lParam);
+}
+
 int MiniGUIMain (int args, const char* arg[])
 {
     struct sigaction siga;
@@ -240,14 +261,39 @@ int MiniGUIMain (int args, const char* arg[])
         return 1;
     }
 
-    if ((hStatusBar = create_task_bar ()) == HWND_INVALID) {
-        fprintf (stderr, "Can not create task bar.\n");
-        return 2;
+    HWND hMainWnd;
+    MAINWINCREATE CreateInfo;
+
+    CreateInfo.dwStyle = WS_ABSSCRPOS | WS_VISIBLE;
+//        WS_VISIBLE | WS_BORDER | WS_CAPTION;
+    CreateInfo.dwExStyle = WS_EX_WINTYPE_GLOBAL;//WS_EX_NONE;
+    CreateInfo.spCaption = "mginit";
+    CreateInfo.hMenu = 0;
+    CreateInfo.hCursor = GetSystemCursor(0);
+    CreateInfo.hIcon = 0;
+    CreateInfo.MainWindowProc = HelloWinProc;
+    CreateInfo.lx = 0;
+    CreateInfo.ty = 0;
+    CreateInfo.rx = g_rcScr.right / 2;
+    CreateInfo.by = g_rcScr.bottom / 2;
+    CreateInfo.iBkColor = GetWindowElementPixelEx (HWND_NULL, HDC_SCREEN, WE_MAINC_THREED_BODY);//COLOR_lightwhite;
+    CreateInfo.dwAddData = 0;
+    CreateInfo.hHosting = HWND_DESKTOP;
+
+    hMainWnd = CreateMainWindow (&CreateInfo);
+
+    if (hMainWnd == HWND_INVALID)
+        return -1;
+
+    ShowWindow(hMainWnd, SW_HIDE);
+
+    while (GetMessage(&msg, hMainWnd)) {
+//        TranslateMessage(&msg);
+        DispatchMessage(&msg);
     }
 
-    while (GetMessage (&msg, hStatusBar)) {
-        DispatchMessage (&msg);
-    }
+    MainWindowThreadCleanup (hMainWnd);
+
 
     return 0;
 }
