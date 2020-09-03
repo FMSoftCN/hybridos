@@ -48,7 +48,7 @@
 |  MiniGUI, hiCairo, hiMesa, SQLite, FreeType, HarfBuzz, LibPNG, LibJPEG, ...     |    | hiBus/WebSocket
 |                                                                                 |    |
  ---------------------------------------------------------------------------------     |
-|                           HybridOS daemons/servers                              |____|
+|                           HybridOS servers and user daemons                     |____|
  ---------------------------------------------------------------------------------
 |                          Python runtime environment (optional)                  |
 |                             LibZ, CURL, LibGcrypt, ...                          |
