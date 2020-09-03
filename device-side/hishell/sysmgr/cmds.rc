@@ -1,0 +1,8 @@
+[lastcommands]
+nr=0
+
+[cmd0]
+cmd=../mginit/mginit
+cd=1
+layer=
+
