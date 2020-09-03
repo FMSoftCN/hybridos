@@ -60,11 +60,7 @@
     #error "*******************************************************************"
 #else
 
-#include "statusbar.h"
-//#include "dockbar.h"
-
-static HWND hStatusBar;
-static HWND hDockBar;
+#include "config.h"
 
 static const char* new_del_client_info [] =
 {
@@ -168,12 +164,13 @@ static void on_change_layer (int op, MG_Layer* layer, MG_Client* client)
                 box_width = new_width;
             }
         }
-
+/*
         layer->dwAddData = (DWORD)CreateWindow (CTRL_BUTTON, layer->name,
                  WS_CHILD | WS_VISIBLE | BS_CHECKBOX | BS_PUSHLIKE | BS_CENTER,
                  _ID_LAYER_BOX,
                  _LEFT_BOXES + box_width * (nr_boxes - 1), _MARGIN,
                  box_width, _HEIGHT_CTRL, hStatusBar, (DWORD)layer);
+*/
         break;
 
     case LCO_DEL_LAYER:
@@ -276,7 +273,7 @@ int MiniGUIMain (int args, const char* arg[])
     CreateInfo.ty = 0;
     CreateInfo.rx = g_rcScr.right / 2;
     CreateInfo.by = g_rcScr.bottom / 2;
-    CreateInfo.iBkColor = GetWindowElementPixelEx (HWND_NULL, HDC_SCREEN, WE_MAINC_THREED_BODY);//COLOR_lightwhite;
+    CreateInfo.iBkColor = GetWindowElementPixelEx (HWND_NULL, HDC_SCREEN, WE_MAINC_THREED_BODY);
     CreateInfo.dwAddData = 0;
     CreateInfo.hHosting = HWND_DESKTOP;
 

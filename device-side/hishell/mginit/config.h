@@ -11,13 +11,13 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 /* 
- * $Id: taskbar.h 368 2008-01-25 06:58:28Z zhounuohua $
+ * $Id: statusbar.h 368 2008-01-25 06:58:28Z zhounuohua $
  * 
  * The head file of task bar.
  */
 
-#ifndef _TASK_BAR
-#define _TASK_BAR
+#ifndef _STATUS_BAR
+#define _STATUS_BAR
 
 #define HEIGHT_TASKBAR  28
 #define HEIGHT_IMEWIN   24
@@ -43,34 +43,13 @@
 
 #define TIP_MAX         255
 
-typedef struct tagAppItem {
-    BOOL cdpath;
-    char path [PATH_MAX + 1];
-    char name [NAME_MAX + 1];
-    char layer [LEN_LAYER_NAME + 1];
-    char tip [TIP_MAX + 1];
-    char bmp_path [PATH_MAX + NAME_MAX + 1];
-    BITMAP bmp;
-} APPITEM;
-
-typedef struct tagAppInfo {
-    int nr_apps;
-    int autostart;
-    char logo_path [PATH_MAX + NAME_MAX + 1];
-    APPITEM* app_items;
-} APPINFO;
-
-extern APPINFO app_info;
-
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */
 
-HWND create_status_bar (void);
-pid_t exec_app (int app);
 
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
 
-#endif /* _TASK_BAR */
+#endif /* _STATUS_BAR */
