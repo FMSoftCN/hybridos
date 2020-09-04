@@ -243,7 +243,7 @@ static LRESULT HelloWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
 static int GetStatusBarZnode(int cli, int clifd, void* buff, size_t len)
 {
-printf("============== in GetStatusBarZnode.\n");
+printf("============== in GetStatusBarZnode, %d, %d, %d, %d.\n", cli, clifd, *((int *)buff), len);
     return 0;
 }
 

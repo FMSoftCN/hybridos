@@ -324,7 +324,8 @@ HWND create_status_bar (void)
     MAINWINCREATE CreateInfo;
     HWND hStatusBar;
     REQUEST request;
-    int znode = 10;
+    WINDOWINFO *pWindowInfo = NULL;
+    int iZnode = 0;
 
     CreateInfo.dwStyle = WS_ABSSCRPOS | WS_VISIBLE;
     CreateInfo.dwExStyle = WS_EX_TOOLWINDOW;
@@ -344,10 +345,12 @@ HWND create_status_bar (void)
 
     hStatusBar = CreateMainWindow (&CreateInfo);
 
-    
+    pWindowInfo = GetWindowInfo(hStatusBar);
+    iZnode = pWindowInfo->idx_znode;
+
     request.id = GET_STATUSBAR_ZNODE_REQID;
-    request.data = (void *)znode;
-    request.len_data = sizeof(void *);
+    request.data = (void *)&iZnode;
+    request.len_data = sizeof(int);
     ClientRequestEx2(&request, NULL, 0, -1, NULL, 0, NULL);
 
     return hStatusBar;
