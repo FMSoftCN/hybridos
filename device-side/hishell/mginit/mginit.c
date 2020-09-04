@@ -63,40 +63,7 @@
 #include "../include/sysconfig.h"
 #include "config.h"
 
-static const char* new_del_client_info [] =
-{
-    NULL,
-    "New comming in client: %s\n",
-    "Disconnecting client: %s\n"
-};
-
-static void on_new_del_client (int op, int cli)
-{
-    static int nr_clients = 0;
-    MG_Client* client = mgClients + cli;
-
-    if (op > 0 && op <= LCO_DEL_CLIENT)
-        printf (new_del_client_info [op], client?client->name:"NULL");
-
-    if (op == LCO_NEW_CLIENT) {
-        nr_clients ++;
-    }
-    else if (op == LCO_DEL_CLIENT) {
-        nr_clients --;
-        if (nr_clients == 0) {
-#if 0
-            SendMessage (hStatusBar, MSG_CLOSE, 0, 0);
-#else
-            printf ("There is no any client.\n");
-#endif
-        }
-        else if (nr_clients < 0) {
-            printf ("Serious error: nr_clients less than zero.\n");
-        }
-    }
-    else
-        printf ("Serious error: incorrect operations.\n");
-}
+static SysConfig m_SysConfig;
 
 static const char* change_layer_info [] =
 {
@@ -220,6 +187,26 @@ static void child_wait (int sig)
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+static const char* new_del_client_info [] =
+{
+    NULL,
+    "New comming in client: %s\n",
+    "Disconnecting client: %s\n"
+};
+
 static LRESULT HelloWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC hdc;
@@ -240,10 +227,96 @@ static LRESULT HelloWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
     return DefaultMainWinProc(hWnd, message, wParam, lParam);
 }
 
+static void on_new_del_client (int op, int cli)
+{
+    static int nr_clients = 0;
+    MG_Client* client = mgClients + cli;
+
+    if (op > 0 && op <= LCO_DEL_CLIENT)
+        printf (new_del_client_info [op], client?client->name:"NULL");
+
+    if (op == LCO_NEW_CLIENT) 
+    {
+        if(client->pid == m_SysConfig.iSystemConfigPid)
+            m_SysConfig.iSystemConfigClientID = cli;
+        else if(client->pid == m_SysConfig.iDyBKGndPid)
+            m_SysConfig.iDyBKGndClientID = cli;
+        nr_clients ++;
+    }
+    else if (op == LCO_DEL_CLIENT) 
+    {
+        nr_clients --;
+        if (nr_clients == 0) 
+        {
+            printf ("There is no any client.\n");
+        }
+        else if (nr_clients < 0) 
+        {
+            printf ("Serious error: nr_clients less than zero.\n");
+        }
+    }
+    else
+        printf ("Serious error: incorrect operations.\n");
+}
+
+static pid_t exec_app (char * app)
+{
+    pid_t pid = 0;
+/*
+    char buff [PATH_MAX + NAME_MAX + 1];
+
+    if ((pid = vfork ()) > 0) {
+        fprintf (stderr, "new child, pid: %d.\n", pid);
+    }
+    else if (pid == 0) {
+        if (app_info.app_items [app].cdpath) {
+            if (chdir (app_info.app_items [app].path)) {
+                fprintf (stderr, "error on chdir.\n");
+                return 0;
+            }
+        }
+        strcpy (buff, app_info.app_items [app].path);
+        strcat (buff, app_info.app_items [app].name);
+
+        if (app_info.app_items [app].layer [0]) {
+            execl (buff, app_info.app_items [app].name,
+                        "-layer", app_info.app_items [app].layer, NULL);
+        }
+        else {
+            execl (buff, app_info.app_items [app].name, NULL);
+        }
+
+        perror ("execl");
+        _exit (1);
+    }
+    else {
+        perror ("vfork");
+    }
+*/
+    char buff [PATH_MAX + NAME_MAX + 1];
+
+    memset(buff, 0, PATH_MAX + NAME_MAX + 1);
+
+    if ((pid = vfork ()) > 0) {
+        fprintf (stderr, "new child, pid: %d.\n", pid);
+    }
+    else if (pid == 0) {
+        strcpy (buff, ".//");
+        strcat (buff, app);
+        execl (buff, app, NULL);
+        perror ("execl");
+        _exit (1);
+    }
+    else {
+        perror ("vfork");
+    }
+    return pid;
+}
 
 static int GetStatusBarZnode(int cli, int clifd, void* buff, size_t len)
 {
-printf("============== in GetStatusBarZnode, %d, %d, %d, %d.\n", cli, clifd, *((int *)buff), len);
+    if(m_SysConfig.iSystemConfigClientID == cli)
+        m_SysConfig.iStatusBarZNode = *((int *)buff);
     return 0;
 }
 
@@ -259,6 +332,9 @@ int MiniGUIMain (int args, const char* arg[])
     MSG msg;
     HWND hMainWnd;
     MAINWINCREATE CreateInfo;
+    pid_t pid = 0;
+
+    memset(&m_SysConfig, 0, sizeof(SysConfig));
 
     siga.sa_handler = child_wait;
     siga.sa_flags  = 0;
@@ -274,6 +350,7 @@ int MiniGUIMain (int args, const char* arg[])
         return 1;
     }
 
+    // registe request handler
     if(!RegisterRequestHandler(GET_STATUSBAR_ZNODE_REQID, GetStatusBarZnode))
     {
         return 2;
@@ -284,9 +361,23 @@ int MiniGUIMain (int args, const char* arg[])
         return 2;
     }
 
+    // start system config process
+    m_SysConfig.iSystemConfigPid = exec_app("sysmgr");
+    if(m_SysConfig.iSystemConfigPid < 0)
+    {
+        return 3;
+    }
+
+    // start dynamic background process
+//    m_SysConfig.iDyBKGndPid = exec_app(2);
+//    if(m_SysConfig.iDyBKGndPid < 0)
+//    {
+//        return 3;
+//    }
+
+    // create a hidden window
     CreateInfo.dwStyle = WS_ABSSCRPOS | WS_VISIBLE;
-//        WS_VISIBLE | WS_BORDER | WS_CAPTION;
-    CreateInfo.dwExStyle = WS_EX_WINTYPE_GLOBAL;//WS_EX_NONE;
+    CreateInfo.dwExStyle = WS_EX_WINTYPE_GLOBAL;
     CreateInfo.spCaption = "mginit";
     CreateInfo.hMenu = 0;
     CreateInfo.hCursor = GetSystemCursor(0);
@@ -308,7 +399,6 @@ int MiniGUIMain (int args, const char* arg[])
     ShowWindow(hMainWnd, SW_HIDE);
 
     while (GetMessage(&msg, hMainWnd)) {
-//        TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
 

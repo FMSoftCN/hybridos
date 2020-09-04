@@ -24,6 +24,14 @@
 #define GET_TITLE_REQID             (MAX_SYS_REQID + 2)
 
 
+typedef struct tagSysConfig {
+    int iSystemConfigClientID;  // clientID of system manager
+    int iDyBKGndClientID;       // clientID of dynamic background
+    pid_t iSystemConfigPid;     // pid of system manager
+    pid_t iDyBKGndPid;          // pid of dynamic background
+    int iStatusBarZNode;        // z node index of status bar
+} SysConfig;
+
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */

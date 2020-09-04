@@ -239,7 +239,7 @@ static pid_t exec_app (int app)
     return pid;
 }
 
-static BITMAP * plogo = NULL;
+//static BITMAP * plogo = NULL;
 static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     char buff [20];
@@ -247,16 +247,19 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
     switch (message) {
     case MSG_CREATE:
     {
-        if (!get_app_info ())
-            return 1;
-        plogo = calloc (1 , sizeof(BITMAP));
-        LoadBitmap (HDC_SCREEN , plogo , app_info.logo_path);
+//        if (!get_app_info ())
+//            return 1;
+//        plogo = calloc (1 , sizeof(BITMAP));
+//        LoadBitmap (HDC_SCREEN , plogo , app_info.logo_path);
 /*
         CreateWindow (CTRL_BUTTON, "Start", WS_CHILD | WS_VISIBLE, _ID_START_BUTTON, 
                     _MARGIN, _MARGIN, _WIDTH_START, _HEIGHT_CTRL, hWnd, 0);
                     */
-        CreateWindow (CTRL_STATIC, "", SS_REALSIZEIMAGE | SS_CENTERIMAGE | SS_BITMAP | WS_CHILD | WS_VISIBLE | WS_BORDER, _ID_START_BUTTON, 
-                    _MARGIN, _MARGIN, g_rcScr.right / 2, /*_WIDTH_START,*/ _HEIGHT_CTRL, hWnd, (DWORD)plogo);
+//        CreateWindow (CTRL_STATIC, "", SS_REALSIZEIMAGE | SS_CENTERIMAGE | SS_BITMAP | WS_CHILD | WS_VISIBLE | WS_BORDER, _ID_START_BUTTON, 
+//                    _MARGIN, _MARGIN, g_rcScr.right / 2, /*_WIDTH_START,*/ _HEIGHT_CTRL, hWnd, (DWORD)plogo);
+
+        CreateWindow (CTRL_STATIC, "hello world", WS_CHILD | WS_BORDER | WS_VISIBLE | SS_CENTER, _ID_START_BUTTON, 
+                    _MARGIN, _MARGIN, g_rcScr.right / 2, /*_WIDTH_START,*/ _HEIGHT_CTRL, hWnd, 0);
 
         CreateWindow (CTRL_STATIC, mk_time (buff), WS_CHILD | WS_BORDER | WS_VISIBLE | SS_CENTER, 
                     _ID_TIME_STATIC, g_rcScr.right / 2, _MARGIN, g_rcScr.right / 2 - _MARGIN, _HEIGHT_CTRL, hWnd, 0);
@@ -308,9 +311,9 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
         
     case MSG_CLOSE:
         KillTimer (hWnd, _ID_TIMER);
-        free (plogo);
+//        free (plogo);
         DestroyAllControls (hWnd);
-        free_app_info ();
+//        free_app_info ();
         DestroyMainWindow (hWnd);
         PostQuitMessage (hWnd);
         return 0;
@@ -327,8 +330,9 @@ HWND create_status_bar (void)
     WINDOWINFO *pWindowInfo = NULL;
     int iZnode = 0;
 
+    // create a main window
     CreateInfo.dwStyle = WS_ABSSCRPOS | WS_VISIBLE;
-    CreateInfo.dwExStyle = WS_EX_TOOLWINDOW;
+    CreateInfo.dwExStyle = WS_EX_WINTYPE_DOCKER;
     CreateInfo.spCaption = "StatusBar" ;
     CreateInfo.hMenu = 0;
     CreateInfo.hCursor = GetSystemCursor (0);
@@ -338,13 +342,15 @@ HWND create_status_bar (void)
     CreateInfo.ty = 0;
     CreateInfo.rx = g_rcScr.right;
     CreateInfo.by = HEIGHT_TASKBAR;
-    CreateInfo.iBkColor =
-        GetWindowElementPixelEx (HWND_NULL, HDC_SCREEN, WE_MAINC_THREED_BODY); 
+    CreateInfo.iBkColor = COLOR_lightwhite; // GetWindowElementPixelEx (HWND_NULL, HDC_SCREEN, WE_MAINC_THREED_BODY); 
     CreateInfo.dwAddData = 0;
     CreateInfo.hHosting = HWND_DESKTOP;
 
     hStatusBar = CreateMainWindow (&CreateInfo);
+    if (hStatusBar == HWND_INVALID)
+        return -1;
 
+    // send status bar zNode index
     pWindowInfo = GetWindowInfo(hStatusBar);
     iZnode = pWindowInfo->idx_znode;
 
