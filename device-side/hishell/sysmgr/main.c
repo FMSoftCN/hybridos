@@ -72,7 +72,7 @@ int MiniGUIMain (int args, const char* arg[])
         return 2;
     }
 
-    while (GetMessage (&msg, hStatusBar) || GetMessage (&msg, hDockBar))
+    while (GetMessage (&msg, HWND_DESKTOP))
     {
         TranslateMessage(&msg);
         DispatchMessage (&msg);
