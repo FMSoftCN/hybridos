@@ -44,7 +44,7 @@ BITMAP bmpTop;
 BITMAP bmpBottom;
 
 int start = 0;
-int end = 20;
+int end = 50;
 int duration = 200;
 enum EffMotionType motionType = InOutQuart;
 
@@ -120,8 +120,10 @@ static void animated_cb(MGEFF_ANIMATION handle, HWND hwnd, int id, int *value)
     paintWallpaper(HDC_SCREEN, *value);
 }
 
+void doAnimationBack(HWND hwnd);
 static void animated_end(MGEFF_ANIMATION handle)
 {
+    doAnimationBack(NULL);
 }
 
 void startAnimation (HWND hwnd)
@@ -133,8 +135,21 @@ void startAnimation (HWND hwnd)
         mGEffAnimationSetEndValue(animation, &end);
         mGEffAnimationSetDuration(animation, duration);
         mGEffAnimationSetCurve(animation, motionType);
-        mGEffAnimationSetProperty(animation, MGEFF_PROP_LOOPCOUNT, -1);
         mGEffAnimationSetFinishedCb(animation, animated_end);
+        mGEffAnimationSyncRun(animation);
+        mGEffAnimationDelete(animation);
+    }
+}
+
+void doAnimationBack(HWND hwnd)
+{
+    MGEFF_ANIMATION animation;
+    animation = mGEffAnimationCreate((void *)hwnd, (void *)animated_cb, 1, MGEFF_INT);
+    if (animation) {
+        mGEffAnimationSetStartValue(animation, &end);
+        mGEffAnimationSetEndValue(animation, &start);
+        mGEffAnimationSetDuration(animation, motionType);
+        mGEffAnimationSetCurve(animation, motionType);
         mGEffAnimationSyncRun(animation);
         mGEffAnimationDelete(animation);
     }
