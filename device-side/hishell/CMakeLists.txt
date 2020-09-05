@@ -12,6 +12,16 @@ set(MGEFF_LIBRARIES ${mGEff_LIBRARIES})
 set(MGEFF_INCLUDE_DIRS ${mGEff_INCLUDE_DIRS})
 
 file(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+file(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/res)
+
+list(APPEND HISHELL_RES_FILES
+    "${PROJECT_SOURCE_DIR}/dybkgnd/res/wallpaper-bottom.jpg"
+    "${PROJECT_SOURCE_DIR}/dybkgnd/res/wallpaper-top.jpg"
+)
+
+file(COPY ${HISHELL_RES_FILES} DESTINATION ${PROJECT_SOURCE_DIR}/bin/res)
+
+
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 add_subdirectory(mginit)
