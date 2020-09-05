@@ -20,17 +20,38 @@
 #define _SYSTEM_CONFIG
 
 // Customer Require Id
-#define GET_STATUSBAR_ZNODE_REQID   (MAX_SYS_REQID + 1)
+#define ZNODE_INFO_REQID            (MAX_SYS_REQID + 1)
 #define GET_TITLE_REQID             (MAX_SYS_REQID + 2)
 
-
-typedef struct tagSysConfig {
+typedef struct tagSysConfig 
+{
     int iSystemConfigClientID;  // clientID of system manager
     int iDyBKGndClientID;       // clientID of dynamic background
     pid_t iSystemConfigPid;     // pid of system manager
     pid_t iDyBKGndPid;          // pid of dynamic background
     int iStatusBarZNode;        // z node index of status bar
 } SysConfig;
+
+
+#define REQ_SUBMIT_STATUSBAR_ZNODE  0   // status bar send znode index to server
+
+typedef struct tagRequestInfo 
+{
+    int id;                     // sub request ID
+    unsigned int iData0;
+    unsigned int request1;
+    unsigned int request2;
+    unsigned int request3;
+} RequestInfo;
+
+typedef struct tagReplyInfo 
+{
+    int id;                     // sub request ID
+    unsigned int iData0;
+    unsigned int request1;
+    unsigned int request2;
+    unsigned int request3;
+} ReplyInfo;
 
 #ifdef __cplusplus
 extern "C" {

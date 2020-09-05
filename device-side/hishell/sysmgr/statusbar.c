@@ -328,7 +328,8 @@ HWND create_status_bar (void)
     HWND hStatusBar;
     REQUEST request;
     WINDOWINFO *pWindowInfo = NULL;
-    int iZnode = 0;
+    RequestInfo requestinfo;
+    ReplyInfo replyInfo;
 
     // create a main window
     CreateInfo.dwStyle = WS_ABSSCRPOS | WS_VISIBLE;
@@ -352,12 +353,21 @@ HWND create_status_bar (void)
 
     // send status bar zNode index
     pWindowInfo = GetWindowInfo(hStatusBar);
-    iZnode = pWindowInfo->idx_znode;
 
-    request.id = GET_STATUSBAR_ZNODE_REQID;
-    request.data = (void *)&iZnode;
-    request.len_data = sizeof(int);
-    ClientRequestEx2(&request, NULL, 0, -1, NULL, 0, NULL);
+    // submit zNode index to server
+    requestinfo.id = REQ_SUBMIT_STATUSBAR_ZNODE;
+    requestinfo.iData0 = pWindowInfo->idx_znode;
+    request.id = ZNODE_INFO_REQID;
+    request.data = (void *)&requestinfo;
+    request.len_data = sizeof(requestinfo);
+
+    memset(&replyInfo, 0, sizeof(ReplyInfo));
+    ClientRequest(&request, &replyInfo, sizeof(ReplyInfo));
+    if((replyInfo.id == REQ_SUBMIT_STATUSBAR_ZNODE) && (replyInfo.iData0))
+    {
+    }
+    else
+        return -1;
 
     return hStatusBar;
 }

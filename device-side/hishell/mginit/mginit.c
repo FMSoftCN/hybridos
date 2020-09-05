@@ -317,7 +317,17 @@ static pid_t exec_app (char * app)
 static int GetStatusBarZnode(int cli, int clifd, void* buff, size_t len)
 {
     if(m_SysConfig.iSystemConfigClientID == cli)
-        m_SysConfig.iStatusBarZNode = *((int *)buff);
+    {
+        RequestInfo * requestInfo = (RequestInfo *)buff;
+        if(requestInfo->id == REQ_SUBMIT_STATUSBAR_ZNODE)
+        {
+            ReplyInfo replyInfo;
+            m_SysConfig.iStatusBarZNode = (int)(requestInfo->iData0);
+            replyInfo.id = REQ_SUBMIT_STATUSBAR_ZNODE;
+            replyInfo.iData0 = (int)TRUE;
+            ServerSendReply(clifd, &replyInfo, sizeof(replyInfo));
+        }
+    }
     return 0;
 }
 
@@ -351,7 +361,7 @@ int MiniGUIMain (int args, const char* arg[])
     }
 
     // registe request handler
-    if(!RegisterRequestHandler(GET_STATUSBAR_ZNODE_REQID, GetStatusBarZnode))
+    if(!RegisterRequestHandler(ZNODE_INFO_REQID, GetStatusBarZnode))
     {
         return 2;
     }
