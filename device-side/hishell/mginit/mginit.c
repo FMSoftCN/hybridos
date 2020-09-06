@@ -284,38 +284,32 @@ static pid_t exec_app (char * app)
 
 static void on_znode_operation(int op, int cli, int idx_znode)
 {
+    MSG msg;
     int clientId = 0;
-    ServerGetTopmostZNodeOfType(NULL, ZOF_TYPE_NORMAL, &clientId);
-    if(clientId == m_SysConfig.iTopmostClientID)
-    {
-        // no change
-    }
-    else
-    {
-printf("======================================= 222222 on_znode_operation: %d, %d, %d, client id: %d\n", op, cli, idx_znode, clientId);
-        MSG msg;
-        if((op == ZNOP_ALLOCATE) || (op == ZNOP_FREE) || (op == ZNOP_MOVE2TOP) || (op == ZNOP_SETACTIVE))
-        {
-            msg.message = MSG_MAINWINDOW_CHANGE;
-            msg.hwnd = m_SysConfig.hWndStatusBar;
-            msg.wParam = (idx_znode << 16) | clientId;
+    int idx_topmost = 0;
 
-            if(clientId)    // to other main window
+    idx_topmost = ServerGetTopmostZNodeOfType(NULL, ZOF_TYPE_NORMAL, &clientId);
+    m_SysConfig.iTopmostClientID = clientId;
+
+    if((op == ZNOP_ALLOCATE) || (op == ZNOP_FREE) || (op == ZNOP_MOVE2TOP) || (op == ZNOP_SETACTIVE))
+    {
+        msg.message = MSG_MAINWINDOW_CHANGE;
+        msg.hwnd = m_SysConfig.hWndStatusBar;
+        msg.wParam = (idx_topmost << 16) | clientId;
+
+        if(clientId)    // to other main window
+        {
+            const ZNODEHEADER * znodeheader = ServerGetWinZNodeHeader(NULL, idx_topmost, NULL, FALSE);
+            if(znodeheader)
             {
-                // err: when op = ZNOP_FREE, idx_znode is the node to free.
-                const ZNODEHEADER * znodeheader = ServerGetWinZNodeHeader(NULL, idx_znode, NULL, FALSE);
-                if(znodeheader)
-                {
-                    if(znodeheader->caption)
-                        msg.lParam = (int)strlen(znodeheader->caption);
-                    else
-                        msg.lParam = 0;
-                }
+                if(znodeheader->caption)
+                    msg.lParam = (int)strlen(znodeheader->caption);
                 else
                     msg.lParam = 0;
             }
+            else
+                msg.lParam = 0;
         }
-        m_SysConfig.iTopmostClientID = clientId;
         Send2Client(&msg, m_SysConfig.iSystemConfigClientID);
     }
 }
@@ -349,15 +343,16 @@ static int GetTopMostTitle(int cli, int clifd, void* buff, size_t len)
             int idx_znode = (requestInfo->iData0 & 0xFFFF0000) >> 16;
             int length = (int)requestInfo->iData1;
             char buff[length + 1];
-            
+
             int cur_clientId = 0;
-            ServerGetTopmostZNodeOfType(NULL, ZOF_TYPE_NORMAL, &cur_clientId);
+            int idx_topmost = 0;
+            idx_topmost = ServerGetTopmostZNodeOfType(NULL, ZOF_TYPE_NORMAL, &cur_clientId);
 
             memset(buff, 0, length + 1);
 
             if(clientId == cur_clientId)            // the same process
             {
-                const ZNODEHEADER * znodeheader = ServerGetWinZNodeHeader(NULL, idx_znode, NULL, FALSE);
+                const ZNODEHEADER * znodeheader = ServerGetWinZNodeHeader(NULL, idx_topmost, NULL, FALSE);
                 if(znodeheader)
                 {
                     if(znodeheader->caption)
