@@ -45,6 +45,8 @@
 #include "../include/sysconfig.h"
 #include "statusbar.h"
 
+extern HWND m_hStatusBar;
+extern HWND m_hDockBar;
 static BOOL quit = FALSE;
 
 static char* mk_time (char* buff)
@@ -243,8 +245,41 @@ static pid_t exec_app (int app)
 static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     char buff [20];
+    int length = 0;
 
-    switch (message) {
+    switch (message) 
+    {
+        case MSG_MAINWINDOW_CHANGE:
+            if((wParam & 0xFFFF) == 0)          // It is Desk Top
+                SetDlgItemText (hWnd, _ID_START_BUTTON, "Hybrid OS V.10");
+            else
+            {
+                length = (int)lParam;
+                if(length == 0)            // no title for main window
+                    SetDlgItemText (hWnd, _ID_START_BUTTON, "Hybrid OS V.10");
+                else                            // get the title
+                {
+                    REQUEST request;
+                    RequestInfo requestinfo;
+                    char title[length + 1];
+
+                    memset(title, 0, length + 1);
+
+                    requestinfo.id = REQ_GET_TOPMOST_TITLE;
+                    requestinfo.hWnd = m_hStatusBar;
+                    requestinfo.iData0 = wParam;
+                    requestinfo.iData1 = lParam;
+
+                    request.id = GET_TITLE_REQID;
+                    request.data = (void *)&requestinfo;
+                    request.len_data = sizeof(requestinfo);
+
+                    ClientRequest(&request, title, length + 1);
+                    if(title[0])
+                        SetDlgItemText (hWnd, _ID_START_BUTTON, title);
+                }
+            }
+            break;
     case MSG_CREATE:
     {
 //        if (!get_app_info ())
@@ -258,7 +293,7 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 //        CreateWindow (CTRL_STATIC, "", SS_REALSIZEIMAGE | SS_CENTERIMAGE | SS_BITMAP | WS_CHILD | WS_VISIBLE | WS_BORDER, _ID_START_BUTTON, 
 //                    _MARGIN, _MARGIN, g_rcScr.right / 2, /*_WIDTH_START,*/ _HEIGHT_CTRL, hWnd, (DWORD)plogo);
 
-        CreateWindow (CTRL_STATIC, "hello world", WS_CHILD | WS_BORDER | WS_VISIBLE | SS_CENTER, _ID_START_BUTTON, 
+        CreateWindow (CTRL_STATIC, "Hybrid OS V.10", WS_CHILD | WS_BORDER | WS_VISIBLE | SS_CENTER, _ID_START_BUTTON, 
                     _MARGIN, _MARGIN, g_rcScr.right / 2, /*_WIDTH_START,*/ _HEIGHT_CTRL, hWnd, 0);
 
         CreateWindow (CTRL_STATIC, mk_time (buff), WS_CHILD | WS_BORDER | WS_VISIBLE | SS_CENTER, 
@@ -327,7 +362,7 @@ HWND create_status_bar (void)
     MAINWINCREATE CreateInfo;
     HWND hStatusBar;
     REQUEST request;
-    WINDOWINFO *pWindowInfo = NULL;
+    const WINDOWINFO *pWindowInfo = NULL;
     RequestInfo requestinfo;
     ReplyInfo replyInfo;
 
@@ -340,22 +375,23 @@ HWND create_status_bar (void)
     CreateInfo.hIcon = 0;
     CreateInfo.MainWindowProc = StatusBarWinProc;
     CreateInfo.lx = g_rcScr.left; 
-    CreateInfo.ty = 0;
+    CreateInfo.ty = 0 + 200;
     CreateInfo.rx = g_rcScr.right;
-    CreateInfo.by = HEIGHT_TASKBAR;
+    CreateInfo.by = HEIGHT_TASKBAR + 200;
     CreateInfo.iBkColor = COLOR_lightwhite; // GetWindowElementPixelEx (HWND_NULL, HDC_SCREEN, WE_MAINC_THREED_BODY); 
     CreateInfo.dwAddData = 0;
     CreateInfo.hHosting = HWND_DESKTOP;
 
     hStatusBar = CreateMainWindow (&CreateInfo);
     if (hStatusBar == HWND_INVALID)
-        return -1;
+        return HWND_INVALID;
 
     // send status bar zNode index
     pWindowInfo = GetWindowInfo(hStatusBar);
 
     // submit zNode index to server
     requestinfo.id = REQ_SUBMIT_STATUSBAR_ZNODE;
+    requestinfo.hWnd = hStatusBar;
     requestinfo.iData0 = pWindowInfo->idx_znode;
     request.id = ZNODE_INFO_REQID;
     request.data = (void *)&requestinfo;
@@ -367,7 +403,7 @@ HWND create_status_bar (void)
     {
     }
     else
-        return -1;
+        return HWND_INVALID;
 
     return hStatusBar;
 }

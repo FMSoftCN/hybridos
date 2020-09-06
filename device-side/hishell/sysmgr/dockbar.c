@@ -343,9 +343,6 @@ HWND create_dock_bar (void)
     CreateInfo.hHosting = HWND_DESKTOP;
     hDockBar = CreateMainWindow (&CreateInfo);
 
-    if (hDockBar == HWND_INVALID)
-        return -1;
-
     return hDockBar;
 }
 

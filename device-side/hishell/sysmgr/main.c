@@ -49,8 +49,8 @@
 #include "statusbar.h"
 #include "dockbar.h"
 
-static HWND hStatusBar = HWND_INVALID;
-static HWND hDockBar = HWND_INVALID;
+HWND m_hStatusBar = HWND_INVALID;
+HWND m_hDockBar = HWND_INVALID;
 
 int MiniGUIMain (int args, const char* arg[])
 {
@@ -60,13 +60,13 @@ int MiniGUIMain (int args, const char* arg[])
     JoinLayer(NAME_DEF_LAYER , "sysmgr" , 0 , 0);
 #endif
 
-    if ((hStatusBar = create_status_bar ()) == HWND_INVALID) 
+    if ((m_hStatusBar = create_status_bar ()) == HWND_INVALID) 
     {
         fprintf (stderr, "Can not create Status bar.\n");
         return 2;
     }
     
-    if ((hDockBar = create_dock_bar ()) == HWND_INVALID) 
+    if ((m_hDockBar = create_dock_bar ()) == HWND_INVALID) 
     {
         fprintf (stderr, "Can not create Dock bar.\n");
         return 2;

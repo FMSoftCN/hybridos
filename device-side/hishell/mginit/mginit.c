@@ -259,38 +259,6 @@ static void on_new_del_client(int op, int cli)
         printf ("Serious error: incorrect operations.\n");
 }
 
-static void on_znode_operation(int op, int cli, int idx_znode)
-{
-/*
-    MG_Client* client = mgClients + cli;
-
-    if (op > 0 && op <= LCO_DEL_CLIENT)
-        printf (new_del_client_info [op], client?client->name:"NULL");
-
-    if (op == LCO_NEW_CLIENT) 
-    {
-        if(client->pid == m_SysConfig.iSystemConfigPid)
-            m_SysConfig.iSystemConfigClientID = cli;
-        else if(client->pid == m_SysConfig.iDyBKGndPid)
-            m_SysConfig.iDyBKGndClientID = cli;
-        nr_clients ++;
-    }
-    else if (op == LCO_DEL_CLIENT) 
-    {
-        nr_clients --;
-        if (nr_clients == 0) 
-        {
-            printf ("There is no any client.\n");
-        }
-        else if (nr_clients < 0) 
-        {
-            printf ("Serious error: nr_clients less than zero.\n");
-        }
-    }
-    else
-        printf ("Serious error: incorrect operations.\n");
-*/
-}
 static pid_t exec_app (char * app)
 {
     pid_t pid = 0;
@@ -314,6 +282,44 @@ static pid_t exec_app (char * app)
     return pid;
 }
 
+static void on_znode_operation(int op, int cli, int idx_znode)
+{
+    int clientId = 0;
+    ServerGetTopmostZNodeOfType(NULL, ZOF_TYPE_NORMAL, &clientId);
+    if(clientId == m_SysConfig.iTopmostClientID)
+    {
+        // no change
+    }
+    else
+    {
+printf("======================================= 222222 on_znode_operation: %d, %d, %d, client id: %d\n", op, cli, idx_znode, clientId);
+        MSG msg;
+        if((op == ZNOP_ALLOCATE) || (op == ZNOP_FREE) || (op == ZNOP_MOVE2TOP) || (op == ZNOP_SETACTIVE))
+        {
+            msg.message = MSG_MAINWINDOW_CHANGE;
+            msg.hwnd = m_SysConfig.hWndStatusBar;
+            msg.wParam = (idx_znode << 16) | clientId;
+
+            if(clientId)    // to other main window
+            {
+                // err: when op = ZNOP_FREE, idx_znode is the node to free.
+                const ZNODEHEADER * znodeheader = ServerGetWinZNodeHeader(NULL, idx_znode, NULL, FALSE);
+                if(znodeheader)
+                {
+                    if(znodeheader->caption)
+                        msg.lParam = (int)strlen(znodeheader->caption);
+                    else
+                        msg.lParam = 0;
+                }
+                else
+                    msg.lParam = 0;
+            }
+        }
+        m_SysConfig.iTopmostClientID = clientId;
+        Send2Client(&msg, m_SysConfig.iSystemConfigClientID);
+    }
+}
+
 static int GetStatusBarZnode(int cli, int clifd, void* buff, size_t len)
 {
     if(m_SysConfig.iSystemConfigClientID == cli)
@@ -323,6 +329,7 @@ static int GetStatusBarZnode(int cli, int clifd, void* buff, size_t len)
         {
             ReplyInfo replyInfo;
             m_SysConfig.iStatusBarZNode = (int)(requestInfo->iData0);
+            m_SysConfig.hWndStatusBar = requestInfo->hWnd;
             replyInfo.id = REQ_SUBMIT_STATUSBAR_ZNODE;
             replyInfo.iData0 = (int)TRUE;
             ServerSendReply(clifd, &replyInfo, sizeof(replyInfo));
@@ -333,7 +340,33 @@ static int GetStatusBarZnode(int cli, int clifd, void* buff, size_t len)
 
 static int GetTopMostTitle(int cli, int clifd, void* buff, size_t len)
 {
-printf("============== in GetTopMostTitle.\n");
+    if(m_SysConfig.iSystemConfigClientID == cli)
+    {
+        RequestInfo * requestInfo = (RequestInfo *)buff;
+        if(requestInfo->id == REQ_GET_TOPMOST_TITLE)
+        {
+            int clientId = requestInfo->iData0 & 0xFFFF;
+            int idx_znode = (requestInfo->iData0 & 0xFFFF0000) >> 16;
+            int length = (int)requestInfo->iData1;
+            char buff[length + 1];
+            
+            int cur_clientId = 0;
+            ServerGetTopmostZNodeOfType(NULL, ZOF_TYPE_NORMAL, &cur_clientId);
+
+            memset(buff, 0, length + 1);
+
+            if(clientId == cur_clientId)            // the same process
+            {
+                const ZNODEHEADER * znodeheader = ServerGetWinZNodeHeader(NULL, idx_znode, NULL, FALSE);
+                if(znodeheader)
+                {
+                    if(znodeheader->caption)
+                        memcpy(buff, znodeheader->caption, length);
+                }
+            }
+            ServerSendReply(clifd, buff, length + 1);
+        }
+    }
     return 0;
 }
 
