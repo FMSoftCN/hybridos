@@ -22,7 +22,7 @@
 #define HEIGHT_TASKBAR  28
 #define HEIGHT_IMEWIN   24
 
-#define _ID_START_BUTTON    100
+#define _ID_TITLE_STATIC    100
 #define _ID_TIME_STATIC     110
 #define _ID_APPS_COOLBAR    120
 #define _ID_LAYER_BOX       200
@@ -40,6 +40,7 @@
 #define _WIDTH_BOXES    (g_rcScr.right - _WIDTH_TIME - _MARGIN - _MARGIN - _LEFT_BOXES)
 
 #define APP_INFO_FILE   "main.rc"
+#define STRING_OS_NAME  "Hybrid OS V1.1.0"
 
 #define TIP_MAX         255
 

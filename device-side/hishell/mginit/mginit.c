@@ -155,7 +155,10 @@ static void on_znode_operation(int op, int cli, int idx_znode)
     idx_topmost = ServerGetTopmostZNodeOfType(NULL, ZOF_TYPE_NORMAL, &clientId);
     m_SysConfig.iTopmostClientID = clientId;
 
-    if((op == ZNOP_ALLOCATE) || (op == ZNOP_FREE) || (op == ZNOP_MOVE2TOP) || (op == ZNOP_SETACTIVE))
+    if((op == ZNOP_CHANGECAPTION) && (clientId != cli))
+        return;
+
+    if((op == ZNOP_ALLOCATE) || (op == ZNOP_FREE) || (op == ZNOP_MOVE2TOP) || (op == ZNOP_SETACTIVE) || (op == ZNOP_CHANGECAPTION))
     {
         msg.message = MSG_MAINWINDOW_CHANGE;
         msg.hwnd = m_SysConfig.hWndStatusBar;

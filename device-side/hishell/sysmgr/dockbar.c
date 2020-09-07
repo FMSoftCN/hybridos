@@ -251,13 +251,9 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 //            return 1;
 //        plogo = calloc (1 , sizeof(BITMAP));
 //        LoadBitmap (HDC_SCREEN , plogo , app_info.logo_path);
-/*
-        CreateWindow (CTRL_BUTTON, "Start", WS_CHILD | WS_VISIBLE, _ID_START_BUTTON, 
-                    _MARGIN, _MARGIN, _WIDTH_START, _HEIGHT_CTRL, hWnd, 0);
-                    */
 //        CreateWindow (CTRL_STATIC, "", SS_REALSIZEIMAGE | SS_CENTERIMAGE | SS_BITMAP | WS_CHILD | WS_VISIBLE | WS_BORDER, _ID_START_BUTTON, 
 //                    _MARGIN, _MARGIN, g_rcScr.right / 2, /*_WIDTH_START,*/ _HEIGHT_CTRL, hWnd, (DWORD)plogo);
-        CreateWindow (CTRL_STATIC, "hello world", WS_CHILD | WS_BORDER | WS_VISIBLE | SS_CENTER, _ID_START_BUTTON,                           
+        CreateWindow (CTRL_STATIC, "dock bar", WS_CHILD | WS_BORDER | WS_VISIBLE | SS_CENTER, _ID_TITLE_STATIC,                           
                     _MARGIN, _MARGIN, g_rcScr.right / 2, /*_WIDTH_START,*/ _HEIGHT_CTRL, hWnd, 0); 
 
         CreateWindow (CTRL_STATIC, mk_time (buff), WS_CHILD | WS_BORDER | WS_VISIBLE | SS_CENTER, 
@@ -278,9 +274,6 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
         int code = HIWORD (wParam);
         int id   = LOWORD (wParam);
         switch (id) {
-        case _ID_START_BUTTON:
-            under_construction (hWnd);
-            break;
         case _ID_APPS_COOLBAR:
             if (code == 0) {
                 ask_for_quit (hWnd);
@@ -338,7 +331,7 @@ HWND create_dock_bar (void)
     CreateInfo.rx = g_rcScr.right;
     CreateInfo.by = g_rcScr.bottom;
 
-    CreateInfo.iBkColor = COLOR_lightwhite; // GetWindowElementPixelEx (HWND_NULL, HDC_SCREEN, WE_MAINC_THREED_BODY); 
+    CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0x80);   //COLOR_lightwhite; // GetWindowElementPixelEx (HWND_NULL, HDC_SCREEN, WE_MAINC_THREED_BODY); 
     CreateInfo.dwAddData = 0;
     CreateInfo.hHosting = HWND_DESKTOP;
     hDockBar = CreateMainWindow (&CreateInfo);
