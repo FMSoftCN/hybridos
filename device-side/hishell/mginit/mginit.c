@@ -71,26 +71,6 @@ static void child_wait (int sig)
     }
 }
 
-static LRESULT HelloWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    HDC hdc;
-
-    switch (message) {
-        case MSG_CREATE:
-            break;
-        case MSG_TIMER:
-            break;
-        case MSG_PAINT:
-            break;
-        case MSG_CLOSE:
-            DestroyMainWindow (hWnd);
-            PostQuitMessage (hWnd);
-            return 0;
-    }
-
-    return DefaultMainWinProc(hWnd, message, wParam, lParam);
-}
-
 static void on_new_del_client(int op, int cli)
 {
     static int nr_clients = 0;
