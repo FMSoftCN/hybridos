@@ -136,7 +136,15 @@ static void on_znode_operation(int op, int cli, int idx_znode)
     m_SysConfig.iTopmostClientID = clientId;
 
     if((op == ZNOP_CHANGECAPTION) && (clientId != cli))
+    {
+        if (clientId == 0)
+        {
+            msg.message = MSG_DYBKGND_DO_ANIMATION;
+            msg.hwnd = NULL;
+            Send2Client(&msg, m_SysConfig.iDyBKGndClientID);
+        }
         return;
+    }
 
     if((op == ZNOP_ALLOCATE) || (op == ZNOP_FREE) || (op == ZNOP_MOVE2TOP) || (op == ZNOP_SETACTIVE) || (op == ZNOP_CHANGECAPTION))
     {

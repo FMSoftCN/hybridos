@@ -37,6 +37,8 @@
 #include <minigui/window.h>
 #include <mgeff/mgeff.h>
 
+#include "../include/sysconfig.h"
+
 #define WALLPAPER_FILE_TOP          "res/wallpaper-top.jpg"
 #define WALLPAPER_FILE_BOTTOM       "res/wallpaper-bottom.jpg"
 
@@ -172,6 +174,10 @@ int MiniGUIMain (int argc, const char* argv[])
     startAnimation(NULL);
 
     while (GetMessage (&msg, HWND_DESKTOP)) {
+        if (msg.message == MSG_DYBKGND_DO_ANIMATION)
+        {
+            startAnimation(NULL);
+        }
         DispatchMessage (&msg);
     }
 

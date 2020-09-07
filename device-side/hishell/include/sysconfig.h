@@ -20,6 +20,7 @@
 #define _SYSTEM_CONFIG
 
 #define MSG_MAINWINDOW_CHANGE       (MSG_USER + 1)
+#define MSG_DYBKGND_DO_ANIMATION    (MSG_USER + 2)
 
 typedef struct tagSysConfig 
 {
