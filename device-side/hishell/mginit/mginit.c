@@ -46,132 +46,16 @@
 #include <minigui/control.h>
 #include <minigui/fixedmath.h>
 
-#ifdef _MGRM_THREADS
-    #error "*******************************************************************"
-    #error "**** Your MiniGUI is configured as MiniGUI-Threads.            ****"
-    #error "**** This program is a server of MiniGUI-Processes,            ****"
-    #error "****   it can only run on MiniGUI-Processes,                   ****"
-    #error "****   not on MiniGUI-Threads.                                 ****"
-    #error "**** If you want to configure MiniGUI as MiniGUI-Processes,    ****"
-    #error "****   please run `./configure --enable-procs'                 ****"
-    #error "****   when configuring MiniGUI                                ****"
-    #error "****   and build and reinstall MiniGUI.                        ****"
-    #error "**** Note that this is not a fatal error.                      ****"
-    #error "*******************************************************************"
-#else
-
 #include "../include/sysconfig.h"
-#include "config.h"
 
 static SysConfig m_SysConfig;
 
-static const char* change_layer_info [] =
+static const char* new_del_client_info [] =
 {
-        NULL,
-        "New layer created: %s; client: %s\n",
-        "Layer deleted: %s; client: %s\n",
-        "New client joined layer: (%s, %s)\n",
-        "Remove client from layer: (%s, %s)\n",
-        "Change topmost layer to %s; client: %s\n",
-        "Change active client: (%s, %s)\n",
+    NULL,
+    "New comming in client: %s\n",
+    "Disconnecting client: %s\n"
 };
-
-static void adjust_boxes (int width, MG_Layer* layer)
-{
-    int left = _LEFT_BOXES;
-    MG_Layer* cur_layer = mgLayers;
-
-    while (cur_layer) {
-        if (cur_layer != layer) {
-            MoveWindow ((HWND)cur_layer->dwAddData, left, _MARGIN,
-                            width, _HEIGHT_CTRL, TRUE);
-            left += width;
-        }
-
-        cur_layer = cur_layer->next;
-    }
-}
-
-static void on_change_topmost (MG_Layer* layer)
-{
-    MG_Layer* cur_layer = mgLayers;
-
-    if (layer)
-        SendMessage ((HWND)layer->dwAddData, BM_SETCHECK, BST_CHECKED, 0);
-
-    while (cur_layer) {
-        if (cur_layer != layer) {
-            SendMessage ((HWND)cur_layer->dwAddData, BM_SETCHECK, 0, 0);
-        }
-
-        cur_layer = cur_layer->next;
-    }
-}
-
-static void on_change_layer (int op, MG_Layer* layer, MG_Client* client)
-{
-    static int nr_boxes = 0;
-    static int box_width = _MAX_WIDTH_LAYER_BOX;
-    int new_width;
-
-    if (op > 0 && op <= LCO_ACTIVE_CHANGED)
-        printf (change_layer_info [op], layer?layer->name:"NULL", 
-                        client?client->name:"NULL");
-
-    switch (op) {
-    case LCO_NEW_LAYER:
-        nr_boxes ++;
-        if (box_width * nr_boxes > _WIDTH_BOXES) {
-            new_width = _WIDTH_BOXES / nr_boxes;
-            if (new_width < _MIN_WIDTH_LAYER_BOX) {
-                new_width = _MIN_WIDTH_LAYER_BOX;
-            }
-
-            if (new_width != box_width) {
-                adjust_boxes (new_width, layer);
-                box_width = new_width;
-            }
-        }
-/*
-        layer->dwAddData = (DWORD)CreateWindow (CTRL_BUTTON, layer->name,
-                 WS_CHILD | WS_VISIBLE | BS_CHECKBOX | BS_PUSHLIKE | BS_CENTER,
-                 _ID_LAYER_BOX,
-                 _LEFT_BOXES + box_width * (nr_boxes - 1), _MARGIN,
-                 box_width, _HEIGHT_CTRL, hStatusBar, (DWORD)layer);
-*/
-        break;
-
-    case LCO_DEL_LAYER:
-        DestroyWindow ((HWND)(layer->dwAddData));
-        layer->dwAddData = 0;
-        nr_boxes --; 
-        if (box_width * nr_boxes < _WIDTH_BOXES) {
-            if (nr_boxes != 0)
-                new_width = _WIDTH_BOXES / nr_boxes;
-            else
-                new_width = _MAX_WIDTH_LAYER_BOX;
-
-            if (new_width > _MAX_WIDTH_LAYER_BOX)
-                new_width = _MAX_WIDTH_LAYER_BOX;
-
-            adjust_boxes (new_width, layer);
-            box_width = new_width;
-        }
-        break;
-
-    case LCO_JOIN_CLIENT:
-        break;
-    case LCO_REMOVE_CLIENT:
-        break;
-    case LCO_TOPMOST_CHANGED:
-        on_change_topmost (layer);
-        break;
-    case LCO_ACTIVE_CHANGED:
-        break;
-    default:
-        printf ("Serious error: incorrect operations.\n");
-    }
-}
 
 static void child_wait (int sig)
 {
@@ -186,26 +70,6 @@ static void child_wait (int sig)
             printf ("--pid=%d--signal=%d--\n", pid, WTERMSIG (status));
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-static const char* new_del_client_info [] =
-{
-    NULL,
-    "New comming in client: %s\n",
-    "Disconnecting client: %s\n"
-};
 
 static LRESULT HelloWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -379,7 +243,6 @@ int MiniGUIMain (int args, const char* arg[])
     sigaction (SIGCHLD, &siga, NULL);
 
     OnNewDelClient = on_new_del_client;
-    OnChangeLayer = on_change_layer;
     OnZNodeOperation = on_znode_operation;
 
     if (!ServerStartup (0, 0, 0)) 
@@ -419,6 +282,3 @@ int MiniGUIMain (int args, const char* arg[])
 
     return 0;
 }
-
-#endif
-
