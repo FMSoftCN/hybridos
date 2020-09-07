@@ -67,6 +67,8 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
     char str_time_buff [20];
     int length = 0;
     RECT rect[2] = {{_MARGIN, _MARGIN, g_rcScr.right / 2,  _HEIGHT_CTRL}, {g_rcScr.right / 2, _MARGIN, g_rcScr.right - _MARGIN, _HEIGHT_CTRL}};
+    static int counter = 1;
+    static int direction = DIRECTION_SHOW;
 
     switch (message) 
     {
@@ -122,6 +124,11 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                     ClientRequest(&request, title, length + 1);
                     if(title[0])
                     {
+                        MoveWindow(hWnd, g_rcScr.left, 0, g_rcScr.right, HEIGHT_TASKBAR, TRUE);
+                        KillTimer (hWnd, _ID_ANIMATE_TIMER);
+                        counter = 1;
+                        SetTimer(hWnd, _ID_SHOW_TIMER, 200);
+
                         SetWindowText(hWnd, title);
                         InvalidateRect(hWnd, rect + 0, TRUE);
                     }
@@ -130,12 +137,41 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             break;
 
         case MSG_CREATE:
-            SetTimer (hWnd, _ID_TIMER, 100);
+            SetTimer(hWnd, _ID_TIMER, 100);
+            SetTimer(hWnd, _ID_SHOW_TIMER, 200);
+            counter = 0;
             break;
 
         case MSG_TIMER:
             if(wParam == _ID_TIMER)
                 InvalidateRect(hWnd, rect + 1, TRUE);
+            else if(wParam == _ID_SHOW_TIMER)
+            {
+                KillTimer(hWnd, _ID_SHOW_TIMER);
+                direction = DIRECTION_HIDE;
+                SetTimer(hWnd, _ID_ANIMATE_TIMER, 10);
+            }
+            else if(wParam == _ID_ANIMATE_TIMER)
+            {
+                MoveWindow(hWnd, g_rcScr.left, -1 * counter * HEIGHT_TASKBAR / 10, g_rcScr.right, HEIGHT_TASKBAR, TRUE);
+                if(direction == DIRECTION_HIDE)
+                {
+                    if(counter == 10)
+                        KillTimer (hWnd, _ID_ANIMATE_TIMER);
+                    else
+                        counter ++;
+                }
+                else
+                {
+                    if(counter == 0)
+                    {
+                        KillTimer (hWnd, _ID_ANIMATE_TIMER);
+                        SetTimer(hWnd, _ID_SHOW_TIMER, 200);
+                    }
+                    else
+                        counter --;
+                }
+            }
             break;
 
         case MSG_CLOSE:
