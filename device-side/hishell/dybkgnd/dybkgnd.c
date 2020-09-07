@@ -43,10 +43,11 @@
 BITMAP bmpTop;
 BITMAP bmpBottom;
 
-int start = 0;
-int end = 50;
-int duration = 200;
-enum EffMotionType motionType = InOutQuart;
+int start = 100;
+int end = 0;
+int duration = 600;
+enum EffMotionType motionType = OutQuart;
+//enum EffMotionType motionType = OutQuint;
 
 void loadBitmap(void)
 {
@@ -88,9 +89,11 @@ int paintWallpaper (HDC hdc, int space)
             wp_w = (int)GetGDCapability (hdc, GDCAP_HPIXEL);
             wp_h = (int)GetGDCapability (hdc, GDCAP_VPIXEL);
             wp_half_h = wp_h >> 1;
+            start = wp_half_h - bmpTop.bmHeight;;
         }
 
-        SetBrushColor(hdc, 0xFFFFFF);
+        fprintf(stderr, "wp_w=%d|wp_h=%d\n", wp_w, wp_h);
+        SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0x00, 0x0, 0x0));
         FillBox(hdc, 0, 0, wp_w, wp_h);
 
         w = bmpTop.bmWidth;
@@ -120,10 +123,8 @@ static void animated_cb(MGEFF_ANIMATION handle, HWND hwnd, int id, int *value)
     paintWallpaper(HDC_SCREEN, *value);
 }
 
-void doAnimationBack(HWND hwnd);
 static void animated_end(MGEFF_ANIMATION handle)
 {
-    doAnimationBack(NULL);
 }
 
 void startAnimation (HWND hwnd)
