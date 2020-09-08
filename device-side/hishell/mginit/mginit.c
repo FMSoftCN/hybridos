@@ -142,12 +142,6 @@ static void on_znode_operation(int op, int cli, int idx_znode)
 
     if((op == ZNOP_CHANGECAPTION) && (clientId != cli))
     {
-        if (clientId == 0)
-        {
-            msg.message = MSG_DYBKGND_DO_ANIMATION;
-            msg.hwnd = HWND_NULL;
-            Send2Client(&msg, m_SysConfig.iDyBKGndClientID);
-        }
         return;
     }
 
@@ -171,6 +165,13 @@ static void on_znode_operation(int op, int cli, int idx_znode)
                 msg.lParam = 0;
         }
         Send2Client(&msg, m_SysConfig.iSystemConfigClientID);
+
+        if (clientId == 0 && idx_topmost == 0)
+        {
+            msg.message = MSG_DYBKGND_DO_ANIMATION;
+            msg.hwnd = HWND_NULL;
+            Send2Client(&msg, m_SysConfig.iDyBKGndClientID);
+        }
     }
 }
 
