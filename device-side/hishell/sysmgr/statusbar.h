@@ -24,6 +24,7 @@
 
 #define HEIGHT_TASKBAR  40 
 #define HEIGHT_IMEWIN   24
+#define TIME_INFO_X     100
 
 #define _ID_TITLE_STATIC    100
 #define _ID_TIME_STATIC     110

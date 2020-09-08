@@ -61,12 +61,23 @@ static char* mk_time(char* buff)
     return buff;
 }
 
+static void Start_Animation(HWND hWnd, int * counter, int direction)
+{
+    KillTimer (hWnd, _ID_ANIMATE_TIMER);
+    KillTimer (hWnd, _ID_SHOW_TIMER);
+
+    if((direction == DIRECTION_SHOW) && (*counter == 10)) 
+        *counter = 9;
+
+    SetTimer(hWnd, _ID_ANIMATE_TIMER, 10);
+}
+
 static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC hdc;
     char str_time_buff [20];
     int length = 0;
-    RECT rect[2] = {{_MARGIN, _MARGIN, g_rcScr.right / 2,  _HEIGHT_CTRL}, {g_rcScr.right / 2, _MARGIN, g_rcScr.right - _MARGIN, _HEIGHT_CTRL}};
+    RECT rect[2] = {{_MARGIN, _MARGIN, g_rcScr.right - TIME_INFO_X,  _HEIGHT_CTRL}, {g_rcScr.right - TIME_INFO_X, _MARGIN, g_rcScr.right - _MARGIN, _HEIGHT_CTRL}};
     static int counter = 1;
     static int direction = DIRECTION_SHOW;
 
@@ -93,6 +104,9 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
         case MSG_MAINWINDOW_CHANGE:
             if((wParam & 0xFFFF) == 0)          // It is Desk Top
             {
+                direction = DIRECTION_SHOW;
+                Start_Animation(hWnd, &counter, direction);
+
                 SetWindowText(hWnd, STRING_OS_NAME);
                 InvalidateRect(hWnd, rect + 0, TRUE);
             }
@@ -101,6 +115,9 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                 length = (int)lParam;
                 if(length == 0)            // no title for main window
                 {
+                    direction = DIRECTION_SHOW;
+                    Start_Animation(hWnd, &counter, direction);
+
                     SetWindowText(hWnd, STRING_OS_NAME);
                     InvalidateRect(hWnd, rect + 0, TRUE);
                 }
@@ -124,10 +141,8 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                     ClientRequest(&request, title, length + 1);
                     if(title[0])
                     {
-                        MoveWindow(hWnd, g_rcScr.left, 0, g_rcScr.right, HEIGHT_TASKBAR, TRUE);
-                        KillTimer (hWnd, _ID_ANIMATE_TIMER);
-                        counter = 1;
-                        SetTimer(hWnd, _ID_SHOW_TIMER, 200);
+                        direction = DIRECTION_SHOW;
+                        Start_Animation(hWnd, &counter, direction);
 
                         SetWindowText(hWnd, title);
                         InvalidateRect(hWnd, rect + 0, TRUE);
@@ -139,7 +154,6 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
         case MSG_CREATE:
             SetTimer(hWnd, _ID_TIMER, 100);
             SetTimer(hWnd, _ID_SHOW_TIMER, 200);
-            counter = 0;
             break;
 
         case MSG_TIMER:
@@ -153,6 +167,7 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             }
             else if(wParam == _ID_ANIMATE_TIMER)
             {
+printf("============== counter is %d\n", counter);
                 MoveWindow(hWnd, g_rcScr.left, -1 * counter * HEIGHT_TASKBAR / 10, g_rcScr.right, HEIGHT_TASKBAR, TRUE);
                 if(direction == DIRECTION_HIDE)
                 {
