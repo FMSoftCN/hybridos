@@ -80,5 +80,7 @@ int MiniGUIMain (int args, const char* arg[])
         DispatchMessage (&msg);
     }
 
+    mGEffDeinit();
+
     return 0;
 }

@@ -38,7 +38,6 @@
 #define _WIDTH_APPS         250
 #define _ID_TIMER           100
 #define _ID_SHOW_TIMER      101
-#define _ID_ANIMATE_TIMER   102
 
 #define _MAX_WIDTH_LAYER_BOX    80
 #define _MIN_WIDTH_LAYER_BOX    20

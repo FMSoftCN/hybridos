@@ -11,9 +11,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 /* 
-** $Id: taskbar.c 381 2008-01-28 10:19:26Z wangjian $
+** $Id: statusbar.c 381 2008-01-28 10:19:26Z wangjian $
 **
-** The taskbar of MDE
+** The statusbar of MDE
 **
 ** Copyright (C) 2003 ~ 2017 FMSoft (http://www.fmsoft.cn).
 **
@@ -49,6 +49,10 @@
 
 extern HWND m_hStatusBar;
 extern HWND m_hDockBar;
+static int m_StatusBar_Height = 0;
+static int m_StatusBar_Y = 0;
+static MGEFF_ANIMATION m_animation = NULL;
+static int m_direction = DIRECTION_SHOW;
 
 static char* mk_time(char* buff)
 {
@@ -62,15 +66,65 @@ static char* mk_time(char* buff)
     return buff;
 }
 
-static void Start_Animation(HWND hWnd, int * counter, int direction)
+static void animated_cb(MGEFF_ANIMATION handle, HWND hWnd, int id, int *value)
 {
-    KillTimer (hWnd, _ID_ANIMATE_TIMER);
-    KillTimer (hWnd, _ID_SHOW_TIMER);
+    if(m_StatusBar_Y != *value)
+    {
+        MoveWindow(hWnd, g_rcScr.left, m_StatusBar_Y, g_rcScr.right, m_StatusBar_Height, TRUE);
+        m_StatusBar_Y = *value;
+    }
+}
 
-    if((direction == DIRECTION_SHOW) && (*counter == 10)) 
-        *counter = 9;
+static void animated_end(MGEFF_ANIMATION handle)
+{
+    HWND hWnd = (HWND)mGEffAnimationGetTarget(handle);
+    mGEffAnimationDelete(m_animation);
+    m_animation = NULL;
 
-    SetTimer(hWnd, _ID_ANIMATE_TIMER, 10);
+    if(m_direction == DIRECTION_SHOW)
+        SetTimer(hWnd, _ID_SHOW_TIMER, 200);
+}
+
+static void create_animation(HWND hWnd)
+{
+    if(m_animation)
+    {
+        mGEffAnimationDelete(m_animation);
+        m_animation = NULL;
+    }
+
+    m_animation = mGEffAnimationCreate((void *)hWnd, (void *)animated_cb, 1, MGEFF_INT);
+    if (m_animation) 
+    {
+        int start = 0;
+        int end = 0;
+        int duration = 0;
+        enum EffMotionType motionType = InQuad;
+
+        start = m_StatusBar_Y;
+        if(m_direction == DIRECTION_HIDE)
+        {
+            end = -1 * m_StatusBar_Height;
+            motionType = InQuad;
+            duration = 1000 * (m_StatusBar_Height + m_StatusBar_Y) / m_StatusBar_Height;
+        }
+        else
+        {
+            end = 0;
+            motionType = OutQuad;
+            duration = -1000 * m_StatusBar_Y / m_StatusBar_Height;
+        }
+
+        if(duration == 0)
+            duration = 1000;
+
+        mGEffAnimationSetStartValue(m_animation, &start);
+        mGEffAnimationSetEndValue(m_animation, &end);
+        mGEffAnimationSetDuration(m_animation, duration);
+        mGEffAnimationSetCurve(m_animation, motionType);
+        mGEffAnimationSetFinishedCb(m_animation, animated_end);
+        mGEffAnimationAsyncRun(m_animation);
+    }
 }
 
 static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -79,8 +133,6 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
     char str_time_buff [20];
     int length = 0;
     RECT rect[2] = {{_MARGIN, _MARGIN, g_rcScr.right - TIME_INFO_X,  _HEIGHT_CTRL}, {g_rcScr.right - TIME_INFO_X, _MARGIN, g_rcScr.right - _MARGIN, _HEIGHT_CTRL}};
-    static int counter = 1;
-    static int direction = DIRECTION_SHOW;
 
     switch (message) 
     {
@@ -105,8 +157,8 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
         case MSG_MAINWINDOW_CHANGE:
             if((wParam & 0xFFFF) == 0)          // It is Desk Top
             {
-                direction = DIRECTION_SHOW;
-                Start_Animation(hWnd, &counter, direction);
+                m_direction = DIRECTION_SHOW;
+                create_animation(hWnd);
 
                 SetWindowText(hWnd, STRING_OS_NAME);
                 InvalidateRect(hWnd, rect + 0, TRUE);
@@ -116,8 +168,8 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                 length = (int)lParam;
                 if(length == 0)            // no title for main window
                 {
-                    direction = DIRECTION_SHOW;
-                    Start_Animation(hWnd, &counter, direction);
+                    m_direction = DIRECTION_SHOW;
+                    create_animation(hWnd);
 
                     SetWindowText(hWnd, STRING_OS_NAME);
                     InvalidateRect(hWnd, rect + 0, TRUE);
@@ -142,8 +194,8 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                     ClientRequest(&request, title, length + 1);
                     if(title[0])
                     {
-                        direction = DIRECTION_SHOW;
-                        Start_Animation(hWnd, &counter, direction);
+                        m_direction = DIRECTION_SHOW;
+                        create_animation(hWnd);
 
                         SetWindowText(hWnd, title);
                         InvalidateRect(hWnd, rect + 0, TRUE);
@@ -155,6 +207,8 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
         case MSG_CREATE:
             SetTimer(hWnd, _ID_TIMER, 100);
             SetTimer(hWnd, _ID_SHOW_TIMER, 200);
+            m_direction = DIRECTION_HIDE;
+            m_StatusBar_Y = 0;
             break;
 
         case MSG_TIMER:
@@ -162,30 +216,9 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                 InvalidateRect(hWnd, rect + 1, TRUE);
             else if(wParam == _ID_SHOW_TIMER)
             {
+                m_direction = DIRECTION_HIDE;
+                create_animation(hWnd);
                 KillTimer(hWnd, _ID_SHOW_TIMER);
-                direction = DIRECTION_HIDE;
-                SetTimer(hWnd, _ID_ANIMATE_TIMER, 10);
-            }
-            else if(wParam == _ID_ANIMATE_TIMER)
-            {
-                MoveWindow(hWnd, g_rcScr.left, -1 * counter * HEIGHT_STATUSBAR / 10, g_rcScr.right, HEIGHT_STATUSBAR, TRUE);
-                if(direction == DIRECTION_HIDE)
-                {
-                    if(counter == 10)
-                        KillTimer (hWnd, _ID_ANIMATE_TIMER);
-                    else
-                        counter ++;
-                }
-                else
-                {
-                    if(counter == 0)
-                    {
-                        KillTimer (hWnd, _ID_ANIMATE_TIMER);
-                        SetTimer(hWnd, _ID_SHOW_TIMER, 200);
-                    }
-                    else
-                        counter --;
-                }
             }
             break;
 
@@ -209,6 +242,9 @@ HWND create_status_bar (void)
     RequestInfo requestinfo;
     ReplyInfo replyInfo;
 
+    m_StatusBar_Height = GetGDCapability(HDC_SCREEN, GDCAP_DPI);
+    m_StatusBar_Height = HEIGHT_STATUSBAR * m_StatusBar_Height / 96;
+
     // create a main window
     CreateInfo.dwStyle = WS_ABSSCRPOS | WS_VISIBLE;
     CreateInfo.dwExStyle = WS_EX_WINTYPE_DOCKER;
@@ -220,7 +256,7 @@ HWND create_status_bar (void)
     CreateInfo.lx = g_rcScr.left; 
     CreateInfo.ty = 0;
     CreateInfo.rx = g_rcScr.right;
-    CreateInfo.by = HEIGHT_STATUSBAR;
+    CreateInfo.by = m_StatusBar_Height;
     CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0x80); 
     CreateInfo.dwAddData = 0;
     CreateInfo.hHosting = HWND_DESKTOP;
