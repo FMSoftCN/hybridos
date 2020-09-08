@@ -45,6 +45,7 @@
 #include <minigui/window.h>
 #include <minigui/control.h>
 #include <minigui/fixedmath.h>
+#include <mgeff/mgeff.h>
 
 #include "config.h"
 
@@ -58,6 +59,8 @@ int MiniGUIMain (int args, const char* arg[])
 #ifdef _MGRM_PROCESSES
     JoinLayer(NAME_DEF_LAYER , "sysmgr" , 0 , 0);
 #endif
+
+    mGEffInit();
 
     if ((m_hStatusBar = create_status_bar ()) == HWND_INVALID) 
     {

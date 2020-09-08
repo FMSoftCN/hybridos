@@ -41,6 +41,7 @@
 #include <minigui/gdi.h>
 #include <minigui/window.h>
 #include <minigui/control.h>
+#include <mgeff/mgeff.h>
 
 #include "../include/sysconfig.h"
 #include "config.h"
@@ -167,7 +168,6 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             }
             else if(wParam == _ID_ANIMATE_TIMER)
             {
-printf("============== counter is %d\n", counter);
                 MoveWindow(hWnd, g_rcScr.left, -1 * counter * HEIGHT_STATUSBAR / 10, g_rcScr.right, HEIGHT_STATUSBAR, TRUE);
                 if(direction == DIRECTION_HIDE)
                 {

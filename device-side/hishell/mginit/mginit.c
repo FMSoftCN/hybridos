@@ -133,10 +133,12 @@ static void on_znode_operation(int op, int cli, int idx_znode)
     int idx_topmost = 0;
 
     idx_topmost = ServerGetTopmostZNodeOfType(NULL, ZOF_TYPE_NORMAL, &clientId);
+
+    if((m_SysConfig.iTopmostClientID == 0) && (clientId == 0))
+        return;
+
     m_SysConfig.iTopmostClientID = clientId;
 
-    if(idx_topmost <= 0)            // todo
-        return;
 
     if((op == ZNOP_CHANGECAPTION) && (clientId != cli))
     {
