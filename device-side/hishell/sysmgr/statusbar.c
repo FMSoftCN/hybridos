@@ -168,7 +168,7 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             else if(wParam == _ID_ANIMATE_TIMER)
             {
 printf("============== counter is %d\n", counter);
-                MoveWindow(hWnd, g_rcScr.left, -1 * counter * HEIGHT_TASKBAR / 10, g_rcScr.right, HEIGHT_TASKBAR, TRUE);
+                MoveWindow(hWnd, g_rcScr.left, -1 * counter * HEIGHT_STATUSBAR / 10, g_rcScr.right, HEIGHT_STATUSBAR, TRUE);
                 if(direction == DIRECTION_HIDE)
                 {
                     if(counter == 10)
@@ -220,7 +220,7 @@ HWND create_status_bar (void)
     CreateInfo.lx = g_rcScr.left; 
     CreateInfo.ty = 0;
     CreateInfo.rx = g_rcScr.right;
-    CreateInfo.by = HEIGHT_TASKBAR;
+    CreateInfo.by = HEIGHT_STATUSBAR;
     CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0x80); 
     CreateInfo.dwAddData = 0;
     CreateInfo.hHosting = HWND_DESKTOP;

@@ -308,7 +308,7 @@ HWND create_dock_bar (void)
     CreateInfo.hIcon = 0;
     CreateInfo.MainWindowProc = DockBarWinProc;
     CreateInfo.lx = g_rcScr.left;
-    CreateInfo.ty = g_rcScr.bottom - HEIGHT_TASKBAR;
+    CreateInfo.ty = g_rcScr.bottom - HEIGHT_STATUSBAR;
     CreateInfo.rx = g_rcScr.right;
     CreateInfo.by = g_rcScr.bottom;
 

@@ -135,12 +135,15 @@ static void on_znode_operation(int op, int cli, int idx_znode)
     idx_topmost = ServerGetTopmostZNodeOfType(NULL, ZOF_TYPE_NORMAL, &clientId);
     m_SysConfig.iTopmostClientID = clientId;
 
+    if(idx_topmost <= 0)            // todo
+        return;
+
     if((op == ZNOP_CHANGECAPTION) && (clientId != cli))
     {
         if (clientId == 0)
         {
             msg.message = MSG_DYBKGND_DO_ANIMATION;
-            msg.hwnd = NULL;
+            msg.hwnd = HWND_NULL;
             Send2Client(&msg, m_SysConfig.iDyBKGndClientID);
         }
         return;

@@ -22,7 +22,7 @@
 #define DIRECTION_SHOW  0
 #define DIRECTION_HIDE  1
 
-#define HEIGHT_TASKBAR  40 
+#define HEIGHT_STATUSBAR  40 
 #define HEIGHT_IMEWIN   24
 #define TIME_INFO_X     100
 
