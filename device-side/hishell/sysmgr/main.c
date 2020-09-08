@@ -46,8 +46,7 @@
 #include <minigui/control.h>
 #include <minigui/fixedmath.h>
 
-#include "statusbar.h"
-#include "dockbar.h"
+#include "config.h"
 
 HWND m_hStatusBar = HWND_INVALID;
 HWND m_hDockBar = HWND_INVALID;

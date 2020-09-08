@@ -75,6 +75,7 @@ extern "C" {
 #endif  /* __cplusplus */
 
 HWND create_status_bar (void);
+HWND create_dock_bar (void);
 //pid_t exec_app (int app);
 
 #ifdef __cplusplus

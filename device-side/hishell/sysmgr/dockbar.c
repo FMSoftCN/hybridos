@@ -42,10 +42,7 @@
 #include <minigui/window.h>
 #include <minigui/control.h>
 
-#include "statusbar.h"
-#include "dockbar.h"
-
-static BOOL quit = FALSE;
+#include "config.h"
 
 static char* mk_time (char* buff)
 {
@@ -193,16 +190,6 @@ static void under_construction (HWND hwnd)
             MB_OK | MB_ICONEXCLAMATION);
 }
 
-static void ask_for_quit (HWND hwnd)
-{
-    if (MessageBox (hwnd, 
-            "You are asking for quit. \n\nDo you want to quit really?",
-            "Do you want to quit really?",
-            MB_YESNO | MB_ICONQUESTION) == IDYES) {
-        quit = TRUE;
-    }
-}
-
 static pid_t exec_app (int app)
 {
     pid_t pid = 0;
@@ -275,11 +262,7 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
         int id   = LOWORD (wParam);
         switch (id) {
         case _ID_APPS_COOLBAR:
-            if (code == 0) {
-                ask_for_quit (hWnd);
-            }
-            else
-                exec_app (code - 1);
+            exec_app (code - 1);
             break;
         }
 
@@ -296,8 +279,6 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
     case MSG_TIMER:
     {
         SetDlgItemText (hWnd, _ID_TIME_STATIC, mk_time (buff));
-        if (quit)
-            PostMessage (hWnd, MSG_CLOSE, 0, 0);
         break;
     }
         
@@ -331,10 +312,15 @@ HWND create_dock_bar (void)
     CreateInfo.rx = g_rcScr.right;
     CreateInfo.by = g_rcScr.bottom;
 
-    CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0x80);   //COLOR_lightwhite; // GetWindowElementPixelEx (HWND_NULL, HDC_SCREEN, WE_MAINC_THREED_BODY); 
+    CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0x80); 
     CreateInfo.dwAddData = 0;
     CreateInfo.hHosting = HWND_DESKTOP;
-    hDockBar = CreateMainWindow (&CreateInfo);
+    hDockBar = CreateMainWindowEx2 (&CreateInfo, 0L, NULL, NULL, ST_PIXEL_ARGB8888,
+                                MakeRGBA (SysPixelColor[IDX_COLOR_darkgray].r,
+                                          SysPixelColor[IDX_COLOR_darkgray].g,
+                                          SysPixelColor[IDX_COLOR_darkgray].b,
+                                          0xA0),
+                                CT_ALPHAPIXEL, 0x80);
 
     return hDockBar;
 }

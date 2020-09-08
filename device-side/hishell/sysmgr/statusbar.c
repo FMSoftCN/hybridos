@@ -43,7 +43,7 @@
 #include <minigui/control.h>
 
 #include "../include/sysconfig.h"
-#include "statusbar.h"
+#include "config.h"
 
 
 extern HWND m_hStatusBar;
