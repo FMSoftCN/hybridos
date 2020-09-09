@@ -131,19 +131,19 @@ static void create_animation(HWND hWnd)
         int start = 0;
         int end = 0;
         int duration = 0;
-        enum EffMotionType motionType = InQuad;
+        enum EffMotionType motionType = InCirc;
 
         start = m_StatusBar_Y;
         if(m_direction == DIRECTION_HIDE)
         {
             end = -1 * m_StatusBar_Height;
-            motionType = InQuad;
+            motionType = InCirc;
             duration = STATUSBAR_ANIMATION_TIME * (m_StatusBar_Height + m_StatusBar_Y) / m_StatusBar_Height;
         }
         else
         {
             end = 0;
-            motionType = OutQuad;
+            motionType = OutCirc;
             duration = -1 * STATUSBAR_ANIMATION_TIME * m_StatusBar_Y / m_StatusBar_Height;
         }
 

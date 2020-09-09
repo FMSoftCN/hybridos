@@ -147,20 +147,20 @@ static void create_animation(HWND hWnd)
         int start = 0;
         int end = 0;
         int duration = 0;
-        enum EffMotionType motionType = InQuad;
+        enum EffMotionType motionType = InCirc;
 
         start = m_DockBar_X;
         if(m_direction == DIRECTION_HIDE)
         {
             end = g_rcScr.right - m_DockBar_Left_Length;
-            motionType = InQuad;
+            motionType = InCirc;
             duration = DOCKBAR_ANIMATION_TIME * (g_rcScr.right - m_DockBar_Left_Length - m_DockBar_X) / (g_rcScr.right - m_DockBar_Left_Length - m_DockBar_Start_x);
             SetDlgItemText(hWnd, ID_DISPLAY_BUTTON, "SHOW");
         }
         else
         {
             end = m_DockBar_Start_x;
-            motionType = OutQuad;
+            motionType = OutCirc;
             duration = DOCKBAR_ANIMATION_TIME * (m_DockBar_X - m_DockBar_Start_x) / (g_rcScr.right -  m_DockBar_Left_Length- m_DockBar_Start_x);
             SetDlgItemText(hWnd, ID_DISPLAY_BUTTON, "HIDE");
         }
