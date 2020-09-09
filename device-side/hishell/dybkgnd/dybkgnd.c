@@ -37,6 +37,10 @@
 #include <minigui/window.h>
 #include <mgeff/mgeff.h>
 
+#include <glib.h>
+
+#include "librsvg/rsvg.h"
+
 #include "../include/sysconfig.h"
 
 #define WALLPAPER_FILE_TOP          "res/wallpaper-top.jpg"
@@ -158,6 +162,107 @@ void doAnimationBack(HWND hwnd)
     }
 }
 
+
+static char *
+get_output_file (const char *test_file,
+                 const char *extension)
+{
+  const char *output_dir = g_get_tmp_dir ();
+  char *result, *base;
+
+  base = g_path_get_basename (test_file);
+
+  if (g_str_has_suffix (base, ".svg"))
+    base[strlen (base) - strlen (".svg")] = '\0';
+
+  result = g_strconcat (output_dir, G_DIR_SEPARATOR_S, base, extension, NULL);
+  g_free (base);
+
+  return result;
+}
+
+static void
+save_image (cairo_surface_t *surface,
+            const char      *test_name,
+            const char      *extension)
+{
+  char *filename = get_output_file (test_name, extension);
+
+  fprintf(stderr, "=======================output filename=%s\n", filename);
+  g_test_message ("Storing test result image at %s", filename);
+  g_assert (cairo_surface_write_to_png (surface, filename) == CAIRO_STATUS_SUCCESS);
+
+  g_free (filename);
+}
+
+static HDC create_memdc_from_image_surface (cairo_surface_t* image_surface)
+{
+    MYBITMAP my_bmp = {
+        flags: MYBMP_TYPE_RGB | MYBMP_FLOW_DOWN,
+        frames: 1,
+        depth: 32,
+    };
+
+    my_bmp.w = cairo_image_surface_get_width (image_surface);
+    my_bmp.h = cairo_image_surface_get_height (image_surface);
+    my_bmp.pitch = cairo_image_surface_get_stride (image_surface);
+    my_bmp.bits = cairo_image_surface_get_data (image_surface);
+    my_bmp.size = my_bmp.pitch * my_bmp.h;
+
+    return CreateMemDCFromMyBitmap(&my_bmp, NULL);
+}
+
+void loadSVG(const char* file)
+{
+    RsvgHandle *handle;
+    GError *error = NULL;
+
+    cairo_t *cr;
+    cairo_surface_t *surface_a;
+    RsvgDimensionData dimensions;
+    
+    handle = rsvg_handle_new_from_file (file, &error);
+    rsvg_handle_get_dimensions (handle, &dimensions);
+
+    int width = 100;// dimensions.width;
+    int height = 100; //dimensions.height;
+
+    surface_a = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+    cr = cairo_create (surface_a);
+    cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+
+#if 1
+    cairo_set_source_rgb (cr, 1.0, 1.0, 1.0);
+    cairo_paint (cr);
+#endif
+
+    cairo_save(cr);
+    cairo_scale(cr, 5.0, 5.0);
+
+    cairo_push_group (cr);
+    rsvg_handle_render_cairo (handle, cr);
+    cairo_pattern_t *p = cairo_pop_group (cr);
+
+    cairo_set_source_rgb (cr, 1.0, 0.0, 0.0);
+    cairo_mask(cr, p);
+
+    cairo_restore (cr);
+
+    cairo_surface_type_t cst = cairo_surface_get_type (surface_a);
+
+    HDC csdc = create_memdc_from_image_surface (surface_a);
+    if (csdc != HDC_SCREEN && csdc != HDC_INVALID) {
+        BitBlt(csdc, 0, 0, width, height,  HDC_SCREEN, 100, 100, 0);
+    }
+    DeleteMemDC (csdc);
+    SyncUpdateDC (HDC_SCREEN);
+
+    cairo_surface_destroy (surface_a);
+    cairo_pattern_destroy (p);
+    cairo_destroy (cr);
+    g_object_unref (handle);
+}
+
 int MiniGUIMain (int argc, const char* argv[])
 {
     MSG msg;
@@ -171,12 +276,14 @@ int MiniGUIMain (int argc, const char* argv[])
     }
 
     mGEffInit();
-    startAnimation(NULL);
+    //startAnimation(NULL);
+    //loadSVG("res/home.svg");
+    loadSVG("res/arrow.svg");
 
     while (GetMessage (&msg, HWND_DESKTOP)) {
         if (msg.message == MSG_DYBKGND_DO_ANIMATION)
         {
-            startAnimation(NULL);
+    //        startAnimation(NULL);
         }
         DispatchMessage (&msg);
     }
