@@ -46,14 +46,14 @@
 #include "../include/sysconfig.h"
 #include "config.h"
 
+extern HWND m_hStatusBar;                       // handle of status bar
+extern HWND m_hDockBar;                         // handle of dock bar
+static int m_StatusBar_Height = 0;              // height of status bar
+static int m_StatusBar_Y = 0;                   // the Y coordinate of top left corner
+static MGEFF_ANIMATION m_animation = NULL;      // handle of animation
+static int m_direction = DIRECTION_SHOW;        // the direction of animation
 
-extern HWND m_hStatusBar;
-extern HWND m_hDockBar;
-static int m_StatusBar_Height = 0;
-static int m_StatusBar_Y = 0;
-static MGEFF_ANIMATION m_animation = NULL;
-static int m_direction = DIRECTION_SHOW;
-
+// get current time
 static char* mk_time(char* buff)
 {
     time_t t;
@@ -61,11 +61,12 @@ static char* mk_time(char* buff)
 
     time (&t);
     tm = localtime (&t);
-    sprintf (buff, "%02d:%02d:%02d", tm->tm_hour, tm->tm_min, tm->tm_sec);
+    sprintf(buff, "%02d:%02d:%02d", tm->tm_hour, tm->tm_min, tm->tm_sec);
 
     return buff;
 }
 
+// callback function of animation
 static void animated_cb(MGEFF_ANIMATION handle, HWND hWnd, int id, int *value)
 {
     if(m_StatusBar_Y != *value)
@@ -75,6 +76,7 @@ static void animated_cb(MGEFF_ANIMATION handle, HWND hWnd, int id, int *value)
     }
 }
 
+// the function which will be invoked at the end of animation
 static void animated_end(MGEFF_ANIMATION handle)
 {
     HWND hWnd = (HWND)mGEffAnimationGetTarget(handle);
@@ -85,6 +87,7 @@ static void animated_end(MGEFF_ANIMATION handle)
         SetTimer(hWnd, _ID_SHOW_TIMER, 200);
 }
 
+// create an animation and start, it is asynchronous。
 static void create_animation(HWND hWnd)
 {
     if(m_animation)
@@ -127,11 +130,12 @@ static void create_animation(HWND hWnd)
     }
 }
 
+// the window proc of status bar
 static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC hdc;
-    static PLOGFONT statusbarfont;
-    char str_time_buff [20];
+    static PLOGFONT font;
+    char buff [20];
     int length = 0;
     RECT rect[2] = {{_MARGIN, _MARGIN, g_rcScr.right - TIME_INFO_X,  m_StatusBar_Height - _MARGIN}, {g_rcScr.right - TIME_INFO_X, _MARGIN, g_rcScr.right - _MARGIN, m_StatusBar_Height - _MARGIN}};
 
@@ -141,7 +145,7 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             hdc = BeginPaint (hWnd);
             SetTextColor (hdc, DWORD2Pixel (hdc, RGBA_black));
             SetBkMode (hdc, BM_TRANSPARENT);
-            SelectFont(hdc, statusbarfont);
+            SelectFont(hdc, font);
             length = GetWindowTextLength(hWnd);
             {
                 char title[length + 1];
@@ -150,8 +154,8 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                 DrawText (hdc, title, strlen(title), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
             }
 
-            mk_time(str_time_buff);
-            DrawText (hdc, str_time_buff, strlen(str_time_buff), rect + 1, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+            mk_time(buff);
+            DrawText (hdc, buff, strlen(buff), rect + 1, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
             EndPaint (hWnd, hdc);
             return 0;
@@ -207,7 +211,7 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             break;
 
         case MSG_CREATE:
-            statusbarfont = CreateLogFont (NULL, "System", "ISO8859-1",
+            font = CreateLogFont (NULL, "System", "ISO8859-1",
                         FONT_WEIGHT_BOOK, FONT_SLANT_ROMAN, FONT_FLIP_NIL,
                         FONT_OTHER_AUTOSCALE, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE,
                         m_StatusBar_Height / 2, 0);
@@ -230,7 +234,7 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             break;
 
         case MSG_DESTROY:
-            DestroyLogFont(statusbarfont);
+            DestroyLogFont(font);
         case MSG_CLOSE:
             KillTimer (hWnd, _ID_TIMER);
             DestroyAllControls (hWnd);
@@ -242,6 +246,7 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
     return DefaultMainWinProc (hWnd, message, wParam, lParam);
 }
 
+// create status bar
 HWND create_status_bar (void)
 {
     MAINWINCREATE CreateInfo;
