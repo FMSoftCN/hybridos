@@ -10,25 +10,54 @@
 // https://www.fmsoft.cn/exception-list
 //
 //////////////////////////////////////////////////////////////////////////////
-/* 
-** $Id: taskbar.c 381 2008-01-28 10:19:26Z wangjian $
-**
-** The taskbar of MDE
-**
-** Copyright (C) 2003 ~ 2017 FMSoft (http://www.fmsoft.cn).
-**
-** Licensed under the Apache License, Version 2.0 (the "License");
-** you may not use this file except in compliance with the License.
-** You may obtain a copy of the License at
-**
-**     http://www.apache.org/licenses/LICENSE-2.0
-**
-** Unless required by applicable law or agreed to in writing, software
-** distributed under the License is distributed on an "AS IS" BASIS,
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-** See the License for the specific language governing permissions and
-** limitations under the License.
-*/
+/**
+ * \file dockbar.c
+ * \author Gengyue <gengyue@minigui.org>
+ * \date 2020/09/16
+ *
+ * \brief This file implements dock bar in system manager process.
+ *
+ \verbatim
+
+    This file is part of HybridOS, a developing operating system based on
+    MiniGUI. HybridOs will support embedded systems and smart IoT devices.
+
+    Copyright (C) 2002~2020, Beijing FMSoft Technologies Co., Ltd.
+    Copyright (C) 1998~2002, WEI Yongming
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    Or,
+
+    As this program is a library, any link to this program must follow
+    GNU General Public License version 3 (GPLv3). If you cannot accept
+    GPLv3, you need to be licensed from FMSoft.
+
+    If you have got a commercial license of this program, please use it
+    under the terms and conditions of the commercial license.
+
+    For more information about the commercial license, please refer to
+    <http://www.minigui.com/blog/minigui-licensing-policy/>.
+
+ \endverbatim
+ */
+
+/*
+ * $Id: dockbar.c 13674 2020-09-16 06:45:01Z Gengyue $
+ *
+ *      HybridOS for Linux, VxWorks, NuCleus, OSE.
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -87,8 +116,8 @@ static void animated_cb(MGEFF_ANIMATION handle, HWND hWnd, int id, int *value)
 {
     if(m_DockBar_X != *value)
     {
-        MoveWindow(hWnd, m_DockBar_X, m_DockBar_Start_y, m_DockBar_End_x - m_DockBar_Start_x, m_DockBar_Height, TRUE);
         m_DockBar_X = *value;
+        MoveWindow(hWnd, m_DockBar_X, m_DockBar_Start_y, m_DockBar_End_x - m_DockBar_Start_x, m_DockBar_Height, TRUE);
     }
 }
 
@@ -126,12 +155,14 @@ static void create_animation(HWND hWnd)
             end = g_rcScr.right - m_DockBar_Left_Length;
             motionType = InQuad;
             duration = DOCKBAR_ANIMATION_TIME * (g_rcScr.right - m_DockBar_Left_Length - m_DockBar_X) / (g_rcScr.right - m_DockBar_Left_Length - m_DockBar_Start_x);
+            SetDlgItemText(hWnd, ID_DISPLAY_BUTTON, "SHOW");
         }
         else
         {
             end = m_DockBar_Start_x;
             motionType = OutQuad;
             duration = DOCKBAR_ANIMATION_TIME * (m_DockBar_X - m_DockBar_Start_x) / (g_rcScr.right -  m_DockBar_Left_Length- m_DockBar_Start_x);
+            SetDlgItemText(hWnd, ID_DISPLAY_BUTTON, "HIDE");
         }
 
         if(duration == 0)
@@ -154,18 +185,14 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
     switch (message) 
     {
         case MSG_CREATE:
+            CreateWindow (CTRL_BUTTON, "HIDE",     WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_DISPLAY_BUTTON,  0 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
 
-            code = (m_DockBar_End_x - m_DockBar_Start_x) / 6;
-            id = code - 2 * _MARGIN;
+            CreateWindow (CTRL_BUTTON, "HOME",     WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_HOME_BUTTON,     1 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
+            CreateWindow (CTRL_BUTTON, "TOGGLE",   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_TOGGLE_BUTTON,   2 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
+            CreateWindow (CTRL_BUTTON, "SETTING",  WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_SETTING_BUTTON,  3 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
+            CreateWindow (CTRL_BUTTON, "SHUTDOWN", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_SHUTDOWN_BUTTON, 4 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
 
-            CreateWindow (CTRL_BUTTON, "HIDE",     WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_DISPLAY_BUTTON,  0 * code + _MARGIN, _MARGIN, code - 2 * _MARGIN, HEIGHT_DOCKBAR - 2 * _MARGIN, hWnd, 0);
-
-            CreateWindow (CTRL_BUTTON, "HOME",     WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_HOME_BUTTON,     1 * code + _MARGIN, _MARGIN, code - 2 * _MARGIN, HEIGHT_DOCKBAR - 2 * _MARGIN, hWnd, 0);
-            CreateWindow (CTRL_BUTTON, "TOGGLE",   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_TOGGLE_BUTTON,   2 * code + _MARGIN, _MARGIN, code - 2 * _MARGIN, HEIGHT_DOCKBAR - 2 * _MARGIN, hWnd, 0);
-            CreateWindow (CTRL_BUTTON, "SETTING",  WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_SETTING_BUTTON,  3 * code + _MARGIN, _MARGIN, code - 2 * _MARGIN, HEIGHT_DOCKBAR - 2 * _MARGIN, hWnd, 0);
-            CreateWindow (CTRL_BUTTON, "SHUTDOWN", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_SHUTDOWN_BUTTON, 4 * code + _MARGIN, _MARGIN, code - 2 * _MARGIN, HEIGHT_DOCKBAR - 2 * _MARGIN, hWnd, 0);
-
-            CreateWindow (CTRL_BUTTON, "ABOUT",    WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_ABOUT_BUTTON,    5 * code + _MARGIN, _MARGIN, code - 2 * _MARGIN, HEIGHT_DOCKBAR - 2 * _MARGIN, hWnd, 0);
+            CreateWindow (CTRL_BUTTON, "ABOUT",    WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_ABOUT_BUTTON,    5 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
 
             SetTimer(hWnd, ID_SHOW_TIMER, DOCKBAR_VISIBLE_TIME);
             m_direction = DIRECTION_HIDE;
@@ -226,14 +253,14 @@ HWND create_dock_bar (void)
     m_DockBar_Height = HEIGHT_DOCKBAR * m_DockBar_Height / 96;
 
     CreateInfo.dwStyle = WS_ABSSCRPOS | WS_VISIBLE;
-    CreateInfo.dwExStyle = WS_EX_WINTYPE_DOCKER;
+    CreateInfo.dwExStyle = WS_EX_WINTYPE_DOCKER | WS_EX_TROUNDCNS | WS_EX_BROUNDCNS;
     CreateInfo.spCaption = "DockBar" ;
     CreateInfo.hMenu = 0;
     CreateInfo.hCursor = GetSystemCursor (0);
     CreateInfo.hIcon = 0;
     CreateInfo.MainWindowProc = DockBarWinProc;
     CreateInfo.lx = g_rcScr.right / 3;
-    CreateInfo.ty = g_rcScr.bottom * 2 / 3;
+    CreateInfo.ty = g_rcScr.bottom * 3 / 4;
     CreateInfo.rx = g_rcScr.right;
     CreateInfo.by = CreateInfo.ty + m_DockBar_Height;
 
