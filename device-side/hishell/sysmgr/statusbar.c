@@ -130,9 +130,10 @@ static void create_animation(HWND hWnd)
 static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC hdc;
+    static PLOGFONT statusbarfont;
     char str_time_buff [20];
     int length = 0;
-    RECT rect[2] = {{_MARGIN, _MARGIN, g_rcScr.right - TIME_INFO_X,  _HEIGHT_CTRL}, {g_rcScr.right - TIME_INFO_X, _MARGIN, g_rcScr.right - _MARGIN, _HEIGHT_CTRL}};
+    RECT rect[2] = {{_MARGIN, _MARGIN, g_rcScr.right - TIME_INFO_X,  m_StatusBar_Height - _MARGIN}, {g_rcScr.right - TIME_INFO_X, _MARGIN, g_rcScr.right - _MARGIN, m_StatusBar_Height - _MARGIN}};
 
     switch (message) 
     {
@@ -140,16 +141,17 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             hdc = BeginPaint (hWnd);
             SetTextColor (hdc, DWORD2Pixel (hdc, RGBA_black));
             SetBkMode (hdc, BM_TRANSPARENT);
+            SelectFont(hdc, statusbarfont);
             length = GetWindowTextLength(hWnd);
             {
                 char title[length + 1];
                 memset(title, 0, length + 1);
                 GetWindowText(hWnd, title, length);
-                DrawText (hdc, title, strlen(title), rect, DT_CENTER);
+                DrawText (hdc, title, strlen(title), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
             }
 
             mk_time(str_time_buff);
-            DrawText (hdc, str_time_buff, strlen(str_time_buff), rect + 1, DT_CENTER);
+            DrawText (hdc, str_time_buff, strlen(str_time_buff), rect + 1, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
             EndPaint (hWnd, hdc);
             return 0;
@@ -205,6 +207,11 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             break;
 
         case MSG_CREATE:
+            statusbarfont = CreateLogFont (NULL, "System", "ISO8859-1",
+                        FONT_WEIGHT_BOOK, FONT_SLANT_ROMAN, FONT_FLIP_NIL,
+                        FONT_OTHER_AUTOSCALE, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE,
+                        m_StatusBar_Height / 2, 0);
+
             SetTimer(hWnd, _ID_TIMER, 100);
             SetTimer(hWnd, _ID_SHOW_TIMER, 200);
             m_direction = DIRECTION_HIDE;
@@ -222,6 +229,8 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             }
             break;
 
+        case MSG_DESTROY:
+            DestroyLogFont(statusbarfont);
         case MSG_CLOSE:
             KillTimer (hWnd, _ID_TIMER);
             DestroyAllControls (hWnd);
@@ -248,7 +257,7 @@ HWND create_status_bar (void)
     // create a main window
     CreateInfo.dwStyle = WS_ABSSCRPOS | WS_VISIBLE;
     CreateInfo.dwExStyle = WS_EX_WINTYPE_DOCKER;
-    CreateInfo.spCaption = "StatusBar" ;
+    CreateInfo.spCaption = STRING_OS_NAME ;
     CreateInfo.hMenu = 0;
     CreateInfo.hCursor = GetSystemCursor (0);
     CreateInfo.hIcon = 0;
