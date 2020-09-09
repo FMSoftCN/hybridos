@@ -83,11 +83,11 @@ static void animated_end(MGEFF_ANIMATION handle)
     mGEffAnimationDelete(m_animation);
     m_animation = NULL;
 
-    if(m_direction == DIRECTION_SHOW)
-        SetTimer(hWnd, _ID_SHOW_TIMER, 200);
+    if((m_direction == DIRECTION_SHOW) && hWnd)
+        SetTimer(hWnd, ID_SHOW_TIMER, STATUSBAR_VISIBLE_TIME);
 }
 
-// create an animation and start, it is asynchronous。
+// create an animation and start, it is asynchronous
 static void create_animation(HWND hWnd)
 {
     if(m_animation)
@@ -109,17 +109,17 @@ static void create_animation(HWND hWnd)
         {
             end = -1 * m_StatusBar_Height;
             motionType = InQuad;
-            duration = 1000 * (m_StatusBar_Height + m_StatusBar_Y) / m_StatusBar_Height;
+            duration = STATUSBAR_ANIMATION_TIME * (m_StatusBar_Height + m_StatusBar_Y) / m_StatusBar_Height;
         }
         else
         {
             end = 0;
             motionType = OutQuad;
-            duration = -1000 * m_StatusBar_Y / m_StatusBar_Height;
+            duration = -1 * STATUSBAR_ANIMATION_TIME * m_StatusBar_Y / m_StatusBar_Height;
         }
 
         if(duration == 0)
-            duration = 1000;
+            duration = STATUSBAR_ANIMATION_TIME;
 
         mGEffAnimationSetStartValue(m_animation, &start);
         mGEffAnimationSetEndValue(m_animation, &end);
@@ -216,27 +216,28 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                         FONT_OTHER_AUTOSCALE, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE,
                         m_StatusBar_Height / 2, 0);
 
-            SetTimer(hWnd, _ID_TIMER, 100);
-            SetTimer(hWnd, _ID_SHOW_TIMER, 200);
+            SetTimer(hWnd, ID_TIMER, 100);
+            SetTimer(hWnd, ID_SHOW_TIMER, STATUSBAR_VISIBLE_TIME);
             m_direction = DIRECTION_HIDE;
             m_StatusBar_Y = 0;
             break;
 
         case MSG_TIMER:
-            if(wParam == _ID_TIMER)
+            if(wParam == ID_TIMER)
                 InvalidateRect(hWnd, rect + 1, TRUE);
-            else if(wParam == _ID_SHOW_TIMER)
+            else if(wParam == ID_SHOW_TIMER)
             {
                 m_direction = DIRECTION_HIDE;
                 create_animation(hWnd);
-                KillTimer(hWnd, _ID_SHOW_TIMER);
+                KillTimer(hWnd, ID_SHOW_TIMER);
             }
             break;
 
         case MSG_DESTROY:
             DestroyLogFont(font);
         case MSG_CLOSE:
-            KillTimer (hWnd, _ID_TIMER);
+            KillTimer (hWnd, ID_TIMER);
+            KillTimer (hWnd, ID_SHOW_TIMER);
             DestroyAllControls (hWnd);
             DestroyMainWindow (hWnd);
             PostQuitMessage (hWnd);

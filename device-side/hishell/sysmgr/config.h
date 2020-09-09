@@ -11,63 +11,46 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 /* 
- * $Id: taskbar.h 368 2008-01-25 06:58:28Z zhounuohua $
+ * $Id: config.h 368 2020-08-25 06:58:28Z gengyue $
  * 
- * The head file of task bar.
+ * The head file of configuration.
  */
 
-#ifndef _STATUS_BAR
-#define _STATUS_BAR
+#ifndef _CONFIG_H
+#define _CONFIG_H
 
-#define DIRECTION_SHOW  0
-#define DIRECTION_HIDE  1
+// some macro of animation 
+#define DIRECTION_SHOW      0               // show the main window
+#define DIRECTION_HIDE      1               // hide the main window
 
-#define HEIGHT_STATUSBAR  40 
-#define HEIGHT_IMEWIN   24
-#define TIME_INFO_X     100
+#define STATUSBAR_ANIMATION_TIME    1000    // 1000 ms
+#define STATUSBAR_VISIBLE_TIME      200     // 200ms * 10 = 2s
 
-#define _ID_TITLE_STATIC    100
-#define _ID_TIME_STATIC     110
-#define _ID_APPS_COOLBAR    120
-#define _ID_LAYER_BOX       200
+#define DOCKBAR_ANIMATION_TIME      1000    // 1000 ms
+#define DOCKBAR_VISIBLE_TIME        200     // 200ms * 10 = 2s
 
-#define _MARGIN             2
-#define _HEIGHT_CTRL        24
-#define _WIDTH_START        40
-#define _WIDTH_TIME         52
-#define _WIDTH_APPS         250
-#define _ID_TIMER           100
-#define _ID_SHOW_TIMER      101
+// some macro of physical dimension 
+#define _MARGIN             2               // margin of text area in status bar
+#define HEIGHT_STATUSBAR    40              // height of status bar 
+#define HEIGHT_DOCKBAR      60              // height of dock bar
+#define TIME_INFO_X         100             // the width of time area in status bar
 
-#define _MAX_WIDTH_LAYER_BOX    80
-#define _MIN_WIDTH_LAYER_BOX    20
+// control ID in dock bar
+#define BUTTON_COUNT        6               // the number of button on the dock bar
+#define ID_DISPLAY_BUTTON   100             // show and hide button
+#define ID_HOME_BUTTON      101             // home button
+#define ID_TOGGLE_BUTTON    102             // toggle apps
+#define ID_SETTING_BUTTON   103             // system settings
+#define ID_SHUTDOWN_BUTTON  104             // shutdown the device
+#define ID_ABOUT_BUTTON     105             // about button, navigate to hybridos.com
 
-#define _LEFT_BOXES     (_MARGIN + _WIDTH_START + _MARGIN + _WIDTH_APPS + _MARGIN)
-#define _WIDTH_BOXES    (g_rcScr.right - _WIDTH_TIME - _MARGIN - _MARGIN - _LEFT_BOXES)
+// timer
+#define ID_TIMER            100             // for time display
+#define ID_SHOW_TIMER       101             // for display status and dock bar
 
-#define APP_INFO_FILE   "main.rc"
+// default string in status bar, when none app exists.
 #define STRING_OS_NAME  "Hybrid OS V1.1.0"
 
-#define TIP_MAX         255
-
-typedef struct tagAppItem {
-    BOOL cdpath;
-    char path [PATH_MAX + 1];
-    char name [NAME_MAX + 1];
-    char layer [LEN_LAYER_NAME + 1];
-    char tip [TIP_MAX + 1];
-    char bmp_path [PATH_MAX + NAME_MAX + 1];
-    BITMAP bmp;
-} APPITEM;
-
-typedef struct tagAppInfo {
-    int nr_apps;
-    int autostart;
-    char logo_path [PATH_MAX + NAME_MAX + 1];
-    APPITEM* app_items;
-} APPINFO;
-
-extern APPINFO app_info;
 
 #ifdef __cplusplus
 extern "C" {
@@ -75,10 +58,9 @@ extern "C" {
 
 HWND create_status_bar (void);
 HWND create_dock_bar (void);
-//pid_t exec_app (int app);
 
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
 
-#endif /* _STATUS_BAR */
+#endif /* _CONFIG_h */
