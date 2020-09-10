@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.10)
+project(helloworld)
+aux_source_directory(. DIR_SRCS)
+add_executable(helloworld ${DIR_SRCS})
+include_directories(${MINIGUI_INCLUDE_DIRS})
+target_link_libraries(helloworld ${MINIGUI_LIBRARIES})

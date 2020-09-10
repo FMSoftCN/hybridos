@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.10)
-project(appagent)
-aux_source_directory(. DIR_SRCS)
-add_executable(appagent ${DIR_SRCS})
-target_link_libraries(appagent ${MINIGUI_LIBRARIES})
+
+# set sub-directory
+add_subdirectory(helloworld)
