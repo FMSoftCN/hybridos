@@ -16,6 +16,7 @@
       <dep package="mg-samples"/>
       <dep package="hidrm"/>
       <dep package="hidrmdrivers"/>
+      <dep package="hirsvg"/>
       <dep package="bwrap" />
       <dep package="cairo"/>
       <dep package="fonts"/>
@@ -24,7 +25,6 @@
       <dep package="freetype6"/>
       <dep package="harfbuzz"/>
       <dep package="libxml2"/>
-      <dep package="gdk-pixbuf"/>
       <dep package="glib"/>
       <dep package="glib-networking"/>
       <dep package="adwaita-icon-theme"/>
@@ -301,16 +301,6 @@
             hash="sha256:b7ccfcbd56b970a709e8b9ea9fb46c922c606c2feef8f086fb6a8492e530f810"/>
   </autotools>
 
-  <autotools id="gdk-pixbuf" autogen-sh="configure"
-             autogenargs="--disable-introspection">
-    <dependencies>
-      <dep package="glib"/>
-    </dependencies>
-    <branch module="/pub/GNOME/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.6.tar.xz" version="2.36.6"
-            repo="ftp.gnome.org"
-            hash="sha256:455eb90c09ed1b71f95f3ebfe1c904c206727e0eeb34fc94e5aaf944663a820c"/>
-  </autotools>
-
   <meson id="graphene">
     <branch repo="gitlab.fmsoft.cn"
             module="graphene.git"
@@ -320,19 +310,17 @@
     </dependencies>
   </meson>
 
-  <autotools id="librsvg" autogen-sh="configure"
-             autogenargs="--disable-introspection --enable-pixbuf-loader --disable-gtk-theme">
+  <autotools id="hirsvg" autogen-sh="autogen.sh"
+             autogenargs="--disable-introspection --enable-pixbuf-loader --disable-pixbuf-loader --enable-minigui-backend">
     <if condition-set="macos">
       <autogenargs value="--disable-Bsymbolic"/>
     </if>
     <dependencies>
-      <dep package="gdk-pixbuf"/>
       <dep package="glib"/>
       <dep package="cairo"/>
     </dependencies>
-    <branch module="/pub/GNOME/sources/librsvg/2.40/librsvg-2.40.16.tar.xz" version="2.40.16"
-            repo="ftp.gnome.org"
-            hash="sha256:d48bcf6b03fa98f07df10332fb49d8c010786ddca6ab34cbba217684f533ff2e"/>
+    <branch repo="hybridos" module="hirsvg" checkoutdir="hirsvg" branch="minigui-backend" revision="minigui-backend" >
+    </branch>
   </autotools>
 
   <meson id="glib"
@@ -394,7 +382,7 @@
 
   <autotools id="adwaita-icon-theme" autogen-sh="configure">
     <dependencies>
-      <dep package="librsvg"/>
+      <dep package="hirsvg"/>
     </dependencies>
     <branch module="pub/GNOME/sources/adwaita-icon-theme/3.24/adwaita-icon-theme-3.24.0.tar.xz" version="3.24.0"
             repo="ftp.gnome.org"
@@ -690,7 +678,6 @@
       <dep package="freetype6"/>
       <dep package="harfbuzz"/>
       <dep package="libxml2"/>
-      <dep package="gdk-pixbuf"/>
       <dep package="glib"/>
       <dep package="glib-networking"/>
       <dep package="adwaita-icon-theme"/>
