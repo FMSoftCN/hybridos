@@ -9,6 +9,7 @@ find_package(mGEff 1.5.0 REQUIRED)
 find_package(GLIB 2.0 REQUIRED)
 find_package(Cairo REQUIRED)
 find_package(Librsvg 2.0 REQUIRED)
+find_package(LibSoup 2.54.0 REQUIRED)
 
 set(MINIGUI_LIBRARIES ${MiniGUI_LIBRARIES})
 set(MINIGUI_INCLUDE_DIRS ${MiniGUI_INCLUDE_DIRS})
