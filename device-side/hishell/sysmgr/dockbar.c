@@ -71,6 +71,8 @@
 #include <minigui/window.h>
 #include <minigui/control.h>
 #include <mgeff/mgeff.h>
+#include <glib.h>
+#include <librsvg/rsvg.h>
 
 #include "config.h"
 
@@ -87,6 +89,7 @@ static int m_DockBar_End_x = 0;
 static int m_DockBar_End_y = 0;
 static int m_DockBar_Left_Length = 0;
 
+#define M_PI    3.1415926
 // start another process
 static pid_t exec_app (char * app)
 {
@@ -155,14 +158,14 @@ static void create_animation(HWND hWnd)
             end = g_rcScr.right - m_DockBar_Left_Length;
             motionType = InCirc;
             duration = DOCKBAR_ANIMATION_TIME * (g_rcScr.right - m_DockBar_Left_Length - m_DockBar_X) / (g_rcScr.right - m_DockBar_Left_Length - m_DockBar_Start_x);
-            SetDlgItemText(hWnd, ID_DISPLAY_BUTTON, "SHOW");
+//            SetDlgItemText(hWnd, ID_DISPLAY_BUTTON, "SHOW");
         }
         else
         {
             end = m_DockBar_Start_x;
             motionType = OutCirc;
             duration = DOCKBAR_ANIMATION_TIME * (m_DockBar_X - m_DockBar_Start_x) / (g_rcScr.right -  m_DockBar_Left_Length- m_DockBar_Start_x);
-            SetDlgItemText(hWnd, ID_DISPLAY_BUTTON, "HIDE");
+//            SetDlgItemText(hWnd, ID_DISPLAY_BUTTON, "HIDE");
         }
 
         if(duration == 0)
@@ -177,15 +180,94 @@ static void create_animation(HWND hWnd)
     }
 }
 
+static cairo_t *cr[BUTTON_COUNT];
+static cairo_surface_t *surface[BUTTON_COUNT];
+
+static HDC create_memdc_from_image_surface (cairo_surface_t* image_surface)
+{
+    MYBITMAP my_bmp = {
+        flags: MYBMP_TYPE_RGB | MYBMP_FLOW_DOWN,
+        frames: 1,
+        depth: 32,
+    };
+
+    my_bmp.w = cairo_image_surface_get_width (image_surface);
+    my_bmp.h = cairo_image_surface_get_height (image_surface);
+    my_bmp.pitch = cairo_image_surface_get_stride (image_surface);
+    my_bmp.bits = cairo_image_surface_get_data (image_surface);
+    my_bmp.size = my_bmp.pitch * my_bmp.h;
+
+    return CreateMemDCFromMyBitmap(&my_bmp, NULL);
+}
+
+static void loadSVG(const char* file, HDC hdc, int index)
+{
+    RsvgHandle *handle;
+    GError *error = NULL;
+    RsvgDimensionData dimensions;
+    cairo_pattern_t *pattern;
+
+    // create cairo_surface_t and cairo_t for one picture
+    handle = rsvg_handle_new_from_file(file, &error);
+    rsvg_handle_get_dimensions(handle, &dimensions);
+    surface[index] = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, dimensions.width, dimensions.height);
+    cr[index] = cairo_create (surface[index]);
+
+printf("=================== %d, %d\n", dimensions.width, dimensions.height);
+
+    pattern = cairo_pattern_create_for_surface(surface[index]);
+    cairo_set_source(cr[index], pattern);
+    cairo_pattern_set_extend(cairo_get_source(cr[index]), CAIRO_EXTEND_REPEAT);
+    cairo_arc (cr[index], 30, 30, 300, 0, 2 * M_PI);
+    cairo_fill (cr);
+
+
+#if 0
+    cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+
+#if 1
+    cairo_set_source_rgb (cr, 1.0, 1.0, 1.0);
+    cairo_paint (cr);
+#endif
+
+    cairo_save(cr);
+    cairo_scale(cr, 5.0, 5.0);
+
+    cairo_push_group (cr);
+    rsvg_handle_render_cairo (handle, cr);
+    cairo_pattern_t *p = cairo_pop_group (cr);
+
+    cairo_set_source_rgb (cr, 1.0, 0.0, 0.0);
+    cairo_mask(cr, p);
+
+    cairo_restore (cr);
+
+#endif
+    HDC csdc = create_memdc_from_image_surface(surface[index]);
+    if (csdc != HDC_SCREEN && csdc != HDC_INVALID) {
+        BitBlt(csdc, 0, 0, 60, 60,  hdc, dimensions.width, dimensions.height, 0);
+    }
+    DeleteMemDC (csdc);
+    SyncUpdateDC (HDC_SCREEN);
+
+//    cairo_surface_destroy (surface_a);
+    cairo_pattern_destroy (pattern);
+//    cairo_destroy (cr);
+    g_object_unref (handle);
+}
+
 static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     int code = 0;
     int id = 0;
+    HDC hdc;
 
     switch (message) 
     {
         case MSG_CREATE:
-            CreateWindow (CTRL_BUTTON, "HIDE",     WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_DISPLAY_BUTTON,  0 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
+            hdc = BeginPaint (hWnd);
+            loadSVG("res/arrow.svg", hdc, 0);
+//            CreateWindow (CTRL_BUTTON, "HIDE",     WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_DISPLAY_BUTTON,  0 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
 
             CreateWindow (CTRL_BUTTON, "HOME",     WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_HOME_BUTTON,     1 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
             CreateWindow (CTRL_BUTTON, "TOGGLE",   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_TOGGLE_BUTTON,   2 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
@@ -197,6 +279,8 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
             SetTimer(hWnd, ID_SHOW_TIMER, DOCKBAR_VISIBLE_TIME);
             m_direction = DIRECTION_HIDE;
             m_DockBar_X = m_DockBar_Start_x;
+
+            EndPaint (hWnd, hdc);
             break;
 
         case MSG_COMMAND:
@@ -234,6 +318,11 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
             break;
         
         case MSG_CLOSE:
+            for(id = 0; id < BUTTON_COUNT; id++)
+            {
+                cairo_surface_destroy(surface[id]);
+                cairo_destroy(cr[id]);
+            }
             KillTimer (hWnd, ID_SHOW_TIMER);
             DestroyAllControls (hWnd);
             DestroyMainWindow (hWnd);

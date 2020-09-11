@@ -3,7 +3,6 @@ project(MiniBrowser)
 aux_source_directory(. DIR_SRCS)
 #add_executable(MiniBrowser ${DIR_SRCS})
 include_directories(${MINIGUI_INCLUDE_DIRS})
-#target_link_libraries(MiniBrowser ${MINIGUI_LIBRARIES} ${MGEFF_LIBRARIES})
 
 
 set(MINIBROWSER_DIR "${PROJECT_SOURCE_DIR}")
