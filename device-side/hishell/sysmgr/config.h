@@ -74,27 +74,37 @@
 
 // some macro of physical dimension 
 #define MARGIN_STATUS       2               // margin of text area in status bar
-#define MARGIN_DOCK         15               // margin of button in dock bar
+#define MARGIN_DOCK         15              // margin of button in dock bar
 #define HEIGHT_STATUSBAR    40              // height of status bar 
 #define HEIGHT_DOCKBAR      60              // height of dock bar
 #define TIME_INFO_X         100             // the width of time area in status bar
+#define DOCK_ICON_WIDTH     48              // the width of icon in dock bar
+#define DOCK_ICON_HEIGHT    48              // the height of icon in dock bar
 
 // control ID in dock bar
 #define BUTTON_COUNT        6               // the number of button on the dock bar
-#define ID_DISPLAY_BUTTON   100             // show and hide button
-#define ID_HOME_BUTTON      101             // home button
-#define ID_TOGGLE_BUTTON    102             // toggle apps
-#define ID_SETTING_BUTTON   103             // system settings
-#define ID_SHUTDOWN_BUTTON  104             // shutdown the device
-#define ID_ABOUT_BUTTON     105             // about button, navigate to hybridos.com
+#define ID_DISPLAY_BUTTON   0               // show and hide button
+#define ID_HOME_BUTTON      1               // home button
+#define ID_TOGGLE_BUTTON    2               // toggle apps
+#define ID_SETTING_BUTTON   3               // system settings
+#define ID_SHUTDOWN_BUTTON  4               // shutdown the device
+#define ID_ABOUT_BUTTON     5               // about button, navigate to hybridos.com
 
 // timer
 #define ID_TIMER            100             // for time display
 #define ID_SHOW_TIMER       101             // for display status and dock bar
 
 // default string in status bar, when none app exists.
-#define STRING_OS_NAME  "Hybrid OS V1.1.0"
+#define STRING_OS_NAME      "Hybrid OS V1.1.0"
+#define DOCK_ICON_ARROW     "res/arrow.svg"
+#define DOCK_ICON_HOME      "res/home.svg"
+#define DOCK_ICON_TOGGLE    "res/toggle.svg"
+#define DOCK_ICON_SETTING   "res/setting.svg"
+#define DOCK_ICON_SHUTDOWN  "res/shutdown.svg"
+#define DOCK_ICON_ABOUT     "res/about.svg"
 
+// for math
+//#define M_PI    3.1415926
 
 #ifdef __cplusplus
 extern "C" {

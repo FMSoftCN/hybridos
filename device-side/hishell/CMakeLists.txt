@@ -26,8 +26,14 @@ file(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/res)
 list(APPEND HISHELL_RES_FILES
     "${PROJECT_SOURCE_DIR}/dybkgnd/res/wallpaper-bottom.jpg"
     "${PROJECT_SOURCE_DIR}/dybkgnd/res/wallpaper-top.jpg"
-    "${PROJECT_SOURCE_DIR}/dybkgnd/res/home.svg"
-    "${PROJECT_SOURCE_DIR}/dybkgnd/res/arrow.svg"
+#    "${PROJECT_SOURCE_DIR}/dybkgnd/res/home.svg"
+#    "${PROJECT_SOURCE_DIR}/dybkgnd/res/arrow.svg"
+    "${PROJECT_SOURCE_DIR}/sysmgr/res/arrow.svg"
+    "${PROJECT_SOURCE_DIR}/sysmgr/res/home.svg"
+    "${PROJECT_SOURCE_DIR}/sysmgr/res/toggle.svg"
+    "${PROJECT_SOURCE_DIR}/sysmgr/res/setting.svg"
+    "${PROJECT_SOURCE_DIR}/sysmgr/res/shutdown.svg"
+    "${PROJECT_SOURCE_DIR}/sysmgr/res/about.svg"
 )
 
 file(COPY ${HISHELL_RES_FILES} DESTINATION ${PROJECT_SOURCE_DIR}/bin/res)

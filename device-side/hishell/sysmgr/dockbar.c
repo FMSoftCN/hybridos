@@ -64,6 +64,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <time.h>
+#include <math.h>
 
 #include <minigui/common.h>
 #include <minigui/minigui.h>
@@ -82,6 +83,10 @@ static int m_DockBar_Height = 0;                // height of dock bar
 static int m_DockBar_X = 0;                     // the X coordinate of top left corner
 static MGEFF_ANIMATION m_animation = NULL;      // handle of animation
 static int m_direction = DIRECTION_SHOW;        // the direction of animation
+static float m_factor = 0;                      // DPI / 96
+static RECT m_rect[BUTTON_COUNT];               // area for BUTTON
+static float m_Arrow_angle = 0;                 // angle of arrow button
+static RsvgHandle * m_arrow_svg_handle = NULL;  // svg handle for arrow file
 
 static int m_DockBar_Start_x = 0;               // it is only for convenience for animation
 static int m_DockBar_Start_y = 0;
@@ -89,7 +94,9 @@ static int m_DockBar_End_x = 0;
 static int m_DockBar_End_y = 0;
 static int m_DockBar_Left_Length = 0;
 
-#define M_PI    3.1415926
+static cairo_t *cr[BUTTON_COUNT];
+static cairo_surface_t *surface[BUTTON_COUNT];
+
 // start another process
 static pid_t exec_app (char * app)
 {
@@ -117,9 +124,13 @@ static pid_t exec_app (char * app)
 // callback function of animation
 static void animated_cb(MGEFF_ANIMATION handle, HWND hWnd, int id, int *value)
 {
+    float factor = 0;
     if(m_DockBar_X != *value)
     {
         m_DockBar_X = *value;
+        
+        factor = (float)(m_DockBar_X - m_DockBar_Start_x) / (float)(m_DockBar_End_x - m_DockBar_Start_x - m_DockBar_Left_Length);
+        m_Arrow_angle = -1.0 * M_PI * factor;
         MoveWindow(hWnd, m_DockBar_X, m_DockBar_Start_y, m_DockBar_End_x - m_DockBar_Start_x, m_DockBar_Height, TRUE);
     }
 }
@@ -158,14 +169,12 @@ static void create_animation(HWND hWnd)
             end = g_rcScr.right - m_DockBar_Left_Length;
             motionType = InCirc;
             duration = DOCKBAR_ANIMATION_TIME * (g_rcScr.right - m_DockBar_Left_Length - m_DockBar_X) / (g_rcScr.right - m_DockBar_Left_Length - m_DockBar_Start_x);
-//            SetDlgItemText(hWnd, ID_DISPLAY_BUTTON, "SHOW");
         }
         else
         {
             end = m_DockBar_Start_x;
             motionType = OutCirc;
             duration = DOCKBAR_ANIMATION_TIME * (m_DockBar_X - m_DockBar_Start_x) / (g_rcScr.right -  m_DockBar_Left_Length- m_DockBar_Start_x);
-//            SetDlgItemText(hWnd, ID_DISPLAY_BUTTON, "HIDE");
         }
 
         if(duration == 0)
@@ -179,9 +188,6 @@ static void create_animation(HWND hWnd)
         mGEffAnimationAsyncRun(m_animation);
     }
 }
-
-static cairo_t *cr[BUTTON_COUNT];
-static cairo_surface_t *surface[BUTTON_COUNT];
 
 static HDC create_memdc_from_image_surface (cairo_surface_t* image_surface)
 {
@@ -200,100 +206,264 @@ static HDC create_memdc_from_image_surface (cairo_surface_t* image_surface)
     return CreateMemDCFromMyBitmap(&my_bmp, NULL);
 }
 
-static void loadSVG(const char* file, HDC hdc, int index)
+#if 0
+static void loadSVGArrow(const char* file, HDC hdc)
 {
     RsvgHandle *handle;
     GError *error = NULL;
     RsvgDimensionData dimensions;
     cairo_pattern_t *pattern;
+    float factor_width = 0.0f;
+    float factor_height = 0.0f;
+
+    // read file from svg file
+    handle = rsvg_handle_new_from_file(file, &error);
+    if(error)
+    {
+        surface[0] = NULL;
+        cr[0] = NULL;
+        return;
+    }
+    rsvg_handle_get_dimensions(handle, &dimensions);
 
     // create cairo_surface_t and cairo_t for one picture
-    handle = rsvg_handle_new_from_file(file, &error);
-    rsvg_handle_get_dimensions(handle, &dimensions);
-    surface[index] = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, dimensions.width, dimensions.height);
-    cr[index] = cairo_create (surface[index]);
+    surface[0] = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, DOCK_ICON_WIDTH * m_factor, DOCK_ICON_HEIGHT * m_factor);
+    cr[0] = cairo_create (surface[0]);
 
-printf("=================== %d, %d\n", dimensions.width, dimensions.height);
+    cairo_save(cr[0]);
 
-    pattern = cairo_pattern_create_for_surface(surface[index]);
-    cairo_set_source(cr[index], pattern);
-    cairo_pattern_set_extend(cairo_get_source(cr[index]), CAIRO_EXTEND_REPEAT);
-    cairo_arc (cr[index], 30, 30, 300, 0, 2 * M_PI);
-    cairo_fill (cr);
+    cairo_translate(cr[0], DOCK_ICON_WIDTH * m_factor / 2, DOCK_ICON_HEIGHT * m_factor / 2);
+    cairo_rotate(cr[0], m_Arrow_angle);
+    cairo_translate(cr[0], -1 * DOCK_ICON_WIDTH * m_factor / 2, -1 * DOCK_ICON_HEIGHT * m_factor / 2);
 
+    factor_width = DOCK_ICON_WIDTH / dimensions.width;
+    factor_height = DOCK_ICON_HEIGHT / dimensions.height;
+    factor_width = (factor_width > factor_height) ? factor_width : factor_height;
+    cairo_scale(cr[0], factor_width, factor_width);
 
-#if 0
-    cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+    cairo_push_group (cr[0]);
+    rsvg_handle_render_cairo (handle, cr[0]);
+    pattern = cairo_pop_group (cr[0]);
 
-#if 1
-    cairo_set_source_rgb (cr, 1.0, 1.0, 1.0);
-    cairo_paint (cr);
-#endif
+    cairo_set_source_rgb (cr[0], 1.0, 0.0, 0.0);
+    cairo_mask(cr[0], pattern);
 
-    cairo_save(cr);
-    cairo_scale(cr, 5.0, 5.0);
+    cairo_restore (cr[0]);
 
-    cairo_push_group (cr);
-    rsvg_handle_render_cairo (handle, cr);
-    cairo_pattern_t *p = cairo_pop_group (cr);
+    HDC csdc = create_memdc_from_image_surface(surface[0]);
+    if (csdc != HDC_SCREEN && csdc != HDC_INVALID) 
+        BitBlt(csdc, 0, 0, DOCK_ICON_WIDTH, DOCK_ICON_HEIGHT, hdc, MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2, (m_DockBar_Height - DOCK_ICON_HEIGHT) * m_factor / 2, 0);
+    DeleteMemDC(csdc);
+//    SyncUpdateDC(hdc);
 
-    cairo_set_source_rgb (cr, 1.0, 0.0, 0.0);
-    cairo_mask(cr, p);
-
-    cairo_restore (cr);
-
-#endif
-    HDC csdc = create_memdc_from_image_surface(surface[index]);
-    if (csdc != HDC_SCREEN && csdc != HDC_INVALID) {
-        BitBlt(csdc, 0, 0, 60, 60,  hdc, dimensions.width, dimensions.height, 0);
-    }
-    DeleteMemDC (csdc);
-    SyncUpdateDC (HDC_SCREEN);
-
-//    cairo_surface_destroy (surface_a);
+    cairo_surface_destroy (surface[0]);
     cairo_pattern_destroy (pattern);
-//    cairo_destroy (cr);
+    cairo_destroy (cr[0]);
     g_object_unref (handle);
+}
+#endif
+
+static void paintSVGArrow(const char* file, HDC hdc)
+{
+    GError *error = NULL;
+    RsvgDimensionData dimensions;
+    cairo_pattern_t *pattern;
+    float factor_width = 0.0f;
+    float factor_height = 0.0f;
+
+    // read file from svg file
+    if(m_arrow_svg_handle == NULL)
+    {
+        surface[0] = NULL;
+        cr[0] = NULL;
+        return;
+    }
+    rsvg_handle_get_dimensions(m_arrow_svg_handle, &dimensions);
+
+    // create cairo_surface_t and cairo_t for one picture
+    surface[0] = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, DOCK_ICON_WIDTH * m_factor, DOCK_ICON_HEIGHT * m_factor);
+    cr[0] = cairo_create (surface[0]);
+
+    cairo_save(cr[0]);
+
+    cairo_translate(cr[0], DOCK_ICON_WIDTH * m_factor / 2, DOCK_ICON_HEIGHT * m_factor / 2);
+    cairo_rotate(cr[0], m_Arrow_angle);
+    cairo_translate(cr[0], -1 * DOCK_ICON_WIDTH * m_factor / 2, -1 * DOCK_ICON_HEIGHT * m_factor / 2);
+
+    factor_width = DOCK_ICON_WIDTH / dimensions.width;
+    factor_height = DOCK_ICON_HEIGHT / dimensions.height;
+    factor_width = (factor_width > factor_height) ? factor_width : factor_height;
+    cairo_scale(cr[0], factor_width, factor_width);
+
+    cairo_push_group (cr[0]);
+    rsvg_handle_render_cairo (m_arrow_svg_handle, cr[0]);
+    pattern = cairo_pop_group (cr[0]);
+
+    cairo_set_source_rgb (cr[0], 1.0, 0.0, 0.0);
+    cairo_mask(cr[0], pattern);
+
+    cairo_restore (cr[0]);
+
+    HDC csdc = create_memdc_from_image_surface(surface[0]);
+    if (csdc != HDC_SCREEN && csdc != HDC_INVALID) 
+        BitBlt(csdc, 0, 0, DOCK_ICON_WIDTH, DOCK_ICON_HEIGHT, hdc, MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2, (m_DockBar_Height - DOCK_ICON_HEIGHT) * m_factor / 2, 0);
+    DeleteMemDC(csdc);
+//    SyncUpdateDC(hdc);
+
+    cairo_surface_destroy (surface[0]);
+    cairo_pattern_destroy (pattern);
+    cairo_destroy (cr[0]);
+}
+
+static void loadSVGArrow(const char* file, HDC hdc)
+{
+    GError *error = NULL;
+    RsvgDimensionData dimensions;
+
+    // read file from svg file
+    m_arrow_svg_handle = rsvg_handle_new_from_file(file, &error);
+    if(error)
+    {
+        surface[0] = NULL;
+        cr[0] = NULL;
+        m_arrow_svg_handle = NULL;
+        return;
+    }
+    return;
+}
+
+static void loadSVGFromFile(const char* file, int index)
+{
+    RsvgHandle *handle;
+    GError *error = NULL;
+    RsvgDimensionData dimensions;
+    cairo_pattern_t *pattern;
+    float factor_width = 0.0f;
+    float factor_height = 0.0f;
+
+    // read file from svg file
+    handle = rsvg_handle_new_from_file(file, &error);
+    if(error)
+    {
+        surface[index] = NULL;
+        cr[index] = NULL;
+        return;
+    }
+    rsvg_handle_get_dimensions(handle, &dimensions);
+
+    // create cairo_surface_t and cairo_t for one picture
+    surface[index] = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, DOCK_ICON_WIDTH * m_factor, DOCK_ICON_HEIGHT * m_factor);
+    cr[index] = cairo_create(surface[index]);
+
+    cairo_save(cr[index]);
+
+    factor_width = DOCK_ICON_WIDTH / dimensions.width;
+    factor_height = DOCK_ICON_HEIGHT / dimensions.height;
+    factor_width = (factor_width > factor_height) ? factor_width : factor_height;
+
+    cairo_scale(cr[index], factor_width, factor_width);
+
+    cairo_push_group (cr[index]);
+    rsvg_handle_render_cairo (handle, cr[index]);
+    pattern = cairo_pop_group (cr[index]);
+
+    cairo_set_source_rgb (cr[index], 1.0, 0.0, 0.0);
+    cairo_mask(cr[index], pattern);
+
+    cairo_restore (cr[index]);
+
+    cairo_pattern_destroy (pattern);
+    g_object_unref (handle);
+}
+
+static void paintDockBarIcon(HDC hdc)
+{
+    int i = 0;
+
+    paintSVGArrow(DOCK_ICON_ARROW, hdc);
+    for(i = 1; i < BUTTON_COUNT; i ++)
+    {
+        if(surface[i] && cr[i])
+        {
+            HDC csdc = create_memdc_from_image_surface(surface[i]);
+            if (csdc != HDC_SCREEN && csdc != HDC_INVALID) 
+               BitBlt(csdc, 0, 0, DOCK_ICON_WIDTH, DOCK_ICON_HEIGHT, hdc, i * m_DockBar_Left_Length + MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2, (m_DockBar_Height - DOCK_ICON_HEIGHT) * m_factor / 2, 0);
+            DeleteMemDC(csdc);
+        }
+    }
+    SyncUpdateDC(hdc);
 }
 
 static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    int code = 0;
-    int id = 0;
+    int i = 0;
+    int x = 0;
+    int y = 0;
     HDC hdc;
 
     switch (message) 
     {
-        case MSG_CREATE:
+        case MSG_PAINT:
             hdc = BeginPaint (hWnd);
-            loadSVG("res/arrow.svg", hdc, 0);
-//            CreateWindow (CTRL_BUTTON, "HIDE",     WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_DISPLAY_BUTTON,  0 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
+            paintDockBarIcon(hdc);
+            EndPaint (hWnd, hdc);
+            return 0;
 
-            CreateWindow (CTRL_BUTTON, "HOME",     WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_HOME_BUTTON,     1 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
-            CreateWindow (CTRL_BUTTON, "TOGGLE",   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_TOGGLE_BUTTON,   2 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
-            CreateWindow (CTRL_BUTTON, "SETTING",  WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_SETTING_BUTTON,  3 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
-            CreateWindow (CTRL_BUTTON, "SHUTDOWN", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_SHUTDOWN_BUTTON, 4 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
-
-            CreateWindow (CTRL_BUTTON, "ABOUT",    WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, ID_ABOUT_BUTTON,    5 * m_DockBar_Left_Length + MARGIN_DOCK, MARGIN_DOCK, m_DockBar_Left_Length - 2 * MARGIN_DOCK, HEIGHT_DOCKBAR - 2 * MARGIN_DOCK, hWnd, 0);
+        case MSG_CREATE:
+            loadSVGArrow(DOCK_ICON_ARROW, 0);
+            loadSVGFromFile(DOCK_ICON_HOME, 1);
+            loadSVGFromFile(DOCK_ICON_TOGGLE, 2);
+            loadSVGFromFile(DOCK_ICON_SETTING, 3);
+            loadSVGFromFile(DOCK_ICON_SHUTDOWN, 4);
+            loadSVGFromFile(DOCK_ICON_ABOUT, 5);
 
             SetTimer(hWnd, ID_SHOW_TIMER, DOCKBAR_VISIBLE_TIME);
             m_direction = DIRECTION_HIDE;
             m_DockBar_X = m_DockBar_Start_x;
+            m_Arrow_angle = 0;
+            break;
 
-            EndPaint (hWnd, hdc);
+        case MSG_LBUTTONUP:
+            x = LOSWORD (lParam);
+            y = HISWORD (lParam);
+            for(i = 0; i < BUTTON_COUNT; i++)
+            {
+                if(PtInRect(m_rect + i, x, y))
+                    break;
+            }
+            if(i < BUTTON_COUNT)
+            {
+                switch(i)
+                {
+                    case ID_DISPLAY_BUTTON:
+                        if(m_direction == DIRECTION_HIDE)
+                            m_direction = DIRECTION_SHOW;
+                        else
+                            m_direction = DIRECTION_HIDE;
+                        create_animation(hWnd);
+                        break;
+                    case ID_HOME_BUTTON:
+                        break;
+                    case ID_TOGGLE_BUTTON:
+                        break;
+                    case ID_SETTING_BUTTON:
+                        break;
+                    case ID_SHUTDOWN_BUTTON:
+                        break;
+                    case ID_ABOUT_BUTTON:
+                        break;
+                }
+            }
+
             break;
 
         case MSG_COMMAND:
+#if 0
             code = HIWORD (wParam);
             id   = LOWORD (wParam);
             switch(id) 
             {
                 case ID_DISPLAY_BUTTON:
-                    if(m_direction == DIRECTION_HIDE)
-                        m_direction = DIRECTION_SHOW;
-                    else
-                        m_direction = DIRECTION_HIDE;
-                    create_animation(hWnd);
                     break;
                 case ID_HOME_BUTTON:
                     break;
@@ -306,6 +476,7 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
                 case ID_ABOUT_BUTTON:
                     break;
             }
+#endif
             break;
 
         case MSG_TIMER:
@@ -318,11 +489,13 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
             break;
         
         case MSG_CLOSE:
-            for(id = 0; id < BUTTON_COUNT; id++)
+            for(i = 1; i < BUTTON_COUNT; i++)
             {
-                cairo_surface_destroy(surface[id]);
-                cairo_destroy(cr[id]);
+                cairo_surface_destroy(surface[i]);
+                cairo_destroy(cr[i]);
             }
+            if(m_arrow_svg_handle)
+                g_object_unref(m_arrow_svg_handle);
             KillTimer (hWnd, ID_SHOW_TIMER);
             DestroyAllControls (hWnd);
             DestroyMainWindow (hWnd);
@@ -337,9 +510,10 @@ HWND create_dock_bar (void)
 {
     MAINWINCREATE CreateInfo;
     HWND hDockBar;
+    int i = 0;
 
-    m_DockBar_Height = GetGDCapability(HDC_SCREEN, GDCAP_DPI);
-    m_DockBar_Height = HEIGHT_DOCKBAR * m_DockBar_Height / 96;
+    m_factor = (float)GetGDCapability(HDC_SCREEN, GDCAP_DPI) / 96.0;
+    m_DockBar_Height = HEIGHT_DOCKBAR * m_factor;
 
     CreateInfo.dwStyle = WS_ABSSCRPOS | WS_VISIBLE;
     CreateInfo.dwExStyle = WS_EX_WINTYPE_DOCKER | WS_EX_TROUNDCNS | WS_EX_BROUNDCNS;
@@ -362,12 +536,21 @@ HWND create_dock_bar (void)
     CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0x80); 
     CreateInfo.dwAddData = 0;
     CreateInfo.hHosting = HWND_DESKTOP;
+
     hDockBar = CreateMainWindowEx2 (&CreateInfo, 0L, NULL, NULL, ST_PIXEL_ARGB8888,
                                 MakeRGBA (SysPixelColor[IDX_COLOR_darkgray].r,
                                           SysPixelColor[IDX_COLOR_darkgray].g,
                                           SysPixelColor[IDX_COLOR_darkgray].b,
                                           0xA0),
                                 CT_ALPHAPIXEL, 0x80);
+
+    for(i = 0; i < BUTTON_COUNT; i++)
+    {
+        m_rect[i].left = i * m_DockBar_Left_Length + MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2;
+        m_rect[i].top = (m_DockBar_Height - DOCK_ICON_HEIGHT) * m_factor / 2;
+        m_rect[i].right = m_rect[i].left + DOCK_ICON_WIDTH * m_factor;
+        m_rect[i].bottom = m_rect[i].top + DOCK_ICON_HEIGHT * m_factor;
+    }
 
     return hDockBar;
 }
