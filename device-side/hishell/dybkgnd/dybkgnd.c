@@ -98,7 +98,6 @@ int paintWallpaper (HDC hdc, int space)
             start = wp_half_h - bmpTop.bmHeight;;
         }
 
-        fprintf(stderr, "wp_w=%d|wp_h=%d\n", wp_w, wp_h);
         SetBrushColor(hdc, RGBA2Pixel(hdc, 0x00, 0x00, 0x0, 0x0));
         FillBox(hdc, 0, 0, wp_w, wp_h);
 
@@ -276,14 +275,12 @@ int MiniGUIMain (int argc, const char* argv[])
     }
 
     mGEffInit();
-    //startAnimation(NULL);
-    //loadSVG("res/home.svg");
-    loadSVG("res/arrow.svg");
+    startAnimation(NULL);
 
     while (GetMessage (&msg, HWND_DESKTOP)) {
         if (msg.message == MSG_DYBKGND_DO_ANIMATION)
         {
-    //        startAnimation(NULL);
+            startAnimation(NULL);
         }
         DispatchMessage (&msg);
     }
