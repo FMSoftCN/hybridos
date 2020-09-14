@@ -1,3 +1,7 @@
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 cmake_minimum_required(VERSION 3.10)
 project(MiniBrowser)
 aux_source_directory(. DIR_SRCS)
@@ -12,7 +16,13 @@ set(DERIVED_SOURCES_DIR "${PROJECT_SOURCE_DIR}/../../../Output/HBD/Build/hiwebki
 set(FORWARDING_HEADERS_DIR ${DERIVED_SOURCES_DIR}/ForwardingHeaders)
 set(DERIVED_SOURCES_WEBKIT2HBD_DIR ${DERIVED_SOURCES_DIR}/webkit2hbd)
 set(FORWARDING_HEADERS_WEBKIT2HBD_DIR ${FORWARDING_HEADERS_DIR}/webkit2hbd)
-set(CMAKE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/../../../Source/hiwebkit-1.0/Source")
+set(FORWARDING_HEADERS_WEBKIT2HBD_1_0_DIR ${FORWARDING_HEADERS_DIR}/webkit2hbd-1.0)
+set(FORWARDING_HEADERS_WEBKIT2HBD_WEBEXTENSION_DIR ${FORWARDING_HEADERS_DIR}/webkit2hbd-webextension)
+set(DERIVED_SOURCES_WEBKIT2HBD_WEBKIT2_DIR ${DERIVED_SOURCES_DIR}/webkit2hbd/webkit2)
+set(DERIVED_SOURCES_WEBKIT_DIR ${DERIVED_SOURCES_DIR}/WebKit)
+set(DERIVED_SOURCES_WEBKIT_INCLUDE_DIR ${DERIVED_SOURCES_WEBKIT_DIR}/include)
+
+set(WEBKIT_SOURCE_DIR "${PROJECT_SOURCE_DIR}/../../../Source/hiwebkit-1.0/Source")
 
 #file(MAKE_DIRECTORY ${DERIVED_SOURCES_MINIBROWSER_DIR})
 
@@ -26,16 +36,166 @@ set(MiniBrowser_SOURCES
 
 set(MiniBrowser_INCLUDE_DIRECTORIES
 #    ${DERIVED_SOURCES_MINIBROWSER_DIR}
+    ${MINIBROWSER_DIR}
     ${DERIVED_SOURCES_WEBKIT2HBD_DIR}
     ${FORWARDING_HEADERS_WEBKIT2HBD_DIR}
     ${FORWARDING_HEADERS_DIR}
-    ${CMAKE_SOURCE_DIR}/Source
+    ${FORWARDING_HEADERS_WEBKIT2HBD_1_0_DIR}
+    ${FORWARDING_HEADERS_WEBKIT2HBD_WEBEXTENSION_DIR}
+    ${DERIVED_SOURCES_WEBKIT2HBD_WEBKIT2_DIR}
+    ${DERIVED_SOURCES_WEBKIT_DIR}
+    ${DERIVED_SOURCES_WEBKIT_INCLUDE_DIR}
+    ${DERIVED_SOURCES_DIR}/JavaScriptCore/javascriptcorehbd
+    ${DERIVED_SOURCES_DIR}/ForwardingHeaders/JavaScriptCore
+    ${DERIVED_SOURCES_DIR}/ForwardingHeaders/JavaScriptCore/glib
+    ${WEBKIT_SOURCE_DIR}
+    ${WEBKIT_SOURCE_DIR}/WebKit
+    ${WEBKIT_SOURCE_DIR}/WebKit/GPUProcess
+    ${WEBKIT_SOURCE_DIR}/WebKit/GPUProcess/graphics
+    ${WEBKIT_SOURCE_DIR}/WebKit/GPUProcess/media
+    ${WEBKIT_SOURCE_DIR}/WebKit/GPUProcess/webrtc
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/Classifier
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/Cookies
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/CustomProtocols
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/Downloads
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/FileAPI
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/IndexedDB
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/ServiceWorker
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/WebStorage
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/cache
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/watchos
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/webrtc
+    ${WEBKIT_SOURCE_DIR}/WebKit/Platform
+    ${WEBKIT_SOURCE_DIR}/WebKit/Platform/IPC
+    ${WEBKIT_SOURCE_DIR}/WebKit/PluginProcess
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/API
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/API/c
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/ApplePay
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/Authentication
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/CoreIPCSupport
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/Databases
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/Databases/IndexedDB
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/FileAPI
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/Gamepad
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/Plugins
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/Plugins/Netscape
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/Plugins/Netscape/x11
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/RemoteLayerTree
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/WebsiteData
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/API
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/API/C
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/API/cpp
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/Authentication
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/Automation
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/Downloads
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/Gamepad
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/GPU
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/Inspector
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/Inspector/Agents
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/Launcher
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/Network
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/Network/CustomProtocols
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/Notifications
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/Plugins
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/RemoteLayerTree
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/UserContent
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/WebAuthentication
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/WebAuthentication/Mock
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/WebsiteData
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/ApplePay
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/ApplicationCache
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Automation
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Cache
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Databases
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Databases/IndexedDB
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/FileAPI
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/FullScreen
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Gamepad
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Geolocation
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/GPU
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/GPU/graphics
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/GPU/media
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/GPU/webrtc
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/IconDatabase
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/InjectedBundle
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/InjectedBundle/API
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/InjectedBundle/API/c
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/InjectedBundle/DOM
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Inspector
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Launching
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/MediaCache
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/MediaStream
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Network
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Network/webrtc
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Notifications
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/OriginData
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Plugins
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Plugins/Netscape
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/ResourceCache
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Storage
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/UserContent
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/WebCoreSupport
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/WebPage
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/WebPage/RemoteLayerTree
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/WebStorage
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/glib
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/hbd
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/soup
+    ${WEBKIT_SOURCE_DIR}/WebKit/NetworkProcess/unix
+    ${WEBKIT_SOURCE_DIR}/WebKit/Platform/IPC/glib
+    ${WEBKIT_SOURCE_DIR}/WebKit/Platform/IPC/unix
+    ${WEBKIT_SOURCE_DIR}/WebKit/Platform/classifier
+    ${WEBKIT_SOURCE_DIR}/WebKit/Platform/generic
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/API/c/hbd
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/API/glib
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/CoordinatedGraphics
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/CoordinatedGraphics/threadedcompositor
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/Plugins/unix
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/glib
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/hbd
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/linux
+    ${WEBKIT_SOURCE_DIR}/WebKit/Shared/soup
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/API/C/cairo
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/API/C/hbd
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/API/glib
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/API/hbd
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/CoordinatedGraphics
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/Inspector/glib
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/Inspector/hbd
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/Plugins/hbd
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/geoclue
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/glib
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/gstreamer
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/hbd
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/linux
+    ${WEBKIT_SOURCE_DIR}/WebKit/UIProcess/soup
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/InjectedBundle/API/glib
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/InjectedBundle/API/glib/DOM
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/InjectedBundle/API/hbd
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/InjectedBundle/API/hbd/DOM
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Inspector/hbd
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Plugins/Netscape/unix
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/Plugins/Netscape/x11
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/hbd
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/soup
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/WebCoreSupport/hbd
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/WebCoreSupport/soup
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/WebPage/CoordinatedGraphics
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/WebPage/atk
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/WebPage/hbd
+    ${WEBKIT_SOURCE_DIR}/WebKit/WebProcess/WebPage/libwpe
+    ${WEBKIT_SOURCE_DIR}/WebCore/platform/graphics/libwpe
 )
 
 set(MiniBrowser_SYSTEM_INCLUDE_DIRECTORIES
     ${GLIB_INCLUDE_DIRS}
     ${LIBSOUP_INCLUDE_DIRS}
 #    ${GSTREAMER_INCLUDE_DIRS}
+    ${Cairo_INCLUDE_DIR}
     ${MINIGUI_INCLUDE_DIRS}
 )
 
@@ -43,7 +203,11 @@ set(MiniBrowser_LIBRARIES
     ${MINIGUI_LIBRARIES}
 #    ${JavaScriptCore_LIBRARY_NAME}
     javascriptcorehbd-1.0
-    WebKit
+    webkit2hbd-1.0
+    gobject-2.0
+    icui18n
+    icuuc
+    icudata
     ${GLIB_LIBRARIES}
     ${LIBSOUP_LIBRARIES}
 #    ${GSTREAMER_LIBRARIES}
@@ -62,6 +226,8 @@ set(MiniBrowser_LIBRARIES
 #endif ()
 
 add_definitions(-DHBD_VERSION_MIN_REQUIRED=HBD_VERSION_1_0)
+add_definitions(-DBUILDING_HBD__=1 -DBUILDING_WITH_CMAKE=1)
+add_definitions(-DJSC_GLIB_API_ENABLED -DSVN_REVISION=\"tarball\" -DWEBKITHBD_API_VERSION_STRING=\"1.0\")
 
 include_directories(${MiniBrowser_INCLUDE_DIRECTORIES})
 include_directories(SYSTEM ${MiniBrowser_SYSTEM_INCLUDE_DIRECTORIES})
