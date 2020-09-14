@@ -62,6 +62,9 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
+// configuration file
+#define SYSTEM_CONFIG_FILE  "hybridos.cfg"  // configuration file
+
 // some macro of animation 
 #define DIRECTION_SHOW      0               // show the main window
 #define DIRECTION_HIDE      1               // hide the main window
@@ -96,20 +99,12 @@
 
 // default string in status bar, when none app exists.
 #define STRING_OS_NAME      "Hybrid OS V1.1.0"
-#define DOCK_ICON_ARROW     "res/arrow.svg"
-#define DOCK_ICON_HOME      "res/home.svg"
-#define DOCK_ICON_TOGGLE    "res/toggle.svg"
-#define DOCK_ICON_SETTING   "res/setting.svg"
-#define DOCK_ICON_SHUTDOWN  "res/shutdown.svg"
-#define DOCK_ICON_ABOUT     "res/about.svg"
 
 // button color
 #define BUTTON_COLOR_R      (float)56
 #define BUTTON_COLOR_G      (float)156
 #define BUTTON_COLOR_B      (float)250
 
-// for math
-//#define M_PI    3.1415926
 
 #ifdef __cplusplus
 extern "C" {

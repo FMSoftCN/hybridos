@@ -92,11 +92,13 @@ static int m_DockBar_Start_x = 0;               // it is only for convenience fo
 static int m_DockBar_Start_y = 0;
 static int m_DockBar_End_x = 0;
 static int m_DockBar_End_y = 0;
-static int m_DockBar_Left_Length = 0;
-static int m_Button_Interval = 0;
+
+static int m_DockBar_Left_Length = 0;           // the visible dock bar length when hidden
+static int m_Button_Interval = 0;               // the interval length between dock buttons
 
 static cairo_t *cr[BUTTON_COUNT];
 static cairo_surface_t *surface[BUTTON_COUNT];
+
 
 // start another process
 static pid_t exec_app (char * app)
@@ -207,64 +209,7 @@ static HDC create_memdc_from_image_surface (cairo_surface_t* image_surface)
     return CreateMemDCFromMyBitmap(&my_bmp, NULL);
 }
 
-#if 0
-static void loadSVGArrow(const char* file, HDC hdc)
-{
-    RsvgHandle *handle;
-    GError *error = NULL;
-    RsvgDimensionData dimensions;
-    cairo_pattern_t *pattern;
-    float factor_width = 0.0f;
-    float factor_height = 0.0f;
-
-    // read file from svg file
-    handle = rsvg_handle_new_from_file(file, &error);
-    if(error)
-    {
-        surface[0] = NULL;
-        cr[0] = NULL;
-        return;
-    }
-    rsvg_handle_get_dimensions(handle, &dimensions);
-
-    // create cairo_surface_t and cairo_t for one picture
-    surface[0] = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, DOCK_ICON_WIDTH * m_factor, DOCK_ICON_HEIGHT * m_factor);
-    cr[0] = cairo_create (surface[0]);
-
-    cairo_save(cr[0]);
-
-    cairo_translate(cr[0], DOCK_ICON_WIDTH * m_factor / 2, DOCK_ICON_HEIGHT * m_factor / 2);
-    cairo_rotate(cr[0], m_Arrow_angle);
-    cairo_translate(cr[0], -1 * DOCK_ICON_WIDTH * m_factor / 2, -1 * DOCK_ICON_HEIGHT * m_factor / 2);
-
-    factor_width = DOCK_ICON_WIDTH / dimensions.width;
-    factor_height = DOCK_ICON_HEIGHT / dimensions.height;
-    factor_width = (factor_width > factor_height) ? factor_width : factor_height;
-    cairo_scale(cr[0], factor_width, factor_width);
-
-    cairo_push_group (cr[0]);
-    rsvg_handle_render_cairo (handle, cr[0]);
-    pattern = cairo_pop_group (cr[0]);
-
-    cairo_set_source_rgb (cr[0], 1.0, 0.0, 0.0);
-    cairo_mask(cr[0], pattern);
-
-    cairo_restore (cr[0]);
-
-    HDC csdc = create_memdc_from_image_surface(surface[0]);
-    if (csdc != HDC_SCREEN && csdc != HDC_INVALID) 
-        BitBlt(csdc, 0, 0, DOCK_ICON_WIDTH, DOCK_ICON_HEIGHT, hdc, MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2, (m_DockBar_Height - DOCK_ICON_HEIGHT) * m_factor / 2, 0);
-    DeleteMemDC(csdc);
-//    SyncUpdateDC(hdc);
-
-    cairo_surface_destroy (surface[0]);
-    cairo_pattern_destroy (pattern);
-    cairo_destroy (cr[0]);
-    g_object_unref (handle);
-}
-#endif
-
-static void paintSVGArrow(const char* file, HDC hdc)
+static void paintSVGArrow(HDC hdc)
 {
     GError *error = NULL;
     RsvgDimensionData dimensions;
@@ -387,7 +332,7 @@ static void paintDockBarIcon(HDC hdc)
 {
     int i = 0;
 
-    paintSVGArrow(DOCK_ICON_ARROW, hdc);
+    paintSVGArrow(hdc);
     for(i = 1; i < BUTTON_COUNT; i ++)
     {
         if(surface[i] && cr[i])
@@ -409,6 +354,7 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
     int i = 0;
     int x = 0;
     int y = 0;
+    char picture_file[ETC_MAXLINE];  
     HDC hdc;
 
     switch (message) 
@@ -420,12 +366,29 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
             return 0;
 
         case MSG_CREATE:
-            loadSVGArrow(DOCK_ICON_ARROW, 0);
-            loadSVGFromFile(DOCK_ICON_HOME, 1);
-            loadSVGFromFile(DOCK_ICON_TOGGLE, 2);
-            loadSVGFromFile(DOCK_ICON_SETTING, 3);
-            loadSVGFromFile(DOCK_ICON_ABOUT, 4);
-            loadSVGFromFile(DOCK_ICON_SHUTDOWN, 5);
+            memset(picture_file, 0, ETC_MAXLINE);
+            if(GetValueFromEtcFile(SYSTEM_CONFIG_FILE, "dockbar", "DOCK_ICON_ARROW", picture_file, ETC_MAXLINE) == ETC_OK)
+                loadSVGArrow(picture_file, ID_DISPLAY_BUTTON);
+
+            memset(picture_file, 0, ETC_MAXLINE);
+            if(GetValueFromEtcFile(SYSTEM_CONFIG_FILE, "dockbar", "DOCK_ICON_HOME", picture_file, ETC_MAXLINE) == ETC_OK)
+                loadSVGFromFile(picture_file, ID_HOME_BUTTON);
+
+            memset(picture_file, 0, ETC_MAXLINE);
+            if(GetValueFromEtcFile(SYSTEM_CONFIG_FILE, "dockbar", "DOCK_ICON_TOGGLE", picture_file, ETC_MAXLINE) == ETC_OK)
+                loadSVGFromFile(picture_file, ID_TOGGLE_BUTTON);
+
+            memset(picture_file, 0, ETC_MAXLINE);
+            if(GetValueFromEtcFile(SYSTEM_CONFIG_FILE, "dockbar", "DOCK_ICON_SETTING", picture_file, ETC_MAXLINE) == ETC_OK)
+                loadSVGFromFile(picture_file, ID_SETTING_BUTTON);
+
+            memset(picture_file, 0, ETC_MAXLINE);
+            if(GetValueFromEtcFile(SYSTEM_CONFIG_FILE, "dockbar", "DOCK_ICON_ABOUT", picture_file, ETC_MAXLINE) == ETC_OK)
+                loadSVGFromFile(picture_file, ID_ABOUT_BUTTON);
+
+            memset(picture_file, 0, ETC_MAXLINE);
+            if(GetValueFromEtcFile(SYSTEM_CONFIG_FILE, "dockbar", "DOCK_ICON_SHUTDOWN", picture_file, ETC_MAXLINE) == ETC_OK)
+                loadSVGFromFile(picture_file, ID_SHUTDOWN_BUTTON);
 
             SetTimer(hWnd, ID_SHOW_TIMER, DOCKBAR_VISIBLE_TIME);
             m_direction = DIRECTION_HIDE;
