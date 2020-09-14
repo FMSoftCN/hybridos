@@ -81,8 +81,8 @@
 #define HEIGHT_STATUSBAR    40              // height of status bar 
 #define HEIGHT_DOCKBAR      60              // height of dock bar
 #define TIME_INFO_X         100             // the width of time area in status bar
-#define DOCK_ICON_WIDTH     36              // the width of icon in dock bar
-#define DOCK_ICON_HEIGHT    36              // the height of icon in dock bar
+#define DOCK_ICON_WIDTH     42              // the width of icon in dock bar
+#define DOCK_ICON_HEIGHT    42              // the height of icon in dock bar
 
 // control ID in dock bar
 #define BUTTON_COUNT        6               // the number of button on the dock bar

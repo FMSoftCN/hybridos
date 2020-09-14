@@ -214,8 +214,8 @@ static void paintSVGArrow(HDC hdc)
     GError *error = NULL;
     RsvgDimensionData dimensions;
     cairo_pattern_t *pattern;
-    float factor_width = 0.0f;
-    float factor_height = 0.0f;
+    double factor_width = 0.0f;
+    double factor_height = 0.0f;
 
     // read file from svg file
     if(m_arrow_svg_handle == NULL)
@@ -236,8 +236,8 @@ static void paintSVGArrow(HDC hdc)
     cairo_rotate(cr[0], m_Arrow_angle);
     cairo_translate(cr[0], (int)(-1 * DOCK_ICON_WIDTH * m_factor / 2), (int)(-1 * DOCK_ICON_HEIGHT * m_factor / 2));
 
-    factor_width = DOCK_ICON_WIDTH / dimensions.width;
-    factor_height = DOCK_ICON_HEIGHT / dimensions.height;
+    factor_width = (double)DOCK_ICON_WIDTH / (double)dimensions.width;
+    factor_height = (double)DOCK_ICON_HEIGHT / (double)dimensions.height;
     factor_width = (factor_width > factor_height) ? factor_width : factor_height;
     cairo_scale(cr[0], factor_width, factor_width);
 
@@ -287,8 +287,8 @@ static void loadSVGFromFile(const char* file, int index)
     GError *error = NULL;
     RsvgDimensionData dimensions;
     cairo_pattern_t *pattern;
-    float factor_width = 0.0f;
-    float factor_height = 0.0f;
+    double factor_width = 0.0f;
+    double factor_height = 0.0f;
 
     // read file from svg file
     handle = rsvg_handle_new_from_file(file, &error);
@@ -306,8 +306,8 @@ static void loadSVGFromFile(const char* file, int index)
 
     cairo_save(cr[index]);
 
-    factor_width = DOCK_ICON_WIDTH / dimensions.width;
-    factor_height = DOCK_ICON_HEIGHT / dimensions.height;
+    factor_width = (double)DOCK_ICON_WIDTH / (double)dimensions.width;
+    factor_height = (double)DOCK_ICON_HEIGHT / (double)dimensions.height;
     factor_width = (factor_width > factor_height) ? factor_width : factor_height;
 
     cairo_scale(cr[index], factor_width, factor_width);
