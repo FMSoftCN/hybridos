@@ -341,7 +341,7 @@ static void paintDockBarIcon(HDC hdc)
             if (csdc != HDC_SCREEN && csdc != HDC_INVALID) 
             {
                 SetMemDCColorKey(csdc, MEMDC_FLAG_SRCCOLORKEY, 0);
-                BitBlt(csdc, 0, 0, DOCK_ICON_WIDTH, DOCK_ICON_HEIGHT, hdc, i * m_Button_Interval + MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2, (int)((m_DockBar_Height - DOCK_ICON_HEIGHT) * m_factor / 2) + 5, 0);
+                BitBlt(csdc, 0, 0, DOCK_ICON_WIDTH, DOCK_ICON_HEIGHT, hdc, i * m_Button_Interval + MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2, (int)((m_DockBar_Height - DOCK_ICON_HEIGHT) * m_factor / 2), 0);
             }
             DeleteMemDC(csdc);
         }
