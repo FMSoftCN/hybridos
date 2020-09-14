@@ -137,7 +137,7 @@ static void create_animation(HWND hWnd)
         if(m_direction == DIRECTION_HIDE)
         {
             end = -1 * m_StatusBar_Height;
-            motionType = InCirc;
+            motionType = OutCirc;
             duration = STATUSBAR_ANIMATION_TIME * (m_StatusBar_Height + m_StatusBar_Y) / m_StatusBar_Height;
         }
         else
@@ -166,13 +166,13 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
     static PLOGFONT font;
     char buff [20];
     int length = 0;
-    RECT rect[2] = {{MARGIN_STATUS, MARGIN_STATUS, g_rcScr.right - TIME_INFO_X,  m_StatusBar_Height - MARGIN_STATUS}, {g_rcScr.right - TIME_INFO_X, MARGIN_STATUS, g_rcScr.right - MARGIN_STATUS, m_StatusBar_Height - MARGIN_STATUS}};
+    RECT rect[2] = {{10 * MARGIN_STATUS, MARGIN_STATUS, g_rcScr.right - TIME_INFO_X,  m_StatusBar_Height - MARGIN_STATUS}, {g_rcScr.right - TIME_INFO_X, MARGIN_STATUS, g_rcScr.right - MARGIN_STATUS, m_StatusBar_Height - MARGIN_STATUS}};
 
     switch (message) 
     {
         case MSG_PAINT:
             hdc = BeginPaint (hWnd);
-            SetTextColor (hdc, DWORD2Pixel (hdc, RGBA_black));
+            SetTextColor (hdc, DWORD2Pixel (hdc, 0xFFFFFFFF));
             SetBkMode (hdc, BM_TRANSPARENT);
             SelectFont(hdc, font);
             length = GetWindowTextLength(hWnd);
@@ -180,7 +180,7 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                 char title[length + 1];
                 memset(title, 0, length + 1);
                 GetWindowText(hWnd, title, length);
-                DrawText (hdc, title, strlen(title), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+                DrawText (hdc, title, strlen(title), rect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
             }
 
             mk_time(buff);
@@ -240,7 +240,7 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             break;
 
         case MSG_CREATE:
-            font = CreateLogFont (NULL, "System", "ISO8859-1",
+            font = CreateLogFont (FONT_TYPE_NAME_SCALE_TTF, "ttf-Source Sans Pro,SansSerif-rrncnn-0-0-ISO8859-1,UTF-8", "UTF-8",
                         FONT_WEIGHT_BOOK, FONT_SLANT_ROMAN, FONT_FLIP_NIL,
                         FONT_OTHER_AUTOSCALE, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE,
                         m_StatusBar_Height / 2, 0);
@@ -301,7 +301,7 @@ HWND create_status_bar (void)
     CreateInfo.ty = 0;
     CreateInfo.rx = g_rcScr.right;
     CreateInfo.by = m_StatusBar_Height;
-    CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0x80); 
+    CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0xFf); 
     CreateInfo.dwAddData = 0;
     CreateInfo.hHosting = HWND_DESKTOP;
 
@@ -309,8 +309,8 @@ HWND create_status_bar (void)
                                 MakeRGBA (SysPixelColor[IDX_COLOR_darkgray].r,
                                           SysPixelColor[IDX_COLOR_darkgray].g,
                                           SysPixelColor[IDX_COLOR_darkgray].b,
-                                          0xA0),
-                                CT_ALPHAPIXEL, 0x80);
+                                          0xE0),
+                                CT_ALPHAPIXEL, 0xFF);
 
     if (hStatusBar == HWND_INVALID)
         return HWND_INVALID;

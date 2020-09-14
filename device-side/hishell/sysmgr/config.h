@@ -69,7 +69,7 @@
 #define STATUSBAR_ANIMATION_TIME    1000    // 1000 ms
 #define STATUSBAR_VISIBLE_TIME      200     // 200ms * 10 = 2s
 
-#define DOCKBAR_ANIMATION_TIME      1000    // 1000 ms
+#define DOCKBAR_ANIMATION_TIME      500     // 500 ms
 #define DOCKBAR_VISIBLE_TIME        200     // 200ms * 10 = 2s
 
 // some macro of physical dimension 
@@ -78,8 +78,8 @@
 #define HEIGHT_STATUSBAR    40              // height of status bar 
 #define HEIGHT_DOCKBAR      60              // height of dock bar
 #define TIME_INFO_X         100             // the width of time area in status bar
-#define DOCK_ICON_WIDTH     48              // the width of icon in dock bar
-#define DOCK_ICON_HEIGHT    48              // the height of icon in dock bar
+#define DOCK_ICON_WIDTH     42              // the width of icon in dock bar
+#define DOCK_ICON_HEIGHT    42              // the height of icon in dock bar
 
 // control ID in dock bar
 #define BUTTON_COUNT        6               // the number of button on the dock bar
@@ -87,8 +87,8 @@
 #define ID_HOME_BUTTON      1               // home button
 #define ID_TOGGLE_BUTTON    2               // toggle apps
 #define ID_SETTING_BUTTON   3               // system settings
-#define ID_SHUTDOWN_BUTTON  4               // shutdown the device
-#define ID_ABOUT_BUTTON     5               // about button, navigate to hybridos.com
+#define ID_ABOUT_BUTTON     4               // about button, navigate to hybridos.com
+#define ID_SHUTDOWN_BUTTON  5               // shutdown the device
 
 // timer
 #define ID_TIMER            100             // for time display
@@ -102,6 +102,11 @@
 #define DOCK_ICON_SETTING   "res/setting.svg"
 #define DOCK_ICON_SHUTDOWN  "res/shutdown.svg"
 #define DOCK_ICON_ABOUT     "res/about.svg"
+
+// button color
+#define BUTTON_COLOR_R      (float)56
+#define BUTTON_COLOR_G      (float)156
+#define BUTTON_COLOR_B      (float)250
 
 // for math
 //#define M_PI    3.1415926

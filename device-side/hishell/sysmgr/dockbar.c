@@ -93,6 +93,7 @@ static int m_DockBar_Start_y = 0;
 static int m_DockBar_End_x = 0;
 static int m_DockBar_End_y = 0;
 static int m_DockBar_Left_Length = 0;
+static int m_Button_Interval = 0;
 
 static cairo_t *cr[BUTTON_COUNT];
 static cairo_surface_t *surface[BUTTON_COUNT];
@@ -167,7 +168,7 @@ static void create_animation(HWND hWnd)
         if(m_direction == DIRECTION_HIDE)
         {
             end = g_rcScr.right - m_DockBar_Left_Length;
-            motionType = InCirc;
+            motionType = OutCirc;
             duration = DOCKBAR_ANIMATION_TIME * (g_rcScr.right - m_DockBar_Left_Length - m_DockBar_X) / (g_rcScr.right - m_DockBar_Left_Length - m_DockBar_Start_x);
         }
         else
@@ -281,14 +282,14 @@ static void paintSVGArrow(const char* file, HDC hdc)
     rsvg_handle_get_dimensions(m_arrow_svg_handle, &dimensions);
 
     // create cairo_surface_t and cairo_t for one picture
-    surface[0] = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, DOCK_ICON_WIDTH * m_factor, DOCK_ICON_HEIGHT * m_factor);
+    surface[0] = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, (int)(DOCK_ICON_WIDTH * m_factor), (int)(DOCK_ICON_HEIGHT * m_factor));
     cr[0] = cairo_create (surface[0]);
 
     cairo_save(cr[0]);
 
-    cairo_translate(cr[0], DOCK_ICON_WIDTH * m_factor / 2, DOCK_ICON_HEIGHT * m_factor / 2);
+    cairo_translate(cr[0], (int)(DOCK_ICON_WIDTH * m_factor / 2), (int)(DOCK_ICON_HEIGHT * m_factor / 2));
     cairo_rotate(cr[0], m_Arrow_angle);
-    cairo_translate(cr[0], -1 * DOCK_ICON_WIDTH * m_factor / 2, -1 * DOCK_ICON_HEIGHT * m_factor / 2);
+    cairo_translate(cr[0], (int)(-1 * DOCK_ICON_WIDTH * m_factor / 2), (int)(-1 * DOCK_ICON_HEIGHT * m_factor / 2));
 
     factor_width = DOCK_ICON_WIDTH / dimensions.width;
     factor_height = DOCK_ICON_HEIGHT / dimensions.height;
@@ -299,15 +300,18 @@ static void paintSVGArrow(const char* file, HDC hdc)
     rsvg_handle_render_cairo (m_arrow_svg_handle, cr[0]);
     pattern = cairo_pop_group (cr[0]);
 
-    cairo_set_source_rgb (cr[0], 1.0, 0.0, 0.0);
+    cairo_set_source_rgb (cr[0], BUTTON_COLOR_R / 255, BUTTON_COLOR_G / 255, BUTTON_COLOR_B / 255);
     cairo_mask(cr[0], pattern);
 
     cairo_restore (cr[0]);
 
     HDC csdc = create_memdc_from_image_surface(surface[0]);
     if (csdc != HDC_SCREEN && csdc != HDC_INVALID) 
-        BitBlt(csdc, 0, 0, DOCK_ICON_WIDTH, DOCK_ICON_HEIGHT, hdc, MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2, (m_DockBar_Height - DOCK_ICON_HEIGHT) * m_factor / 2, 0);
-    DeleteMemDC(csdc);
+    {
+        SetMemDCColorKey(csdc, MEMDC_FLAG_SRCCOLORKEY, 0);
+        BitBlt(csdc, 0, 0, DOCK_ICON_WIDTH, DOCK_ICON_HEIGHT, hdc, MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2, (int)((m_DockBar_Height - DOCK_ICON_HEIGHT) * m_factor / 2), 0);
+        DeleteMemDC(csdc);
+    }
 //    SyncUpdateDC(hdc);
 
     cairo_surface_destroy (surface[0]);
@@ -367,7 +371,10 @@ static void loadSVGFromFile(const char* file, int index)
     rsvg_handle_render_cairo (handle, cr[index]);
     pattern = cairo_pop_group (cr[index]);
 
-    cairo_set_source_rgb (cr[index], 1.0, 0.0, 0.0);
+    if(index == ID_SHUTDOWN_BUTTON)
+        cairo_set_source_rgb (cr[index], 1.0, 0, 0);
+    else
+        cairo_set_source_rgb (cr[index], BUTTON_COLOR_R / 255, BUTTON_COLOR_G / 255, BUTTON_COLOR_B / 255);
     cairo_mask(cr[index], pattern);
 
     cairo_restore (cr[index]);
@@ -387,7 +394,10 @@ static void paintDockBarIcon(HDC hdc)
         {
             HDC csdc = create_memdc_from_image_surface(surface[i]);
             if (csdc != HDC_SCREEN && csdc != HDC_INVALID) 
-               BitBlt(csdc, 0, 0, DOCK_ICON_WIDTH, DOCK_ICON_HEIGHT, hdc, i * m_DockBar_Left_Length + MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2, (m_DockBar_Height - DOCK_ICON_HEIGHT) * m_factor / 2, 0);
+            {
+                SetMemDCColorKey(csdc, MEMDC_FLAG_SRCCOLORKEY, 0);
+                BitBlt(csdc, 0, 0, DOCK_ICON_WIDTH, DOCK_ICON_HEIGHT, hdc, i * m_Button_Interval + MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2, (int)((m_DockBar_Height - DOCK_ICON_HEIGHT) * m_factor / 2) + 5, 0);
+            }
             DeleteMemDC(csdc);
         }
     }
@@ -414,8 +424,8 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
             loadSVGFromFile(DOCK_ICON_HOME, 1);
             loadSVGFromFile(DOCK_ICON_TOGGLE, 2);
             loadSVGFromFile(DOCK_ICON_SETTING, 3);
-            loadSVGFromFile(DOCK_ICON_SHUTDOWN, 4);
-            loadSVGFromFile(DOCK_ICON_ABOUT, 5);
+            loadSVGFromFile(DOCK_ICON_ABOUT, 4);
+            loadSVGFromFile(DOCK_ICON_SHUTDOWN, 5);
 
             SetTimer(hWnd, ID_SHOW_TIMER, DOCKBAR_VISIBLE_TIME);
             m_direction = DIRECTION_HIDE;
@@ -522,18 +532,19 @@ HWND create_dock_bar (void)
     CreateInfo.hCursor = GetSystemCursor (0);
     CreateInfo.hIcon = 0;
     CreateInfo.MainWindowProc = DockBarWinProc;
-    CreateInfo.lx = g_rcScr.right / 3;
-    CreateInfo.ty = g_rcScr.bottom * 3 / 4;
+    CreateInfo.lx = g_rcScr.right * (1 - 0.618);
+    CreateInfo.ty = g_rcScr.bottom - m_DockBar_Height;
     CreateInfo.rx = g_rcScr.right;
-    CreateInfo.by = CreateInfo.ty + m_DockBar_Height;
+    CreateInfo.by = g_rcScr.bottom;
 
     m_DockBar_Start_x = CreateInfo.lx;
     m_DockBar_Start_y = CreateInfo.ty;
     m_DockBar_End_x = CreateInfo.rx;
     m_DockBar_End_y = CreateInfo.by;
-    m_DockBar_Left_Length = (m_DockBar_End_x - m_DockBar_Start_x) / BUTTON_COUNT;
+    m_DockBar_Left_Length = 2 * MARGIN_DOCK + m_DockBar_Height * m_factor;
+    m_Button_Interval = (m_DockBar_End_x - m_DockBar_Start_x) / BUTTON_COUNT;
 
-    CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0x80); 
+    CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0xFF); 
     CreateInfo.dwAddData = 0;
     CreateInfo.hHosting = HWND_DESKTOP;
 
@@ -541,12 +552,12 @@ HWND create_dock_bar (void)
                                 MakeRGBA (SysPixelColor[IDX_COLOR_darkgray].r,
                                           SysPixelColor[IDX_COLOR_darkgray].g,
                                           SysPixelColor[IDX_COLOR_darkgray].b,
-                                          0xA0),
-                                CT_ALPHAPIXEL, 0x80);
+                                          0xE0),
+                                CT_ALPHAPIXEL, 0xFF);
 
     for(i = 0; i < BUTTON_COUNT; i++)
     {
-        m_rect[i].left = i * m_DockBar_Left_Length + MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2;
+        m_rect[i].left = i * m_Button_Interval + MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2;
         m_rect[i].top = (m_DockBar_Height - DOCK_ICON_HEIGHT) * m_factor / 2;
         m_rect[i].right = m_rect[i].left + DOCK_ICON_WIDTH * m_factor;
         m_rect[i].bottom = m_rect[i].top + DOCK_ICON_HEIGHT * m_factor;
