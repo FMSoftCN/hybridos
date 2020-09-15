@@ -149,8 +149,8 @@ static LRESULT MainFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
     switch (message) {
         case MSG_CREATE:
-            m_hWndAddress = CreateWindow (CTRL_EDIT, "", WS_CHILD | WS_VISIBLE | WS_BORDER, IDC_ADDRESS, m_ScreenRect.left + IDC_ADDRESS_LEFT, m_ScreenRect.top + IDC_ADDRESS_TOP, m_ScreenRect.right - m_ScreenRect.left - 2 * IDC_ADDRESS_LEFT - 5, IDC_ADDRESS_HEIGHT, hWnd, 0);
-//            m_hWndAddress = CreateWindow (CTRL_EDIT, "", WS_CHILD | WS_VISIBLE | WS_BORDER, IDC_ADDRESS, m_ScreenRect.left + IDC_ADDRESS_LEFT, m_ScreenRect.top + IDC_ADDRESS_TOP, m_ScreenRect.right - m_ScreenRect.left - 2 * IDC_ADDRESS_LEFT - 25, IDC_ADDRESS_HEIGHT, hWnd, 0);
+//            m_hWndAddress = CreateWindow (CTRL_EDIT, "", WS_CHILD | WS_VISIBLE | WS_BORDER, IDC_ADDRESS, m_ScreenRect.left + IDC_ADDRESS_LEFT, m_ScreenRect.top + IDC_ADDRESS_TOP, m_ScreenRect.right - m_ScreenRect.left - 2 * IDC_ADDRESS_LEFT - 5, IDC_ADDRESS_HEIGHT, hWnd, 0);
+            m_hWndAddress = CreateWindow (CTRL_EDIT, "", WS_CHILD | WS_VISIBLE | WS_BORDER, IDC_ADDRESS, m_ScreenRect.left + IDC_ADDRESS_LEFT, m_ScreenRect.top + IDC_ADDRESS_TOP, m_ScreenRect.right - m_ScreenRect.left - 2 * IDC_ADDRESS_LEFT - 25, IDC_ADDRESS_HEIGHT, hWnd, 0);
 //            m_hWndClose = CreateWindow(CTRL_BUTTON, "X", WS_CHILD | WS_VISIBLE | WS_BORDER, IDC_CLOSEVIEW, m_ScreenRect.right - 25, m_ScreenRect.top + IDC_ADDRESS_TOP, 20, 20, hWnd, 0);
             SetNotificationCallback (m_hWndAddress, my_notif_address);
 
@@ -273,7 +273,7 @@ int MiniGUIMain (int argc, const char* argv[])
 #endif
 
     CreateInfo.dwStyle = 
-        WS_VISIBLE | WS_CAPTION ;
+        WS_VISIBLE;
     CreateInfo.dwExStyle = WS_EX_NONE;
     CreateInfo.spCaption = HL_ST_CAP;
     CreateInfo.hMenu = 0;
