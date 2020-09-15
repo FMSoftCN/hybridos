@@ -227,7 +227,6 @@ set(MiniBrowser_LIBRARIES
 
 add_definitions(-DHBD_VERSION_MIN_REQUIRED=HBD_VERSION_1_0)
 add_definitions(-DBUILDING_HBD__=1 -DBUILDING_WITH_CMAKE=1)
-add_definitions(-DJSC_GLIB_API_ENABLED -DSVN_REVISION=\"tarball\" -DWEBKITHBD_API_VERSION_STRING=\"1.0\")
 
 include_directories(${MiniBrowser_INCLUDE_DIRECTORIES})
 include_directories(SYSTEM ${MiniBrowser_SYSTEM_INCLUDE_DIRECTORIES})
