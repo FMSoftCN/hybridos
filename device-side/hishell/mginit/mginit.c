@@ -79,6 +79,7 @@
 #include "../include/sysconfig.h"
 
 static SysConfig m_SysConfig;
+extern CompositorOps mine_compositor;
 
 static const char* new_del_client_info [] =
 {
@@ -207,16 +208,36 @@ static void on_znode_operation(int op, int cli, int idx_znode)
 
 static int GetStatusBarZnode(int cli, int clifd, void* buff, size_t len)
 {
+    ReplyInfo replyInfo;
+
     if(m_SysConfig.iSystemConfigClientID == cli)
     {
         RequestInfo * requestInfo = (RequestInfo *)buff;
         if(requestInfo->id == REQ_SUBMIT_STATUSBAR_ZNODE)
         {
-            ReplyInfo replyInfo;
             m_SysConfig.iStatusBarZNode = (int)(requestInfo->iData0);
             m_SysConfig.hWndStatusBar = requestInfo->hWnd;
             replyInfo.id = REQ_SUBMIT_STATUSBAR_ZNODE;
             replyInfo.iData0 = (int)TRUE;
+            ServerSendReply(clifd, &replyInfo, sizeof(replyInfo));
+        }
+        else if(requestInfo->id == REQ_SUBMIT_TOGGLE)
+        {
+            int cur_clientId = 0; 
+            int idx_topmost = 0; 
+
+            idx_topmost = ServerGetTopmostZNodeOfType(NULL, ZOF_TYPE_NORMAL, &cur_clientId); 
+            replyInfo.id = REQ_SUBMIT_TOGGLE;
+            replyInfo.iData0 = (int)FALSE;
+            if(idx_topmost > 0)
+            {
+                CompositorCtxt * context = NULL;
+                const CompositorOps * ops = ServerSelectCompositor(USER_DEFINE_COMPOSITOR, &context);
+                if(ops != &mine_compositor)
+                    ServerSelectCompositor("fallback", &context);
+                else
+                    replyInfo.iData0 = (int)TRUE;
+            }
             ServerSendReply(clifd, &replyInfo, sizeof(replyInfo));
         }
     }
@@ -261,6 +282,7 @@ int MiniGUIMain (int args, const char* arg[])
     struct sigaction siga;
     MSG msg;
     pid_t pid = 0;
+    BOOL ret = FALSE;
 
     memset(&m_SysConfig, 0, sizeof(SysConfig));
 
@@ -289,6 +311,11 @@ int MiniGUIMain (int args, const char* arg[])
         return 2;
     }
 
+    // register compositor
+    ret = ServerRegisterCompositor(USER_DEFINE_COMPOSITOR, &mine_compositor);
+    if(!ret)
+        printf("error: register mine-toggle compostor error!\n");
+
     // start system config process
     m_SysConfig.iSystemConfigPid = exec_app("sysmgr");
     if(m_SysConfig.iSystemConfigPid < 0)
@@ -307,5 +334,7 @@ int MiniGUIMain (int args, const char* arg[])
         DispatchMessage(&msg);
     }
 
+    // unregister compositor
+    ServerUnregisterCompositor(USER_DEFINE_COMPOSITOR);
     return 0;
 }

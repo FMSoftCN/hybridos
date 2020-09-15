@@ -84,6 +84,10 @@ typedef struct tagSysConfig
 // Customer sub require Id
 #define REQ_SUBMIT_STATUSBAR_ZNODE  0   // status bar send znode index to server
 #define REQ_GET_TOPMOST_TITLE       1   // get topmost normal window title
+#define REQ_SUBMIT_TOGGLE           2   // toggle the application
+
+// user defined compositor
+#define USER_DEFINE_COMPOSITOR  "mine-toggle"   // name of user's compositor
 
 typedef struct tagRequestInfo 
 {

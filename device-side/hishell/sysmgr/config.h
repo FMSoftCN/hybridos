@@ -105,7 +105,6 @@
 #define BUTTON_COLOR_G      (float)156
 #define BUTTON_COLOR_B      (float)250
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */

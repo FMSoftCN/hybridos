@@ -75,6 +75,7 @@
 #include <glib.h>
 #include <librsvg/rsvg.h>
 
+#include "../include/sysconfig.h"
 #include "config.h"
 
 extern HWND m_hStatusBar;                       // handle of status bar
@@ -98,7 +99,6 @@ static int m_Button_Interval = 0;               // the interval length between d
 
 static cairo_t *cr[BUTTON_COUNT];
 static cairo_surface_t *surface[BUTTON_COUNT];
-
 
 // start another process
 static pid_t exec_app (char * app)
@@ -349,6 +349,29 @@ static void paintDockBarIcon(HDC hdc)
     SyncUpdateDC(hdc);
 }
 
+static void toggle_application(HWND hWnd)
+{
+    REQUEST request;
+    RequestInfo requestinfo;
+    ReplyInfo replyInfo;
+
+    requestinfo.id = REQ_SUBMIT_TOGGLE;
+    requestinfo.hWnd = hWnd;
+    requestinfo.iData0 = 0;
+    request.id = ZNODE_INFO_REQID;
+    request.data = (void *)&requestinfo;
+    request.len_data = sizeof(requestinfo);
+
+    memset(&replyInfo, 0, sizeof(ReplyInfo));
+    ClientRequest(&request, &replyInfo, sizeof(ReplyInfo));
+    if((replyInfo.id == REQ_SUBMIT_TOGGLE) && (replyInfo.iData0))
+    {
+    }
+    else
+    {
+    }
+}
+
 static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     int i = 0;
@@ -356,6 +379,7 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
     int y = 0;
     char picture_file[ETC_MAXLINE];  
     HDC hdc;
+    BOOL ret = FALSE;
 
     switch (message) 
     {
@@ -418,6 +442,7 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
                     case ID_HOME_BUTTON:
                         break;
                     case ID_TOGGLE_BUTTON:
+                        toggle_application(hWnd);
                         break;
                     case ID_SETTING_BUTTON:
                         break;
@@ -470,6 +495,7 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
             }
             if(m_arrow_svg_handle)
                 g_object_unref(m_arrow_svg_handle);
+
             KillTimer (hWnd, ID_SHOW_TIMER);
             DestroyAllControls (hWnd);
             DestroyMainWindow (hWnd);
