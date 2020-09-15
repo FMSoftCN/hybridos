@@ -63,7 +63,6 @@
 
 // user define message
 #define MSG_USER_NEW_VIEW       (MSG_USER + 100 + 0)
-#define MSG_USER_DELETE_VIEW    (MSG_USER + 100 + 1)
 
 // define contrl
 #define IDC_ADDRESS_LEFT    5

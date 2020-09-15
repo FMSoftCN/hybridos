@@ -216,7 +216,7 @@ void close(WKPageRef page, const void* clientInfo)
 {
     fprintf(stderr, "%s:%d:%s\n", __FILE__, __LINE__, __func__);
     auto& thisWindow = toWebKitBrowserWindow(clientInfo);
-    SendMessage(thisWindow.mainHwnd(), MSG_USER_DELETE_VIEW, 0, (LPARAM)clientInfo); 
+    SendMessage(thisWindow.mainHwnd(), MSG_CLOSE, 0, (LPARAM)clientInfo); 
     DestroyWindow(thisWindow.hwnd());
 }
 

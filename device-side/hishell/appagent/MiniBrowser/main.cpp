@@ -73,72 +73,70 @@
 #include "browser_res_en.h"
 #endif
 
-BrowserWindow * m_currentView = NULL;   // current webkit view
-static HWND m_hWndAddress = NULL;
-static HWND m_hWndClose = NULL;
 RECT m_ScreenRect;
-BrowserWindow * m_viewStack[100];
 
 extern WebKitBrowserWindow& toWebKitBrowserWindow(const void *clientInfo);
 extern std::string createString(WKStringRef wkString);
 extern std::string createString(WKURLRef wkURL);
 
-static const char *gUrl = "https://hybridos.fmsoft.cn/";
+//static const char *gUrl = "https://hybridos.fmsoft.cn/";
+static const char *gUrl = "http://www.sina.com.cn/";
+static LRESULT MainFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 static void create_control(HWND hwnd, const char * url)
 {
     BrowserWindow * browserWindow = NULL;
     int i = 0;
     RECT rect = m_ScreenRect;
-    rect.top += IDC_ADDRESS_HEIGHT + IDC_ADDRESS_TOP + 5;
     
     browserWindow = WebKitBrowserWindow::create(IDC_BROWSER, rect, hwnd, HWND_INVALID);
     if (browserWindow)
     {
-        m_currentView = browserWindow;
-
-        for(i = 0; i < 100; i++)
-        {
-            if(m_viewStack[i] == NULL)
-                break;
-        }
-        if(i == 100)
-            return;
-
-        m_viewStack[i] = browserWindow;
-
         ShowWindow(browserWindow->hwnd(), SW_SHOW);
 
         if(url)
         {
             browserWindow->loadURL(url);
-            SetWindowText(m_hWndAddress, url);
         }
         else
         {
             browserWindow->loadURL(gUrl);
-            SetWindowText(m_hWndAddress, gUrl);
         }
     }
 }
 
-static void my_notif_address (HWND hwnd, LINT id, int nc, DWORD add_data)
+static HWND CreateAPPAgentMaindow(char * url)
 {
-    if (id == IDC_ADDRESS && nc == EN_ENTER) 
-    {
-        char buff [1024];
-        GetWindowText (hwnd, buff, 1024);
+    HWND hMainWnd;
+    MAINWINCREATE CreateInfo;
+    
+    m_ScreenRect = GetScreenRect();
 
-        // TODO: change the page.
-        if(m_currentView)
-            m_currentView->loadURL(buff);
-        else
-        {
-            create_control(GetParent(hwnd), buff);
-        }
-    }
+    CreateInfo.dwStyle = 
+        WS_VISIBLE;
+    CreateInfo.dwExStyle = WS_EX_NONE;
+    CreateInfo.spCaption = HL_ST_CAP;
+    CreateInfo.hMenu = 0;
+    CreateInfo.hCursor = GetSystemCursor(0);
+    CreateInfo.hIcon = 0;
+    CreateInfo.MainWindowProc = MainFrameProc;
+    CreateInfo.lx = m_ScreenRect.left;
+    CreateInfo.ty = m_ScreenRect.top;
+    CreateInfo.rx = m_ScreenRect.right;
+    CreateInfo.by = m_ScreenRect.bottom;
+    CreateInfo.iBkColor = COLOR_lightwhite;
+    CreateInfo.dwAddData = (DWORD) url;
+    CreateInfo.hHosting = HWND_DESKTOP;
+    
+    hMainWnd = CreateMainWindow (&CreateInfo);
+    
+    if (hMainWnd == HWND_INVALID)
+        return HWND_INVALID;
+
+    ShowWindow(hMainWnd, SW_SHOWNORMAL);
+
+    return hMainWnd;
 }
-
 
 static LRESULT MainFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -149,84 +147,13 @@ static LRESULT MainFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
     switch (message) {
         case MSG_CREATE:
-//            m_hWndAddress = CreateWindow (CTRL_EDIT, "", WS_CHILD | WS_VISIBLE | WS_BORDER, IDC_ADDRESS, m_ScreenRect.left + IDC_ADDRESS_LEFT, m_ScreenRect.top + IDC_ADDRESS_TOP, m_ScreenRect.right - m_ScreenRect.left - 2 * IDC_ADDRESS_LEFT - 5, IDC_ADDRESS_HEIGHT, hWnd, 0);
-            m_hWndAddress = CreateWindow (CTRL_EDIT, "", WS_CHILD | WS_VISIBLE | WS_BORDER, IDC_ADDRESS, m_ScreenRect.left + IDC_ADDRESS_LEFT, m_ScreenRect.top + IDC_ADDRESS_TOP, m_ScreenRect.right - m_ScreenRect.left - 2 * IDC_ADDRESS_LEFT - 25, IDC_ADDRESS_HEIGHT, hWnd, 0);
-//            m_hWndClose = CreateWindow(CTRL_BUTTON, "X", WS_CHILD | WS_VISIBLE | WS_BORDER, IDC_CLOSEVIEW, m_ScreenRect.right - 25, m_ScreenRect.top + IDC_ADDRESS_TOP, 20, 20, hWnd, 0);
-            SetNotificationCallback (m_hWndAddress, my_notif_address);
-
-            create_control(hWnd, NULL);
+            url = (char *) GetWindowAdditionalData(hWnd);
+            create_control(hWnd, url);
             break;
 
         case MSG_USER_NEW_VIEW:
             url = (char *)lParam;
-            create_control(hWnd, url);
-            break;
-
-        case MSG_USER_DELETE_VIEW:
-            view = (BrowserWindow *)lParam;
-
-
-            for(i = 0; i < 100; i++)
-            {
-                if(m_viewStack[i] == view)
-                    break;
-            }
-            if(i == 100)
-                printf("can not find the close view\n");
-            else
-            {
-                int j = i;
-                for(; i < 99; i++)
-                    m_viewStack[i] = m_viewStack[i + 1];
-                i = j;
-                if(m_viewStack[i] == 0)
-                {
-                    if(i == 0)           // no one left
-                    {
-                        m_currentView = NULL;
-                        SetWindowText(m_hWndAddress, "");
-                    }
-                    else
-                    {
-                        view = m_viewStack[i - 1];  // the top view
-                        SendMessage(view->hwnd(), MSG_SETFOCUS, 0, 0);
-                        m_currentView = view;
-                        {
-                            auto& thisWindow = toWebKitBrowserWindow(view);
-                            auto page = WKViewGetPage(thisWindow.getView().get());
-                            WKRetainPtr<WKURLRef> url = adoptWK(WKPageCopyActiveURL(page));
-                            std::string urlString = createString(url.get());
-                            SetWindowText(m_hWndAddress, urlString.c_str());
-                        }
-                    }
-                }
-                else
-                {
-                    for(; i < 100; i++)
-                    {
-                        if(m_viewStack[i] == 0)
-                            break;
-                    }
-                    if(i == 100)
-                    {
-                    }
-                    else
-                    {
-                        view = m_viewStack[i - 1];  // the top view
-                        SendMessage(view->hwnd(), MSG_SETFOCUS, 0, 0);
-                        m_currentView = view;
-                        {
-                            auto& thisWindow = toWebKitBrowserWindow(view);
-                            auto page = WKViewGetPage(thisWindow.getView().get());
-                            WKRetainPtr<WKURLRef> url = adoptWK(WKPageCopyActiveURL(page));
-                            std::string urlString = createString(url.get());
-                            SetWindowText(m_hWndAddress, urlString.c_str());
-                        }
-                    }
-                }
-
-            }
-
+            CreateAPPAgentMaindow(url);
             break;
 
         case MSG_CLOSE:
@@ -234,21 +161,6 @@ static LRESULT MainFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             DestroyMainWindow (hWnd);
             PostQuitMessage (hWnd);
             return 0;
-
-        case MSG_COMMAND:
-        {
-            switch (wParam) 
-            {
-                case IDC_BROWSER:
-                    printf("press button now ...\n");
-                    break;
-                case IDC_CLOSEVIEW:
-                    if(m_currentView)
-                        SendMessage(m_currentView->hwnd(), MSG_CLOSE, 0, 0);
-                    break;
-            }
-            break;
-        }
     }
 
     return DefaultMainWinProc(hWnd, message, wParam, lParam);
@@ -267,7 +179,6 @@ int MiniGUIMain (int argc, const char* argv[])
     
     m_ScreenRect = GetScreenRect();
 
-    memset(m_viewStack, 0, 100 * sizeof(BrowserWindow *));
 #ifdef _MGRM_PROCESSES
     JoinLayer(NAME_DEF_LAYER , "HybridOS" , 0 , 0);
 #endif
