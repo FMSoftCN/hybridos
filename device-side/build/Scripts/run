@@ -28,8 +28,7 @@ MG_CFG_FILE=$MG_CFG_PATH/MiniGUI.cfg
 sed -i -e "s:MiniGUI-3.2:MiniGUI-5.0:g" -e "s:exec_file=.*:exec_file=$WEBKIT_OUTPUTDIR/Root/bin/gvfb:g" -e "s:cursorpath=.*:cursorpath=$WEBKIT_OUTPUTDIR/Root/share/minigui/res/cursor/:g" -e "s:respath=.*:respath=$WEBKIT_OUTPUTDIR/Root/share/minigui/res/:g"  -e "s:fontfile0=/usr/local/share:fontfile0=$WEBKIT_OUTPUTDIR/Root/share:g" $MG_CFG_FILE
 
 # Modify hybridos.cfg
-
-sed -i -e "s:=:=$WEBKIT_OUTPUTDIR/Root/libexec/:g" $HISHELL_CFG_PATH/hybridos.cfg
+sed -i -e "s:=res:=$WEBKIT_OUTPUTDIR/Root/libexec/res:g" $HISHELL_CFG_PATH/hybridos.cfg
 
 # MiniBrowser
 $WEBKIT_OUTPUTDIR/Root/libexec/webkit2hbd-1.0/MiniBrowser 
