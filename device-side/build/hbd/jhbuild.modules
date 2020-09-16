@@ -52,6 +52,7 @@
           <dep package="gsettings-desktop-schemas"/>
       </if>
       <dep package="hiwebkit"/>
+      <dep package="hishell"/>
     </dependencies>
   </metamodule>
 
@@ -704,6 +705,14 @@
       <if condition-set="macos">
           <dep package="gsettings-desktop-schemas"/>
       </if>
+    </dependencies>
+  </cmake>
+  <cmake id="hishell">
+    <branch repo="hybridos" module="hybridos" checkoutdir="hishell" branch="dev"  revision="dev" subdir="device-side/hishell"/>
+    <dependencies>
+      <dep package="minigui"/>
+      <dep package="cairo"/>
+      <dep package="hiwebkit"/>
     </dependencies>
   </cmake>
 
