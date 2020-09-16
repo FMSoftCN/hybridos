@@ -378,6 +378,8 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
     int x = 0;
     int y = 0;
     char picture_file[ETC_MAXLINE];  
+    char config_path[MAX_PATH + 1];
+    char* etc_value = NULL;
     HDC hdc;
     BOOL ret = FALSE;
 
@@ -390,28 +392,44 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
             return 0;
 
         case MSG_CREATE:
+            if ((etc_value = getenv ("HISHELL_CFG_PATH")))
+            {
+                int len = strlen(etc_value);
+                if (etc_value[len-1] == '/')
+                {
+                    sprintf(config_path, "%s%s", etc_value, SYSTEM_CONFIG_FILE);
+                }
+                else
+                {
+                    sprintf(config_path, "%s/%s", etc_value, SYSTEM_CONFIG_FILE);
+                }
+            }
+            else
+            {
+                sprintf(config_path, "%s", SYSTEM_CONFIG_FILE);
+            }
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(SYSTEM_CONFIG_FILE, "dockbar", "DOCK_ICON_ARROW", picture_file, ETC_MAXLINE) == ETC_OK)
+            if(GetValueFromEtcFile(config_path, "dockbar", "DOCK_ICON_ARROW", picture_file, ETC_MAXLINE) == ETC_OK)
                 loadSVGArrow(picture_file, ID_DISPLAY_BUTTON);
 
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(SYSTEM_CONFIG_FILE, "dockbar", "DOCK_ICON_HOME", picture_file, ETC_MAXLINE) == ETC_OK)
+            if(GetValueFromEtcFile(config_path, "dockbar", "DOCK_ICON_HOME", picture_file, ETC_MAXLINE) == ETC_OK)
                 loadSVGFromFile(picture_file, ID_HOME_BUTTON);
 
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(SYSTEM_CONFIG_FILE, "dockbar", "DOCK_ICON_TOGGLE", picture_file, ETC_MAXLINE) == ETC_OK)
+            if(GetValueFromEtcFile(config_path, "dockbar", "DOCK_ICON_TOGGLE", picture_file, ETC_MAXLINE) == ETC_OK)
                 loadSVGFromFile(picture_file, ID_TOGGLE_BUTTON);
 
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(SYSTEM_CONFIG_FILE, "dockbar", "DOCK_ICON_SETTING", picture_file, ETC_MAXLINE) == ETC_OK)
+            if(GetValueFromEtcFile(config_path, "dockbar", "DOCK_ICON_SETTING", picture_file, ETC_MAXLINE) == ETC_OK)
                 loadSVGFromFile(picture_file, ID_SETTING_BUTTON);
 
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(SYSTEM_CONFIG_FILE, "dockbar", "DOCK_ICON_ABOUT", picture_file, ETC_MAXLINE) == ETC_OK)
+            if(GetValueFromEtcFile(config_path, "dockbar", "DOCK_ICON_ABOUT", picture_file, ETC_MAXLINE) == ETC_OK)
                 loadSVGFromFile(picture_file, ID_ABOUT_BUTTON);
 
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(SYSTEM_CONFIG_FILE, "dockbar", "DOCK_ICON_SHUTDOWN", picture_file, ETC_MAXLINE) == ETC_OK)
+            if(GetValueFromEtcFile(config_path, "dockbar", "DOCK_ICON_SHUTDOWN", picture_file, ETC_MAXLINE) == ETC_OK)
                 loadSVGFromFile(picture_file, ID_SHUTDOWN_BUTTON);
 
             SetTimer(hWnd, ID_SHOW_TIMER, DOCKBAR_VISIBLE_TIME);
