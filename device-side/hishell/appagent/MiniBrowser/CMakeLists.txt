@@ -14,7 +14,7 @@ if(NOT DEFINED ENV{WEBKIT_OUTPUTDIR})
     set(WEBKIT_SOURCE_DIR "${PROJECT_SOURCE_DIR}/../../../Source/hiwebkit-1.0/Source")
     set(DERIVED_SOURCES_DIR "${PROJECT_SOURCE_DIR}/../../../Output/HBD/Build/hiwebkit-1.0/DerivedSources")
 else()
-    set(WEBKIT_SOURCE_DIR "${PROJECT_SOURCE_DIR}/hiwebkit-1.0/Source")
+    set(WEBKIT_SOURCE_DIR "${PROJECT_SOURCE_DIR}/../../../../../hiwebkit-1.0/Source")
     set(DERIVED_SOURCES_DIR "$ENV{WEBKIT_OUTPUTDIR}/Build/hiwebkit-1.0/DerivedSources")
 endif()
 
