@@ -7,20 +7,22 @@ WEBKIT_OUTPUTDIR="$BASE_DIR/../../Output/HBD"
 # LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$WEBKIT_OUTPUTDIR/Root/lib/:$LD_LIBRARY_PATH 
 
+# hishell res
+export HISHELL_RES_PATH=$WEBKIT_OUTPUTDIR/Root/libexec/res
+
 # MiniGUI.cfg
-export MG_CFG_PATH=$WEBKIT_OUTPUTDIR/Root/etc/
+export MG_CFG_PATH=$WEBKIT_OUTPUTDIR/Root/libexec/
 
 # mgncs.cfg
 export NCS_CFG_PATH=$WEBKIT_OUTPUTDIR/Root/etc/
 
-export HISHELL_RES_PATH=$WEBKIT_OUTPUTDIR/Root/libexec/res
 
 export PATH=$WEBKIT_OUTPUTDIR/Root/bin/:$PATH
 export PATH=$WEBKIT_OUTPUTDIR/Root/libexec/:$PATH
 
 # Modify MiniGUI.cfg 
 MG_CFG_FILE=$MG_CFG_PATH/MiniGUI.cfg
-sed -i -e "s:exec_file=.*:exec_file=$WEBKIT_OUTPUTDIR/Root/bin/gvfb:g" -e "s:cursorpath=.*:cursorpath=$WEBKIT_OUTPUTDIR/Root/share/minigui/res/cursor/:g" -e "s:respath=.*:respath=$WEBKIT_OUTPUTDIR/Root/share/minigui/res/:g"  $MG_CFG_FILE
+sed -i -e "s:exec_file=.*:exec_file=$WEBKIT_OUTPUTDIR/Root/bin/gvfb:g" -e "s:cursorpath=.*:cursorpath=$WEBKIT_OUTPUTDIR/Root/share/minigui/res/cursor/:g" -e "s:respath=.*:respath=$WEBKIT_OUTPUTDIR/Root/share/minigui/res/:g"  -e "s:fontfile0=/usr/local/share:fontfile0=$WEBKIT_OUTPUTDIR/Root/share:g" $MG_CFG_FILE
 
 
 echo $HISHELL_RES_PATH
