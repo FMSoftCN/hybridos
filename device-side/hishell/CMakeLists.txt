@@ -50,4 +50,3 @@ add_subdirectory(sysmgr)
 add_subdirectory(dybkgnd)
 add_subdirectory(appagent)
 
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/bin/ DESTINATION ${CMAKE_INSTALL_PREFIX}/libexec/)

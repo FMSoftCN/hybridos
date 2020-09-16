@@ -220,4 +220,4 @@ target_link_libraries(MiniBrowser ${MiniBrowser_LIBRARIES})
 target_compile_options(MiniBrowser PRIVATE -Wno-unused-parameter})
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-as-needed")
 
-#install(TARGETS MiniBrowser DESTINATION "${LIBEXEC_INSTALL_DIR}")
+install(TARGETS MiniBrowser DESTINATION ${CMAKE_INSTALL_PREFIX}/libexec/)
