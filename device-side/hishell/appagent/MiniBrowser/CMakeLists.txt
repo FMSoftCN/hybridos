@@ -8,12 +8,19 @@ aux_source_directory(. DIR_SRCS)
 #add_executable(MiniBrowser ${DIR_SRCS})
 include_directories(${MINIGUI_INCLUDE_DIRS})
 
-
 set(MINIBROWSER_DIR "${PROJECT_SOURCE_DIR}")
-#set(DERIVED_SOURCES_MINIBROWSER_DIR "${CMAKE_BINARY_DIR}/DerivedSources/MiniBrowser")
 
-set(WEBKIT_SOURCE_DIR "${PROJECT_SOURCE_DIR}/../../../Source/hiwebkit-1.0/Source")
-set(DERIVED_SOURCES_DIR "${PROJECT_SOURCE_DIR}/../../../Output/HBD/Build/hiwebkit-1.0/DerivedSources")
+if(NOT DEFINED ENV{WEBKIT_OUTPUTDIR})
+    set(WEBKIT_SOURCE_DIR "${PROJECT_SOURCE_DIR}/../../../Source/hiwebkit-1.0/Source")
+    set(DERIVED_SOURCES_DIR "${PROJECT_SOURCE_DIR}/../../../Output/HBD/Build/hiwebkit-1.0/DerivedSources")
+else()
+    set(WEBKIT_SOURCE_DIR "${PROJECT_SOURCE_DIR}/hiwebkit-1.0/Source")
+    set(DERIVED_SOURCES_DIR "$ENV{WEBKIT_OUTPUTDIR}/Build/hiwebkit-1.0/DerivedSources")
+endif()
+
+MESSAGE( STATUS "WEBKIT_SOURCE_DIR=${WEBKIT_SOURCE_DIR}")
+MESSAGE( STATUS "DERIVED_SOURCES_DIR=${DERIVED_SOURCES_DIR}")
+
 
 set(MiniBrowser_SOURCES
     ${MINIBROWSER_DIR}/Common.cpp
@@ -200,17 +207,6 @@ set(MiniBrowser_LIBRARIES
 #    ${GSTREAMER_LIBRARIES}
 )
 
-#add_custom_command(
-#    OUTPUT ${DERIVED_SOURCES_MINIBROWSER_DIR}/BrowserMarshal.c
-#           ${DERIVED_SOURCES_MINIBROWSER_DIR}/BrowserMarshal.h
-#    MAIN_DEPENDENCY ${MINIBROWSER_DIR}/browser-marshal.list
-#    COMMAND glib-genmarshal --prefix=browser_marshal ${MINIBROWSER_DIR}/browser-marshal.list --body > ${DERIVED_SOURCES_MINIBROWSER_DIR}/BrowserMarshal.c
-#    COMMAND glib-genmarshal --prefix=browser_marshal ${MINIBROWSER_DIR}/browser-marshal.list --header > ${DERIVED_SOURCES_MINIBROWSER_DIR}/BrowserMarshal.h
-#    VERBATIM)
-
-#if (DEVELOPER_MODE)
-#    add_definitions(-DWEBKIT_INJECTED_BUNDLE_PATH="${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-#endif ()
 
 add_definitions(-DHBD_VERSION_MIN_REQUIRED=HBD_VERSION_1_0)
 add_definitions(-DBUILDING_HBD__=1 -DBUILDING_WITH_CMAKE=1)
