@@ -278,7 +278,7 @@ The HybridOS Security Service which runs on device side works closely with
 the cloud services above to ensure the security of your IoT application.
 
 The identity authentication mechanisms of HybridOS will learn some ideas
-or concept from blockchain technology, in order to in order to avoid
+or concept from blockchain technology, in order to avoid
 hijacking device by cracker.
 
 In the future, we will provide serverless computing on the cloud side.
