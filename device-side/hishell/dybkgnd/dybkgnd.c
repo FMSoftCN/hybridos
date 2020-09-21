@@ -43,8 +43,8 @@
 
 #include "../include/sysconfig.h"
 
-#define WALLPAPER_FILE_TOP          "res/wallpaper-top.jpg"
-#define WALLPAPER_FILE_BOTTOM       "res/wallpaper-bottom.jpg"
+#define WALLPAPER_FILE_TOP          "wallpaper-top.jpg"
+#define WALLPAPER_FILE_BOTTOM       "wallpaper-bottom.jpg"
 
 BITMAP bmpTop;
 BITMAP bmpBottom;
@@ -57,10 +57,35 @@ enum EffMotionType motionType = OutQuart;
 
 void loadBitmap(void)
 {
+    char topRes [MAX_PATH + 1];
+    char bottomRes [MAX_PATH + 1];
+    char* etc_value = NULL;
+
     bmpTop.bmWidth = 0;
     bmpBottom.bmWidth = 0;
-    LoadBitmapFromFile(HDC_SCREEN, &bmpTop, WALLPAPER_FILE_TOP);
-    LoadBitmapFromFile(HDC_SCREEN, &bmpBottom, WALLPAPER_FILE_BOTTOM);
+
+    if ((etc_value = getenv ("HISHELL_RES_PATH")))
+    {
+        int len = strlen(etc_value);
+        if (etc_value[len-1] == '/')
+        {
+            sprintf(topRes, "%s%s", etc_value, WALLPAPER_FILE_TOP);
+            sprintf(bottomRes, "%s%s", etc_value, WALLPAPER_FILE_BOTTOM);
+        }
+        else
+        {
+            sprintf(topRes, "%s/%s", etc_value, WALLPAPER_FILE_TOP);
+            sprintf(bottomRes, "%s/%s", etc_value, WALLPAPER_FILE_BOTTOM);
+        }
+    }
+    else
+    {
+        sprintf(topRes, "res/%s", WALLPAPER_FILE_TOP);
+        sprintf(bottomRes, "res/%s", WALLPAPER_FILE_BOTTOM);
+    }
+
+    LoadBitmapFromFile(HDC_SCREEN, &bmpTop, topRes);
+    LoadBitmapFromFile(HDC_SCREEN, &bmpBottom, bottomRes);
 }
 
 void clearBitmap(void)

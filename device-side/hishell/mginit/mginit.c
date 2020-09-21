@@ -66,6 +66,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <time.h>
+#include <libgen.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -139,6 +140,7 @@ static pid_t exec_app (char * app)
 {
     pid_t pid = 0;
     char buff [PATH_MAX + NAME_MAX + 1];
+    char execPath[PATH_MAX + 1];
 
     memset(buff, 0, PATH_MAX + NAME_MAX + 1);
 
@@ -146,8 +148,8 @@ static pid_t exec_app (char * app)
         fprintf (stderr, "new child, pid: %d.\n", pid);
     }
     else if (pid == 0) {
-        strcpy (buff, ".//");
-        strcat (buff, app);
+        readlink("/proc/self/exe", execPath, PATH_MAX);
+        sprintf(buff, "%s/%s", dirname(execPath), app);
         execl (buff, app, NULL);
         perror ("execl");
         _exit (1);
