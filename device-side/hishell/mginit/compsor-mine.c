@@ -71,6 +71,8 @@
 #define DEF_OVERLAPPED_OFFSET_X     30
 #define DEF_OVERLAPPED_OFFSET_Y     30
 
+#include "../include/sysconfig.h"
+
 struct _CompositorCtxt {
     RECT        rc_screen;  // screen rect - avoid duplicated GetScreenRect calls
     BLOCKHEAP   cliprc_heap;// heap for clipping rects
@@ -101,6 +103,7 @@ static struct CompositorToggleCtxt m_fallback_toggle_ctxt;
 static MSGHOOK m_OldMouseHook = NULL;
 static MSGHOOK m_OldKeyHook = NULL;
 static MSGHOOK m_OldExtraInputHook = NULL;
+static CompositorCtxt * fallback_ctxt = NULL;
 
 static void fallback_toggle_draw(int zidx, HDC hsdc, int sx, int sy, int sw, int sh, HDC hddc, int dx, int dy, DWORD dwRop)
 {
@@ -146,6 +149,13 @@ static void fallback_toggle_draw(int zidx, HDC hsdc, int sx, int sy, int sw, int
             if(m_fallback_toggle_ctxt.main_window_number == 0)
             {
                 m_fallback_toggle_ctxt.fallback_toggle = FALSE;
+
+                RegisterEventHookFunc(HOOK_EVENT_MOUSE, m_OldMouseHook, NULL);
+                RegisterEventHookFunc(HOOK_EVENT_KEY, m_OldKeyHook, NULL);
+                RegisterEventHookFunc(HOOK_EVENT_EXTRA, m_OldExtraInputHook, NULL);
+    
+                CompositorCtxt * ctxt;
+                ServerSelectCompositor("fallback", &ctxt);
                 return;
             }
 
@@ -439,6 +449,13 @@ static void fallback_toggle_draw(int zidx, HDC hsdc, int sx, int sy, int sw, int
         else
         {
             m_fallback_toggle_ctxt.fallback_toggle = FALSE;
+
+            RegisterEventHookFunc(HOOK_EVENT_MOUSE, m_OldMouseHook, NULL);
+            RegisterEventHookFunc(HOOK_EVENT_KEY, m_OldKeyHook, NULL);
+            RegisterEventHookFunc(HOOK_EVENT_EXTRA, m_OldExtraInputHook, NULL);
+    
+            CompositorCtxt * ctxt;
+            ServerSelectCompositor("fallback", &ctxt);
             return;
         }
     }
@@ -525,7 +542,7 @@ static CompositorCtxt* initialize (const char* name)
         SetClipRgn (&ctxt->wins_rgn, &ctxt->rc_screen);
 
         m_fallback_toggle_ctxt.fallback_ctxt = ctxt;
-        m_fallback_toggle_ctxt.fallback_toggle = FALSE;
+        m_fallback_toggle_ctxt.fallback_toggle = TRUE;
     }
 
     return ctxt;
@@ -1434,8 +1451,8 @@ static int MouseHook(void* context, HWND dst_wnd, UINT msg, WPARAM wparam, LPARA
             RegisterEventHookFunc(HOOK_EVENT_KEY, m_OldKeyHook, NULL);
             RegisterEventHookFunc(HOOK_EVENT_EXTRA, m_OldExtraInputHook, NULL);
     
-            m_fallback_toggle_ctxt.fallback_toggle = FALSE;
-            on_dirty_screen(m_fallback_toggle_ctxt.fallback_ctxt, NULL, ZNIT_NULL, NULL);
+            CompositorCtxt * ctxt;
+            ServerSelectCompositor("fallback", &ctxt);
         }
         return HOOK_STOP;
     }
@@ -1508,8 +1525,8 @@ static int KeyHook(void* context, HWND dst_wnd, UINT msg, WPARAM wparam, LPARAM 
                 RegisterEventHookFunc(HOOK_EVENT_KEY, m_OldKeyHook, NULL);
                 RegisterEventHookFunc(HOOK_EVENT_EXTRA, m_OldExtraInputHook, NULL);
     
-                m_fallback_toggle_ctxt.fallback_toggle = FALSE;
-                on_dirty_screen(m_fallback_toggle_ctxt.fallback_ctxt, NULL, ZNIT_NULL, NULL);
+                CompositorCtxt * ctxt;
+                ServerSelectCompositor("fallback", &ctxt);
                 return HOOK_STOP;
         }
     }
@@ -1523,19 +1540,21 @@ static int ExtraInputHook(void* context, HWND dst_wnd, UINT msg, WPARAM wparam, 
 
 void mine_compositor_toggle_state(BOOL toggle)
 {
-    if(m_fallback_toggle_ctxt.fallback_toggle == toggle)
-        return;
-    
-    m_fallback_toggle_ctxt.fallback_toggle = toggle;
-
     if(toggle)
     {
+        CompositorOps * compositorOps = NULL;
+        CompositorCtxt * ctxt;
+
+        m_fallback_toggle_ctxt.main_window_number = 0;
+        // select customer compositor
+        compositorOps = ServerSelectCompositor(MIME_COMPOSITOR, &ctxt);
+        if(compositorOps != &mine_compositor)
+        {
+            return;
+        }
+
         m_OldMouseHook = RegisterEventHookFunc(HOOK_EVENT_MOUSE, MouseHook, NULL);
         m_OldKeyHook = RegisterEventHookFunc(HOOK_EVENT_KEY, KeyHook, NULL);
         m_OldExtraInputHook = RegisterEventHookFunc(HOOK_EVENT_EXTRA, ExtraInputHook, NULL);
-
-        m_fallback_toggle_ctxt.main_window_number = 0;
     }
-
-    on_dirty_screen(m_fallback_toggle_ctxt.fallback_ctxt, NULL, ZNIT_NULL, NULL);
 }

@@ -280,8 +280,6 @@ int MiniGUIMain (int args, const char* arg[])
     struct sigaction siga;
     MSG msg;
     pid_t pid = 0;
-    CompositorOps * compositorOps = NULL;
-    CompositorCtxt * ctxt;
 
     memset(&m_SysConfig, 0, sizeof(SysConfig));
 
@@ -301,13 +299,6 @@ int MiniGUIMain (int args, const char* arg[])
 
     // register a compositor
     if(!ServerRegisterCompositor(MIME_COMPOSITOR, &mine_compositor))
-    {
-        return 4;
-    }
-
-    // select customer compositor
-    compositorOps = ServerSelectCompositor(MIME_COMPOSITOR, &ctxt);
-    if(compositorOps != &mine_compositor)
     {
         return 4;
     }
