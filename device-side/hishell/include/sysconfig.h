@@ -86,8 +86,8 @@ typedef struct tagSysConfig
 #define REQ_GET_TOPMOST_TITLE       1   // get topmost normal window title
 #define REQ_SUBMIT_TOGGLE           2   // toggle the application
 
-// user defined compositor
-#define USER_DEFINE_COMPOSITOR  "mine-toggle"   // name of user's compositor
+// Customer compositor name
+#define MIME_COMPOSITOR         "mine-compositor"
 
 typedef struct tagRequestInfo 
 {

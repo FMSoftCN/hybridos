@@ -79,6 +79,7 @@
 #include "../include/sysconfig.h"
 
 static SysConfig m_SysConfig;
+extern void mine_compositor_toggle_state(BOOL toggle);
 extern CompositorOps mine_compositor;
 
 static const char* new_del_client_info [] =
@@ -226,19 +227,14 @@ static int GetStatusBarZnode(int cli, int clifd, void* buff, size_t len)
             int cur_clientId = 0; 
             int idx_topmost = 0; 
 
-            idx_topmost = ServerGetTopmostZNodeOfType(NULL, ZOF_TYPE_NORMAL, &cur_clientId); 
+            // reply client
             replyInfo.id = REQ_SUBMIT_TOGGLE;
-            replyInfo.iData0 = (int)FALSE;
-            if(idx_topmost > 0)
-            {
-                CompositorCtxt * context = NULL;
-                const CompositorOps * ops = ServerSelectCompositor(USER_DEFINE_COMPOSITOR, &context);
-                if(ops != &mine_compositor)
-                    ServerSelectCompositor("fallback", &context);
-                else
-                    replyInfo.iData0 = (int)TRUE;
-            }
+            replyInfo.iData0 = (int)TRUE;
             ServerSendReply(clifd, &replyInfo, sizeof(replyInfo));
+
+            idx_topmost = ServerGetTopmostZNodeOfType(NULL, ZOF_TYPE_NORMAL, &cur_clientId); 
+            if(idx_topmost > 0)
+                mine_compositor_toggle_state(TRUE);
         }
     }
     return 0;
@@ -282,7 +278,8 @@ int MiniGUIMain (int args, const char* arg[])
     struct sigaction siga;
     MSG msg;
     pid_t pid = 0;
-    BOOL ret = FALSE;
+    CompositorOps * compositorOps = NULL;
+    CompositorCtxt * ctxt;
 
     memset(&m_SysConfig, 0, sizeof(SysConfig));
 
@@ -300,7 +297,20 @@ int MiniGUIMain (int args, const char* arg[])
         return 1;
     }
 
-    // registe request handler
+    // register a compositor
+    if(!ServerRegisterCompositor(MIME_COMPOSITOR, &mine_compositor))
+    {
+        return 4;
+    }
+
+    // select customer compositor
+    compositorOps = ServerSelectCompositor(MIME_COMPOSITOR, &ctxt);
+    if(compositorOps != &mine_compositor)
+    {
+        return 4;
+    }
+
+    // register request handler
     if(!RegisterRequestHandler(ZNODE_INFO_REQID, GetStatusBarZnode))
     {
         return 2;
@@ -310,11 +320,6 @@ int MiniGUIMain (int args, const char* arg[])
     {
         return 2;
     }
-
-    // register compositor
-    ret = ServerRegisterCompositor(USER_DEFINE_COMPOSITOR, &mine_compositor);
-    if(!ret)
-        printf("error: register mine-toggle compostor error!\n");
 
     // start system config process
     m_SysConfig.iSystemConfigPid = exec_app("sysmgr");
@@ -334,7 +339,8 @@ int MiniGUIMain (int args, const char* arg[])
         DispatchMessage(&msg);
     }
 
-    // unregister compositor
-    ServerUnregisterCompositor(USER_DEFINE_COMPOSITOR);
+    // unregister customer compositor
+    ServerUnregisterCompositor(MIME_COMPOSITOR);
+
     return 0;
 }

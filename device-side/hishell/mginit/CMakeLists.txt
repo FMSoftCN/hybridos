@@ -4,3 +4,8 @@ aux_source_directory(. DIR_SRCS)
 add_executable(mginit ${DIR_SRCS})
 include_directories(${MINIGUI_INCLUDE_DIRS})
 target_link_libraries(mginit ${MINIGUI_LIBRARIES} ${MGEFF_LIBRARIES})
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS "-g ${CMAKE_CXX_FLAGS}")
+    set(CMAKE_C_FLAGS "-g ${CMAKE_C_FLAGS}")
+endif(CMAKE_COMPILER_IS_GNUCXX)
