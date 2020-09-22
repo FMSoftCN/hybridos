@@ -30,7 +30,7 @@ Therefore, when FMSoft launched the HybridOS project in 2018, the connotation we
 
 Researcher Wu Yanjun, a doctoral supervisor of the Institute of Software of the Chinese Academy of Sciences, said: "Different from other operating systems, the FMSoft team puts forward the idea and method of developing operating systems from top to bottom, and implements this method through the HybridOS. The plan is ambitious and innovative, and it is very worthy of long-term investment and development. Therefore, the 'Open Source Software Supply Chain Lighting Program' of the ISCAS chose to fund the HybridOS project. On the one hand, we hope to promote the development of the entire project, on the other hand, to set an example for all sectors of society to sponsor open source projects through funds and manpower."
 
-After receiving the news that the "Open Source Software Supply Chain Lighting Project" funded the project, the team was encouraged and proud. We believe that as more innovative ideas become reality step by step, more people of insight will choose this way to motivate an infrastructure software development team.
+After receiving the news that the "Open Source Software Supply Chain Lighting Project" funded the project, the team was encouraged and proud. The team believes that as more innovative ideas become reality step by step, more people of insight will choose this way to motivate an infrastructure software development team.
 
 It is worth mentioning that although HybridOS is a long-term development process, FMSoft’s development team adheres to the concept of "open source, open process" and has released many results in less than two years. These open source results can all be used in actual products:
 
