@@ -76,6 +76,7 @@
 #include <minigui/window.h>
 #include <minigui/control.h>
 #include <minigui/fixedmath.h>
+#include <mgeff/mgeff.h>
 
 #include "../include/sysconfig.h"
 
@@ -281,6 +282,8 @@ int MiniGUIMain (int args, const char* arg[])
     MSG msg;
     pid_t pid = 0;
 
+    mGEffInit();
+
     memset(&m_SysConfig, 0, sizeof(SysConfig));
 
     siga.sa_handler = child_wait;
@@ -334,6 +337,8 @@ int MiniGUIMain (int args, const char* arg[])
 
     // unregister customer compositor
     ServerUnregisterCompositor(MIME_COMPOSITOR);
+
+    mGEffDeinit();
 
     return 0;
 }

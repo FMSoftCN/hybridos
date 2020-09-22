@@ -240,10 +240,10 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             break;
 
         case MSG_CREATE:
-            font = CreateLogFont (FONT_TYPE_NAME_SCALE_TTF, "ttf-Source Sans Pro,SansSerif-rrncnn-0-0-ISO8859-1,UTF-8", "UTF-8",
+            font = CreateLogFont (FONT_TYPE_NAME_SCALE_TTF, "ttf-Source", "UTF-8",
                         FONT_WEIGHT_BOOK, FONT_SLANT_ROMAN, FONT_FLIP_NIL,
                         FONT_OTHER_AUTOSCALE, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE,
-                        m_StatusBar_Height / 2, 0);
+                        m_StatusBar_Height * 0.4, 0);
 
             SetTimer(hWnd, ID_TIMER, 100);
             SetTimer(hWnd, ID_SHOW_TIMER, STATUSBAR_VISIBLE_TIME);
