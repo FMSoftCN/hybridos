@@ -1,4 +1,4 @@
-# HybridOS got the first sponsorship from Institute of Software, Chinese Academy of Sciences
+# HybridOS got the first sponsorship from ISCAS
 
 In September 2020, FMSoft received funding from the "Open Source Software Supply Chain Lighting Project" initialized by Institute of Software, Chinese Academy of Sciences, and ISCAS became the first sponsor of the HybridOS open source collaboration project.
 
