@@ -159,7 +159,7 @@ static LRESULT MainFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         case MSG_CLOSE:
             DestroyAllControls (hWnd);
             DestroyMainWindow (hWnd);
-            PostQuitMessage (hWnd);
+//            PostQuitMessage (hWnd);
             return 0;
     }
 

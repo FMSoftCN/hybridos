@@ -55,6 +55,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <math.h>
 
 #include <minigui/common.h>
 #include <minigui/minigui.h>
@@ -120,7 +121,7 @@ static float m_factor = 1.0;
 static HDC create_memdc_from_image_surface (cairo_surface_t* image_surface)
 {
     MYBITMAP my_bmp = {
-        flags: MYBMP_TYPE_RGB | MYBMP_FLOW_DOWN,
+        flags: MYBMP_TYPE_RGB | MYBMP_FLOW_DOWN | MYBMP_TRANSPARENT | MYBMP_ALPHA,
         frames: 1,
         depth: 32,
     };
@@ -130,77 +131,56 @@ static HDC create_memdc_from_image_surface (cairo_surface_t* image_surface)
     my_bmp.pitch = cairo_image_surface_get_stride (image_surface);
     my_bmp.bits = cairo_image_surface_get_data (image_surface);
     my_bmp.size = my_bmp.pitch * my_bmp.h;
+    my_bmp.transparent = 0;
 
     return CreateMemDCFromMyBitmap(&my_bmp, NULL);
 }
 
-static void loadSVGFromFile(const char* file)
-{
-    RsvgHandle *handle;
-    GError *error = NULL;
-    RsvgDimensionData dimensions;
-    cairo_pattern_t *pattern;
-    double factor_width = 0.0f;
-    double factor_height = 0.0f;
-
-    // read file from svg file
-    handle = rsvg_handle_new_from_file(file, &error);
-    if(error)
-    {
-        surface = NULL;
-        cr = NULL;
-        return;
-    }
-    rsvg_handle_get_dimensions(handle, &dimensions);
-
-    // create cairo_surface_t and cairo_t for one picture
-    surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, DOCK_ICON_WIDTH * m_factor, DOCK_ICON_HEIGHT * m_factor);
-    cr = cairo_create(surface);
-
-    cairo_save(cr);
-
-    factor_width = (double)DOCK_ICON_WIDTH / (double)dimensions.width;
-    factor_height = (double)DOCK_ICON_HEIGHT / (double)dimensions.height;
-    factor_width = (factor_width > factor_height) ? factor_width : factor_height;
-
-    cairo_scale(cr, factor_width, factor_width);
-
-    cairo_push_group (cr);
-    rsvg_handle_render_cairo (handle, cr);
-    pattern = cairo_pop_group (cr);
-
-    cairo_set_source_rgb (cr, (float)TOGGLE_FRAME_R / 255, (float)TOGGLE_FRAME_G / 255, (float)TOGGLE_FRAME_B / 255);
-    cairo_mask(cr, pattern);
-
-    cairo_restore (cr);
-
-    cairo_pattern_destroy (pattern);
-    g_object_unref (handle);
-}
-
-static void paintCloseIcon1()
-{
-    int i = 0;
-
-    if(surface && cr)
-    {
-        HDC csdc = create_memdc_from_image_surface(surface);
-        if (csdc != HDC_SCREEN && csdc != HDC_INVALID) 
-        {
-            SetMemDCColorKey(csdc, MEMDC_FLAG_SRCCOLORKEY, 0);
-            BitBlt(csdc, 0, 0, DOCK_ICON_WIDTH, DOCK_ICON_HEIGHT, HDC_SCREEN_SYS, (m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].right & 0xFFFF) - 24, (m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].top & 0xFFFF), 0);
-        }
-        DeleteMemDC(csdc);
-    }
-}
-
 static void paintCloseIcon()
 {
-    SetBrushColor(HDC_SCREEN_SYS, RGBA2Pixel(HDC_SCREEN_SYS, TOGGLE_FRAME_R, TOGGLE_FRAME_G, TOGGLE_FRAME_B, 0xFF));
-    FillCircle(HDC_SCREEN_SYS, (m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].right & 0xFFFF) - 5, (m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].top & 0xFFFF) + 5, 15);
-    SetBrushColor(HDC_SCREEN_SYS, RGBA2Pixel(HDC_SCREEN_SYS, 0xFF, 0xFF, 0xFF, 0xFF));
-    FillCircle(HDC_SCREEN_SYS, (m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].right & 0xFFFF) - 5, (m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].top & 0xFFFF) + 5, 10);
+    cairo_t *cr = NULL;
+    cairo_surface_t * surface = NULL;
+    HDC hdc_result = NULL;
+
+    surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 30, 30);
+    cr = cairo_create(surface);
+
+    // draw picture
+    cairo_save(cr);
+    cairo_set_source_rgba(cr, 0, 0, 0, 0);
+    cairo_rectangle(cr, 0, 0, 30, 30);
+    cairo_fill(cr);
+
+    cairo_set_source_rgba(cr, (float)TOGGLE_FRAME_R / 255, (float)TOGGLE_FRAME_G / 255, (float)TOGGLE_FRAME_B / 255, 1);
+    cairo_arc(cr, 15, 15, 15, 0, 2 * M_PI);
+    cairo_fill(cr);
+
+    cairo_set_source_rgba(cr, 1, 1, 1, 1);
+    cairo_arc(cr, 15, 15, 10, 0, 2 * M_PI);
+    cairo_fill(cr);
+
+    cairo_set_source_rgba(cr, (float)TOGGLE_FRAME_R / 255, (float)TOGGLE_FRAME_G / 255, (float)TOGGLE_FRAME_B / 255, 1);
+    cairo_set_line_width (cr, 3);
+    cairo_move_to(cr, 10, 20);
+    cairo_line_to(cr, 20, 10);
+    cairo_move_to(cr, 10, 10);
+    cairo_line_to(cr, 20, 20);
+    cairo_stroke(cr);
+
+    // copy the result
+    hdc_result = create_memdc_from_image_surface(surface);
+    if(hdc_result != HDC_SCREEN && hdc_result != HDC_INVALID) 
+    {
+        SetMemDCColorKey(hdc_result, MEMDC_FLAG_SRCCOLORKEY, 0xFF000000);
+        BitBlt(hdc_result, 0, 0, 30, 30, HDC_SCREEN_SYS, (m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].right & 0xFFFF) - 20, (m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].top & 0xFFFF) - 10, 0);
+    }
+    cairo_restore(cr);
+
+    DeleteMemDC(hdc_result);
+    cairo_destroy (cr);
+    cairo_surface_destroy(surface);
 }
+
 static void draw_select_window(int index)
 {
     int znode_index = 0;
@@ -212,17 +192,41 @@ static void draw_select_window(int index)
     if(znodeheader)
     {
         // copy the window content
-        StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
-                m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF, m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF, 
-                (m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF),
-                (m_fallback_toggle_ctxt.window_rect[index].bottom & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF), 0);
+        SetBrushColor(HDC_SCREEN_SYS, RGBA2Pixel(HDC_SCREEN_SYS, 0x00, 0x00, 0x00, 0xFF));
+        FillBox(HDC_SCREEN_SYS, (m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - 20, (m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF) - 10, 30, 30);
 
+        if(((znodeheader->rc.right - znodeheader->rc.left) == (g_rcScr.right - g_rcScr.left)) && ((znodeheader->rc.bottom - znodeheader->rc.top) == (g_rcScr.bottom - g_rcScr.top)))
+            StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
+                    m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF, m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF, 
+                    (m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF),
+                    (m_fallback_toggle_ctxt.window_rect[index].bottom & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF), 0);
+        else
+        {
+            float factor_x = (float)(znodeheader->rc.right - znodeheader->rc.left) / (float)(g_rcScr.right - g_rcScr.left);
+            float factor_y = (float)(znodeheader->rc.bottom - znodeheader->rc.top) / (float)(g_rcScr.bottom - g_rcScr.top);
+            float factor = (factor_x > factor_y)? factor_x: factor_y;
+            int w = 0;
+            int h = 0;
+
+            w = (int)((float)((znodeheader->rc.right - znodeheader->rc.left)) / factor);
+            h = (int)((float)((znodeheader->rc.bottom - znodeheader->rc.top)) / factor);
+            factor = (float)((m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF)) / (float)(g_rcScr.right - g_rcScr.left);
+            w = (int)((float)w * factor);
+            h = (int)((float)h * factor);
+
+            StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
+                    m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF, m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF, 
+                    w, h, 0);
+        }
+
+        // draw select rectangle
         SetPenColor(HDC_SCREEN_SYS, RGB2Pixel (HDC_SCREEN_SYS, TOGGLE_FRAME_R, TOGGLE_FRAME_G, TOGGLE_FRAME_B));
-
         for(j = 0; j < 5; j++)
             Rectangle(HDC_SCREEN_SYS, (m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF) + j, (m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF) + j,
                     (m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - j, (m_fallback_toggle_ctxt.window_rect[index].bottom & 0xFFFF) - j);
-        paintCloseIcon1();
+
+        // draw close icon
+        paintCloseIcon();
     }
 }
 
@@ -236,10 +240,34 @@ static void draw_unselect_window(int index)
     if(znodeheader)
     {
         // copy the window content
-        StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
-                m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF, m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF, 
-                (m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF),
-                (m_fallback_toggle_ctxt.window_rect[index].bottom & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF), 0);
+        SetBrushColor(HDC_SCREEN_SYS, RGBA2Pixel(HDC_SCREEN_SYS, 0x00, 0x00, 0x00, 0xFF));
+        FillBox(HDC_SCREEN_SYS, (m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - 20, (m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF) - 10, 30, 30);
+
+        if(((znodeheader->rc.right - znodeheader->rc.left) == (g_rcScr.right - g_rcScr.left)) && ((znodeheader->rc.bottom - znodeheader->rc.top) == (g_rcScr.bottom - g_rcScr.top)))
+            StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
+                    m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF, m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF, 
+                    (m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF),
+                    (m_fallback_toggle_ctxt.window_rect[index].bottom & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF), 0);
+        else
+        {
+            float factor_x = (float)(znodeheader->rc.right - znodeheader->rc.left) / (float)(g_rcScr.right - g_rcScr.left);
+            float factor_y = (float)(znodeheader->rc.bottom - znodeheader->rc.top) / (float)(g_rcScr.bottom - g_rcScr.top);
+            float factor = (factor_x > factor_y)? factor_x: factor_y;
+            int w = 0;
+            int h = 0;
+
+            w = (int)((float)((znodeheader->rc.right - znodeheader->rc.left)) / factor);
+            h = (int)((float)((znodeheader->rc.bottom - znodeheader->rc.top)) / factor);
+            factor = (float)((m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF)) / (float)(g_rcScr.right - g_rcScr.left);
+            w = (int)((float)w * factor);
+            h = (int)((float)h * factor);
+
+            FillBox(HDC_SCREEN_SYS, m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF, m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF, (m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF) + 1,
+                    (m_fallback_toggle_ctxt.window_rect[index].bottom & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF) + 1);
+            StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
+                    m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF, m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF, 
+                    w, h, 0);
+        }
     }
 }
 
@@ -253,7 +281,26 @@ static void animated_start(MGEFF_ANIMATION handle, HWND hWnd, int id, RECT *valu
     // get the number of app in normal level
     znodeheader = ServerGetWinZNodeHeader(NULL, zidx, NULL, FALSE);
     BitBlt(m_AnimationDC, 0, 0, g_rcScr.right, g_rcScr.bottom, HDC_SCREEN_SYS, 0, 0, 0);
-    StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, 0); 
+    if(((znodeheader->rc.right - znodeheader->rc.left) == (g_rcScr.right - g_rcScr.left)) && ((znodeheader->rc.bottom - znodeheader->rc.top) == (g_rcScr.bottom - g_rcScr.top)))
+        StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, 0); 
+    else
+    {
+        float factor_x = (float)(znodeheader->rc.right - znodeheader->rc.left) / (float)(g_rcScr.right - g_rcScr.left);
+        float factor_y = (float)(znodeheader->rc.bottom - znodeheader->rc.top) / (float)(g_rcScr.bottom - g_rcScr.top);
+        float factor = (factor_x > factor_y)? factor_x: factor_y;
+        int w = 0;
+        int h = 0;
+
+        w = (int)((float)((znodeheader->rc.right - znodeheader->rc.left)) / factor);
+        h = (int)((float)((znodeheader->rc.bottom - znodeheader->rc.top)) / factor);
+        factor = (float)(rect.right - rect.left) / (float)(g_rcScr.right - g_rcScr.left);
+        w = (int)((float)w * factor);
+        h = (int)((float)h * factor);
+
+        StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
+                rect.left, rect.top, w, h, 0);
+    }
+
     SyncUpdateDC(HDC_SCREEN_SYS);
 }
 
@@ -318,12 +365,7 @@ static void toggle_draw(int zidx, HDC hsdc, int sx, int sy, int sw, int sh, HDC 
 
             // draw the main window
             for(i = 0; i < m_fallback_toggle_ctxt.main_window_number; i++)
-            {
-                if(m_fallback_toggle_ctxt.current_window == i)
-                    draw_select_window(i);
-                else
-                    draw_unselect_window(i);
-            }
+                  draw_unselect_window(i);
 
             if(m_fallback_toggle_ctxt.b_FirstTime)
             {
@@ -354,10 +396,15 @@ static void toggle_draw(int zidx, HDC hsdc, int sx, int sy, int sw, int sh, HDC 
                     mGEffAnimationDelete(animation);
                 }
                 DeleteMemDC(m_AnimationDC);
+                draw_select_window(m_fallback_toggle_ctxt.current_window);
+                SyncUpdateDC(HDC_SCREEN_SYS);
                 m_AnimationDC = NULL;
             }
             else
+            {
+                draw_select_window(m_fallback_toggle_ctxt.current_window);
                 SyncUpdateDC(HDC_SCREEN_SYS);
+            }
         }
         else
         {
@@ -374,6 +421,7 @@ static void toggle_draw(int zidx, HDC hsdc, int sx, int sy, int sw, int sh, HDC 
     }
     else
     {
+        SelectClipRect (HDC_SCREEN_SYS, &screen_rect);
         // whether the zidx is the main window idx
         for(i = 0; i < m_fallback_toggle_ctxt.main_window_number; i++)
         {
@@ -414,7 +462,6 @@ static CompositorCtxt* initialize (const char* name)
         m_fallback_toggle_ctxt.b_FirstTime = TRUE;
     }
 
-    loadSVGFromFile("res/close.svg");
     return ctxt;
 }
 
@@ -1216,12 +1263,32 @@ static void animated_end(MGEFF_ANIMATION handle, HWND hWnd, int id, RECT *value)
 
     // get the number of app in normal level
     znodeheader = ServerGetWinZNodeHeader(NULL, zidx, NULL, FALSE);
-    StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, 0); 
+    if(((znodeheader->rc.right - znodeheader->rc.left) == (g_rcScr.right - g_rcScr.left)) && ((znodeheader->rc.bottom - znodeheader->rc.top) == (g_rcScr.bottom - g_rcScr.top)))
+        StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, 0); 
+    else
+    {
+        float factor_x = (float)(znodeheader->rc.right - znodeheader->rc.left) / (float)(g_rcScr.right - g_rcScr.left);
+        float factor_y = (float)(znodeheader->rc.bottom - znodeheader->rc.top) / (float)(g_rcScr.bottom - g_rcScr.top);
+        float factor = (factor_x > factor_y)? factor_x: factor_y;
+        int w = 0;
+        int h = 0;
+
+        w = (int)((float)((znodeheader->rc.right - znodeheader->rc.left)) / factor);
+        h = (int)((float)((znodeheader->rc.bottom - znodeheader->rc.top)) / factor);
+        factor = (float)(rect.right - rect.left) / (float)(g_rcScr.right - g_rcScr.left);
+        w = (int)((float)w * factor);
+        h = (int)((float)h * factor);
+
+        StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
+                rect.left, rect.top, w, h, 0);
+    }
     SyncUpdateDC(HDC_SCREEN_SYS);
 }
 
 static int MouseHook(void* context, HWND dst_wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
+    BOOL b_close = FALSE;
+
     if(msg == MSG_LBUTTONDOWN)
     {
     }
@@ -1234,52 +1301,84 @@ static int MouseHook(void* context, HWND dst_wnd, UINT msg, WPARAM wparam, LPARA
 
         for(i = 0; i < m_fallback_toggle_ctxt.main_window_number; i++)
         {
+            rect.left = (m_fallback_toggle_ctxt.window_rect[i].right & 0xFFFF) - 20;
+            rect.top = (m_fallback_toggle_ctxt.window_rect[i].top & 0xFFFF) - 10;
+            rect.right = rect.left + 30;
+            rect.bottom = rect.top + 30;
+            
+            if(PtInRect (&rect, x, y))
+            {
+                b_close = TRUE;
+                break;
+            }
+
             rect.left = m_fallback_toggle_ctxt.window_rect[i].left & 0xFFFF;
             rect.top = m_fallback_toggle_ctxt.window_rect[i].top & 0xFFFF;
             rect.right = m_fallback_toggle_ctxt.window_rect[i].right & 0xFFFF;
             rect.bottom = m_fallback_toggle_ctxt.window_rect[i].bottom & 0xFFFF;
-            
+
             if(PtInRect (&rect, x, y))
                 break;
         }
 
         if(i < m_fallback_toggle_ctxt.main_window_number)
         {
-            MGEFF_ANIMATION animation = NULL;
-            int  znode_index = m_fallback_toggle_ctxt.window_rect[i].top >> 16;
-
-            // set current window for animation
-            m_fallback_toggle_ctxt.current_window = i;
-
-            // animation
-            animation = mGEffAnimationCreate(NULL, (void *)animated_end, 1, MGEFF_RECT);
-            if (animation) 
+            if(b_close)
             {
-                enum EffMotionType motionType = InCirc;
-                int duration = TOGGLE_ANIMATION_TIME;
-                RECT screen_rect = {0, 0, g_rcScr.right, g_rcScr.bottom};
+                MSG msg;
+                int node_index = 0;
+                const ZNODEHEADER * znodeheader = NULL;
 
-                SelectClipRect (HDC_SCREEN_SYS, &screen_rect);
+                msg.message = MSG_CLOSE;
+                msg.wParam = 0;
+                msg.lParam = 0;
 
-                mGEffAnimationSetStartValue(animation, &rect);
-                mGEffAnimationSetEndValue(animation, &screen_rect);
-                mGEffAnimationSetDuration(animation, duration);
-                mGEffAnimationSetCurve(animation, motionType);
-                mGEffAnimationSyncRun(animation);
-                mGEffAnimationDelete(animation);
+                node_index = m_fallback_toggle_ctxt.window_rect[i].top >> 16;
+                znodeheader = ServerGetWinZNodeHeader(NULL, node_index, NULL, FALSE);
+                if(znodeheader)
+                {
+                    msg.hwnd = znodeheader->hwnd;
+                    Send2Client(&msg, znodeheader->cli);
+                }
             }
+            else
+            {
+                MGEFF_ANIMATION animation = NULL;
+                int  znode_index = m_fallback_toggle_ctxt.window_rect[i].top >> 16;
 
-            // set this main window to the top
-            ServerDoZNodeOperation(NULL, znode_index, ZNOP_MOVE2TOP, NULL, FALSE);
+                // set current window for animation
+                m_fallback_toggle_ctxt.current_window = i;
 
-            // unregister hook
-            RegisterEventHookFunc(HOOK_EVENT_MOUSE, m_OldMouseHook, NULL);
-            RegisterEventHookFunc(HOOK_EVENT_KEY, m_OldKeyHook, NULL);
-            RegisterEventHookFunc(HOOK_EVENT_EXTRA, m_OldExtraInputHook, NULL);
-    
-            // toggle compositor
-            CompositorCtxt * ctxt;
-            ServerSelectCompositor("fallback", &ctxt);
+                // animation
+                animation = mGEffAnimationCreate(NULL, (void *)animated_end, 1, MGEFF_RECT);
+                if (animation) 
+                {
+                    enum EffMotionType motionType = InCirc;
+                    int duration = TOGGLE_ANIMATION_TIME;
+                    RECT screen_rect = {0, 0, g_rcScr.right, g_rcScr.bottom};
+
+                    SelectClipRect (HDC_SCREEN_SYS, &screen_rect);
+
+                    mGEffAnimationSetStartValue(animation, &rect);
+                    mGEffAnimationSetEndValue(animation, &screen_rect);
+                    mGEffAnimationSetDuration(animation, duration);
+                    mGEffAnimationSetCurve(animation, motionType);
+                    mGEffAnimationSyncRun(animation);
+                    mGEffAnimationDelete(animation);
+                }
+
+                // set this main window to the top
+                ServerDoZNodeOperation(NULL, znode_index, ZNOP_MOVE2TOP, NULL, FALSE);
+
+                // unregister hook
+                RegisterEventHookFunc(HOOK_EVENT_MOUSE, m_OldMouseHook, NULL);
+                RegisterEventHookFunc(HOOK_EVENT_KEY, m_OldKeyHook, NULL);
+                RegisterEventHookFunc(HOOK_EVENT_EXTRA, m_OldExtraInputHook, NULL);
+
+                // toggle compositor
+                CompositorCtxt * ctxt;
+                ServerSelectCompositor("fallback", &ctxt);
+            }
         }
         return HOOK_STOP;
     }
