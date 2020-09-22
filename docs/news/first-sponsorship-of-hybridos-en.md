@@ -19,7 +19,7 @@ Among them, HVML is a new, highly abstract, and easy-to-learn data-driven progra
 1. Bringing new changes to traditional GUI development, including design tools and development frameworks.
 1. It brings new possibilities for the development of IoT applications in the cloud environment.
 
-Obviously, HybridOS is a future-oriented operating system that requires long-term investment and hard work. Faced with this ambitious goal, the author believes that in addition to a large company like Huawei, there is another way to develop our operating system-open source collaboration:
+Obviously, HybridOS is a future-oriented operating system that requires long-term investment and hard work. Faced with this ambitious goal, Vincent Wei believes that in addition to a large company like Huawei, there is another way to develop our operating system-open source collaboration:
 
 1. The long-term and huge investment in operating system development is difficult for a single enterprise to bear. Collaboration helps diversify investment and reduce risks.
 1. Through collaboration, domestic manufacturers can avoid repeated investment in basic software.
