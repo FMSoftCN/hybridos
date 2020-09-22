@@ -1,6 +1,6 @@
 # HybridOS Project Got the First Sponsorship from ISCAS
 
-In September 2020, FMSoft received funding from the "Open Source Software Supply Chain Lighting Project" initialized by Institute of Software, Chinese Academy of Sciences, and ISCAS became the first sponsor of the HybridOS open source collaboration project.
+In September 2020, FMSoft received funding from the "Open Source Software Supply Chain Lighting Project" which is initialized by Institute of Software of Chinese Academy of Sciences (ISCAS). And ISCAS became the first sponsor of the HybridOS open source collaboration project.
 
 With the release of HarmonyOS 2.0 at Huawei's second developer conference, Huawei's operating system strategy has become clear. As Vincent Wei (CEO of FMSoft) pointed out: HarmonyOS is an important infrastructure that Huawei relies on to realize the full-scene and distributed application support around smart phones, but "HarmonyOS lacks some exciting innovations and breakthroughs." For example, it has not made some breakthroughs or innovations in simplifying application development, which is understandable. After all, HarmonyOS’s primary strategic goal is to replace Android and can only take a relatively safe path.
 

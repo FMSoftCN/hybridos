@@ -40,7 +40,7 @@
 
 有关这些扩展的技术细节以及给开发者带来的好处，在专辑[《合璧操作系统的技术突破》](https://mp.weixin.qq.com/mp/appmsgalbum?action=getalbum&album_id=1442713925182767106&__biz=MzA5MTYwNTA3MA==#wechat_redirect)中有介绍，感兴趣的读者可以点击阅读。
 
-本次受中科院软件资助的经费，将用于进一步完善合璧操作系统设备侧的代码，增强 hiShell、hiWebKit 等组件，使之支持 HVML 编程语言，从而为 Web App 提供免 JavaScript 的低代码开发能力。预计我们将在 2020 年 10 月发布 hiShell，在 2020 年年底或 2021 年年初发布第一个支持 HVML 的 hiWebKit 版本。
+本次受中科院软件软资助的经费，将用于进一步完善合璧操作系统设备侧的代码，比如开发 hiShell，增强 hiWebKit 等。其目标是让 HybridOS 支持 HVML 编程语言，从而为 Web App 提供免 JavaScript 的低代码开发能力。预计我们将在 2020 年 10 月发布 hiShell，在 2020 年年底或 2021 年年初发布第一个支持 HVML 的 hiWebKit 版本。
 
 更多详情，请访问合璧操作系统在 GitHub 上的代码仓库（**麻烦随手点亮 HybridOS 项目仓库的星星哦**）：
 
