@@ -206,7 +206,7 @@ int MiniGUIMain (int argc, const char* argv[])
 
     ShowWindow(hMainWnd, SW_SHOWNORMAL);
 
-    while (GetMessage(&Msg, hMainWnd)) {
+    while (GetMessage(&Msg, HWND_DESKTOP)) {
         performMessageLoopTasks();
         TranslateMessage(&Msg);
         DispatchMessage(&Msg);

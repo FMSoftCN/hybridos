@@ -10,46 +10,55 @@
 // https://www.fmsoft.cn/exception-list
 //
 //////////////////////////////////////////////////////////////////////////////
-/*
- *   This file is part of MiniGUI, a mature cross-platform windowing
- *   and Graphics User Interface (GUI) support system for embedded systems
- *   and smart IoT devices.
+/**
+ * \file compsor-mine.c 
+ * \author Gengyue <gengyue@minigui.org>
+ * \date 2020/09/16
  *
- *   Copyright (C) 2002~2020, Beijing FMSoft Technologies Co., Ltd.
- *   Copyright (C) 1998~2002, WEI Yongming
+ * \brief This file is used to build a customer compostor.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Or,
- *
- *   As this program is a library, any link to this program must follow
- *   GNU General Public License version 3 (GPLv3). If you cannot accept
- *   GPLv3, you need to be licensed from FMSoft.
- *
- *   If you have got a commercial license of this program, please use it
- *   under the terms and conditions of the commercial license.
- *
- *   For more information about the commercial license, please refer to
- *   <http://www.minigui.com/blog/minigui-licensing-policy/>.
+ \verbatim
+
+    This file is part of HybridOS, a developing operating system based on
+    MiniGUI. HybridOs will support embedded systems and smart IoT devices.
+
+    Copyright (C) 2002~2020, Beijing FMSoft Technologies Co., Ltd.
+    Copyright (C) 1998~2002, WEI Yongming
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    Or,
+
+    As this program is a library, any link to this program must follow
+    GNU General Public License version 3 (GPLv3). If you cannot accept
+    GPLv3, you need to be licensed from FMSoft.
+
+    If you have got a commercial license of this program, please use it
+    under the terms and conditions of the commercial license.
+
+    For more information about the commercial license, please refer to
+    <http://www.minigui.com/blog/minigui-licensing-policy/>.
+
+ \endverbatim
  */
+
 /*
-** compsor-fallback.c: the fallback compositor.
-**
-** Create date: 2020-01-19
-**
-** Current maintainer: Wei Yongming.
-*/
+ * $Id: compsor-mine.c 13674 2020-09-16 06:45:01Z Gengyue $
+ *
+ *      HybridOS for Linux, VxWorks, NuCleus, OSE.
+ */
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -98,6 +107,8 @@ struct CompositorToggleCtxt {
     int             unselected_page;            // index of unselected page
     RECT            window_rect[MAX_TOGGLE_APP];// max number of main window is 25
     BOOL            b_FirstTime;                // first time to make animation
+    PLOGFONT        font;                       // font for caption in selected window
+    PLOGFONT        font_old;                   // unselect font
 };
 
 static struct CompositorToggleCtxt m_fallback_toggle_ctxt;      // context of toggle window
@@ -132,29 +143,29 @@ static void paintCloseIcon()
     cairo_surface_t * surface = NULL;
     HDC hdc_result = NULL;
 
-    surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 30, 30);
+    surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, m_factor * CLOSE_ICON_WIDTH, m_factor * CLOSE_ICON_HEIGHT);
     cr = cairo_create(surface);
 
     // draw picture
     cairo_save(cr);
     cairo_set_source_rgba(cr, 0, 0, 0, 0);
-    cairo_rectangle(cr, 0, 0, 30, 30);
+    cairo_rectangle(cr, 0, 0, m_factor * CLOSE_ICON_WIDTH, m_factor * CLOSE_ICON_HEIGHT);
     cairo_fill(cr);
 
     cairo_set_source_rgba(cr, (float)TOGGLE_FRAME_R / 255, (float)TOGGLE_FRAME_G / 255, (float)TOGGLE_FRAME_B / 255, 1);
-    cairo_arc(cr, 15, 15, 15, 0, 2 * M_PI);
+    cairo_arc(cr, m_factor * CLOSE_ICON_WIDTH / 2, m_factor * CLOSE_ICON_WIDTH / 2, m_factor * CLOSE_ICON_WIDTH / 2, 0, 2 * M_PI);
     cairo_fill(cr);
 
     cairo_set_source_rgba(cr, 1, 1, 1, 1);
-    cairo_arc(cr, 15, 15, 10, 0, 2 * M_PI);
+    cairo_arc(cr, m_factor * CLOSE_ICON_WIDTH / 2, m_factor * CLOSE_ICON_WIDTH / 2, m_factor * CLOSE_ICON_WIDTH / 3, 0, 2 * M_PI);
     cairo_fill(cr);
 
     cairo_set_source_rgba(cr, (float)TOGGLE_FRAME_R / 255, (float)TOGGLE_FRAME_G / 255, (float)TOGGLE_FRAME_B / 255, 1);
     cairo_set_line_width (cr, 3);
-    cairo_move_to(cr, 10, 20);
-    cairo_line_to(cr, 20, 10);
-    cairo_move_to(cr, 10, 10);
-    cairo_line_to(cr, 20, 20);
+    cairo_move_to(cr, m_factor * CLOSE_ICON_WIDTH / 3, m_factor * CLOSE_ICON_WIDTH * 2 / 3);
+    cairo_line_to(cr, m_factor * CLOSE_ICON_WIDTH * 2/ 3, m_factor * CLOSE_ICON_WIDTH / 3);
+    cairo_move_to(cr, m_factor * CLOSE_ICON_WIDTH / 3, m_factor * CLOSE_ICON_WIDTH / 3);
+    cairo_line_to(cr, m_factor * CLOSE_ICON_WIDTH * 2/ 3, m_factor * CLOSE_ICON_WIDTH  * 2 / 3);
     cairo_stroke(cr);
 
     // copy the result
@@ -162,13 +173,87 @@ static void paintCloseIcon()
     if(hdc_result != HDC_SCREEN && hdc_result != HDC_INVALID) 
     {
         SetMemDCColorKey(hdc_result, MEMDC_FLAG_SRCCOLORKEY, 0xFF000000);
-        BitBlt(hdc_result, 0, 0, 30, 30, HDC_SCREEN_SYS, RECT_RIGHT(CUR_WIN) - 20, RECT_TOP(CUR_WIN) - 10, 0);
+        BitBlt(hdc_result, 0, 0, m_factor * CLOSE_ICON_WIDTH, m_factor * CLOSE_ICON_WIDTH, HDC_SCREEN_SYS, 
+                                RECT_RIGHT(CUR_WIN) - m_factor * 20, RECT_TOP(CUR_WIN) - m_factor * 10, 0);
     }
     cairo_restore(cr);
 
     DeleteMemDC(hdc_result);
     cairo_destroy (cr);
     cairo_surface_destroy(surface);
+}
+
+static void paintWindowTitle(const char * title)
+{
+    cairo_t *cr = NULL;
+    cairo_surface_t * surface = NULL;
+    HDC hdc_result = NULL;
+    int w = 0;
+    int h = m_factor * CAPTION_BAR_HEIGHT;
+    RECT rect;
+
+    // calculate the size for caption
+    SIZE size;
+    int offset = GetTabbedTextExtentPoint(HDC_SCREEN_SYS, title, strlen(title),
+                    RECT_RIGHT(CUR_WIN) - RECT_LEFT(CUR_WIN) - h - 10, NULL, NULL, NULL, &size);
+
+    if((RECT_RIGHT(CUR_WIN) - RECT_LEFT(CUR_WIN) - h - 10) > size.cx)
+        w = size.cx + h;
+    else
+        w = RECT_RIGHT(CUR_WIN) - RECT_LEFT(CUR_WIN) - h - 10;
+
+    // create cairo
+    surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
+    cr = cairo_create(surface);
+
+    // draw picture
+    cairo_save(cr);
+    cairo_set_source_rgba(cr, 0, 0, 0, 0);
+    cairo_rectangle(cr, 0, 0, w, h);
+    cairo_fill(cr);
+
+    cairo_set_source_rgba(cr, (float)TOGGLE_FRAME_R / 255, (float)TOGGLE_FRAME_G / 255, (float)TOGGLE_FRAME_B / 255, 1);
+    cairo_arc(cr, h / 2, h / 2, h / 2, 0.5 * M_PI, 1.5 * M_PI);
+    cairo_close_path(cr);
+    cairo_fill(cr);
+
+    cairo_arc(cr, w - h / 2, h / 2, h / 2, -0.5 * M_PI, 0.5 * M_PI);
+    cairo_close_path(cr);
+    cairo_fill(cr);
+
+    cairo_rectangle(cr, h / 2, 0, w - h, h);
+    cairo_fill(cr);
+//    cairo_set_source_rgba(cr, 1, 1, 1, 1);
+//    cairo_arc(cr, m_factor * CLOSE_ICON_WIDTH / 2, m_factor * CLOSE_ICON_WIDTH / 2, m_factor * CLOSE_ICON_WIDTH / 3, 0, 2 * M_PI);
+//    cairo_fill(cr);
+
+//    cairo_set_source_rgba(cr, (float)TOGGLE_FRAME_R / 255, (float)TOGGLE_FRAME_G / 255, (float)TOGGLE_FRAME_B / 255, 1);
+//    cairo_set_line_width (cr, 3);
+//    cairo_move_to(cr, m_factor * CLOSE_ICON_WIDTH / 3, m_factor * CLOSE_ICON_WIDTH * 2 / 3);
+//    cairo_line_to(cr, m_factor * CLOSE_ICON_WIDTH * 2/ 3, m_factor * CLOSE_ICON_WIDTH / 3);
+//    cairo_move_to(cr, m_factor * CLOSE_ICON_WIDTH / 3, m_factor * CLOSE_ICON_WIDTH / 3);
+//    cairo_line_to(cr, m_factor * CLOSE_ICON_WIDTH * 2/ 3, m_factor * CLOSE_ICON_WIDTH  * 2 / 3);
+//    cairo_stroke(cr);
+
+    // copy the result
+    hdc_result = create_memdc_from_image_surface(surface);
+    if(hdc_result != HDC_SCREEN && hdc_result != HDC_INVALID) 
+    {
+        SetMemDCColorKey(hdc_result, MEMDC_FLAG_SRCCOLORKEY, 0xFF000000);
+        BitBlt(hdc_result, 0, 0, w, h, HDC_SCREEN_SYS, 
+              RECT_LEFT(CUR_WIN) + (RECT_RIGHT(CUR_WIN) - RECT_LEFT(CUR_WIN) - w) / 2, RECT_BOTTOM(CUR_WIN) - 3 - h, 0);
+    }
+    cairo_restore(cr);
+
+    DeleteMemDC(hdc_result);
+    cairo_destroy (cr);
+    cairo_surface_destroy(surface);
+
+    rect.top = RECT_BOTTOM(CUR_WIN) - 3 - h;
+    rect.left = RECT_LEFT(CUR_WIN) + (RECT_RIGHT(CUR_WIN) - RECT_LEFT(CUR_WIN) - w) / 2;
+    rect.bottom = rect.top + h;
+    rect.right = rect.left + w;
+    DrawText(HDC_SCREEN_SYS, title, strlen(title), &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 }
 
 static void draw_select_window(int index)
@@ -183,7 +268,7 @@ static void draw_select_window(int index)
     {
         // copy the window content
         SetBrushColor(HDC_SCREEN_SYS, RGBA2Pixel(HDC_SCREEN_SYS, 0x00, 0x00, 0x00, 0xFF));
-        FillBox(HDC_SCREEN_SYS, RECT_RIGHT(CUR_WIN) - 20, RECT_TOP(CUR_WIN) - 10, 30, 30);
+        FillBox(HDC_SCREEN_SYS, RECT_RIGHT(CUR_WIN) - m_factor * 20, RECT_TOP(CUR_WIN) - m_factor * 10, m_factor * 30, m_factor * 30);
 
         if((RECTW(znodeheader->rc) == RECTW(g_rcScr)) && (RECTH(znodeheader->rc) == RECTH(g_rcScr)))
             StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
@@ -214,6 +299,9 @@ static void draw_select_window(int index)
 
         // draw close icon
         paintCloseIcon();
+
+        // draw window title
+        paintWindowTitle(znodeheader->caption);
     }
 }
 
@@ -228,7 +316,7 @@ static void draw_unselect_window(int index)
     {
         // copy the window content
         SetBrushColor(HDC_SCREEN_SYS, RGBA2Pixel(HDC_SCREEN_SYS, 0x00, 0x00, 0x00, 0xFF));
-        FillBox(HDC_SCREEN_SYS, RECT_RIGHT(index) - 20, RECT_TOP(index) - 10, 30, 30);
+        FillBox(HDC_SCREEN_SYS, RECT_RIGHT(index) - m_factor * 20, RECT_TOP(index) - m_factor * 10, m_factor * 30, m_factor * 30);
 
         if((RECTW(znodeheader->rc) == RECTW(g_rcScr)) && (RECTH(znodeheader->rc) == RECTH(g_rcScr)))
             StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
@@ -446,6 +534,12 @@ static CompositorCtxt* initialize (const char* name)
         m_fallback_toggle_ctxt.fallback_ctxt = ctxt;
         m_fallback_toggle_ctxt.fallback_toggle = TRUE;
         m_fallback_toggle_ctxt.b_FirstTime = TRUE;
+        m_fallback_toggle_ctxt.font = CreateLogFont (FONT_TYPE_NAME_SCALE_TTF, 
+                        "ttf-Source", "UTF-8", FONT_WEIGHT_BOOK, FONT_SLANT_ROMAN, 
+                        FONT_FLIP_NIL, FONT_OTHER_AUTOSCALE, FONT_UNDERLINE_NONE, 
+                        FONT_STRUCKOUT_NONE, m_factor * CAPTION_BAR_HEIGHT * 0.4, 0);
+        m_fallback_toggle_ctxt.font_old = SelectFont(HDC_SCREEN_SYS, m_fallback_toggle_ctxt.font);
+        m_factor = (float)GetGDCapability(HDC_SCREEN, GDCAP_DPI) / 96.0;
     }
 
     return ctxt;
@@ -460,6 +554,8 @@ static void terminate (CompositorCtxt* ctxt)
         DestroyFreeClipRectList (&ctxt->cliprc_heap);
         free (ctxt);
     }
+    SelectFont(HDC_SCREEN_SYS, m_fallback_toggle_ctxt.font_old);
+    DestroyLogFont(m_fallback_toggle_ctxt.font);
 }
 
 /* return the number of subtracted windows above */
@@ -1246,19 +1342,20 @@ static void animated_end(MGEFF_ANIMATION handle, HWND hWnd, int id, RECT *value)
 
     // get the number of app in normal level
     znodeheader = ServerGetWinZNodeHeader(NULL, zidx, NULL, FALSE);
-    if(((znodeheader->rc.right - znodeheader->rc.left) == (g_rcScr.right - g_rcScr.left)) && ((znodeheader->rc.bottom - znodeheader->rc.top) == (g_rcScr.bottom - g_rcScr.top)))
-        StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, 0); 
+    if((RECTW(znodeheader->rc) == RECTW(g_rcScr)) && (RECTH(znodeheader->rc) == RECTH(g_rcScr)))
+        StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, 
+        HDC_SCREEN_SYS, rect.left, rect.top, RECTW(rect), RECTH(rect), 0); 
     else
     {
-        float factor_x = (float)(znodeheader->rc.right - znodeheader->rc.left) / (float)(g_rcScr.right - g_rcScr.left);
-        float factor_y = (float)(znodeheader->rc.bottom - znodeheader->rc.top) / (float)(g_rcScr.bottom - g_rcScr.top);
+        float factor_x = (float)RECTW(znodeheader->rc) / (float)RECTW(g_rcScr);
+        float factor_y = (float)RECTH(znodeheader->rc) / (float)RECTH(g_rcScr);
         float factor = (factor_x > factor_y)? factor_x: factor_y;
         int w = 0;
         int h = 0;
 
-        w = (int)((float)((znodeheader->rc.right - znodeheader->rc.left)) / factor);
-        h = (int)((float)((znodeheader->rc.bottom - znodeheader->rc.top)) / factor);
-        factor = (float)(rect.right - rect.left) / (float)(g_rcScr.right - g_rcScr.left);
+        w = (int)((float)RECTW(znodeheader->rc) / factor);
+        h = (int)((float)RECTH(znodeheader->rc) / factor);
+        factor = (float)RECTW(rect) / (float)RECTW(g_rcScr);
         w = (int)((float)w * factor);
         h = (int)((float)h * factor);
 
@@ -1284,7 +1381,7 @@ static int MouseHook(void* context, HWND dst_wnd, UINT msg, WPARAM wparam, LPARA
 
         for(i = 0; i < m_fallback_toggle_ctxt.main_window_number; i++)
         {
-            rect.left = RECT_LEFT(i) - 20;
+            rect.left = RECT_RIGHT(i) - 20;
             rect.top = RECT_TOP(i)- 10;
             rect.right = rect.left + 30;
             rect.bottom = rect.top + 30;

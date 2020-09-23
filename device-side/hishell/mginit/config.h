@@ -77,6 +77,8 @@
 #define CLOSE_ICON_WIDTH        30
 #define CLOSE_ICON_HEIGHT       30
 
+#define CAPTION_BAR_HEIGHT      30
+
 // only for convenience
 #define CUR_WIN         (m_fallback_toggle_ctxt.current_window)
 #define RECT_TOP(i)     (m_fallback_toggle_ctxt.window_rect[(i)].top & 0xFFFF)
@@ -84,8 +86,6 @@
 #define RECT_BOTTOM(i)  (m_fallback_toggle_ctxt.window_rect[(i)].bottom & 0xFFFF)
 #define RECT_RIGHT(i)   (m_fallback_toggle_ctxt.window_rect[(i)].right & 0xFFFF)
 #define ZNODE_INDEX(i)  (m_fallback_toggle_ctxt.window_rect[(i)].top >> 16)
-
-
 
 #ifdef __cplusplus
 extern "C" {

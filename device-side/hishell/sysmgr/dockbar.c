@@ -316,6 +316,7 @@ static void loadSVGFromFile(const char* file, int index)
 
     cairo_push_group (cr[index]);
     rsvg_handle_render_cairo (handle, cr[index]);
+
     pattern = cairo_pop_group (cr[index]);
 
     if(index == ID_SHUTDOWN_BUTTON)
@@ -323,7 +324,6 @@ static void loadSVGFromFile(const char* file, int index)
     else
         cairo_set_source_rgb (cr[index], BUTTON_COLOR_R / 255, BUTTON_COLOR_G / 255, BUTTON_COLOR_B / 255);
     cairo_mask(cr[index], pattern);
-
     cairo_restore (cr[index]);
 
     cairo_pattern_destroy (pattern);
