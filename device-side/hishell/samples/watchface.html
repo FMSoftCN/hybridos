@@ -1,0 +1,81 @@
+<html>
+    <head>
+        <title>watchface</title>
+        <style type="text/css">
+            #simpleWatch { background-image: url(watchfaceBg.png); }
+            #paramStatus { border: 1px solid #000; height: 100px; max-height: 100px; overflow:auto; }
+        </style>
+    </head>
+    <body>
+        <p>Watch dial</p>
+        <hiview type="watchface" design="default" vendor="fmsoft.cn"
+            id="simpleWatch" width="520" height="520"
+            data-move="static" data-time="9:45:03"
+            onhandsmoved="viewHandMoved(event)"
+            onhourmoved="viewHourMoved(event)"
+            onminutemoved="viewMinuteMoved(event)"
+            onsecondmoved="viewSecondMoved(event)"
+            >
+            <param name="hands" value="hour,minute,second" />
+        </hiview>
+
+        <p>Params:</p>
+        <div id="paramMove"></div>
+        <div id="paramTime"></div>
+
+        <button id="btnStart" type="button">Start</button>
+        <button id="btnStop" type="button">Stop</button>
+        <div id="paramStatus"></div>
+
+        <script type="text/javascript">
+            var watch = document.getElementById("simpleWatch");
+
+            function updateStatus()
+            {
+                document.getElementById("paramMove").innerText = "move: " + watch.dataset.move;
+                document.getElementById("paramTime").innerText = "time: " + watch.dataset.time;
+            }
+            function startMove()
+            {
+                watch.dataset.move = 'auto';
+                updateStatus();
+            }
+
+            function stopMove()
+            {
+                watch.dataset.move = 'static';
+                updateStatus();
+            }
+
+            function viewHandMoved(event)
+            {
+                document.getElementById("paramStatus").innerText = parseInt(event.timeStamp) + " Event: onhandsmoved:" +  event.hands + " \n" + document.getElementById("paramStatus").innerText;
+            }
+
+            function viewHourMoved()
+            {
+                document.getElementById("paramStatus").innerText = parseInt(event.timeStamp) + " Event: onhourmoved" + "\n" + document.getElementById("paramStatus").innerText;
+            }
+
+            function viewSecondMoved()
+            {
+                document.getElementById("paramStatus").innerText = parseInt(event.timeStamp) + " Event: onsecondmoved" + "\n" + document.getElementById("paramStatus").innerText;
+            }
+
+            function viewMinuteMoved()
+            {
+                document.getElementById("paramStatus").innerText = parseInt(event.timeStamp) + " Event: onminutemoved" + "\n" + document.getElementById("paramStatus").innerText;
+            }
+
+            var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
+            var observer = new MutationObserver(function(mutations) {
+                updateStatus();
+            });
+            var config = { attributes: true, childList: true, characterData: true }
+            observer.observe(watch, config);
+            updateStatus();
+            document.getElementById("btnStart").onclick = startMove;
+            document.getElementById("btnStop").onclick = stopMove;
+        </script>
+    </body>
+</html>

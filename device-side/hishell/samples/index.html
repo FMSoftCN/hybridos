@@ -44,6 +44,7 @@
                   width="200" height="240"
                   name="samples" value="2"
                   endtoend="true"
+                  id="samplesPicker"
                   onchange="pickchange(this.value)"
                   >
             <hiitem value="0">hiView : watchface</hiitem>
@@ -62,24 +63,45 @@
                 switch(value)
                 {
                     case "0":
-                        document.getElementById("paramStatus").innerText = "select 0";
+                        document.getElementById("paramStatus").innerText = "hiView 示例一: watchface";
                         break;
                     case "1":
-                        document.getElementById("paramStatus").innerText = "select 1";
+                        document.getElementById("paramStatus").innerText = "hiView 示例二: stopwatch";
                         break;
                     case "2":
-                        document.getElementById("paramStatus").innerText = "select 2";
+                        document.getElementById("paramStatus").innerText = "hiMeter 示例";
                         break;
                     case "3":
-                        document.getElementById("paramStatus").innerText = "select 3";
+                        document.getElementById("paramStatus").innerText = "lCmd 示例";
                         break;
                     case "4":
-                        document.getElementById("paramStatus").innerText = "select 4";
+                        document.getElementById("paramStatus").innerText = "lSql 示例";
+                        break;
+                }
+            }
+
+            function showSamples()
+            {
+                var value =  document.getElementById("samplesPicker").value;
+                switch(value)
+                {
+                    case "0":
+                        window.location.href="watchface.html";
+                        break;
+                    case "1":
+                        window.location.href="stopwatch.html";
+                        break;
+                    case "2":
+                        break;
+                    case "3":
+                        break;
+                    case "4":
                         break;
                 }
             }
 
             pickchange("2");
         </script>
+        <button type="button" onclick="showSamples()">Show Samples</button>
     </body>
 </html>

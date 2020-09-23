@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>fmsoft.org ; Test the view tag</title>
+        <style type="text/css">
+            #stopWatchId { background-image: url(stopwatchBg.png); }
+        </style>
+    </head>
+
+    <body>
+        <hiview id="stopWatchId" type="stopwatch" width="520" height="520">
+            <param id="stopwatchaction" name="action" value="start" />
+            <param name="faces" value="minute, hour, digits, second" />
+            <param name="secondscale" value="60" />
+            <param name="minutescale" value="60" />
+            <param name="hourscale" value="24" />
+<!--            <param src="dida.mp3" name="ticktack" value="loop, always" />   -->
+        </hiview>
+
+        <button id="btnValue1" type="button">Start</button>
+        <button id="btnValue2" type="button">Pause</button>
+        <button id="btnValue3" type="button">Stop</button>
+        <button id="btnValue4" type="button">Reset</button>
+        <button id="btnValue5" type="button">New</button>
+
+        <script type="text/javascript">
+            function toValue1()
+            {
+			    document.getElementById("stopwatchaction").setAttribute("value", "start");
+            }
+
+            function toValue2()
+            {
+			    document.getElementById("stopwatchaction").setAttribute("value", "pause");
+            }
+
+            function toValue3()
+            {
+			    document.getElementById("stopwatchaction").setAttribute("value", "stop");
+            }
+
+            function toValue4()
+            {
+			    document.getElementById("stopwatchaction").setAttribute("value", "reset");
+            }
+
+            function toValue5()
+            {
+			    document.getElementById("stopwatchaction").setAttribute("value", "new");
+            }
+
+            document.getElementById("btnValue1").onclick = toValue1;
+            document.getElementById("btnValue2").onclick = toValue2;
+            document.getElementById("btnValue3").onclick = toValue3;
+            document.getElementById("btnValue4").onclick = toValue4;
+            document.getElementById("btnValue5").onclick = toValue5;
+
+        </script>
+</body>
+</html>
+
