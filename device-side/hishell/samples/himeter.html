@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <title>himeter</title>
+        <style type="text/css">
+            body
+            {
+                text-align:center;
+            }
+			himeter
+			{
+                text-align:left;
+                display:inline-block;
+				background-image: url(meterBg.png);;
+			}
+            hihand
+            {
+            }
+            hihand.speed 
+			{
+				-hi-hand-type:needle;
+				-hi-min:0.0;
+				-hi-max:160.0;
+				-hi-value:0.0;
+				-hi-hand-starting-angle:140deg;
+				-hi-hand-end-angle:400deg;
+				-hi-hand-center:120px 120px;
+				-hi-needle-anchor:0px 23px;
+            }
+
+            hihand.oil 
+			{
+				-hi-hand-type:stripe;
+				-hi-min:0.0;
+				-hi-max:160.0;
+				-hi-value:0.0;
+				-hi-hand-starting-angle:128deg;
+				-hi-hand-end-angle:-128deg;
+				-hi-hand-center:128px 60px;
+				-hi-needle-anchor:0px 23px;
+                -hi-hand-fill-style:radial-gradient;
+            }
+        </style>
+    </head>
+    <body>
+        <p>Himeter Example with Timer</p>
+        <form action="form_action.asp" method="get">
+            <himeter design="default" class="CLASS" id="himeterID" width="512" height="240">
+                <hihand class="speed" id="handid" name="speed" min="0" max="160" value="0" width="260" height="260"/> 
+                <hihand class="oil" id="oilid" name="oil" min="0" max="160" value="25" width="200" height="200"/>
+            </himeter>
+        </form>
+        <p>himeter End</p>
+        
+        <button id="btnValue1" type="button">160.0</button>
+        <button id="btnValue2" type="button">0.0</button>
+        <button id="btnValue3" type="button">60</button>
+        <button id="btnValue4" type="button">120.0</button>
+        
+        <script type="text/javascript">
+			var value = 0;
+	        var value_end = 0;
+    	    var iCount = 0;
+
+			function run()  {
+            if(value == value_end)
+            {
+                value = value_end;
+                clearInterval(iCount);
+                return;
+            }
+            
+            if(value > value_end)
+                value --;
+            else
+                value ++;
+
+			document.getElementById("handid").style.setProperty("-hi-value", value);
+			document.getElementById("oilid").style.setProperty("-hi-value", value);
+        }
+
+			
+            function toValue1()
+            {
+				value_end = 160;
+
+            	iCount = setInterval(function() { run(); }, 10);
+//			document.getElementById("oilid").style.setProperty("-hi-value", value_end);
+
+            }
+
+            function toValue2()
+            {
+				value_end = 0;
+
+            	iCount = setInterval(function() { run(); }, 10);
+//			document.getElementById("oilid").style.setProperty("-hi-value", value_end);
+            }
+
+            function toValue3()
+            {
+				value_end = 60;
+
+            	iCount = setInterval(function() { run(); }, 5);
+//			document.getElementById("oilid").style.setProperty("-hi-value", value_end);
+
+            }
+
+            function toValue4()
+            {
+				value_end = 120;
+
+            	iCount = setInterval(function() { run(); }, 5);
+//			document.getElementById("oilid").style.setProperty("-hi-value", value_end);
+            }
+            document.getElementById("btnValue1").onclick = toValue1;
+            document.getElementById("btnValue2").onclick = toValue2;
+            document.getElementById("btnValue3").onclick = toValue3;
+            document.getElementById("btnValue4").onclick = toValue4;
+
+        </script>
+        <script type="text/javascript">
+        </script>
+    </body>
+</html>
+
