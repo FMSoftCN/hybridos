@@ -78,6 +78,7 @@
 #define CLOSE_ICON_HEIGHT       30
 
 #define CAPTION_BAR_HEIGHT      30
+#define CAPTION_FONT_SIZE       18 
 
 // only for convenience
 #define CUR_WIN         (m_fallback_toggle_ctxt.current_window)
@@ -85,7 +86,12 @@
 #define RECT_LEFT(i)    (m_fallback_toggle_ctxt.window_rect[(i)].left & 0xFFFF)
 #define RECT_BOTTOM(i)  (m_fallback_toggle_ctxt.window_rect[(i)].bottom & 0xFFFF)
 #define RECT_RIGHT(i)   (m_fallback_toggle_ctxt.window_rect[(i)].right & 0xFFFF)
+#define RECT_W(i)       (RECT_RIGHT(i) - RECT_LEFT(i))
+#define RECT_H(i)       (RECT_BOTTOM(i) - RECT_TOP(i))
 #define ZNODE_INDEX(i)  (m_fallback_toggle_ctxt.window_rect[(i)].top >> 16)
+
+// line width of selected frame
+#define FRAME_WIDTH         5
 
 #ifdef __cplusplus
 extern "C" {

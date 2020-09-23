@@ -165,7 +165,7 @@ static void paintCloseIcon()
     cairo_move_to(cr, m_factor * CLOSE_ICON_WIDTH / 3, m_factor * CLOSE_ICON_WIDTH * 2 / 3);
     cairo_line_to(cr, m_factor * CLOSE_ICON_WIDTH * 2/ 3, m_factor * CLOSE_ICON_WIDTH / 3);
     cairo_move_to(cr, m_factor * CLOSE_ICON_WIDTH / 3, m_factor * CLOSE_ICON_WIDTH / 3);
-    cairo_line_to(cr, m_factor * CLOSE_ICON_WIDTH * 2/ 3, m_factor * CLOSE_ICON_WIDTH  * 2 / 3);
+    cairo_line_to(cr, m_factor * CLOSE_ICON_WIDTH * 2 / 3, m_factor * CLOSE_ICON_WIDTH  * 2 / 3);
     cairo_stroke(cr);
 
     // copy the result
@@ -195,12 +195,12 @@ static void paintWindowTitle(const char * title)
     // calculate the size for caption
     SIZE size;
     int offset = GetTabbedTextExtentPoint(HDC_SCREEN_SYS, title, strlen(title),
-                    RECT_RIGHT(CUR_WIN) - RECT_LEFT(CUR_WIN) - h - 10, NULL, NULL, NULL, &size);
+                    RECT_W(CUR_WIN) - h - 2 * FRAME_WIDTH, NULL, NULL, NULL, &size);
 
-    if((RECT_RIGHT(CUR_WIN) - RECT_LEFT(CUR_WIN) - h - 10) > size.cx)
+    if((RECT_W(CUR_WIN) - h - 2 * FRAME_WIDTH) > size.cx)
         w = size.cx + h;
     else
-        w = RECT_RIGHT(CUR_WIN) - RECT_LEFT(CUR_WIN) - h - 10;
+        w = RECT_W(CUR_WIN) - h - 2 * FRAME_WIDTH;
 
     // create cairo
     surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
@@ -223,17 +223,6 @@ static void paintWindowTitle(const char * title)
 
     cairo_rectangle(cr, h / 2, 0, w - h, h);
     cairo_fill(cr);
-//    cairo_set_source_rgba(cr, 1, 1, 1, 1);
-//    cairo_arc(cr, m_factor * CLOSE_ICON_WIDTH / 2, m_factor * CLOSE_ICON_WIDTH / 2, m_factor * CLOSE_ICON_WIDTH / 3, 0, 2 * M_PI);
-//    cairo_fill(cr);
-
-//    cairo_set_source_rgba(cr, (float)TOGGLE_FRAME_R / 255, (float)TOGGLE_FRAME_G / 255, (float)TOGGLE_FRAME_B / 255, 1);
-//    cairo_set_line_width (cr, 3);
-//    cairo_move_to(cr, m_factor * CLOSE_ICON_WIDTH / 3, m_factor * CLOSE_ICON_WIDTH * 2 / 3);
-//    cairo_line_to(cr, m_factor * CLOSE_ICON_WIDTH * 2/ 3, m_factor * CLOSE_ICON_WIDTH / 3);
-//    cairo_move_to(cr, m_factor * CLOSE_ICON_WIDTH / 3, m_factor * CLOSE_ICON_WIDTH / 3);
-//    cairo_line_to(cr, m_factor * CLOSE_ICON_WIDTH * 2/ 3, m_factor * CLOSE_ICON_WIDTH  * 2 / 3);
-//    cairo_stroke(cr);
 
     // copy the result
     hdc_result = create_memdc_from_image_surface(surface);
@@ -241,7 +230,7 @@ static void paintWindowTitle(const char * title)
     {
         SetMemDCColorKey(hdc_result, MEMDC_FLAG_SRCCOLORKEY, 0xFF000000);
         BitBlt(hdc_result, 0, 0, w, h, HDC_SCREEN_SYS, 
-              RECT_LEFT(CUR_WIN) + (RECT_RIGHT(CUR_WIN) - RECT_LEFT(CUR_WIN) - w) / 2, RECT_BOTTOM(CUR_WIN) - 3 - h, 0);
+              RECT_LEFT(CUR_WIN) + (RECT_W(CUR_WIN) - w) / 2, RECT_BOTTOM(CUR_WIN) - h / 2, 0);
     }
     cairo_restore(cr);
 
@@ -249,10 +238,10 @@ static void paintWindowTitle(const char * title)
     cairo_destroy (cr);
     cairo_surface_destroy(surface);
 
-    rect.top = RECT_BOTTOM(CUR_WIN) - 3 - h;
-    rect.left = RECT_LEFT(CUR_WIN) + (RECT_RIGHT(CUR_WIN) - RECT_LEFT(CUR_WIN) - w) / 2;
+    rect.top = RECT_BOTTOM(CUR_WIN) - h / 2;
+    rect.left = RECT_LEFT(CUR_WIN) + (RECT_W(CUR_WIN) - w) / 2 + h / 2;
     rect.bottom = rect.top + h;
-    rect.right = rect.left + w;
+    rect.right = rect.left + w - h;
     DrawText(HDC_SCREEN_SYS, title, strlen(title), &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 }
 
@@ -272,7 +261,7 @@ static void draw_select_window(int index)
 
         if((RECTW(znodeheader->rc) == RECTW(g_rcScr)) && (RECTH(znodeheader->rc) == RECTH(g_rcScr)))
             StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
-                    RECT_LEFT(index), RECT_TOP(index), RECT_RIGHT(index) - RECT_LEFT(index), RECT_BOTTOM(index) - RECT_TOP(index), 0);
+                    RECT_LEFT(index), RECT_TOP(index), RECT_W(index), RECT_H(index), 0);
         else
         {
             float factor_x = (float)RECTW(znodeheader->rc) / (float)RECTW(g_rcScr);
@@ -283,7 +272,7 @@ static void draw_select_window(int index)
 
             w = (int)((float)RECTW(znodeheader->rc) / factor);
             h = (int)((float)RECTH(znodeheader->rc) / factor);
-            factor = (float)(RECT_RIGHT(index) - RECT_LEFT(index)) / (float)RECTW(g_rcScr);
+            factor = (float)RECT_W(index) / (float)RECTW(g_rcScr);
             w = (int)((float)w * factor);
             h = (int)((float)h * factor);
 
@@ -293,7 +282,7 @@ static void draw_select_window(int index)
 
         // draw select rectangle
         SetPenColor(HDC_SCREEN_SYS, RGB2Pixel(HDC_SCREEN_SYS, TOGGLE_FRAME_R, TOGGLE_FRAME_G, TOGGLE_FRAME_B));
-        for(j = 0; j < 5; j++)
+        for(j = 0; j < FRAME_WIDTH; j++)
             Rectangle(HDC_SCREEN_SYS, RECT_LEFT(index) + j, RECT_TOP(index) + j,
                                       RECT_RIGHT(index) - j, RECT_BOTTOM(index) - j);
 
@@ -301,6 +290,7 @@ static void draw_select_window(int index)
         paintCloseIcon();
 
         // draw window title
+        FillBox(HDC_SCREEN_SYS, RECT_LEFT(index), RECT_BOTTOM(index), RECT_W(index), m_factor * CAPTION_BAR_HEIGHT);
         paintWindowTitle(znodeheader->caption);
     }
 }
@@ -317,11 +307,11 @@ static void draw_unselect_window(int index)
         // copy the window content
         SetBrushColor(HDC_SCREEN_SYS, RGBA2Pixel(HDC_SCREEN_SYS, 0x00, 0x00, 0x00, 0xFF));
         FillBox(HDC_SCREEN_SYS, RECT_RIGHT(index) - m_factor * 20, RECT_TOP(index) - m_factor * 10, m_factor * 30, m_factor * 30);
+        FillBox(HDC_SCREEN_SYS, RECT_LEFT(index), RECT_BOTTOM(index), RECT_W(index), m_factor * CAPTION_BAR_HEIGHT);
 
         if((RECTW(znodeheader->rc) == RECTW(g_rcScr)) && (RECTH(znodeheader->rc) == RECTH(g_rcScr)))
             StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
-                    RECT_LEFT(index), RECT_TOP(index), RECT_RIGHT(index) - RECT_LEFT(index),
-                    RECT_BOTTOM(index) - RECT_TOP(index), 0);
+                    RECT_LEFT(index), RECT_TOP(index), RECT_W(index), RECT_H(index), 0);
         else
         {
             float factor_x = (float)RECTW(znodeheader->rc) / (float)RECTW(g_rcScr);
@@ -332,12 +322,11 @@ static void draw_unselect_window(int index)
 
             w = (int)((float)RECTW(znodeheader->rc) / factor);
             h = (int)((float)RECTH(znodeheader->rc) / factor);
-            factor = (float)(RECT_RIGHT(index) - RECT_LEFT(index)) / (float)RECTW(g_rcScr);
+            factor = (float)RECT_W(index) / (float)RECTW(g_rcScr);
             w = (int)((float)w * factor);
             h = (int)((float)h * factor);
 
-            FillBox(HDC_SCREEN_SYS, RECT_LEFT(index), RECT_TOP(index), RECT_RIGHT(index) - RECT_LEFT(index) + 1,
-                                    RECT_BOTTOM(index) - RECT_TOP(index) + 1);
+            FillBox(HDC_SCREEN_SYS, RECT_LEFT(index), RECT_TOP(index), RECT_W(index) + 1, RECT_H(index) + 1);
             StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
                                     RECT_LEFT(index), RECT_TOP(index), w, h, 0);
         }
@@ -535,10 +524,11 @@ static CompositorCtxt* initialize (const char* name)
         m_fallback_toggle_ctxt.fallback_toggle = TRUE;
         m_fallback_toggle_ctxt.b_FirstTime = TRUE;
         m_fallback_toggle_ctxt.font = CreateLogFont (FONT_TYPE_NAME_SCALE_TTF, 
-                        "ttf-Source", "UTF-8", FONT_WEIGHT_BOOK, FONT_SLANT_ROMAN, 
+                        "ttf-Source", "UTF-8", FONT_WEIGHT_BOOK | FONT_WEIGHT_BOLD, FONT_SLANT_ROMAN, 
                         FONT_FLIP_NIL, FONT_OTHER_AUTOSCALE, FONT_UNDERLINE_NONE, 
-                        FONT_STRUCKOUT_NONE, m_factor * CAPTION_BAR_HEIGHT * 0.4, 0);
+                        FONT_STRUCKOUT_NONE, m_factor * CAPTION_FONT_SIZE, 0);
         m_fallback_toggle_ctxt.font_old = SelectFont(HDC_SCREEN_SYS, m_fallback_toggle_ctxt.font);
+        SetTextColor(HDC_SCREEN_SYS, DWORD2Pixel(HDC_SCREEN_SYS, 0xFFFFFFFF));
         m_factor = (float)GetGDCapability(HDC_SCREEN, GDCAP_DPI) / 96.0;
     }
 
