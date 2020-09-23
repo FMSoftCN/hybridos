@@ -66,6 +66,7 @@
 #include <librsvg/rsvg.h>
 
 #include "../include/sysconfig.h"
+#include "config.h"
 
 
 #define SIZE_CLIPRC_HEAP        64
@@ -77,12 +78,6 @@
 #define WS_EX_DIALOGBOX         0x40000000L
 #define DEF_OVERLAPPED_OFFSET_X     30
 #define DEF_OVERLAPPED_OFFSET_Y     30
-
-#define MAX_TOGGLE_APP      9 
-#define TOGGLE_FRAME_R      250
-#define TOGGLE_FRAME_G      156
-#define TOGGLE_FRAME_B      56
-#define TOGGLE_ANIMATION_TIME   300
 
 struct _CompositorCtxt {
     RECT        rc_screen;  // screen rect - avoid duplicated GetScreenRect calls
@@ -105,18 +100,13 @@ struct CompositorToggleCtxt {
     BOOL            b_FirstTime;                // first time to make animation
 };
 
-static struct CompositorToggleCtxt m_fallback_toggle_ctxt;
-static MSGHOOK m_OldMouseHook = NULL;
-static MSGHOOK m_OldKeyHook = NULL;
-static MSGHOOK m_OldExtraInputHook = NULL;
-static void calculate_rect();
-static HDC m_AnimationDC = NULL;
-static cairo_t *cr;
-static cairo_surface_t *surface;
-
-static float m_factor = 1.0;
-#define DOCK_ICON_WIDTH     24
-#define DOCK_ICON_HEIGHT    24
+static struct CompositorToggleCtxt m_fallback_toggle_ctxt;      // context of toggle window
+static MSGHOOK m_OldMouseHook = NULL;                           // mouse hook function
+static MSGHOOK m_OldKeyHook = NULL;                             // keyboard hook function
+static MSGHOOK m_OldExtraInputHook = NULL;                      // extra input hook function
+static void calculate_rect();                                   // function to calculate toggle window
+static HDC m_AnimationDC = NULL;                                // memory DC for start animation
+static float m_factor = 1.0;                                    // factor for input control
 
 static HDC create_memdc_from_image_surface (cairo_surface_t* image_surface)
 {
@@ -172,7 +162,7 @@ static void paintCloseIcon()
     if(hdc_result != HDC_SCREEN && hdc_result != HDC_INVALID) 
     {
         SetMemDCColorKey(hdc_result, MEMDC_FLAG_SRCCOLORKEY, 0xFF000000);
-        BitBlt(hdc_result, 0, 0, 30, 30, HDC_SCREEN_SYS, (m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].right & 0xFFFF) - 20, (m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].top & 0xFFFF) - 10, 0);
+        BitBlt(hdc_result, 0, 0, 30, 30, HDC_SCREEN_SYS, RECT_RIGHT(CUR_WIN) - 20, RECT_TOP(CUR_WIN) - 10, 0);
     }
     cairo_restore(cr);
 
@@ -187,43 +177,40 @@ static void draw_select_window(int index)
     const ZNODEHEADER * znodeheader = NULL;
     int j = 0;
 
-    znode_index = m_fallback_toggle_ctxt.window_rect[index].top >> 16;
+    znode_index = ZNODE_INDEX(index);
     znodeheader = ServerGetWinZNodeHeader(NULL, znode_index, NULL, FALSE);
     if(znodeheader)
     {
         // copy the window content
         SetBrushColor(HDC_SCREEN_SYS, RGBA2Pixel(HDC_SCREEN_SYS, 0x00, 0x00, 0x00, 0xFF));
-        FillBox(HDC_SCREEN_SYS, (m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - 20, (m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF) - 10, 30, 30);
+        FillBox(HDC_SCREEN_SYS, RECT_RIGHT(CUR_WIN) - 20, RECT_TOP(CUR_WIN) - 10, 30, 30);
 
-        if(((znodeheader->rc.right - znodeheader->rc.left) == (g_rcScr.right - g_rcScr.left)) && ((znodeheader->rc.bottom - znodeheader->rc.top) == (g_rcScr.bottom - g_rcScr.top)))
+        if((RECTW(znodeheader->rc) == RECTW(g_rcScr)) && (RECTH(znodeheader->rc) == RECTH(g_rcScr)))
             StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
-                    m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF, m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF, 
-                    (m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF),
-                    (m_fallback_toggle_ctxt.window_rect[index].bottom & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF), 0);
+                    RECT_LEFT(index), RECT_TOP(index), RECT_RIGHT(index) - RECT_LEFT(index), RECT_BOTTOM(index) - RECT_TOP(index), 0);
         else
         {
-            float factor_x = (float)(znodeheader->rc.right - znodeheader->rc.left) / (float)(g_rcScr.right - g_rcScr.left);
-            float factor_y = (float)(znodeheader->rc.bottom - znodeheader->rc.top) / (float)(g_rcScr.bottom - g_rcScr.top);
+            float factor_x = (float)RECTW(znodeheader->rc) / (float)RECTW(g_rcScr);
+            float factor_y = (float)RECTH(znodeheader->rc) / (float)RECTH(g_rcScr);
             float factor = (factor_x > factor_y)? factor_x: factor_y;
             int w = 0;
             int h = 0;
 
-            w = (int)((float)((znodeheader->rc.right - znodeheader->rc.left)) / factor);
-            h = (int)((float)((znodeheader->rc.bottom - znodeheader->rc.top)) / factor);
-            factor = (float)((m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF)) / (float)(g_rcScr.right - g_rcScr.left);
+            w = (int)((float)RECTW(znodeheader->rc) / factor);
+            h = (int)((float)RECTH(znodeheader->rc) / factor);
+            factor = (float)(RECT_RIGHT(index) - RECT_LEFT(index)) / (float)RECTW(g_rcScr);
             w = (int)((float)w * factor);
             h = (int)((float)h * factor);
 
             StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
-                    m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF, m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF, 
-                    w, h, 0);
+                    RECT_LEFT(index), RECT_TOP(index), w, h, 0);
         }
 
         // draw select rectangle
-        SetPenColor(HDC_SCREEN_SYS, RGB2Pixel (HDC_SCREEN_SYS, TOGGLE_FRAME_R, TOGGLE_FRAME_G, TOGGLE_FRAME_B));
+        SetPenColor(HDC_SCREEN_SYS, RGB2Pixel(HDC_SCREEN_SYS, TOGGLE_FRAME_R, TOGGLE_FRAME_G, TOGGLE_FRAME_B));
         for(j = 0; j < 5; j++)
-            Rectangle(HDC_SCREEN_SYS, (m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF) + j, (m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF) + j,
-                    (m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - j, (m_fallback_toggle_ctxt.window_rect[index].bottom & 0xFFFF) - j);
+            Rectangle(HDC_SCREEN_SYS, RECT_LEFT(index) + j, RECT_TOP(index) + j,
+                                      RECT_RIGHT(index) - j, RECT_BOTTOM(index) - j);
 
         // draw close icon
         paintCloseIcon();
@@ -235,38 +222,36 @@ static void draw_unselect_window(int index)
     int znode_index = 0;
     const ZNODEHEADER * znodeheader = NULL;
 
-    znode_index = m_fallback_toggle_ctxt.window_rect[index].top >> 16;
+    znode_index = ZNODE_INDEX(index);
     znodeheader = ServerGetWinZNodeHeader(NULL, znode_index, NULL, FALSE);
     if(znodeheader)
     {
         // copy the window content
         SetBrushColor(HDC_SCREEN_SYS, RGBA2Pixel(HDC_SCREEN_SYS, 0x00, 0x00, 0x00, 0xFF));
-        FillBox(HDC_SCREEN_SYS, (m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - 20, (m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF) - 10, 30, 30);
+        FillBox(HDC_SCREEN_SYS, RECT_RIGHT(index) - 20, RECT_TOP(index) - 10, 30, 30);
 
-        if(((znodeheader->rc.right - znodeheader->rc.left) == (g_rcScr.right - g_rcScr.left)) && ((znodeheader->rc.bottom - znodeheader->rc.top) == (g_rcScr.bottom - g_rcScr.top)))
+        if((RECTW(znodeheader->rc) == RECTW(g_rcScr)) && (RECTH(znodeheader->rc) == RECTH(g_rcScr)))
             StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
-                    m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF, m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF, 
-                    (m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF),
-                    (m_fallback_toggle_ctxt.window_rect[index].bottom & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF), 0);
+                    RECT_LEFT(index), RECT_TOP(index), RECT_RIGHT(index) - RECT_LEFT(index),
+                    RECT_BOTTOM(index) - RECT_TOP(index), 0);
         else
         {
-            float factor_x = (float)(znodeheader->rc.right - znodeheader->rc.left) / (float)(g_rcScr.right - g_rcScr.left);
-            float factor_y = (float)(znodeheader->rc.bottom - znodeheader->rc.top) / (float)(g_rcScr.bottom - g_rcScr.top);
+            float factor_x = (float)RECTW(znodeheader->rc) / (float)RECTW(g_rcScr);
+            float factor_y = (float)RECTH(znodeheader->rc) / (float)RECTH(g_rcScr);
             float factor = (factor_x > factor_y)? factor_x: factor_y;
             int w = 0;
             int h = 0;
 
-            w = (int)((float)((znodeheader->rc.right - znodeheader->rc.left)) / factor);
-            h = (int)((float)((znodeheader->rc.bottom - znodeheader->rc.top)) / factor);
-            factor = (float)((m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF)) / (float)(g_rcScr.right - g_rcScr.left);
+            w = (int)((float)RECTW(znodeheader->rc) / factor);
+            h = (int)((float)RECTH(znodeheader->rc) / factor);
+            factor = (float)(RECT_RIGHT(index) - RECT_LEFT(index)) / (float)RECTW(g_rcScr);
             w = (int)((float)w * factor);
             h = (int)((float)h * factor);
 
-            FillBox(HDC_SCREEN_SYS, m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF, m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF, (m_fallback_toggle_ctxt.window_rect[index].right & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF) + 1,
-                    (m_fallback_toggle_ctxt.window_rect[index].bottom & 0xFFFF) - (m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF) + 1);
+            FillBox(HDC_SCREEN_SYS, RECT_LEFT(index), RECT_TOP(index), RECT_RIGHT(index) - RECT_LEFT(index) + 1,
+                                    RECT_BOTTOM(index) - RECT_TOP(index) + 1);
             StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
-                    m_fallback_toggle_ctxt.window_rect[index].left & 0xFFFF, m_fallback_toggle_ctxt.window_rect[index].top & 0xFFFF, 
-                    w, h, 0);
+                                    RECT_LEFT(index), RECT_TOP(index), w, h, 0);
         }
     }
 }
@@ -275,25 +260,26 @@ static void draw_unselect_window(int index)
 static void animated_start(MGEFF_ANIMATION handle, HWND hWnd, int id, RECT *value)
 {
     RECT rect = *value;
-    int zidx = m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].top >> 16;
+    int zidx = ZNODE_INDEX(CUR_WIN);
     const ZNODEHEADER * znodeheader = NULL;
 
     // get the number of app in normal level
     znodeheader = ServerGetWinZNodeHeader(NULL, zidx, NULL, FALSE);
     BitBlt(m_AnimationDC, 0, 0, g_rcScr.right, g_rcScr.bottom, HDC_SCREEN_SYS, 0, 0, 0);
-    if(((znodeheader->rc.right - znodeheader->rc.left) == (g_rcScr.right - g_rcScr.left)) && ((znodeheader->rc.bottom - znodeheader->rc.top) == (g_rcScr.bottom - g_rcScr.top)))
-        StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, 0); 
+    if((RECTW(znodeheader->rc) == RECTW(g_rcScr)) && (RECTH(znodeheader->rc) == RECTH(g_rcScr)))
+        StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
+                                   rect.left, rect.top, RECTW(rect), RECTH(rect), 0); 
     else
     {
-        float factor_x = (float)(znodeheader->rc.right - znodeheader->rc.left) / (float)(g_rcScr.right - g_rcScr.left);
-        float factor_y = (float)(znodeheader->rc.bottom - znodeheader->rc.top) / (float)(g_rcScr.bottom - g_rcScr.top);
+        float factor_x = (float)RECTW(znodeheader->rc) / (float)RECTW(g_rcScr);
+        float factor_y = (float)RECTH(znodeheader->rc) / (float)RECTH(g_rcScr);
         float factor = (factor_x > factor_y)? factor_x: factor_y;
         int w = 0;
         int h = 0;
 
-        w = (int)((float)((znodeheader->rc.right - znodeheader->rc.left)) / factor);
-        h = (int)((float)((znodeheader->rc.bottom - znodeheader->rc.top)) / factor);
-        factor = (float)(rect.right - rect.left) / (float)(g_rcScr.right - g_rcScr.left);
+        w = (int)((float)RECTW(znodeheader->rc) / factor);
+        h = (int)((float)RECTH(znodeheader->rc) / factor);
+        factor = (float)RECTW(rect) / (float)RECTW(g_rcScr);
         w = (int)((float)w * factor);
         h = (int)((float)h * factor);
 
@@ -383,10 +369,10 @@ static void toggle_draw(int zidx, HDC hsdc, int sx, int sy, int sw, int sh, HDC 
                     enum EffMotionType motionType = InCirc;
                     int duration = TOGGLE_ANIMATION_TIME;
 
-                    rect.left = m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].left & 0xFFFF;
-                    rect.top = m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].top & 0xFFFF;
-                    rect.right = m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].right & 0xFFFF;
-                    rect.bottom = m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].bottom & 0xFFFF;
+                    rect.left = RECT_LEFT(CUR_WIN);
+                    rect.top = RECT_TOP(CUR_WIN);
+                    rect.right = RECT_RIGHT(CUR_WIN);
+                    rect.bottom = RECT_BOTTOM(CUR_WIN);
 
                     mGEffAnimationSetStartValue(animation, &screen_rect);
                     mGEffAnimationSetEndValue(animation, &rect);
@@ -425,7 +411,7 @@ static void toggle_draw(int zidx, HDC hsdc, int sx, int sy, int sw, int sh, HDC 
         // whether the zidx is the main window idx
         for(i = 0; i < m_fallback_toggle_ctxt.main_window_number; i++)
         {
-            znode_index = m_fallback_toggle_ctxt.window_rect[i].top >> 16;
+            znode_index = ZNODE_INDEX(i);
             if(zidx == znode_index)
                 break;
         }
@@ -474,9 +460,6 @@ static void terminate (CompositorCtxt* ctxt)
         DestroyFreeClipRectList (&ctxt->cliprc_heap);
         free (ctxt);
     }
-
-    cairo_surface_destroy(surface);
-    cairo_destroy(cr);
 }
 
 /* return the number of subtracted windows above */
@@ -1258,7 +1241,7 @@ CompositorOps mine_compositor = {
 static void animated_end(MGEFF_ANIMATION handle, HWND hWnd, int id, RECT *value)
 {
     RECT rect = *value;
-    int zidx = m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].top >> 16;
+    int zidx = ZNODE_INDEX(CUR_WIN);
     const ZNODEHEADER * znodeheader = NULL;
 
     // get the number of app in normal level
@@ -1301,8 +1284,8 @@ static int MouseHook(void* context, HWND dst_wnd, UINT msg, WPARAM wparam, LPARA
 
         for(i = 0; i < m_fallback_toggle_ctxt.main_window_number; i++)
         {
-            rect.left = (m_fallback_toggle_ctxt.window_rect[i].right & 0xFFFF) - 20;
-            rect.top = (m_fallback_toggle_ctxt.window_rect[i].top & 0xFFFF) - 10;
+            rect.left = RECT_LEFT(i) - 20;
+            rect.top = RECT_TOP(i)- 10;
             rect.right = rect.left + 30;
             rect.bottom = rect.top + 30;
             
@@ -1312,10 +1295,10 @@ static int MouseHook(void* context, HWND dst_wnd, UINT msg, WPARAM wparam, LPARA
                 break;
             }
 
-            rect.left = m_fallback_toggle_ctxt.window_rect[i].left & 0xFFFF;
-            rect.top = m_fallback_toggle_ctxt.window_rect[i].top & 0xFFFF;
-            rect.right = m_fallback_toggle_ctxt.window_rect[i].right & 0xFFFF;
-            rect.bottom = m_fallback_toggle_ctxt.window_rect[i].bottom & 0xFFFF;
+            rect.left = RECT_LEFT(i);
+            rect.top = RECT_TOP(i);
+            rect.right = RECT_RIGHT(i);
+            rect.bottom = RECT_BOTTOM(i);
 
             if(PtInRect (&rect, x, y))
                 break;
@@ -1333,7 +1316,7 @@ static int MouseHook(void* context, HWND dst_wnd, UINT msg, WPARAM wparam, LPARA
                 msg.wParam = 0;
                 msg.lParam = 0;
 
-                node_index = m_fallback_toggle_ctxt.window_rect[i].top >> 16;
+                node_index = ZNODE_INDEX(i);
                 znodeheader = ServerGetWinZNodeHeader(NULL, node_index, NULL, FALSE);
                 if(znodeheader)
                 {
@@ -1344,7 +1327,7 @@ static int MouseHook(void* context, HWND dst_wnd, UINT msg, WPARAM wparam, LPARA
             else
             {
                 MGEFF_ANIMATION animation = NULL;
-                int  znode_index = m_fallback_toggle_ctxt.window_rect[i].top >> 16;
+                int  znode_index = ZNODE_INDEX(i);
 
                 // set current window for animation
                 m_fallback_toggle_ctxt.current_window = i;
@@ -1391,10 +1374,10 @@ static int MouseHook(void* context, HWND dst_wnd, UINT msg, WPARAM wparam, LPARA
 
         for(i = 0; i < m_fallback_toggle_ctxt.main_window_number; i++)
         {
-            rect.left = m_fallback_toggle_ctxt.window_rect[i].left & 0xFFFF;
-            rect.top = m_fallback_toggle_ctxt.window_rect[i].top & 0xFFFF;
-            rect.right = m_fallback_toggle_ctxt.window_rect[i].right & 0xFFFF;
-            rect.bottom = m_fallback_toggle_ctxt.window_rect[i].bottom & 0xFFFF;
+            rect.left = RECT_LEFT(i);
+            rect.top = RECT_TOP(i);
+            rect.right = RECT_RIGHT(i);
+            rect.bottom = RECT_BOTTOM(i);
             
             if(PtInRect (&rect, x, y))
                 break;
@@ -1466,10 +1449,10 @@ static int KeyHook(void* context, HWND dst_wnd, UINT msg, WPARAM wparam, LPARAM 
                     enum EffMotionType motionType = InCirc;
                     int duration = TOGGLE_ANIMATION_TIME;
 
-                    rect.left = m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].left & 0xFFFF;
-                    rect.top = m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].top & 0xFFFF;
-                    rect.right = m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].right & 0xFFFF;
-                    rect.bottom = m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].bottom & 0xFFFF;
+                    rect.left = RECT_LEFT(CUR_WIN);
+                    rect.top = RECT_TOP(CUR_WIN);
+                    rect.right = RECT_RIGHT(CUR_WIN);
+                    rect.bottom = RECT_BOTTOM(CUR_WIN);
 
                     SelectClipRect (HDC_SCREEN_SYS, &screen_rect);
 
@@ -1481,7 +1464,7 @@ static int KeyHook(void* context, HWND dst_wnd, UINT msg, WPARAM wparam, LPARAM 
                     mGEffAnimationDelete(animation);
                 }
 
-                znode_index = m_fallback_toggle_ctxt.window_rect[m_fallback_toggle_ctxt.current_window].top >> 16;
+                znode_index = ZNODE_INDEX(CUR_WIN);
                 ServerDoZNodeOperation(NULL, znode_index, ZNOP_MOVE2TOP, NULL, FALSE);
 
                 RegisterEventHookFunc(HOOK_EVENT_MOUSE, m_OldMouseHook, NULL);
@@ -1531,244 +1514,244 @@ static void calculate_rect()
     {
         m_fallback_toggle_ctxt.window_rect[0].left += g_rcScr.right * 0.382 / 2;
         m_fallback_toggle_ctxt.window_rect[0].top += g_rcScr.bottom * 0.382 / 2;
-        m_fallback_toggle_ctxt.window_rect[0].right = (m_fallback_toggle_ctxt.window_rect[0].left & 0xFFFF) + g_rcScr.right * 0.618;
-        m_fallback_toggle_ctxt.window_rect[0].bottom = (m_fallback_toggle_ctxt.window_rect[0].top & 0xFFFF) + g_rcScr.bottom * 0.618;
+        m_fallback_toggle_ctxt.window_rect[0].right = RECT_LEFT(0) + g_rcScr.right * 0.618;
+        m_fallback_toggle_ctxt.window_rect[0].bottom = RECT_TOP(0) + g_rcScr.bottom * 0.618;
     }
     else if(m_fallback_toggle_ctxt.main_window_number == 2)
     {
         m_fallback_toggle_ctxt.window_rect[0].left += g_rcScr.right * 0.06;
         m_fallback_toggle_ctxt.window_rect[0].top += g_rcScr.bottom * 0.59 / 2;
-        m_fallback_toggle_ctxt.window_rect[0].right = (m_fallback_toggle_ctxt.window_rect[0].left & 0xFFFF) + g_rcScr.right * 0.41;
-        m_fallback_toggle_ctxt.window_rect[0].bottom = (m_fallback_toggle_ctxt.window_rect[0].top & 0xFFFF) + g_rcScr.bottom * 0.41;
+        m_fallback_toggle_ctxt.window_rect[0].right =  RECT_LEFT(0)+ g_rcScr.right * 0.41;
+        m_fallback_toggle_ctxt.window_rect[0].bottom = RECT_TOP(0) + g_rcScr.bottom * 0.41;
 
         m_fallback_toggle_ctxt.window_rect[1].left += g_rcScr.right * 0.53;
         m_fallback_toggle_ctxt.window_rect[1].top += g_rcScr.bottom * 0.59 / 2;
-        m_fallback_toggle_ctxt.window_rect[1].right = (m_fallback_toggle_ctxt.window_rect[1].left & 0xFFFF) + g_rcScr.right * 0.41;
-        m_fallback_toggle_ctxt.window_rect[1].bottom = (m_fallback_toggle_ctxt.window_rect[1].top & 0xFFFF) + g_rcScr.bottom * 0.41;
+        m_fallback_toggle_ctxt.window_rect[1].right = RECT_LEFT(1)+ g_rcScr.right * 0.41;
+        m_fallback_toggle_ctxt.window_rect[1].bottom = RECT_TOP(1) + g_rcScr.bottom * 0.41;
     }
     else if(m_fallback_toggle_ctxt.main_window_number == 3)
     {
         m_fallback_toggle_ctxt.window_rect[0].left += g_rcScr.right * 0.59 / 2;
         m_fallback_toggle_ctxt.window_rect[0].top += g_rcScr.bottom * 0.06;
-        m_fallback_toggle_ctxt.window_rect[0].right = (m_fallback_toggle_ctxt.window_rect[0].left & 0xFFFF) + g_rcScr.right * 0.41;
-        m_fallback_toggle_ctxt.window_rect[0].bottom = (m_fallback_toggle_ctxt.window_rect[0].top & 0xFFFF) + g_rcScr.bottom * 0.41;
+        m_fallback_toggle_ctxt.window_rect[0].right = RECT_LEFT(0) + g_rcScr.right * 0.41;
+        m_fallback_toggle_ctxt.window_rect[0].bottom = RECT_TOP(0) + g_rcScr.bottom * 0.41;
 
         m_fallback_toggle_ctxt.window_rect[1].left += g_rcScr.right * 0.06;
         m_fallback_toggle_ctxt.window_rect[1].top += g_rcScr.bottom * 0.53;
-        m_fallback_toggle_ctxt.window_rect[1].right = (m_fallback_toggle_ctxt.window_rect[1].left & 0xFFFF) + g_rcScr.right * 0.41;
-        m_fallback_toggle_ctxt.window_rect[1].bottom = (m_fallback_toggle_ctxt.window_rect[1].top & 0xFFFF) + g_rcScr.bottom * 0.41;
+        m_fallback_toggle_ctxt.window_rect[1].right = RECT_LEFT(1) + g_rcScr.right * 0.41;
+        m_fallback_toggle_ctxt.window_rect[1].bottom = RECT_TOP(1) + g_rcScr.bottom * 0.41;
 
         m_fallback_toggle_ctxt.window_rect[2].left += g_rcScr.right * 0.53;
         m_fallback_toggle_ctxt.window_rect[2].top += g_rcScr.bottom * 0.53;
-        m_fallback_toggle_ctxt.window_rect[2].right = (m_fallback_toggle_ctxt.window_rect[2].left & 0xFFFF) + g_rcScr.right * 0.41;
-        m_fallback_toggle_ctxt.window_rect[2].bottom = (m_fallback_toggle_ctxt.window_rect[2].top & 0xFFFF) + g_rcScr.bottom * 0.41;
+        m_fallback_toggle_ctxt.window_rect[2].right = RECT_LEFT(2) + g_rcScr.right * 0.41;
+        m_fallback_toggle_ctxt.window_rect[2].bottom = RECT_TOP(2) + g_rcScr.bottom * 0.41;
     }
     else if(m_fallback_toggle_ctxt.main_window_number == 4)
     {
         m_fallback_toggle_ctxt.window_rect[0].left += g_rcScr.right * 0.06;
         m_fallback_toggle_ctxt.window_rect[0].top += g_rcScr.bottom * 0.06;
-        m_fallback_toggle_ctxt.window_rect[0].right = (m_fallback_toggle_ctxt.window_rect[0].left & 0xFFFF) + g_rcScr.right * 0.41;
-        m_fallback_toggle_ctxt.window_rect[0].bottom = (m_fallback_toggle_ctxt.window_rect[0].top & 0xFFFF) + g_rcScr.bottom * 0.41;
+        m_fallback_toggle_ctxt.window_rect[0].right = RECT_LEFT(0) + g_rcScr.right * 0.41;
+        m_fallback_toggle_ctxt.window_rect[0].bottom = RECT_TOP(0) + g_rcScr.bottom * 0.41;
 
         m_fallback_toggle_ctxt.window_rect[1].left += g_rcScr.right * 0.53;
         m_fallback_toggle_ctxt.window_rect[1].top += g_rcScr.bottom * 0.06;
-        m_fallback_toggle_ctxt.window_rect[1].right = (m_fallback_toggle_ctxt.window_rect[1].left & 0xFFFF) + g_rcScr.right * 0.41;
-        m_fallback_toggle_ctxt.window_rect[1].bottom = (m_fallback_toggle_ctxt.window_rect[1].top & 0xFFFF) + g_rcScr.bottom * 0.41;
+        m_fallback_toggle_ctxt.window_rect[1].right = RECT_LEFT(1) + g_rcScr.right * 0.41;
+        m_fallback_toggle_ctxt.window_rect[1].bottom = RECT_TOP(1) + g_rcScr.bottom * 0.41;
 
         m_fallback_toggle_ctxt.window_rect[2].left += g_rcScr.right * 0.06;
         m_fallback_toggle_ctxt.window_rect[2].top += g_rcScr.bottom * 0.53;
-        m_fallback_toggle_ctxt.window_rect[2].right = (m_fallback_toggle_ctxt.window_rect[2].left & 0xFFFF) + g_rcScr.right * 0.41;
-        m_fallback_toggle_ctxt.window_rect[2].bottom = (m_fallback_toggle_ctxt.window_rect[2].top & 0xFFFF) + g_rcScr.bottom * 0.41;
+        m_fallback_toggle_ctxt.window_rect[2].right = RECT_LEFT(2) + g_rcScr.right * 0.41;
+        m_fallback_toggle_ctxt.window_rect[2].bottom = RECT_TOP(2) + g_rcScr.bottom * 0.41;
 
         m_fallback_toggle_ctxt.window_rect[3].left += g_rcScr.right * 0.53;
         m_fallback_toggle_ctxt.window_rect[3].top += g_rcScr.bottom * 0.53;
-        m_fallback_toggle_ctxt.window_rect[3].right = (m_fallback_toggle_ctxt.window_rect[3].left & 0xFFFF) + g_rcScr.right * 0.41;
-        m_fallback_toggle_ctxt.window_rect[3].bottom = (m_fallback_toggle_ctxt.window_rect[3].top & 0xFFFF) + g_rcScr.bottom * 0.41;
+        m_fallback_toggle_ctxt.window_rect[3].right = RECT_LEFT(3) + g_rcScr.right * 0.41;
+        m_fallback_toggle_ctxt.window_rect[3].bottom = RECT_TOP(3) + g_rcScr.bottom * 0.41;
     }
     else if(m_fallback_toggle_ctxt.main_window_number == 5)
     {
         m_fallback_toggle_ctxt.window_rect[0].left += g_rcScr.right * 0.20;
         m_fallback_toggle_ctxt.window_rect[0].top += g_rcScr.bottom * 0.14;
-        m_fallback_toggle_ctxt.window_rect[0].right = (m_fallback_toggle_ctxt.window_rect[0].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[0].bottom = (m_fallback_toggle_ctxt.window_rect[0].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[0].right = RECT_LEFT(0) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[0].bottom = RECT_TOP(0) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[1].left += g_rcScr.right * 0.52;
         m_fallback_toggle_ctxt.window_rect[1].top += g_rcScr.bottom * 0.14;
-        m_fallback_toggle_ctxt.window_rect[1].right = (m_fallback_toggle_ctxt.window_rect[1].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[1].bottom = (m_fallback_toggle_ctxt.window_rect[1].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[1].right = RECT_LEFT(1) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[1].bottom = RECT_TOP(1) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[2].left += g_rcScr.right * 0.04;
         m_fallback_toggle_ctxt.window_rect[2].top += g_rcScr.bottom * 0.56;
-        m_fallback_toggle_ctxt.window_rect[2].right = (m_fallback_toggle_ctxt.window_rect[2].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[2].bottom = (m_fallback_toggle_ctxt.window_rect[2].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[2].right = RECT_LEFT(2) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[2].bottom = RECT_TOP(2) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[3].left += g_rcScr.right * 0.36;
         m_fallback_toggle_ctxt.window_rect[3].top += g_rcScr.bottom * 0.56;
-        m_fallback_toggle_ctxt.window_rect[3].right = (m_fallback_toggle_ctxt.window_rect[3].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[3].bottom = (m_fallback_toggle_ctxt.window_rect[3].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[3].right = RECT_LEFT(3) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[3].bottom = RECT_TOP(3) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[4].left += g_rcScr.right * 0.68;
         m_fallback_toggle_ctxt.window_rect[4].top += g_rcScr.bottom * 0.56;
-        m_fallback_toggle_ctxt.window_rect[4].right = (m_fallback_toggle_ctxt.window_rect[4].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[4].bottom = (m_fallback_toggle_ctxt.window_rect[4].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[4].right = RECT_LEFT(4) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[4].bottom = RECT_TOP(4) + g_rcScr.bottom * 0.28;
     }
     else if(m_fallback_toggle_ctxt.main_window_number == 6)
     {
         m_fallback_toggle_ctxt.window_rect[0].left += g_rcScr.right * 0.04;
         m_fallback_toggle_ctxt.window_rect[0].top += g_rcScr.bottom * 0.14;
-        m_fallback_toggle_ctxt.window_rect[0].right = (m_fallback_toggle_ctxt.window_rect[0].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[0].bottom = (m_fallback_toggle_ctxt.window_rect[0].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[0].right = RECT_LEFT(0) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[0].bottom = RECT_TOP(0) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[1].left += g_rcScr.right * 0.36;
         m_fallback_toggle_ctxt.window_rect[1].top += g_rcScr.bottom * 0.14;
-        m_fallback_toggle_ctxt.window_rect[1].right = (m_fallback_toggle_ctxt.window_rect[1].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[1].bottom = (m_fallback_toggle_ctxt.window_rect[1].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[1].right = RECT_LEFT(1) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[1].bottom = RECT_TOP(1) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[2].left += g_rcScr.right * 0.68;
         m_fallback_toggle_ctxt.window_rect[2].top += g_rcScr.bottom * 0.14;
-        m_fallback_toggle_ctxt.window_rect[2].right = (m_fallback_toggle_ctxt.window_rect[2].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[2].bottom = (m_fallback_toggle_ctxt.window_rect[2].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[2].right = RECT_LEFT(2) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[2].bottom = RECT_TOP(2) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[3].left += g_rcScr.right * 0.04;
         m_fallback_toggle_ctxt.window_rect[3].top += g_rcScr.bottom * 0.56;
-        m_fallback_toggle_ctxt.window_rect[3].right = (m_fallback_toggle_ctxt.window_rect[3].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[3].bottom = (m_fallback_toggle_ctxt.window_rect[3].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[3].right = RECT_LEFT(3) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[3].bottom = RECT_TOP(3) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[4].left += g_rcScr.right * 0.36;
         m_fallback_toggle_ctxt.window_rect[4].top += g_rcScr.bottom * 0.56;
-        m_fallback_toggle_ctxt.window_rect[4].right = (m_fallback_toggle_ctxt.window_rect[4].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[4].bottom = (m_fallback_toggle_ctxt.window_rect[4].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[4].right = RECT_LEFT(4) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[4].bottom = RECT_TOP(4) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[5].left += g_rcScr.right * 0.68;
         m_fallback_toggle_ctxt.window_rect[5].top += g_rcScr.bottom * 0.56;
-        m_fallback_toggle_ctxt.window_rect[5].right = (m_fallback_toggle_ctxt.window_rect[5].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[5].bottom = (m_fallback_toggle_ctxt.window_rect[5].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[5].right = RECT_LEFT(5) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[5].bottom = RECT_TOP(5) + g_rcScr.bottom * 0.28;
     }
     else if(m_fallback_toggle_ctxt.main_window_number == 7)
     {
         m_fallback_toggle_ctxt.window_rect[0].left += g_rcScr.right * 0.20;
         m_fallback_toggle_ctxt.window_rect[0].top += g_rcScr.bottom * 0.04;
-        m_fallback_toggle_ctxt.window_rect[0].right = (m_fallback_toggle_ctxt.window_rect[0].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[0].bottom = (m_fallback_toggle_ctxt.window_rect[0].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[0].right = RECT_LEFT(0) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[0].bottom = RECT_TOP(0) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[1].left += g_rcScr.right * 0.52;
         m_fallback_toggle_ctxt.window_rect[1].top += g_rcScr.bottom * 0.04;
-        m_fallback_toggle_ctxt.window_rect[1].right = (m_fallback_toggle_ctxt.window_rect[1].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[1].bottom = (m_fallback_toggle_ctxt.window_rect[1].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[1].right = RECT_LEFT(1) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[1].bottom = RECT_TOP(1) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[2].left += g_rcScr.right * 0.20;
         m_fallback_toggle_ctxt.window_rect[2].top += g_rcScr.bottom * 0.36;
-        m_fallback_toggle_ctxt.window_rect[2].right = (m_fallback_toggle_ctxt.window_rect[2].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[2].bottom = (m_fallback_toggle_ctxt.window_rect[2].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[2].right = RECT_LEFT(2) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[2].bottom = RECT_TOP(2) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[3].left += g_rcScr.right * 0.52;
         m_fallback_toggle_ctxt.window_rect[3].top += g_rcScr.bottom * 0.36;
-        m_fallback_toggle_ctxt.window_rect[3].right = (m_fallback_toggle_ctxt.window_rect[3].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[3].bottom = (m_fallback_toggle_ctxt.window_rect[3].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[3].right = RECT_LEFT(3) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[3].bottom = RECT_TOP(3) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[4].left += g_rcScr.right * 0.04;
         m_fallback_toggle_ctxt.window_rect[4].top += g_rcScr.bottom * 0.68;
-        m_fallback_toggle_ctxt.window_rect[4].right = (m_fallback_toggle_ctxt.window_rect[4].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[4].bottom = (m_fallback_toggle_ctxt.window_rect[4].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[4].right = RECT_LEFT(4) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[4].bottom = RECT_TOP(4) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[5].left += g_rcScr.right * 0.36;
         m_fallback_toggle_ctxt.window_rect[5].top += g_rcScr.bottom * 0.68;
-        m_fallback_toggle_ctxt.window_rect[5].right = (m_fallback_toggle_ctxt.window_rect[5].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[5].bottom = (m_fallback_toggle_ctxt.window_rect[5].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[5].right = RECT_LEFT(5) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[5].bottom = RECT_TOP(5) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[6].left += g_rcScr.right * 0.68;
         m_fallback_toggle_ctxt.window_rect[6].top += g_rcScr.bottom * 0.68;
-        m_fallback_toggle_ctxt.window_rect[6].right = (m_fallback_toggle_ctxt.window_rect[6].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[6].bottom = (m_fallback_toggle_ctxt.window_rect[6].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[6].right = RECT_LEFT(6) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[6].bottom = RECT_TOP(6) + g_rcScr.bottom * 0.28;
     }
     else if(m_fallback_toggle_ctxt.main_window_number == 8)
     {
         m_fallback_toggle_ctxt.window_rect[0].left += g_rcScr.right * 0.20;
         m_fallback_toggle_ctxt.window_rect[0].top += g_rcScr.bottom * 0.04;
-        m_fallback_toggle_ctxt.window_rect[0].right = (m_fallback_toggle_ctxt.window_rect[0].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[0].bottom = (m_fallback_toggle_ctxt.window_rect[0].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[0].right = RECT_LEFT(0) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[0].bottom = RECT_TOP(0) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[1].left += g_rcScr.right * 0.52;
         m_fallback_toggle_ctxt.window_rect[1].top += g_rcScr.bottom * 0.04;
-        m_fallback_toggle_ctxt.window_rect[1].right = (m_fallback_toggle_ctxt.window_rect[1].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[1].bottom = (m_fallback_toggle_ctxt.window_rect[1].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[1].right = RECT_LEFT(1) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[1].bottom = RECT_TOP(1) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[2].left += g_rcScr.right * 0.04;
         m_fallback_toggle_ctxt.window_rect[2].top += g_rcScr.bottom * 0.36;
-        m_fallback_toggle_ctxt.window_rect[2].right = (m_fallback_toggle_ctxt.window_rect[2].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[2].bottom = (m_fallback_toggle_ctxt.window_rect[2].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[2].right = RECT_LEFT(2) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[2].bottom = RECT_TOP(2) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[3].left += g_rcScr.right * 0.36;
         m_fallback_toggle_ctxt.window_rect[3].top += g_rcScr.bottom * 0.36;
-        m_fallback_toggle_ctxt.window_rect[3].right = (m_fallback_toggle_ctxt.window_rect[3].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[3].bottom = (m_fallback_toggle_ctxt.window_rect[3].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[3].right = RECT_LEFT(3) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[3].bottom = RECT_TOP(3) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[4].left += g_rcScr.right * 0.68;
         m_fallback_toggle_ctxt.window_rect[4].top += g_rcScr.bottom * 0.36;
-        m_fallback_toggle_ctxt.window_rect[4].right = (m_fallback_toggle_ctxt.window_rect[4].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[4].bottom = (m_fallback_toggle_ctxt.window_rect[4].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[4].right = RECT_LEFT(4) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[4].bottom = RECT_TOP(4) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[5].left += g_rcScr.right * 0.04;
         m_fallback_toggle_ctxt.window_rect[5].top += g_rcScr.bottom * 0.68;
-        m_fallback_toggle_ctxt.window_rect[5].right = (m_fallback_toggle_ctxt.window_rect[5].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[5].bottom = (m_fallback_toggle_ctxt.window_rect[5].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[5].right = RECT_LEFT(5) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[5].bottom = RECT_TOP(5) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[6].left += g_rcScr.right * 0.36;
         m_fallback_toggle_ctxt.window_rect[6].top += g_rcScr.bottom * 0.68;
-        m_fallback_toggle_ctxt.window_rect[6].right = (m_fallback_toggle_ctxt.window_rect[6].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[6].bottom = (m_fallback_toggle_ctxt.window_rect[6].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[6].right = RECT_LEFT(6) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[6].bottom = RECT_TOP(6) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[7].left += g_rcScr.right * 0.68;
         m_fallback_toggle_ctxt.window_rect[7].top += g_rcScr.bottom * 0.68;
-        m_fallback_toggle_ctxt.window_rect[7].right = (m_fallback_toggle_ctxt.window_rect[7].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[7].bottom = (m_fallback_toggle_ctxt.window_rect[7].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[7].right = RECT_LEFT(7) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[7].bottom = RECT_TOP(7) + g_rcScr.bottom * 0.28;
     }
     else if(m_fallback_toggle_ctxt.main_window_number == 9)
     {
         m_fallback_toggle_ctxt.window_rect[0].left += g_rcScr.right * 0.04;
         m_fallback_toggle_ctxt.window_rect[0].top += g_rcScr.bottom * 0.04;
-        m_fallback_toggle_ctxt.window_rect[0].right = (m_fallback_toggle_ctxt.window_rect[0].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[0].bottom = (m_fallback_toggle_ctxt.window_rect[0].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[0].right = RECT_LEFT(0) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[0].bottom = RECT_TOP(0) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[1].left += g_rcScr.right * 0.36;
         m_fallback_toggle_ctxt.window_rect[1].top += g_rcScr.bottom * 0.04;
-        m_fallback_toggle_ctxt.window_rect[1].right = (m_fallback_toggle_ctxt.window_rect[1].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[1].bottom = (m_fallback_toggle_ctxt.window_rect[1].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[1].right = RECT_LEFT(1) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[1].bottom = RECT_TOP(1) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[2].left += g_rcScr.right * 0.68;
         m_fallback_toggle_ctxt.window_rect[2].top += g_rcScr.bottom * 0.04;
-        m_fallback_toggle_ctxt.window_rect[2].right = (m_fallback_toggle_ctxt.window_rect[2].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[2].bottom = (m_fallback_toggle_ctxt.window_rect[2].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[2].right = RECT_LEFT(2) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[2].bottom = RECT_TOP(2) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[3].left += g_rcScr.right * 0.04;
         m_fallback_toggle_ctxt.window_rect[3].top += g_rcScr.bottom * 0.36;
-        m_fallback_toggle_ctxt.window_rect[3].right = (m_fallback_toggle_ctxt.window_rect[3].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[3].bottom = (m_fallback_toggle_ctxt.window_rect[3].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[3].right = RECT_LEFT(3) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[3].bottom = RECT_TOP(3) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[4].left += g_rcScr.right * 0.36;
         m_fallback_toggle_ctxt.window_rect[4].top += g_rcScr.bottom * 0.36;
-        m_fallback_toggle_ctxt.window_rect[4].right = (m_fallback_toggle_ctxt.window_rect[4].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[4].bottom = (m_fallback_toggle_ctxt.window_rect[4].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[4].right = RECT_LEFT(4) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[4].bottom = RECT_TOP(4) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[5].left += g_rcScr.right * 0.68;
         m_fallback_toggle_ctxt.window_rect[5].top += g_rcScr.bottom * 0.36;
-        m_fallback_toggle_ctxt.window_rect[5].right = (m_fallback_toggle_ctxt.window_rect[5].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[5].bottom = (m_fallback_toggle_ctxt.window_rect[5].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[5].right = RECT_LEFT(5) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[5].bottom = RECT_TOP(5) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[6].left += g_rcScr.right * 0.04;
         m_fallback_toggle_ctxt.window_rect[6].top += g_rcScr.bottom * 0.68;
-        m_fallback_toggle_ctxt.window_rect[6].right = (m_fallback_toggle_ctxt.window_rect[6].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[6].bottom = (m_fallback_toggle_ctxt.window_rect[6].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[6].right = RECT_LEFT(6) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[6].bottom = RECT_TOP(6) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[7].left += g_rcScr.right * 0.36;
         m_fallback_toggle_ctxt.window_rect[7].top += g_rcScr.bottom * 0.68;
-        m_fallback_toggle_ctxt.window_rect[7].right = (m_fallback_toggle_ctxt.window_rect[7].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[7].bottom = (m_fallback_toggle_ctxt.window_rect[7].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[7].right = RECT_LEFT(7) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[7].bottom = RECT_TOP(7) + g_rcScr.bottom * 0.28;
 
         m_fallback_toggle_ctxt.window_rect[8].left += g_rcScr.right * 0.68;
         m_fallback_toggle_ctxt.window_rect[8].top += g_rcScr.bottom * 0.68;
-        m_fallback_toggle_ctxt.window_rect[8].right = (m_fallback_toggle_ctxt.window_rect[8].left & 0xFFFF) + g_rcScr.right * 0.28;
-        m_fallback_toggle_ctxt.window_rect[8].bottom = (m_fallback_toggle_ctxt.window_rect[8].top & 0xFFFF) + g_rcScr.bottom * 0.28;
+        m_fallback_toggle_ctxt.window_rect[8].right = RECT_LEFT(8) + g_rcScr.right * 0.28;
+        m_fallback_toggle_ctxt.window_rect[8].bottom = RECT_TOP(8) + g_rcScr.bottom * 0.28;
     }
 }
 
