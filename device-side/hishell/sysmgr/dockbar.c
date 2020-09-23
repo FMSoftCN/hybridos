@@ -79,6 +79,16 @@
 #include "../include/sysconfig.h"
 #include "config.h"
 
+
+static RsvgStylePair button_color_pair [] = {
+    {"color", "#389CFA", 0},
+};
+
+static RsvgStylePair power_button_color_pair [] = {
+    {"color", "#ff0000", 0},
+};
+
+
 extern HWND m_hStatusBar;                       // handle of status bar
 extern HWND m_hDockBar;                         // handle of dock bar
 static int m_DockBar_Height = 0;                // height of dock bar
@@ -215,7 +225,6 @@ static void paintSVGArrow(HDC hdc)
 {
     GError *error = NULL;
     RsvgDimensionData dimensions;
-    cairo_pattern_t *pattern;
     double factor_width = 0.0f;
     double factor_height = 0.0f;
 
@@ -229,7 +238,7 @@ static void paintSVGArrow(HDC hdc)
     rsvg_handle_get_dimensions(m_arrow_svg_handle, &dimensions);
 
     // create cairo_surface_t and cairo_t for one picture
-    surface[0] = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, (int)(DOCK_ICON_WIDTH * m_factor), (int)(DOCK_ICON_HEIGHT * m_factor));
+    surface[0] = cairo_image_surface_create (CAIRO_FORMAT_RGB24, (int)(DOCK_ICON_WIDTH * m_factor), (int)(DOCK_ICON_HEIGHT * m_factor));
     cr[0] = cairo_create (surface[0]);
 
     cairo_save(cr[0]);
@@ -243,26 +252,26 @@ static void paintSVGArrow(HDC hdc)
     factor_width = (factor_width > factor_height) ? factor_width : factor_height;
     cairo_scale(cr[0], factor_width, factor_width);
 
-    cairo_push_group (cr[0]);
-    rsvg_handle_render_cairo (m_arrow_svg_handle, cr[0]);
-    pattern = cairo_pop_group (cr[0]);
-
-    cairo_set_source_rgb (cr[0], BUTTON_COLOR_R / 255, BUTTON_COLOR_G / 255, BUTTON_COLOR_B / 255);
-    cairo_mask(cr[0], pattern);
-
-    cairo_restore (cr[0]);
+    float r = SysPixelColor[IDX_COLOR_darkgray].r / 255.0;
+    float g = SysPixelColor[IDX_COLOR_darkgray].g / 255.0;
+    float b = SysPixelColor[IDX_COLOR_darkgray].b / 255.0;
+    float alpha = 0xE0 / 255.0;
+    cairo_set_source_rgb (cr[0],  r*alpha, g*alpha, b*alpha);
+    cairo_paint (cr[0]);
+    rsvg_handle_render_cairo_style (m_arrow_svg_handle, cr[0], button_color_pair, 1);
 
     HDC csdc = create_memdc_from_image_surface(surface[0]);
-    if (csdc != HDC_SCREEN && csdc != HDC_INVALID) 
+    if (csdc != HDC_SCREEN && csdc != HDC_INVALID)
     {
-        SetMemDCColorKey(csdc, MEMDC_FLAG_SRCCOLORKEY, 0);
+        SetMemDCColorKey(csdc, MEMDC_FLAG_SRCCOLORKEY,
+            MakeRGB(SysPixelColor[IDX_COLOR_darkgray].r * alpha,
+            SysPixelColor[IDX_COLOR_darkgray].g * alpha,
+            SysPixelColor[IDX_COLOR_darkgray].b * alpha));
         BitBlt(csdc, 0, 0, DOCK_ICON_WIDTH, DOCK_ICON_HEIGHT, hdc, MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2, (int)((m_DockBar_Height - DOCK_ICON_HEIGHT) * m_factor / 2), 0);
         DeleteMemDC(csdc);
     }
-//    SyncUpdateDC(hdc);
 
     cairo_surface_destroy (surface[0]);
-    cairo_pattern_destroy (pattern);
     cairo_destroy (cr[0]);
 }
 
@@ -288,7 +297,6 @@ static void loadSVGFromFile(const char* file, int index)
     RsvgHandle *handle;
     GError *error = NULL;
     RsvgDimensionData dimensions;
-    cairo_pattern_t *pattern;
     double factor_width = 0.0f;
     double factor_height = 0.0f;
 
@@ -314,19 +322,18 @@ static void loadSVGFromFile(const char* file, int index)
 
     cairo_scale(cr[index], factor_width, factor_width);
 
-    cairo_push_group (cr[index]);
-    rsvg_handle_render_cairo (handle, cr[index]);
-
-    pattern = cairo_pop_group (cr[index]);
-
+    float r = SysPixelColor[IDX_COLOR_darkgray].r / 255.0;
+    float g = SysPixelColor[IDX_COLOR_darkgray].g / 255.0;
+    float b = SysPixelColor[IDX_COLOR_darkgray].b / 255.0;
+    float alpha = 0xE0 / 255.0;
+    cairo_set_source_rgb (cr[index],  r*alpha, g*alpha, b*alpha);
+    cairo_paint (cr[index]);
     if(index == ID_SHUTDOWN_BUTTON)
-        cairo_set_source_rgb (cr[index], 1.0, 0, 0);
+        rsvg_handle_render_cairo_style (handle, cr[index], power_button_color_pair, 1);
     else
-        cairo_set_source_rgb (cr[index], BUTTON_COLOR_R / 255, BUTTON_COLOR_G / 255, BUTTON_COLOR_B / 255);
-    cairo_mask(cr[index], pattern);
+        rsvg_handle_render_cairo_style (handle, cr[index], button_color_pair, 1);
     cairo_restore (cr[index]);
 
-    cairo_pattern_destroy (pattern);
     g_object_unref (handle);
 }
 
@@ -335,14 +342,21 @@ static void paintDockBarIcon(HDC hdc)
     int i = 0;
 
     paintSVGArrow(hdc);
+    float r = SysPixelColor[IDX_COLOR_darkgray].r / 255.0;
+    float g = SysPixelColor[IDX_COLOR_darkgray].g / 255.0;
+    float b = SysPixelColor[IDX_COLOR_darkgray].b / 255.0;
+    float alpha = 0xE0 / 255.0;
     for(i = 1; i < BUTTON_COUNT; i ++)
     {
         if(surface[i] && cr[i])
         {
             HDC csdc = create_memdc_from_image_surface(surface[i]);
-            if (csdc != HDC_SCREEN && csdc != HDC_INVALID) 
+            if (csdc != HDC_SCREEN && csdc != HDC_INVALID)
             {
-                SetMemDCColorKey(csdc, MEMDC_FLAG_SRCCOLORKEY, 0);
+                SetMemDCColorKey(csdc, MEMDC_FLAG_SRCCOLORKEY,
+                        MakeRGB(SysPixelColor[IDX_COLOR_darkgray].r * alpha,
+                            SysPixelColor[IDX_COLOR_darkgray].g * alpha,
+                            SysPixelColor[IDX_COLOR_darkgray].b * alpha));
                 BitBlt(csdc, 0, 0, DOCK_ICON_WIDTH, DOCK_ICON_HEIGHT, hdc, i * m_Button_Interval + MARGIN_DOCK + (m_DockBar_Height - DOCK_ICON_WIDTH) * m_factor / 2, (int)((m_DockBar_Height - DOCK_ICON_HEIGHT) * m_factor / 2), 0);
             }
             DeleteMemDC(csdc);
@@ -379,13 +393,13 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
     int i = 0;
     int x = 0;
     int y = 0;
-    char picture_file[ETC_MAXLINE];  
+    char picture_file[ETC_MAXLINE]; 
     char config_path[MAX_PATH + 1];
     char* etc_value = NULL;
     HDC hdc;
     BOOL ret = FALSE;
 
-    switch (message) 
+    switch (message)
     {
         case MSG_PAINT:
             hdc = BeginPaint (hWnd);
@@ -554,7 +568,7 @@ HWND create_dock_bar (void)
     m_DockBar_Left_Length = 2 * MARGIN_DOCK + m_DockBar_Height * m_factor;
     m_Button_Interval = (m_DockBar_End_x - m_DockBar_Start_x) / BUTTON_COUNT;
 
-    CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0xFF); 
+    CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0xFF);
     CreateInfo.dwAddData = 0;
     CreateInfo.hHosting = HWND_DESKTOP;
 

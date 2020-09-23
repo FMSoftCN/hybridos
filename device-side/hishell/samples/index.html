@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style type="text/css">
+            body
+            {
+                text-align:center;
+            }
+
+			hipicker
+			{
+                text-align:left;
+                display:inline-block;
+                outline:none;
+			}
+            
+            ::-hi-picker-selected
+            {
+                border-style: solid none solid none;
+                border-width: 1px;
+                border-color: gray;
+                font-size: 18px;
+                color: black;
+            }
+
+            ::-hi-picker-items
+            {
+                color: gray;
+                font-size: 18px;
+            }
+
+            ::-hi-picker-selected-before
+            {
+            }
+
+            hipicker.samples::-hi-picker-selected-after
+            {
+            }
+
+        </style>
+    </head>
+    <body>
+        <hipicker type="text" class="samples"
+                  width="200" height="240"
+                  name="samples" value="2"
+                  endtoend="true"
+                  id="samplesPicker"
+                  onchange="pickchange(this.value)"
+                  >
+            <hiitem value="0">hiView : watchface</hiitem>
+            <hiitem value="1">hiView : stopwatch</hiitem>
+            <hiitem value="2">hiMeter</hiitem>
+            <hiitem value="3">lCmd</hiitem>
+            <hiitem value="4">lSql</hiitem>
+        </hipicker>
+
+        <div id="paramStatus"></div>
+
+        <script type="text/javascript">
+
+            function pickchange(value)
+            {
+                switch(value)
+                {
+                    case "0":
+                        document.getElementById("paramStatus").innerText = "hiView 示例一: watchface";
+                        break;
+                    case "1":
+                        document.getElementById("paramStatus").innerText = "hiView 示例二: stopwatch";
+                        break;
+                    case "2":
+                        document.getElementById("paramStatus").innerText = "hiMeter 示例";
+                        break;
+                    case "3":
+                        document.getElementById("paramStatus").innerText = "lCmd 示例";
+                        break;
+                    case "4":
+                        document.getElementById("paramStatus").innerText = "lSql 示例";
+                        break;
+                }
+            }
+
+            function showSamples()
+            {
+                var value =  document.getElementById("samplesPicker").value;
+                switch(value)
+                {
+                    case "0":
+                        window.open("watchface.html", "_self");
+                        break;
+                    case "1":
+                        window.open("stopwatch.html", "_self");
+                        break;
+                    case "2":
+                        window.open("himeter.html", "_self");
+                        break;
+                    case "3":
+                        window.open("lcmd.html", "_self");
+                        break;
+                    case "4":
+                        window.open("lsql.html", "_self");
+                        break;
+                }
+            }
+
+            pickchange("2");
+        </script>
+        <button type="button" onclick="showSamples()">Show Samples</button>
+    </body>
+</html>
