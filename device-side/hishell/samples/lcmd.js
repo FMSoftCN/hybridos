@@ -18,9 +18,6 @@ function addRow(name, url, isdir, size, size_string, date_modified, date_modifie
         url = url + "/";
         size = 0;
         size_string = "";
-    } else {
-        link.draggable = "true";
-        link.addEventListener("dragstart", onDragStart, false);
     }
     link.innerText = name;
     link.href = root + url;
@@ -33,14 +30,6 @@ function addRow(name, url, isdir, size, size_string, date_modified, date_modifie
     row.appendChild(createCell(date_modified, date_modified_string));
 
     tbody.appendChild(row);
-}
-
-function onDragStart(e) {
-    var el = e.srcElement;
-    var name = el.innerText.replace(":", "");
-    var download_url_data = "application/octet-stream:" + name + ":" + el.href;
-    e.dataTransfer.setData("DownloadURL", download_url_data);
-    e.dataTransfer.effectAllowed = "copy";
 }
 
 function createCell(value, text) {
