@@ -1,14 +1,49 @@
+<!DOCTYPE html>
 <html>
     <head>
-        <title>lCmd samples</title>
-        <style type="text/css">
-            body
-            {
-                text-align:center;
-            }
-        </style>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title id="title">lCmd Samples</title>
+        <script type="text/javascript" src="lcmd.js">
+        </script>
+        <link rel="stylesheet" type="text/css" href="lcmd.css">
     </head>
+
     <body>
-        <p>lCmd samples</p>
+        <div id="listingParsingErrorBox">
+            糟糕！无法解读服务器所发送的数据。<a href="LOCATION">原始列表</a>。
+        </div>
+
+        <h1 id="header">LOCATION 的索引</h1>
+
+        <div id="parentDirLinkBox" style="display:none">
+            <a id="parentDirLink" class="icon up">
+                <span id="parentDirText">[上级目录]</span>
+            </a>
+        </div>
+
+        <table border="0">
+            <thead>
+                <tr class="header" id="theader">
+                    <th id="nameColumnHeader" tabindex=0 role="button">名称</th>
+                    <th id="sizeColumnHeader" class="detailsColumn" tabindex=0 role="button">
+                        大小
+                    </th>
+                    <th id="dateColumnHeader" class="detailsColumn" tabindex=0 role="button" colspan="3">
+                        修改日期
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
     </body>
+    <script>
+        start("/home/");
+        onHasParentDirectory();
+        addRow("usr","usr",1,352,"352 B","2020/5/6", "下午", "5:22:14");
+        addRow("var","var",0,832,"832 B","2019/1/31", "上午", "12:43:38");
+    </script>
 </html>
+
+
