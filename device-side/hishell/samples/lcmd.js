@@ -1,4 +1,4 @@
-function addRow(name, url, isdir, size, size_string, date_modified, date_modified_string) {
+function addRow(name, url, isdir, size, size_string, time_field_1, time_field_2, time_field_3) {
     if (name == "." || name == "..")
         return;
 
@@ -27,7 +27,9 @@ function addRow(name, url, isdir, size, size_string, date_modified, date_modifie
 
     row.appendChild(file_cell);
     row.appendChild(createCell(size, size_string));
-    row.appendChild(createCell(date_modified, date_modified_string));
+    row.appendChild(createCell(time_field_1, time_field_1));
+    row.appendChild(createCell(time_field_2, time_field_2));
+    row.appendChild(createCell(time_field_3, time_field_3));
 
     tbody.appendChild(row);
 }

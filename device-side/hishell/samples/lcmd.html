@@ -22,14 +22,14 @@
             </a>
         </div>
 
-        <table>
+        <table border="0">
             <thead>
                 <tr class="header" id="theader">
                     <th id="nameColumnHeader" tabindex=0 role="button">名称</th>
                     <th id="sizeColumnHeader" class="detailsColumn" tabindex=0 role="button">
                         大小
                     </th>
-                    <th id="dateColumnHeader" class="detailsColumn" tabindex=0 role="button">
+                    <th id="dateColumnHeader" class="detailsColumn" tabindex=0 role="button" colspan="3">
                         修改日期
                     </th>
                 </tr>
@@ -41,8 +41,8 @@
     <script>
         start("/home/");
         onHasParentDirectory();
-        addRow("usr","usr",1,352,"352 B",1588756934,"2020/5/6 下午5:22:14");
-        addRow("var","var",0,832,"832 B",1548866618,"2019/1/31 上午12:43:38");
+        addRow("usr","usr",1,352,"352 B","2020/5/6", "下午", "5:22:14");
+        addRow("var","var",0,832,"832 B","2019/1/31", "上午", "12:43:38");
     </script>
 </html>
 
