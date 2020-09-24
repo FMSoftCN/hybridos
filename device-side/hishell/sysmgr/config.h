@@ -62,9 +62,6 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
-// configuration file
-#define SYSTEM_CONFIG_FILE  "hybridos.cfg"  // configuration file
-
 // some macro of animation 
 #define DIRECTION_SHOW      0               // show the main window
 #define DIRECTION_HIDE      1               // hide the main window

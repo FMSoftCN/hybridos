@@ -119,6 +119,8 @@ static void on_new_del_client(int op, int cli)
             m_SysConfig.iSystemConfigClientID = cli;
         else if(client->pid == m_SysConfig.iDyBKGndPid)
             m_SysConfig.iDyBKGndClientID = cli;
+        else if(client->pid == m_SysConfig.iBrowserPid)
+            m_SysConfig.iBrowserClientID = cli;
         nr_clients ++;
     }
     else if (op == LCO_DEL_CLIENT) 
@@ -210,13 +212,15 @@ static void on_znode_operation(int op, int cli, int idx_znode)
     }
 }
 
-static int GetStatusBarZnode(int cli, int clifd, void* buff, size_t len)
+static int fix_format_request(int cli, int clifd, void* buff, size_t len)
 {
     ReplyInfo replyInfo;
 
     if(m_SysConfig.iSystemConfigClientID == cli)
     {
         RequestInfo * requestInfo = (RequestInfo *)buff;
+
+        // from status bar: znode index and status bar hwnd
         if(requestInfo->id == REQ_SUBMIT_STATUSBAR_ZNODE)
         {
             m_SysConfig.iStatusBarZNode = (int)(requestInfo->iData0);
@@ -225,6 +229,7 @@ static int GetStatusBarZnode(int cli, int clifd, void* buff, size_t len)
             replyInfo.iData0 = (int)TRUE;
             ServerSendReply(clifd, &replyInfo, sizeof(replyInfo));
         }
+        // from status bar: press toggle button
         else if(requestInfo->id == REQ_SUBMIT_TOGGLE)
         {
             int cur_clientId = 0; 
@@ -239,15 +244,32 @@ static int GetStatusBarZnode(int cli, int clifd, void* buff, size_t len)
             if(idx_topmost > 0)
                 mine_compositor_toggle_state(TRUE);
         }
+        else if((requestInfo->id == REQ_SHOW_HOME_PAGE) || (requestInfo->id == REQ_SHOW_SETTING_PAGE) || (requestInfo->id == REQ_SHOW_ABOUT_PAGE))
+        {
+            int cur_clientId = 0; 
+            int idx_topmost = 0; 
+            MSG msg;
+
+            // reply client
+            replyInfo.id = requestInfo->id;
+            replyInfo.iData0 = (int)TRUE;
+            ServerSendReply(clifd, &replyInfo, sizeof(replyInfo));
+
+            msg.message = MSG_BROWSER_SHOW;
+            msg.hwnd = HWND_NULL;
+            msg.wParam = requestInfo->id;
+            Send2Client(&msg, m_SysConfig.iBrowserClientID);
+        }
     }
     return 0;
 }
 
-static int GetTopMostTitle(int cli, int clifd, void* buff, size_t len)
+static int unfixed_format_request(int cli, int clifd, void* buff, size_t len)
 {
     if(m_SysConfig.iSystemConfigClientID == cli)
     {
         RequestInfo * requestInfo = (RequestInfo *)buff;
+        // from status bar: get the titile of main window
         if(requestInfo->id == REQ_GET_TOPMOST_TITLE)
         {
             int clientId = requestInfo->iData0 & 0xFFFF;
@@ -307,12 +329,13 @@ int MiniGUIMain (int args, const char* arg[])
     }
 
     // register request handler
-    if(!RegisterRequestHandler(ZNODE_INFO_REQID, GetStatusBarZnode))
+    if(!RegisterRequestHandler(FIXED_FORMAT_REQID, fix_format_request))
     {
         return 2;
     }
 
-    if(!RegisterRequestHandler(GET_TITLE_REQID, GetTopMostTitle))
+    // register request for status bar, to get main window title
+    if(!RegisterRequestHandler(UNFIXED_FORMAT_REQID, unfixed_format_request))
     {
         return 2;
     }
@@ -327,6 +350,13 @@ int MiniGUIMain (int args, const char* arg[])
     // start dynamic background process
     m_SysConfig.iDyBKGndPid = exec_app("dybkgnd");
     if(m_SysConfig.iDyBKGndPid < 0)
+    {
+        return 3;
+    }
+
+    // start browser process
+    m_SysConfig.iBrowserPid = exec_app("appagent");
+    if(m_SysConfig.iBrowserPid < 0)
     {
         return 3;
     }

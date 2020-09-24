@@ -56,10 +56,10 @@
 #include <minigui/gdi.h>
 #include <minigui/window.h>
 
+#include "BrowserWindow.h"
+
 // Control ID
 #define IDC_BROWSER     140
-#define IDC_ADDRESS     100
-#define IDC_CLOSEVIEW   101
 
 // user define message
 #define MSG_USER_NEW_VIEW       (MSG_USER + 100 + 0)
@@ -68,6 +68,17 @@
 #define IDC_ADDRESS_LEFT    5
 #define IDC_ADDRESS_TOP     3
 #define IDC_ADDRESS_HEIGHT  20   
+
+#define MAX_WINDOW_NUMBER   9
+#define MAX_TARGET_NAME_LEN 64
+#define MAX_TARGET_URL_LEN  512
+
+struct Window_Info {
+    HWND    hWnd;
+    char    target_name[MAX_TARGET_NAME_LEN];
+    char    target_url[MAX_TARGET_URL_LEN];
+    BrowserWindow * view;
+};
 
 struct Credential {
     std::string username;

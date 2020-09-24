@@ -222,7 +222,7 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                     requestinfo.iData0 = wParam;
                     requestinfo.iData1 = lParam;
 
-                    request.id = GET_TITLE_REQID;
+                    request.id = UNFIXED_FORMAT_REQID;
                     request.data = (void *)&requestinfo;
                     request.len_data = sizeof(requestinfo);
 
@@ -322,7 +322,7 @@ HWND create_status_bar (void)
     requestinfo.id = REQ_SUBMIT_STATUSBAR_ZNODE;
     requestinfo.hWnd = hStatusBar;
     requestinfo.iData0 = pWindowInfo->idx_znode;
-    request.id = ZNODE_INFO_REQID;
+    request.id = FIXED_FORMAT_REQID;
     request.data = (void *)&requestinfo;
     request.len_data = sizeof(requestinfo);
 

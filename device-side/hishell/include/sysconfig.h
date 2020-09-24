@@ -62,32 +62,44 @@
 #ifndef _SYSTEM_CONFIG
 #define _SYSTEM_CONFIG
 
+// configuration file
+#define SYSTEM_CONFIG_FILE  "hybridos.cfg"  // configuration file
+
+// user define message
 #define MSG_MAINWINDOW_CHANGE       (MSG_USER + 1)
 #define MSG_DYBKGND_DO_ANIMATION    (MSG_USER + 2)
+#define MSG_BROWSER_SHOW            (MSG_USER + 3)
+
+// Customer Require Id
+#define FIXED_FORMAT_REQID          (MAX_SYS_REQID + 1)
+#define UNFIXED_FORMAT_REQID        (MAX_SYS_REQID + 2)
+
+// Customer sub require Id
+#define REQ_SUBMIT_STATUSBAR_ZNODE  0   // status bar send znode index to server
+#define REQ_GET_TOPMOST_TITLE       1   // get topmost normal window title
+#define REQ_SUBMIT_TOGGLE           2   // toggle the application
+#define REQ_SHOW_HOME_PAGE          3   // show home page
+#define REQ_SHOW_SETTING_PAGE       4   // show setting page
+#define REQ_SHOW_ABOUT_PAGE         5   // show about page
+
+
+// Customer compositor name
+#define MIME_COMPOSITOR         "mine-compositor"
 
 typedef struct tagSysConfig 
 {
     int iSystemConfigClientID;  // clientID of system manager process
     int iDyBKGndClientID;       // clientID of dynamic background process
+    int iBrowserClientID;       // clientID of browser process
     pid_t iSystemConfigPid;     // pid of system manager process
     pid_t iDyBKGndPid;          // pid of dynamic background process
+    pid_t iBrowserPid;          // pid of browser process
     int iStatusBarZNode;        // z node index of status bar
     HWND hWndStatusBar;         // the handle of status bar, it is invlid in sysmgr process
     int iTopmostClientID;       // topmost client ID of topmost process
 } SysConfig;
 
 
-// Customer Require Id
-#define ZNODE_INFO_REQID            (MAX_SYS_REQID + 1)
-#define GET_TITLE_REQID             (MAX_SYS_REQID + 2)
-
-// Customer sub require Id
-#define REQ_SUBMIT_STATUSBAR_ZNODE  0   // status bar send znode index to server
-#define REQ_GET_TOPMOST_TITLE       1   // get topmost normal window title
-#define REQ_SUBMIT_TOGGLE           2   // toggle the application
-
-// Customer compositor name
-#define MIME_COMPOSITOR         "mine-compositor"
 
 typedef struct tagRequestInfo 
 {

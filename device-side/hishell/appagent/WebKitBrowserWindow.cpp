@@ -57,6 +57,9 @@
 #include <WebKit/WKProtectionSpaceTypes.h>
 #include <WebKit/WKCredential.h>
 
+#include "Common.h"
+extern struct Window_Info window_info[MAX_WINDOW_NUMBER];
+
 
 std::string createString(WKStringRef wkString)
 {
@@ -229,10 +232,42 @@ void close(WKPageRef page, const void* clientInfo)
 // it is WKPagePolicyClientV1 callback
 static void decidePolicyForNewWindowAction(WKPageRef page, WKFrameRef frame, WKFrameNavigationType navigationType, WKEventModifiers modifiers, WKEventMouseButton mouseButton, WKURLRequestRef request, WKStringRef frameName, WKFramePolicyListenerRef listener, WKTypeRef userData, const void* clientInfo)
 {
+    int i = 0;
+    BOOL find = FALSE;
+
     WKURLRef url = WKURLRequestCopyURL(request);
     std::string urlString = createString(url);
     auto& thisWindow = toWebKitBrowserWindow(clientInfo);
-    SendMessage(thisWindow.mainHwnd(), MSG_USER_NEW_VIEW, 0, (LPARAM)(urlString.c_str())); 
+
+    std::string framename = createString(frameName);
+    for(i = 0; i < MAX_WINDOW_NUMBER; i++)
+    {
+        if(strcmp(framename.c_str(), window_info[i].target_name) == 0)
+        {
+            find = TRUE;
+            break;
+        }
+    }
+
+    if(find)
+    {
+        if(i < 2)
+            i = MAX_WINDOW_NUMBER;
+        else
+        {
+            memset(window_info[i].target_url, 0, MAX_TARGET_URL_LEN);
+            sprintf(window_info[i].target_url, "%s", urlString.c_str());
+        }
+    }
+
+    if(i == MAX_WINDOW_NUMBER)
+    {
+        i = 2;
+        memset(window_info[i].target_url, 0, MAX_TARGET_URL_LEN);
+        sprintf(window_info[i].target_url, "%s", urlString.c_str());
+    }
+
+    SendMessage(thisWindow.mainHwnd(), MSG_USER_NEW_VIEW, (WPARAM)i, NULL); 
     return;
 }
 

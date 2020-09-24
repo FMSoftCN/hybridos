@@ -73,6 +73,8 @@
 #include "browser_res_en.h"
 #endif
 
+#include "../include/sysconfig.h"
+
 RECT m_ScreenRect;
 
 extern WebKitBrowserWindow& toWebKitBrowserWindow(const void *clientInfo);
@@ -82,9 +84,12 @@ extern std::string createString(WKURLRef wkURL);
 //static const char *gUrl = "https://hybridos.fmsoft.cn/";
 //static const char *gUrl = "http://www.sina.com.cn/";
 static const char *gUrl = "file://localhost/home/projects/hiwebkit/Websites/fmsoft.webkit.org/e.html";
+struct Window_Info window_info[MAX_WINDOW_NUMBER];
+static char m_unknown_target[MAX_TARGET_NAME_LEN];
+
 static LRESULT MainFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-static void create_control(HWND hwnd, const char * url)
+static void create_control(HWND hwnd, int index)
 {
     BrowserWindow * browserWindow = NULL;
     int i = 0;
@@ -93,11 +98,13 @@ static void create_control(HWND hwnd, const char * url)
     browserWindow = WebKitBrowserWindow::create(IDC_BROWSER, rect, hwnd, HWND_INVALID);
     if (browserWindow)
     {
+        window_info[index].hWnd = hwnd;
+        window_info[index].view = browserWindow;
         ShowWindow(browserWindow->hwnd(), SW_SHOW);
 
-        if(url)
+        if(window_info[index].target_url)
         {
-            browserWindow->loadURL(url);
+            browserWindow->loadURL(window_info[index].target_url);
         }
         else
         {
@@ -106,15 +113,14 @@ static void create_control(HWND hwnd, const char * url)
     }
 }
 
-static HWND CreateAPPAgentMaindow(char * url)
+static HWND CreateAPPAgentMaindow(int index)
 {
     HWND hMainWnd;
     MAINWINCREATE CreateInfo;
     
     m_ScreenRect = GetScreenRect();
 
-    CreateInfo.dwStyle = 
-        WS_VISIBLE;
+    CreateInfo.dwStyle = WS_VISIBLE;
     CreateInfo.dwExStyle = WS_EX_NONE;
     CreateInfo.spCaption = HL_ST_CAP;
     CreateInfo.hMenu = 0;
@@ -126,7 +132,7 @@ static HWND CreateAPPAgentMaindow(char * url)
     CreateInfo.rx = m_ScreenRect.right;
     CreateInfo.by = m_ScreenRect.bottom;
     CreateInfo.iBkColor = COLOR_lightwhite;
-    CreateInfo.dwAddData = (DWORD) url;
+    CreateInfo.dwAddData = (DWORD)index;
     CreateInfo.hHosting = HWND_DESKTOP;
     
     hMainWnd = CreateMainWindow (&CreateInfo);
@@ -142,25 +148,43 @@ static HWND CreateAPPAgentMaindow(char * url)
 static LRESULT MainFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC hdc;
-    char * url = NULL;
+    int index = 0;
     BrowserWindow * view = NULL;
     int i = 0;
 
     switch (message) {
         case MSG_CREATE:
-            url = (char *) GetWindowAdditionalData(hWnd);
-            create_control(hWnd, url);
+            index = (int) GetWindowAdditionalData(hWnd);
+            create_control(hWnd, index);
             break;
 
         case MSG_USER_NEW_VIEW:
-            url = (char *)lParam;
-            CreateAPPAgentMaindow(url);
+            i = (int)wParam;
+            if(window_info[i].hWnd)
+            {
+                SetActiveWindow(window_info[i].hWnd);
+                window_info[i].view->loadURL(window_info[i].target_url);
+            }
+            else
+                CreateAPPAgentMaindow(i);
             break;
 
         case MSG_CLOSE:
+            for(i == 0; i < MAX_WINDOW_NUMBER; i++)
+            {
+                if(window_info[i].hWnd == hWnd)
+                    break;
+            }
+            if(i < MAX_WINDOW_NUMBER)
+            {
+                window_info[i].hWnd = NULL;
+                window_info[i].view = NULL;
+                if(i > 2)
+                    window_info[i].target_url[0] = 0;
+            }
+
             DestroyAllControls (hWnd);
             DestroyMainWindow (hWnd);
-//            PostQuitMessage (hWnd);
             return 0;
     }
 
@@ -172,11 +196,95 @@ void performMessageLoopTasks()
     g_main_context_iteration(0, false);
 }
 
+static void filter_browser_message(MSG * msg)
+{
+    int id = -1;
+
+    if(msg->message == MSG_BROWSER_SHOW)
+    {
+        if(msg->wParam == REQ_SHOW_HOME_PAGE)
+            id = 0;
+        else if(msg->wParam == REQ_SHOW_SETTING_PAGE)
+            id = 1;
+        else if(msg->wParam == REQ_SHOW_ABOUT_PAGE)
+            id = 2;
+        if(id != -1)
+        {
+            if(window_info[id].hWnd)
+            {
+                SetActiveWindow(window_info[id].hWnd);
+                window_info[id].view->loadURL(window_info[id].target_url);
+            }
+            else
+                CreateAPPAgentMaindow(id);
+        }
+    }
+}
+
+static void initial_window_info()
+{
+    char config_path[MAX_PATH + 1];
+    char* etc_value = NULL;
+
+    if ((etc_value = getenv ("HISHELL_CFG_PATH")))
+    {
+        int len = strlen(etc_value);
+        if (etc_value[len-1] == '/')
+        {
+            sprintf(config_path, "%s%s", etc_value, SYSTEM_CONFIG_FILE);
+        }
+        else
+        {
+            sprintf(config_path, "%s/%s", etc_value, SYSTEM_CONFIG_FILE);
+        }
+    }
+    else
+    {
+        sprintf(config_path, "%s", SYSTEM_CONFIG_FILE);
+    }
+
+    memset(&window_info, 0, sizeof(struct Window_Info) * MAX_WINDOW_NUMBER);
+    memset(m_unknown_target, 0, MAX_TARGET_NAME_LEN);
+
+    GetValueFromEtcFile(config_path, "system", "target0", window_info[0].target_name, MAX_TARGET_NAME_LEN);
+    GetValueFromEtcFile(config_path, "system", "url0", window_info[0].target_url, MAX_TARGET_URL_LEN);
+
+    GetValueFromEtcFile(config_path, "system", "target1", window_info[1].target_name, MAX_TARGET_NAME_LEN);
+    GetValueFromEtcFile(config_path, "system", "url1", window_info[1].target_url, MAX_TARGET_URL_LEN);
+
+    GetValueFromEtcFile(config_path, "system", "target2", window_info[2].target_name, MAX_TARGET_NAME_LEN);
+    GetValueFromEtcFile(config_path, "system", "url2", window_info[2].target_url, MAX_TARGET_URL_LEN);
+
+    GetValueFromEtcFile(config_path, "system", "target3", window_info[3].target_name, MAX_TARGET_NAME_LEN);
+    GetValueFromEtcFile(config_path, "system", "url3", window_info[3].target_url, MAX_TARGET_URL_LEN);
+
+    GetValueFromEtcFile(config_path, "system", "target4", window_info[4].target_name, MAX_TARGET_NAME_LEN);
+    GetValueFromEtcFile(config_path, "system", "url4", window_info[4].target_url, MAX_TARGET_URL_LEN);
+
+    GetValueFromEtcFile(config_path, "system", "target5", window_info[5].target_name, MAX_TARGET_NAME_LEN);
+    GetValueFromEtcFile(config_path, "system", "url5", window_info[5].target_url, MAX_TARGET_URL_LEN);
+
+    GetValueFromEtcFile(config_path, "system", "target6", window_info[6].target_name, MAX_TARGET_NAME_LEN);
+    GetValueFromEtcFile(config_path, "system", "url6", window_info[6].target_url, MAX_TARGET_URL_LEN);
+
+    GetValueFromEtcFile(config_path, "system", "target7", window_info[7].target_name, MAX_TARGET_NAME_LEN);
+    GetValueFromEtcFile(config_path, "system", "url7", window_info[7].target_url, MAX_TARGET_URL_LEN);
+
+    GetValueFromEtcFile(config_path, "system", "target8", window_info[8].target_name, MAX_TARGET_NAME_LEN);
+    GetValueFromEtcFile(config_path, "system", "url8", window_info[8].target_url, MAX_TARGET_URL_LEN);
+
+    GetValueFromEtcFile(config_path, "system", "unknown_target", m_unknown_target, MAX_TARGET_NAME_LEN);
+
+}
+
 int MiniGUIMain (int argc, const char* argv[])
 {
     MSG Msg;
+
+#if 0
     HWND hMainWnd;
     MAINWINCREATE CreateInfo;
+#endif
     
     m_ScreenRect = GetScreenRect();
 
@@ -184,6 +292,9 @@ int MiniGUIMain (int argc, const char* argv[])
     JoinLayer(NAME_DEF_LAYER , "HybridOS" , 0 , 0);
 #endif
 
+    initial_window_info();
+
+#if 0
     CreateInfo.dwStyle = 
         WS_VISIBLE;
     CreateInfo.dwExStyle = WS_EX_NONE;
@@ -206,15 +317,18 @@ int MiniGUIMain (int argc, const char* argv[])
         return -1;
 
     ShowWindow(hMainWnd, SW_SHOWNORMAL);
-
+#endif
     while (GetMessage(&Msg, HWND_DESKTOP)) {
         performMessageLoopTasks();
         TranslateMessage(&Msg);
         DispatchMessage(&Msg);
+        filter_browser_message(&Msg);
         performMessageLoopTasks();
     }
 
+#if 0
     MainWindowThreadCleanup (hMainWnd);
+#endif
 
     return 0;
 }

@@ -375,13 +375,37 @@ static void toggle_application(HWND hWnd)
     requestinfo.id = REQ_SUBMIT_TOGGLE;
     requestinfo.hWnd = hWnd;
     requestinfo.iData0 = 0;
-    request.id = ZNODE_INFO_REQID;
+    request.id = FIXED_FORMAT_REQID;
     request.data = (void *)&requestinfo;
     request.len_data = sizeof(requestinfo);
 
     memset(&replyInfo, 0, sizeof(ReplyInfo));
     ClientRequest(&request, &replyInfo, sizeof(ReplyInfo));
     if((replyInfo.id == REQ_SUBMIT_TOGGLE) && (replyInfo.iData0))
+    {
+    }
+    else
+    {
+    }
+}
+
+static void show_page(HWND hWnd, int page_req)
+{
+    REQUEST request;
+    RequestInfo requestinfo;
+    ReplyInfo replyInfo;
+
+    requestinfo.id = page_req;
+    requestinfo.hWnd = hWnd;
+    requestinfo.iData0 = 0;
+
+    request.id = FIXED_FORMAT_REQID;
+    request.data = (void *)&requestinfo;
+    request.len_data = sizeof(requestinfo);
+
+    memset(&replyInfo, 0, sizeof(ReplyInfo));
+    ClientRequest(&request, &replyInfo, sizeof(ReplyInfo));
+    if(replyInfo.id == page_req && (replyInfo.iData0))
     {
     }
     else
@@ -536,16 +560,20 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
                         create_animation(hWnd);
                         break;
                     case ID_HOME_BUTTON:
+                        show_page(hWnd, REQ_SHOW_HOME_PAGE);
                         break;
                     case ID_TOGGLE_BUTTON:
                         toggle_application(hWnd);
                         break;
                     case ID_SETTING_BUTTON:
+                        show_page(hWnd, REQ_SHOW_SETTING_PAGE);
                         break;
                     case ID_SHUTDOWN_BUTTON:
                         break;
                     case ID_ABOUT_BUTTON:
-                        exec_app("appagent");
+                        show_page(hWnd, REQ_SHOW_ABOUT_PAGE);
+//                        SendMessage(HWND_DESKTOP, MSG_BROWSER_SHOW, 10, 0);
+//                        exec_app("appagent");
                         break;
                 }
             }
