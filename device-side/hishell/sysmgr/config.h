@@ -100,11 +100,6 @@
 // default string in status bar, when none app exists.
 #define STRING_OS_NAME      "Hybrid OS V1.1.0"
 
-// button color
-#define BUTTON_COLOR_R      (float)56
-#define BUTTON_COLOR_G      (float)156
-#define BUTTON_COLOR_B      (float)250
-
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */

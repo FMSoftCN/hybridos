@@ -79,14 +79,15 @@
 #include "../include/sysconfig.h"
 #include "config.h"
 
+static RsvgStylePair button_color_pair [6];
+static char button_color[6][32];
+//static RsvgStylePair button_color_pair [] = {
+//    {"color", "#389CFA", 0},
+//};
 
-static RsvgStylePair button_color_pair [] = {
-    {"color", "#389CFA", 0},
-};
-
-static RsvgStylePair power_button_color_pair [] = {
-    {"color", "#ff0000", 0},
-};
+//static RsvgStylePair power_button_color_pair [] = {
+//    {"color", "#ff0000", 0},
+//};
 
 
 extern HWND m_hStatusBar;                       // handle of status bar
@@ -258,7 +259,7 @@ static void paintSVGArrow(HDC hdc)
     float alpha = 0xE0 / 255.0;
     cairo_set_source_rgb (cr[0],  r*alpha, g*alpha, b*alpha);
     cairo_paint (cr[0]);
-    rsvg_handle_render_cairo_style (m_arrow_svg_handle, cr[0], button_color_pair, 1);
+    rsvg_handle_render_cairo_style (m_arrow_svg_handle, cr[0], &button_color_pair[0], 1);
 
     HDC csdc = create_memdc_from_image_surface(surface[0]);
     if (csdc != HDC_SCREEN && csdc != HDC_INVALID)
@@ -275,7 +276,7 @@ static void paintSVGArrow(HDC hdc)
     cairo_destroy (cr[0]);
 }
 
-static void loadSVGArrow(const char* file, HDC hdc)
+static void loadSVGArrow(const char* file, int index)
 {
     GError *error = NULL;
     RsvgDimensionData dimensions;
@@ -328,10 +329,10 @@ static void loadSVGFromFile(const char* file, int index)
     float alpha = 0xE0 / 255.0;
     cairo_set_source_rgb (cr[index],  r*alpha, g*alpha, b*alpha);
     cairo_paint (cr[index]);
-    if(index == ID_SHUTDOWN_BUTTON)
-        rsvg_handle_render_cairo_style (handle, cr[index], power_button_color_pair, 1);
-    else
-        rsvg_handle_render_cairo_style (handle, cr[index], button_color_pair, 1);
+//    if(index == ID_SHUTDOWN_BUTTON)
+//        rsvg_handle_render_cairo_style (handle, cr[index], power_button_color_pair, 1);
+//    else
+        rsvg_handle_render_cairo_style (handle, cr[index], &button_color_pair[index], 1);
     cairo_restore (cr[index]);
 
     g_object_unref (handle);
@@ -424,29 +425,90 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
             {
                 sprintf(config_path, "%s", SYSTEM_CONFIG_FILE);
             }
-            memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(config_path, "dockbar", "DOCK_ICON_ARROW", picture_file, ETC_MAXLINE) == ETC_OK)
-                loadSVGArrow(picture_file, ID_DISPLAY_BUTTON);
 
+            // arrow
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(config_path, "dockbar", "DOCK_ICON_HOME", picture_file, ETC_MAXLINE) == ETC_OK)
-                loadSVGFromFile(picture_file, ID_HOME_BUTTON);
+            if(GetValueFromEtcFile(config_path, "dock_arrow", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
+            {
+                memset(button_color[ID_DISPLAY_BUTTON], 0, 24);
+                if(GetValueFromEtcFile(config_path, "dock_arrow", "icon_color", button_color[ID_DISPLAY_BUTTON], 24) == ETC_OK)
+                {
+                    button_color_pair[ID_DISPLAY_BUTTON].name = "color";
+                    button_color_pair[ID_DISPLAY_BUTTON].value = button_color[ID_DISPLAY_BUTTON];
+                    button_color_pair[ID_DISPLAY_BUTTON].important = 0;
+                    loadSVGArrow(picture_file, ID_DISPLAY_BUTTON);
+                }
+            }
+            
+            // home
+            memset(picture_file, 0, ETC_MAXLINE);
+            if(GetValueFromEtcFile(config_path, "dock_home", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
+            {
+                memset(button_color[ID_HOME_BUTTON], 0, 24);
+                if(GetValueFromEtcFile(config_path, "dock_home", "icon_color", button_color[ID_HOME_BUTTON], 24) == ETC_OK)
+                {
+                    button_color_pair[ID_HOME_BUTTON].name = "color";
+                    button_color_pair[ID_HOME_BUTTON].value = button_color[ID_HOME_BUTTON];
+                    button_color_pair[ID_HOME_BUTTON].important = 0;
+                    loadSVGFromFile(picture_file, ID_HOME_BUTTON);
+                }
+            }
 
+            // toggle
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(config_path, "dockbar", "DOCK_ICON_TOGGLE", picture_file, ETC_MAXLINE) == ETC_OK)
-                loadSVGFromFile(picture_file, ID_TOGGLE_BUTTON);
+            if(GetValueFromEtcFile(config_path, "dock_toggle", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
+            {
+                memset(button_color[ID_TOGGLE_BUTTON], 0, 24);
+                if(GetValueFromEtcFile(config_path, "dock_toggle", "icon_color", button_color[ID_TOGGLE_BUTTON], 24) == ETC_OK)
+                {
+                    button_color_pair[ID_TOGGLE_BUTTON].name = "color";
+                    button_color_pair[ID_TOGGLE_BUTTON].value = button_color[ID_TOGGLE_BUTTON];
+                    button_color_pair[ID_TOGGLE_BUTTON].important = 0;
+                    loadSVGFromFile(picture_file, ID_TOGGLE_BUTTON);
+                }
+            }
 
+            // setting
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(config_path, "dockbar", "DOCK_ICON_SETTING", picture_file, ETC_MAXLINE) == ETC_OK)
-                loadSVGFromFile(picture_file, ID_SETTING_BUTTON);
+            if(GetValueFromEtcFile(config_path, "dock_setting", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
+            {
+                memset(button_color[ID_SETTING_BUTTON], 0, 24);
+                if(GetValueFromEtcFile(config_path, "dock_setting", "icon_color", button_color[ID_SETTING_BUTTON], 24) == ETC_OK)
+                {
+                    button_color_pair[ID_SETTING_BUTTON].name = "color";
+                    button_color_pair[ID_SETTING_BUTTON].value = button_color[ID_SETTING_BUTTON];
+                    button_color_pair[ID_SETTING_BUTTON].important = 0;
+                    loadSVGFromFile(picture_file, ID_SETTING_BUTTON);
+                }
+            }
 
+            // about
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(config_path, "dockbar", "DOCK_ICON_ABOUT", picture_file, ETC_MAXLINE) == ETC_OK)
-                loadSVGFromFile(picture_file, ID_ABOUT_BUTTON);
-
+            if(GetValueFromEtcFile(config_path, "dock_about", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
+            {
+                memset(button_color[ID_ABOUT_BUTTON], 0, 24);
+                if(GetValueFromEtcFile(config_path, "dock_about", "icon_color", button_color[ID_ABOUT_BUTTON], 24) == ETC_OK)
+                {
+                    button_color_pair[ID_ABOUT_BUTTON].name = "color";
+                    button_color_pair[ID_ABOUT_BUTTON].value = button_color[ID_ABOUT_BUTTON];
+                    button_color_pair[ID_ABOUT_BUTTON].important = 0;
+                    loadSVGFromFile(picture_file, ID_ABOUT_BUTTON);
+                }
+            }
+    
+            // shutdown
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(config_path, "dockbar", "DOCK_ICON_SHUTDOWN", picture_file, ETC_MAXLINE) == ETC_OK)
-                loadSVGFromFile(picture_file, ID_SHUTDOWN_BUTTON);
+            if(GetValueFromEtcFile(config_path, "dock_shutdown", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
+            {
+                memset(button_color[ID_SHUTDOWN_BUTTON], 0, 24);
+                if(GetValueFromEtcFile(config_path, "dock_shutdown", "icon_color", button_color[ID_SHUTDOWN_BUTTON], 24) == ETC_OK)
+                {
+                    button_color_pair[ID_SHUTDOWN_BUTTON].name = "color";
+                    button_color_pair[ID_SHUTDOWN_BUTTON].value = button_color[ID_SHUTDOWN_BUTTON];
+                    button_color_pair[ID_SHUTDOWN_BUTTON].important = 0;
+                    loadSVGFromFile(picture_file, ID_SHUTDOWN_BUTTON);
+                }
+            }
 
             SetTimer(hWnd, ID_SHOW_TIMER, DOCKBAR_VISIBLE_TIME);
             m_direction = DIRECTION_HIDE;
