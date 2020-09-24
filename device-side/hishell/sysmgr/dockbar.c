@@ -483,7 +483,7 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
                     case ID_SHUTDOWN_BUTTON:
                         break;
                     case ID_ABOUT_BUTTON:
-                        exec_app("MiniBrowser");
+                        exec_app("appagent");
                         break;
                 }
             }

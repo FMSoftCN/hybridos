@@ -80,7 +80,8 @@ extern std::string createString(WKStringRef wkString);
 extern std::string createString(WKURLRef wkURL);
 
 //static const char *gUrl = "https://hybridos.fmsoft.cn/";
-static const char *gUrl = "http://www.sina.com.cn/";
+//static const char *gUrl = "http://www.sina.com.cn/";
+static const char *gUrl = "file://localhost/home/projects/hiwebkit/Websites/fmsoft.webkit.org/e.html";
 static LRESULT MainFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 static void create_control(HWND hwnd, const char * url)
