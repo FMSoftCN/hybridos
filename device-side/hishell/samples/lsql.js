@@ -22,8 +22,8 @@ function createCell(value, text) {
 }
 
 function start(value) {
-    var header = document.getElementById("header");
-    header.innerText = decodeURI(value);
+    var input = document.getElementById("cmdInput");
+    input.value = decodeURI(value);
 }
 
 function onListingParsingError() {
@@ -42,16 +42,17 @@ function getQueryStringByName(name)
     return result[1];
 }
 
-function lsqlGet(path)
+function lsqlSelect()
 {
-    if (path == undefined)
-        path =  "SELECT%20*%20FROM%20Books";
-
-    start(path);
+    var cmd =  document.getElementById('cmdInput').value;
+    if(typeof cmd == "undefined" || cmd == null || cmd == "")
+    {
+        return;
+    }
 
     var xmlHttp = new XMLHttpRequest();
     var baseUrl = "lsql:///home/xue/work/hybridos/device-side/hishell/samples/samples.db?sqlQuery="; 
-    var url =  baseUrl + path;
+    var url = encodeURI(baseUrl + cmd);
     var tbody = document.getElementById("tbody");
     tbody.innerHTML="";
     xmlHttp.open( "GET", url, true);
@@ -75,7 +76,6 @@ function lsqlGet(path)
 }
 
 function onLoad() {
-    lsqlGet();
 }
 
 
