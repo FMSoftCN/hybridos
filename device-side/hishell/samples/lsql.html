@@ -1,14 +1,47 @@
+<!DOCTYPE html>
 <html>
     <head>
-        <title>lSql samples</title>
-        <style type="text/css">
-            body
-            {
-                text-align:center;
-            }
-        </style>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title >lSql Samples</title>
+        <script type="text/javascript" src="lsql.js">
+        </script>
+        <link rel="stylesheet" type="text/css" href="lsql.css">
     </head>
+
     <body>
-        <p>lSql samples</p>
+        <div id="listingParsingErrorBox">
+            糟糕！无法解读服务器所发送的数据。<a href="LOCATION">原始列表</a>。
+        </div>
+
+        <h1 id="header"></h1>
+
+        <div id="parentDirLinkBox" style="display:none">
+            <a id="parentDirLink" class="icon up">
+                <span id="parentDirText">[上级目录]</span>
+            </a>
+        </div>
+
+        <table border="0">
+            <thead>
+                <tr class="header" id="theader">
+                    <th id="idColumnHeader" tabindex=0 role="button">Id</th>
+                    <th id="titleColumnHeader" class="detailsColumn" tabindex=0 role="button">
+                        Title
+                    </th>
+                    <th id="authorColumnHeader" class="detailsColumn" tabindex=0 role="button" >
+                        Author
+                    </th>
+                    <th id="isbnColumnHeader" class="detailsColumn" tabindex=0 role="button">
+                        Isbn
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+        <div id="info"></div>
     </body>
 </html>
+
+
