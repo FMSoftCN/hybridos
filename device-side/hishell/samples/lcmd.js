@@ -2,10 +2,6 @@ function addRow(name, url, isdir, size, size_string, time_field_1, time_field_2,
     if (name == "." || name == "..")
         return;
 
-    var root = document.location.pathname;
-    if (root.substr(-1) !== "/")
-        root += "/";
-
     var tbody = document.getElementById("tbody");
     var row = document.createElement("tr");
     var file_cell = document.createElement("td");
@@ -18,7 +14,9 @@ function addRow(name, url, isdir, size, size_string, time_field_1, time_field_2,
         url = url + "/";
     }
     link.innerText = name;
-    link.href = root + url;
+    link.onclick = function() {
+        lcmdGet(url);
+    }
 
     file_cell.dataset.value = name;
     file_cell.appendChild(link);
@@ -42,21 +40,36 @@ function createCell(value, text) {
 
 function start(location) {
     var header = document.getElementById("header");
-    header.innerText = header.innerText.replace("LOCATION", location);
-
-    document.getElementById("title").innerText = header.innerText;
+    header.innerText = location + " 的索引";
 }
 
-function onHasParentDirectory() {
+function onHasParentDirectory(url) {
+    var path = url;
+    if (url.length >= 2)
+    {
+        var idx = url.lastIndexOf("/", url.length - 2);
+        if (idx > 0)
+        {
+            path = url.substr(0, idx + 1);
+        }
+        else
+        {
+            path = "/";
+        }
+    }
+
     var box = document.getElementById("parentDirLinkBox");
     box.style.display = "block";
 
-    var root = document.location.pathname;
-    if (!root.endsWith("/"))
-        root += "/";
-
     var link = document.getElementById("parentDirLink");
-    link.href = root + "..";
+    link.onclick = function() {
+        lcmdGet(path);
+    }
+}
+
+function onNoParentDirectory() {
+    var box = document.getElementById("parentDirLinkBox");
+    box.style.display = "none";
 }
 
 function onListingParsingError() {
@@ -123,11 +136,26 @@ function getQueryStringByName(name)
     return result[1];
 }
 
-function lcmdGet()
+function lcmdGet(path)
 {
+    if (path == undefined)
+        path = getQueryStringByName("path");
+
+    start(path);
+    if (path == "/")
+    {
+        onNoParentDirectory()
+    }
+    else
+    {
+        onHasParentDirectory(path);
+    }
+
     var xmlHttp = new XMLHttpRequest();
-    var path = getQueryStringByName("path");
-    var url = "lcmd:///bin/bash?cmdfilter=delimiter('%20');array()&cmdline=ls%20-l%20" + path;
+    var baseUrl = "lcmd:///bin/bash?cmdfilter=delimiter('%20');array()&cmdline=ls%20-l%20"; 
+    var url =  baseUrl + path;
+    var tbody = document.getElementById("tbody");
+    tbody.innerHTML="";
     xmlHttp.open( "GET", url, true);
     xmlHttp.onreadystatechange=function()
     {
@@ -137,10 +165,6 @@ function lcmdGet()
             var obj = JSON.parse(responseText);
             if (obj.statusCode == 200)
             {
-                if (path != "/")
-                {
-                    onHasParentDirectory();
-                }
                 for (var i=0; i < obj.lines.length; i++)
                 {
                     var line = obj.lines[i];
@@ -149,9 +173,8 @@ function lcmdGet()
                         continue;
                     }
                     var type = line[0].charAt(0)=='d' ? 1 : 0;
-                    addRow(line[8], line[8], type, line[4], line[4], line[5], line[6], line[7]);
+                    addRow(line[8], path + line[8], type, line[4], line[4], line[5], line[6], line[7]);
                 }
-                start(path);
             }
         }
     }
