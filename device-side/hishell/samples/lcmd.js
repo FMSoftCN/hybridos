@@ -114,11 +114,57 @@ function addHandlers(element, column) {
     };
 }
 
+function getQueryStringByName(name)
+{
+    var result = location.search.match(new RegExp("[\?\&]" + name+ "=([^\&]+)","i"));
+    if(result == null || result.length < 1){
+        return "/";
+    }
+    return result[1];
+}
+
+function lcmdGet()
+{
+    var xmlHttp = new XMLHttpRequest();
+    var path = getQueryStringByName("path");
+    var url = "lcmd:///bin/bash?cmdfilter=delimiter('%20');array()&cmdline=ls%20-l%20" + path;
+    xmlHttp.open( "GET", url, true);
+    xmlHttp.onreadystatechange=function()
+    {
+        if (xmlHttp.readyState==4 && xmlHttp.status==200)
+        {
+            var responseText = xmlHttp.responseText;
+            var obj = JSON.parse(responseText);
+            if (obj.statusCode == 200)
+            {
+                if (path != "/")
+                {
+                    onHasParentDirectory();
+                }
+                for (var i=0; i < obj.lines.length; i++)
+                {
+                    var line = obj.lines[i];
+                    if (line.length <= 2)
+                    {
+                        continue;
+                    }
+                    var type = line[0].charAt(0)=='d' ? 1 : 0;
+                    addRow(line[8], line[8], type, line[4], line[4], line[5], line[6], line[7]);
+                }
+                start(path);
+            }
+        }
+    }
+    xmlHttp.send( null );
+}
+
 function onLoad() {
     addHandlers(document.getElementById('nameColumnHeader'), 0);
     addHandlers(document.getElementById('sizeColumnHeader'), 1);
     addHandlers(document.getElementById('dateColumnHeader'), 2);
+    lcmdGet();
 }
+
 
 window.addEventListener('DOMContentLoaded', onLoad);
 
