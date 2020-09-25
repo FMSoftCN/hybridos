@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-        <title id="title">lCmd Samples</title>
+        <title >lCmd Samples</title>
         <script type="text/javascript" src="lcmd.js">
         </script>
         <link rel="stylesheet" type="text/css" href="lcmd.css">
@@ -33,17 +33,46 @@
                         修改日期
                     </th>
                 </tr>
+                <p/>
+                <div id="myDiv">
+                </div>
             </thead>
             <tbody id="tbody">
             </tbody>
         </table>
     </body>
     <script>
-        start("/home/");
+        start("/");
         onHasParentDirectory();
-        addRow("usr","usr",1,352,"352 B","2020/5/6", "下午", "5:22:14");
-        addRow("var","var",0,832,"832 B","2019/1/31", "上午", "12:43:38");
+        function httpGet(theUrl)
+        {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "GET", "lcmd:///bin/bash?cmdfilter=delimiter('%20');array()&cmdline=ls%20-l%20/", true);
+            xmlHttp.onreadystatechange=function()
+            {
+                if (xmlHttp.readyState==4 && xmlHttp.status==200)
+                {
+                    var responseText = xmlHttp.responseText;
+                    var obj = JSON.parse(responseText);
+                    if (obj.statusCode == 200)
+                    {
+                        for (var i=0; i < obj.lines.length; i++)
+                        {
+                            var line = obj.lines[i];
+                            if (line.length <= 2)
+                            {
+                                continue;
+                            }
+                            var type = line[0].charAt(0)=='d' ? 1 : 0;
+                            addRow(line[8], line[8], type, line[4], line[4], line[5], line[6], line[7]);
+                        }
+                    }
+                }
+            }
+            xmlHttp.send( null );
+        }
     </script>
+    <button type="button" onclick="httpGet()">test cmd</button>
 </html>
 
 
