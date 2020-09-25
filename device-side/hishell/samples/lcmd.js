@@ -16,8 +16,6 @@ function addRow(name, url, isdir, size, size_string, time_field_1, time_field_2,
     if (isdir) {
         name = name + "/";
         url = url + "/";
-        size = 0;
-        size_string = "";
     }
     link.innerText = name;
     link.href = root + url;
