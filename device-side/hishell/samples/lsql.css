@@ -1,3 +1,9 @@
+H1 {
+    border-bottom: 1px solid #c0c0c0;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    white-space: nowrap;
+}
 .splitDiv {
     border-bottom: 1px solid #c0c0c0;
     margin-bottom: 10px;
@@ -12,9 +18,16 @@ html,body{
     margin: 0;
 }
 
+.insertInput {
+    width: 30%;
+}
+
 #cmdInput {
-    white-space: nowrap;
     width: 50%;
+}
+
+button {
+    width: 10%;
 }
 
 table {

@@ -75,6 +75,48 @@ function lsqlSelect()
     xmlHttp.send( null );
 }
 
+function lsqlInsert() {
+
+    var id = document.getElementById('idInput').value;
+    if(typeof id == "undefined" || id == null || id == "")
+    {
+        return;
+    }
+
+    var title = document.getElementById('titleInput').value;
+    if(typeof title == "undefined" || title == null || title == "")
+    {
+        return;
+    }
+
+    var author = document.getElementById('authorInput').value;
+    if(typeof author == "undefined" || author == null || author == "")
+    {
+        return;
+    }
+
+    var isbn = document.getElementById('isbnInput').value;
+    if(typeof isbn == "undefined" || isbn == null || isbn == "")
+    {
+        return;
+    }
+
+    var cmd = "insert into Books values(" + id + ",\"" + title + "\",\"" + author + "\",\"" + isbn + "\")";
+    var xmlHttp = new XMLHttpRequest();
+    var baseUrl = "lsql:///home/xue/work/hybridos/device-side/hishell/samples/samples.db?sqlQuery="; 
+    var url = encodeURI(baseUrl + cmd);
+
+    xmlHttp.open( "GET", url, true);
+    xmlHttp.onreadystatechange=function()
+    {
+        if (xmlHttp.readyState==4 && xmlHttp.status==200)
+        {
+            document.getElementById("info").innerText = xmlHttp.responseText;;
+        }
+    }
+    xmlHttp.send( null );
+}
+
 function onLoad() {
     lsqlSelect();
 }

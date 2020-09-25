@@ -14,12 +14,21 @@
             糟糕！无法解读服务器所发送的数据。
         </div>
 
-        <div id="inputDiv">
-            <input id="cmdInput" type="text" name="sqlCmd" value="select * from Books"/ >
-            <button id="btnSelect" type="button" onclick="lsqlSelect()">Select</button>
+        <h1>Insert:</h1>
+        <div id="insertDiv">
+            <p><input class="insertInput" type="text" id="idInput" placeholder="Id" /></p>
+            <p><input class="insertInput" type="text" id="titleInput" placeholder="Title" / ></p>
+            <p><input class="insertInput" type="text" id="authorInput" placeholder="Author" /></p>
+            <p><input class="insertInput" type="text" id="isbnInput" placeholder="Isbn" /></p>
+            <p><button id="btnInsert" type="button" onclick="lsqlInsert()">Insert</button></p>
         </div>
 
-        <div class="splitDiv"></div>
+
+        <h1>Query:</h1>
+        <div id="inputDiv">
+            <input id="cmdInput" type="text" name="sqlCmd" value="select * from Books"/ >
+            <button id="btnSelect" type="button" onclick="lsqlSelect()">Query</button>
+        </div>
 
         <table border="0">
             <thead>
