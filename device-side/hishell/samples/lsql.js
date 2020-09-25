@@ -76,6 +76,7 @@ function lsqlSelect()
 }
 
 function onLoad() {
+    lsqlSelect();
 }
 
 
