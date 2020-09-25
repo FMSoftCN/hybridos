@@ -329,10 +329,7 @@ static void loadSVGFromFile(const char* file, int index)
     float alpha = 0xE0 / 255.0;
     cairo_set_source_rgb (cr[index],  r*alpha, g*alpha, b*alpha);
     cairo_paint (cr[index]);
-//    if(index == ID_SHUTDOWN_BUTTON)
-//        rsvg_handle_render_cairo_style (handle, cr[index], power_button_color_pair, 1);
-//    else
-        rsvg_handle_render_cairo_style (handle, cr[index], &button_color_pair[index], 1);
+    rsvg_handle_render_cairo_style (handle, cr[index], &button_color_pair[index], 1);
     cairo_restore (cr[index]);
 
     g_object_unref (handle);
