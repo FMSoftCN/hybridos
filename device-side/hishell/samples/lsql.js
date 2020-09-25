@@ -1,3 +1,6 @@
+function info(msg) {
+    document.getElementById("info").innerText = msg;
+}
 function addRow(id, title, author, isbn) {
     if (name == "." || name == "..")
         return;
@@ -47,6 +50,7 @@ function lsqlSelect()
     var cmd =  document.getElementById('cmdInput').value;
     if(typeof cmd == "undefined" || cmd == null || cmd == "")
     {
+        info("Invalid cmd : " + cmd);
         return;
     }
 
@@ -64,6 +68,7 @@ function lsqlSelect()
             var obj = JSON.parse(responseText);
             if (obj.statusCode == 200)
             {
+                info("Query success.");
                 for (var i=0; i < obj.rows.length; i++)
                 {
                     var line = obj.rows[i];
@@ -80,24 +85,28 @@ function lsqlInsert() {
     var id = document.getElementById('idInput').value;
     if(typeof id == "undefined" || id == null || id == "")
     {
+        info("Invalid id : " + id);
         return;
     }
 
     var title = document.getElementById('titleInput').value;
     if(typeof title == "undefined" || title == null || title == "")
     {
+        info("Invalid title : " + title);
         return;
     }
 
     var author = document.getElementById('authorInput').value;
     if(typeof author == "undefined" || author == null || author == "")
     {
+        info("Invalid author : " + author);
         return;
     }
 
     var isbn = document.getElementById('isbnInput').value;
     if(typeof isbn == "undefined" || isbn == null || isbn == "")
     {
+        info("Invalid isbn : " + isbn);
         return;
     }
 
@@ -111,7 +120,7 @@ function lsqlInsert() {
     {
         if (xmlHttp.readyState==4 && xmlHttp.status==200)
         {
-            document.getElementById("info").innerText = xmlHttp.responseText;;
+            info("Insert success.");
         }
     }
     xmlHttp.send( null );
