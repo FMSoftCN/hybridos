@@ -56,11 +56,6 @@ html[dir=rtl] a {
     background-position-x: right;
 }
 
-#parentDirLinkBox {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-}
-
 #listingParsingErrorBox {
     border: 1px solid black;
     background: #fae691;
