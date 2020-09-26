@@ -34,45 +34,11 @@
                     </th>
                 </tr>
                 <p/>
-                <div id="myDiv">
-                </div>
             </thead>
             <tbody id="tbody">
             </tbody>
         </table>
     </body>
-    <script>
-        start("/");
-        onHasParentDirectory();
-        function httpGet(theUrl)
-        {
-            var xmlHttp = new XMLHttpRequest();
-            xmlHttp.open( "GET", "lcmd:///bin/bash?cmdfilter=delimiter('%20');array()&cmdline=ls%20-l%20/", true);
-            xmlHttp.onreadystatechange=function()
-            {
-                if (xmlHttp.readyState==4 && xmlHttp.status==200)
-                {
-                    var responseText = xmlHttp.responseText;
-                    var obj = JSON.parse(responseText);
-                    if (obj.statusCode == 200)
-                    {
-                        for (var i=0; i < obj.lines.length; i++)
-                        {
-                            var line = obj.lines[i];
-                            if (line.length <= 2)
-                            {
-                                continue;
-                            }
-                            var type = line[0].charAt(0)=='d' ? 1 : 0;
-                            addRow(line[8], line[8], type, line[4], line[4], line[5], line[6], line[7]);
-                        }
-                    }
-                }
-            }
-            xmlHttp.send( null );
-        }
-    </script>
-    <button type="button" onclick="httpGet()">test cmd</button>
 </html>
 
 
