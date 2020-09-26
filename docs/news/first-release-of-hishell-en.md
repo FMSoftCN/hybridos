@@ -1,15 +1,13 @@
-# hiShell 发布，合璧操作系统设备侧代码接近完成
+# hiShell Is Released, Code for Device Side of HybridOS Is Almost Complete
 
-魏永明
+After we released hiWebKit, FMSOft’s R&D team immediately began to build an app running environment for the device side of HybridOS, which we called hiShell. After a month of hard work, we officially released the first version of hiShell. We also updated the graphics stack for the device side of HybridOS and hiWebKit component. In addition, along with hiShell, we also released a complete HybridOS App (hiApp for short) source code to demonstrate the extended features we have made on hiWebKit.
 
-在我们发布了 hiWebKit 之后，飞漫的研发团队立即开始着手构建合璧操作系统（HybridOS）设备侧的应用运行环境，我们称之为 hiShell。经过一个月的奋战，我们正式发布 hiShell 第一个版本，我们同时更新了 HybridOS 图形栈以及 hiWebKit 组件。另外，随同 hiShell，我们同时发布了一个完整的 HybridOS App（简称 hiApp）的源代码，用于展示我们在 hiWebKit 上所做的诸多扩展特性。
+Watch the video first:
 
-先看视频：
+(video here)  
+Run hiApp in hiShell
 
-（插入视频）  
-在 hiShell 环境以及在 hiWebKit 支持下运行 hiApp
-
-如[《低代码：合璧操作系统设备侧的软件架构》](https://mp.weixin.qq.com/s?__biz=MzA5MTYwNTA3MA==&mid=2651104663&idx=2&sn=4883ea4ec7ba7a77a9557a41a94da5d4)一文中所描述，合璧操作系统设备侧软件架构之设计思想，我们称之为数据驱动。这种设计思想带来的好处非常明显：
+合璧操作系统设备侧软件架构之设计思想，我们称之为数据驱动。这种设计思想带来的好处非常明显：
 
 1. 使用最合适的编程语言和工具来开发系统中不同的功能模块是最为合理的软件设计思想，也就是说，用最合适的工具来完成最合适的工作。比如，要开发 GUI，基于 hiWebKit 的扩展标签和功能，结合 HTML 5/CSS 3/JavaScript 就可以轻松开发具有丰富交互效果和优秀展示能力的图形用户界面。而对于计算密集型的任务模块，则可使用 C/C++ 语言（或者 Python 语言）来实现。最后，使用不同编程语言开发的模块之间，通过本地的数据总线连接起来。
 1. 数据驱动的软件架构设计，还有利于功能模块之间的解耦，从而大大方便开发、测试和调试。比如，当我们在台式电脑上开发 GUI 时，我们可以编写一个模拟真实环境各种情况的底层模块，这个模块可以产生各种可能的数据给 GUI 模块，从而形成可以覆盖所有 GUI 模块交互情形的测试用例。这样，就可以将绝大部分调试工作在开发阶段完成，而不需要在真实硬件上做全覆盖测试。
