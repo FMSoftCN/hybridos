@@ -2,7 +2,7 @@
 
 魏永明
 
-在我们发布了 hiWebKit 之后，飞漫的研发团队立即开始着手构建合璧操作系统（HybridOS）设备侧的应用运行环境，我们称之为 hiShell。经过一个月的奋战，hiShell 正式发布，同时更新了HybridOS 图形栈以及 hiWebKit 组件。我们同时发布了一个完整的 HybridOS App（简称 hiApp）的源代码，用于展示我们在 hiWebKit 上所做的诸多扩展特性。
+在我们发布了 hiWebKit 之后，飞漫的研发团队立即开始着手构建合璧操作系统（HybridOS）设备侧的应用运行环境，我们称之为 hiShell。经过一个月的奋战，我们正式发布 hiShell 第一个版本，我们同时更新了 HybridOS 图形栈以及 hiWebKit 组件。另外，随同 hiShell，我们同时发布了一个完整的 HybridOS App（简称 hiApp）的源代码，用于展示我们在 hiWebKit 上所做的诸多扩展特性。
 
 先看视频：
 
