@@ -214,12 +214,11 @@ static void on_znode_operation(int op, int cli, int idx_znode)
 
 static int fix_format_request(int cli, int clifd, void* buff, size_t len)
 {
+    RequestInfo * requestInfo = (RequestInfo *)buff;
     ReplyInfo replyInfo;
 
     if(m_SysConfig.iSystemConfigClientID == cli)
     {
-        RequestInfo * requestInfo = (RequestInfo *)buff;
-
         // from status bar: znode index and status bar hwnd
         if(requestInfo->id == REQ_SUBMIT_STATUSBAR_ZNODE)
         {
@@ -244,7 +243,7 @@ static int fix_format_request(int cli, int clifd, void* buff, size_t len)
             if(idx_topmost > 0)
                 mine_compositor_toggle_state(TRUE);
         }
-        else if((requestInfo->id == REQ_SHOW_HOME_PAGE) || (requestInfo->id == REQ_SHOW_SETTING_PAGE) || (requestInfo->id == REQ_SHOW_ABOUT_PAGE))
+        else if(requestInfo->id == REQ_SHOW_PAGE)
         {
             int cur_clientId = 0; 
             int idx_topmost = 0; 
@@ -257,9 +256,48 @@ static int fix_format_request(int cli, int clifd, void* buff, size_t len)
 
             msg.message = MSG_BROWSER_SHOW;
             msg.hwnd = HWND_NULL;
-            msg.wParam = requestInfo->id;
+            msg.wParam = requestInfo->iData0;
             Send2Client(&msg, m_SysConfig.iBrowserClientID);
         }
+    }
+    else if(m_SysConfig.iBrowserClientID == cli)
+    {
+        // from browser: bring hwnd to topmost
+        if(requestInfo->id == REQ_SUBMIT_TOPMOST)
+        {
+            int cur_clientId = 0;
+            int idx_topmost = 0;
+            int znode_index = 0;
+            int znode_result = -1;
+            ZNODEINFO znodeinfo;
+            const ZNODEHEADER * znodeheader = NULL;
+
+            znode_index = ServerGetNextZNode(NULL, 0, &cur_clientId);
+
+            while(znode_index > 0)
+            {
+                if(ServerGetZNodeInfo(NULL, znode_index, &znodeinfo))
+                {
+                    if((znodeinfo.type & ZOF_TYPE_MASK) == ZOF_TYPE_NORMAL)     // it the main window in normal level
+                    {
+                        znodeheader = ServerGetWinZNodeHeader(NULL, znode_index, NULL, FALSE);
+                        if(znodeheader->hwnd == requestInfo->hWnd)
+                        {
+                            znode_result = znode_index;
+                            break;
+                        }
+                    }
+                }
+                znode_index = ServerGetNextZNode(NULL, znode_index, &cur_clientId);
+            }
+
+            if(znode_result != -1)
+                ServerDoZNodeOperation(NULL, znode_result, ZNOP_MOVE2TOP, NULL, FALSE);
+        }
+        // reply client
+        replyInfo.id = requestInfo->id;
+        replyInfo.iData0 = (int)TRUE;
+        ServerSendReply(clifd, &replyInfo, sizeof(replyInfo));
     }
     return 0;
 }

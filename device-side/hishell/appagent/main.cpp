@@ -84,8 +84,8 @@ extern std::string createString(WKURLRef wkURL);
 //static const char *gUrl = "https://hybridos.fmsoft.cn/";
 //static const char *gUrl = "http://www.sina.com.cn/";
 static const char *gUrl = "file://localhost/home/projects/hiwebkit/Websites/fmsoft.webkit.org/e.html";
-struct Window_Info window_info[MAX_WINDOW_NUMBER];
-static char m_unknown_target[MAX_TARGET_NAME_LEN];
+struct Window_Info window_info[MAX_TARGET_NUMBER];
+int m_target_blank_index = -1;
 
 static LRESULT MainFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -170,12 +170,12 @@ static LRESULT MainFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             break;
 
         case MSG_CLOSE:
-            for(i == 0; i < MAX_WINDOW_NUMBER; i++)
+            for(i == 0; i < MAX_TARGET_NUMBER; i++)
             {
                 if(window_info[i].hWnd == hWnd)
                     break;
             }
-            if(i < MAX_WINDOW_NUMBER)
+            if(i < MAX_TARGET_NUMBER)
             {
                 window_info[i].hWnd = NULL;
                 window_info[i].view = NULL;
@@ -202,22 +202,40 @@ static void filter_browser_message(MSG * msg)
 
     if(msg->message == MSG_BROWSER_SHOW)
     {
-        if(msg->wParam == REQ_SHOW_HOME_PAGE)
-            id = 0;
-        else if(msg->wParam == REQ_SHOW_SETTING_PAGE)
-            id = 1;
-        else if(msg->wParam == REQ_SHOW_ABOUT_PAGE)
-            id = 2;
-        if(id != -1)
+        id = msg->wParam;
+
+
+        if(id == -1)
+            id = m_target_blank_index;
+
+        if(window_info[id].hWnd)
         {
-            if(window_info[id].hWnd)
+            REQUEST request;
+            RequestInfo requestinfo;
+            ReplyInfo replyInfo;
+
+            SetActiveWindow(window_info[id].hWnd);
+            SetFocus(window_info[id].hWnd);
+            window_info[id].view->loadURL(window_info[id].target_url);
+
+            requestinfo.id = REQ_SUBMIT_TOPMOST;
+            requestinfo.hWnd = window_info[id].hWnd;
+            requestinfo.iData0 = 0;
+            request.id = FIXED_FORMAT_REQID;
+            request.data = (void *)&requestinfo;
+            request.len_data = sizeof(requestinfo);
+
+            memset(&replyInfo, 0, sizeof(ReplyInfo));
+            ClientRequest(&request, &replyInfo, sizeof(ReplyInfo));
+            if((replyInfo.id == REQ_SUBMIT_TOGGLE) && (replyInfo.iData0))
             {
-                SetActiveWindow(window_info[id].hWnd);
-                window_info[id].view->loadURL(window_info[id].target_url);
             }
             else
-                CreateAPPAgentMaindow(id);
+            {
+            }
         }
+        else
+            CreateAPPAgentMaindow(id);
     }
 }
 
@@ -225,6 +243,8 @@ static void initial_window_info()
 {
     char config_path[MAX_PATH + 1];
     char* etc_value = NULL;
+    char unknown_target[MAX_TARGET_NAME_LEN];
+    int i = 0;
 
     if ((etc_value = getenv ("HISHELL_CFG_PATH")))
     {
@@ -243,8 +263,8 @@ static void initial_window_info()
         sprintf(config_path, "%s", SYSTEM_CONFIG_FILE);
     }
 
-    memset(&window_info, 0, sizeof(struct Window_Info) * MAX_WINDOW_NUMBER);
-    memset(m_unknown_target, 0, MAX_TARGET_NAME_LEN);
+    memset(&window_info, 0, sizeof(struct Window_Info) * MAX_TARGET_NUMBER);
+    memset(unknown_target, 0, MAX_TARGET_NAME_LEN);
 
     GetValueFromEtcFile(config_path, "system", "target0", window_info[0].target_name, MAX_TARGET_NAME_LEN);
     GetValueFromEtcFile(config_path, "system", "url0", window_info[0].target_url, MAX_TARGET_URL_LEN);
@@ -273,7 +293,16 @@ static void initial_window_info()
     GetValueFromEtcFile(config_path, "system", "target8", window_info[8].target_name, MAX_TARGET_NAME_LEN);
     GetValueFromEtcFile(config_path, "system", "url8", window_info[8].target_url, MAX_TARGET_URL_LEN);
 
-    GetValueFromEtcFile(config_path, "system", "unknown_target", m_unknown_target, MAX_TARGET_NAME_LEN);
+    GetValueFromEtcFile(config_path, "system", "unknown_target", unknown_target, MAX_TARGET_NAME_LEN);
+
+    for(i = 0; i < MAX_TARGET_NUMBER; i++)
+        if(window_info[i].target_name[0] && (strcmp(window_info[i].target_name, unknown_target) == 0))
+            break;
+
+    if(i < MAX_TARGET_NUMBER)
+        m_target_blank_index = i;
+    else
+        m_target_blank_index = -1;
 
 }
 

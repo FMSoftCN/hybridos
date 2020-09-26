@@ -79,16 +79,11 @@
 #include "../include/sysconfig.h"
 #include "config.h"
 
-static RsvgStylePair button_color_pair [6];
-static char button_color[6][32];
-//static RsvgStylePair button_color_pair [] = {
-//    {"color", "#389CFA", 0},
-//};
-
-//static RsvgStylePair power_button_color_pair [] = {
-//    {"color", "#ff0000", 0},
-//};
-
+static RsvgStylePair button_color_pair [BUTTON_COUNT];
+static char button_color[BUTTON_COUNT][32];
+static char button_target[BUTTON_COUNT][MAX_TARGET_NAME_LEN];
+static char target_name[MAX_TARGET_NUMBER][MAX_TARGET_NAME_LEN];
+static int target_blank_index = -1;
 
 extern HWND m_hStatusBar;                       // handle of status bar
 extern HWND m_hDockBar;                         // handle of dock bar
@@ -111,31 +106,6 @@ static int m_Button_Interval = 0;               // the interval length between d
 
 static cairo_t *cr[BUTTON_COUNT];
 static cairo_surface_t *surface[BUTTON_COUNT];
-
-// start another process
-static pid_t exec_app (char * app)
-{
-    pid_t pid = 0;
-    char buff [PATH_MAX + NAME_MAX + 1];
-    char execPath[PATH_MAX + 1];
-
-    memset(buff, 0, PATH_MAX + NAME_MAX + 1);
-
-    if ((pid = vfork ()) > 0) {
-        fprintf (stderr, "new child, pid: %d.\n", pid);
-    }
-    else if (pid == 0) {
-        readlink("/proc/self/exe", execPath, PATH_MAX);
-        sprintf(buff, "%s/%s", dirname(execPath), app);
-        execl (buff, app, NULL);
-        perror ("execl");
-        _exit (1);
-    }
-    else {
-        perror ("vfork");
-    }
-    return pid;
-}
 
 // callback function of animation
 static void animated_cb(MGEFF_ANIMATION handle, HWND hWnd, int id, int *value)
@@ -386,15 +356,23 @@ static void toggle_application(HWND hWnd)
     }
 }
 
-static void show_page(HWND hWnd, int page_req)
+static void show_page(HWND hWnd, char * button_target_name)
 {
     REQUEST request;
     RequestInfo requestinfo;
     ReplyInfo replyInfo;
+    int i = 0;
 
-    requestinfo.id = page_req;
+    for(i = 0; i < MAX_TARGET_NUMBER; i++)
+        if(target_name[i][0] && (strcmp(target_name[i], button_target_name) == 0))
+            break;
+
+    if(i >= MAX_TARGET_NUMBER)
+        i = target_blank_index;
+
+    requestinfo.id = REQ_SHOW_PAGE;
     requestinfo.hWnd = hWnd;
-    requestinfo.iData0 = 0;
+    requestinfo.iData0 = i;
 
     request.id = FIXED_FORMAT_REQID;
     request.data = (void *)&requestinfo;
@@ -402,7 +380,7 @@ static void show_page(HWND hWnd, int page_req)
 
     memset(&replyInfo, 0, sizeof(ReplyInfo));
     ClientRequest(&request, &replyInfo, sizeof(ReplyInfo));
-    if(replyInfo.id == page_req && (replyInfo.iData0))
+    if(replyInfo.id == REQ_SHOW_PAGE && (replyInfo.iData0))
     {
     }
     else
@@ -447,90 +425,121 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
                 sprintf(config_path, "%s", SYSTEM_CONFIG_FILE);
             }
 
+            memset(button_target, 0, sizeof(char) * BUTTON_COUNT * MAX_TARGET_NAME_LEN);
+            memset(target_name, 0, sizeof(char) * MAX_TARGET_NUMBER * MAX_TARGET_NAME_LEN);
             // arrow
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(config_path, "dock_arrow", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
+            if(GetValueFromEtcFile(config_path, "dock_icon0", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
             {
                 memset(button_color[ID_DISPLAY_BUTTON], 0, 24);
-                if(GetValueFromEtcFile(config_path, "dock_arrow", "icon_color", button_color[ID_DISPLAY_BUTTON], 24) == ETC_OK)
+                if(GetValueFromEtcFile(config_path, "dock_icon0", "icon_color", button_color[ID_DISPLAY_BUTTON], 24) == ETC_OK)
                 {
                     button_color_pair[ID_DISPLAY_BUTTON].name = "color";
                     button_color_pair[ID_DISPLAY_BUTTON].value = button_color[ID_DISPLAY_BUTTON];
                     button_color_pair[ID_DISPLAY_BUTTON].important = 0;
                     loadSVGArrow(picture_file, ID_DISPLAY_BUTTON);
                 }
+                GetValueFromEtcFile(config_path, "dock_icon0", "target", button_target[ID_DISPLAY_BUTTON], MAX_TARGET_NAME_LEN);
             }
             
             // home
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(config_path, "dock_home", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
+            if(GetValueFromEtcFile(config_path, "dock_icon1", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
             {
                 memset(button_color[ID_HOME_BUTTON], 0, 24);
-                if(GetValueFromEtcFile(config_path, "dock_home", "icon_color", button_color[ID_HOME_BUTTON], 24) == ETC_OK)
+                if(GetValueFromEtcFile(config_path, "dock_icon1", "icon_color", button_color[ID_HOME_BUTTON], 24) == ETC_OK)
                 {
                     button_color_pair[ID_HOME_BUTTON].name = "color";
                     button_color_pair[ID_HOME_BUTTON].value = button_color[ID_HOME_BUTTON];
                     button_color_pair[ID_HOME_BUTTON].important = 0;
                     loadSVGFromFile(picture_file, ID_HOME_BUTTON);
                 }
+                GetValueFromEtcFile(config_path, "dock_icon1", "target", button_target[ID_HOME_BUTTON], MAX_TARGET_NAME_LEN);
             }
 
             // toggle
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(config_path, "dock_toggle", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
+            if(GetValueFromEtcFile(config_path, "dock_icon2", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
             {
                 memset(button_color[ID_TOGGLE_BUTTON], 0, 24);
-                if(GetValueFromEtcFile(config_path, "dock_toggle", "icon_color", button_color[ID_TOGGLE_BUTTON], 24) == ETC_OK)
+                if(GetValueFromEtcFile(config_path, "dock_icon2", "icon_color", button_color[ID_TOGGLE_BUTTON], 24) == ETC_OK)
                 {
                     button_color_pair[ID_TOGGLE_BUTTON].name = "color";
                     button_color_pair[ID_TOGGLE_BUTTON].value = button_color[ID_TOGGLE_BUTTON];
                     button_color_pair[ID_TOGGLE_BUTTON].important = 0;
                     loadSVGFromFile(picture_file, ID_TOGGLE_BUTTON);
                 }
+                GetValueFromEtcFile(config_path, "dock_icon2", "target", button_target[ID_TOGGLE_BUTTON], MAX_TARGET_NAME_LEN);
             }
 
             // setting
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(config_path, "dock_setting", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
+            if(GetValueFromEtcFile(config_path, "dock_icon3", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
             {
                 memset(button_color[ID_SETTING_BUTTON], 0, 24);
-                if(GetValueFromEtcFile(config_path, "dock_setting", "icon_color", button_color[ID_SETTING_BUTTON], 24) == ETC_OK)
+                if(GetValueFromEtcFile(config_path, "dock_icon3", "icon_color", button_color[ID_SETTING_BUTTON], 24) == ETC_OK)
                 {
                     button_color_pair[ID_SETTING_BUTTON].name = "color";
                     button_color_pair[ID_SETTING_BUTTON].value = button_color[ID_SETTING_BUTTON];
                     button_color_pair[ID_SETTING_BUTTON].important = 0;
                     loadSVGFromFile(picture_file, ID_SETTING_BUTTON);
                 }
+                GetValueFromEtcFile(config_path, "dock_icon3", "target", button_target[ID_SETTING_BUTTON], MAX_TARGET_NAME_LEN);
             }
 
             // about
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(config_path, "dock_about", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
+            if(GetValueFromEtcFile(config_path, "dock_icon4", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
             {
                 memset(button_color[ID_ABOUT_BUTTON], 0, 24);
-                if(GetValueFromEtcFile(config_path, "dock_about", "icon_color", button_color[ID_ABOUT_BUTTON], 24) == ETC_OK)
+                if(GetValueFromEtcFile(config_path, "dock_icon4", "icon_color", button_color[ID_ABOUT_BUTTON], 24) == ETC_OK)
                 {
                     button_color_pair[ID_ABOUT_BUTTON].name = "color";
                     button_color_pair[ID_ABOUT_BUTTON].value = button_color[ID_ABOUT_BUTTON];
                     button_color_pair[ID_ABOUT_BUTTON].important = 0;
                     loadSVGFromFile(picture_file, ID_ABOUT_BUTTON);
                 }
+                GetValueFromEtcFile(config_path, "dock_icon4", "target", button_target[ID_ABOUT_BUTTON], MAX_TARGET_NAME_LEN);
             }
     
             // shutdown
             memset(picture_file, 0, ETC_MAXLINE);
-            if(GetValueFromEtcFile(config_path, "dock_shutdown", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
+            if(GetValueFromEtcFile(config_path, "dock_icon5", "icon_file", picture_file, ETC_MAXLINE) == ETC_OK)
             {
                 memset(button_color[ID_SHUTDOWN_BUTTON], 0, 24);
-                if(GetValueFromEtcFile(config_path, "dock_shutdown", "icon_color", button_color[ID_SHUTDOWN_BUTTON], 24) == ETC_OK)
+                if(GetValueFromEtcFile(config_path, "dock_icon5", "icon_color", button_color[ID_SHUTDOWN_BUTTON], 24) == ETC_OK)
                 {
                     button_color_pair[ID_SHUTDOWN_BUTTON].name = "color";
                     button_color_pair[ID_SHUTDOWN_BUTTON].value = button_color[ID_SHUTDOWN_BUTTON];
                     button_color_pair[ID_SHUTDOWN_BUTTON].important = 0;
                     loadSVGFromFile(picture_file, ID_SHUTDOWN_BUTTON);
                 }
+                GetValueFromEtcFile(config_path, "dock_icon5", "target", button_target[ID_SHUTDOWN_BUTTON], MAX_TARGET_NAME_LEN);
             }
 
+            // get target param
+            GetValueFromEtcFile(config_path, "system", "target0", target_name[0], MAX_TARGET_NAME_LEN);
+            GetValueFromEtcFile(config_path, "system", "target1", target_name[1], MAX_TARGET_NAME_LEN);
+            GetValueFromEtcFile(config_path, "system", "target2", target_name[2], MAX_TARGET_NAME_LEN);
+            GetValueFromEtcFile(config_path, "system", "target3", target_name[3], MAX_TARGET_NAME_LEN);
+            GetValueFromEtcFile(config_path, "system", "target4", target_name[4], MAX_TARGET_NAME_LEN);
+            GetValueFromEtcFile(config_path, "system", "target5", target_name[5], MAX_TARGET_NAME_LEN);
+            GetValueFromEtcFile(config_path, "system", "target6", target_name[6], MAX_TARGET_NAME_LEN);
+            GetValueFromEtcFile(config_path, "system", "target7", target_name[7], MAX_TARGET_NAME_LEN);
+            GetValueFromEtcFile(config_path, "system", "target8", target_name[8], MAX_TARGET_NAME_LEN);
+
+            memset(picture_file, 0, ETC_MAXLINE);
+            GetValueFromEtcFile(config_path, "system", "unknown_target", picture_file, MAX_TARGET_NAME_LEN);
+
+            for(i = 0; i < MAX_TARGET_NUMBER; i++)
+                if(target_name[i][0] && (strcmp(target_name[i], picture_file) == 0))
+                    break;
+
+            if(i < MAX_TARGET_NUMBER)
+                target_blank_index = i;
+            else
+                target_blank_index = -1;
+                
             SetTimer(hWnd, ID_SHOW_TIMER, DOCKBAR_VISIBLE_TIME);
             m_direction = DIRECTION_HIDE;
             m_DockBar_X = m_DockBar_Start_x;
@@ -557,20 +566,18 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
                         create_animation(hWnd);
                         break;
                     case ID_HOME_BUTTON:
-                        show_page(hWnd, REQ_SHOW_HOME_PAGE);
+                        show_page(hWnd, button_target[ID_HOME_BUTTON]);
                         break;
                     case ID_TOGGLE_BUTTON:
                         toggle_application(hWnd);
                         break;
                     case ID_SETTING_BUTTON:
-                        show_page(hWnd, REQ_SHOW_SETTING_PAGE);
+                        show_page(hWnd, button_target[ID_SETTING_BUTTON]);
                         break;
                     case ID_SHUTDOWN_BUTTON:
                         break;
                     case ID_ABOUT_BUTTON:
-                        show_page(hWnd, REQ_SHOW_ABOUT_PAGE);
-//                        SendMessage(HWND_DESKTOP, MSG_BROWSER_SHOW, 10, 0);
-//                        exec_app("appagent");
+                        show_page(hWnd, button_target[ID_ABOUT_BUTTON]);
                         break;
                 }
             }

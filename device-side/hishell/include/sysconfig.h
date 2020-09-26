@@ -78,10 +78,12 @@
 #define REQ_SUBMIT_STATUSBAR_ZNODE  0   // status bar send znode index to server
 #define REQ_GET_TOPMOST_TITLE       1   // get topmost normal window title
 #define REQ_SUBMIT_TOGGLE           2   // toggle the application
-#define REQ_SHOW_HOME_PAGE          3   // show home page
-#define REQ_SHOW_SETTING_PAGE       4   // show setting page
-#define REQ_SHOW_ABOUT_PAGE         5   // show about page
+#define REQ_SHOW_PAGE               3   // show target page
+#define REQ_SUBMIT_TOPMOST          4   // set the window to topmost
 
+// max number of targets
+#define MAX_TARGET_NUMBER           9   // max number of targets
+#define MAX_TARGET_NAME_LEN         64  // the max number of target name
 
 // Customer compositor name
 #define MIME_COMPOSITOR         "mine-compositor"

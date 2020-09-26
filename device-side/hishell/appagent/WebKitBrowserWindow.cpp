@@ -58,7 +58,10 @@
 #include <WebKit/WKCredential.h>
 
 #include "Common.h"
-extern struct Window_Info window_info[MAX_WINDOW_NUMBER];
+#include "../include/sysconfig.h"
+
+extern struct Window_Info window_info[MAX_TARGET_NUMBER];
+extern int m_target_blank_index;
 
 
 std::string createString(WKStringRef wkString)
@@ -240,7 +243,7 @@ static void decidePolicyForNewWindowAction(WKPageRef page, WKFrameRef frame, WKF
     auto& thisWindow = toWebKitBrowserWindow(clientInfo);
 
     std::string framename = createString(frameName);
-    for(i = 0; i < MAX_WINDOW_NUMBER; i++)
+    for(i = 0; i < MAX_TARGET_NUMBER; i++)
     {
         if(strcmp(framename.c_str(), window_info[i].target_name) == 0)
         {
@@ -252,7 +255,7 @@ static void decidePolicyForNewWindowAction(WKPageRef page, WKFrameRef frame, WKF
     if(find)
     {
         if(i < 2)
-            i = MAX_WINDOW_NUMBER;
+            i = MAX_TARGET_NUMBER;
         else
         {
             memset(window_info[i].target_url, 0, MAX_TARGET_URL_LEN);
@@ -260,9 +263,9 @@ static void decidePolicyForNewWindowAction(WKPageRef page, WKFrameRef frame, WKF
         }
     }
 
-    if(i == MAX_WINDOW_NUMBER)
+    if(i == MAX_TARGET_NUMBER)
     {
-        i = 2;
+        i = m_target_blank_index;
         memset(window_info[i].target_url, 0, MAX_TARGET_URL_LEN);
         sprintf(window_info[i].target_url, "%s", urlString.c_str());
     }

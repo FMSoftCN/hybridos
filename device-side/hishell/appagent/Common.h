@@ -57,6 +57,7 @@
 #include <minigui/window.h>
 
 #include "BrowserWindow.h"
+#include "../include/sysconfig.h"
 
 // Control ID
 #define IDC_BROWSER     140
@@ -69,8 +70,6 @@
 #define IDC_ADDRESS_TOP     3
 #define IDC_ADDRESS_HEIGHT  20   
 
-#define MAX_WINDOW_NUMBER   9
-#define MAX_TARGET_NAME_LEN 64
 #define MAX_TARGET_URL_LEN  512
 
 struct Window_Info {
