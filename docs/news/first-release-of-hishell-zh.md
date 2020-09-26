@@ -67,9 +67,9 @@ https://github.com/FMSoftCN/hybridos/tree/master/device-side
 
 1. hiBusServer 本地数据总线服务器。通过该服务器，我们可以在应用中获得系统状态的变化信息（如电量、WiFi 信号强度等），还可以通过发送任务请求来完成某些系统功能，如连接到指定的 WiFi 热点。在使用 hiWebKit 扩展标签的情形下，我们利用 hiBus 提供的服务完成页面的自动更新，而无需 JavaScript 的支持。
 1. hiWSServer：本地 WebSocket 服务器。该服务运行在本地，为基于 hiWebKit 的页面提供 WebSocket 服务，本质上作为 hiBus 服务器的代理运行，从而无需开发 JavaScript 的本地绑定对象，即可实现对系统功能的调用。
-1. 发布完整的合璧操作系统设备侧软件栈以及文档、示例代码和演示系统。
+1. 发布完整的合璧操作系统设备侧软件栈、构件系统、文档和示例代码。
 
-预期我们将在 2020 年 12 月正式发布 HybridOS Device Side 1.0。这令人激动的创新产品，再过三个月，大家就可以用于产品开发了！
+我们计划在 2020 年 12 月正式发布 HybridOS Device Side 1.0。这令人激动的创新产品，再过三个月，大家就可以用于产品开发了！
 
 记住，HybridOS 遵循过程开源原则，**发布即意味着您可以同时看到源代码**。实际上，HybridOS 的源代码是实时镜像到 GitHub 上的。
 
