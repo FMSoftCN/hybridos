@@ -107,6 +107,8 @@ static int m_Button_Interval = 0;               // the interval length between d
 static cairo_t *cr[BUTTON_COUNT];
 static cairo_surface_t *surface[BUTTON_COUNT];
 
+static int m_dockbar_visible_time = 400;
+
 // callback function of animation
 static void animated_cb(MGEFF_ANIMATION handle, HWND hWnd, int id, int *value)
 {
@@ -129,7 +131,7 @@ static void animated_end(MGEFF_ANIMATION handle)
     m_animation = NULL;
 
     if((m_direction == DIRECTION_SHOW) && hWnd)
-        SetTimer(hWnd, ID_SHOW_TIMER, DOCKBAR_VISIBLE_TIME);
+        SetTimer(hWnd, ID_SHOW_TIMER, m_dockbar_visible_time);
 }
 
 // create an animation and start, it is asynchronous
@@ -412,18 +414,12 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
             {
                 int len = strlen(etc_value);
                 if (etc_value[len-1] == '/')
-                {
                     sprintf(config_path, "%s%s", etc_value, SYSTEM_CONFIG_FILE);
-                }
                 else
-                {
                     sprintf(config_path, "%s/%s", etc_value, SYSTEM_CONFIG_FILE);
-                }
             }
             else
-            {
                 sprintf(config_path, "%s", SYSTEM_CONFIG_FILE);
-            }
 
             memset(button_target, 0, sizeof(char) * BUTTON_COUNT * MAX_TARGET_NAME_LEN);
             memset(target_name, 0, sizeof(char) * MAX_TARGET_NUMBER * MAX_TARGET_NAME_LEN);
@@ -540,7 +536,9 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
             else
                 target_blank_index = -1;
                 
-            SetTimer(hWnd, ID_SHOW_TIMER, DOCKBAR_VISIBLE_TIME);
+            GetIntValueFromEtcFile(config_path, "system", "dockbar_time", &m_dockbar_visible_time);
+
+            SetTimer(hWnd, ID_SHOW_TIMER, m_dockbar_visible_time);
             m_direction = DIRECTION_HIDE;
             m_DockBar_X = m_DockBar_Start_x;
             m_Arrow_angle = 0;

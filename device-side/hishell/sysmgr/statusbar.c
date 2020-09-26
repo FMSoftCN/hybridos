@@ -81,6 +81,7 @@ static int m_StatusBar_Height = 0;              // height of status bar
 static int m_StatusBar_Y = 0;                   // the Y coordinate of top left corner
 static MGEFF_ANIMATION m_animation = NULL;      // handle of animation
 static int m_direction = DIRECTION_SHOW;        // the direction of animation
+static int m_statusbar_visible_time = 200;      // status bar visible time
 
 // get current time
 static char* mk_time(char* buff)
@@ -113,7 +114,7 @@ static void animated_end(MGEFF_ANIMATION handle)
     m_animation = NULL;
 
     if((m_direction == DIRECTION_SHOW) && hWnd)
-        SetTimer(hWnd, ID_SHOW_TIMER, STATUSBAR_VISIBLE_TIME);
+        SetTimer(hWnd, ID_SHOW_TIMER, m_statusbar_visible_time);
 }
 
 // create an animation and start, it is asynchronous
@@ -167,6 +168,8 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
     char buff [20];
     int length = 0;
     RECT rect[2] = {{10 * MARGIN_STATUS, MARGIN_STATUS, g_rcScr.right - TIME_INFO_X,  m_StatusBar_Height - MARGIN_STATUS}, {g_rcScr.right - TIME_INFO_X, MARGIN_STATUS, g_rcScr.right - MARGIN_STATUS, m_StatusBar_Height - MARGIN_STATUS}};
+    char config_path[MAX_PATH + 1];
+    char* etc_value = NULL;
 
     switch (message) 
     {
@@ -240,13 +243,25 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             break;
 
         case MSG_CREATE:
+            if ((etc_value = getenv ("HISHELL_CFG_PATH")))
+            {
+                int len = strlen(etc_value);
+                if (etc_value[len-1] == '/')
+                    sprintf(config_path, "%s%s", etc_value, SYSTEM_CONFIG_FILE);
+                else
+                    sprintf(config_path, "%s/%s", etc_value, SYSTEM_CONFIG_FILE);
+            }
+            else
+                sprintf(config_path, "%s", SYSTEM_CONFIG_FILE);
+            GetIntValueFromEtcFile(config_path, "system", "statusbar_time", &m_statusbar_visible_time);
+
             font = CreateLogFont (FONT_TYPE_NAME_SCALE_TTF, "ttf-Source", "UTF-8",
                         FONT_WEIGHT_BOOK, FONT_SLANT_ROMAN, FONT_FLIP_NIL,
                         FONT_OTHER_AUTOSCALE, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE,
                         m_StatusBar_Height * 0.4, 0);
 
             SetTimer(hWnd, ID_TIMER, 100);
-            SetTimer(hWnd, ID_SHOW_TIMER, STATUSBAR_VISIBLE_TIME);
+            SetTimer(hWnd, ID_SHOW_TIMER, m_statusbar_visible_time);
             m_direction = DIRECTION_HIDE;
             m_StatusBar_Y = 0;
             break;

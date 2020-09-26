@@ -67,10 +67,7 @@
 #define DIRECTION_HIDE      1               // hide the main window
 
 #define STATUSBAR_ANIMATION_TIME    1000    // 1000 ms
-#define STATUSBAR_VISIBLE_TIME      200     // 200ms * 10 = 2s
-
 #define DOCKBAR_ANIMATION_TIME      500     // 500 ms
-#define DOCKBAR_VISIBLE_TIME        200     // 200ms * 10 = 2s
 
 // some macro of physical dimension 
 #define MARGIN_STATUS       2               // margin of text area in status bar

@@ -183,6 +183,117 @@ static void paintCloseIcon()
     cairo_surface_destroy(surface);
 }
 
+// This code is copied from complexscripts from mg-sample
+static void draw_title(HDC hdc, RECT rect, const char * text)
+{
+    TEXTRUNS*   textruns;
+    LAYOUT*     layout;
+    LAYOUTLINE* line = NULL;
+    int header_x = 0;
+    int header_y = 0;
+    int left_len_text = 0;
+    Uchar32* ucs = NULL;
+    Uint16* bos = NULL;
+
+    // create title environment
+    left_len_text = strlen(text);
+    while(left_len_text > 0) 
+    {
+        int consumed = 0;
+        int n = 0;
+        int nr_ucs = 0;
+
+        ucs = NULL;
+        consumed = GetUCharsUntilParagraphBoundary(m_fallback_toggle_ctxt.font, text, left_len_text,
+                WSR_NOWRAP, &ucs, &n);
+        if(consumed > 0) 
+        {
+            if(n > 0)
+            {
+                int len_bos;
+
+                nr_ucs = n;
+                bos = NULL;
+                len_bos = UStrGetBreaks(LANGCODE_zh, CTR_NONE, WBR_NORMAL, LBP_NORMAL, ucs, n, &bos);
+
+                if(len_bos > 0) 
+                {
+                    bos = bos;
+
+                    // layout
+                    textruns = CreateTextRuns(ucs, nr_ucs, LANGCODE_zh, BIDI_PGDIR_ON, 
+                                "ttf-思源黑体-ernnns-*-14-UTF-8", MakeRGB(0, 0, 0), 0, bos + 1);
+                    if(textruns) 
+                    {
+                        if(!InitComplexShapingEngine(textruns)) 
+                        {
+                            DestroyTextRuns(textruns);
+                            free(bos);
+                            free(ucs);
+                            return;
+                        }
+
+                        layout = CreateLayout(textruns, GRF_WRITING_MODE_HORIZONTAL_TB | GRF_TEXT_ORIENTATION_AUTO 
+                                    | GRF_INDENT_NONE | GRF_LINE_EXTENT_FIXED | GRF_OVERFLOW_WRAP_NORMAL 
+                                    | GRF_OVERFLOW_ELLIPSIZE_MIDDLE | GRF_ALIGN_CENTER | GRF_TEXT_JUSTIFY_NONE 
+                                    | GRF_HANGING_PUNC_NONE | GRF_SPACES_KEEP, bos + 1, TRUE, 
+                                    RECTW(rect), 0, 0, 0, 100, NULL, 0);
+                        if (layout == NULL) 
+                        {
+                            DestroyTextRuns(textruns);
+                            free(bos);
+                            free(ucs);
+                            return;
+                        }
+
+                        LAYOUTLINE* line = NULL;
+                        while ((line = LayoutNextLine(layout, line, 0, TRUE, NULL, 0))) 
+                        {
+                        }
+                    }
+                    else 
+                        return;
+                }
+                else 
+                    return;
+            }
+            else 
+                return;
+
+            break;
+        }
+        else
+            return;
+
+        left_len_text -= consumed;
+        text += consumed;
+    }
+    
+    // draw title
+    header_x = rect.left;
+    header_y = rect.top + 3;
+
+    SetTextColorInTextRuns(textruns, 0, 4096, MakeRGB(255, 255, 255));
+
+    // always draw only one line
+    if ((line = LayoutNextLine(layout, line, 0, 0, NULL, 0))) 
+    {
+        int x = header_x;
+        int y = header_y;
+        RECT rc;
+
+        GetLayoutLineRect(line, &x, &y, 0, &rc);
+        if(RectVisible(hdc, &rc))
+            DrawLayoutLine(hdc, line, header_x, header_y);
+    }
+
+    // destroy
+    DestroyLayout(layout);
+    DestroyTextRuns(textruns);
+    free(bos);
+    free(ucs);
+}
+
 static void paintWindowTitle(const char * title)
 {
     cairo_t *cr = NULL;
@@ -195,12 +306,12 @@ static void paintWindowTitle(const char * title)
     // calculate the size for caption
     SIZE size;
     int offset = GetTabbedTextExtentPoint(HDC_SCREEN_SYS, title, strlen(title),
-                    RECT_W(CUR_WIN) - h - 2 * FRAME_WIDTH, NULL, NULL, NULL, &size);
+                    RECT_W(CUR_WIN) * 0.618 - h - 2 * FRAME_WIDTH, NULL, NULL, NULL, &size);
 
-    if((RECT_W(CUR_WIN) - h - 2 * FRAME_WIDTH) > size.cx)
+    if((RECT_W(CUR_WIN) * 0.618 - h - 2 * FRAME_WIDTH) > size.cx)
         w = size.cx + h;
     else
-        w = RECT_W(CUR_WIN) - h - 2 * FRAME_WIDTH;
+        w = RECT_W(CUR_WIN) * 0.618 - h - 2 * FRAME_WIDTH;
 
     // create cairo
     surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
@@ -230,7 +341,7 @@ static void paintWindowTitle(const char * title)
     {
         SetMemDCColorKey(hdc_result, MEMDC_FLAG_SRCCOLORKEY, 0xFF000000);
         BitBlt(hdc_result, 0, 0, w, h, HDC_SCREEN_SYS, 
-              RECT_LEFT(CUR_WIN) + (RECT_W(CUR_WIN) - w) / 2, RECT_BOTTOM(CUR_WIN) - h / 2, 0);
+              RECT_LEFT(CUR_WIN) + (RECT_W(CUR_WIN) - w) / 2 + FRAME_WIDTH, RECT_BOTTOM(CUR_WIN) - h / 2, 0);
     }
     cairo_restore(cr);
 
@@ -239,10 +350,10 @@ static void paintWindowTitle(const char * title)
     cairo_surface_destroy(surface);
 
     rect.top = RECT_BOTTOM(CUR_WIN) - h / 2;
-    rect.left = RECT_LEFT(CUR_WIN) + (RECT_W(CUR_WIN) - w) / 2 + h / 2;
+    rect.left = RECT_LEFT(CUR_WIN) + (RECT_W(CUR_WIN) - w) / 2 + h / 2 + FRAME_WIDTH;
     rect.bottom = rect.top + h;
     rect.right = rect.left + w - h;
-    DrawText(HDC_SCREEN_SYS, title, strlen(title), &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+    draw_title(HDC_SCREEN_SYS, rect, title);
 }
 
 static void draw_select_window(int index)
