@@ -7,88 +7,85 @@ Watch the video first:
 (video here)  
 Run hiApp in hiShell
 
-合璧操作系统设备侧软件架构之设计思想，我们称之为数据驱动。这种设计思想带来的好处非常明显：
+The design idea of the software architecture on the device side of HybridOS is called data-driven. The benefits of this design idea are obvious:
 
-1. 使用最合适的编程语言和工具来开发系统中不同的功能模块是最为合理的软件设计思想，也就是说，用最合适的工具来完成最合适的工作。比如，要开发 GUI，基于 hiWebKit 的扩展标签和功能，结合 HTML 5/CSS 3/JavaScript 就可以轻松开发具有丰富交互效果和优秀展示能力的图形用户界面。而对于计算密集型的任务模块，则可使用 C/C++ 语言（或者 Python 语言）来实现。最后，使用不同编程语言开发的模块之间，通过本地的数据总线连接起来。
-1. 数据驱动的软件架构设计，还有利于功能模块之间的解耦，从而大大方便开发、测试和调试。比如，当我们在台式电脑上开发 GUI 时，我们可以编写一个模拟真实环境各种情况的底层模块，这个模块可以产生各种可能的数据给 GUI 模块，从而形成可以覆盖所有 GUI 模块交互情形的测试用例。这样，就可以将绝大部分调试工作在开发阶段完成，而不需要在真实硬件上做全覆盖测试。
+1. It is the most reasonable software design idea to use the most suitable programming language and APIs to develop different functional modules in the system, that is, using the most suitable tools to complete the specific work. For example, to develop GUIs, based on hiWebKit's extended tags and functions, combined with HTML5, CSS3, and JavaScript, it is very easy to develop a graphical user interface with rich interaction effects and excellent display capabilities. For computationally intensive task modules, we can use C/C++ language (or Python language) to implement them. Finally, modules developed in different programming languages are connected through a local data bus.
+1. Data-driven software architecture design also facilitates decoupling between functional modules, which greatly facilitates development, testing, and debugging. For example, when we develop a GUI on a desktop computer, we can write a low-level module that simulates various situations in the real environment. This module can generate various possible data for the GUI module, thereby forming an interactive situation that can cover all test cases for GUI modules. In this way, most of the debugging work can be completed in the development phase, without the need to do full coverage testing on real hardware.
 
-下图给出了合璧操作系统设备侧的软件架构。
+The following figure shows the software architecture for the device side of HybridOS:
 
-![合璧操作系统设备侧的软件架构](hybridos-device-side-arch.png)  
-合璧操作系统设备侧的软件架构
+![The software architecture for the device side of HybridOS](hybridos-device-side-arch.png)  
+The software architecture for the device side of HybridOS
 
-本次发布的 hiShell 1.0 版本，主要实现了如下模块：
+The hiShell version 1.0 released this time mainly implements the following modules:
 
-1) MiniGUI 的服务器进程。该进程扮演窗口管理器运行，使用 C/C++ 开发，包含一个定制的窗口合成器（compositor），用于提供主窗口切换功能以及切换时的动画特效。
+1) The server process of MiniGUI. This process runs as a window manager, developed in C/C++, and includes a customized window compositor, which provides the main window switching function and animation effects when switching.
 
-![定制合成器](hybridos-device-side-tailored-compositor.png)  
-定制窗口合成器，提供了常见于现代智能设备的窗口切换功能和动画特效
+![The customized window compositor](hybridos-device-side-tailored-compositor.png)  
+The customized window compositor, which provides the main window switching function and animation effects when switching
 
-2) 动态壁纸进程。该进程展示了一个动态壁纸，即合璧中英文徽标的合并动画。
+2) Live wallpaper process. The process showes a live wallpaper, an animation of the Chinese and English logos of HybridOS.
 
-![动态壁纸](hybridos-device-side-dynamic-wallpaper.png)  
-动态壁纸
+![Live wallpaper](hybridos-device-side-dynamic-wallpaper.png)  
+Live wallpaper
 
-3) 系统管理进程，该进程负责创建和维护如下主窗口（称为系统主窗口，system main window）：
-   - 状态栏（Status Bar），用于展示当前活动主窗口的标题、时间等信息。
-   - 任务栏（Docker Bar），用于呼出主功能（或启动器）、系统设置，选择和切换应用主窗口等。
+3) System management process. This process is responsible for creating and maintaining the following main windows (called the system main windows):
+   - Status Bar, used to display the title, time and other information of the currently active main window.
+   - Docker Bar, used to call out the main function (or launcher), system settings, select and switch the main application window, etc.
 
-![状态栏](hybridos-device-side-status-bar.png)  
-状态栏，用于展示当前窗口标题以及时间
+![Status bar](hybridos-device-side-status-bar.png)  
+Status bar, used to display the title of current window and the system time
 
-![任务栏](hybridos-device-side-docker-bar.png)  
-任务栏，用于启动 hiApp 以及系统设置等功能
+![Docker Bar](hybridos-device-side-docker-bar.png)  
+Docker bar, used to launch various hiApps.
 
-4) 应用进程，称为 appagent，该进程在 hiWebKit 的支持下运行，用于管理应用窗口，并在窗口中渲染基于扩展 Web 前端技术开发的 hiApp 应用。本版本提供了如下几个应用入口作为示例：
-   - 用于展示 hiWebKit 扩展特性的五个功能入口，其展示了滚轮、自定义控件标签（时钟和秒表）、仪表指针、使用 LCMD 协议直接读取文件系统内容、使用 LSQL 协议直接操作本地数据库等功能。
-   - 一个简单的系统设置功能入口。
-   - 一个访问合璧操作系统官方网站（<https://hybridos.fmsoft.cn>）的入口。
+4) App process, called appagent. This process runs under the support of hiWebKit and is used to manage app windows and render hiApps developed based on the extended Web front-end technology in the windows. This version provides the following app entries as examples:
+   - The five function entrances used to show the extended features of hiWebKit, which show the scroll wheel, custom view tags (clock and stopwatch), meter, use of LCMD schema, use of LSQL schema, and so on.
+   - The entry for a simple system settings.
+   - The entry to visit the official website of HybridOS (<https://hybridos.fmsoft.cn>).
 
-各应用示例的截屏如下：
+The screenshots of each example are as follows:
 
-![演示功能主入口](hybridos-device-side-demo-home.png)  
-演示功能主入口
+![The main entrance of the demo](hybridos-device-side-demo-home.png)  
+The main entrance of the demo
 
-![时钟](hybridos-device-side-demo-clock.png)  
-时钟表盘
+![Clock](hybridos-device-side-demo-clock.png)  
+Clock
 
-![秒表](hybridos-device-side-demo-stopwatch.png)  
-秒表
+![Stopwatch](hybridos-device-side-demo-stopwatch.png)  
+Stopwatch
 
-![仪表指针](hybridos-device-side-demo-meter.png)  
-指针式仪表盘或条带式仪表盘
+![Meter](hybridos-device-side-demo-meter.png)  
+Meters with needle pointer or strip pointer
 
-![使用 LCMD 协议直接读取文件系统内容](hybridos-device-side-demo-lcmd.png)  
-使用 LCMD 协议直接读取文件系统内容
+![Using LCMD schema to travel locale file system](hybridos-device-side-demo-lcmd.png)  
+Using LCMD schema to travel locale file system
 
-![使用 LSQL 协议直接操作本地数据库](hybridos-device-side-demo-lsql.png)  
-使用 LSQL 协议直接操作本地数据库
+![Using LSQL schema to operate local SQLite database](hybridos-device-side-demo-lsql.png)  
+Using LSQL schema to operate local SQLite database
 
-![系统设置](hybridos-device-side-system-settings.png)  
-系统设置
+![System settings](hybridos-device-side-system-settings.png)  
+System settings
 
-![关于系统](hybridos-device-side-about-hybridos.png)  
-关于（访问互联网 Web 页面）
+![About HybridOS](hybridos-device-side-about-hybridos.png)  
+About HybridOS (visiting Web pages on Internet)
 
-需要说明的是，hiShell 任务栏上的图标及其功能可以通过配置文件修改。您只要使用扩展的 Web 标签、协议以及 HTML 5/CSS 3/JavaScript 开发好自己的 hiApp，修改这个配置文件即可完成相应的部署。
+It should be noted that the icons and their functions on the hiShell docker bar can be modified through a runtime configuration file. You only need to use the extended Web tags, protocols and HTML 5/CSS 3/JavaScript to develop your own hiApp and modify this configuration file to complete the corresponding deployment.
 
-有关合璧操作系统设备侧代码的获取及其构建方法，敬请访问：
+To fetch and build the code of HybridOS Device Side, please visit:
 
 <https://github.com/FMSoftCN/hybridos/tree/master/device-side>
 
-在接下来的 2020 年第四季度，飞漫开发团队将完成合璧操作系统设备侧 1.0 版本剩余的组件开发，主要有：
+In the next fourth quarter of 2020, the HybridOS team will complete the development of the remaining components of HybridOS Device Side, including:
 
-1. hiBusServer 本地数据总线服务器。通过该服务器，我们可以在应用中获得系统状态的变化信息（如电量、WiFi 信号强度等），还可以通过发送任务请求来完成某些系统功能，如连接到指定的 WiFi 热点。
-1. hiWSServer：本地 WebSocket 服务器。该服务运行在本地，为基于 hiWebKit 的页面提供 WebSocket 服务，本质上作为 hiBus 服务器的代理运行，从而无需开发 JavaScript 的本地绑定对象，即可实现对系统功能的调用。
-1. 完整的合璧操作系统设备侧软件栈、构件系统（含交叉编译）、文档和示例代码。
+1. hiBusServer, the local data bus server. Through this server, we can obtain system status change information (such as battery level, WiFi signal strength, etc.) in your hiApps, and can also complete certain system functions by sending task requests, such as connecting to a designated WiFi hotspot.
+1. hiWSServer, the local WebSocket server. The service runs locally and provides WebSocket services for hiApps. Essentially, it runs as a proxy for the hiBus server, so that you can call system functions without developing JavaScript local binding objects.
+1. A complete device-side software stack, component system (including cross-compilation), documentation and sample codes of the integrated operating system.
 
-我们计划在 2020 年 12 月正式发布 HybridOS Device Side 1.0。这令人激动的创新产品，再过三个月，大家就可以用于产品开发了！
+We plan to officially release HybridOS Device Side version 1.0 in December 2020. This exciting and innovative product will be available to everyone for product development in three months!
 
-记住，HybridOS 遵循过程开源原则，**发布即意味着您可以同时看到源代码**。实际上，HybridOS 的源代码是实时镜像到 GitHub 上的。
+Remember, HybridOS follows the "open source and open process" principle, **release means you can see the source code at the same time**. In fact, the source code of HybridOS is mirrored on GitHub in real time.
 
-**点击文末原文链接，支持合璧操作系统，请点亮 GitHub 上 HybridOS 项目的星星吧！**
+**To support HybridOS, please visit the HybridOS repository on GitHub, and light up the star of the HybridOS project on GitHub!**
 
----
-
-原文链接：<https://github.com/FMSoftCN/hybridos>
-
+<https://github.com/FMSoftCN/hybridos>
