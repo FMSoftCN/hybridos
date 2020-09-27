@@ -82,6 +82,8 @@ static int m_StatusBar_Y = 0;                   // the Y coordinate of top left 
 static MGEFF_ANIMATION m_animation = NULL;      // handle of animation
 static int m_direction = DIRECTION_SHOW;        // the direction of animation
 static int m_statusbar_visible_time = 200;      // status bar visible time
+static int m_statusbar_show_time = 750;         // status bar animation show time
+static int m_statusbar_hide_time = 400;         // status bar animation hide time
 
 // get current time
 static char* mk_time(char* buff)
@@ -94,6 +96,116 @@ static char* mk_time(char* buff)
     sprintf(buff, "%02d:%02d:%02d", tm->tm_hour, tm->tm_min, tm->tm_sec);
 
     return buff;
+}
+
+// This code is copied from complexscripts from mg-sample
+static void draw_title(HDC hdc, RECT rect, const char * text, PLOGFONT font)
+{
+    TEXTRUNS*   textruns;
+    LAYOUT*     layout;
+    LAYOUTLINE* line = NULL;
+    int header_x = 0;
+    int header_y = 0;
+    int left_len_text = 0;
+    Uchar32* ucs = NULL;
+    Uint16* bos = NULL;
+
+    // create title environment
+    left_len_text = strlen(text);
+    while(left_len_text > 0) 
+    {
+        int consumed = 0;
+        int n = 0;
+        int nr_ucs = 0;
+
+        ucs = NULL;
+        consumed = GetUCharsUntilParagraphBoundary(font, text, left_len_text, WSR_NOWRAP, &ucs, &n);
+        if(consumed > 0) 
+        {
+            if(n > 0)
+            {
+                int len_bos;
+
+                nr_ucs = n;
+                bos = NULL;
+                len_bos = UStrGetBreaks(LANGCODE_zh, CTR_NONE, WBR_NORMAL, LBP_NORMAL, ucs, n, &bos);
+
+                if(len_bos > 0) 
+                {
+                    bos = bos;
+
+                    // layout
+                    textruns = CreateTextRuns(ucs, nr_ucs, LANGCODE_zh, BIDI_PGDIR_ON, 
+                                "ttf-Source-ernnns-*-18-UTF-8", MakeRGB(0, 0, 0), 0, bos + 1);
+                    if(textruns) 
+                    {
+                        if(!InitComplexShapingEngine(textruns)) 
+                        {
+                            DestroyTextRuns(textruns);
+                            free(bos);
+                            free(ucs);
+                            return;
+                        }
+
+                        layout = CreateLayout(textruns, GRF_WRITING_MODE_HORIZONTAL_TB | GRF_TEXT_ORIENTATION_AUTO 
+                                    | GRF_INDENT_NONE | GRF_LINE_EXTENT_FIXED | GRF_OVERFLOW_WRAP_NORMAL 
+                                    | GRF_OVERFLOW_ELLIPSIZE_END | GRF_ALIGN_LEFT | GRF_TEXT_JUSTIFY_NONE 
+                                    | GRF_HANGING_PUNC_NONE | GRF_SPACES_KEEP, bos + 1, TRUE, 
+                                    RECTW(rect), 0, 0, 0, 100, NULL, 0);
+                        if (layout == NULL) 
+                        {
+                            DestroyTextRuns(textruns);
+                            free(bos);
+                            free(ucs);
+                            return;
+                        }
+
+                        LAYOUTLINE* line = NULL;
+                        while ((line = LayoutNextLine(layout, line, 0, TRUE, NULL, 0))) 
+                        {
+                        }
+                    }
+                    else 
+                        return;
+                }
+                else 
+                    return;
+            }
+            else 
+                return;
+
+            break;
+        }
+        else
+            return;
+
+        left_len_text -= consumed;
+        text += consumed;
+    }
+    
+    // draw title
+    header_x = rect.left;
+    header_y = rect.top;
+
+    SetTextColorInTextRuns(textruns, 0, 4096, MakeRGB(255, 255, 255));
+
+    // always draw only one line
+    if ((line = LayoutNextLine(layout, line, 0, 0, NULL, 0))) 
+    {
+        int x = header_x;
+        int y = header_y + 2;
+        RECT rc;
+
+        GetLayoutLineRect(line, &x, &y, 0, &rc);
+        if(RectVisible(hdc, &rc))
+            DrawLayoutLine(hdc, line, header_x, header_y);
+    }
+
+    // destroy
+    DestroyLayout(layout);
+    DestroyTextRuns(textruns);
+    free(bos);
+    free(ucs);
 }
 
 // callback function of animation
@@ -139,17 +251,17 @@ static void create_animation(HWND hWnd)
         {
             end = -1 * m_StatusBar_Height;
             motionType = OutCirc;
-            duration = STATUSBAR_ANIMATION_TIME * (m_StatusBar_Height + m_StatusBar_Y) / m_StatusBar_Height;
+            duration = m_statusbar_hide_time * (m_StatusBar_Height + m_StatusBar_Y) / m_StatusBar_Height;
         }
         else
         {
             end = 0;
             motionType = OutCirc;
-            duration = -1 * STATUSBAR_ANIMATION_TIME * m_StatusBar_Y / m_StatusBar_Height;
+            duration = -1 * m_statusbar_show_time * m_StatusBar_Y / m_StatusBar_Height;
         }
 
         if(duration == 0)
-            duration = STATUSBAR_ANIMATION_TIME;
+            duration = m_statusbar_show_time;
 
         mGEffAnimationSetStartValue(m_animation, &start);
         mGEffAnimationSetEndValue(m_animation, &end);
@@ -164,7 +276,8 @@ static void create_animation(HWND hWnd)
 static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC hdc;
-    static PLOGFONT font;
+    static PLOGFONT font_title;
+    static PLOGFONT font_time;
     char buff [20];
     int length = 0;
     RECT rect[2] = {{10 * MARGIN_STATUS, MARGIN_STATUS, g_rcScr.right - TIME_INFO_X,  m_StatusBar_Height - MARGIN_STATUS}, {g_rcScr.right - TIME_INFO_X, MARGIN_STATUS, g_rcScr.right - MARGIN_STATUS, m_StatusBar_Height - MARGIN_STATUS}};
@@ -177,16 +290,16 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             hdc = BeginPaint (hWnd);
             SetTextColor (hdc, DWORD2Pixel (hdc, 0xFFFFFFFF));
             SetBkMode (hdc, BM_TRANSPARENT);
-            SelectFont(hdc, font);
             length = GetWindowTextLength(hWnd);
             {
                 char title[length + 1];
                 memset(title, 0, length + 1);
                 GetWindowText(hWnd, title, length);
-                DrawText (hdc, title, strlen(title), rect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+                draw_title(hdc, *(rect + 0), title, font_title);
             }
 
             mk_time(buff);
+            SelectFont(hdc, font_time);
             DrawText (hdc, buff, strlen(buff), rect + 1, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
             EndPaint (hWnd, hdc);
@@ -254,8 +367,15 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             else
                 sprintf(config_path, "%s", SYSTEM_CONFIG_FILE);
             GetIntValueFromEtcFile(config_path, "system", "statusbar_time", &m_statusbar_visible_time);
+            GetIntValueFromEtcFile(config_path, "system", "statusbar_animation_show_time", &m_statusbar_show_time);
+            GetIntValueFromEtcFile(config_path, "system", "statusbar_animation_hide_time", &m_statusbar_hide_time);
 
-            font = CreateLogFont (FONT_TYPE_NAME_SCALE_TTF, "ttf-Source", "UTF-8",
+            font_title = CreateLogFont (FONT_TYPE_NAME_SCALE_TTF, "ttf-Source", "UTF-8",
+                        FONT_WEIGHT_BOOK, FONT_SLANT_ROMAN, FONT_FLIP_NIL,
+                        FONT_OTHER_AUTOSCALE, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE,
+                        m_StatusBar_Height * 0.5, 0);
+
+            font_time = CreateLogFont (FONT_TYPE_NAME_SCALE_TTF, "ttf-Source", "UTF-8",
                         FONT_WEIGHT_BOOK, FONT_SLANT_ROMAN, FONT_FLIP_NIL,
                         FONT_OTHER_AUTOSCALE, FONT_UNDERLINE_NONE, FONT_STRUCKOUT_NONE,
                         m_StatusBar_Height * 0.4, 0);
@@ -278,7 +398,8 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             break;
 
         case MSG_DESTROY:
-            DestroyLogFont(font);
+            DestroyLogFont(font_title);
+            DestroyLogFont(font_time);
         case MSG_CLOSE:
             KillTimer (hWnd, ID_TIMER);
             KillTimer (hWnd, ID_SHOW_TIMER);
@@ -316,17 +437,20 @@ HWND create_status_bar (void)
     CreateInfo.ty = 0;
     CreateInfo.rx = g_rcScr.right;
     CreateInfo.by = m_StatusBar_Height;
-    CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0xFf); 
+    CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0xFF); 
     CreateInfo.dwAddData = 0;
     CreateInfo.hHosting = HWND_DESKTOP;
 
-    hStatusBar = CreateMainWindowEx2 (&CreateInfo, 0L, NULL, NULL, ST_PIXEL_ARGB8888,
-                                MakeRGBA (SysPixelColor[IDX_COLOR_darkgray].r,
-                                          SysPixelColor[IDX_COLOR_darkgray].g,
-                                          SysPixelColor[IDX_COLOR_darkgray].b,
-                                          0xE0),
-                                CT_ALPHAPIXEL, 0xFF);
+//    hStatusBar = CreateMainWindowEx2 (&CreateInfo, 0L, NULL, NULL, ST_PIXEL_ARGB8888,
+//                                MakeRGBA (SysPixelColor[IDX_COLOR_darkgray].r,
+//                                          SysPixelColor[IDX_COLOR_darkgray].g,
+//                                          SysPixelColor[IDX_COLOR_darkgray].b,
+//                                          0xE0),
+//                                CT_ALPHAPIXEL, 0xFF);
 
+    hStatusBar = CreateMainWindowEx2 (&CreateInfo, 0L, NULL, NULL, ST_PIXEL_ARGB8888,
+                                MakeRGBA (140, 140, 140, 0xF0),
+                                CT_ALPHAPIXEL, 0xFF);
     if (hStatusBar == HWND_INVALID)
         return HWND_INVALID;
 

@@ -107,7 +107,9 @@ static int m_Button_Interval = 0;               // the interval length between d
 static cairo_t *cr[BUTTON_COUNT];
 static cairo_surface_t *surface[BUTTON_COUNT];
 
-static int m_dockbar_visible_time = 400;
+static int m_dockbar_visible_time = 400;        // 400 * 10ms
+static int m_dockbar_show_time = 750;           // 500 ms
+static int m_dockbar_hide_time = 400;           // 500 ms
 
 // callback function of animation
 static void animated_cb(MGEFF_ANIMATION handle, HWND hWnd, int id, int *value)
@@ -156,17 +158,17 @@ static void create_animation(HWND hWnd)
         {
             end = g_rcScr.right - m_DockBar_Left_Length;
             motionType = OutCirc;
-            duration = DOCKBAR_ANIMATION_TIME * (g_rcScr.right - m_DockBar_Left_Length - m_DockBar_X) / (g_rcScr.right - m_DockBar_Left_Length - m_DockBar_Start_x);
+            duration = m_dockbar_hide_time * (g_rcScr.right - m_DockBar_Left_Length - m_DockBar_X) / (g_rcScr.right - m_DockBar_Left_Length - m_DockBar_Start_x);
         }
         else
         {
             end = m_DockBar_Start_x;
             motionType = OutCirc;
-            duration = DOCKBAR_ANIMATION_TIME * (m_DockBar_X - m_DockBar_Start_x) / (g_rcScr.right -  m_DockBar_Left_Length- m_DockBar_Start_x);
+            duration = m_dockbar_show_time * (m_DockBar_X - m_DockBar_Start_x) / (g_rcScr.right -  m_DockBar_Left_Length- m_DockBar_Start_x);
         }
 
         if(duration == 0)
-            duration = DOCKBAR_ANIMATION_TIME;
+            duration = m_dockbar_show_time;
 
         mGEffAnimationSetStartValue(m_animation, &start);
         mGEffAnimationSetEndValue(m_animation, &end);
@@ -228,7 +230,7 @@ static void paintSVGArrow(HDC hdc)
     float r = SysPixelColor[IDX_COLOR_darkgray].r / 255.0;
     float g = SysPixelColor[IDX_COLOR_darkgray].g / 255.0;
     float b = SysPixelColor[IDX_COLOR_darkgray].b / 255.0;
-    float alpha = 0xE0 / 255.0;
+    float alpha = 0xF0 / 255.0;
     cairo_set_source_rgb (cr[0],  r*alpha, g*alpha, b*alpha);
     cairo_paint (cr[0]);
     rsvg_handle_render_cairo_style (m_arrow_svg_handle, cr[0], &button_color_pair[0], 1);
@@ -298,7 +300,7 @@ static void loadSVGFromFile(const char* file, int index)
     float r = SysPixelColor[IDX_COLOR_darkgray].r / 255.0;
     float g = SysPixelColor[IDX_COLOR_darkgray].g / 255.0;
     float b = SysPixelColor[IDX_COLOR_darkgray].b / 255.0;
-    float alpha = 0xE0 / 255.0;
+    float alpha = 0xF0 / 255.0;
     cairo_set_source_rgb (cr[index],  r*alpha, g*alpha, b*alpha);
     cairo_paint (cr[index]);
     rsvg_handle_render_cairo_style (handle, cr[index], &button_color_pair[index], 1);
@@ -315,7 +317,7 @@ static void paintDockBarIcon(HDC hdc)
     float r = SysPixelColor[IDX_COLOR_darkgray].r / 255.0;
     float g = SysPixelColor[IDX_COLOR_darkgray].g / 255.0;
     float b = SysPixelColor[IDX_COLOR_darkgray].b / 255.0;
-    float alpha = 0xE0 / 255.0;
+    float alpha = 0xF0 / 255.0;
     for(i = 1; i < BUTTON_COUNT; i ++)
     {
         if(surface[i] && cr[i])
@@ -537,6 +539,8 @@ static LRESULT DockBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
                 target_blank_index = -1;
                 
             GetIntValueFromEtcFile(config_path, "system", "dockbar_time", &m_dockbar_visible_time);
+            GetIntValueFromEtcFile(config_path, "system", "dockbar_animation_show_time", &m_dockbar_show_time);
+            GetIntValueFromEtcFile(config_path, "system", "dockbar_animation_hide_time", &m_dockbar_hide_time);
 
             SetTimer(hWnd, ID_SHOW_TIMER, m_dockbar_visible_time);
             m_direction = DIRECTION_HIDE;
@@ -664,11 +668,15 @@ HWND create_dock_bar (void)
     CreateInfo.dwAddData = 0;
     CreateInfo.hHosting = HWND_DESKTOP;
 
+//    hDockBar = CreateMainWindowEx2 (&CreateInfo, 0L, NULL, NULL, ST_PIXEL_ARGB8888,
+//                                MakeRGBA (SysPixelColor[IDX_COLOR_darkgray].r,
+//                                          SysPixelColor[IDX_COLOR_darkgray].g,
+//                                          SysPixelColor[IDX_COLOR_darkgray].b,
+//                                          0xE0),
+//                                CT_ALPHAPIXEL, 0xFF);
+
     hDockBar = CreateMainWindowEx2 (&CreateInfo, 0L, NULL, NULL, ST_PIXEL_ARGB8888,
-                                MakeRGBA (SysPixelColor[IDX_COLOR_darkgray].r,
-                                          SysPixelColor[IDX_COLOR_darkgray].g,
-                                          SysPixelColor[IDX_COLOR_darkgray].b,
-                                          0xE0),
+                                MakeRGBA (140, 140, 140, 0xF0),
                                 CT_ALPHAPIXEL, 0xFF);
 
     for(i = 0; i < BUTTON_COUNT; i++)

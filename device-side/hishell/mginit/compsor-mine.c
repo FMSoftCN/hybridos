@@ -222,7 +222,7 @@ static void draw_title(HDC hdc, RECT rect, const char * text)
 
                     // layout
                     textruns = CreateTextRuns(ucs, nr_ucs, LANGCODE_zh, BIDI_PGDIR_ON, 
-                                "ttf-思源黑体-ernnns-*-14-UTF-8", MakeRGB(0, 0, 0), 0, bos + 1);
+                                "ttf-Source-ernnns-*-16-UTF-8", MakeRGB(0, 0, 0), 0, bos + 1);
                     if(textruns) 
                     {
                         if(!InitComplexShapingEngine(textruns)) 

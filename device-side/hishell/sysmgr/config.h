@@ -66,9 +66,6 @@
 #define DIRECTION_SHOW      0               // show the main window
 #define DIRECTION_HIDE      1               // hide the main window
 
-#define STATUSBAR_ANIMATION_TIME    1000    // 1000 ms
-#define DOCKBAR_ANIMATION_TIME      500     // 500 ms
-
 // some macro of physical dimension 
 #define MARGIN_STATUS       2               // margin of text area in status bar
 #define MARGIN_DOCK         15              // margin of button in dock bar
