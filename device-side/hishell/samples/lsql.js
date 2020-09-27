@@ -12,6 +12,7 @@ function addRow(id, title, author, isbn) {
     row.appendChild(createCell(title, title));
     row.appendChild(createCell(author, author));
     row.appendChild(createCell(isbn, isbn));
+    row.appendChild(createDelButton(id));
 
     tbody.appendChild(row);
 }
@@ -21,6 +22,20 @@ function createCell(value, text) {
     cell.setAttribute("class", "detailsColumn");
     cell.dataset.value = value;
     cell.innerText = text;
+    return cell;
+}
+
+function createDelButton(id) {
+    var cell = document.createElement("td");
+    cell.setAttribute("class", "detailsColumn");
+
+    var link = document.createElement("div");
+    link.innerText = "删除";
+    link.onclick = function() {
+        lsqlDel(id);
+    }
+
+    cell.appendChild(link);
     return cell;
 }
 
@@ -121,6 +136,29 @@ function lsqlInsert() {
         if (xmlHttp.readyState==4 && xmlHttp.status==200)
         {
             info("Insert success.");
+        }
+    }
+    xmlHttp.send( null );
+}
+
+function lsqlDel(recordId) {
+    if(typeof recordId == "undefined" || typeof recordId != "number" || recordId < 0)
+    {
+        info("Invalid id : " + recordId);
+        return;
+    }
+
+    var cmd = "delete from Books where id = " + recordId;
+    var xmlHttp = new XMLHttpRequest();
+    var baseUrl = "lsql:///home/xue/work/hybridos/device-side/hishell/samples/samples.db?sqlQuery="; 
+    var url = encodeURI(baseUrl + cmd);
+
+    xmlHttp.open( "GET", url, true);
+    xmlHttp.onreadystatechange=function()
+    {
+        if (xmlHttp.readyState==4 && xmlHttp.status==200)
+        {
+            info("Delete success.");
         }
     }
     xmlHttp.send( null );
