@@ -165,7 +165,7 @@ to support dynamic content locally.
 When you launch an activity, you can pass the intent as the GET
 parameters to the HVML document:
 
-    foot/bar.hvml?fname=XXX&lname=XXX
+    foo/bar.hvml?fname=XXX&lname=XXX
 
 Or pass the intent as a JSON object to the HVML document.
 
