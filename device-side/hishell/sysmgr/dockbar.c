@@ -230,7 +230,7 @@ static void paintSVGArrow(HDC hdc)
     float r = SysPixelColor[IDX_COLOR_darkgray].r / 255.0;
     float g = SysPixelColor[IDX_COLOR_darkgray].g / 255.0;
     float b = SysPixelColor[IDX_COLOR_darkgray].b / 255.0;
-    float alpha = 0xF0 / 255.0;
+    float alpha = 0xE0 / 255.0;
     cairo_set_source_rgb (cr[0],  r*alpha, g*alpha, b*alpha);
     cairo_paint (cr[0]);
     rsvg_handle_render_cairo_style (m_arrow_svg_handle, cr[0], &button_color_pair[0], 1);
@@ -300,7 +300,7 @@ static void loadSVGFromFile(const char* file, int index)
     float r = SysPixelColor[IDX_COLOR_darkgray].r / 255.0;
     float g = SysPixelColor[IDX_COLOR_darkgray].g / 255.0;
     float b = SysPixelColor[IDX_COLOR_darkgray].b / 255.0;
-    float alpha = 0xF0 / 255.0;
+    float alpha = 0xE0 / 255.0;
     cairo_set_source_rgb (cr[index],  r*alpha, g*alpha, b*alpha);
     cairo_paint (cr[index]);
     rsvg_handle_render_cairo_style (handle, cr[index], &button_color_pair[index], 1);
@@ -317,7 +317,7 @@ static void paintDockBarIcon(HDC hdc)
     float r = SysPixelColor[IDX_COLOR_darkgray].r / 255.0;
     float g = SysPixelColor[IDX_COLOR_darkgray].g / 255.0;
     float b = SysPixelColor[IDX_COLOR_darkgray].b / 255.0;
-    float alpha = 0xF0 / 255.0;
+    float alpha = 0xE0 / 255.0;
     for(i = 1; i < BUTTON_COUNT; i ++)
     {
         if(surface[i] && cr[i])
@@ -676,7 +676,7 @@ HWND create_dock_bar (void)
 //                                CT_ALPHAPIXEL, 0xFF);
 
     hDockBar = CreateMainWindowEx2 (&CreateInfo, 0L, NULL, NULL, ST_PIXEL_ARGB8888,
-                                MakeRGBA (140, 140, 140, 0xF0),
+                                MakeRGBA (140, 140, 140, 0xE0),
                                 CT_ALPHAPIXEL, 0xFF);
 
     for(i = 0; i < BUTTON_COUNT; i++)
