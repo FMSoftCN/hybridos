@@ -92,25 +92,33 @@ in order that the developers can focus on their applications.
 
 ## Goals of HybridOS
 
+### A new programming language for universal app
+
+HybridOS provides a new and universal app framework for IoT devices and client apps.
+The developers can write device app and client apps for Linux, Windows, macOS,
+Android, and iOS operating systems by using HVML (Hybrid Virtual Markup Language).
+HVML provides a data-driven programming model, and one developer can easily write
+an app with GUI by using HVML like writing a HTML document. HVML also provides
+a way to integrate external modules writing in other programming languages.
+On low-end IoT devices, you use C++ as the external programming language,
+while you use Python or JavaScript on high-end IoT devices and/or clients as
+the external programming language.
+
+Finally, the app programming languages of HybridOS will be reduced to two:
+HVML and one object-oriented programming language (Python, JavaScript, or C++),
+no matter on device, mobile phone, computer, or server.
+As a result, the development cost of an IoT application will be reduced
+greatly by using HybridOS.
+
 ### A specialized software stack for IoT
 
 HybridOS provides a new software stack for IoT applications:
 
-* A new implementation for common server, such as MQTT, WebSocket, HTTP,
-  CoAP, and streaming servers. HybridOS provides a different
-  architecture for the implementation of the servers: any HybridOS app or
-  service can register and work as a real service provider or a request provider
-  of the servers.
-
-* A new and universal app framework for IoT devices and client apps.
-  The developers can write device app and client apps for Linux, Windows, macOS,
-  Android, and iOS operating systems by using a set of extended HTML5 tags
-  and CSS 3. On low-end IoT devices, you use C++ as the script language of HVML,
-  while you use JavaScript on high-end IoT devices and/or clients.
-
-Finally, the application programming languages of HybridOS will be reduced to two:
-JavaScript or C/C++ for apps. As a result, the development cost of
-an IoT application will be reduced greatly by using HybridOS.
+A new implementation for common server, such as data bus, HTTP,
+CoAP, and streaming servers. HybridOS provides a different
+architecture for the implementation of the servers: any HybridOS app or
+service can register and work as a real service provider or a request
+provider of the servers.
 
 ### IoT-dedicated cloud computing services and security implementation
 
@@ -127,12 +135,12 @@ service. HybridOS will provide an enhanced MQTT implementation for
 communication between things and an identity authentication mechanism
 based on blockchain technology/idea.
 
-### Rich connectivities
+### Rich connectivity
 
 On the device side, HybridOS integrates a standard peripheral and task
-management interface based on hBus (an enhanced edition of OpenWRT's uBus),
+management interface based on hiBus (an enhanced edition of OpenWRT's uBus),
 such as networking management, sensor (like GPS and gravity accelerometer)
-management, and USB interface management. hBus exchanges data among apps
+management, and USB interface management. hiBus exchanges data among apps
 and services in JSON, which is friendly for any programming language.
 
 HybridOS will provide a variety of connectivity options for the IoT devices,
@@ -196,16 +204,19 @@ through the following public repositories:
    + MiniGUI: the window system for HybridOS:
 <https://github.com/VincentWei/minigui>
 
-- System Servers: (Stay tuned).
+- System Servers:
+   + hiHttp: the HTTP server for HybridOS device side: (Stay Tuned).
+   + hiBus: the data bus server for HybridOS device side:
+<https://github.com/FMSoftCN/hibus>
 
 - System Daemons:
-   + hiBus: the HybridOS derivative of uBus:
-<https://github.com/FMSoftCN/hibus>
    + hiLogged: the HybridOS logging service: (Stay tuned).
    + hiSecd: the HybridOS security service: (Stay tuned).
 
 ## Current Status
 
+- Sep. 2020:  
+   FMSoft announces the availability of the app running environment of HybridOS for device-side: hiShell.
 - Aug. 2020:  
    FMSoft announces the availability of the key component of HybridOS for device-side: hiWebKit.
 - Mar. 2020:  
