@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="bootstrap.min.css">
 
         <title >lSql Samples</title>
         <script type="text/javascript" src="lsql.js">
@@ -14,45 +15,72 @@
             糟糕！无法解读服务器所发送的数据。
         </div>
 
-        <h1>Insert:</h1>
-        <div id="insertDiv">
-            <p><input class="insertInput" type="text" id="idInput" placeholder="Id" /></p>
-            <p><input class="insertInput" type="text" id="titleInput" placeholder="Title" / ></p>
-            <p><input class="insertInput" type="text" id="authorInput" placeholder="Author" /></p>
-            <p><input class="insertInput" type="text" id="isbnInput" placeholder="Isbn" /></p>
-            <p><button id="btnInsert" type="button" onclick="lsqlInsert()">Insert</button></p>
+        <div id="insertDiv" class="container">
+            <div class="row input-group mb-3">
+                Insert:
+            </div>
+            <div class="row input-group mb-3">
+                <input id="idInput" type="text" class="form-control" placeholder="Id" aria-label="Id" aria-describedby="basic-addon1">
+            </div>
+            <div class="row input-group mb-3">
+                <input id="titleInput" type="text" class="form-control" placeholder="Title" aria-label="Title" aria-describedby="basic-addon1">
+            </div>
+            <div class="row input-group mb-3">
+                <input id="authorInput" type="text" class="form-control" placeholder="Author" aria-label="Author" aria-describedby="basic-addon1">
+            </div>
+            <div class="row input-group mb-3">
+                <input id="isbnInput" type="text" class="form-control" placeholder="Isbn" aria-label="Isbn" aria-describedby="basic-addon1">
+            </div>
+            <div class="row input-group mb-3">
+                <button id="btnInsert" type="button"  class="btn btn-primary" onclick="lsqlInsert()">Insert</button>
+            </div>
         </div>
 
 
-        <h1>Query:</h1>
-        <div id="inputDiv">
-            <input id="cmdInput" type="text" name="sqlCmd" value="select * from Books"/ >
-            <button id="btnSelect" type="button" onclick="lsqlSelect()">Query</button>
+        <div id="inputDiv" class="container">
+            <div class="row input-group mb-3">
+                Query:
+            </div>
+            <div class="row input-group mb-3">
+                <input id="cmdInput" type="text" class="form-control" placeholder="sql" aria-label="sql" aria-describedby="basic-addon1" value="select * from Books">
+            </div>
+            <div class="row input-group mb-3">
+                <button id="btnSelect" type="button"  class="btn btn-primary" onclick="lsqlSelect()">Query</button>
+            </div>
         </div>
 
-        <table border="0">
-            <thead>
-                <tr class="header" id="theader">
-                    <th id="idColumnHeader" tabindex=0 role="button">Id</th>
-                    <th id="titleColumnHeader" class="detailsColumn" tabindex=0 role="button">
-                        Title
-                    </th>
-                    <th id="authorColumnHeader" class="detailsColumn" tabindex=0 role="button" >
-                        Author
-                    </th>
-                    <th id="isbnColumnHeader" class="detailsColumn" tabindex=0 role="button">
-                        Isbn
-                    </th>
-                    <th id="delColumnHeader" class="detailsColumn" tabindex=0 role="button">
-                        xxxxx
-                    </th>
-                </tr>
-            </thead>
-            <tbody id="tbody">
-            </tbody>
-        </table>
-        <div class="splitDiv"></div>
-        <div id="info"></div>
+        <div class="container">
+            <div class="row">
+                <table border="0">
+                    <thead>
+                        <tr class="header" id="theader">
+                            <th id="idColumnHeader" tabindex=0 role="button">Id</th>
+                            <th id="titleColumnHeader" class="detailsColumn" tabindex=0 role="button">
+                                Title
+                            </th>
+                            <th id="authorColumnHeader" class="detailsColumn" tabindex=0 role="button" >
+                                Author
+                            </th>
+                            <th id="isbnColumnHeader" class="detailsColumn" tabindex=0 role="button">
+                                Isbn
+                            </th>
+                            <th id="delColumnHeader" class="detailsColumn" tabindex=0 role="button">
+                                xxxxx
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col alert alert-primary" id="info">
+                </div>
+            </div>
+        </div>
     </body>
 </html>
 

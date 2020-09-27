@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>watchface</title>
+        <link rel="stylesheet" href="bootstrap.min.css">
         <style type="text/css">
             body
             {
@@ -14,11 +15,9 @@
 			}
 
             #simpleWatch { background-image: url(watchfaceBg.png); }
-            #paramStatus { border: 1px solid #000; height: 100px; max-height: 100px; overflow:auto; }
         </style>
     </head>
     <body>
-        <p>Watch dial</p>
         <hiview type="watchface" design="default" vendor="fmsoft.cn"
             id="simpleWatch" width="520" height="520"
             data-move="static" data-time="9:45:03"
@@ -30,21 +29,24 @@
             <param name="hands" value="hour,minute,second" />
         </hiview>
 
-        <p>Params:</p>
-        <div id="paramMove"></div>
-        <div id="paramTime"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col alert alert-primary" role="alert" id="statusInfo">
+                </div>
+                <div class="col alert alert-primary" id="paramStatus">
+                </div>
+            </div>
+        </div>
 
-        <button id="btnStart" type="button">Start</button>
-        <button id="btnStop" type="button">Stop</button>
-        <div id="paramStatus"></div>
+        <button id="btnStart" type="button" class="btn btn-primary">Start</button>
+        <button id="btnStop" type="button"  class="btn btn-primary">Stop</button>
 
         <script type="text/javascript">
             var watch = document.getElementById("simpleWatch");
 
             function updateStatus()
             {
-                document.getElementById("paramMove").innerText = "move: " + watch.dataset.move;
-                document.getElementById("paramTime").innerText = "time: " + watch.dataset.time;
+                document.getElementById("statusInfo").innerText = "data-move: " + watch.dataset.move + " | data-time: " + watch.dataset.time;
             }
             function startMove()
             {
@@ -57,25 +59,43 @@
                 watch.dataset.move = 'static';
                 updateStatus();
             }
+            function dateFormat(fmt, date) {
+                let ret;
+                let opt = {
+                    "Y+": date.getFullYear().toString(),        // 年
+                    "m+": (date.getMonth() + 1).toString(),     // 月
+                    "d+": date.getDate().toString(),            // 日
+                    "H+": date.getHours().toString(),           // 时
+                    "M+": date.getMinutes().toString(),         // 分
+                    "S+": date.getSeconds().toString()          // 秒
+                };
+                for (let k in opt) {
+                    ret = new RegExp("(" + k + ")").exec(fmt);
+                    if (ret) {
+                        fmt=fmt.replace(ret[1],(ret[1].length==1)?(opt[k]):(opt[k].padStart(ret[1].length,"0")))
+                    };
+                };
+                return fmt;
+            }
 
             function viewHandMoved(event)
             {
-                document.getElementById("paramStatus").innerText = parseInt(event.timeStamp) + " Event: onhandsmoved:" +  event.hands + " \n" + document.getElementById("paramStatus").innerText;
+                document.getElementById("paramStatus").innerText = dateFormat("YYYY-mm-dd HH:MM:SS", new Date())  +  ": onhandsmoved:" + event.hands;
             }
 
             function viewHourMoved()
             {
-                document.getElementById("paramStatus").innerText = parseInt(event.timeStamp) + " Event: onhourmoved" + "\n" + document.getElementById("paramStatus").innerText;
+                document.getElementById("paramStatus").innerText =  dateFormat("YYYY-mm-dd HH:MM:SS", new Date())  + " : onhourmoved ";
             }
 
             function viewSecondMoved()
             {
-                document.getElementById("paramStatus").innerText = parseInt(event.timeStamp) + " Event: onsecondmoved" + "\n" + document.getElementById("paramStatus").innerText;
+                document.getElementById("paramStatus").innerText =  dateFormat("YYYY-mm-dd HH:MM:SS", new Date())  + " : onsecondmoved ";
             }
 
             function viewMinuteMoved()
             {
-                document.getElementById("paramStatus").innerText = parseInt(event.timeStamp) + " Event: onminutemoved" + "\n" + document.getElementById("paramStatus").innerText;
+                document.getElementById("paramStatus").innerText =  dateFormat("YYYY-mm-dd HH:MM:SS", new Date())  + " : onminutemoved ";
             }
 
             var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver

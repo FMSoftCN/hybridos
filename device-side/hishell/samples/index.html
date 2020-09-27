@@ -1,6 +1,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="bootstrap.min.css">
         <style type="text/css">
             body
             {
@@ -19,14 +20,13 @@
                 border-style: solid none solid none;
                 border-width: 1px;
                 border-color: gray;
-                font-size: 18px;
+                font-size: 20px;
                 color: black;
             }
 
             ::-hi-picker-items
             {
                 color: gray;
-                font-size: 18px;
             }
 
             ::-hi-picker-selected-before
@@ -40,21 +40,30 @@
         </style>
     </head>
     <body>
-        <hipicker type="text" class="samples"
+        <hipicker type="text" class="samples border"
                   width="200" height="240"
                   name="samples" value="2"
                   endtoend="true"
                   id="samplesPicker"
                   onchange="pickchange(this.value)"
                   >
-            <hiitem value="0">hiView : watchface</hiitem>
-            <hiitem value="1">hiView : stopwatch</hiitem>
-            <hiitem value="2">hiMeter</hiitem>
-            <hiitem value="3">lCmd</hiitem>
-            <hiitem value="4">lSql</hiitem>
+            <hiitem value="0">hiView : watchface </hiitem>
+            <hiitem value="1">hiView : stopwatch </hiitem>
+            <hiitem value="2">hiMeter </hiitem>
+            <hiitem value="3">lCmd </hiitem>
+            <hiitem value="4">lSql </hiitem>
         </hipicker>
 
-        <div id="paramStatus"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col alert alert-light" id="paramStatus">
+                </div>
+                <div class="col">
+                </div>
+            </div>
+        </div>
 
         <script type="text/javascript">
 
@@ -105,6 +114,6 @@
 
             pickchange("2");
         </script>
-        <button type="button" onclick="showSamples()">Show Samples</button>
+        <button type="button"  class="btn btn-primary" onclick="showSamples()">Show Samples</button>
     </body>
 </html>
