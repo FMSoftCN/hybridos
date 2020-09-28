@@ -6,7 +6,7 @@
 
 ## 基本框架
 
-下图给出了单一应用场景下的 HybridOS 系统架构图：
+下图给出了单一应用场景下的 HybridOS 设备侧系统架构图：
 
 ```
  ---------------------------------------------------------------------------------
@@ -57,9 +57,9 @@ hiBus 的基本思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 ### 套接字接口
 
-1. Unix Doman Socket 接口
-   - `/var/hibus/event`：事件
-   - `/var/hibus/method`：过程调用
+1. Unix Doman Socket 端口：
+   - `/var/run/hibus.event`：事件
+   - `/var/run/hibus.method`：过程调用
 1. Web Socket 端口（HybridOS 保留 7000 ~ 7999 端口）：
    - `7700`：事件
    - `7701`：过程调用
