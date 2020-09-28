@@ -16,7 +16,7 @@
                 outline:none;
 			}
 
-            #simpleWatch { background-image: url(watchfaceBg.png); }
+            #simpleWatch { background-image: url(watchfaceBg.png); background-size:contain;}
         </style>
     </head>
     <body>
@@ -37,7 +37,7 @@
         </header>
 
         <hiview type="watchface" design="default" vendor="fmsoft.cn"
-            id="simpleWatch" width="520" height="520"
+            id="simpleWatch" width="400" height="400"
             data-move="static" data-time="9:45:03"
             onhandsmoved="viewHandMoved(event)"
             onhourmoved="viewHourMoved(event)"
