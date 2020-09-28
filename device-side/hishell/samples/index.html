@@ -22,13 +22,14 @@
                 border-style: solid none solid none;
                 border-width: 1px;
                 border-color: gray;
-                font-size: 20px;
+                font-size: 24px;
                 color: black;
             }
 
             ::-hi-picker-items
             {
                 color: gray;
+                font-size: 24px;
             }
 
             ::-hi-picker-selected-before
@@ -51,9 +52,9 @@
                     <li class="nav-item"><a class="nav-link active" href="index.html">演示主页</a></li>
                     <li class="nav-item"><a class="nav-link " href="watchface.html">时钟</a></li>
                     <li class="nav-item"> <a class="nav-link " href="stopwatch.html">秒表</a></li>
-                    <li class="nav-item"> <a class="nav-link " href="himeter.html">仪表</a></li>
-                    <li class="nav-item"><a class="nav-link" href="lcmd.html">LCMD</a></li>
-                    <li class="nav-item"><a class="nav-link" href="lsql.html">LSQL</a></li>
+                    <li class="nav-item"> <a class="nav-link " href="himeter.html">仪表指针</a></li>
+                    <li class="nav-item"><a class="nav-link" href="lcmd.html">本地命令</a></li>
+                    <li class="nav-item"><a class="nav-link" href="lsql.html">本地数据库</a></li>
                 </ul>
             </div>
         </header>
@@ -62,30 +63,21 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-6 mx-auto col-md-6 order-md-2">
-                        <hipicker type="text" class="samples border"
-                                  width="200" height="240"
+                        <hipicker type="text" class="samples"
+                                  width="200" height="200"
                                   name="samples" value="2"
                                   endtoend="true"
                                   id="samplesPicker"
                                   onchange="pickchange(this.value)"
                                   >
-                              <hiitem value="0">hiView : watchface </hiitem>
-                              <hiitem value="1">hiView : stopwatch </hiitem>
-                              <hiitem value="2">hiMeter </hiitem>
-                              <hiitem value="3">lCmd </hiitem>
-                              <hiitem value="4">lSql </hiitem>
+                              <hiitem value="0">时钟</hiitem>
+                              <hiitem value="1">秒表</hiitem>
+                              <hiitem value="2">仪表指针</hiitem>
+                              <hiitem value="3">本地命令</hiitem>
+                              <hiitem value="4">本地数据库</hiitem>
                         </hipicker>
-                        <div class="container">
-                            <div class="row">
-                                <div class="col">
-                                </div>
-                                <div class="col alert alert-light" id="paramStatus">
-                                </div>
-                                <div class="col">
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button"  class="btn btn-primary" onclick="showSamples()">Show Samples</button>
+                        <p id="paramStatus"></p>
+                        <button type="button"  class="btn btn-primary" onclick="showSamples()">查看演示</button>
                     </div>
                     <div class="col-md-6 order-md-1 text-center text-md-left pr-md-5">
                         <h1 class="mb-3 bd-text-purple-bright">HybridOS</h1>
@@ -109,19 +101,19 @@
                 switch(value)
                 {
                     case "0":
-                        document.getElementById("paramStatus").innerText = "hiView 示例一: watchface";
+                        document.getElementById("paramStatus").innerText = "时钟表盘，使用扩展的 hiview 标签实现";
                         break;
                     case "1":
-                        document.getElementById("paramStatus").innerText = "hiView 示例二: stopwatch";
+                        document.getElementById("paramStatus").innerText = "秒表，使用扩展的 hiview 标签实现";
                         break;
                     case "2":
-                        document.getElementById("paramStatus").innerText = "hiMeter 示例";
+                        document.getElementById("paramStatus").innerText = "指针式仪表盘或条带式仪表盘，使用扩展的 himeter 及 hihand 标签实现";
                         break;
                     case "3":
-                        document.getElementById("paramStatus").innerText = "lCmd 示例";
+                        document.getElementById("paramStatus").innerText = "使用 LCMD 协议直接读取文件系统内容";
                         break;
                     case "4":
-                        document.getElementById("paramStatus").innerText = "lSql 示例";
+                        document.getElementById("paramStatus").innerText = "使用 LSQL 协议直接操作本地数据库";
                         break;
                 }
             }
