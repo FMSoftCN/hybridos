@@ -43,7 +43,7 @@ hiBus 的基本思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 我们保留如下特别的主机名称、应用名称：
 
-- `localhost`：指通过 127.0.0.1 IP 地址连接到 hiBus 的本机模块。
+- `localhost`：指通过 Unix Domain Socket 或本机 IP 地址（127.0.0.1）连接到 hiBus 的本机模块。
 - `cn.fmsoft.hybridos.hibus`：保留的应用名称，指 hiBus 本身，注册或注销事件或方法时，向该应用发送指定的过程调用。该应用也可提供一些一般性的系统操作命令以及事件。
 
 不同的软件模块可扮演不同的角色或同时扮演多个角色：
