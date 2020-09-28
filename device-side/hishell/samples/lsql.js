@@ -19,7 +19,6 @@ function addRow(id, title, author, isbn) {
 
 function createCell(value, text) {
     var cell = document.createElement("td");
-    cell.setAttribute("class", "detailsColumn");
     cell.dataset.value = value;
     cell.innerText = text;
     return cell;
@@ -27,9 +26,9 @@ function createCell(value, text) {
 
 function createDelButton(id) {
     var cell = document.createElement("td");
-    cell.setAttribute("class", "detailsColumn");
 
     var link = document.createElement("div");
+    link.setAttribute("class", "btn btn-danger");
     link.innerText = "删除";
     link.onclick = function() {
         lsqlDel(id);

@@ -1,71 +1,88 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="bootstrap.min.css">
+        <link href="docs.min.css" rel="stylesheet">
 
-        <title >lSql Samples</title>
         <script type="text/javascript" src="lsql.js">
         </script>
         <link rel="stylesheet" type="text/css" href="lsql.css">
     </head>
 
     <body>
-        <div id="listingParsingErrorBox">
-            糟糕！无法解读服务器所发送的数据。
-        </div>
+        <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar"> 
+            <a class="navbar-brand mr-0 mr-md-2" href="https://hybridos.fmsoft.cn/" aria-label="Bootstrap" target="_blank">
+                <span class="border border-white rounded-lg p-1"> HybridOS </span>
+            </a>
+            <div class="navbar-nav-scroll">
+                <ul class="navbar-nav bd-navbar-nav flex-row">
+                    <li class="nav-item"><a class="nav-link" href="index.html">演示主页</a></li>
+                    <li class="nav-item"><a class="nav-link" href="watchface.html">时钟</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="stopwatch.html">秒表</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="himeter.html">仪表指针</a></li>
+                    <li class="nav-item"><a class="nav-link" href="lcmd.html">本地命令</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="lsql.html">本地数据库</a></li>
+                </ul>
+            </div>
+        </header>
 
         <div id="insertDiv" class="container">
             <div class="row input-group mb-3">
-                Insert:
             </div>
             <div class="row input-group mb-3">
-                <input id="idInput" type="text" class="form-control" placeholder="Id" aria-label="Id" aria-describedby="basic-addon1">
+                <div class="col">
+                    <input id="idInput" type="text" class="form-control" placeholder="Id" aria-label="Id" aria-describedby="basic-addon1">
+                </div>
+                <div class="col">
+                    <input id="titleInput" type="text" class="form-control" placeholder="Title" aria-label="Title" aria-describedby="basic-addon1">
+                </div>
+            </div>
+            <div class="row input-group mb-3" >
+                <div class="col">
+                    <input id="authorInput" type="text" class="form-control" placeholder="Author" aria-label="Author" aria-describedby="basic-addon1">
+                </div>
+                <div class="col">
+                    <input id="isbnInput" type="text" class="form-control" placeholder="Isbn" aria-label="Isbn" aria-describedby="basic-addon1">
+                </div>
             </div>
             <div class="row input-group mb-3">
-                <input id="titleInput" type="text" class="form-control" placeholder="Title" aria-label="Title" aria-describedby="basic-addon1">
-            </div>
-            <div class="row input-group mb-3">
-                <input id="authorInput" type="text" class="form-control" placeholder="Author" aria-label="Author" aria-describedby="basic-addon1">
-            </div>
-            <div class="row input-group mb-3">
-                <input id="isbnInput" type="text" class="form-control" placeholder="Isbn" aria-label="Isbn" aria-describedby="basic-addon1">
-            </div>
-            <div class="row input-group mb-3">
-                <button id="btnInsert" type="button"  class="btn btn-primary" onclick="lsqlInsert()">Insert</button>
+                <button id="btnInsert" type="button"  class="btn btn-primary" onclick="lsqlInsert()">插入</button>
             </div>
         </div>
 
 
         <div id="inputDiv" class="container">
             <div class="row input-group mb-3">
-                Query:
             </div>
             <div class="row input-group mb-3">
                 <input id="cmdInput" type="text" class="form-control" placeholder="sql" aria-label="sql" aria-describedby="basic-addon1" value="select * from Books">
             </div>
             <div class="row input-group mb-3">
-                <button id="btnSelect" type="button"  class="btn btn-primary" onclick="lsqlSelect()">Query</button>
+                <button id="btnSelect" type="button"  class="btn btn-primary" onclick="lsqlSelect()">查询</button>
             </div>
         </div>
 
         <div class="container">
-            <div class="row">
-                <table border="0">
+            <div class="row pre-scrollable">
+                <table class="table table-striped">
                     <thead>
                         <tr class="header" id="theader">
-                            <th id="idColumnHeader" tabindex=0 role="button">Id</th>
-                            <th id="titleColumnHeader" class="detailsColumn" tabindex=0 role="button">
+                            <th>
+                                id
+                            </th>
+                            <th>
                                 Title
                             </th>
-                            <th id="authorColumnHeader" class="detailsColumn" tabindex=0 role="button" >
+                            <th>
                                 Author
                             </th>
-                            <th id="isbnColumnHeader" class="detailsColumn" tabindex=0 role="button">
+                            <th>
                                 Isbn
                             </th>
-                            <th id="delColumnHeader" class="detailsColumn" tabindex=0 role="button">
-                                xxxxx
+                            <th>
+                                
                             </th>
                         </tr>
                     </thead>
@@ -76,9 +93,7 @@
         </div>
 
         <div class="container">
-            <div class="row">
-                <div class="col alert alert-primary" id="info">
-                </div>
+            <div class="row alert alert-light" id="info">
             </div>
         </div>
     </body>
