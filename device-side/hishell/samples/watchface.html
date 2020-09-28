@@ -1,7 +1,9 @@
 <html>
     <head>
-        <title>watchface</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="bootstrap.min.css">
+        <link href="docs.min.css" rel="stylesheet">
         <style type="text/css">
             body
             {
@@ -18,6 +20,22 @@
         </style>
     </head>
     <body>
+        <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar"> 
+            <a class="navbar-brand mr-0 mr-md-2" href="https://hybridos.fmsoft.cn/" aria-label="Bootstrap" target="_blank">
+                <span class="border border-white rounded-lg p-1"> HybridOS </span>
+            </a>
+            <div class="navbar-nav-scroll">
+                <ul class="navbar-nav bd-navbar-nav flex-row">
+                    <li class="nav-item"><a class="nav-link" href="index.html">演示主页</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="watchface.html">时钟</a></li>
+                    <li class="nav-item"> <a class="nav-link " href="stopwatch.html">秒表</a></li>
+                    <li class="nav-item"> <a class="nav-link " href="himeter.html">仪表指针</a></li>
+                    <li class="nav-item"><a class="nav-link" href="lcmd.html">本地命令</a></li>
+                    <li class="nav-item"><a class="nav-link" href="lsql.html">本地数据库</a></li>
+                </ul>
+            </div>
+        </header>
+
         <hiview type="watchface" design="default" vendor="fmsoft.cn"
             id="simpleWatch" width="520" height="520"
             data-move="static" data-time="9:45:03"
@@ -38,8 +56,8 @@
             </div>
         </div>
 
-        <button id="btnStart" type="button" class="btn btn-primary">Start</button>
-        <button id="btnStop" type="button"  class="btn btn-primary">Stop</button>
+        <button id="btnStart" type="button" class="btn btn-primary">开始</button>
+        <button id="btnStop" type="button"  class="btn btn-primary">停止</button>
 
         <script type="text/javascript">
             var watch = document.getElementById("simpleWatch");
