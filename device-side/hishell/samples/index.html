@@ -1,7 +1,9 @@
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="bootstrap.min.css">
+        <link href="docs.min.css" rel="stylesheet">
         <style type="text/css">
             body
             {
@@ -40,6 +42,22 @@
         </style>
     </head>
     <body>
+        <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar"> 
+            <a class="navbar-brand mr-0 mr-md-2" href="https://hybridos.fmsoft.cn/" aria-label="Bootstrap" target="_blank">
+                <span class="border border-white rounded-lg p-1"> HybridOS </span>
+            </a>
+            <div class="navbar-nav-scroll">
+                <ul class="navbar-nav bd-navbar-nav flex-row">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">演示主页</a></li>
+                    <li class="nav-item"><a class="nav-link " href="watchface.html">时钟</a></li>
+                    <li class="nav-item"> <a class="nav-link " href="stopwatch.html">秒表</a></li>
+                    <li class="nav-item"> <a class="nav-link " href="himeter.html">仪表</a></li>
+                    <li class="nav-item"><a class="nav-link" href="lcmd.html">LCMD</a></li>
+                    <li class="nav-item"><a class="nav-link" href="lsql.html">LSQL</a></li>
+                </ul>
+            </div>
+        </header>
+
         <hipicker type="text" class="samples border"
                   width="200" height="240"
                   name="samples" value="2"
