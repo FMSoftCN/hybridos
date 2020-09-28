@@ -37,26 +37,27 @@
             </div>
         </header>
 
-        <hiview id="stopWatchId" type="stopwatch" width="400" height="400">
-            <param id="stopwatchaction" name="action" value="start" />
-            <param name="faces" value="minute, hour, digits, second" />
-            <param name="secondscale" value="60" />
-            <param name="minutescale" value="60" />
-            <param name="hourscale" value="24" />
-<!--            <param src="dida.mp3" name="ticktack" value="loop, always" />   -->
-        </hiview>
-
-        <p/>
         <div class="container">
+            <hiview id="stopWatchId" type="stopwatch" width="400" height="400">
+                <param id="stopwatchaction" name="action" value="start" />
+                <param name="faces" value="minute, hour, digits, second" />
+                <param name="secondscale" value="60" />
+                <param name="minutescale" value="60" />
+                <param name="hourscale" value="24" />
+    <!--            <param src="dida.mp3" name="ticktack" value="loop, always" />   -->
+            </hiview>
+        </div>
+
+        <div class="container">
+            <div class="row p-2">
+            </div>
             <div class="row">
                 <div class="col">
                 </div>
                 <div class="col">
                     <button id="btnValue1" type="button" class="btn btn-primary">开始</button>
-                    <button id="btnValue2" type="button" class="btn btn-primary">暂停</button>
-                    <button id="btnValue3" type="button" class="btn btn-primary">停止</button>
-                    <button id="btnValue4" type="button" class="btn btn-primary">重置</button>
-                    <button id="btnValue5" type="button" class="btn btn-primary">新的</button>
+                    <button id="btnValue2" type="button" class="btn btn-warning">暂停</button>
+                    <button id="btnValue3" type="button" class="btn btn-danger">停止</button>
                 </div>
                 <div class="col">
                 </div>
