@@ -214,7 +214,7 @@ static void animated_cb(MGEFF_ANIMATION handle, HWND hWnd, int id, int *value)
     if(m_StatusBar_Y != *value)
     {
         m_StatusBar_Y = *value;
-        MoveWindow(hWnd, g_rcScr.left, m_StatusBar_Y, g_rcScr.right, m_StatusBar_Height, TRUE);
+        MoveWindow(hWnd, g_rcScr.right * (1.0 - 0.618) / 2.0, m_StatusBar_Y, g_rcScr.right * 0.618, m_StatusBar_Height, TRUE);
     }
 }
 
@@ -280,7 +280,7 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
     static PLOGFONT font_time;
     char buff [20];
     int length = 0;
-    RECT rect[2] = {{10 * MARGIN_STATUS, MARGIN_STATUS, g_rcScr.right - TIME_INFO_X,  m_StatusBar_Height - MARGIN_STATUS}, {g_rcScr.right - TIME_INFO_X, MARGIN_STATUS, g_rcScr.right - MARGIN_STATUS, m_StatusBar_Height - MARGIN_STATUS}};
+    RECT rect[2] = {{10 * MARGIN_STATUS, MARGIN_STATUS, g_rcScr.right * 0.618 - TIME_INFO_X,  m_StatusBar_Height - MARGIN_STATUS}, {g_rcScr.right * 0.618 - TIME_INFO_X, MARGIN_STATUS, g_rcScr.right * 0.618 - MARGIN_STATUS, m_StatusBar_Height - MARGIN_STATUS}};
     char config_path[MAX_PATH + 1];
     char* etc_value = NULL;
 
@@ -427,15 +427,15 @@ HWND create_status_bar (void)
 
     // create a main window
     CreateInfo.dwStyle = WS_ABSSCRPOS | WS_VISIBLE;
-    CreateInfo.dwExStyle = WS_EX_WINTYPE_DOCKER;
+    CreateInfo.dwExStyle = WS_EX_WINTYPE_DOCKER | WS_EX_TROUNDCNS | WS_EX_BROUNDCNS;
     CreateInfo.spCaption = STRING_OS_NAME ;
     CreateInfo.hMenu = 0;
     CreateInfo.hCursor = GetSystemCursor (0);
     CreateInfo.hIcon = 0;
     CreateInfo.MainWindowProc = StatusBarWinProc;
-    CreateInfo.lx = g_rcScr.left; 
+    CreateInfo.lx = g_rcScr.right * (1 - 0.618) / 2.0; 
     CreateInfo.ty = 0;
-    CreateInfo.rx = g_rcScr.right;
+    CreateInfo.rx = CreateInfo.lx + g_rcScr.right * 0.618;
     CreateInfo.by = m_StatusBar_Height;
     CreateInfo.iBkColor = RGBA2Pixel(HDC_SCREEN, 0xFF, 0xFF, 0xFF, 0xFF); 
     CreateInfo.dwAddData = 0;
