@@ -58,33 +58,52 @@
             </div>
         </header>
 
-        <hipicker type="text" class="samples border"
-                  width="200" height="240"
-                  name="samples" value="2"
-                  endtoend="true"
-                  id="samplesPicker"
-                  onchange="pickchange(this.value)"
-                  >
-            <hiitem value="0">hiView : watchface </hiitem>
-            <hiitem value="1">hiView : stopwatch </hiitem>
-            <hiitem value="2">hiMeter </hiitem>
-            <hiitem value="3">lCmd </hiitem>
-            <hiitem value="4">lSql </hiitem>
-        </hipicker>
-
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                </div>
-                <div class="col alert alert-light" id="paramStatus">
-                </div>
-                <div class="col">
+        <main class="bd-masthead" id="content" role="main">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-6 mx-auto col-md-6 order-md-2">
+                        <hipicker type="text" class="samples border"
+                                  width="200" height="240"
+                                  name="samples" value="2"
+                                  endtoend="true"
+                                  id="samplesPicker"
+                                  onchange="pickchange(this.value)"
+                                  >
+                              <hiitem value="0">hiView : watchface </hiitem>
+                              <hiitem value="1">hiView : stopwatch </hiitem>
+                              <hiitem value="2">hiMeter </hiitem>
+                              <hiitem value="3">lCmd </hiitem>
+                              <hiitem value="4">lSql </hiitem>
+                        </hipicker>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                </div>
+                                <div class="col alert alert-light" id="paramStatus">
+                                </div>
+                                <div class="col">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button"  class="btn btn-primary" onclick="showSamples()">Show Samples</button>
+                    </div>
+                    <div class="col-md-6 order-md-1 text-center text-md-left pr-md-5">
+                        <h1 class="mb-3 bd-text-purple-bright">HybridOS</h1>
+                        <p class="lead"> HybridOS是专为智能IoT设备和云计算环境设计的全新开源操作系统。 </p>
+                        <div class="row mx-n2">
+                            <div class="col-md px-2">
+                                <a href="https://hybridos.fmsoft.cn" class="btn btn-lg btn-bd-primary w-100 mb-3" target="_blank">官方网站</a>
+                            </div>
+                            <div class="col-md px-2">
+                                <a href="https://github.com/FMSoftCN/hybridos" class="btn btn-lg btn-outline-secondary w-100 mb-3" target="_blank">下载 HybridOS</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </main>
 
         <script type="text/javascript">
-
             function pickchange(value)
             {
                 switch(value)
@@ -132,6 +151,5 @@
 
             pickchange("2");
         </script>
-        <button type="button"  class="btn btn-primary" onclick="showSamples()">Show Samples</button>
     </body>
 </html>
