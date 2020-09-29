@@ -39,7 +39,6 @@ HybridOS integrates the following components:
     * procd
     * sntpd
     * udevd
-    * hiBus (the HybridOS variant of uBus)
     * hiAppmand (the HybridOS App Management Daemon)
     * hiLogged (the HybridOS logging service)
     * hiSecurityd (the HybridOS security service)
@@ -47,10 +46,10 @@ HybridOS integrates the following components:
     * hiXinetd (the HybridOS variant of xinetd)
     * ...
 1. HybridOS servers such as
-    * WebSocket Server
-    * HTTP Server
-    * CoAP Server
+    * hiBus (the HybridOS data bus server, providing services via Unix domain socket and WebSocket)
+    * hiHttp (the HybridOS HTTP server)
     * Streaming Server
+    * CoAP Server
     * MQTT Broker
     * ...
 
@@ -171,39 +170,41 @@ running in the device, or a constrained node which connected to the device.
 
 The following chart shows the software diagram of HybridOS on device-side:
 
-     -----------------------------------------------
-    |                  HybridOS Apps                |
-     -----------------------------------------------
-    |                HybridOS Desktop               |
-     -----------------------------------------------
-    |      hiWebKit with a replacable JS engine     |____
-     -----------------------------------------------     |
-    |  MiniGUI, SQLite,       | Node.js runtime env.|____| (Node.js optinal)
-    |  Cairo, EGL, OpenGLES2, |---------------------|    |
-    |  FreeType, HarfBuzz,    | Python runtime env. |____| (Python is optinal)
-    |  LibPNG, LibJPEG,       |---------------------|    |
-    |  GStreamer, ...         |  C/C++ runtime env. |____|
-     -----------------------------------------------     | hiBus
-    |          HybridOS daemons/servers             |____|
-     -----------------------------------------------
-    |          LibZ, CURL, LibGcrypt, ...           | (infrastructure)
-    |        HAL, C/C++ standard libraries          | (HAL: Hardware abstract layer)
-     -----------------------------------------------
-    |               Kernel/Drivers                  |
-     -----------------------------------------------
+```
+ ---------------------------------------------------------------------------------
+| DockerBar, StatusBar,   |                   |           | Input Method Window,  |
+| Screen Lock, Launcher,  | App Main Windows  |  N/A      | System Alert Window,  |        - main windows
+| Notification...         |                   |           | ...                   |
+ ---------------------------------------------------------------------------------
+|      System Manager     |     App Agent     | Wallpaper | mginit w/ compositor  |____    - processes
+ ---------------------------------------------------------------------------------     |
+|                   hiWebKit                  |                                   |    |
+ ---------------------------------------------                                    |    |
+|  MiniGUI, hiCairo, hiMesa, SQLite, FreeType, HarfBuzz, LibPNG, LibJPEG, ...     |    | hiBus/WebSocket
+|                                                                                 |    |
+ ---------------------------------------------------------------------------------     |
+|                           HybridOS servers and user daemons                     |____|
+ ---------------------------------------------------------------------------------
+|                          Python runtime environment (optional)                  |
+|                             LibZ, CURL, LibGcrypt, ...                          |
+|                               C/C++ runtime environment                         |
+ ---------------------------------------------------------------------------------
+|                               Linux Kernel/Drivers                              |
+ ---------------------------------------------------------------------------------
+```
 
 As shown in the diagram, HybridOS provides two API sets:
 
-1. Use [The WebKit Derivative for HybridOS](`hiWebKt` for short), to write
-a HybridOS app in HVML/CSS/JavaScript, either the activities or the services.
+1. Use [The WebKit Derivative for HybridOS] \(`hiWebKt` for short) to write
+GUIs of a HybridOS app in HVML (or standard HTML5/CSS3/JavaScript).
 
-1. When your device has a low hardware configuration, you can use a JavaScript
-engine with low footprint. If your device has a high hardware configuration,
-you use V8 or SquirrelFish JavaScript engine.
+1. Use an object-oriented programming language, such as Python or C++, to
+write the service of a HybridOS app, and the services can act the provider
+for different servers, for example, the HybridOS HTTP server.
 
 In addition to the standard C/C++ libraries, HybridOS integrates many
 mature open-source libraries as the infrastructure, for example,
-MiniGUI, FreeType, HarfBuzz, SQLite, V8 JS engine, and so on.
+MiniGUI, FreeType, HarfBuzz, SQLite, JavaScript Core, and so on.
 
 The following components act key roles in HybridOS for device-side:
 
@@ -215,7 +216,7 @@ system for HybridOS.
 and specifications such as HTML 5.x and CSS 3. It also provides
 support for customizing the view type defined by HVML.
 
-1. [HybridOS Desktop] acts as the window/activity manager for HybridOS,
+1. [hiShell] acts as the window manager for HybridOS,
 it provides the internal interfaces to create and manage
 windows, activities, intents, services for your HybridOS apps.
 

@@ -58,7 +58,7 @@
 秒表，使用扩展的 `hiview` 标签实现
 
 ![仪表指针](hybridos-device-side-demo-meter.png)  
-指针式仪表盘或条带式仪表盘，使用扩展的 `himeter` 即 `hihand` 标签实现
+指针式仪表盘或条带式仪表盘，使用扩展的 `himeter` 及 `hihand` 标签实现
 
 ![使用 LCMD 协议直接读取文件系统内容](hybridos-device-side-demo-lcmd.png)  
 使用 LCMD 协议直接读取文件系统内容

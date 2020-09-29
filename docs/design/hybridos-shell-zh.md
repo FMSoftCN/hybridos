@@ -45,7 +45,7 @@
  ---------------------------------------------------------------------------------     |
 |                   hiWebKit                  |                                   |    |
  ---------------------------------------------                                    |    |
-|  MiniGUI, hiCairo, hiMesa, SQLite, FreeType, HarfBuzz, LibPNG, LibJPEG, ...     |    | hiBus/WebSocket
+|  MiniGUI, hiCairo, hiMesa, SQLite, FreeType, HarfBuzz, LibPNG, LibJPEG, ...     |    | hiBus
 |                                                                                 |    |
  ---------------------------------------------------------------------------------     |
 |                           HybridOS servers and user daemons                     |____|
