@@ -69,7 +69,7 @@ function lsqlSelect()
     }
 
     var xmlHttp = new XMLHttpRequest();
-    var baseUrl = "lsql:///home/xue/work/hybridos/device-side/hishell/samples/samples.db?sqlQuery="; 
+    var baseUrl = "lsql:///home/projects/hybridos/device-side/hishell/samples/samples.db?sqlQuery="; 
     var url = encodeURI(baseUrl + cmd);
     var tbody = document.getElementById("tbody");
     tbody.innerHTML="";
@@ -126,7 +126,7 @@ function lsqlInsert() {
 
     var cmd = "insert into Books values(" + id + ",\"" + title + "\",\"" + author + "\",\"" + isbn + "\")";
     var xmlHttp = new XMLHttpRequest();
-    var baseUrl = "lsql:///home/xue/work/hybridos/device-side/hishell/samples/samples.db?sqlQuery="; 
+    var baseUrl = "lsql:///home/projects/hybridos/device-side/hishell/samples/samples.db?sqlQuery="; 
     var url = encodeURI(baseUrl + cmd);
 
     xmlHttp.open( "GET", url, true);
@@ -149,7 +149,7 @@ function lsqlDel(recordId) {
 
     var cmd = "delete from Books where id = " + recordId;
     var xmlHttp = new XMLHttpRequest();
-    var baseUrl = "lsql:///home/xue/work/hybridos/device-side/hishell/samples/samples.db?sqlQuery="; 
+    var baseUrl = "lsql:///home/projects/hybridos/device-side/hishell/samples/samples.db?sqlQuery="; 
     var url = encodeURI(baseUrl + cmd);
 
     xmlHttp.open( "GET", url, true);
