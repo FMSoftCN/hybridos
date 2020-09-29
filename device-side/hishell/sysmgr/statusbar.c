@@ -280,7 +280,7 @@ static LRESULT StatusBarWinProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
     static PLOGFONT font_time;
     char buff [20];
     int length = 0;
-    RECT rect[2] = {{10 * MARGIN_STATUS, MARGIN_STATUS, g_rcScr.right * 0.618 - TIME_INFO_X,  m_StatusBar_Height - MARGIN_STATUS}, {g_rcScr.right * 0.618 - TIME_INFO_X, MARGIN_STATUS, g_rcScr.right * 0.618 - MARGIN_STATUS, m_StatusBar_Height - MARGIN_STATUS}};
+    RECT rect[2] = {{10 * MARGIN_STATUS, MARGIN_STATUS + 3, g_rcScr.right * 0.618 - TIME_INFO_X,  m_StatusBar_Height - MARGIN_STATUS}, {g_rcScr.right * 0.618 - TIME_INFO_X, MARGIN_STATUS, g_rcScr.right * 0.618 - MARGIN_STATUS, m_StatusBar_Height - MARGIN_STATUS}};
     char config_path[MAX_PATH + 1];
     char* etc_value = NULL;
 
