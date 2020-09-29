@@ -368,6 +368,7 @@ static void draw_select_window(int index)
     {
         // copy the window content
         SetBrushColor(HDC_SCREEN_SYS, RGBA2Pixel(HDC_SCREEN_SYS, 0x00, 0x00, 0x00, 0xFF));
+        FillBox(HDC_SCREEN_SYS, RECT_LEFT(CUR_WIN), RECT_TOP(CUR_WIN), RECT_W(CUR_WIN), RECT_H(CUR_WIN));
         FillBox(HDC_SCREEN_SYS, RECT_RIGHT(CUR_WIN) - m_factor * 20, RECT_TOP(CUR_WIN) - m_factor * 10, m_factor * 30, m_factor * 30);
 
         if((RECTW(znodeheader->rc) == RECTW(g_rcScr)) && (RECTH(znodeheader->rc) == RECTH(g_rcScr)))
@@ -418,6 +419,7 @@ static void draw_unselect_window(int index)
         // copy the window content
         SetBrushColor(HDC_SCREEN_SYS, RGBA2Pixel(HDC_SCREEN_SYS, 0x00, 0x00, 0x00, 0xFF));
         FillBox(HDC_SCREEN_SYS, RECT_RIGHT(index) - m_factor * 20, RECT_TOP(index) - m_factor * 10, m_factor * 30, m_factor * 30);
+        FillBox(HDC_SCREEN_SYS, RECT_LEFT(index), RECT_TOP(index), RECT_W(index), RECT_H(index));
         FillBox(HDC_SCREEN_SYS, RECT_LEFT(index), RECT_BOTTOM(index), RECT_W(index), m_factor * CAPTION_BAR_HEIGHT);
 
         if((RECTW(znodeheader->rc) == RECTW(g_rcScr)) && (RECTH(znodeheader->rc) == RECTH(g_rcScr)))
@@ -454,7 +456,12 @@ static void animated_start(MGEFF_ANIMATION handle, HWND hWnd, int id, RECT *valu
     // get the number of app in normal level
     znodeheader = ServerGetWinZNodeHeader(NULL, zidx, NULL, FALSE);
     BitBlt(m_AnimationDC, 0, 0, g_rcScr.right, g_rcScr.bottom, HDC_SCREEN_SYS, 0, 0, 0);
+
+    SetBrushColor(HDC_SCREEN_SYS, RGBA2Pixel(m_AnimationDC, 0x00, 0x00, 0x00, 0xFF));
+    FillBox(HDC_SCREEN_SYS, rect.left, rect.top, RECTW(rect), RECTH(rect));
+
     if((RECTW(znodeheader->rc) == RECTW(g_rcScr)) && (RECTH(znodeheader->rc) == RECTH(g_rcScr)))
+
         StretchBlt(znodeheader->mem_dc, 0, 0, znodeheader->rc.right, znodeheader->rc.bottom, HDC_SCREEN_SYS, 
                                    rect.left, rect.top, RECTW(rect), RECTH(rect), 0); 
     else
@@ -1440,6 +1447,9 @@ static void animated_end(MGEFF_ANIMATION handle, HWND hWnd, int id, RECT *value)
     RECT rect = *value;
     int zidx = ZNODE_INDEX(CUR_WIN);
     const ZNODEHEADER * znodeheader = NULL;
+
+    SetBrushColor(HDC_SCREEN_SYS, RGBA2Pixel(HDC_SCREEN_SYS, 0x00, 0x00, 0x00, 0xFF));
+    FillBox(HDC_SCREEN_SYS, rect.left, rect.top, RECTW(rect), RECTH(rect));
 
     // get the number of app in normal level
     znodeheader = ServerGetWinZNodeHeader(NULL, zidx, NULL, FALSE);
