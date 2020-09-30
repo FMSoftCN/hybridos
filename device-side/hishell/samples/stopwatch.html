@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>秒表</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="bootstrap.min.css">
+        <link href="docs.min.css" rel="stylesheet">
+        <style type="text/css">
+            body
+            {
+                text-align:center;
+            }
+			hiview
+			{
+                text-align:left;
+                display:inline-block;
+                outline:none;
+			}
+            #stopWatchId { background-image: url(stopwatchBg.png); background-size:contain;}
+        </style>
+    </head>
+
+    <body>
+        <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar"> 
+            <a class="navbar-brand mr-0 mr-md-2" href="https://hybridos.fmsoft.cn/" aria-label="Bootstrap" target="_blank">
+                <span class="border border-white rounded-lg p-1"> HybridOS </span>
+            </a>
+            <div class="navbar-nav-scroll">
+                <ul class="navbar-nav bd-navbar-nav flex-row">
+                    <li class="nav-item"><a class="nav-link" href="index.html">演示主页</a></li>
+                    <li class="nav-item"><a class="nav-link" href="watchface.html">时钟</a></li>
+                    <li class="nav-item"> <a class="nav-link active" href="stopwatch.html">秒表</a></li>
+                    <li class="nav-item"> <a class="nav-link " href="himeter.html">仪表指针</a></li>
+                    <li class="nav-item"><a class="nav-link" href="lcmd.html">本地命令</a></li>
+                    <li class="nav-item"><a class="nav-link" href="lsql.html">本地数据库</a></li>
+                </ul>
+            </div>
+        </header>
+
+        <div class="container">
+            <hiview id="stopWatchId" type="stopwatch" width="400" height="400">
+                <param id="stopwatchaction" name="action" value="start" />
+                <param name="faces" value="minute, hour, digits, second" />
+                <param name="secondscale" value="60" />
+                <param name="minutescale" value="60" />
+                <param name="hourscale" value="24" />
+    <!--            <param src="dida.mp3" name="ticktack" value="loop, always" />   -->
+            </hiview>
+        </div>
+
+        <div class="container">
+            <div class="row p-2">
+            </div>
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col">
+                    <button id="btnValue1" type="button" class="btn btn-primary">开始</button>
+                    <button id="btnValue2" type="button" class="btn btn-warning">暂停</button>
+                    <button id="btnValue3" type="button" class="btn btn-danger">停止</button>
+                </div>
+                <div class="col">
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            function toValue1()
+            {
+			    document.getElementById("stopwatchaction").setAttribute("value", "start");
+            }
+
+            function toValue2()
+            {
+			    document.getElementById("stopwatchaction").setAttribute("value", "pause");
+            }
+
+            function toValue3()
+            {
+			    document.getElementById("stopwatchaction").setAttribute("value", "stop");
+            }
+
+            function toValue4()
+            {
+			    document.getElementById("stopwatchaction").setAttribute("value", "reset");
+            }
+
+            function toValue5()
+            {
+			    document.getElementById("stopwatchaction").setAttribute("value", "new");
+            }
+
+            document.getElementById("btnValue1").onclick = toValue1;
+            document.getElementById("btnValue2").onclick = toValue2;
+            document.getElementById("btnValue3").onclick = toValue3;
+            document.getElementById("btnValue4").onclick = toValue4;
+            document.getElementById("btnValue5").onclick = toValue5;
+
+        </script>
+</body>
+</html>
+

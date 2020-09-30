@@ -16,6 +16,7 @@
       <dep package="mg-samples"/>
       <dep package="hidrm"/>
       <dep package="hidrmdrivers"/>
+      <dep package="hirsvg"/>
       <dep package="bwrap" />
       <dep package="cairo"/>
       <dep package="fonts"/>
@@ -24,7 +25,6 @@
       <dep package="freetype6"/>
       <dep package="harfbuzz"/>
       <dep package="libxml2"/>
-      <dep package="gdk-pixbuf"/>
       <dep package="glib"/>
       <dep package="glib-networking"/>
       <dep package="adwaita-icon-theme"/>
@@ -52,6 +52,7 @@
           <dep package="gsettings-desktop-schemas"/>
       </if>
       <dep package="hiwebkit"/>
+      <dep package="hishell"/>
     </dependencies>
   </metamodule>
 
@@ -264,16 +265,6 @@
             hash="sha256:b7ccfcbd56b970a709e8b9ea9fb46c922c606c2feef8f086fb6a8492e530f810"/>
   </autotools>
 
-  <autotools id="gdk-pixbuf" autogen-sh="configure"
-             autogenargs="--disable-introspection">
-    <dependencies>
-      <dep package="glib"/>
-    </dependencies>
-    <branch module="/pub/GNOME/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.6.tar.xz" version="2.36.6"
-            repo="ftp.gnome.org"
-            hash="sha256:455eb90c09ed1b71f95f3ebfe1c904c206727e0eeb34fc94e5aaf944663a820c"/>
-  </autotools>
-
   <meson id="graphene">
     <branch repo="github.com"
             module="ebassi/graphene.git"
@@ -283,19 +274,17 @@
     </dependencies>
   </meson>
 
-  <autotools id="librsvg" autogen-sh="configure"
-             autogenargs="--disable-introspection --enable-pixbuf-loader --disable-gtk-theme">
+  <autotools id="hirsvg" autogen-sh="autogen.sh"
+             autogenargs="--disable-introspection --enable-pixbuf-loader --disable-pixbuf-loader --enable-minigui-backend">
     <if condition-set="macos">
       <autogenargs value="--disable-Bsymbolic"/>
     </if>
     <dependencies>
-      <dep package="gdk-pixbuf"/>
       <dep package="glib"/>
       <dep package="cairo"/>
     </dependencies>
-    <branch module="/pub/GNOME/sources/librsvg/2.40/librsvg-2.40.16.tar.xz" version="2.40.16"
-            repo="ftp.gnome.org"
-            hash="sha256:d48bcf6b03fa98f07df10332fb49d8c010786ddca6ab34cbba217684f533ff2e"/>
+    <branch repo="hybridos" module="hirsvg" checkoutdir="hirsvg" branch="minigui-backend" revision="minigui-backend" >
+    </branch>
   </autotools>
 
   <meson id="glib"
@@ -357,7 +346,7 @@
 
   <autotools id="adwaita-icon-theme" autogen-sh="configure">
     <dependencies>
-      <dep package="librsvg"/>
+      <dep package="hirsvg"/>
     </dependencies>
     <branch module="pub/GNOME/sources/adwaita-icon-theme/3.24/adwaita-icon-theme-3.24.0.tar.xz" version="3.24.0"
             repo="ftp.gnome.org"
@@ -637,10 +626,10 @@
 
   <cmake id="hiwebkit"
      cmakeargs="-DPORT='HBD' -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DDEVELOPER_MODE=ON -DENABLE_ACCELERATED_2D_CANVAS=ON -DENABLE_WEBGL=OFF -DENABLE_WEBGL2=OFF -DENABLE_MINIBROWSER=ON">
-    <branch module="r2008/hiwebkit-${version}.tar.xz"
+    <branch module="r2010/hiwebkit-${version}.tar.xz"
             version="1.0"
             repo="hiwebkit-release"
-            hash="sha256:1a4fad77dfa2097a6b659360e7af53b1f3d09b4333fcdace3413895b82c652a9"/>
+            hash="sha256:ade4b131a584637890fa6c4650a7458a2895b142de063a3f9eded5594e797492"/>
     <dependencies>
       <dep package="minigui"/>
       <dep package="hidrm"/>
@@ -653,7 +642,6 @@
       <dep package="freetype6"/>
       <dep package="harfbuzz"/>
       <dep package="libxml2"/>
-      <dep package="gdk-pixbuf"/>
       <dep package="glib"/>
       <dep package="glib-networking"/>
       <dep package="adwaita-icon-theme"/>
@@ -680,6 +668,14 @@
       <if condition-set="macos">
           <dep package="gsettings-desktop-schemas"/>
       </if>
+    </dependencies>
+  </cmake>
+  <cmake id="hishell">
+    <branch repo="hybridos" module="hybridos" checkoutdir="hishell" branch="dev"  revision="dev" subdir="device-side/hishell"/>
+    <dependencies>
+      <dep package="minigui"/>
+      <dep package="cairo"/>
+      <dep package="hiwebkit"/>
     </dependencies>
   </cmake>
 
