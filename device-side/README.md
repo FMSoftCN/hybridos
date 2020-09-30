@@ -47,14 +47,25 @@ $ build/hbd/install-dependencies
 $ build/Scripts/build
 ```
 
-4) Run the executables
+4) Build hiview renderer
 
 ```
-# Run mginit first
+$ git clone https://github.com/FMSoftCN/hiviewrenderer.git
+$ cd watchface
+$ make && sudo make install
+$ cd ..
+
+$ cd stopwatch
+$ make && sudo make install
+```
+
+
+5) Run the executables
+
+```
+# Run mginit
 $ build/Scripts/run-mginit
 
-# Run hiwebkit then
-$ build/Scripts/run
 ```
 
 ## Copying
