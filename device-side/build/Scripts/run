@@ -29,6 +29,7 @@ sed -i -e "s:MiniGUI-3.2:MiniGUI-5.0:g" -e "s:exec_file=.*:exec_file=$WEBKIT_OUT
 
 # Modify hybridos.cfg
 sed -i -e "s:=res:=$WEBKIT_OUTPUTDIR/Root/libexec/res:g" $HISHELL_CFG_PATH/hybridos.cfg
+sed -i -e "s:url0.*:url0=$WEBKIT_OUTPUTDIR/Root/libexec/samples/index.html:g" $HISHELL_CFG_PATH/hybridos.cfg
 
 # MiniBrowser
 $WEBKIT_OUTPUTDIR/Root/libexec/webkit2hbd-1.0/MiniBrowser 
