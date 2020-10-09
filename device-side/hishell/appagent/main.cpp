@@ -87,6 +87,9 @@ static const char *gUrl = "file://localhost/home/projects/hiwebkit/Websites/fmso
 struct Window_Info window_info[MAX_TARGET_NUMBER];
 int m_target_blank_index = -1;
 
+bool g_has_page_configuration = false;
+WKPageConfigurationRef g_page_configuration;
+
 static LRESULT MainFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 static void create_control(HWND hwnd, int index)
@@ -95,9 +98,21 @@ static void create_control(HWND hwnd, int index)
     int i = 0;
     RECT rect = m_ScreenRect;
     
-    browserWindow = WebKitBrowserWindow::create(IDC_BROWSER, rect, hwnd, HWND_INVALID);
+    if (g_has_page_configuration)
+    {
+        browserWindow = WebKitBrowserWindow::create(IDC_BROWSER, rect, hwnd, HWND_INVALID, g_page_configuration);
+    }
+    else
+    {
+        browserWindow = WebKitBrowserWindow::create(IDC_BROWSER, rect, hwnd, HWND_INVALID);
+    }
     if (browserWindow)
     {
+        if (!g_has_page_configuration)
+        {
+            g_page_configuration = ((WebKitBrowserWindow*)browserWindow)->getPageConfiguration();
+            g_has_page_configuration = true;
+        }
         window_info[index].hWnd = hwnd;
         window_info[index].view = browserWindow;
         ShowWindow(browserWindow->hwnd(), SW_SHOW);

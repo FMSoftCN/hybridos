@@ -220,7 +220,6 @@ static WKPageRef createNewPage(WKPageRef page, WKPageConfigurationRef configurat
 
 void close(WKPageRef page, const void* clientInfo)
 {
-    fprintf(stderr, "%s:%d:%s\n", __FILE__, __LINE__, __func__);
     auto& thisWindow = toWebKitBrowserWindow(clientInfo);
     SendMessage(thisWindow.mainHwnd(), MSG_CLOSE, 0, (LPARAM)clientInfo); 
     DestroyWindow(thisWindow.hwnd());
@@ -409,16 +408,36 @@ static void didSwapWebProcesses(const void* clientInfo)
 */
 
 
-BrowserWindow* WebKitBrowserWindow::create(LINT id, RECT rect, HWND mainWnd, HWND urlBarWnd)
+WebKitBrowserWindow* WebKitBrowserWindow::create(LINT id, RECT rect, HWND mainWnd, HWND urlBarWnd)
 {
-    return new WebKitBrowserWindow(id, rect,mainWnd, urlBarWnd);
+    auto conf = adoptWK(WKPageConfigurationCreate());
+
+    auto prefs = adoptWK(WKPreferencesCreate());
+
+    auto pageGroup = adoptWK(WKPageGroupCreateWithIdentifier(createWKString("HbdMiniBrowser").get()));
+    WKPageConfigurationSetPageGroup(conf.get(), pageGroup.get());
+    WKPageGroupSetPreferences(pageGroup.get(), prefs.get());
+
+    WKPreferencesSetMediaCapabilitiesEnabled(prefs.get(), false);
+    WKPreferencesSetDeveloperExtrasEnabled(prefs.get(), true);
+    WKPageConfigurationSetPreferences(conf.get(), prefs.get());
+
+    auto context =adoptWK(WKContextCreateWithConfiguration(nullptr));
+    WKPageConfigurationSetContext(conf.get(), context.get());
+
+    return create(id, rect, mainWnd, urlBarWnd, conf.get());
 }
 
-WebKitBrowserWindow::WebKitBrowserWindow(LINT id, RECT rect, HWND mainWnd, HWND urlBarWnd)
+WebKitBrowserWindow* WebKitBrowserWindow::create(LINT id, RECT rect, HWND mainWnd, HWND urlBarWnd, WKPageConfigurationRef conf)
+{
+    return new WebKitBrowserWindow(id, rect,mainWnd, urlBarWnd, conf);
+}
+
+WebKitBrowserWindow::WebKitBrowserWindow(LINT id, RECT rect, HWND mainWnd, HWND urlBarWnd, WKPageConfigurationRef conf)
     : m_hMainWnd(mainWnd)
     , m_urlBarWnd(urlBarWnd)
 {
-    m_view = adoptWK(WKViewCreate(rect, mainWnd, id));
+    m_view = adoptWK(WKViewCreateWithConfiguration(rect, mainWnd, id, conf));
     WKViewSetIsInWindow(m_view.get(), true);
 
     auto page = WKViewGetPage(m_view.get());
@@ -488,6 +507,7 @@ WebKitBrowserWindow::WebKitBrowserWindow(LINT id, RECT rect, HWND mainWnd, HWND 
     stateClient.didSwapWebProcesses = didSwapWebProcesses;
     */
     WKPageSetPageStateClient(page, &stateClient.base);
+    m_pageConfiguration = WKPageCopyPageConfiguration(page);
 
     updateProxySettings();
     resetZoom();

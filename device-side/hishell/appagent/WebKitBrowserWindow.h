@@ -59,15 +59,18 @@
 
 class WebKitBrowserWindow : public BrowserWindow {
 public:
-    static BrowserWindow* create(LINT id, RECT rect, HWND mainWnd, HWND urlBarWnd);
+    static WebKitBrowserWindow* create(LINT id, RECT rect, HWND mainWnd, HWND urlBarWnd);
+    static WebKitBrowserWindow* create(LINT id, RECT rect, HWND mainWnd, HWND urlBarWnd, WKPageConfigurationRef conf);
+
     HWND hwnd() override;
     HWND mainHwnd() { return m_hMainWnd; }
     bool canTrustServerCertificate(WKProtectionSpaceRef);
     double getEstimatedProgress() override;
     WKRetainPtr<WKViewRef> getView()    { return m_view; }
+    WKPageConfigurationRef getPageConfiguration() { return m_pageConfiguration; }
 
 private:
-    WebKitBrowserWindow(LINT id, RECT rect, HWND mainWnd, HWND urlBarWnd);
+    WebKitBrowserWindow(LINT id, RECT rect, HWND mainWnd, HWND urlBarWnd, WKPageConfigurationRef conf);
 
     LRESULT init() override;
 
@@ -100,4 +103,5 @@ private:
     HWND m_urlBarWnd { nullptr };
     ProxySettings m_proxy { };
     std::unordered_map<std::string, std::string> m_acceptedServerTrustCerts;
+    WKPageConfigurationRef m_pageConfiguration;
 };
