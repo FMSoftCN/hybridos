@@ -184,7 +184,7 @@ static LRESULT MainFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 CreateAPPAgentMaindow(i);
             break;
 
-        case MSG_CLOSE:
+        case MSG_USER_CLOSE_VIEW:
             for(i == 0; i < MAX_TARGET_NUMBER; i++)
             {
                 if(window_info[i].hWnd == hWnd)
@@ -200,6 +200,18 @@ static LRESULT MainFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
             DestroyAllControls (hWnd);
             DestroyMainWindow (hWnd);
+            return 0;
+
+        case MSG_CLOSE:
+            for(i == 0; i < MAX_TARGET_NUMBER; i++)
+            {
+                if(window_info[i].hWnd == hWnd)
+                    break;
+            }
+            if(i < MAX_TARGET_NUMBER)
+            {
+                SendMessage(window_info[i].view->hwnd(), MSG_CLOSE, 0, 0);
+            }
             return 0;
     }
 

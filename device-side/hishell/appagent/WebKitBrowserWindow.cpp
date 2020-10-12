@@ -221,7 +221,7 @@ static WKPageRef createNewPage(WKPageRef page, WKPageConfigurationRef configurat
 void close(WKPageRef page, const void* clientInfo)
 {
     auto& thisWindow = toWebKitBrowserWindow(clientInfo);
-    SendMessage(thisWindow.mainHwnd(), MSG_CLOSE, 0, (LPARAM)clientInfo); 
+    SendMessage(thisWindow.mainHwnd(), MSG_USER_CLOSE_VIEW, 0, (LPARAM)clientInfo);
     DestroyWindow(thisWindow.hwnd());
 }
 
