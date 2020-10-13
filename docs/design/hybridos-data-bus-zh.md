@@ -12,7 +12,7 @@
       * [过程调用结果](#过程调用结果)
       * [转发过程调用请求给过程处理器](#转发过程调用请求给过程处理器)
       * [事件](#事件)
-      * [hiBus 内置过程](#hibus-内置过程)
+   + [hiBus 内置过程](#hibus-内置过程)
 - [hiBus 服务器的架构及关键模块](#hibus-服务器的架构及关键模块)
    + [架构](#架构)
    + [关键模块](#关键模块)
@@ -124,7 +124,7 @@ hiBus 服务器会首先将过程调用请求转发给过程处理器，根据�
     "fromApp": "<app_name_processed_this_call>",
     "timeDiff": 0.1234,
     "retCode": 200,
-    "result": {
+    "retValue": {
         ...
     }
 }
@@ -146,13 +146,15 @@ hiBus 服务器会首先将过程调用请求转发给过程处理器，根据�
    - 404 Not Found：表示请求的过程无效。
    - 405 Method Not Allowed：表示请求参数不被允许。
    - 406 Not Acceptable：表示请求参数不被接受。
+   - 409 Confilct：表示冲突；比如重复注册过程或事件时。
+   - 423 Locked：表示被锁定；比如要撤销的过程尚未结束某个执行。
    - 500 Internal Server Error：表示服务器内部错误。
    - 501 Not Implemented：表示未实现。
    - 502 Bad Gateway：表示执行该调用的过程发生异常。
    - 503 Service Unavailable：表示服务不可用。
    - 504 Gateway Timeout：表示执行该调用的过程超时。
    - 507 Insufficient Storage：表示遇到内存或存储不足的问题。
-- `result` 包含过程调用结果。只有 `retCode` 为 200 时，返回的数据中才包含有结果数据（`result`）。
+- `retValue` 包含过程调用的返回值。只有 `retCode` 为 200 时，返回的数据中才包含有结果数据。
 
 在正常情况下，调用者会首先收到 202 状态码，然后在未来的某个时间点收到 200 状态码。只有状态码为 200 时，才表示过程执行完毕并包含有结果信息。
 
@@ -214,8 +216,8 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
     "packetType": "event",
     "eventId": "<hased_event_identifier>",
     "eventName": "<event_name>",
-    "toHost": "<the_host_receiving_this_packet>",
-    "toApp": "<the_app_receiving_this_packet>",
+    "forHost": "<the_host_receiving_this_packet>",
+    "forApp": "<the_app_receiving_this_packet>",
     "payload": {
         ...
     }
@@ -224,10 +226,10 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 
 其中，
 - `packetType` 表示数据包类型，这里用 `event`，表示这是一个事件。
-- `eventId` 是事件发生器为每个事件分配的一个全局唯一字符串。
-- `eventName` 是事件名称。
-- `toHost` 是可以接收该事件的主机名称，可使用通配符。
-- `toApp` 是可以接收该事件的应用名称，可使用通配符。
+- `eventId`：事件发生器为每个事件分配的一个全局唯一字符串。
+- `eventName`：事件名称。
+- `forHost`：可以接收该事件的主机名称，可指定多个主机（用逗号分隔），可包含通配符。
+- `forApp` 是可以接收该事件的应用名称，可指定多个主机（用逗号分隔），可包含通配符。
 - `payload` 包含真正的事件数据。
 
 #### 收到事件
@@ -267,25 +269,190 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 
 此时，最终收到调用请求的服务器将扮演调用者角色向目标服务器发起调用请求。
 
-#### hiBus 内置过程
+### hiBus 内置过程
 
-hiBus 服务器应提供如下的内置过程调用：
+hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
-- `cn.fmsoft.hybridos.hibus/registerProcedure`：注册过程。
-- `cn.fmsoft.hybridos.hibus/revokeProcedure`：撤销过程。
-- `cn.fmsoft.hybridos.hibus/registerEvent`：注册事件。
-- `cn.fmsoft.hybridos.hibus/revokeEvent`：撤销事件。
-- `cn.fmsoft.hybridos.hibus/subscribeEvent`：订阅事件。
-- `cn.fmsoft.hybridos.hibus/unsubscribeEvent`：取消事件订阅。
-- `cn.fmsoft.hybridos.hibus/listProcedures`：列出已注册过程。
-- `cn.fmsoft.hybridos.hibus/listEvents`：列出已注册事件。
-- `cn.fmsoft.hybridos.hibus/listEventSubscribers`：列出特定事件的订阅者。
+#### 注册过程
+
+- 过程名称：`localhost/cn.fmsoft.hybridos.hibus/registerProcedure`
+- 参数：
+   + `methodName`：待注册过程的方法名称；由于主机名和应用名是隐含的，所以无需指定。
+   + `forHost`：可以调用该方法的主机名称，可指定多个主机（逗号分隔），亦可使用通配符。
+   + `forApp`：可以调用该方法的应用名称，可指定多个主机（逗号分隔），亦可使用通配符。
+- 返回值：无。客户端依据结果的 `retCode` 判断是否注册成功：
+   + `409`：表示重复的过程名称/方法名称。
+   + `200`：表示成功。
+
+注册过程的数据包：
+
+```json
+{
+    "packetType": "call",
+    "requestId": "<hased_request_identifier>",
+    "procedure": "localhost/cn.fmsoft.hybridos.hibus/registerProcedure",
+    "expectedTime": 30000,
+    "authenInfo": null,
+    "parameter": {
+        "methodName": "foo",
+        "forHost": "localhost",
+        "forApp": "*",
+    },
+}
+```
+
+成功情形下的结果数据包：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<hased_result_identifier>",
+    "requestId": "<hased_request_identifier>",
+    "fromHost": "localhost",
+    "fromApp": "cn.fmsoft.hybridos.hibus",
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retValue": null,
+}
+```
+
+#### 撤销过程
+
+- 过程名称：`localhost/cn.fmsoft.hybridos.hibus/revokeProcedure`
+- 参数：
+   + `methodName`：待撤销过程的方法名称；由于主机名和应用名是隐含的，所以无需指定。
+- 返回值：无。客户端依据结果的 `retCode` 判断是否撤销成功，可能的值有：
+   + `404`：表示未找到指定的过程。
+   + `403`：表示待撤销的过程不是由调用方注册的，所以不能撤销。
+   + `423`：表示有调用者正在等待该过程返回结果，不能撤销。
+   + `200`：表示成功。
+
+#### 注册事件
+
+- 过程名称：`localhost/cn.fmsoft.hybridos.hibus/registerEvent`
+- 参数：
+   + `eventName`：待注册的事件名称；由于主机名和应用名是隐含的，所以无需指定。
+   + `forHost`：可以订阅该事件的主机名称，可指定多个主机（逗号分隔），亦可使用通配符。
+   + `forApp`：可以订阅该事件的应用名称，可指定多个主机（逗号分隔），亦可使用通配符。
+- 返回值：无。客户端依据结果的 `retCode` 判断是否注册成功，可能的值有：
+   + `409`：表示重复的事件名称/方法名称。
+   + `200`：表示成功。
+
+#### 撤销事件
+
+- 过程名称：`localhost/cn.fmsoft.hybridos.hibus/revokeEvent`
+- 参数：
+   + `eventName`：待撤销过程的事件名称；由于主机名和应用名是隐含的，所以无需指定。
+- 返回值：无。客户端依据结果的 `retCode` 判断是否撤销成功，可能的值有：
+   + `404`：表示未找到指定的事件。
+   + `403`：表示待撤销的事件不是由调用方注册的，所以不能撤销。
+   + `200`：表示成功。
+
+#### 订阅事件
+
+- 过程名称：`localhost/cn.fmsoft.hybridos.hibus/subscribeEvent`
+- 参数：
+   + `event`：要订阅的完整事件名称，含主机名、应用名以及事件名。
+- 返回值：无。客户端依据结果的 `retCode` 判断是否订阅成功，可能的值有：
+   + `404`：表示未找到指定的事件。
+   + `403`：表示事件发生器不允许调用方订阅该事件。
+   + `200`：表示成功。
+
+#### 取消事件订阅
+
+- 过程名称：`localhost/cn.fmsoft.hybridos.hibus/unsubscribeEvent`
+- 参数：
+   + `event`：要取消订阅的完整事件名称，含主机名、应用名以及事件名。
+- 返回值：无。客户端依据结果的 `retCode` 判断是否取消成功，可能的值有：
+   + `404`：表示调用方未订阅指定的事件；或者该事件已经被撤销。
+   + `200`：表示成功。
+
+#### 列出已注册过程
+
+- 过程名称：`localhost/cn.fmsoft.hybridos.hibus/listProcedures`
+- 参数：无。
+- 返回值：成功时返回已注册的，且调用方可调用的过程清单。
+- 常见错误状态码：无
+
+下面是一个示例结果：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<hased_result_identifier>",
+    "requestId": "<hased_request_identifier>",
+    "fromHost": "localhost",
+    "fromApp": "cn.fmsoft.hybridos.hibus",
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retValue": [
+        "localhost/cn.fmsoft.hybridos.networkManager/getHotSpots",
+        "localhost/cn.fmsoft.hybridos.networkManager/connectToHotSpot",
+    ],
+}
+```
+
+#### 列出已注册事件
+
+- 过程名称：`localhost/cn.fmsoft.hybridos.hibus/listEvents`
+- 参数：无。
+- 返回值：成功时返回已注册的，且调用方可订阅的事件清单。
+- 常见错误状态码：无
+
+下面是一个示例结果：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<hased_result_identifier>",
+    "requestId": "<hased_request_identifier>",
+    "fromHost": "localhost",
+    "fromApp": "cn.fmsoft.hybridos.hibus",
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retValue": [
+        "localhost/cn.fmsoft.hybridos.networkManager/getHotSpots",
+        "localhost/cn.fmsoft.hybridos.networkManager/connectToHotSpot",
+    ],
+}
+```
+
+#### 列出事件的订阅者
+
+- 过程名称：`localhost/cn.fmsoft.hybridos.hibus/listEventSubscribers`
+- 参数：
+   + `eventName`：事件名称，含完整的主机名即应用名。
+- 返回值：成功时返回指定事件的订阅者的主机名及应用名清单。
+- 常见错误状态码：
+   + `404`：表示未找到指定的事件。
+   + `403`：表示调用方无权查询指定事件的订阅者。
+   + `200`：表示成功。
+
+下面是一个示例结果：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<hased_result_identifier>",
+    "requestId": "<hased_request_identifier>",
+    "fromHost": "localhost",
+    "fromApp": "cn.fmsoft.hybridos.hibus",
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retValue": [
+        "localhost/cn.fmsoft.hybridos.foo",
+        "localhost/cn.fmsoft.hybridos.bar",
+    ],
+}
+```
 
 ## hiBus 服务器的架构及关键模块
 
 ### 架构
 
 ### 关键模块
+
+### 调试工具
 
 ### 客户端接口
 
