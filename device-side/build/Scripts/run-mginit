@@ -29,6 +29,7 @@ sed -i -e "s:MiniGUI-3.2:MiniGUI-5.0:g" -e "s:exec_file=.*:exec_file=$WEBKIT_OUT
 
 # Modify hybridos.cfg
 sed -i -e "s:=res:=$WEBKIT_OUTPUTDIR/Root/libexec/res:g" $HISHELL_CFG_PATH/hybridos.cfg
+sed -i -e "s:url0=.*:url0=file\://$WEBKIT_OUTPUTDIR/Root/libexec/samples/index.html:g" $HISHELL_CFG_PATH/hybridos.cfg
 
 # mginit
 mginit

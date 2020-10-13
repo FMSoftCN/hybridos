@@ -664,10 +664,10 @@
   <cmake id="hiwebkit"
      cmakeargs="-DPORT='HBD' -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DDEVELOPER_MODE=ON -DENABLE_ACCELERATED_2D_CANVAS=ON -DENABLE_WEBGL=OFF -DENABLE_WEBGL2=OFF -DENABLE_MINIBROWSER=ON">
     <!--
-    <branch module="r2008/hiwebkit-${version}.tar.xz"
+    <branch module="r2010/hiwebkit-${version}.tar.xz"
             version="1.0"
             repo="hiwebkit-release"
-            hash="sha256:1a4fad77dfa2097a6b659360e7af53b1f3d09b4333fcdace3413895b82c652a9"/>
+            hash="sha256:ade4b131a584637890fa6c4650a7458a2895b142de063a3f9eded5594e797492"/>
     -->
     <branch repo="hybridos" module="hiwebkit" checkoutdir="hiwebkit" branch="dev"  revision="dev"/>
     <dependencies>
@@ -711,7 +711,7 @@
     </dependencies>
   </cmake>
   <cmake id="hishell">
-    <branch repo="hybridos" module="hybridos" checkoutdir="hishell" branch="dev"  revision="dev" subdir="device-side/hishell"/>
+    <branch repo="hybridos" module="hishell" checkoutdir="hishell" branch="dev"  revision="dev"/>
     <dependencies>
       <dep package="minigui"/>
       <dep package="cairo"/>
