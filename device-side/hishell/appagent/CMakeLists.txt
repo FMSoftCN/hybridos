@@ -191,10 +191,12 @@ set(appagent_SYSTEM_INCLUDE_DIRECTORIES
 #    ${GSTREAMER_INCLUDE_DIRS}
     ${Cairo_INCLUDE_DIR}
     ${MINIGUI_INCLUDE_DIRS}
+    ${HIWEBKIT_INCLUDE_DIRS}
 )
 
 set(appagent_LIBRARIES
     ${MINIGUI_LIBRARIES}
+    ${HIWEBKIT_LIBRARIES}
 #    ${JavaScriptCore_LIBRARY_NAME}
     javascriptcorehbd-1.0
     webkit2hbd-1.0
