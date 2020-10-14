@@ -51,9 +51,8 @@
 #include "BrowserWindow.h"
 #include "Common.h"
 
-#include <WebKit/WKRetainPtr.h>
 #include <WebKit/WebKit2_C.h>
-#include <webkit2/webkit2.h> 
+#include <webkit2/webkit2.h>
 
 #include <unordered_map>
 
@@ -66,7 +65,7 @@ public:
     HWND mainHwnd() { return m_hMainWnd; }
     bool canTrustServerCertificate(WKProtectionSpaceRef);
     double getEstimatedProgress() override;
-    WKRetainPtr<WKViewRef> getView()    { return m_view; }
+    WKViewRef getView()    { return m_view; }
     WKPageConfigurationRef getPageConfiguration() { return m_pageConfiguration; }
 
 private:
@@ -98,7 +97,7 @@ private:
 
     void updateProxySettings();
 
-    WKRetainPtr<WKViewRef> m_view;
+    WKViewRef m_view;
     HWND m_hMainWnd { nullptr };
     HWND m_urlBarWnd { nullptr };
     ProxySettings m_proxy { };

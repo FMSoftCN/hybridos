@@ -85,7 +85,7 @@ void BrowserWindow::setUserAgent(UINT menuID)
         break;
     case IDM_UA_OTHER:
     default:
-        ASSERT(0); // We should never hit this case
+        assert(0); // We should never hit this case
         return;
     }
 

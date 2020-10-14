@@ -48,15 +48,16 @@
 
 #pragma once
 
+#include <string>
+
 #include <minigui/common.h>
 #include <minigui/minigui.h>
 #include <minigui/gdi.h>
 #include <minigui/window.h>
-#include <wtf/RefCounted.h>
 
 #include "resource.h"
 
-class BrowserWindow : public RefCounted<BrowserWindow> {
+class BrowserWindow {
 public:
     virtual ~BrowserWindow() { };
 

@@ -53,9 +53,9 @@ bool askProxySettings(HWND hwnd, ProxySettings& settings)
     return false;
 }
 
-Optional<Credential> askCredential(HWND hwnd, const std::string& realm)
+std::optional<Credential> askCredential(HWND hwnd, const std::string& realm)
 {
-    return WTF::nullopt;
+    return std::nullopt;
 }
 
 bool askServerTrustEvaluation(HWND hwnd, const std::string& pems)
