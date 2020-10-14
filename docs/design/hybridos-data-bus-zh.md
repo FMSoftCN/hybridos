@@ -2,7 +2,7 @@
 
 魏永明
 
-本文阐述合璧操作系统设备端数据总线（hiBus）的设计。
+本文阐述合璧操作系统设备端数据总线（hiBus）1.0 版本的设计。
 
 - [基本框架及术语](#基本框架及术语)
 - [协议及接口](#协议及接口)
@@ -14,7 +14,6 @@
       * [转发过程调用请求给过程处理器](#转发过程调用请求给过程处理器)
       * [产生事件](#产生事件)
       * [收到事件](#收到事件)
-      * [跨设备连接的思考](#跨设备连接的思考)
    + [hiBus 内置过程](#hibus-内置过程)
       * [注册过程](#注册过程)
       * [撤销过程](#撤销过程)
@@ -28,9 +27,19 @@
 - [hiBus 服务器的架构及关键模块](#hibus-服务器的架构及关键模块)
    + [架构](#架构)
    + [关键模块](#关键模块)
-   + [调试工具](#调试工具)
-   + [客户端接口](#客户端接口)
-- [演进规划](#演进规划)
+   + [命令行](#命令行)
+   + [客户端主要接口](#客户端主要接口)
+      * [全局类型](#全局类型)
+      * [连接管理](#连接管理)
+      * [辅助函数](#辅助函数)
+      * [过程管理](#过程管理)
+      * [事件管理](#事件管理)
+      * [订阅事件](#订阅事件)
+      * [调用过程](#调用过程)
+   + [等待数据包及事件循环](#等待数据包及事件循环)
+- [其他](#其他)
+   + [简单的应用包管理](#简单的应用包管理)
+   + [跨设备连接的思考](#跨设备连接的思考)
 
 ## 基本框架及术语
 
@@ -399,15 +408,6 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 - `bubbleName` 是事件泡泡名称。
 - `bubbleData` 包含真正的事件泡泡数据。
 
-#### 跨设备连接的思考
-
-注：当前版本仅处理本机上的连接。
-
-跨设备（主机）连接有两种思路：
-
-1. hiBus 服务器使用 Web Socket 在非回环地址上监听连接请求，另一个主机上的应用通过 Web Socket 直接连接到该服务器。问题：如何对另一台主机上的应用进行身份验证？
-1. 在不同的 hiBus 服务器实例之间建立中继服务，所有针对另一个主机上的请求，由 hiBus 服务器之间通过中继完成，从而实现跨主机的远程过程调用或者事件订阅。此种设计下，身份验证只在 hiBus 服务器之间进行，各主机上的应用身份验证，由本机处理。这样的话，本机 Web Socket 的事件和过程调用端口均只在本地回环地址上提供服务。比如，当过程调用的目标主机非本机时，hiBus 服务器可将该请求转发给目标主机所在的 hiBus 服务器，然后将结果转发给调用者。
-
 ### hiBus 内置过程
 
 hiBus 服务器通过内置过程实现注册过程/事件等功能。
@@ -709,7 +709,7 @@ int hibus_fire_event (HIBUS_CONN* conn,
 
 `hibus_fire_event` 用于产生一个事件。
 
-#### 订阅事件管理
+#### 订阅事件
 
 模块可以使用如下的接口订阅或者取消订阅一个事件：
 
@@ -730,5 +730,54 @@ int hibus_unsubscribe_event (HIBUS_CONN* conn,
 
 `hibus_unsubscribe_event` 函数用于取消对一个事件的订阅。
 
-## 演进规划
+`hibus_wait_for_event` 函数用于等待事件。
+
+#### 调用过程
+
+模块可使用如下接口调用过程：
+
+```c
+typedef void (*HIBUS_RESULT_HANDLER)(HIBUS_CONN* conn,
+        const char* from_endpoint, const char* method_name,
+        int ret_code, const HIBUS_JSON* ret_value);
+
+int hibus_call_procedure (HIBUS_CONN* conn, const char* endpoint, const char* method_name,
+        const HIBUS_JSON* method_praram, time_t ret_time_expected, HIBUS_RESULT_HANDLER result_handler);
+
+int hibus_call_procedure_and_wait (HIBUS_CONN* conn, const char* endpoint, const char* method_name,
+        const HIBUS_JSON* method_praram, time_t ret_time_expected, HIBUS_JSON** ret_value);
+```
+
+`hibus_call_procedure` 提供了异步调用远程过程的接口：发起调用后会立即返回，然后在回调函数（`result_handler`）中等待结果或错误。此时，需要配合后面讲到的 `hibus_wait_for_packet` 函数使用。
+
+`hibus_call_procedure_and_wait` 提供了同步调用远程过程的接口：发起调用后将等待结果或错误然后返回。注意，在等待返回值的过程中，可能会收到事件，此时，该函数会调用相应的事件处理器。
+
+### 等待数据包及事件循环
+
+```c
+int hibus_wait_for_packet (HIBUS_CONN* conn, struct timeval *timeout);
+```
+
+该函数检查服务器发过来的数据，并调用相应的事件处理器或者结果处理器。通常在一个循环中使用，如：
+
+```c
+    struct timeval timeout = { 0, 100000 }; // 100ms
+
+    while (1) {
+        hibus_wait_for_packet (conn, &timeout);
+    }
+```
+
+## 其他
+
+### 简单的应用包管理
+
+### 跨设备连接的思考
+
+注：当前版本仅处理本机上的连接。
+
+跨设备（主机）连接有两种思路：
+
+1. hiBus 服务器使用 Web Socket 在非回环地址上监听连接请求，另一个主机上的应用通过 Web Socket 直接连接到该服务器。问题：如何对另一台主机上的应用进行身份验证？
+1. 在不同的 hiBus 服务器实例之间建立中继服务，所有针对另一个主机上的请求，由 hiBus 服务器之间通过中继完成，从而实现跨主机的远程过程调用或者事件订阅。此种设计下，身份验证只在 hiBus 服务器之间进行，各主机上的应用身份验证，由本机处理。这样的话，本机 Web Socket 的事件和过程调用端口均只在本地回环地址上提供服务。比如，当过程调用的目标主机非本机时，hiBus 服务器可将该请求转发给目标主机所在的 hiBus 服务器，然后将结果转发给调用者。
 
