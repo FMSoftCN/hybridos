@@ -65,7 +65,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 1. 提供两种类型的底层连接通道：本地的 Unix Domain Socket 和 Web Socket，以方便不同模块、节点之间可以通过 Web Socket 连接到 hiBus 上。
 1. 提供基本的安全机制，以决定某个应用或者某个远程节点能否订阅（subscribe）特定的事件，以及能否调用（call）某个特定的过程（procedure）。
-1. 考虑到在未来，hiBus 可通过 Web Socket 向局域网中的其他 IoT 设备节点提供服务。因此，需要在事件订阅以及调用远程过程时使用包含主机或设备名称的统一资源标识符（URI）。
+1. 考虑到在未来，hiBus 可通过 Web Socket 向局域网中的其他 IoT 设备节点提供服务。因此，需要在事件订阅以及调用远程过程时使用包含主机名称信息。
 1. 重新设计的通讯协议。
 
 术语：
@@ -73,13 +73,13 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 1. 主机（host）：指合璧操作系统设备侧赖以运行的一个计算机主机。
 1. 应用（app）：合璧操作系统中，一个应用由多个不同的模块组成，这些模块可能使用不同的编程语言开发，在系统中以 GUI 进程或者守护进程的形式运行。
 1. 模块（module）：模块用来区分一个应用的不同组件。在合璧操作系统中，一个应用可以有多个模块，通常以独立的进程或者线程存在。比如专门用于处理底层设备控制的模块，专门用于处理人机交互的模块。
-1. 事件（event）/泡泡（bubble）：事件名称中包含了主机名称、应用名称、模块名称以及泡泡名称。
+1. 事件（event）/泡泡（bubble）：事件名称中包含了主机名称、应用名称、模块名称以及泡泡（即事件发生器）名称。
 1. 过程（procedure）/方法（method）：过程名称中包含了主机名称、应用名称、模块名称以及方法名称。
 
 在 hiBus 中，一个应用的不同模块都可以作为客户端连接到 hiBus 服务器上；单个应用的不同连接对应一个唯一的模块名称，每个模块都可以扮演如下单个角色或多个角色：
 
-1. 事件发生器（event generator）：注册事件后，发生新的事件后向服务器写入事件数据。
-1. 过程处理器（procedure handler）：注册过程后，等待调用请求、处理，然后发送处理结果。
+1. 泡泡（bubble）/事件发生器（event generator）：注册事件后，发生新的事件后向服务器写入事件数据。
+1. 方法（method）/过程处理器（procedure handler）：注册过程后，等待调用请求、处理，然后发送处理结果。
 1. 事件订阅者（event subscriber）：向服务器订阅指定的事件后，将收到对应的事件。
 1. 过程调用者（procedure caller）：向服务器发送过程调用请求，之后同步等待或者异步等待处理结果。
 
@@ -109,13 +109,12 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
              ------------------------------
 ```
 
-我们使用如下的 URI 来指定一个过程：
+我们使用如下的端点（endpoint）名称来指定一个应用、模块、过程或事件：
 
-`proc://<host_name>/<app_name>/<module_name>/<method_name>`
-
-我们使用如下的端点（endpoint）名称来指定一个事件：
-
-`@<host_name>/<app_name>/<module_name>/<bubble_name>`
+- 应用：`@<host_name>/<app_name>`
+- 模块：`@<host_name>/<app_name>/<module_name>`
+- 过程：`@<host_name>/<app_name>/<module_name>/<method_name>`
+- 事件：`@<host_name>/<app_name>/<module_name>/<bubble_name>`
 
 其中，
 
@@ -139,7 +138,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
    - `/var/run/hibus`：通讯端口，用于过程调用、发送和接收事件。
 1. Web Socket 端口（HybridOS 保留 7000 ~ 7999 端口）：
    - `7700`：通讯端口，用于过程调用、发送和接收事件。
-   - `7701`：保留。或可用于中继功能。
+   - `7701`：保留；或可用于中继功能。
 
 理论上，当 hiBus 服务器运行在 Web Socket 端口且绑定到非本机回环（loopback）地址上时，有能力为其他设备节点提供事件及过程调用服务。
 
@@ -227,8 +226,8 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 ```json
 {
     "packetType": "call",
-    "requestId": "<hased_request_identifier>",
-    "procedure": "proc://<host_name>/<app_name>/<module_name>/<method_name>",
+    "callId": "<hased_call_identifier>",
+    "procedure": "@<host_name>/<app_name>/<module_name>/<method_name>",
     "expectedTime": 30000,
     "authenInfo": {
         ...
@@ -241,7 +240,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 其中，
 - `packetType` 表示数据包类型，这里用 `call`，表示过程调用。
-- `requestId` 是调用方提供的一个唯一性字符串，用于在调用方标识特定的调用请求。
+- `callId` 是调用方提供的一个唯一性字符串，用于在调用方标识特定的调用请求。
 - `procedure` 是过程名称，包括主机名、应用名称、模块名称和方法名称。
 - `expectedTime` 是期望的执行时间，毫秒为单位，为 0 表示不限（内部上限可在运行时配置，一般取 30s）。
 - `authenInfo` 是可选的用户身份验证信息（如果该过程需要额外的用户身份验证的话）。当前版本暂不考虑。
@@ -255,7 +254,7 @@ hiBus 服务器会首先将过程调用请求转发给过程处理器，根据�
 {
     "packetType": "result",
     "resultId": "<hased_result_identifier>",
-    "requestId": "<hased_request_identifier>",
+    "callId": "<hased_call_identifier>",
     "fromHost": "<host_name_processed_this_call>",
     "fromApp": "<app_name_processed_this_call>",
     "fromModule": "<module_name_processed_this_call>",
@@ -270,7 +269,7 @@ hiBus 服务器会首先将过程调用请求转发给过程处理器，根据�
 其中，
 - `packetType` 表示数据包类型，这里用 `result`，表示过程调用结果。
 - `resultId` 是 hiBus 服务器为每个过程调用分配的一个全局唯一字符串，用于跟踪特定的调用。
-- `requestId` 是调用方发起过程调用时提供的标识符。
+- `callId` 是调用方发起过程调用时提供的标识符。
 - `fromHost` 表示处理该调用的主机名称。
 - `fromApp` 表示处理该调用的应用名称。
 - `fromModdule` 表示处理该调用的模块名称。
@@ -304,7 +303,7 @@ hiBus 服务器会首先将过程调用请求转发给过程处理器，根据�
 {
     "packetType": "result",
     "resultId": "<hased_result_identifier>",
-    "requestId": "<hased_request_identifier>",
+    "callId": "<hased_call_identifier>",
     "retCode": 200,
     "timeConsumed": 1.2345,
     "result": {
@@ -329,7 +328,7 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 {
     "packetType": "call",
     "resultId": "<hased_result_identifier>",
-    "requestId": "<hased_request_identifier>",
+    "callId": "<hased_call_identifier>",
     "timeDiff": 0.5432,
     "methodName": "<method_name>",
     "authenInfo": {
@@ -344,7 +343,7 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 过程处理器返回给服务器的结果数据包同 `过程调用结果` 中的描述，然后由服务器转发给调用者。
 
 一般而言，为防止出现过程处理器的重入情形，服务器应保证在一个过程调用连接上（对应于单个应用），一次只处理一个过程，故而需要使用队列来维护多个过程调用请求。
-但调用者可发起多个请求，然后根据 `resultId` 和 `requestId` 来跟踪这些请求返回的结果数据。
+但调用者可发起多个请求，然后根据 `resultId` 和 `callId` 来跟踪这些请求返回的结果数据。
 
 #### 产生事件
 
@@ -413,7 +412,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 #### 注册过程
 
-- 过程名称：`proc://localhost/cn.fmsoft.hybridos.hibus/builtin/registerProcedure`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/registerProcedure`
 - 参数：
    + `methodName`：待注册过程的方法名称；由于主机名和应用名是隐含的，所以无需指定。
    + `forHost`：可以调用该方法的主机名称，可指定多个主机（逗号分隔），亦可使用通配符。
@@ -427,8 +426,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 ```json
 {
     "packetType": "call",
-    "requestId": "<hased_request_identifier>",
-    "procedure": "proc://localhost/cn.fmsoft.hybridos.hibus/builtin/registerProcedure",
+    "callId": "<hased_call_identifier>",
+    "procedure": "@localhost/cn.fmsoft.hybridos.hibus/builtin/registerProcedure",
     "expectedTime": 30000,
     "authenInfo": null,
     "parameter": {
@@ -445,7 +444,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 {
     "packetType": "result",
     "resultId": "<hased_result_identifier>",
-    "requestId": "<hased_request_identifier>",
+    "callId": "<hased_call_identifier>",
     "fromHost": "localhost",
     "fromApp": "cn.fmsoft.hybridos.hibus",
     "fromModule": "builtin",
@@ -457,7 +456,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 #### 撤销过程
 
-- 过程名称：`proc://localhost/cn.fmsoft.hybridos.hibus/builtin/revokeProcedure`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/revokeProcedure`
 - 参数：
    + `methodName`：待撤销过程的方法名称；由于主机名和应用名是隐含的，所以无需指定。
 - 返回值：无。客户端依据结果的 `retCode` 判断是否撤销成功，可能的值有：
@@ -468,7 +467,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 #### 注册事件
 
-- 过程名称：`proc://localhost/cn.fmsoft.hybridos.hibus/builtin/registerEvent`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/registerEvent`
 - 参数：
    + `bubbleName`：待注册的事件名称；由于主机名和应用名是隐含的，所以无需指定。
    + `forHost`：可以订阅该事件的主机名称，可指定多个主机（逗号分隔），亦可使用通配符。
@@ -479,7 +478,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 #### 撤销事件
 
-- 过程名称：`proc://localhost/cn.fmsoft.hybridos.hibus/builtin/revokeEvent`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/revokeEvent`
 - 参数：
    + `bubbleName`：待撤销过程的事件名称；由于主机名和应用名是隐含的，所以无需指定。
 - 返回值：无。客户端依据结果的 `retCode` 判断是否撤销成功，可能的值有：
@@ -489,7 +488,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 #### 订阅事件
 
-- 过程名称：`proc://localhost/cn.fmsoft.hybridos.hibus/builtin/subscribeEvent`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/subscribeEvent`
 - 参数：
    + `event`：要订阅的完整事件名称，含主机名、应用名以及泡泡名。
 - 返回值：无。客户端依据结果的 `retCode` 判断是否订阅成功，可能的值有：
@@ -499,7 +498,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 #### 取消事件订阅
 
-- 过程名称：`proc://localhost/cn.fmsoft.hybridos.hibus/builtin/unsubscribeEvent`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/unsubscribeEvent`
 - 参数：
    + `event`：要取消订阅的完整事件名称，含主机名、应用名以及泡泡名。
 - 返回值：无。客户端依据结果的 `retCode` 判断是否取消成功，可能的值有：
@@ -508,7 +507,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 #### 列出已注册过程
 
-- 过程名称：`proc://localhost/cn.fmsoft.hybridos.hibus/builtin/listProcedures`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/listProcedures`
 - 参数：无。
 - 返回值：成功时返回已注册的，且调用方可调用的过程清单。
 - 常见错误状态码：无
@@ -519,7 +518,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 {
     "packetType": "result",
     "resultId": "<hased_result_identifier>",
-    "requestId": "<hased_request_identifier>",
+    "callId": "<hased_call_identifier>",
     "fromHost": "localhost",
     "fromApp": "cn.fmsoft.hybridos.hibus",
     "fromModule": "builtin",
@@ -534,7 +533,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 #### 列出已注册事件
 
-- 过程名称：`proc://localhost/cn.fmsoft.hybridos.hibus/builtin/listEvents`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/listEvents`
 - 参数：无。
 - 返回值：成功时返回已注册的，且调用方可订阅的事件清单。
 - 常见错误状态码：无
@@ -545,7 +544,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 {
     "packetType": "result",
     "resultId": "<hased_result_identifier>",
-    "requestId": "<hased_request_identifier>",
+    "callId": "<hased_call_identifier>",
     "fromHost": "localhost",
     "fromApp": "cn.fmsoft.hybridos.hibus",
     "fromModule": "builtin",
@@ -560,7 +559,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 #### 列出事件的订阅者
 
-- 过程名称：`proc://localhost/cn.fmsoft.hybridos.hibus/builtin/listEventSubscribers`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/listEventSubscribers`
 - 参数：
    + `eventName`：事件名称，含完整的主机名、应用名、模块名以及泡泡名。
 - 返回值：成功时返回指定事件的订阅者的主机名及应用名清单。
@@ -575,7 +574,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 {
     "packetType": "result",
     "resultId": "<hased_result_identifier>",
-    "requestId": "<hased_request_identifier>",
+    "callId": "<hased_call_identifier>",
     "fromHost": "localhost",
     "fromApp": "cn.fmsoft.hybridos.hibus",
     "fromModule": "builtin",
