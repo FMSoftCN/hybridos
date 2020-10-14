@@ -232,7 +232,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 #### 过程调用请求
 
-发起执行特定过程（procedure）的请求时，向 hiBus 的过程调用端口写入如下 JSON 数据：
+发起执行特定过程（procedure）的请求时，向 hiBus 服务器写入如下 JSON 数据：
 
 ```json
 {
