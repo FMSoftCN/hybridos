@@ -822,7 +822,12 @@ int hibus_wait_for_packet (HIBUS_CONN* conn, struct timeval *timeout);
     struct timeval timeout = { 0, 100000 }; // 100ms
 
     while (1) {
+
+        ...
+
         hibus_wait_for_packet (conn, &timeout);
+
+        ...
     }
 ```
 
