@@ -109,18 +109,20 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
              ------------------------------
 ```
 
-我们使用如下的端点（endpoint）名称来指定一个应用、模块、过程或事件：
+我们使用如下的端点（endpoint）名称来指定一个模块（含有主机名、应用名及模块名）：
 
-- 应用：`@<host_name>/<app_name>`
 - 模块：`@<host_name>/<app_name>/<module_name>`
+
+使用如下的字符串指代一个过程或事件：
+
 - 过程：`@<host_name>/<app_name>/<module_name>/<method_name>`
 - 事件：`@<host_name>/<app_name>/<module_name>/<bubble_name>`
 
 其中，
 
-- `<host_name>` 符合 FQDN（Fully Qualified Domain Name）规范。
-- `<app_name>` 一个字符串，字母开头，可包含字母、数字和句点，句点不能连续出现；不区分大小写，但习惯上使用全小写字母。类似 Android 的应用名称。
-- `<module_name>`、`<method_name>` 和 `<bubble_name>` 符合常见编程语言的变量名规范，但不区分大小写。
+- `<host_name>` 符合 FQDN（Fully Qualified Domain Name）规范。长度不超过 127 字节。
+- `<app_name>` 一个字符串，字母开头，可包含字母、数字和句点，句点不能连续出现；不区分大小写，但习惯上使用全小写字母。类似 Android 的应用名称。长度不超过 127 字节。
+- `<module_name>`、`<method_name>` 以及 `<bubble_name>` 符合常见编程语言的变量名规范，但不区分大小写。长度不超过 64 字节。
 
 我们保留如下特别的主机名称和应用名称：
 
@@ -589,13 +591,144 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 ## hiBus 服务器的架构及关键模块
 
+hiBus 服务器使用 C/C++ 语言开发，由服务器程序、命令行程序和供客户端使用的函数库（以及头文件）三部分组成。
+
 ### 架构
 
 ### 关键模块
 
-### 调试工具
+### 命令行
 
-### 客户端接口
+hiBus 的命令行工具，将被编译为独立的程序，该程序以端点名 `@localhost/cn.fmsoft.hybridos.hibus/cmdline` 连接到服务器，视为 hiBus 本身的 `cmdline` 模块，以独立进程方式运行。
+
+使用该命令行工具时，可通过 hiBus 内置过程来查询已注册过程、事件、特定事件的订阅者信息，亦可订阅特定事件，或者调用某个特定的过程。
+
+### 客户端主要接口
+
+客户端接口编译为独立函数库（libhibus.so），提供 C 语言接口，以方便使用不同编程语言开发的客户端使用这些接口注册/撤销过程、注册/撤销/订阅事件等。
+
+所有的客户端接口均是线程安全的，这样，我们可以用某个线程来实现某个通讯模块。比如，我们可以在主线程中以 `event` 模块名连接到服务器，在主线程中只处理事件，而所有调用远程过程的功能则在另一个线程中实现，其模块名为 `call`。如此设计，便于实现远程过程的异步调用。
+
+#### 全局类型
+
+```c
+struct _HIBUS_CONN;
+typedef struct _HIBUS_CONN HIBUS_CONN;
+
+struct _HIBUS_JSON;
+typedef struct _HIBUS_JSON HIBUS_JSON;
+```
+
+`HIBUS_CONN` 是一个用来表示 hiBus 连接的匿名数据结构。
+
+`HIBUS_JSON` 是一个用来表示 JSON 对象的数据结构。
+
+#### 连接管理
+
+使用如下接口之一连接到 hiBus 服务器：
+
+```c
+int hibus_connect_to_server_via_unix_socket (const char* path_to_socket, const char* module_name, HIBUS_CONN** conn);
+int hibus_connect_to_server_via_web_socket (const char* host_name, int port, const char* module_name, HIBUS_CONN** conn);
+```
+
+上面的两个函数，分别使用 Unix Domain Socket 或者 Web Socket 连接到 hiBus 服务器上。函数的返回值为套接字文件描述符（fd）。`fd >= 0` 时表明连接成功，此时会通过 `conn` 参数返回一个匿名的 `HIBUS_CONN` 结构指针。`fd < 0` 时表明连接失败，其绝对值标识错误编码。
+
+若连接成功，其后所有的接口均使用通过 `conn` 返回的结构指针来标识该连接。
+
+使用如下接口之一关闭到 hiBus 服务器的连接：
+
+```c
+int hibus_disconnect (HIBUS_CONN* conn);
+```
+
+使用如下接口从 `HIBUS_CONN` 结构中获得相关信息（主机名、应用名、模块名、套接字文件描述符）：
+
+```c
+const char* hibus_get_host_name (HIBUS_CONN* conn);
+const char* hibus_get_app_name (HIBUS_CONN* conn);
+const char* hibus_get_module_name (HIBUS_CONN* conn);
+int hibus_get_socket_fd (HIBUS_CONN* conn);
+```
+
+#### 辅助函数
+
+模块可使用如下辅助函数来解析端点名称：
+
+```c
+#define LEN_HOST_NAME       127
+#define LEN_APP_NAME        127
+#define LEN_MODULE_NAME     64
+#define LEN_METHOD_NAME     64
+#define LEN_BUBBLE_NAME     64
+
+char* hibus_get_host_name (const char* endpoint);
+char* hibus_get_app_name (const char* endpoint);
+char* hibus_get_module_name (const char* endpoint);
+```
+
+模块可使用如下辅助函数来组装一个端点名称：
+
+```c
+char* hibus_assemble_endpoint (const char* host_name, const char* app_name,
+        const char* module_name);
+```
+
+#### 过程管理
+
+模块可以使用如下的接口注册或撤销过程：
+
+```c
+typedef HIBUS_JSON* (*HIBUS_METHOD_HANDLER)(HIBUS_CONN* conn,
+        const char* from_endpoint, const char* method_name,
+        const HIBUS_JSON* method_param);
+
+int hibus_register_procedure (HIBUS_CONN* conn, const char* method_name, HIBUS_METHOD_HANDLER method_handler);
+int hibus_revoke_procedure (HIBUS_CONN* conn, const char* method_name);
+```
+
+`hibus_register_procedure` 函数用于注册一个过程。当该模块收到调用该过程的请求时，将自动调用对应的回调函数 `method_cb`，并传递方法名、调用者端点以及过程参数。
+
+`hibus_revoke_procedure` 函数用于撤销一个过程。
+
+#### 事件管理
+
+模块可以使用如下的接口注册或撤销事件：
+
+```c
+int hibus_register_event (HIBUS_CONN* conn, const char* bubble_name,
+        const char* to_host, const char* to_app);
+int hibus_revoke_event (HIBUS_CONN* conn, const char* bubble_name);
+int hibus_fire_event (HIBUS_CONN* conn,
+        const char* bubble_name, const HIBUS_JSON* bubble_data);
+```
+
+`hibus_register_event` 函数用于注册一个事件。
+
+`hibus_revoke_event` 函数用于撤销一个事件。
+
+`hibus_fire_event` 用于产生一个事件。
+
+#### 订阅事件管理
+
+模块可以使用如下的接口订阅或者取消订阅一个事件：
+
+```c
+typedef void (*HIBUS_EVENT_HANDLER)(HIBUS_CONN* conn,
+        const char* from_endpoint, const char* bubble_name,
+        const HIBUS_JSON* bubble_data);
+
+int hibus_subscribe_event (HIBUS_CONN* conn,
+        const char* endpoint, const char* bubble_name,
+        HIBUS_EVENT_HANDLER event_handler);
+
+int hibus_unsubscribe_event (HIBUS_CONN* conn,
+        const char* endpoint, const char* bubble_name);
+```
+
+`hibus_subscribe_event` 函数用于订阅一个事件。当指定的事件来临时，`event_handler` 指定的事件回调函数将被调用。
+
+`hibus_unsubscribe_event` 函数用于取消对一个事件的订阅。
 
 ## 演进规划
 
