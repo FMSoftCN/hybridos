@@ -408,6 +408,28 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 - `bubbleName` 是事件泡泡名称。
 - `bubbleData` 包含真正的事件泡泡数据。
 
+#### 乒乓心跳
+
+服务器或者客户端应通过乒乓心跳数据包来判断对方是否仍然可用。
+
+```json
+{
+    "packetType": "ping",
+    "pingId": "<hased_ping_identifier>",
+}
+```
+
+任何一方收到 `ping` 数据包之后，应立即发送 `pong` 数据包：
+
+```json
+{
+    "packetType": "pong",
+    "pingId": "<the_ping_identifier_correspond_to_this_pong>",
+}
+```
+
+一般而言，在 Internet 连接上使用乒乓心跳可以有效检测连接的意外丢失，但对通过 Unix Domain Socekt 建立的连接是不需要执行乒乓心跳测试的。
+
 ### hiBus 内置过程
 
 hiBus 服务器通过内置过程实现注册过程/事件等功能。
@@ -589,6 +611,33 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 }
 ```
 
+#### 回声
+
+该过程主要用于测试
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/echo`
+- 参数：
+   + `words`：一个非空字符串。
+- 返回值：成功时返回传入的非空字符串。
+- 常见错误状态码：
+   + `200`：表示成功。
+
+下面是一个示例结果：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<hased_result_identifier>",
+    "callId": "<hased_call_identifier>",
+    "fromHost": "localhost",
+    "fromApp": "cn.fmsoft.hybridos.hibus",
+    "fromModule": "builtin",
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retValue": "I am still live",
+}
+```
+
 ## 架构及关键模块
 
 hiBus 服务器使用 C/C++ 语言开发，由服务器程序、命令行程序和供客户端使用的函数库（以及头文件）三部分组成。
@@ -620,6 +669,8 @@ hiBus 服务器使用 C/C++ 语言开发，由服务器程序、命令行程序�
 |                           Event Subscriber Manager                 |
  --------------------------------------------------------------------
 |           Event Dispatcher       |        Call Dispatcher          |     hiBus Server
+ --------------------------------------------------------------------
+|                           The Builtin Endpoint                     |
  --------------------------------------------------------------------
 |                                Helpers                             |
 |   ------------------------------------------------------------     |
@@ -654,6 +705,7 @@ hiBus 服务器主要包含如下软件模块：
 - 事件订阅者管理器（Event Subscriber Manager）：该模块管理所有的事件订阅者清单信息，处理事件的订阅及取消订阅请求。
 - 事件分发器（Event Dispatcher）：该模块将端点产生的事件分发给订阅者。
 - 调用分发器（Call Dispatcher）：该模块将端点发起的过程调用分发给对应的端点进行处理。
+- 内置端点（The Builtin Endpoint）：该模块实现 hiBus 的内置过程。
 - 辅助模块（Helpers）：辅助模块中主要包括 JSON 的处理模块以及安全性处理模块。前者主要用于解析 JSON 格式的数据包并将其转换成内部结构，或者反之。后者主要提供基于非对称个加密算法的签名验证功能以及通配符处理功能等。
 
 ### 命令行
@@ -687,15 +739,15 @@ typedef struct _HIBUS_JSON HIBUS_JSON;
 使用如下接口之一连接到 hiBus 服务器：
 
 ```c
-int hibus_connect_to_server_via_unix_socket (const char* path_to_socket, const char* module_name, HIBUS_CONN** conn);
-int hibus_connect_to_server_via_web_socket (const char* host_name, int port, const char* module_name, HIBUS_CONN** conn);
+int hibus_connect_by_unix_socket (const char* path_to_socket, const char* module_name, HIBUS_CONN** conn);
+int hibus_connect_by_web_socket (const char* host_name, int port, const char* module_name, HIBUS_CONN** conn);
 ```
 
 上面的两个函数，分别使用 Unix Domain Socket 或者 Web Socket 连接到 hiBus 服务器上。函数的返回值为套接字文件描述符（fd）。`fd >= 0` 时表明连接成功，此时会通过 `conn` 参数返回一个匿名的 `HIBUS_CONN` 结构指针。`fd < 0` 时表明连接失败，其绝对值标识错误编码。
 
 若连接成功，其后所有的接口均使用通过 `conn` 返回的结构指针来标识该连接。
 
-使用如下接口之一关闭到 hiBus 服务器的连接：
+使用如下接口关闭到 hiBus 服务器的连接：
 
 ```c
 int hibus_disconnect (HIBUS_CONN* conn);
@@ -721,15 +773,22 @@ int hibus_get_socket_fd (HIBUS_CONN* conn);
 #define LEN_METHOD_NAME     64
 #define LEN_BUBBLE_NAME     64
 
-char* hibus_get_host_name (const char* endpoint);
-char* hibus_get_app_name (const char* endpoint);
-char* hibus_get_module_name (const char* endpoint);
+int hibus_get_host_name (const char* endpoint, char* buff);
+int hibus_get_app_name (const char* endpoint, char* buff);
+int hibus_get_module_name (const char* endpoint, char* buff);
+
+char* hibus_get_host_name_alloc (const char* endpoint);
+char* hibus_get_app_name_alloc (const char* endpoint);
+char* hibus_get_module_name_alloc (const char* endpoint);
 ```
 
 模块可使用如下辅助函数来组装一个端点名称：
 
 ```c
-char* hibus_assemble_endpoint (const char* host_name, const char* app_name,
+int hibus_assemble_endpoint (const char* host_name, const char* app_name,
+        const char* module_name, char* buff);
+
+char* hibus_assemble_endpoint_alloc (const char* host_name, const char* app_name,
         const char* module_name);
 ```
 
@@ -742,7 +801,8 @@ typedef HIBUS_JSON* (*HIBUS_METHOD_HANDLER)(HIBUS_CONN* conn,
         const char* from_endpoint, const char* method_name,
         const HIBUS_JSON* method_param);
 
-int hibus_register_procedure (HIBUS_CONN* conn, const char* method_name, HIBUS_METHOD_HANDLER method_handler);
+int hibus_register_procedure (HIBUS_CONN* conn, const char* method_name,
+        HIBUS_METHOD_HANDLER method_handler);
 int hibus_revoke_procedure (HIBUS_CONN* conn, const char* method_name);
 ```
 
