@@ -177,9 +177,9 @@ different sides:
 
 ```
     `
-    |-- device-side/    # The source for device side.
-    |-- server-side/    # The source for server side.
-    |-- client-side/    # The source for client side.
+    |-- device-side/    # The building scripts and samples for device side.
+    |-- server-side/    # The building scripts and samples for server side.
+    |-- client-side/    # The building scripts and samples for client side.
     |-- docs/           # The design documents and specifications of HybridOS.
 ```
 
