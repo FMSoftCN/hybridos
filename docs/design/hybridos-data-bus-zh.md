@@ -271,6 +271,7 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
     "fromHost": "<host_name_processed_this_call>",
     "fromApp": "<app_name_processed_this_call>",
     "fromRunner": "<runner_name_processed_this_call>",
+    "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
     "retValue": {
@@ -286,6 +287,7 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
 - `fromHost` 表示处理该调用的主机名称。
 - `fromApp` 表示处理该调用的应用名称。
 - `fromModdule` 表示处理该调用的行者名称。
+- `timeConsumed` 是方法处理器实际消耗的事件；单位秒，浮点数。
 - `timeDiff` 是自收到原始请求到返回该结果的时间差；单位秒，浮点数。
 - `retCode` 取 HTTP 状态码子集，可取如下值：
    - 200 Ok：表示过程正常执行并返回了结果。
@@ -474,6 +476,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "fromHost": "localhost",
     "fromApp": "cn.fmsoft.hybridos.hibus",
     "fromRunner": "builtin",
+    "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
     "retValue": null,
@@ -548,6 +551,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "fromHost": "localhost",
     "fromApp": "cn.fmsoft.hybridos.hibus",
     "fromRunner": "builtin",
+    "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
     "retValue": [
@@ -574,6 +578,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "fromHost": "localhost",
     "fromApp": "cn.fmsoft.hybridos.hibus",
     "fromRunner": "builtin",
+    "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
     "retValue": [
@@ -604,6 +609,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "fromHost": "localhost",
     "fromApp": "cn.fmsoft.hybridos.hibus",
     "fromRunner": "builtin",
+    "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
     "retValue": [
@@ -634,6 +640,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "fromHost": "localhost",
     "fromApp": "cn.fmsoft.hybridos.hibus",
     "fromRunner": "builtin",
+    "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
     "retValue": "I am still live",
