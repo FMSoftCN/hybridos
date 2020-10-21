@@ -1,14 +1,11 @@
 # HybridOS Device Side
 
-This directory contains the building scripts, the source of daemons and
-servers, and the samples for device side of HybridOS.
+This directory contains the building scripts and the samples for device side of HybridOS.
 
 ```
     `
     |-- build/          # The building scripts.
-    |-- daemons/        # The source for HybridOS daemons/servers.
     |-- samples/        # The source for HybridOS device-side samples.
-    |-- thirdparty/     # The source for the third party librairies and tools.
 ```
 
 ## Building
