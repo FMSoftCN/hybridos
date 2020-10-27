@@ -148,7 +148,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 ### 套接字接口
 
 1. Unix Doman Socket 端口：
-   - `/var/run/hibus`：通讯端口，用于过程调用、发送和接收事件。
+   - `/var/run/hibus.sock`：通讯端口，用于过程调用、发送和接收事件。
 1. Web Socket 端口（HybridOS 保留 7000 ~ 7999 端口）：
    - `7700`：通讯端口，用于过程调用、发送和接收事件。
    - `7701`：保留；或可用于中继功能。
