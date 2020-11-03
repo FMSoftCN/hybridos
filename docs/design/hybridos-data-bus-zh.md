@@ -794,10 +794,10 @@ char* hibus_get_runner_name_alloc (const char* endpoint);
 行者可使用如下辅助函数来组装一个端点名称：
 
 ```c
-int hibus_assemble_endpoint (const char* host_name, const char* app_name,
+int hibus_assembly_endpoint (const char* host_name, const char* app_name,
         const char* runner_name, char* buff);
 
-char* hibus_assemble_endpoint_alloc (const char* host_name, const char* app_name,
+char* hibus_assembly_endpoint_alloc (const char* host_name, const char* app_name,
         const char* runner_name);
 ```
 
@@ -806,12 +806,12 @@ char* hibus_assemble_endpoint_alloc (const char* host_name, const char* app_name
 行者可以使用如下的接口注册或撤销过程：
 
 ```c
-typedef hibus_json* (*HIBUS_METHOD_HANDLER)(hibus_conn* conn,
+typedef hibus_json* (*hibus_method_handler)(hibus_conn* conn,
         const char* from_endpoint, const char* method_name,
         const hibus_json* method_param);
 
 int hibus_register_procedure (hibus_conn* conn, const char* method_name,
-        HIBUS_METHOD_HANDLER method_handler);
+        hibus_method_handler method_handler);
 int hibus_revoke_procedure (hibus_conn* conn, const char* method_name);
 ```
 
@@ -842,13 +842,13 @@ int hibus_fire_event (hibus_conn* conn,
 模块可以使用如下的接口订阅或者取消订阅一个事件：
 
 ```c
-typedef void (*HIBUS_EVENT_HANDLER)(hibus_conn* conn,
+typedef void (*hibus_event_handler)(hibus_conn* conn,
         const char* from_endpoint, const char* bubble_name,
         const hibus_json* bubble_data);
 
 int hibus_subscribe_event (hibus_conn* conn,
         const char* endpoint, const char* bubble_name,
-        HIBUS_EVENT_HANDLER event_handler);
+        hibus_event_handler event_handler);
 
 int hibus_unsubscribe_event (hibus_conn* conn,
         const char* endpoint, const char* bubble_name);
@@ -865,12 +865,12 @@ int hibus_unsubscribe_event (hibus_conn* conn,
 行者可使用如下接口调用过程：
 
 ```c
-typedef void (*HIBUS_RESULT_HANDLER)(hibus_conn* conn,
+typedef void (*hibus_result_handler)(hibus_conn* conn,
         const char* from_endpoint, const char* method_name,
         int ret_code, const hibus_json* ret_value);
 
 int hibus_call_procedure (hibus_conn* conn, const char* endpoint, const char* method_name,
-        const hibus_json* method_praram, time_t ret_time_expected, HIBUS_RESULT_HANDLER result_handler);
+        const hibus_json* method_praram, time_t ret_time_expected, hibus_result_handler result_handler);
 
 int hibus_call_procedure_and_wait (hibus_conn* conn, const char* endpoint, const char* method_name,
         const hibus_json* method_praram, time_t ret_time_expected, hibus_json** ret_value);
