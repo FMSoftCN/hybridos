@@ -748,8 +748,8 @@ typedef struct json_object hibus_json;
 使用如下接口之一连接到 hiBus 服务器：
 
 ```c
-int hibus_connect_by_unix_socket (const char* path_to_socket, const char* runner_name, hibus_conn** conn);
-int hibus_connect_by_web_socket (const char* host_name, int port, const char* runner_name, hibus_conn** conn);
+int hibus_connect_via_unix_socket (const char* path_to_socket, const char* runner_name, hibus_conn** conn);
+int hibus_connect_via_web_socket (const char* host_name, int port, const char* runner_name, hibus_conn** conn);
 ```
 
 上面的两个函数，分别使用 Unix Domain Socket 或者 Web Socket 连接到 hiBus 服务器上。函数的返回值为套接字文件描述符（fd）。`fd >= 0` 时表明连接成功，此时会通过 `conn` 参数返回一个匿名的 `hibus_conn` 结构指针。`fd < 0` 时表明连接失败，其绝对值标识错误编码。
