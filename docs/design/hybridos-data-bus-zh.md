@@ -732,43 +732,43 @@ hiBus 的命令行工具，将被编译为独立的程序，该程序以端点�
 #### 全局类型
 
 ```c
-struct _HIBUS_CONN;
-typedef struct _HIBUS_CONN HIBUS_CONN;
+struct _hibus_conn;
+typedef struct _hibus_conn hibus_conn;
 
-struct _HIBUS_JSON;
-typedef struct _HIBUS_JSON HIBUS_JSON;
+struct _hibus_json;
+typedef struct json_object hibus_json;
 ```
 
-`HIBUS_CONN` 是一个用来表示 hiBus 连接的匿名数据结构。
+`hibus_conn` 是一个用来表示 hiBus 连接的匿名数据结构。
 
-`HIBUS_JSON` 是一个用来表示 JSON 对象的数据结构。
+`hibus_json` 是一个用来表示 JSON 对象的数据结构。
 
 #### 连接管理
 
 使用如下接口之一连接到 hiBus 服务器：
 
 ```c
-int hibus_connect_by_unix_socket (const char* path_to_socket, const char* runner_name, HIBUS_CONN** conn);
-int hibus_connect_by_web_socket (const char* host_name, int port, const char* runner_name, HIBUS_CONN** conn);
+int hibus_connect_by_unix_socket (const char* path_to_socket, const char* runner_name, hibus_conn** conn);
+int hibus_connect_by_web_socket (const char* host_name, int port, const char* runner_name, hibus_conn** conn);
 ```
 
-上面的两个函数，分别使用 Unix Domain Socket 或者 Web Socket 连接到 hiBus 服务器上。函数的返回值为套接字文件描述符（fd）。`fd >= 0` 时表明连接成功，此时会通过 `conn` 参数返回一个匿名的 `HIBUS_CONN` 结构指针。`fd < 0` 时表明连接失败，其绝对值标识错误编码。
+上面的两个函数，分别使用 Unix Domain Socket 或者 Web Socket 连接到 hiBus 服务器上。函数的返回值为套接字文件描述符（fd）。`fd >= 0` 时表明连接成功，此时会通过 `conn` 参数返回一个匿名的 `hibus_conn` 结构指针。`fd < 0` 时表明连接失败，其绝对值标识错误编码。
 
 若连接成功，其后所有的接口均使用通过 `conn` 返回的结构指针来标识该连接。
 
 使用如下接口关闭到 hiBus 服务器的连接：
 
 ```c
-int hibus_disconnect (HIBUS_CONN* conn);
+int hibus_disconnect (hibus_conn* conn);
 ```
 
-使用如下接口从 `HIBUS_CONN` 结构中获得相关信息（主机名、应用名、行者名、套接字文件描述符）：
+使用如下接口从 `hibus_conn` 结构中获得相关信息（主机名、应用名、行者名、套接字文件描述符）：
 
 ```c
-const char* hibus_get_host_name (HIBUS_CONN* conn);
-const char* hibus_get_app_name (HIBUS_CONN* conn);
-const char* hibus_get_runner_name (HIBUS_CONN* conn);
-int hibus_get_socket_fd (HIBUS_CONN* conn);
+const char* hibus_get_host_name (hibus_conn* conn);
+const char* hibus_get_app_name (hibus_conn* conn);
+const char* hibus_get_runner_name (hibus_conn* conn);
+int hibus_get_socket_fd (hibus_conn* conn);
 ```
 
 #### 辅助函数
@@ -806,13 +806,13 @@ char* hibus_assemble_endpoint_alloc (const char* host_name, const char* app_name
 行者可以使用如下的接口注册或撤销过程：
 
 ```c
-typedef HIBUS_JSON* (*HIBUS_METHOD_HANDLER)(HIBUS_CONN* conn,
+typedef hibus_json* (*HIBUS_METHOD_HANDLER)(hibus_conn* conn,
         const char* from_endpoint, const char* method_name,
-        const HIBUS_JSON* method_param);
+        const hibus_json* method_param);
 
-int hibus_register_procedure (HIBUS_CONN* conn, const char* method_name,
+int hibus_register_procedure (hibus_conn* conn, const char* method_name,
         HIBUS_METHOD_HANDLER method_handler);
-int hibus_revoke_procedure (HIBUS_CONN* conn, const char* method_name);
+int hibus_revoke_procedure (hibus_conn* conn, const char* method_name);
 ```
 
 `hibus_register_procedure` 函数用于注册一个过程。当该行者收到调用该过程的请求时，将自动调用对应的回调函数 `method_cb`，并传递方法名、调用者端点以及过程参数。
@@ -824,11 +824,11 @@ int hibus_revoke_procedure (HIBUS_CONN* conn, const char* method_name);
 行者可以使用如下的接口注册或撤销事件：
 
 ```c
-int hibus_register_event (HIBUS_CONN* conn, const char* bubble_name,
+int hibus_register_event (hibus_conn* conn, const char* bubble_name,
         const char* to_host, const char* to_app);
-int hibus_revoke_event (HIBUS_CONN* conn, const char* bubble_name);
-int hibus_fire_event (HIBUS_CONN* conn,
-        const char* bubble_name, const HIBUS_JSON* bubble_data);
+int hibus_revoke_event (hibus_conn* conn, const char* bubble_name);
+int hibus_fire_event (hibus_conn* conn,
+        const char* bubble_name, const hibus_json* bubble_data);
 ```
 
 `hibus_register_event` 函数用于注册一个事件。
@@ -842,15 +842,15 @@ int hibus_fire_event (HIBUS_CONN* conn,
 模块可以使用如下的接口订阅或者取消订阅一个事件：
 
 ```c
-typedef void (*HIBUS_EVENT_HANDLER)(HIBUS_CONN* conn,
+typedef void (*HIBUS_EVENT_HANDLER)(hibus_conn* conn,
         const char* from_endpoint, const char* bubble_name,
-        const HIBUS_JSON* bubble_data);
+        const hibus_json* bubble_data);
 
-int hibus_subscribe_event (HIBUS_CONN* conn,
+int hibus_subscribe_event (hibus_conn* conn,
         const char* endpoint, const char* bubble_name,
         HIBUS_EVENT_HANDLER event_handler);
 
-int hibus_unsubscribe_event (HIBUS_CONN* conn,
+int hibus_unsubscribe_event (hibus_conn* conn,
         const char* endpoint, const char* bubble_name);
 ```
 
@@ -865,15 +865,15 @@ int hibus_unsubscribe_event (HIBUS_CONN* conn,
 行者可使用如下接口调用过程：
 
 ```c
-typedef void (*HIBUS_RESULT_HANDLER)(HIBUS_CONN* conn,
+typedef void (*HIBUS_RESULT_HANDLER)(hibus_conn* conn,
         const char* from_endpoint, const char* method_name,
-        int ret_code, const HIBUS_JSON* ret_value);
+        int ret_code, const hibus_json* ret_value);
 
-int hibus_call_procedure (HIBUS_CONN* conn, const char* endpoint, const char* method_name,
-        const HIBUS_JSON* method_praram, time_t ret_time_expected, HIBUS_RESULT_HANDLER result_handler);
+int hibus_call_procedure (hibus_conn* conn, const char* endpoint, const char* method_name,
+        const hibus_json* method_praram, time_t ret_time_expected, HIBUS_RESULT_HANDLER result_handler);
 
-int hibus_call_procedure_and_wait (HIBUS_CONN* conn, const char* endpoint, const char* method_name,
-        const HIBUS_JSON* method_praram, time_t ret_time_expected, HIBUS_JSON** ret_value);
+int hibus_call_procedure_and_wait (hibus_conn* conn, const char* endpoint, const char* method_name,
+        const hibus_json* method_praram, time_t ret_time_expected, hibus_json** ret_value);
 ```
 
 `hibus_call_procedure` 提供了异步调用远程过程的接口：发起调用后会立即返回，然后在回调函数（`result_handler`）中等待结果或错误。此时，需要配合后面讲到的 `hibus_wait_for_packet` 函数使用。
@@ -883,7 +883,7 @@ int hibus_call_procedure_and_wait (HIBUS_CONN* conn, const char* endpoint, const
 ### 等待数据包及事件循环
 
 ```c
-int hibus_wait_for_packet (HIBUS_CONN* conn, struct timeval *timeout);
+int hibus_wait_for_packet (hibus_conn* conn, struct timeval *timeout);
 ```
 
 该函数检查服务器发过来的数据，并调用相应的事件处理器或者结果处理器。通常在一个循环中使用，如：
