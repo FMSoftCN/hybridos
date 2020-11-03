@@ -765,10 +765,10 @@ int hibus_disconnect (hibus_conn* conn);
 使用如下接口从 `hibus_conn` 结构中获得相关信息（主机名、应用名、行者名、套接字文件描述符）：
 
 ```c
-const char* hibus_get_host_name (hibus_conn* conn);
-const char* hibus_get_app_name (hibus_conn* conn);
-const char* hibus_get_runner_name (hibus_conn* conn);
-int hibus_get_socket_fd (hibus_conn* conn);
+const char* hibus_conn_host_name (hibus_conn* conn);
+const char* hibus_conn_app_name (hibus_conn* conn);
+const char* hibus_conn_runner_name (hibus_conn* conn);
+int hibus_conn_socket_fd (hibus_conn* conn);
 ```
 
 #### 辅助函数
