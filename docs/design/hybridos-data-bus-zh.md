@@ -245,9 +245,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "authenInfo": {
         ...
     },
-    "parameter": {
-        ...
-    },
+    "parameter": "...",
 }
 ```
 
@@ -257,7 +255,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 - `procedure` 是过程名称，包括主机名、应用名称、行者名称和方法名称。
 - `expectedTime` 是期望的执行时间，毫秒为单位，为 0 表示不限（内部上限可在运行时配置，一般取 30s）。
 - `authenInfo` 是可选的用户身份验证信息（如果该过程需要额外的用户身份验证的话）。当前版本暂不考虑。
-- `parameter` 是该过程的执行参数。
+- `parameter` 是该过程的执行参数。注意，执行参数以及返回值使用 JSON 表达，但转为字符串传递。由方法处理器和调用者负责解析。
 
 #### 过程调用结果
 
@@ -274,9 +272,7 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
-    "retValue": {
-        ...
-    }
+    "retValue": "...",
 }
 ```
 
@@ -306,7 +302,7 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
    - 503 Service Unavailable：表示服务不可用。
    - 504 Gateway Timeout：表示执行该调用的过程超时。
    - 507 Insufficient Storage：表示遇到内存或存储不足的问题。
-- `retValue` 包含过程调用的返回值。只有 `retCode` 为 200 时，返回的数据中才包含有结果数据。
+- `retValue` 包含过程调用的返回值。只有 `retCode` 为 200 时，返回的数据中才包含有结果数据。注意，执行参数以及返回值使用 JSON 表达，但转为字符串传递。由方法处理器和调用者负责解析。
 
 在正常情况下，调用者会首先收到 202 状态码，然后在未来的某个时间点收到 200 状态码。只有状态码为 200 时，才表示过程执行完毕并包含有返回值（`retValue`）信息。
 
@@ -349,9 +345,7 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
     "authenInfo": {
         ...
     },
-    "parameter": {
-        ...
-    },
+    "parameter": "...",
 }
 ```
 
@@ -458,11 +452,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "procedure": "@localhost/cn.fmsoft.hybridos.hibus/builtin/registerProcedure",
     "expectedTime": 30000,
     "authenInfo": null,
-    "parameter": {
-        "methodName": "foo",
-        "forHost": "localhost",
-        "forApp": "*",
-    },
+    "parameter": "{ \"methodName\": \"foo\", \"forHost\": \"localhost\", \"forApp\": \"*\" }"
 }
 ```
 
@@ -479,7 +469,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
-    "retValue": null,
+    "retValue": "null"
 }
 ```
 
