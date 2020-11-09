@@ -174,6 +174,10 @@ static void decidePolicyForNavigationActionHBD(const void * decisionTypePointer,
 //    if (g_strcmp0(webkit_web_resource_get_uri(mainResource), requestURI))
 //        return;
 
+    // only for arm version
+    if(strncmp("file:///", requestURI, 8) == 0)
+        return;
+
     webkit_policy_decision_download(decision);
     MessageBox(NULL, "Do not Support Download", "Warning", MB_OK);
 }
