@@ -157,6 +157,26 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 ### 协议
 
+#### 连接
+
+当客户端通过 Web Socket 连接到服务器时，Web Socket 规范规定了初始的连接处理。但通过 Unix Domain Socket 连接时，服务器可能在达到资源上限或者其他错误情形下拒绝客户端的连接请求，此时，服务器向客户端发送如下数据包，然后断开连接：
+
+```json
+{
+    "packageType": "error",
+    "protocolName": "HIBUS/1.0",
+    "retCode": 503,
+    "retMsg": "Service Unavailable"
+}
+```
+
+其中，
+- `protocolName`：包含协议名称及版本号，当前取 `HIBUS/1.0`。
+- `retCode`：包含错误码，可能的取值有（来自 HTTP 状态码）：
+    + 503（Service Unavailable）：达到连接上限。
+    + 505（Internal Server Error）：内部错误。
+- `retMsg`：包含简单的错误信息。
+
 #### 身份识别
 
 当客户端（某个应用的某个行者）连接到上述套接字端口之后，服务器将首先发送一个挑战码（Challenge Code）给客户端，客户端发送身份信息给服务器，服务器据此确定客户端代表的应用名称。
@@ -181,6 +201,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 ```json
 {
     "packageType": "auth",
+    "protocolName": "HIBUS/1.0",
     "challengeCode": "..."
 }
 ```
@@ -214,18 +235,18 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 ```json
 {
     "packageType": "authFailed",
-    "errCode": 409,
-    "extraMsg": "Conflict"
+    "retCode": 409,
+    "retMsg": "Conflict"
 }
 ```
 
 其中，
-- `errCode`：用于验证失败的错误码，可能的取值有（来自 HTTP 状态码）：
+- `retCode`：用于验证失败的错误码，可能的取值有（来自 HTTP 状态码）：
     + 400（Bad Request）：数据包格式错误。
     + 401（Unauthorized）：验签失败。
     + 404（Not Found）：系统中未安装指定应用。
     + 409（Conflict）：行者名冲突。
-- `errMsg`：包含简单的错误信息。
+- `retMsg`：包含简单的错误信息。
 
 在身份验证失败的情况下，服务器将立即断开连接。
 在身份验证未通过之前，客户端发送到服务器所有非用于身份验证的数据包，都将被忽略并致使服务器立即断开连接。
@@ -272,6 +293,7 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
+    "retMsg": "Ok",
     "retValue": "...",
 }
 ```
@@ -302,6 +324,7 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
    - 503 Service Unavailable：表示服务不可用。
    - 504 Gateway Timeout：表示执行该调用的过程超时。
    - 507 Insufficient Storage：表示遇到内存或存储不足的问题。
+- `retMsg`：对 `retCode` 的可读简短描述。
 - `retValue` 包含过程调用的返回值。只有 `retCode` 为 200 时，返回的数据中才包含有结果数据。注意，执行参数以及返回值使用 JSON 表达，但转为字符串传递。由方法处理器和调用者负责解析。
 
 在正常情况下，调用者会首先收到 202 状态码，然后在未来的某个时间点收到 200 状态码。只有状态码为 200 时，才表示过程执行完毕并包含有返回值（`retValue`）信息。
@@ -316,6 +339,7 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
     "resultId": "<hased_result_identifier>",
     "callId": "<hased_call_identifier>",
     "retCode": 200,
+    "retMsg": "Ok",
     "timeConsumed": 1.2345,
     "result": {
         ...
@@ -469,6 +493,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
+    "retMsg": "Ok",
     "retValue": "null"
 }
 ```
@@ -544,6 +569,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
+    "retMsg": "Ok",
     "retValue": [
         "localhost/cn.fmsoft.hybridos.networkManager/getHotSpots",
         "localhost/cn.fmsoft.hybridos.networkManager/connectToHotSpot",
@@ -571,6 +597,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
+    "retMsg": "Ok",
     "retValue": [
         "@localhost/cn.fmsoft.hybridos.networkManager/NETWORKCHANGED",
         "@localhost/cn.fmsoft.hybridos.networkManager/SIGNALCHANGED",
@@ -602,6 +629,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
+    "retMsg": "Ok",
     "retValue": [
         "@localhost/cn.fmsoft.hybridos.foo/first",
         "@localhost/cn.fmsoft.hybridos.bar/second",
@@ -633,6 +661,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
+    "retMsg": "Ok",
     "retValue": "I am still live",
 }
 ```
