@@ -167,16 +167,19 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "protocolName": "HIBUS",
     "protocolVersion": 90,
     "retCode": 503,
-    "retMsg": "Service Unavailable"
+    "retMsg": "Service Unavailable",
+    "extraMsg": "...",
 }
 ```
 
 其中，
-- `protocolName`：包含协议名称及版本号，当前取 `HIBUS/1.0`。
+- `protocolName`：包含协议名称，当前取 `HIBUS`。
+- `protocolVersion`：包含协议版本号，正整数。
 - `retCode`：包含错误码，可能的取值有（来自 HTTP 状态码）：
     + 503（Service Unavailable）：达到连接上限。
     + 505（Internal Server Error）：内部错误。
-- `retMsg`：包含简单的错误信息。
+- `retMsg`：包含简单的信息。
+- `extraMsg`：可选的额外描述信息。
 
 #### 身份识别
 
@@ -225,11 +228,13 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 ```json
 {
     "packageType": "authPassed",
+    "serverHostName": "localhost",
     "reassignedHostName": "localhost",
 }
 ```
 
 其中，
+- `serverHostName`：返回服务器的正规主机名称。
 - `reassignedHostName`：用于返回重新分配的主机名称，或者根据名称反向解析服务获得的正规主机名。
 
 如果验证未通过，服务器将发送如下验证失败数据包，然后断开连接：
@@ -238,7 +243,8 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 {
     "packageType": "authFailed",
     "retCode": 409,
-    "retMsg": "Conflict"
+    "retMsg": "Conflict",
+    "extraMsg": "..."
 }
 ```
 
@@ -248,7 +254,8 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     + 401（Unauthorized）：验签失败。
     + 404（Not Found）：系统中未安装指定应用。
     + 409（Conflict）：行者名冲突。
-- `retMsg`：包含简单的错误信息。
+- `retMsg`：包含简单的返回信息。
+- `extraMsg`：额外信息（可选）。
 
 在身份验证失败的情况下，服务器将立即断开连接。
 在身份验证未通过之前，客户端发送到服务器所有非用于身份验证的数据包，都将被忽略并致使服务器立即断开连接。
