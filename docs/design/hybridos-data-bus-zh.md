@@ -164,7 +164,8 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 ```json
 {
     "packageType": "error",
-    "protocolName": "HIBUS/1.0",
+    "protocolName": "HIBUS",
+    "protocolVersion": 90,
     "retCode": 503,
     "retMsg": "Service Unavailable"
 }
@@ -201,7 +202,8 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 ```json
 {
     "packageType": "auth",
-    "protocolName": "HIBUS/1.0",
+    "protocolName": "HIBUS",
+    "protocolVersion": 90,
     "challengeCode": "..."
 }
 ```
@@ -767,8 +769,10 @@ typedef struct json_object hibus_json;
 使用如下接口之一连接到 hiBus 服务器：
 
 ```c
-int hibus_connect_via_unix_socket (const char* path_to_socket, const char* runner_name, hibus_conn** conn);
-int hibus_connect_via_web_socket (const char* host_name, int port, const char* runner_name, hibus_conn** conn);
+int hibus_connect_via_unix_socket (const char* path_to_socket,
+        const char* app_name, const char* runner_name, hibus_conn** conn);
+int hibus_connect_via_web_socket (const char* host_name, int port,
+        const char* app_name, const char* runner_name, hibus_conn** conn);
 ```
 
 上面的两个函数，分别使用 Unix Domain Socket 或者 Web Socket 连接到 hiBus 服务器上。函数的返回值为套接字文件描述符（fd）。`fd >= 0` 时表明连接成功，此时会通过 `conn` 参数返回一个匿名的 `hibus_conn` 结构指针。`fd < 0` 时表明连接失败，其绝对值标识错误编码。
@@ -784,7 +788,8 @@ int hibus_disconnect (hibus_conn* conn);
 使用如下接口从 `hibus_conn` 结构中获得相关信息（主机名、应用名、行者名、套接字文件描述符）：
 
 ```c
-const char* hibus_conn_host_name (hibus_conn* conn);
+const char* hibus_conn_srv_host_name (hibus_conn* conn);
+const char* hibus_conn_own_host_name (hibus_conn* conn);
 const char* hibus_conn_app_name (hibus_conn* conn);
 const char* hibus_conn_runner_name (hibus_conn* conn);
 int hibus_conn_socket_fd (hibus_conn* conn);
@@ -797,7 +802,7 @@ int hibus_conn_socket_fd (hibus_conn* conn);
 ```c
 #define LEN_HOST_NAME       127
 #define LEN_APP_NAME        127
-#define LEN_MODULE_NAME     64
+#define LEN_RUNNER_NAME     64
 #define LEN_METHOD_NAME     64
 #define LEN_BUBBLE_NAME     64
 
