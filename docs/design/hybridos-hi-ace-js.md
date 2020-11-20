@@ -6,6 +6,9 @@
 - [基本框架及术语](#基本框架及术语)
 - [架构及关键模块](#架构及关键模块)
    + [架构](#架构)
+   + [JS 应用框架层](#JS应用框架层)
+   + [JS 引擎与运行时层](#JS引擎与运行时层)
+   + [基础组件](#基础组件)
 
 
 ## 基本框架及术语
@@ -73,7 +76,56 @@ hiAceJs 使用 C/C++ 语言开发，使用 jerryscript 作为JS runtime, 大体�
 和运行时层绑定到图形渲染层对应的Component上，通过MiniGUI 来处理事件并最终渲染到屏幕上。
 
 - JS 应用框架层：提供了一套跨平台的类web应用开发框架
-- JS 引擎与运行时层：该部分主要使用 jerryscript 实现
+- JS 引擎与运行时层：该部分主要使用 JerryScript 实现
 - 图形渲染层：该部分主要包括使用C/C++实现的一套Component，以及相关动画支持。
 
+### JS 应用框架层 
 
+### JS 引擎与运行时层 
+
+JS 引擎目前使用的是 JerryScript，这是一款由三星开发的嵌入式 JS 引擎。运行时主要提供了JS 应用框架层
+使用的组件到平台的绑定，例如，每种形如 <text> 和 <div> 的 XML 标签组件，都对应一个绑定到 JerryScript 
+上的 C++ Component 类，如 TextComponent 和 DivComponent 等。
+
+### 图形渲染层
+
+* 基础组件
+  - AnalogClockComponent
+  - CameraComponent
+  - CanvasComponent
+  - ChartComponent
+  - ClockHandComponent
+  - DivComponent
+  - ImageAnimatorComponent
+  - ImageComponent
+  - InputComponent
+  - ListComponent
+  - PickerViewComponent
+  - ProgressComponent
+  - SliderComponent
+  - SwiperComponent
+  - SwitchComponent
+  - TabBarComponent
+  - TabContentComponent
+  - TabsComponent
+  - TextComponent
+  - VideoComponent
+
+* 动画支持
+
+实现了简单的动画支持，主要由Animator, AnimatorCallback 和 AnimatorManager 三个类来实现。
+
+当需要实现动画时:
+首先，需要继承 AnimatorCallback 类，并实现其成员函数 Callback，在该函数里实现相关动作； 
+其次，需要实例化一个 Animator 对象，并将 AnimatorCallback 作为参数传入;
+最后，将 Animator 加入到 AnimatorManager 中，由 AnimatorManager 类的 AnimatorTask 函数来调度。
+
+AnimatorManager 类的 AnimatorTask 函数由MiniGUI的定时器，每10ms调用一次。
+
+* 事件处理 : 使用MiniGUI的消息(鼠标，键盘等)
+
+* 渲染
+
+提供 RenderManager 类来进行渲染，其核心函数是 RenderManager::RenderRect，它接收参数 Rect作为
+目标区域进行渲染。最终在MiniGUI的 MSG_PAINT 消息处理时将渲染结果输出到屏幕上。
+ 
