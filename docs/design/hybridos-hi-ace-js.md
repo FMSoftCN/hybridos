@@ -172,7 +172,8 @@ AnimatorManager 类的 AnimatorTask 函数由MiniGUI的定时器，每10ms调用
 目标区域进行渲染。最终在MiniGUI的 MSG_PAINT 消息处理时将渲染结果输出到屏幕上。
  
 
-```C/C++
+```c
+
 void RenderManager::RenderRect(const Rect& rect, RootView* rootView)
 {
     if (rootView == nullptr) {
