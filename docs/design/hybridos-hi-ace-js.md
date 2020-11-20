@@ -171,3 +171,47 @@ AnimatorManager 类的 AnimatorTask 函数由MiniGUI的定时器，每10ms调用
 提供 RenderManager 类来进行渲染，其核心函数是 RenderManager::RenderRect，它接收参数 Rect作为
 目标区域进行渲染。最终在MiniGUI的 MSG_PAINT 消息处理时将渲染结果输出到屏幕上。
  
+
+```C/C++
+void RenderManager::RenderRect(const Rect& rect, RootView* rootView)
+{
+    if (rootView == nullptr) {
+        return;
+    }
+
+    Rect mask = rect;
+#if ENABLE_WINDOW
+    if (rootView->GetBoundWindow()) {
+        Rect winRect = rootView->GetBoundWindow()->GetRect();
+        winRect.SetPosition(0, 0);
+        mask.Intersect(rect, winRect);
+    }
+#endif
+    int32_t bufferHeight = ScreenDeviceProxy::GetInstance()->GetScreenArea() / mask.GetWidth();
+    if (bufferHeight > mask.GetHeight()) {
+        bufferHeight = mask.GetHeight();
+    }
+
+    Rect& bufferRect = ScreenDeviceProxy::GetInstance()->GetBufferRect();
+    bufferRect.SetLeft(mask.GetLeft());
+    bufferRect.SetRight(mask.GetRight());
+
+    int16_t bottom = mask.GetBottom();
+    for (int16_t bufferTop = mask.GetTop(); bufferTop <= bottom; bufferTop += bufferHeight) {
+        bufferRect.SetTop(bufferTop);
+        int16_t bufferBottom = bufferTop + bufferHeight - 1;
+        if (bufferBottom >= bottom) {
+            bufferRect.SetBottom(bottom);
+        } else {
+            bufferRect.SetBottom(bufferBottom);
+        }
+
+        UIView* topView = rootView->GetTopUIView(bufferRect);
+        rootView->DrawTop(topView, bufferRect);
+#if !ENABLE_WINDOW
+        ScreenDeviceProxy::GetInstance()->Flush();
+#endif
+    }
+}
+
+```
