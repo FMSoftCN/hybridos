@@ -120,9 +120,9 @@ JS 引擎目前使用的是 JerryScript，这是一款由三星开发的嵌入�
 实现了简单的动画支持，主要由Animator, AnimatorCallback 和 AnimatorManager 三个类来实现。
 
 当需要实现动画时:
-首先，需要继承 AnimatorCallback 类，并实现其成员函数 Callback，在该函数里实现相关动作； 
-其次，需要实例化一个 Animator 对象，并将 AnimatorCallback 作为参数传入;
-最后，将 Animator 加入到 AnimatorManager 中，由 AnimatorManager 类的 AnimatorTask 函数来调度。
+-  首先，需要继承 AnimatorCallback 类，并实现其成员函数 Callback，在该函数里实现相关动作； 
+-  其次，需要实例化一个 Animator 对象，并将 AnimatorCallback 作为参数传入;
+-  最后，将 Animator 加入到 AnimatorManager 中，由 AnimatorManager 类的 AnimatorTask 函数来调度。
 
 AnimatorManager 类的 AnimatorTask 函数由MiniGUI的定时器，每10ms调用一次。
 
