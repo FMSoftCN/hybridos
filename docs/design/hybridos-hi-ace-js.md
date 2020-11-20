@@ -121,8 +121,46 @@ JS 引擎目前使用的是 JerryScript，这是一款由三星开发的嵌入�
 
 当需要实现动画时:
 -  首先，需要继承 AnimatorCallback 类，并实现其成员函数 Callback，在该函数里实现相关动作； 
+
+```c
+
+    virtual void Callback(UIView* view)
+
+```
+
 -  其次，需要实例化一个 Animator 对象，并将 AnimatorCallback 作为参数传入;
+
+```c
+
+    Animator(AnimatorCallback* callback, UIView* view, uint32_t time, bool repeat)
+
+```
+
 -  最后，将 Animator 加入到 AnimatorManager 中，由 AnimatorManager 类的 AnimatorTask 函数来调度。
+
+```c
+
+void AnimatorManager::AnimatorTask()
+{
+    ListNode<Animator*>* pos = list_.Begin();
+    Animator* animator = nullptr;
+
+    while (pos != list_.End()) {
+        animator = pos->data_;
+        if (animator->GetState() == Animator::START) {
+            if (animator->IsRepeat() || animator->GetRunTime() <= animator->GetTime()) {
+                animator->Run();
+            } else {
+                animator->Stop();
+            }
+        }
+
+        pos = pos->next_;
+    }
+}
+
+```
+
 
 AnimatorManager 类的 AnimatorTask 函数由MiniGUI的定时器，每10ms调用一次。
 
