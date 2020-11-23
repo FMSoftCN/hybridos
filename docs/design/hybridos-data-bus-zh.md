@@ -216,6 +216,8 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 ```json
 {
     "packageType": "auth",
+    "protocolName": "HIBUS",
+    "protocolVersion": 90,
     "hostName": "localhost",
     "appName": "cn.fmsoft.hybridos.network",
     "runnerName": "self",
@@ -253,7 +255,9 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     + 400（Bad Request）：数据包格式错误。
     + 401（Unauthorized）：验签失败。
     + 404（Not Found）：系统中未安装指定应用。
+    + 406（Not Acceptable）：无效的主机名、应用名或行者名。
     + 409（Conflict）：行者名冲突。
+    + 426（Upgrade Required）：客户端版本过低，需要升级。
 - `retMsg`：包含简单的返回信息。
 - `extraMsg`：额外信息（可选）。
 
