@@ -91,7 +91,7 @@ hiAceJs 使用 C/C++ 语言开发，使用 jerryscript 作为JS runtime, 大体�
 ### JS引擎与运行时层 
 
 JS 引擎目前使用的是 JerryScript，这是一款由三星开发的嵌入式 JS 引擎。运行时主要提供了JS 应用框架层
-使用的组件到平台的绑定，例如，每种形如 <text> 和 <div> 的 XML 标签组件，都对应一个绑定到 JerryScript 
+使用的组件到平台的绑定，例如，每种形如 &lt;text&gt; 和 &ltdiv&gt; 的 XML 标签组件，都对应一个绑定到 JerryScript 
 上的 C++ Component 类，如 TextComponent 和 DivComponent 等。
 
 
