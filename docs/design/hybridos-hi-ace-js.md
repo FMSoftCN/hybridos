@@ -171,6 +171,41 @@ AnimatorManager 类的 AnimatorTask 函数由MiniGUI的定时器，每10ms调用
 
 * 事件处理 : 使用MiniGUI的消息(鼠标，键盘等)
 
+```c
+
+LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message) {
+    ...
+    case MSG_PAINT:
+        BitBlt (memDC, 0, 0, w, h, hdc, 0, 0, 0);
+        break;
+
+    case MSG_MOUSEMOVE:
+    case MSG_LBUTTONDOWN:
+    case MSG_MBUTTONDOWN:
+    case MSG_RBUTTONDOWN:
+    case MSG_LBUTTONDBLCLK:
+    case MSG_MBUTTONDBLCLK:
+    case MSG_RBUTTONDBLCLK:
+    case MSG_LBUTTONUP:
+    case MSG_MBUTTONUP:
+    case MSG_RBUTTONUP:
+        PointerInputDevice->DispatchEvent();
+        break;
+
+    case MSG_TIMER
+        AnimatorManager->Callback();
+        RenderManager->Callback();
+        break;
+    ...
+    }
+    ...
+
+}
+
+```
+
 * 渲染
 
 提供 RenderManager 类来进行渲染，其核心函数是 RenderManager::RenderRect，它接收参数 Rect作为
