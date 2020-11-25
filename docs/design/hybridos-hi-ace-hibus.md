@@ -83,6 +83,8 @@
  ---------------------------------------------------------------------------------
 |                          JS hiBus Connection (C Code)                           |
  --------------------------------------------------------------------------------- 
+|                              JS engine (jerry JS)                               |
+ --------------------------------------------------------------------------------- 
 |                   HybridOS servers and user daemons (hiBus daemon)              |
  ---------------------------------------------------------------------------------
 |                          Python runtime environment (optional)                  |
@@ -95,17 +97,20 @@
 
 其中：
 
-- JS hiBus Framework，是一段封装好的JS代码，对外提供接口，供用户JS代码调用。其负责：
-  - 根据用户传递的参数，建立到hiBus daemon的连接；
-  - 保存用户注册的事件、过程调用方法的回调函数；
-  - 提供对hiBus的写接口，并完成对写入数据的封装；
-  - 以轮询方式定时检测与接收hiBus daemon发回的数据；
-  - 解析数据，然后调用事件、方法对应的回调函数；
-  - 将方法回调的结果，再次发送到hiBus daemon。
-- JS hiBus Connection，完成与hiBus daemon通信，用c代码完成，其负责：
-  - 建立到hiBus daemon的连接，完成连接、身份识别；
-  - 完成对hiBus的写操作；
-  - 完成对hiBus的读操作。
+JS hiBus Framework，是一段封装好的JS代码，对外提供接口，供用户JS代码调用。其负责：
+- 根据用户传递的参数，建立到hiBus daemon的连接；
+- 保存用户注册的事件、过程调用方法的回调函数；
+- 提供对hiBus的写接口，并完成对写入数据的封装；
+- 以轮询方式定时检测与接收hiBus daemon发回的数据；
+- 解析数据，然后调用事件、方法对应的回调函数；
+- 将方法回调的结果，再次发送到hiBus daemon。
+
+JS hiBus Connection，完成与hiBus daemon通信，用c代码完成，其负责：
+- 建立到hiBus daemon的连接，完成连接、身份识别；
+- 完成对hiBus的写操作；
+- 完成对hiBus的读操作。
+
+JS engine：JS引擎，目前使用的是 jerry javascript。
 
 ##### 二、JS hiBus Framework
 
