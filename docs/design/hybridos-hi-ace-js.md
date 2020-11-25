@@ -61,13 +61,17 @@ hiAceJs 使用 C/C++ 语言开发，使用 jerryscript 作为JS runtime, 大体�
  ---------------------------------------------------------------------------------
 |                                       App                                       |
  ---------------------------------------------------------------------------------
-|                                  JS应用框架层                                   |
+|                                  JS App Framework                               |
  ---------------------------------------------------------------------------------
-|                                JS引擎与运行时层                                 |
+|                                JS Engine & Runtime                              |
  ---------------------------------------------------------------------------------
-|                         Component          |                                    |
- ---------------------------------------------                                    |
-|                          MiniGUI图形渲染层                                      |
+|                 Component                  |            hiView                  |
+ ---------------------------------------------------------------------------------|
+|                                            |            hiCairo                 |
+|               Graphic Render               -------------------------------------|
+|                                                                                 |
+ ---------------------------------------------------------------------------------
+|                     Window Manager,  IO   (MiniGUI)                             |
  ---------------------------------------------------------------------------------
 ```
 
@@ -87,7 +91,7 @@ hiAceJs 使用 C/C++ 语言开发，使用 jerryscript 作为JS runtime, 大体�
 ### JS引擎与运行时层 
 
 JS 引擎目前使用的是 JerryScript，这是一款由三星开发的嵌入式 JS 引擎。运行时主要提供了JS 应用框架层
-使用的组件到平台的绑定，例如，每种形如 <text> 和 <div> 的 XML 标签组件，都对应一个绑定到 JerryScript 
+使用的组件到平台的绑定，例如，每种形如 &lt;text&gt; 和 &lt;div&gt; 的 XML 标签组件，都对应一个绑定到 JerryScript 
 上的 C++ Component 类，如 TextComponent 和 DivComponent 等。
 
 
@@ -115,10 +119,11 @@ JS 引擎目前使用的是 JerryScript，这是一款由三星开发的嵌入�
   - TextComponent
   - VideoComponent
 
+* hiView
+
 * 动画支持
 
 实现了简单的动画支持，主要由Animator, AnimatorCallback 和 AnimatorManager 三个类来实现。
-
 当需要实现动画时:
 -  首先，需要继承 AnimatorCallback 类，并实现其成员函数 Callback，在该函数里实现相关动作； 
 
@@ -166,14 +171,47 @@ AnimatorManager 类的 AnimatorTask 函数由MiniGUI的定时器，每10ms调用
 
 * 事件处理 : 使用MiniGUI的消息(鼠标，键盘等)
 
+```c
+
+LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message) {
+    ...
+    case MSG_PAINT:
+        BitBlt (memDC, 0, 0, w, h, hdc, 0, 0, 0);
+        break;
+
+    case MSG_MOUSEMOVE:
+    case MSG_LBUTTONDOWN:
+    case MSG_MBUTTONDOWN:
+    case MSG_RBUTTONDOWN:
+    case MSG_LBUTTONDBLCLK:
+    case MSG_MBUTTONDBLCLK:
+    case MSG_RBUTTONDBLCLK:
+    case MSG_LBUTTONUP:
+    case MSG_MBUTTONUP:
+    case MSG_RBUTTONUP:
+        PointerInputDevice->DispatchEvent();
+        break;
+
+    case MSG_TIMER
+        AnimatorManager->Callback();
+        RenderManager->Callback();
+        break;
+    ...
+    }
+    ...
+
+}
+
+```
+
 * 渲染
 
 提供 RenderManager 类来进行渲染，其核心函数是 RenderManager::RenderRect，它接收参数 Rect作为
 目标区域进行渲染。最终在MiniGUI的 MSG_PAINT 消息处理时将渲染结果输出到屏幕上。
  
-
 ```c
-
 void RenderManager::RenderRect(const Rect& rect, RootView* rootView)
 {
     if (rootView == nullptr) {
@@ -214,5 +252,4 @@ void RenderManager::RenderRect(const Rect& rect, RootView* rootView)
 #endif
     }
 }
-
 ```

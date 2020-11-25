@@ -8,6 +8,7 @@
 - [协议及接口](#协议及接口)
    + [套接字接口](#套接字接口)
    + [协议](#协议)
+      * [连接](#连接)
       * [身份识别](#身份识别)
       * [过程调用请求](#过程调用请求)
       * [过程调用结果](#过程调用结果)
@@ -32,16 +33,16 @@
    + [客户端接口](#客户端接口)
       * [全局类型](#全局类型)
       * [连接管理](#连接管理)
+      * [数据包读写函数](#数据包读写函数)
       * [辅助函数](#辅助函数)
       * [过程管理](#过程管理)
       * [事件管理](#事件管理)
       * [订阅事件](#订阅事件)
       * [调用过程](#调用过程)
-   + [等待数据包及事件循环](#等待数据包及事件循环)
+      * [等待数据包及事件循环](#等待数据包及事件循环)
 - [其他](#其他)
    + [简单的应用管理](#简单的应用管理)
    + [跨设备连接的思考](#跨设备连接的思考)
-
 
 ## 基本框架及术语
 
@@ -446,25 +447,7 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 
 #### 乒乓心跳
 
-服务器或者客户端应通过乒乓心跳数据包来判断对方是否仍然可用。
-
-```json
-{
-    "packetType": "ping",
-    "pingId": "<hased_ping_identifier>",
-}
-```
-
-任何一方收到 `ping` 数据包之后，应立即发送 `pong` 数据包：
-
-```json
-{
-    "packetType": "pong",
-    "pingId": "<the_ping_identifier_correspond_to_this_pong>",
-}
-```
-
-一般而言，在 Internet 连接上使用乒乓心跳可以有效检测连接的意外丢失，但对通过 Unix Domain Socekt 建立的连接是不需要执行乒乓心跳测试的。
+一般而言，在套接字连接上使用乒乓心跳可以有效检测连接的意外丢失。Web Socket 规范规定了心跳的处理机制，和 Web Socket 类似，在 Unix Socket 的连接中，服务器和客户端之间，也将通过类似 Web Socket 的机制来处理乒乓心跳。这种处理由底层的通讯协议进行，上层无须关系。
 
 ### hiBus 内置过程
 
@@ -797,7 +780,7 @@ int hibus_connect_via_web_socket (const char* host_name, int port,
 int hibus_disconnect (hibus_conn* conn);
 ```
 
-使用如下接口从 `hibus_conn` 结构中获得相关信息（主机名、应用名、行者名、套接字文件描述符）：
+使用如下接口从 `hibus_conn` 结构中获得相关信息（主机名、应用名、行者名、套接字文件描述符、套接字类型等）：
 
 ```c
 const char* hibus_conn_srv_host_name (hibus_conn* conn);
@@ -805,7 +788,24 @@ const char* hibus_conn_own_host_name (hibus_conn* conn);
 const char* hibus_conn_app_name (hibus_conn* conn);
 const char* hibus_conn_runner_name (hibus_conn* conn);
 int hibus_conn_socket_fd (hibus_conn* conn);
+int hibus_conn_socket_type (hibus_conn* conn);
 ```
+
+#### 数据包读写函数
+
+客户端可直接使用如下函数读取数据包中的数据：
+
+```c
+#define MAX_LEN_PAYLOAD     4096
+int hibus_read_packet_data (hibus_conn* conn, void* data_buf, unsigned int *data_len);
+void* hibus_read_packet_data_alloc (hibus_conn* conn, unsigned int *data_len);
+
+int hibus_send_text (hibus_conn* conn, const char* text, unsigned int txt_len);
+```
+
+每个数据包中数据的大小被限定为 4096 字节，因此，这些函数将自动处理数据包的分片发送或者读取。也会自动处理乒乓心跳数据包。
+
+注意，通常客户端不需要直接调用这几个底层的读写数据包函数。这些函数供 Python、JavaScript 等编程语言实现本地绑定功能时使用。另外，这些函数全部使用阻塞读写模式，故而在调用这些函数，尤其是读取函数之前，应通过 `select` 系统调用判断对应的文件描述符上是否存在相应的可读取数据。
 
 #### 辅助函数
 
@@ -916,7 +916,7 @@ int hibus_call_procedure_and_wait (hibus_conn* conn, const char* endpoint, const
 
 `hibus_call_procedure_and_wait` 提供了同步调用远程过程的接口：发起调用后将等待结果或错误然后返回。注意，在等待返回值的过程中，可能会收到事件，此时，该函数会调用相应的事件处理器。
 
-### 等待数据包及事件循环
+#### 等待数据包及事件循环
 
 ```c
 int hibus_wait_for_packet (hibus_conn* conn, struct timeval *timeout);
@@ -943,8 +943,8 @@ int hibus_wait_for_packet (hibus_conn* conn, struct timeval *timeout);
 
 在 HybridOS 系统中，应用包管理类似 Android 系统：
 
-- 每个应用被安装在独立的目录中，且每个应用对应一个唯一的用户账号，通常使用和应用名称一样的用户账号名称。
-- 每个应用所在目录中包含有一对非对称加密算法使用的公钥和私钥。在安装该应用时，对应的公钥将被复制到系统目录（如 `/usr/apps/cn.fmsoft.hybridos.hibus/`）中，可用于验证签名。
+- 每个应用被安装在独立的目录中，且每个应用对应一个唯一的用户账号，通常使用和应用名称一样的用户账号名称（需要将应用名中的 `.` 字符调整为 `-` 字符）。
+- 每个应用所在目录中包含有一对非对称加密算法使用的私钥。在安装该应用时，对应的公钥应被复制到系统目录（如 `/etc/public-keys/`）中，可用于验证签名。
 - 检查应用是否安装好，只要检查系统目录中是否有对应的应用即可。
 - 对具有需要超级用户权限的应用，将其对应的用户名加入到 `admin` 组中。
 
