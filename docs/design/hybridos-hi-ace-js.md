@@ -176,7 +176,6 @@ AnimatorManager 类的 AnimatorTask 函数由MiniGUI的定时器，每10ms调用
 提供 RenderManager 类来进行渲染，其核心函数是 RenderManager::RenderRect，它接收参数 Rect作为
 目标区域进行渲染。最终在MiniGUI的 MSG_PAINT 消息处理时将渲染结果输出到屏幕上。
  
-
 ```c
 void RenderManager::RenderRect(const Rect& rect, RootView* rootView)
 {
