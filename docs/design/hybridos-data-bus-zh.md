@@ -446,25 +446,7 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 
 #### 乒乓心跳
 
-服务器或者客户端应通过乒乓心跳数据包来判断对方是否仍然可用。
-
-```json
-{
-    "packetType": "ping",
-    "pingId": "<hased_ping_identifier>",
-}
-```
-
-任何一方收到 `ping` 数据包之后，应立即发送 `pong` 数据包：
-
-```json
-{
-    "packetType": "pong",
-    "pingId": "<the_ping_identifier_correspond_to_this_pong>",
-}
-```
-
-一般而言，在 Internet 连接上使用乒乓心跳可以有效检测连接的意外丢失，但对通过 Unix Domain Socekt 建立的连接是不需要执行乒乓心跳测试的。
+一般而言，在套接字连接上使用乒乓心跳可以有效检测连接的意外丢失。Web Socket 规范规定了心跳的处理机制，和 Web Socket 类似，在 Unix Socket 的连接中，服务器和客户端之间，也将通过类似 Web Socket 的机制来处理乒乓心跳。这种处理由底层的通讯协议进行，上层无须关系。
 
 ### hiBus 内置过程
 
@@ -797,7 +779,7 @@ int hibus_connect_via_web_socket (const char* host_name, int port,
 int hibus_disconnect (hibus_conn* conn);
 ```
 
-使用如下接口从 `hibus_conn` 结构中获得相关信息（主机名、应用名、行者名、套接字文件描述符）：
+使用如下接口从 `hibus_conn` 结构中获得相关信息（主机名、应用名、行者名、套接字文件描述符、套接字类型等）：
 
 ```c
 const char* hibus_conn_srv_host_name (hibus_conn* conn);
@@ -805,7 +787,24 @@ const char* hibus_conn_own_host_name (hibus_conn* conn);
 const char* hibus_conn_app_name (hibus_conn* conn);
 const char* hibus_conn_runner_name (hibus_conn* conn);
 int hibus_conn_socket_fd (hibus_conn* conn);
+int hibus_conn_socket_type (hibus_conn* conn);
 ```
+
+#### 数据包读写函数
+
+客户端可使用如下函数读取数据包：
+
+```c
+#define MAX_LEN_PAYLOAD     4096
+int hibus_read_packet_data (hibus_conn* conn, void* data_buf, unsigned int *data_len);
+void* hibus_read_packet_data_alloc (hibus_conn* conn, unsigned int *data_len);
+
+int hibus_send_text (hibus_conn* conn, const char* text, unsigned int txt_len);
+```
+
+每个数据包中数据的大小被限定为 4096 字节，因此，这些函数将自动处理数据包的分片发送或者读取。
+
+注意，通常客户端不需要直接调用这几个底层的读写数据包函数。这些函数供 Python、JavaScript 等编程语言实现相关功能时使用。另外，这些函数全部使用阻塞读写模式，故而在调用这些函数，尤其是读写函数之前，应通过 `select` 系统调用判断对应的文件描述符上是否存在相应的可读取数据。
 
 #### 辅助函数
 
