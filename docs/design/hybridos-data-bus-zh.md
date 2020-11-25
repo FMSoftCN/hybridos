@@ -792,7 +792,7 @@ int hibus_conn_socket_type (hibus_conn* conn);
 
 #### 数据包读写函数
 
-客户端可使用如下函数读取数据包：
+客户端可直接使用如下函数读取数据包中的数据：
 
 ```c
 #define MAX_LEN_PAYLOAD     4096
@@ -802,9 +802,9 @@ void* hibus_read_packet_data_alloc (hibus_conn* conn, unsigned int *data_len);
 int hibus_send_text (hibus_conn* conn, const char* text, unsigned int txt_len);
 ```
 
-每个数据包中数据的大小被限定为 4096 字节，因此，这些函数将自动处理数据包的分片发送或者读取。
+每个数据包中数据的大小被限定为 4096 字节，因此，这些函数将自动处理数据包的分片发送或者读取。也会自动处理乒乓心跳数据包。
 
-注意，通常客户端不需要直接调用这几个底层的读写数据包函数。这些函数供 Python、JavaScript 等编程语言实现相关功能时使用。另外，这些函数全部使用阻塞读写模式，故而在调用这些函数，尤其是读写函数之前，应通过 `select` 系统调用判断对应的文件描述符上是否存在相应的可读取数据。
+注意，通常客户端不需要直接调用这几个底层的读写数据包函数。这些函数供 Python、JavaScript 等编程语言实现本地绑定功能时使用。另外，这些函数全部使用阻塞读写模式，故而在调用这些函数，尤其是读取函数之前，应通过 `select` 系统调用判断对应的文件描述符上是否存在相应的可读取数据。
 
 #### 辅助函数
 
