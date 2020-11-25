@@ -178,7 +178,6 @@ AnimatorManager 类的 AnimatorTask 函数由MiniGUI的定时器，每10ms调用
  
 
 ```c
-
 void RenderManager::RenderRect(const Rect& rect, RootView* rootView)
 {
     if (rootView == nullptr) {
@@ -219,5 +218,4 @@ void RenderManager::RenderRect(const Rect& rect, RootView* rootView)
 #endif
     }
 }
-
 ```
