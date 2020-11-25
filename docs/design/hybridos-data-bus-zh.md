@@ -39,7 +39,7 @@
       * [事件管理](#事件管理)
       * [订阅事件](#订阅事件)
       * [调用过程](#调用过程)
-   + [等待数据包及事件循环](#等待数据包及事件循环)
+      * [等待数据包及事件循环](#等待数据包及事件循环)
 - [其他](#其他)
    + [简单的应用管理](#简单的应用管理)
    + [跨设备连接的思考](#跨设备连接的思考)
@@ -916,7 +916,7 @@ int hibus_call_procedure_and_wait (hibus_conn* conn, const char* endpoint, const
 
 `hibus_call_procedure_and_wait` 提供了同步调用远程过程的接口：发起调用后将等待结果或错误然后返回。注意，在等待返回值的过程中，可能会收到事件，此时，该函数会调用相应的事件处理器。
 
-### 等待数据包及事件循环
+#### 等待数据包及事件循环
 
 ```c
 int hibus_wait_for_packet (hibus_conn* conn, struct timeval *timeout);
