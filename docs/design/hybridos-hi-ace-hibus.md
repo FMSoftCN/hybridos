@@ -254,11 +254,11 @@ var hibus = new hiBus(host_name, app_name, runner_name);
 
 问题：
 
-1、心跳的处理
+1、心跳的处理？
 
-2、多个hiBus对象如何使用同一个框架js代码；
+2、多个hiBus对象如何使用同一个框架js代码，在js里添加hibus_communication类，包含了hibus对象，定时器，timer函数，读写函数，注册函数？
 
-3、同一个APP如果包含若干个页面，每个页面都是重新加载和解析的。当切换的时候，不同页面属于同一个runner，但是页面变了，hiBus如何处理。
+3、同一个APP如果包含若干个页面，每个页面都是重新加载和解析的。当切换的时候，不同页面属于同一个runner，但是页面变了，hiBus如何处理？
 
 
 
