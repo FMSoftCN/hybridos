@@ -1,7 +1,17 @@
-#### hiACEJS中hiBus概要设计
+# hiACEJS中hiBus概要设计
+
+耿岳
+
+本文阐述了在hiACEJS中，hiBus功能的实现方式，及概要设计。
+
+- [hiACEJS中hiBus软件结构](#hiACEJS中hiBus软件结构)
+- [hiBus Interface](#hiBus Interface)
+   + [hiBus_handler 类](#hiBus_handler 类)
+   + [代码举例](#代码举例)
+- [hiBus connection](#hiBus connection)
 
 
-##### hiACEJS中hiBus软件结构
+## hiACEJS中hiBus软件结构
 
 在hiACEJS中，对hiBus的实现的软件结构如下图：
 
@@ -36,9 +46,9 @@
 
 
 
-##### hiBus Interface
+## hiBus Interface
 
-###### hiBus_handler 类
+### hiBus_handler 类
 
 hiBus Interface由hiBus_handler对象实现。hiBus_handler类如下：
 
@@ -194,7 +204,7 @@ hibusHandler()：hiBus读入数据处理
 
 
 
-###### 代码举例
+### 代码举例
 
 用户在JS代码中，使用该接口，有类似如下代码：
 
@@ -212,7 +222,7 @@ hiBus.hibusHandler();
 
 
 
-##### hiBus connection
+## hiBus connection
 
 hiBus connection是对JS引擎的扩展，为JS提供了到hiBus的连接与读写的具体实现。
 
