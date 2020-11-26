@@ -4,7 +4,7 @@
 
 本文阐述了在hiACEJS中，hiBus功能的实现方式，及概要设计。
 
-- [hiACEJS中hiBus软件结构](#hiACEJS中hiBus软件结构)
+- [hiACEJS中hiBus软件结构](#hiacejs中hibus软件结构)
 - [hiBus Interface](#hibus-interface)
    + [hiBus_handler类](#hibus_handler类)
    + [代码举例](#代码举例)
