@@ -87,7 +87,7 @@ constructor(app, runner) ;
 
 产生一个事件，并发到hiBus总线上。
 
-```c
+```
 fireEvent(name, data);
 参数：
     name：事件名称；
