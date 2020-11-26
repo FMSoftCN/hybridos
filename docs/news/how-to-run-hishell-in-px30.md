@@ -36,7 +36,7 @@
 
 根据SDK中的文档：Rockchip_PX30_Linux_SDK_Release_V1.3.0_20200224_CN.pdf，获取并升级SDK源代码，假设源代码目录为：
 
-```bash
+```
 # cd $HOME/px30/px30_linux_sdk_release_v1.3.0_20200224
 ```
 
