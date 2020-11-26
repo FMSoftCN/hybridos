@@ -221,7 +221,7 @@ hiBus.hibusHandler();
 
 
 
-## hiBus-connection
+## hiBus connection
 
 hiBus connection是对JS引擎的扩展，为JS提供了到hiBus的连接与读写的具体实现。
 
