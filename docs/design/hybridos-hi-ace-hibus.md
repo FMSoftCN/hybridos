@@ -52,7 +52,7 @@
 
 hiBus Interface由hiBus_handler对象实现。hiBus_handler类如下：
 
-```js
+```c
 class hiBus_handler {
     var hiBusConnection;    // hiBus object for connection to hiBus
     var appName;            // app name
@@ -74,7 +74,7 @@ class hiBus_handler {
 
 hiBus_handler类的构造函数，在该函数中，创建hiBusConnection对象。
 
-```js
+```c
 constructor(app, runner) ;
 参数：
     app：应用名称；
@@ -87,7 +87,7 @@ constructor(app, runner) ;
 
 产生一个事件，并发到hiBus总线上。
 
-```js
+```c
 fireEvent(name, data);
 参数：
     name：事件名称；
@@ -100,7 +100,7 @@ fireEvent(name, data);
 
 订阅一个事件，并发到hiBus总线
 
-```js
+```c
 subscribeEvent(app, runner, event, func);
 参数：
     app：产生事件的endpoint应用名；
@@ -115,7 +115,7 @@ subscribeEvent(app, runner, event, func);
 
 取消订阅一个事件，并发到hiBus总线
 
-```js
+```c
 revokeEvent(app, runner, event);
 参数：
     app：产生事件的endpoint应用名；
@@ -129,7 +129,7 @@ revokeEvent(app, runner, event);
 
 向hiBus注册过程
 
-```js
+```c
 registerProcedure(method, func) ;
 参数：
     method：method_name；
@@ -142,7 +142,7 @@ registerProcedure(method, func) ;
 
 向hiBus发送撤销过程
 
-```js
+```c
 revokeProcedure(method);
 参数：
     method：method_name；
@@ -154,7 +154,7 @@ revokeProcedure(method);
 
 向hiBus发送异步远程过程调用请求
 
-```js
+```c
 callProcedure(app, runner, method, param, timeout);
 参数：
     app：远程调用的endpoint应用名；
@@ -170,7 +170,7 @@ callProcedure(app, runner, method, param, timeout);
 
 向hiBus发送同步远程过程调用请求
 
-```js
+```c
 callProcedureAndWait(app, runner, method, param, timeout) ;
 参数：
     app：远程调用的endpoint应用名；
@@ -186,7 +186,7 @@ callProcedureAndWait(app, runner, method, param, timeout) ;
 
 hiBus读入数据处理
 
-```js
+```c
 hibusHandler();
 参数：
 	无
@@ -198,7 +198,7 @@ hibusHandler();
 
 用户回调函数，都具有如下的形式：
 
-```js
+```c
 callbackFunction(msgData)	{ ........ }
 ```
 
@@ -208,7 +208,7 @@ callbackFunction(msgData)	{ ........ }
 
 用户在JS代码中，使用该接口，有类似如下代码：
 
-```js
+```c
 // 创建hiBus_handler对象
 var hiBus = new hiBus_handler("appagent", "setting");
 
