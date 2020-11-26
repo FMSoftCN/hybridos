@@ -8,7 +8,7 @@
 - [hiBus Interface](#hiBus Interface)
    + [hiBus_handler类](#hiBus_handler类)
    + [代码举例](#代码举例)
-- [hiBus connection](#hiBus connection)
+- [hiBus connection](#hiBus-connection)
 
 
 ## hiACEJS中hiBus软件结构
@@ -221,7 +221,7 @@ hiBus.hibusHandler();
 
 
 
-## hiBus connection
+## hiBus-connection
 
 hiBus connection是对JS引擎的扩展，为JS提供了到hiBus的连接与读写的具体实现。
 
