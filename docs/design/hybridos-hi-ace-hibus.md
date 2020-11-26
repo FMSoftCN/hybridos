@@ -52,7 +52,7 @@
 
 hiBus Interface由hiBus_handler对象实现。hiBus_handler类如下：
 
-```c
+```
 class hiBus_handler {
     var hiBusConnection;    // hiBus object for connection to hiBus
     var appName;            // app name
@@ -74,7 +74,7 @@ class hiBus_handler {
 
 hiBus_handler类的构造函数，在该函数中，创建hiBusConnection对象。
 
-```c
+```
 constructor(app, runner) ;
 参数：
     app：应用名称；
@@ -100,7 +100,7 @@ fireEvent(name, data);
 
 订阅一个事件，并发到hiBus总线
 
-```c
+```
 subscribeEvent(app, runner, event, func);
 参数：
     app：产生事件的endpoint应用名；
@@ -115,7 +115,7 @@ subscribeEvent(app, runner, event, func);
 
 取消订阅一个事件，并发到hiBus总线
 
-```c
+```
 revokeEvent(app, runner, event);
 参数：
     app：产生事件的endpoint应用名；
@@ -129,7 +129,7 @@ revokeEvent(app, runner, event);
 
 向hiBus注册过程
 
-```c
+```
 registerProcedure(method, func) ;
 参数：
     method：method_name；
@@ -142,7 +142,7 @@ registerProcedure(method, func) ;
 
 向hiBus发送撤销过程
 
-```c
+```
 revokeProcedure(method);
 参数：
     method：method_name；
@@ -154,7 +154,7 @@ revokeProcedure(method);
 
 向hiBus发送异步远程过程调用请求
 
-```c
+```
 callProcedure(app, runner, method, param, timeout);
 参数：
     app：远程调用的endpoint应用名；
@@ -170,7 +170,7 @@ callProcedure(app, runner, method, param, timeout);
 
 向hiBus发送同步远程过程调用请求
 
-```c
+```
 callProcedureAndWait(app, runner, method, param, timeout) ;
 参数：
     app：远程调用的endpoint应用名；
@@ -186,7 +186,7 @@ callProcedureAndWait(app, runner, method, param, timeout) ;
 
 hiBus读入数据处理
 
-```c
+```
 hibusHandler();
 参数：
 	无
@@ -198,7 +198,7 @@ hibusHandler();
 
 用户回调函数，都具有如下的形式：
 
-```c
+```
 callbackFunction(msgData)	{ ........ }
 ```
 
@@ -208,7 +208,7 @@ callbackFunction(msgData)	{ ........ }
 
 用户在JS代码中，使用该接口，有类似如下代码：
 
-```c
+```
 // 创建hiBus_handler对象
 var hiBus = new hiBus_handler("appagent", "setting");
 
@@ -235,7 +235,7 @@ hiBusConnection类包含三个JS函数的实现，说明如下：
 
 hiBusConnection类的构造函数，创建到hiBus总线的连接
 
-```c
+```
 bool hiBusConnection(char * app_ame, char * runner_name);
 参数：
     app_name：创建该对象的应用名；
@@ -248,7 +248,7 @@ bool hiBusConnection(char * app_ame, char * runner_name);
 
 hiBus总线的读操作
 
-```c
+```
 int hiBusReadRaw(char * buffer, int length);
 参数：
     buffer：读缓冲区；
