@@ -261,7 +261,7 @@ int hiBusReadRaw(char * buffer, int length);
 
 hiBus总线的写操作
 
-```c
+```
 int hiBusWriteRaw(char * buffer, int length);
 参数：
     buffer：写缓冲区；
@@ -269,6 +269,3 @@ int hiBusWriteRaw(char * buffer, int length);
 返回值：
     实际写入hiBus总线的字节数。如果写操作失败，返回-1。
 ```
-
-
-
