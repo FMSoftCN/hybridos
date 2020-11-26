@@ -44,14 +44,14 @@
 
 由于HybridOS的需要gcc-7以上版本，而SDK中只提供了gcc-6.3.1版本，因此需要更换交叉编译工具链
 
-```bash
+```
 # cd prebuilts/gcc/linux-x86/aarch64/
 # tar xvJf $HOME/Downloads/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
 ```
 
 然后搜索以下文件：
 
-```c
+```
 $HOME/px30/px30_linux_sdk_release_v1.3.0_20200224/buildroot/package/rockchip/rkwifibt/rkwifibt.mk
 $HOME/px30/px30_linux_sdk_release_v1.3.0_20200224/distro/envsetup.sh
 $HOME/px30/px30_linux_sdk_release_v1.3.0_20200224/external/camera_engine_rkisp/productConfigs.mk
@@ -62,19 +62,19 @@ $HOME/px30/px30_linux_sdk_release_v1.3.0_20200224/u-boot/make.sh
 
 将其中的
 
-```bash
+```
 gcc-linaro-6.3.1-2017.05-x86_64_aarch64-linux-gnu
 ```
 
 替换为
 
-```bash
+```
 gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu
 ```
 
 ### 替换内部工具链
 
-```bash
+```
 # cd $HOME/px30/px30_linux_sdk_release_v1.3.0_20200224/buildroot/package
 # rm -fr gcc
 # tar zxf $HOME/Downloads/gcc.tar.gz
@@ -84,13 +84,13 @@ gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu
 
 因为更换了交叉编译工具链，所以会造成原有代码编译时错误。编译前修改文件：
 
-```bash
+```
 # vim $HOME/px30/px30_linux_sdk_release_v1.3.0_20200224/external/recovery/update_engine/flash_image.cpp
 ```
 
 将其中的：
 
-```c
+```
     for (i =0; i < 256; i++) {
         if (strUUid == '\0') {
             break;
@@ -99,7 +99,7 @@ gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu
 
 修改为：
 
-```c
+```
     for (i =0; i < 256; i++) {
         if (strUUid[0] == '\0') {
             break;
@@ -108,7 +108,7 @@ gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu
 
 ### 编译及烧写
 
-```bash
+```
 # cd $HOME/px30/px30_linux_sdk_release_v1.3.0_20200224
 # ./build.sh
 # sudo ./rkflash.sh
@@ -122,13 +122,13 @@ gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu
 
 请参考 https://blog.csdn.net/gys_20153235/article/details/80516560 为PC机配置NFS服务，并假设NFS的挂载目录为：
 
-```bash
+```
 /share
 ```
 
 启动NFS服务后，执行下面的命令：
 
-```bash
+```
 # cd /share
 # tar zxf $HOME/Downloads/sysroot.tar.gz
 ```
@@ -139,7 +139,7 @@ PX30_mini_EVB_V11_20190507开发板，既可以通过RJ45有线接口连接网�
 
 参考SDK文档：PX30 MINI EVB硬件操作指南_20180710.pdf，将PC机通过串口与PX30连接。在PC机的串口控制台上输入命令：
 
-```bash
+```
 # vi /etc/wpa_supplicant.conf
 ```
 
@@ -159,7 +159,7 @@ network={
 
 编辑该文件，根据用户的实际网络状况，正确填写文件中的ssid以及psk。然后保存退出。在串口控制台上输入命令：
 
-```bash
+```
 # wifi_start.sh
 # ping www.baidu.com
 ```
@@ -170,7 +170,7 @@ network={
 
 在串口控制台上输入命令：
 
-```bash
+```
 # mount -t nfs -o nolock PC_ip:/share /mnt
 # cd /userdata
 # cp /mnt/sysroot . -a
