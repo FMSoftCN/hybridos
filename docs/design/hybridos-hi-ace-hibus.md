@@ -8,7 +8,7 @@
 - [hiBus Interface](#hiBus Interface)
    + [hiBus_handler类](#hiBus_handler类)
    + [代码举例](#代码举例)
-- [hiBus connection](#hiBus)
+- [hiBus connection](#hiBus connection)
 
 
 ## hiACEJS中hiBus软件结构
