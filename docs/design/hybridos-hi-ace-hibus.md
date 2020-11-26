@@ -6,7 +6,7 @@
 
 - [hiACEJS中hiBus软件结构](#hiACEJS中hiBus软件结构)
 - [hiBus Interface](#hiBus Interface)
-   + [hiBus_handler 类](#hiBus_handler类)
+   + [hiBus_handler类](#hiBus_handler类)
    + [代码举例](#代码举例)
 - [hiBus connection](#hiBus connection)
 
