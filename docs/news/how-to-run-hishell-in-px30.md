@@ -34,7 +34,7 @@
 
 ### 升级SDK
 
-根据SDK中的文档：Rockchip_PX30_Linux_SDK_Release_V1.3.0_20200224_CN.pdf，获取并升级SDK源代码，假设源代码目录为：
+根据SDK中的文档：《Rockchip_PX30_Linux_SDK_Release_V1.3.0_20200224_CN.pdf》，获取并升级SDK源代码，假设源代码目录为：
 
 ```
 # cd $HOME/px30/px30_linux_sdk_release_v1.3.0_20200224
@@ -114,7 +114,7 @@ gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu
 # sudo ./rkflash.sh
 ```
 
-具体烧写的方法与步骤，清参考SDK文档：Rockchip_PX30_Linux_SDK_Release_V1.3.0_20200224_CN.pdf。
+具体烧写的方法与步骤，清参考SDK文档：《Rockchip_PX30_Linux_SDK_Release_V1.3.0_20200224_CN.pdf》。
 
 ## 安装HybridOS二进制文件
 
@@ -137,7 +137,7 @@ gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu
 
 PX30_mini_EVB_V11_20190507开发板，既可以通过RJ45有线接口连接网络，也可以使用WIFI。开发板中已经使用DHCP配置了有线网络，直接插入网线即可连接局域网。在这里介绍如何设置开发板的WIFI。
 
-参考SDK文档：PX30 MINI EVB硬件操作指南_20180710.pdf，将PC机通过串口与PX30连接。在PC机的串口控制台上输入命令：
+参考SDK文档：《PX30 MINI EVB硬件操作指南_20180710.pdf》，将PC机通过串口与PX30连接。在PC机的串口控制台上输入命令：
 
 ```
 # vi /etc/wpa_supplicant.conf
