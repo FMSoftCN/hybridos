@@ -4,6 +4,7 @@
 
 耿岳
 
+- [PX30开发板介绍](#px30开发板介绍)
 - [代码的获取](#代码的获取)
 - [PX30 SDK的编译与烧写](#px30-sdk的编译与烧写)
    + [升级SDK](#升级sdk)
@@ -15,6 +16,19 @@
    + [在PC机上配置NFS服务](#在pc机上配置NFS服务)
    + [配置开发板的WIFI](#配置开发板的wifi)
    + [安装HybridOS二进制代码](#安装hybridos二进制代码)
+
+## PX30开发板介绍
+
+下表列出 PX30 MINI EVB 的主要特征:
+
+- | 项目      | 参数                                                         |
+  | --------- | ------------------------------------------------------------ |
+  | Processor | Rockchip PX30<br />Quad-core ARM Cortex-A35 CPU up to 1.6GHz<br/>Embedded 3D GPU, compatible with OpenGL ES1.1/2.0/3.2, DirectX 11 FL9_3, OpenCL 2.0 and Vulkan 1.0 OpenVG1.1 |
+  | Memory    | DDR3,  4 * 256M * 16bit                                      |
+  | Storage   | 16GB eMMC                                                    |
+  | Ethernet  | One RJ45 Ethernet that supports:<br/>    IEEE802.3u compliant<br/>    Support only RMII(Reduced MII) mode<br/>   10Mbps and 100Mbps compatible |
+  | Wireless  | Complies with IEEE 802.11 b/g/n                              |
+
 
 
 ## 代码的获取
