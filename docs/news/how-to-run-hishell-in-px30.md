@@ -151,8 +151,8 @@ ap_scan=1
 update_config=1
 
 network={
-        ssid="your_wifi_name"
-        psk="your_wifi_password"
+        ssid="SSID"
+        psk="PASSWORD"
         key_mgmt=WPA-PSK
 }
 ```
