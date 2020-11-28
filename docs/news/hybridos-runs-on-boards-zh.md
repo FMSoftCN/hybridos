@@ -36,7 +36,7 @@ HybridOS 设备侧 R2011 版本在以上两块开发板上，主要使用的软�
    - 其中用于展示仪表盘的页面，使用了 hiWebKit 的 `himeter` 和 `hihand` 扩展标签实现。
    - 仔细观察表盘及仪表盘中的指针及条带变化，在两款开发板上的运行效果都非常棒。
 
-如果读者手头有这两块开发板，可以阅读如下内容下载 HybridOS 设备侧 R2011 的已编译映像文件，放到开发板上运行做实际的体验。
+如果读者手头有这两块开发板，可以阅读如下内容下载 HybridOS 设备侧 R2011 版本的已编译映像文件，放到开发板上运行做实际的体验。
 
 ## 全志 R818 AXP305 开发板
 
@@ -72,7 +72,7 @@ root@TinaLinux:/# wifi_scan_results_test
 root@TinaLinux:/# wifi_connect_ap_test <your ssid> <your password>
 ```
 
-然后从 HybridOS 官网下载 HybridOS R2011 设备侧针对该开发板的映像文件（69MB）到开发用 PC：
+然后从 HybridOS 官网下载 HybridOS 设备侧 R2011 版本针对该开发板的映像文件（69MB）到开发用 PC：
 
 <https://hybridos.fmsoft.cn/downloads/r2011/r818.tar.gz>
 
@@ -120,7 +120,7 @@ root@TinaLinux:/mnt/UDISK/sysroot# . ./run.sh  #  运行
 # ./rkflash.sh
 ```
 
-然后从 HybridOS 官网下载 HybridOS R2011 设备侧针对该开发板的映像文件（69MB）到开发用 PC：
+然后从 HybridOS 官网下载 HybridOS 设备侧 R2011 版本针对该开发板的映像文件（69MB）到开发用 PC：
 
 <https://hybridos.fmsoft.cn/downloads/r2011/r818.tar.gz>
 
