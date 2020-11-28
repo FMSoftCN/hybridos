@@ -116,7 +116,7 @@ root@TinaLinux:/mnt/UDISK/sysroot# . ./run.sh  #  运行
 
 然后从 HybridOS 官网下载 HybridOS 设备侧 R2011 版本针对该开发板的映像文件（69MB）到开发用 PC：
 
-<https://hybridos.fmsoft.cn/downloads/r2011/r818.tar.gz>
+<https://hybridos.fmsoft.cn/downloads/r2011/px30.tar.gz>
 
 之后按如下步骤安装 HybridOS：
 
@@ -129,7 +129,7 @@ root@TinaLinux:/mnt/UDISK/sysroot# . ./run.sh  #  运行
 # tar zxf r818.tar.gz
 ```
 
-3) 参考SDK文档 `《PX30 MINI EVB硬件操作指南_20180710.pdf》`，将 PC 机通过串口与开发板连接，然后进入串口控制台，并在 PC 机的串口控制台上编辑 `/etc/wpa_supplicant.conf` 文件：
+3) 参考瑞芯提供的 SDK 文档 `《PX30 MINI EVB硬件操作指南_20180710.pdf》`，将 PC 机通过串口与开发板连接，然后进入串口控制台，并在 PC 机的串口控制台上编辑 `/etc/wpa_supplicant.conf` 文件：
 
 ```
 ctrl_interface=/var/run/wpa_supplicant
