@@ -1,27 +1,27 @@
-# 实拍：合璧操作系统运行在两款国产 SoC 开发板上
+# Actual Shooting: HybridOS Runs on Two Domestic SoC Development Boards
 
-经过近两个月的奋战，飞漫软件的开发团队完成了合璧操作系统（HybridOS）设备侧 R2011 版本到两款国产 SoC 处理器上的移植。
+After a struggle of nearly two months, the development team of HybridOS completed the porting of HybridOS device side (R2011) to two SoC processors.
 
-这两款开发板，分别由飞漫的两个芯片合作厂商全志及瑞芯提供：
+These two development boards are respectively provided by FMSoft's two chip partners, Allwinner and Rockchip:
 
-1. 全志 R818 AXP305 开发板，主要硬件配置：
-   - Quad-core ARM Cortex-A53 CPU 1.6GHz，含 GPU。
+1. Allwinner R818 AXP305 development board, main hardware configuration:
+   - Quad-core ARM Cortex-A53 CPU 1.6GHz with GPU.
    - DDR3 1GB
    - 16GB eMMC
-   - 屏幕分辨率：800x1280（横屏）
-1. 瑞芯 PX30 开发板，主要硬件配置：
-   - Quad-core ARM Cortex-A35 CPU 1.3GHz，含 GPU。
+   - Screen resolution: 800x1280 (landscape)
+1. Rockchip PX30 mini EVB development board, main hardware configuration:
+   - Quad-core ARM Cortex-A35 CPU 1.3GHz with GPU.
    - DDR3 2GB
    - 16GB eMMC
-   - 屏幕分辨率：1280x800（竖屏）
+   - Screen resolution: 1280x800 (portrait)
 
-HybridOS 设备侧 R2011 版本运行在全志 R818 开发板上的实拍操作视频如下：
+The real shooting video for HybridOS on Allwinner R818:
 
-（插入 hybridos-r818.mp4 视频。视频下载地址：<https://hybridos.fmsoft.cn/downloads/hybridos-on-boards-r2011.zip>）
+(Insert hybridos-r818.mp4 video)
 
-HybridOS 设备侧 R2011 版本运行在瑞芯 PX30 开发板上的实拍操作视频如下：
+The real shooting video for HybridOS on Rockchip PX30:
 
-（插入 hybridos-px30.mp4 视频。视频下载地址：<https://hybridos.fmsoft.cn/downloads/hybridos-on-boards-r2011.zip>）
+(Insert the hybridos-px30.mp4 video)
 
 HybridOS 设备侧 R2011 版本在以上两块开发板上，主要使用的软件组件为：
 
@@ -163,28 +163,18 @@ network={
 
 6) 当 PX30 开发板重新启动后，就可以看到 HybridOS 的界面，并可以通过触摸屏进行操作。
 
-## 后续计划
+## Next Plan
 
-飞漫的研发团队正在开发合璧操作系统设备侧第一个正式版本的最后几个特性。在最终的正式版中，将新增如下特性：
+In the end of 2020, the HybridOS team will complete the development of the remaining components of HybridOS Device Side, including:
 
-1. hiBus 本地数据总线服务器。通过该服务器，我们可以在应用中获得系统状态的变化信息（如电量、WiFi 信号强度等），还可以通过发送任务请求来完成某些系统功能，如连接到指定的 WiFi 热点。开发者还可以编写自己的模块提供总线服务。另外，该服务器将同时在 Unix Domain Socket 和本地的 Web Socket 上提供服务，以方便在 hiApp 中使用这些系统和应用提供的服务。
-1. 轻量级 JavaScript 应用框架 hiACEJS。hiACEJS 是 OpenHarmoney 2.0 中的轻量级 JavaScript 应用框架的派生版本，可为某些应用场景提供轻量级的类 Web 应用支持。在 hiACEJS 中，我们将提供对 hiBus 的支持，以提供更为灵活的开发框架。未来，我们还将会把我们在 hiWebKit 中实现的突破技术整合到该框架中。
-1. 分别使用 hiACEJS 以及 hiWebKit 的两套演示系统，一套以白色家电面板为例，一套以智能音箱为例。
-1. 完整的合璧操作系统设备侧软件栈、构件系统（含交叉编译）、文档和示例代码。
+1. hiBus, the local data bus server. Through this server, we can obtain system status change information (such as battery level, WiFi signal strength, etc.) in your hiApps, and can also complete certain system functions by sending task requests, such as connecting to a designated WiFi hotspot.
+1. hiACEJS, a lightweight JavaScript app framework. HiACEJS is a derivative of the lightweight JavaScript app framework in OpenHarmoney 2.0 and provides lightweight Web-like app support for some scenarios. In hiACEJS, we will provide support for hiBus to provide a more flexible development framework. In the future, we will also integrate the breakthrough technologies we implemented in hiWebKit into the framework,
+1. Two demonstrations which use hiWebKit and hiACEJS respectively; one for smart speakers and one for household appliances.
+1. A complete device-side software stack, component system (including cross-compilation), documentation and sample codes of the integrated operating system.
 
-我们计划在 2020 年 12 月正式发布 HybridOS Device Side 1.0。这令人激动的创新产品，再过一个月，大家就可以用于产品开发了！
+Remember, HybridOS follows the "open source and open process" principle, **release means you can see the source code at the same time**. In fact, the source code of HybridOS is mirrored on GitHub in real time.
 
-记住，HybridOS 遵循过程开源原则，**发布即意味着您可以同时看到源代码**。实际上，HybridOS 的源代码是实时镜像到 GitHub 上的。
-
-**支持合璧操作系统，请点亮 GitHub 上 HybridOS 项目的星星吧：**
+**To support HybridOS, please visit the HybridOS repository on GitHub, and light up the star of the HybridOS project on GitHub!**
 
 <https://github.com/FMSoftCN/hybridos>
-
----
-
-（以下内容，仅用于微信公众号文章）
-
-点击文末原文链接，为合璧操作系统项目以及其他飞漫主持的开源项目呐喊助威吧！
-
-原文链接：<https://store.fmsoft.cn/campaign/denoteoss-lt>
 
