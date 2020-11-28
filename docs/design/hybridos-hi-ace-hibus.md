@@ -1,269 +1,271 @@
-##### 零、讨论情境
+# hiACEJS中hiBus概要设计
 
-为讨论方便，假设以下情境
+耿岳
 
-```c
- --------------------------------------------------------------------------------- 
-|                                 App: Interface GUI                              |
-|--------------------------------------------------------------------------------- 
-|          runner: battery check            |     runner: phone monitor           |
-|Event subscribers   Procedure callers      |Event subscribers   Procedure callers|
- ---------------------------------------------------------------------------------
-  |                    |                    |                  |
-  |                    |                    |                  |
- ---------------------------------------------------------------------------------   hiBus
-  |                    |                    |                  |
-  | quantity msg       | shutdown func      | call in msg      | hung up func
- ---------------------------------------------------------------------------------
-|Event bubbles      Procedure handlers      |Event bubbles      Procedure handlers|
-|                battry daemon              |             GSM daemon              |
- ---------------------------------------------------------------------------------
-```
+本文阐述了在hiACEJS中，hiBus功能的实现方式，及概要设计。
 
-假设系统中运行着三个用户进程：
-
-1. GUI：用户界面进程。其中包含了两个runner：
-   1. battery check：
-      1. Event subscribers：订阅电池电量事件，要求1s一次，同时根据电量值，显示电池电量；
-      2. Procedure callers：当电池电量小于某值时，调用电池守护进程的关机功能；
-   2. phone monitor：
-      1. Event subscribers：订阅来电事件，要求10ms一次。如果事件产生，从事件中获取来电号码并显示是否接听；
-      2. Procedure callers：当用户选择拒绝，调用GSM守护进程的挂断功能。
-2. battry daemon：power监控守护进程，仅有一个runner：
-   1. power manager：
-      1. Event bubbles：1s产生一次电量事件；
-      2. Procedure handlers：关机功能。
-3. GSM daemon：GSM守护进程，仅有一个runner：
-   1. GSM manager：
-      1. Event bubbles：来电事件，仅在有来电时发送；
-      2. Procedure handlers：挂断功能。
+- [hiACEJS中hiBus软件结构](#hiacejs中hibus软件结构)
+- [hiBus Interface](#hibus-interface)
+   + [hiBus_handler类](#hibus_handler类)
+   + [代码举例](#代码举例)
+- [hiBus connection](#hibus-connection)
 
 
+## hiACEJS中hiBus软件结构
 
-现在理解：
-
-1. 关于事件：
-
-   1. 任何进程都可以产生任何事件。事件的eventId，由系统统一编码。不在统一编码中的事件将被hiBus认为非法；
-   2. 产生的事件，无需特别操作，直接扔到hiBus总线上。也就是说电池电量、来电事件一旦发生直接送往hiBus，只要它们合法；
-   3. 事件的接收（订阅），是要告之hiBus的。hiBus只将订阅的事件发往订阅的runner。
-
-2. 关于过程调用：
-
-   1. 任何进程都可以向hiBus申请过程调用，无需特别的操作。申请的调用是否被提供，是否合法，由hiBus判断；
-   2. 过程调用的提供者，是需要向hiBus注册过程调用的。只有注册过的过程调用才为合法。因此关机、挂断两个功能是需要注册的；
-   3. hashed_call_identifier如何确定？
-
-3. 关于hiBus连接：
-
-   GUI进程的hiBus连接有两种模型：
-
-   1. 两个runner各自拥有各自的连接，也即有两个hiBus对象，hiBus连接的最小粒度为runner；
-   2. 两个runner只有一个连接，也即有一个hiBus对象，hiBus连接的最小粒度为App。
-
-下面的文字，基于下面的几个理解：
-
-1. 产生的事件，无需特别操作，直接扔到hiBus总线上。事件的接收（订阅），是要告之hiBus的；
-
-2. 任何进程都可以向hiBus申请过程调用，无需特别的操作。过程调用的提供者，是需要向hiBus注册过程调用的；
-
-3. hiBus连接的最小粒度为runner。
-
-   
-
-##### 一、hiBus软件结构
-
-如下图：
+在hiACEJS中，对hiBus的实现的软件结构如下图：
 
 ```c
- ---------------------------------------------------------------------------------
-|                           User JS code (Java Script)                            |
- ---------------------------------------------------------------------------------
-|                        JS hiBus Framework (Java Script)                         |
- ---------------------------------------------------------------------------------
-|                          JS hiBus Connection (C Code)                           |
- --------------------------------------------------------------------------------- 
-|                              JS engine (jerry JS)                               |
- --------------------------------------------------------------------------------- 
-|                   HybridOS servers and user daemons (hiBus daemon)              |
- ---------------------------------------------------------------------------------
-|                          Python runtime environment (optional)                  |
-|                             LibZ, CURL, LibGcrypt, ...                          |
-|                               C/C++ runtime environment                         |
- ---------------------------------------------------------------------------------
-|                               Linux Kernel/Drivers                              |
- ---------------------------------------------------------------------------------
+ ------------------------------------------------------------
+|              User JS code, hiBus Interface(JS)             |
+ ------------------------------------------------------------
+|         JS engine (jerryscript), hiBus connection(c)       |
+ ------------------------------------------------------------ 
+|      HybridOS servers and user daemons (hiBus daemon)      |
+ ------------------------------------------------------------
+|          Python runtime environment (optional)             |
+|                LibZ, CURL, LibGcrypt, ...                  |
+|                C/C++ runtime environment                   |
+ ------------------------------------------------------------
+|                  Linux Kernel/Drivers                      |
+ ------------------------------------------------------------
 ```
 
-其中：
+整个代码结构包含了三部分：
 
-JS hiBus Framework，是一段封装好的JS代码，对外提供接口，供用户JS代码调用。其负责：
-- 根据用户传递的参数，建立到hiBus daemon的连接；
-- 保存用户注册的事件、过程调用方法的回调函数；
-- 提供对hiBus的写接口，并完成对写入数据的封装；
-- 以轮询方式定时检测与接收hiBus daemon发回的数据；
-- 解析数据，然后调用事件、方法对应的回调函数；
-- 将方法回调的结果，再次发送到hiBus daemon。
+- 用户JS代码，调用hiBus Interface，完成hiBus总线所定义的全部功能；
 
-JS hiBus Connection，完成与hiBus daemon通信，用c代码完成，其负责：
-- 建立到hiBus daemon的连接，完成连接、身份识别；
-- 完成对hiBus的写操作；
-- 完成对hiBus的读操作。
+- hiBus Interface，该代码为公共代码，为每个页面调用。为用户JS代码提供接口，包括：
+  - 建立到hiBus 总线的连接；
+  - 向hiBus 总线发送事件；
+  - 做为事件订阅者，向hiBus 总线订阅事件，并设置事件处理的回调函数；
+  - 作为过程处理器，设置过程调用函数；
+  - 作为过程调用者，向hiBus 总线发送过程调用请求；
+  - 读hiBus总线数据，解析并调用可能的事件处理函数，以及过程调用函数。
+- hiBus connection，是对JS引擎的扩展，为JS提供了到hiBus的连接与读写的具体实现。该部分不参与任何业务处理。只处理raw data。
 
-JS engine：JS引擎，目前使用的是 jerry javascript。
 
-##### 二、JS hiBus Framework
 
-###### 2.1 主要数据结构及注册过程
+## hiBus Interface
 
-```c
-                                                     Event List
-                        |-------------------------------------------------------------------| 
-     register-event     | id0 | host name | app name | runner name | bubble name | function |
- ---------------------->|-------------------------------------------------------------------|
-                        | id1 | host name | app name | runner name | bubble name | function |  
-                        |-------------------------------------------------------------------|
-                        |                              .......                              |
-    unregister-event    |-------------------------------------------------------------------|
- <----------------------| idn | host name | app name | runner name | bubble name | function |
-                        |-------------------------------------------------------------------|
-     
-                                                       Method List
-                        |-------------------------------------------------------------------|
-     register-method    | id0 | host name | app name | runner name | method name | function |
- ---------------------->|-------------------------------------------------------------------|
-                        | id1 | host name | app name | runner name | method name | function |  
-                        |-------------------------------------------------------------------|
-                        |                              .......                              |
-   unregister-method    |-------------------------------------------------------------------|
- <----------------------| idn | host name | app name | runner name | method name | function |
-                        |-------------------------------------------------------------------|                                                        
+### hiBus_handler类
+
+hiBus Interface由hiBus_handler对象实现。hiBus_handler类如下：
+
+```
+class hiBus_handler {
+    var hiBusConnection;    // hiBus object for connection to hiBus
+    var appName;            // app name
+    var runnerName;         // runner name
+    
+    constructor(app, runner) { ...... }                 // constructor 
+    fireEvent(event, data) { ...... }                   // send evnet to hiBus
+    subscribeEvent(app, runner, event, func) { ...... } // subscribe event to hiBus
+    revokeEvent(app, runner, event) { ...... }          // revoke event to hiBus
+    registerProcedure(method, func) { ......}           // register Procedure to hiBus
+    revokeProcedure(method) { ...... }	                // revoke Procedure to hiBus
+    callProcedure(app, runner, method, param, timeout) { ...... }        // call a remote procedure, synchronously
+    callProcedureAndWait(app, runner, method, param, timeout) { ...... } // call a remote procedure, asynchronously
+    hibusHandler() { ...... }   			             // read hiBus, and handle each data package 
+}
 ```
 
-其中：
 
-- register-event：注册一个接收事件，以及该事件的回调函数：
-  - 如果host name、app name、runner name、bubble name、function与列表中的某节点一致，则认为该函数已经注册；
-  - 如果host name、app name、runner name、bubble name、function至少有一项与列表中所有节点不同，则认为是一个新节点，插到列表结尾；
-  - 如未达到列表最大长度，该函数返回idn；
-  - 如已达到列表最大长度，该函数返回-1，表示插入失败；
-  - 新插入的节点id从0开始，顺序计数；
-  - id为-1，表示该节点为空；
-  - 调用hiBus_event_subscribe()，订阅一个事件。
 
-- unregister-event：删除一个接收事件：
-  - 当参数为host name、app name、runner name、bubble name、function时，所有项都相同，视为所要删除的节点，将该节点的id设置为-1；
-  - 当参数为id，则直接删除该id的节点，将该节点的id设置为-1；
-  - id不存在，或者为-1，视为删除失败；
-  - 调用hiBus_event_remove()，删除一个事件的订阅；
-  - 该函数返回被删除节点的id，或者-1；
+hiBus_handler类的构造函数，在该函数中，创建hiBusConnection对象。
 
-- register-method：注册一个回调过程，以及该实际执行的回调函数。具体规则同register-event函数；
-- unregister-method：删除一个回调过程，具体规则同unregister-event。
-
-###### 2.2 启动过程
-
-Start_hiBus(host_name, app_name, runner_name, type, Interval);
-
-1. 判断是否存在hiBus对象，如果存在，删除之（同一窗口页面跳转时，删除上一个页面的痕迹），删除Event List和Method List，跳转到步骤2；
-2. 使用host_name, app_name, runner_name，创建hiBus对象，建立和hiBus daemon的连接，如连接失败，返回false，成功跳转到步骤3；
-3. 如果type为TIMER_MODE，以Interval为参数，调用setInterval建立定时器，返回true；
-4. 如果type为USER_INVOKE，返回true。
-
-在hiBus的使用过程中，存在两种模式：
-
-- TIMER_MODE模式：使用js定时器，自动定时获取hiBus的输入数据，并传递给hiBus处理函数；
-
-- USER_INVOKE模式：用户根据自己的需求，在任何时刻都可以调用hiBus处理函数，框架本身不维护timer事件。
-
-即使在TIMER_MODE，用户为了某些实时目的，也可以在代码中，直接调用hiBus处理函数。因此hiBus处理函数名称保留为：
-
-```c
-hiBus_Read_Handler();
+```
+constructor(app, runner) ;
+参数：
+    app：应用名称；
+    runner：行者名称；
+返回值：
+    无。如果hiBus连接成功，则hiBusConnection为hiBus对象，否则hiBusConnection为undefined。
 ```
 
-###### 2.3 hiBus_Read_Handler过程
 
-hiBus_Read_Handler();
 
-1. 如果hiBus对象未定义，直接返回。如果有值，则跳转到步骤2；
-2. 调用hiBus.read()方法，读取hiBus传递过来的数据。如果数据长度为0，则直接返回。否则则跳转到步骤3；
-3. 根据hiBus协议，对Json格式的请求逐一解析：
-   1. 如果是Event请求，则在Event List中搜索。搜索到后执行回调函数。如果未搜索到，则跳到下一个请求；
-   2. 如果是Method请求，则在Method List中搜索。搜索到后执行回调函数，如果未搜索到，则跳到下一个请求。执行回调函数后，获得函数返回值，调用hiBus.write()方法，写入hiBus；
-4. 执行完全部请求，函数返回，该函数没有返回值。
+产生一个事件，并发到hiBus总线上。
 
-###### 2.4 hiBus写过程
-
-hiBus_Write();
-
-此步骤没有想好，对数据的封装是调用者处理，还是在此处处理，或者二者都处理。
-
-###### 2.5 事件的订阅与取消
-
-hiBus_event_subscribe();
-
-hiBus_event_remove();
-
-讨论后再写。
-
-###### 2.6 过程的注册与取消
-
-hiBus_procedure_register();
-
-hiBus_procedure_unregister();
-
-讨论后再写。
-
-##### 三、hiBus connection
-
-hiBus connection既为hiBus对象的c语言实现。
-
-###### 3.1 创建hiBus对象
-
-var hibus = new hiBus(host_name, app_name, runner_name);
-
-其步骤为：
-
-​	1、连接服务器
-
-​		参数：host_name, app_name, runner_name, param；
-
-​		param: 符合协议的json字符串，这个根据hiBus提供接口而定；
-
-​		接收：hiBus 服务器返回的挑战码。
-
-​	2、身份识别
-
-​		对服务器发来的挑战码进行数字签名，并返回签名。
-
-​		问题：签名算法？
-
-​	3、获得连接
-
-​		获得服务器返回值，判断是否连接成功。如果成功，返回hiBus对象指针，如果失败，返回NULL；
+```
+fireEvent(name, data);
+参数：
+    name：事件名称；
+    data：事件数据（Json格式）；
+返回值：
+    无。
+```
 
 
 
-###### 3.2 hiBus写操作
+订阅一个事件，并发到hiBus总线
 
-视hiBus API而定。
-
-###### 3.3 hiBus读操作
-
-视hiBus API而定。
-
-
-
-
-
-问题：
-
-1、心跳的处理？
-
-2、多个hiBus对象如何使用同一个框架js代码，在js里添加hibus_communication类，包含了hibus对象，定时器，timer函数，读写函数，注册函数？
-
-3、同一个APP如果包含若干个页面，每个页面都是重新加载和解析的。当切换的时候，不同页面属于同一个runner，但是页面变了，hiBus如何处理？
+```
+subscribeEvent(app, runner, event, func);
+参数：
+    app：产生事件的endpoint应用名；
+    runner：产生事件的endpoint行者名；
+    event：订阅事件的事件名；
+    func：订阅事件的回调函数；
+返回值：
+    无。
+```
 
 
 
+取消订阅一个事件，并发到hiBus总线
+
+```
+revokeEvent(app, runner, event);
+参数：
+    app：产生事件的endpoint应用名；
+    runner：产生事件的endpoint行者名；
+    event：订阅事件的事件名；
+返回值：
+    无。
+```
+
+
+
+向hiBus注册过程
+
+```
+registerProcedure(method, func) ;
+参数：
+    method：method_name；
+    func：过程调用的回调函数；
+返回值：
+    无。最终向hiBus发送Json数据时，填入hiBus_handler类的appName及runnerName属性。
+```
+
+
+
+向hiBus发送撤销过程
+
+```
+revokeProcedure(method);
+参数：
+    method：method_name；
+返回值：
+    无。
+```
+
+
+
+向hiBus发送异步远程过程调用请求
+
+```
+callProcedure(app, runner, method, param, timeout);
+参数：
+    app：远程调用的endpoint应用名；
+    runner：远程调用的endpoint行者名；
+    method：method_name；
+    param：远程过程参数（Json格式）；
+    timeout：超时时间，单位毫秒；
+返回值：
+    无。
+```
+
+
+
+向hiBus发送同步远程过程调用请求
+
+```
+callProcedureAndWait(app, runner, method, param, timeout) ;
+参数：
+    app：远程调用的endpoint应用名；
+    runner：远程调用的endpoint行者名；
+    method：method_name；
+    param：远程过程参数（Json格式）；
+    timeout：超时时间，单位毫秒；
+返回值：
+    无。
+```
+
+
+
+hiBus读入数据处理
+
+```
+hibusHandler();
+参数：
+	无
+返回值：
+	无
+```
+
+
+
+用户回调函数，都具有如下的形式：
+
+```
+callbackFunction(msgData)	{ ........ }
+```
+
+参数msgData为一个Json对象。对其的解析由用户回调函数完成，解析内容参见hiBus通信协议。
+
+### 代码举例
+
+用户在JS代码中，使用该接口，有类似如下代码：
+
+```
+// 创建hiBus_handler对象
+var hiBus = new hiBus_handler("appagent", "setting");
+
+// 订阅电池监控应用的“battery-quantity”消息
+hiBus.subscribeEvent("battery-daemon", "battery-runner", "battery-quantity", display(msgData) { ...... });
+
+// 读取hiBus总线，解析数据，如果“battery-quantity”消息存在，则执行display(msgData) {}
+hiBus.hibusHandler();
+```
+
+
+
+## hiBus connection
+
+hiBus connection是对JS引擎的扩展，为JS提供了到hiBus的连接与读写的具体实现。
+
+该部分不参与任何业务处理。换句话说，该部分代码读写接口，只处理raw data，不负责任何打包和解析。
+
+该部分代码为JS函数对象的c实现。因此返回值的理解不是c或者c++代码，需要以JS函数来理解。
+
+hiBusConnection类包含三个JS函数的实现，说明如下：
+
+
+
+hiBusConnection类的构造函数，创建到hiBus总线的连接
+
+```
+bool hiBusConnection(char * app_ame, char * runner_name);
+参数：
+    app_name：创建该对象的应用名；
+    runner_name：创建该对象的行者名；
+返回值：
+    成功返回true，失败返回false。
+```
+
+
+
+hiBus总线的读操作
+
+```
+int hiBusReadRaw(char * buffer, int length);
+参数：
+    buffer：读缓冲区；
+    length：读缓冲区长度；
+返回值：
+    实际读到的字节数。如果读操作失败，返回-1。
+```
+
+
+
+hiBus总线的写操作
+
+```
+int hiBusWriteRaw(char * buffer, int length);
+参数：
+    buffer：写缓冲区；
+    length：写缓冲区长度；
+返回值：
+    实际写入hiBus总线的字节数。如果写操作失败，返回-1。
+```
