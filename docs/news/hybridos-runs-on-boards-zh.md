@@ -40,15 +40,11 @@ HybridOS 设备侧 R2011 版本在以上两块开发板上，主要使用的软�
 
 ## 全志 R818 AXP305 开发板
 
-### 系统要求
-
 需要使用 GCC 7.5 或以上工具链编译基础系统，或者直接使用我们编译好的基础系统（47MB）重新刷机。下载链接如下:
 
 <https://hybridos.fmsoft.cn/downloads/r2011/tina-r818-evb2-gcc7-5.img.gz>
 
 注：下载后请使用 `gunzip` 命令解压使用；解压后尺寸为 55MB。
-
-### 安装和运行
 
 首先按如下步骤配置开发板上的网络：
 
@@ -104,9 +100,7 @@ root@TinaLinux:/mnt/UDISK/sysroot# . ./run.sh  #  运行
 
 ## 瑞芯 PX30 mini EVB 开发板
 
-## 下载
-
-交叉编译 HybridOS，需要使用 GCC 7.0 或以上版本。但 PX30 SDK 所提供的交叉编译工具链，版本为 `gcc-linaro-6.3.1`。您可以使用 `gcc-linaro-7.0` 或以上版本重新编译 SDK。交叉编译工具链下载地址为：
+编译 HybridOS，需要使用 GCC 7.0 或以上版本，但 PX30 SDK 所提供的交叉编译工具链，版本为 `gcc-linaro-6.3.1`。您可以使用 `gcc-linaro-7.0` 或以上版本重新编译 SDK。交叉编译工具链下载地址为：
 
 <https://hybridos.fmsoft.cn/downloads/r2011/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz>
 
