@@ -77,7 +77,7 @@ root@TinaLinux:/# wifi_connect_ap_test <your ssid> <your password>
 1) 将设备用 USB 连接到 PC 上。
 2) 在 PC 终端使用 `adb` 命令将下载的 `r818.tar.gz` 文件推送到设备上 `/mnt/UDISK` 目录下：
 
-``` shell
+```shell
 $ adb push r818.tar.gz /mnt/UDISK/
 ```
 
@@ -110,7 +110,7 @@ root@TinaLinux:/mnt/UDISK/sysroot# . ./run.sh  #  运行
 
 下载后请解压缩，并覆盖原 SDK 中的 `rockdev` 目录，然后使用 SDK 工具烧写到开发板上：
 
-```
+```shell
 # ./rkflash.sh
 ```
 
@@ -152,7 +152,7 @@ network={
 
 5) 在串口控制台上输入命令：
 
-```
+```shell
 # mount -t nfs -o nolock PC_ip:/share /mnt
 # cd /userdata
 # cp /mnt/sysroot . -a

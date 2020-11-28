@@ -43,7 +43,7 @@ You need to build the base system using GCC 7.5 or more tool chains, or just use
 
 <https://hybridos.fmsoft.cn/downloads/r2011/tina-r818-evb2-gcc7-5.img.gz>
 
-[Note] After downloading, please use the `gunzip` command to decompress the file first; The uncompressed size is 55MB.
+Note that after downloading, please use the `gunzip` command to decompress the file first; The uncompressed size is 55MB.
 
 First configure the network on the development board as follows:
 
@@ -76,7 +76,7 @@ After this, follow the steps to install HybridOS:
 1) Connect the board to your PC via USB.
 2) Run `adb` on your PC and push the `r818.tar.gz` file to `/mnt/UDISK` directory on the board:
 
-``` shell
+```shell
 $ adb push r818.tar.gz /mnt/UDISK/
 ```
 
@@ -109,7 +109,7 @@ You can also directly download the SDK we compiled in advance by using `gcc-lina
 
 After downloading, please unzip and overwrite the `rockdev/` directory in the original SDK, and then burn it to the development board by using SDK tools:
 
-```
+```shell
 # ./rkflash.sh
 ```
 
