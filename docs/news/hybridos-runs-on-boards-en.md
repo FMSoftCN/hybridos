@@ -23,22 +23,21 @@ The real shooting video for HybridOS on Rockchip PX30:
 
 (Insert the hybridos-px30.mp4 video)
 
-HybridOS 设备侧 R2011 版本在以上两块开发板上，主要使用的软件组件为：
+On above two development boards, we run the device side of HybridOS (R2011), and the major software components are:
 
-1. MiniGUI 5.0.3，多进程模式，合成图式：
-   - 视频中应用的启动条、状态栏、背景动画等，基于合成图式实现。
-   - 使用中应用的缩小展示、切换、管理等，使用了 MiniGUI 在合成图式下的定制合成器技术开发。
-   - 在瑞芯 PX30 开发板上，使用 DRM 图形引擎；在全志 R818 开发板上使用 FB 图形引擎。
-   - 采用的是纯软件渲染效果，暂未启用 GPU。在使用 DRM 图形引擎时，动画流畅顺滑，但在使用 FB 图形引擎时，有丢帧现象。
-1. hiShell：用于启动应用、切换应用、管理应用的外壳程序。
-1. hiWebKit：用于支撑 HTML5 及 HybridOS 扩展特性的 WebKit 扩展版本：
-   - 其中用于展示手表表盘、秒表的页面，采用 hiWebKit 的 `hiview` 扩展标签实现。
-   - 其中用于展示仪表盘的页面，使用了 hiWebKit 的 `himeter` 和 `hihand` 扩展标签实现。
-   - 仔细观察表盘及仪表盘中的指针及条带变化，在两款开发板上的运行效果都非常棒。
+1. MiniGUI 5.0.3, Multi-process mode, composite schema:
+  - The docker bar, status bar and background animation in the video are implemented based on the compositing schema.
+  - To manage the apps, we developed a customize compositor for MiniGUI.
+  - On the PX30 development board, MiniGUI uses DRM graphics engine, while on R818, MiniGUI uses FB graphics engine.
+  - Software-only rendering is used, and GPU is not enabled yet.
+2. HiShell: Shell for launching, switching, and managing apps.
+3. HiWebKit: The WebKit extension version used to support HTML5 and the HybridOS extension features:
+  - Among them, the page used to display the watch and stopwatch is implemented by hiWebKit's `hiview` tag.
+  - The page for displaying the dashboard uses `himeter` and `hihand` tags of hiWebKit.
 
-如果读者手头有这两块开发板，可以阅读如下内容下载 HybridOS 设备侧 R2011 版本的已编译映像文件，放到开发板上运行做实际的体验。
+If you have the two development boards at hand, you can read the following words to download the compiled image files of the device side of HybridOS (R2011) and run it on the development board for the tremendous experience.
 
-## 全志 R818 AXP305 开发板
+## Allwinner R818 AXP305 Board
 
 需要使用 GCC 7.5 或以上工具链编译基础系统，或者直接使用我们编译好的基础系统（47MB）重新刷机。下载链接如下:
 
@@ -98,7 +97,7 @@ root@TinaLinux:/mnt/UDISK/sysroot# . ./setup.sh  # 安装
 root@TinaLinux:/mnt/UDISK/sysroot# . ./run.sh  #  运行
 ```
 
-## 瑞芯 PX30 mini EVB 开发板
+## Rockchip PX30 mini EVB
 
 编译 HybridOS，需要使用 GCC 7.0 或以上版本，但 PX30 SDK 所提供的交叉编译工具链，版本为 `gcc-linaro-6.3.1`。您可以使用 `gcc-linaro-7.0` 或以上版本重新编译 SDK。交叉编译工具链下载地址为：
 
