@@ -171,6 +171,12 @@ In the end of 2020, the HybridOS team will complete the development of the remai
 1. Two demonstrations which use hiWebKit and hiACEJS respectively; one for smart speakers and one for household appliances.
 1. A complete device-side software stack, component system (including cross-compilation), documentation and sample codes of the integrated operating system.
 
+The public source code repositories of hiBus and hiACEJS are as follow:
+
+<https://github.com/FMSoftCN/hibus>
+
+<https://github.com/FMSoftCN/hiACEJS>
+
 Remember, HybridOS follows the "open source and open process" principle, **release means you can see the source code at the same time**. In fact, the source code of HybridOS is mirrored on GitHub in real time.
 
 **To support HybridOS, please visit the HybridOS repository on GitHub, and light up the star of the HybridOS project on GitHub!**
