@@ -88,7 +88,7 @@ $ adb shell
 root@TinaLinux:/#
 ```
 
-４) 在设备控制台执行以下命令进行安装和运行：
+4) 在设备控制台执行以下命令进行安装和运行：
 
 ```shell
 root@TinaLinux:/# cd /mnt/UDISK

@@ -26,14 +26,14 @@ The real shooting video for HybridOS on Rockchip PX30:
 On above two development boards, we run the device side of HybridOS (R2011), and the major software components are:
 
 1. MiniGUI 5.0.3, Multi-process mode, composite schema:
-  - The docker bar, status bar and background animation in the video are implemented based on the compositing schema.
-  - To manage the apps, we developed a customize compositor for MiniGUI.
-  - On the PX30 development board, MiniGUI uses DRM graphics engine, while on R818, MiniGUI uses FB graphics engine.
-  - Software-only rendering is used, and GPU is not enabled yet.
-2. HiShell: Shell for launching, switching, and managing apps.
-3. HiWebKit: The WebKit extension version used to support HTML5 and the HybridOS extension features:
-  - Among them, the page used to display the watch and stopwatch is implemented by hiWebKit's `hiview` tag.
-  - The page for displaying the dashboard uses `himeter` and `hihand` tags of hiWebKit.
+   - The docker bar, status bar and background animation in the video are implemented based on the compositing schema.
+   - To manage the apps, we developed a customize compositor for MiniGUI.
+   - On the PX30 development board, MiniGUI uses DRM graphics engine, while on R818, MiniGUI uses FB graphics engine.
+   - Software-only rendering is used, and GPU is not enabled yet.
+1. HiShell: Shell for launching, switching, and managing apps.
+1. HiWebKit: The WebKit extension version used to support HTML5 and the HybridOS extension features:
+   - Among them, the page used to display the watch and stopwatch is implemented by hiWebKit's `hiview` tag.
+   - The page for displaying the dashboard uses `himeter` and `hihand` tags of hiWebKit.
 
 If you have the two development boards at hand, you can read the following words to download the compiled image files of the device side of HybridOS (R2011) and run it on the development board for the tremendous experience.
 
@@ -87,7 +87,7 @@ $ adb shell
 root@TinaLinux:/#
 ```
 
-４) Run the following commands on the board to install and run HybridOS:
+4) Run the following commands on the board to install and run HybridOS:
 
 ```shell
 root@TinaLinux:/# cd /mnt/UDISK
