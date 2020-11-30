@@ -6,7 +6,7 @@
 
 - [hiACEJS中hiBus软件结构](#hiacejs中hibus软件结构)
 - [hiBus Interface](#hibus-interface)
-   + [hiBus_handler类](#hibus_handler类)
+   + [hiBusCommunicate类](#hibuscommunicate类)
    + [代码举例](#代码举例)
 - [hiBus connection](#hibus-connection)
 
@@ -37,9 +37,7 @@
 
 - hiBus Interface，该代码为公共代码，为每个页面调用。为用户JS代码提供接口，包括：
   - 建立到hiBus 总线的连接；
-  - 向hiBus 总线发送事件；
   - 做为事件订阅者，向hiBus 总线订阅事件，并设置事件处理的回调函数；
-  - 作为过程处理器，设置过程调用函数；
   - 作为过程调用者，向hiBus 总线发送过程调用请求；
   - 读hiBus总线数据，解析并调用可能的事件处理函数，以及过程调用函数。
 - hiBus connection，是对JS引擎的扩展，为JS提供了到hiBus的连接与读写的具体实现。该部分不参与任何业务处理。只处理raw data。
@@ -48,31 +46,28 @@
 
 ## hiBus Interface
 
-### hiBus_handler类
+### hiBusCommunicate类
 
-hiBus Interface由hiBus_handler对象实现。hiBus_handler类如下：
+hiBus Interface由hiBusCommunicate对象实现。hiBusCommunicate类如下：
 
 ```
-class hiBus_handler {
+class hiBusCommunicate {
     var hiBusConnection;    // hiBus object for connection to hiBus
     var appName;            // app name
     var runnerName;         // runner name
     
     constructor(app, runner) { ...... }                 // constructor 
-    fireEvent(event, data) { ...... }                   // send evnet to hiBus
     subscribeEvent(app, runner, event, func) { ...... } // subscribe event to hiBus
-    revokeEvent(app, runner, event) { ...... }          // revoke event to hiBus
-    registerProcedure(method, func) { ......}           // register Procedure to hiBus
-    revokeProcedure(method) { ...... }	                // revoke Procedure to hiBus
-    callProcedure(app, runner, method, param, timeout) { ...... }        // call a remote procedure, synchronously
-    callProcedureAndWait(app, runner, method, param, timeout) { ...... } // call a remote procedure, asynchronously
-    hibusHandler() { ...... }   			             // read hiBus, and handle each data package 
+    unsubscribeEvent(app, runner, event) { ...... }     // unsubscribe event to hiBus
+    callProcedure(endpoint, method, param, timeout) { ...... }        // call a remote procedure, synchronously
+    callProcedureAndWait(endpoint, method, param, timeout) { ...... } // call a remote procedure, asynchronously
+    checkPackages() { ...... }   			            // read hiBus, and handle each data package 
 }
 ```
 
 
 
-hiBus_handler类的构造函数，在该函数中，创建hiBusConnection对象。
+hiBusCommunicate类的构造函数，在该函数中，创建hiBusConnection对象。
 
 ```
 constructor(app, runner) ;
@@ -81,19 +76,6 @@ constructor(app, runner) ;
     runner：行者名称；
 返回值：
     无。如果hiBus连接成功，则hiBusConnection为hiBus对象，否则hiBusConnection为undefined。
-```
-
-
-
-产生一个事件，并发到hiBus总线上。
-
-```
-fireEvent(name, data);
-参数：
-    name：事件名称；
-    data：事件数据（Json格式）；
-返回值：
-    无。
 ```
 
 
@@ -116,7 +98,7 @@ subscribeEvent(app, runner, event, func);
 取消订阅一个事件，并发到hiBus总线
 
 ```
-revokeEvent(app, runner, event);
+unsubscribeEvent(app, runner, event);
 参数：
     app：产生事件的endpoint应用名；
     runner：产生事件的endpoint行者名；
@@ -127,38 +109,12 @@ revokeEvent(app, runner, event);
 
 
 
-向hiBus注册过程
-
-```
-registerProcedure(method, func) ;
-参数：
-    method：method_name；
-    func：过程调用的回调函数；
-返回值：
-    无。最终向hiBus发送Json数据时，填入hiBus_handler类的appName及runnerName属性。
-```
-
-
-
-向hiBus发送撤销过程
-
-```
-revokeProcedure(method);
-参数：
-    method：method_name；
-返回值：
-    无。
-```
-
-
-
 向hiBus发送异步远程过程调用请求
 
 ```
-callProcedure(app, runner, method, param, timeout);
+callProcedure(endpoint, method, param, timeout);
 参数：
-    app：远程调用的endpoint应用名；
-    runner：远程调用的endpoint行者名；
+    endpoint：远程调用的endpoint名；
     method：method_name；
     param：远程过程参数（Json格式）；
     timeout：超时时间，单位毫秒；
@@ -171,10 +127,9 @@ callProcedure(app, runner, method, param, timeout);
 向hiBus发送同步远程过程调用请求
 
 ```
-callProcedureAndWait(app, runner, method, param, timeout) ;
+callProcedureAndWait(endpoint, method, param, timeout) ;
 参数：
-    app：远程调用的endpoint应用名；
-    runner：远程调用的endpoint行者名；
+    endpoint：远程调用的endpoint名；
     method：method_name；
     param：远程过程参数（Json格式）；
     timeout：超时时间，单位毫秒；
@@ -187,7 +142,7 @@ callProcedureAndWait(app, runner, method, param, timeout) ;
 hiBus读入数据处理
 
 ```
-hibusHandler();
+checkPackages();
 参数：
 	无
 返回值：
@@ -209,14 +164,14 @@ callbackFunction(msgData)	{ ........ }
 用户在JS代码中，使用该接口，有类似如下代码：
 
 ```
-// 创建hiBus_handler对象
-var hiBus = new hiBus_handler("appagent", "setting");
+// 创建hiBusCommunicate对象
+var hiBus = new hiBusCommunicate("appagent", "setting");
 
-// 订阅电池监控应用的“battery-quantity”消息
-hiBus.subscribeEvent("battery-daemon", "battery-runner", "battery-quantity", display(msgData) { ...... });
+// 订阅电池监控应用的“batteryquantity”消息
+hiBus.subscribeEvent("batterymanager", "batterychecker", "batteryquantity", display(msgData) { ...... });
 
-// 读取hiBus总线，解析数据，如果“battery-quantity”消息存在，则执行display(msgData) {}
-hiBus.hibusHandler();
+// 读取hiBus总线，解析数据，如果“batteryquantity”消息存在，则执行display(msgData) {}
+hiBus.checkPackages();
 ```
 
 
@@ -236,10 +191,11 @@ hiBusConnection类包含三个JS函数的实现，说明如下：
 hiBusConnection类的构造函数，创建到hiBus总线的连接
 
 ```
-bool hiBusConnection(char * app_ame, char * runner_name);
+bool hiBusConnection(char * app_name, char * runner_name, char * path_to_socket);
 参数：
     app_name：创建该对象的应用名；
     runner_name：创建该对象的行者名；
+    path_to_socket：socket路径；
 返回值：
     成功返回true，失败返回false。
 ```
