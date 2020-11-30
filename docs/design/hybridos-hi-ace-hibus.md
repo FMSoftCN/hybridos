@@ -59,9 +59,8 @@ class HiBusCommunicate {
     constructor(app, runner) { ...... }                 // constructor 
     subscribeEvent(app, runner, event, func) { ...... } // subscribe event to hiBus
     unsubscribeEvent(app, runner, event) { ...... }     // unsubscribe event to hiBus
-    callProcedure(endpoint, method, param, timeout) { ...... }        // call a remote procedure, synchronously
-    callProcedureAndWait(endpoint, method, param, timeout) { ...... } // call a remote procedure, asynchronously
-    checkPackages() { ...... }   			            // read hiBus, and handle each data package 
+    callProcedure(endpoint, method, param, timeout, func) { ...... }        // call a remote procedure, synchronously
+    checkPackets() { ...... }   			            // read hiBus, and handle each data package 
 }
 ```
 
@@ -112,27 +111,18 @@ unsubscribeEvent(app, runner, event);
 向hiBus发送异步远程过程调用请求
 
 ```
-callProcedure(endpoint, method, param, timeout);
+callProcedure(endpoint, method, param, timeout, func);
 参数：
     endpoint：远程调用的endpoint名；
     method：method_name；
     param：远程过程参数（Json格式）；
     timeout：超时时间，单位毫秒；
-返回值：
-    无。
-```
-
-
-
-向hiBus发送同步远程过程调用请求
-
-```
-callProcedureAndWait(endpoint, method, param, timeout) ;
-参数：
-    endpoint：远程调用的endpoint名；
-    method：method_name；
-    param：远程过程参数（Json格式）；
-    timeout：超时时间，单位毫秒；
+    func：远程调用的回调函数，有形如下结构：
+        {
+            type:sync,                  // 请求类型：同步、异步
+            success: funcSuccess,       // 回调成功后执行的回调函数
+            error: funcError,           // 回调失败后执行的回调函数
+        }
 返回值：
     无。
 ```
@@ -142,7 +132,7 @@ callProcedureAndWait(endpoint, method, param, timeout) ;
 hiBus读入数据处理
 
 ```
-checkPackages();
+checkPackets();
 参数：
 	无
 返回值：
@@ -171,7 +161,7 @@ var hiBus = new HiBusCommunicate("appagent", "setting");
 hiBus.subscribeEvent("batterymanager", "batterychecker", "batteryquantity", display(msgData) { ...... });
 
 // 读取hiBus总线，解析数据，如果“batteryquantity”消息存在，则执行display(msgData) {}
-hiBus.checkPackages();
+hiBus.checkPackets();
 ```
 
 
