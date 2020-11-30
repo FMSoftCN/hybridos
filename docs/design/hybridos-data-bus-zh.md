@@ -164,7 +164,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 ```json
 {
-    "packageType": "error",
+    "packetType": "error",
     "protocolName": "HIBUS",
     "protocolVersion": 90,
     "retCode": 503,
@@ -205,7 +205,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 ```json
 {
-    "packageType": "auth",
+    "packetType": "auth",
     "protocolName": "HIBUS",
     "protocolVersion": 90,
     "challengeCode": "..."
@@ -216,7 +216,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 ```json
 {
-    "packageType": "auth",
+    "packetType": "auth",
     "protocolName": "HIBUS",
     "protocolVersion": 90,
     "hostName": "localhost",
@@ -231,7 +231,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 ```json
 {
-    "packageType": "authPassed",
+    "packetType": "authPassed",
     "serverHostName": "localhost",
     "reassignedHostName": "localhost",
 }
@@ -245,7 +245,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 ```json
 {
-    "packageType": "authFailed",
+    "packetType": "authFailed",
     "retCode": 409,
     "retMsg": "Conflict",
     "extraMsg": "..."
