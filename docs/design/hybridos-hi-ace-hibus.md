@@ -6,7 +6,7 @@
 
 - [hiACEJS中hiBus软件结构](#hiacejs中hibus软件结构)
 - [hiBus Interface](#hibus-interface)
-   + [hiBusCommunicate类](#hibuscommunicate类)
+   + [HiBusCommunicate类](#hibuscommunicate类)
    + [代码举例](#代码举例)
 - [hiBus connection](#hibus-connection)
 
@@ -46,12 +46,12 @@
 
 ## hiBus Interface
 
-### hiBusCommunicate类
+### HiBusCommunicate类
 
-hiBus Interface由hiBusCommunicate对象实现。hiBusCommunicate类如下：
+hiBus Interface由HiBusCommunicate对象实现。HiBusCommunicate类如下：
 
 ```
-class hiBusCommunicate {
+class HiBusCommunicate {
     var hiBusConnection;    // hiBus object for connection to hiBus
     var appName;            // app name
     var runnerName;         // runner name
@@ -67,7 +67,7 @@ class hiBusCommunicate {
 
 
 
-hiBusCommunicate类的构造函数，在该函数中，创建hiBusConnection对象。
+HiBusCommunicate类的构造函数，在该函数中，创建hiBusConnection对象。
 
 ```
 constructor(app, runner) ;
@@ -164,8 +164,8 @@ callbackFunction(msgData)	{ ........ }
 用户在JS代码中，使用该接口，有类似如下代码：
 
 ```
-// 创建hiBusCommunicate对象
-var hiBus = new hiBusCommunicate("appagent", "setting");
+// 创建HiBusCommunicate对象
+var hiBus = new HiBusCommunicate("appagent", "setting");
 
 // 订阅电池监控应用的“batteryquantity”消息
 hiBus.subscribeEvent("batterymanager", "batterychecker", "batteryquantity", display(msgData) { ...... });
