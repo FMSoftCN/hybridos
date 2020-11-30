@@ -223,7 +223,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "appName": "cn.fmsoft.hybridos.network",
     "runnerName": "self",
     "signature": "...",
-    "encoding": "[ base64 | hex ]"
+    "encodedIn": [ "base64" | "hex" ]
 }
 ```
 
