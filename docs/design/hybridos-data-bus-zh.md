@@ -178,6 +178,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 - `protocolVersion`：包含协议版本号，正整数。
 - `retCode`：包含错误码，可能的取值有（来自 HTTP 状态码）：
     + 503（Service Unavailable）：达到连接上限。
+    + 503（Service Unavailable）：达到连接上限。
     + 505（Internal Server Error）：内部错误。
 - `retMsg`：包含简单的信息。
 - `extraMsg`：可选的额外描述信息。
@@ -797,13 +798,13 @@ int hibus_conn_socket_type (hibus_conn* conn);
 
 ```c
 #define MAX_LEN_PAYLOAD     4096
-int hibus_read_packet_data (hibus_conn* conn, void* data_buf, unsigned int *data_len);
-void* hibus_read_packet_data_alloc (hibus_conn* conn, unsigned int *data_len);
+int hibus_read_packet (hibus_conn* conn, void* packet_buf, unsigned int *packet_len);
+void* hibus_read_packet_alloc (hibus_conn* conn, unsigned int *packet_len);
 
-int hibus_send_text (hibus_conn* conn, const char* text, unsigned int txt_len);
+int hibus_send_text_packet (hibus_conn* conn, const char* text, unsigned int txt_len);
 ```
 
-每个数据包中数据的大小被限定为 4096 字节，因此，这些函数将自动处理数据包的分片发送或者读取。也会自动处理乒乓心跳数据包。
+和 Web Socket 类似，在数据包长度超过 1024 字节时，通过 Unix Socket 发出的数据包也会被分成较小的数据帧（frame）来传输。每个数据帧的大小被限定为 1024 字节，这些函数将自动处理数据包的分片发送或者读取。也会自动处理乒乓心跳数据帧。
 
 注意，通常客户端不需要直接调用这几个底层的读写数据包函数。这些函数供 Python、JavaScript 等编程语言实现本地绑定功能时使用。另外，这些函数全部使用阻塞读写模式，故而在调用这些函数，尤其是读取函数之前，应通过 `select` 系统调用判断对应的文件描述符上是否存在相应的可读取数据。
 
@@ -830,10 +831,10 @@ char* hibus_get_runner_name_alloc (const char* endpoint);
 行者可使用如下辅助函数来组装一个端点名称：
 
 ```c
-int hibus_assembly_endpoint (const char* host_name, const char* app_name,
+int hibus_assemble_endpoint (const char* host_name, const char* app_name,
         const char* runner_name, char* buff);
 
-char* hibus_assembly_endpoint_alloc (const char* host_name, const char* app_name,
+char* hibus_assemble_endpoint_alloc (const char* host_name, const char* app_name,
         const char* runner_name);
 ```
 
