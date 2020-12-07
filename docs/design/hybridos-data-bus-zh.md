@@ -794,7 +794,7 @@ int hibus_conn_socket_type (hibus_conn* conn);
 
 #### 数据包读写函数
 
-客户端可直接使用如下函数读取数据包中的数据：
+客户端可直接使用如下函数读取一个数据包：
 
 ```c
 #define MAX_LEN_PAYLOAD     4096
