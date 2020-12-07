@@ -27,6 +27,9 @@
       * [列出已注册事件](#列出已注册事件)
       * [列出事件的订阅者](#列出事件的订阅者)
       * [回声](#回声)
+   + [hiBus 内置事件](#hibus-内置事件)
+      * [新行者事件](#新行者事件)
+      * [行者断开事件](#行者断开事件)
 - [架构及关键模块](#架构及关键模块)
    + [架构及服务器模块构成](#架构及服务器模块构成)
    + [命令行](#命令行)
@@ -719,23 +722,6 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 - `totalEndpoints` 是整数，表示当前端点数量。
 
 注意：`bubbleData` 将以 JSON 字符串的形式传递，避免在服务器端做额外的解析。
-
-#### 行者断开事件
-
-当一个行者主动断开连接时，产生 `endpointDisconnected` 事件：
-
-```json
-{
-    "packetType": "event",
-    "eventId": "<hased_event_identifier>",
-    "bubbleName": "newEndpoint",
-    "bubbleData": {
-        "endpointName": "<the_endpoint_name>",
-        "endpointType": "[web | unix]",
-        "totalEndpoints": <the_number_of_total_endpoints>
-    }
-}
-```
 
 ## 架构及关键模块
 
