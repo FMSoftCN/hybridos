@@ -75,9 +75,9 @@
 
 hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递数据。但相比 uBus，hiBus 具有如下重要的改进：
 
-1. 提供两种类型的底层连接通道：本地的 Unix Domain Socket 和 Web Socket，以方便使用不同编程语言开发的模块都可以方便地连接到 hiBus 上。
+1. 提供两种类型的底层连接通道：本地的 Unix Domain Socket（简称 UnixSocket）和 WebSocket，以方便使用不同编程语言开发的模块都可以方便地连接到 hiBus 上。
 1. 提供基本的安全机制，以决定某个应用或者某个远程节点能否订阅（subscribe）特定的事件，以及能否调用（call）某个特定的过程（procedure）。
-1. 考虑到在未来，hiBus 可通过 Web Socket 向局域网中的其他 IoT 设备节点提供服务。因此，需要在事件订阅以及调用远程过程时包含主机名称信息。
+1. 考虑到在未来，hiBus 可通过 WebSocket 向局域网中的其他 IoT 设备节点提供服务。因此，需要在事件订阅以及调用远程过程时包含主机名称信息。
 1. 重新设计的通讯协议，可避免出现同一应用扮演不同角色时出现死锁情形。
 
 术语：
@@ -111,7 +111,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
                     | hiBus Server |
                      --------------
                             |
-                            | Unix Domain Socket connection
+                            | UnixSocket connection
                             |
              ------------------------------
             |   C/C++-based control runner |
@@ -148,19 +148,19 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 ### 套接字接口
 
-1. Unix Doman Socket 端口：
+1. UnixSocket 端口：
    - `/var/run/hibus.sock`：通讯端口，用于过程调用、发送和接收事件。
-1. Web Socket 端口（HybridOS 保留 7000 ~ 7999 端口）：
+1. WebSocket 端口（HybridOS 保留 7000 ~ 7999 端口）：
    - `7700`：通讯端口，用于过程调用、发送和接收事件。
    - `7701`：保留；或可用于中继功能。
 
-理论上，当 hiBus 服务器运行在 Web Socket 端口且绑定到非本机回环（loopback）地址上时，有能力为其他设备节点提供事件及过程调用服务。
+理论上，当 hiBus 服务器运行在 WebSocket 端口且绑定到非本机回环（loopback）地址上时，有能力为其他设备节点提供事件及过程调用服务。
 
 ### 协议
 
 #### 连接
 
-当客户端通过 Web Socket 连接到服务器时，Web Socket 规范规定了初始的连接处理。但通过 Unix Domain Socket 连接时，服务器可能在达到资源上限或者其他错误情形下拒绝客户端的连接请求，此时，服务器向客户端发送如下数据包，然后断开连接：
+当客户端通过 WebSocket 连接到服务器时，WebSocket 规范规定了初始的连接处理。但通过 UnixSocket 连接时，服务器可能在达到资源上限或者其他错误情形下拒绝客户端的连接请求，此时，服务器向客户端发送如下数据包，然后断开连接：
 
 ```json
 {
@@ -189,10 +189,10 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 客户端的身份信息主要包括主机名称、应用名称、行者名称，以及用于证明应用名称正确性的验证信息。
 
-当前版本，Unix Domain Socket 和 Web Socket 均运行在本机上，不对外提供服务，因此，主机名称的确定策略非常简单：
+当前版本，UnixSocket 和 WebSocket 均运行在本机上，不对外提供服务，因此，主机名称的确定策略非常简单：
 
-1. 当使用 Unix Domain Socket 端口连接服务器时，主机名称将被始终确定为 `localhost`。
-1. 当使用 Web Socket 端口连接服务器时，客户端的主机名称按如下规则确定：
+1. 当使用 UnixSocket 端口连接服务器时，主机名称将被始终确定为 `localhost`。
+1. 当使用 WebSocket 端口连接服务器时，客户端的主机名称按如下规则确定：
    - IPv4 的回环地址（`127.0.0.1`，或 `127.0.0.0` 到 `127.255.255.255`），均被映射为 `localhost`。
    - IPv6 的回环地址（`0:0:0:0:0:0:0:1`，或 `::1`），被映射为 `localhost`。
    - 对其他 IP 地址，由客户端在进行身份验证时指定；在发生冲突的情况下，服务器添加后缀名（编号）后返回给客户端。未来，应通过名称服务完成反向解析。
@@ -448,7 +448,7 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 
 #### 乒乓心跳
 
-一般而言，在套接字连接上使用乒乓心跳可以有效检测连接的意外丢失。Web Socket 规范规定了心跳的处理机制，和 Web Socket 类似，在 Unix Socket 的连接中，服务器和客户端之间，也将通过类似 Web Socket 的机制来处理乒乓心跳。这种处理由底层的通讯协议进行，上层无须关系。
+一般而言，在套接字连接上使用乒乓心跳可以有效检测连接的意外丢失。WebSocket 规范规定了心跳的处理机制，和 WebSocket 类似，在 UnixSocket 的连接中，服务器和客户端之间，也将通过类似 WebSocket 的机制来处理乒乓心跳。这种处理由底层的通讯协议进行，上层无须关系。
 
 ### hiBus 内置过程
 
@@ -664,6 +664,79 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 }
 ```
 
+### hiBus 内置事件
+
+hiBus 服务器通过 `builtin` 行者产生内置事件。
+
+#### 新行者事件
+
+当一个新的行者成功连入 hibus 服务器时，产生 `newEndpoint` 事件：
+
+```json
+{
+    "packetType": "event",
+    "eventId": "<hased_event_identifier>",
+    "bubbleName": "newEndpoint",
+    "bubbleData": {
+        "endpointType": [ "web" | "unix" ],
+        "endpointName": "<the_endpoint_name>",
+        "peerInfo": [ <PID_if_type_is_unix> | "IP_address_if_type_is_web"],
+        "totalEndpoints": <the_number_of_total_endpoints>
+    }
+}
+```
+
+其中：
+- `endpointType` 取 `web` 或者 `unix`，对应于 WebSocket 连接或者 UnixSocket 连接。
+- `endpointName` 是包含主机名、应用名以及行者名的端点名称。
+- `peerInfo` 是行者信息；对 WebSocket 连接，为 IP 地址（字符串）；对 UnixSocket 连接，为 PID（整数）。
+- `totalEndpoints` 是整数，表示当前端点数量。
+
+注意：`bubbleData` 将以 JSON 字符串的形式传递，避免在服务器端做额外的解析。
+
+#### 行者断开事件
+
+当一个行者因为丢失连接或者长时间无响应而移除时，产生 `brokenEndpoint` 事件：
+
+```json
+{
+    "packetType": "event",
+    "eventId": "<hased_event_identifier>",
+    "bubbleName": "brokenEndpoint",
+    "bubbleData": {
+        "endpointType": [ "web" | "unix" ],
+        "endpointName": "<the_endpoint_name>",
+        "brokenReason:" [ "lostConnection" | "notResponding" ],
+        "totalEndpoints": <the_number_of_total_endpoints>
+    }
+}
+```
+
+其中：
+- `endpointType` 取 `web` 或者 `unix`，对应于 WebSocket 连接或者 UnixSocket 连接。
+- `endpointName` 是包含主机名、应用名以及行者名的端点名称。
+- `borkenReason` 是行者的断开原因，取 `lostConnection` 和 `notResponding` 两个值之一。
+- `totalEndpoints` 是整数，表示当前端点数量。
+
+注意：`bubbleData` 将以 JSON 字符串的形式传递，避免在服务器端做额外的解析。
+
+#### 行者断开事件
+
+当一个行者主动断开连接时，产生 `endpointDisconnected` 事件：
+
+```json
+{
+    "packetType": "event",
+    "eventId": "<hased_event_identifier>",
+    "bubbleName": "newEndpoint",
+    "bubbleData": {
+        "endpointName": "<the_endpoint_name>",
+        "endpointType": "[web | unix]",
+        "totalEndpoints": <the_number_of_total_endpoints>
+    }
+}
+```
+
 ## 架构及关键模块
 
 hiBus 服务器使用 C/C++ 语言开发，由服务器程序、命令行程序和供客户端使用的函数库（以及头文件）三部分组成。
@@ -687,7 +760,7 @@ hiBus 服务器使用 C/C++ 语言开发，由服务器程序、命令行程序�
                                    | WebSocket connection
                                    |
  --------------------------------------------------------------------
-|                    Web Socket Connection Manager                   |
+|                    WebSocket Connection Manager                    |
  --------------------------------------------------------------------
 |                     Connection/Endpoint Manager                    |
  --------------------------------------------------------------------
@@ -702,10 +775,10 @@ hiBus 服务器使用 C/C++ 语言开发，由服务器程序、命令行程序�
 |   ------------------------------------------------------------     |
 |   |       JSON Processing        |    Security Processing     |    |          
  --------------------------------------------------------------------
-|                 Unix Domain Socket Connection Manager              |
+|                     UnixSocket Connection Manager                  |
  --------------------------------------------------------------------
                                    |
-                                   | Unix Domain Socket connection
+                                   | UnixSocket connection
                                    |
          -----------------------------------------------------------
          |                              |                           |
@@ -718,13 +791,13 @@ hiBus 服务器使用 C/C++ 语言开发，由服务器程序、命令行程序�
     --------------------       --------------------
 ```
 
-如上图所示，App 通过 Web Socket 或者 Unix Domain Socket 连接到 hiBus 服务器，每个应用可包含若干行者，可用于过程处理，产生事件，或者处理事件，发起过程调用。
+如上图所示，App 通过 WebSocket 或者 UnixSocket 连接到 hiBus 服务器，每个应用可包含若干行者，可用于过程处理，产生事件，或者处理事件，发起过程调用。
 
 其中，hiBus 命令行（command line）作为 `cn.fmsoft.hybridos.hibus` 应用的外挂行者实现，可用于系统管理员查看或者开发者调试使用。
 
 hiBus 服务器主要包含如下软件模块：
 
-- Web Socket/Unix Domain Socket 连接管理器：该模块用于监听套接字端口，接受连接请求，检测连接是否已断开等。
+- WebSocket/UnixSocket 连接管理器：该模块用于监听套接字端口，接受连接请求，检测连接是否已断开等。
 - 连接/端点管理器（Connection/Endpoint Manager）：该模块验证应用身份，记录连接和端点的映射关系。
 - 已注册事件管理器（Registered Event Manager）：该模块处理事件的注册及撤销请求，维护已注册事件列表。
 - 已注册过程管理器（Registered Procedure Manager）：该模块处理过程的注册及撤销请求，维护已注册过程列表。
@@ -771,7 +844,7 @@ int hibus_connect_via_web_socket (const char* host_name, int port,
         const char* app_name, const char* runner_name, hibus_conn** conn);
 ```
 
-上面的两个函数，分别使用 Unix Domain Socket 或者 Web Socket 连接到 hiBus 服务器上。函数的返回值为套接字文件描述符（fd）。`fd >= 0` 时表明连接成功，此时会通过 `conn` 参数返回一个匿名的 `hibus_conn` 结构指针。`fd < 0` 时表明连接失败，其绝对值标识错误编码。
+上面的两个函数，分别使用 UnixSocket 或者 WebSocket 连接到 hiBus 服务器上。函数的返回值为套接字文件描述符（fd）。`fd >= 0` 时表明连接成功，此时会通过 `conn` 参数返回一个匿名的 `hibus_conn` 结构指针。`fd < 0` 时表明连接失败，其绝对值标识错误编码。
 
 若连接成功，其后所有的接口均使用通过 `conn` 返回的结构指针来标识该连接。
 
@@ -804,7 +877,7 @@ void* hibus_read_packet_alloc (hibus_conn* conn, unsigned int *packet_len);
 int hibus_send_text_packet (hibus_conn* conn, const char* text, unsigned int txt_len);
 ```
 
-和 Web Socket 类似，在数据包长度超过 1024 字节时，通过 Unix Socket 发出的数据包也会被分成较小的数据帧（frame）来传输。每个数据帧的大小被限定为 1024 字节，这些函数将自动处理数据包的分片发送或者读取。也会自动处理乒乓心跳数据帧。
+和 WebSocket 类似，在数据包长度超过 1024 字节时，通过 UnixSocket 发出的数据包也会被分成较小的数据帧（frame）来传输。每个数据帧的大小被限定为 1024 字节，这些函数将自动处理数据包的分片发送或者读取。也会自动处理乒乓心跳数据帧。
 
 注意，通常客户端不需要直接调用这几个底层的读写数据包函数。这些函数供 Python、JavaScript 等编程语言实现本地绑定功能时使用。另外，这些函数全部使用阻塞读写模式，故而在调用这些函数，尤其是读取函数之前，应通过 `select` 系统调用判断对应的文件描述符上是否存在相应的可读取数据。
 
@@ -957,6 +1030,6 @@ int hibus_wait_for_packet (hibus_conn* conn, struct timeval *timeout);
 
 跨设备（主机）连接有两种思路：
 
-1. hiBus 服务器使用 Web Socket 在非回环地址上监听连接请求，另一个主机上的应用通过 Web Socket 直接连接到该服务器。问题：如何对另一台主机上的应用进行身份验证？
-1. 在不同的 hiBus 服务器实例之间建立中继服务，所有针对另一个主机上的请求，由 hiBus 服务器之间通过中继完成，从而实现跨主机的远程过程调用或者事件订阅。此种设计下，身份验证只在 hiBus 服务器之间进行，各主机上的应用身份验证，由本机处理。这样的话，本机 Web Socket 的事件和过程调用端口均只在本地回环地址上提供服务。比如，当过程调用的目标主机非本机时，hiBus 服务器可将该请求转发给目标主机所在的 hiBus 服务器，然后将结果转发给调用者。
+1. hiBus 服务器使用 WebSocket 在非回环地址上监听连接请求，另一个主机上的应用通过 WebSocket 直接连接到该服务器。问题：如何对另一台主机上的应用进行身份验证？
+1. 在不同的 hiBus 服务器实例之间建立中继服务，所有针对另一个主机上的请求，由 hiBus 服务器之间通过中继完成，从而实现跨主机的远程过程调用或者事件订阅。此种设计下，身份验证只在 hiBus 服务器之间进行，各主机上的应用身份验证，由本机处理。这样的话，本机 WebSocket 的事件和过程调用端口均只在本地回环地址上提供服务。比如，当过程调用的目标主机非本机时，hiBus 服务器可将该请求转发给目标主机所在的 hiBus 服务器，然后将结果转发给调用者。
 
