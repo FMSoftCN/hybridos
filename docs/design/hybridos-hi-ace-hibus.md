@@ -111,18 +111,19 @@ unsubscribeEvent(app, runner, event);
 向hiBus发送异步远程过程调用请求
 
 ```
-callProcedure(endpoint, method, param, timeout, func);
+callProcedure(endpoint, method, param, func);
 参数：
     endpoint：远程调用的endpoint名；
     method：method_name；
-    param：远程过程参数（Json格式）；
-    timeout：超时时间，单位毫秒；
+    param：远程过程参数（Json格式），null表示该过程无需参数；
     func：远程调用的回调函数，有形如下结构：
         {
             type:sync,                  // 请求类型：同步、异步
+            timeout: MsTimeout,         // 超时时间，单位毫秒。如果是0，表示异步请求，忽略type的值；
             success: funcSuccess,       // 回调成功后执行的回调函数
             error: funcError,           // 回调失败后执行的回调函数
         }
+          如果为null，则表示该过程调用忽略timeout参数，是个异步过程。从hiBus获得返回值后，不做任何处理。
 返回值：
     无。
 ```
