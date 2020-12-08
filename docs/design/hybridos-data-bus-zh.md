@@ -351,7 +351,7 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
 
 通常，当 `retCode` 为 202 时，调用方应根据 `resultId` 来监视后续从服务器返回的数据包，从而获得最终的执行状态或结果。
 
-注意，过程处理器返回给服务器的结果数据包格式，和上述数据包类似，但缺少 `fromHost`、`fromApp` 以及 `timeDiff` 等字段，但包含 `timeConsumed` 字段，表示过程处理器执行该调用消耗的时间。
+注意，过程处理器返回给服务器的结果数据包格式，和上述数据包类似，但缺少 `fromEndpoint` 以及 `timeDiff` 等字段，但包含 `timeConsumed` 字段，表示过程处理器执行该调用消耗的时间。
 
 ```json
 {
@@ -431,10 +431,8 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
     "packetType": "event",
     "eventId": "<hased_event_identifier>",
     "timeDiff": 0.1234,
-    "fromHost": "<host_name>",
-    "fromApp": "<app_name>",
-    "fromRunner": "<runner_name>",
-    "bubbleName": "<bubble_name>",
+    "fromEndpoint": "@<host_name>/<app_name>/<runner_name>",
+    "fromBubble": "<bubble_name>",
     "bubbleData": {
         ...
     }
@@ -445,10 +443,8 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 - `packetType` 表示数据包类型，这里用 `event`，表示这是一个事件。
 - `eventId` 是事件发生器为每个事件分配的一个全局唯一字符串。
 - `timeDiff` 表示服务器收到该事件到转发该事件的时间差；单位秒，浮点数。
-- `fromHost` 表示发生该事件的主机名称。
-- `fromApp` 表示发生该事件的应用名称。
-- `fromRunner` 表示发生该事件的行者名称。
-- `bubbleName` 是事件泡泡名称。
+- `fromEndpoint` 表示发生该事件的端点名称，包括主机名称、应用名称和行者名称。
+- `fromBubble` 是事件的泡泡名称。
 - `bubbleData` 包含真正的事件泡泡数据。
 
 #### 乒乓心跳
@@ -476,7 +472,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 {
     "packetType": "call",
     "callId": "<hased_call_identifier>",
-    "procedure": "@localhost/cn.fmsoft.hybridos.hibus/builtin/registerProcedure",
+    "toEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+    "toMethod": "registerProcedure",
     "expectedTime": 30000,
     "authenInfo": null,
     "parameter": "{ \"methodName\": \"foo\", \"forHost\": \"localhost\", \"forApp\": \"*\" }"
@@ -490,9 +487,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "packetType": "result",
     "resultId": "<hased_result_identifier>",
     "callId": "<hased_call_identifier>",
-    "fromHost": "localhost",
-    "fromApp": "cn.fmsoft.hybridos.hibus",
-    "fromRunner": "builtin",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+    "fromMethod": "registerProcedure",
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
@@ -566,16 +562,15 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "packetType": "result",
     "resultId": "<hased_result_identifier>",
     "callId": "<hased_call_identifier>",
-    "fromHost": "localhost",
-    "fromApp": "cn.fmsoft.hybridos.hibus",
-    "fromRunner": "builtin",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+    "fromMethod": "listProcedures",
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
     "retMsg": "Ok",
     "retValue": [
-        "localhost/cn.fmsoft.hybridos.networkManager/getHotSpots",
-        "localhost/cn.fmsoft.hybridos.networkManager/connectToHotSpot",
+        "localhost/cn.fmsoft.hybridos.inetd/getHotSpots",
+        "localhost/cn.fmsoft.hybridos.inetd/connectToHotSpot",
     ],
 }
 ```
@@ -594,16 +589,15 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "packetType": "result",
     "resultId": "<hased_result_identifier>",
     "callId": "<hased_call_identifier>",
-    "fromHost": "localhost",
-    "fromApp": "cn.fmsoft.hybridos.hibus",
-    "fromRunner": "builtin",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+    "fromMethod": "listEvents",
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
     "retMsg": "Ok",
     "retValue": [
-        "@localhost/cn.fmsoft.hybridos.networkManager/NETWORKCHANGED",
-        "@localhost/cn.fmsoft.hybridos.networkManager/SIGNALCHANGED",
+        "@localhost/cn.fmsoft.hybridos.inetd/NETWORKCHANGED",
+        "@localhost/cn.fmsoft.hybridos.inetd/SIGNALCHANGED",
     ],
 }
 ```
@@ -626,9 +620,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "packetType": "result",
     "resultId": "<hased_result_identifier>",
     "callId": "<hased_call_identifier>",
-    "fromHost": "localhost",
-    "fromApp": "cn.fmsoft.hybridos.hibus",
-    "fromRunner": "builtin",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+    "fromMethod": "listEventSubscribers",
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
@@ -658,9 +651,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "packetType": "result",
     "resultId": "<hased_result_identifier>",
     "callId": "<hased_call_identifier>",
-    "fromHost": "localhost",
-    "fromApp": "cn.fmsoft.hybridos.hibus",
-    "fromRunner": "builtin",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+    "fromMethod": "echo",
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
@@ -681,7 +673,8 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 {
     "packetType": "event",
     "eventId": "<hased_event_identifier>",
-    "bubbleName": "newEndpoint",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+    "fromBubble": "newEndpoint",
     "bubbleData": {
         "endpointType": [ "web" | "unix" ],
         "endpointName": "<the_endpoint_name>",
@@ -707,7 +700,8 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 {
     "packetType": "event",
     "eventId": "<hased_event_identifier>",
-    "bubbleName": "brokenEndpoint",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+    "fromBubble": "brokenEndpoint",
     "bubbleData": {
         "endpointType": [ "web" | "unix" ],
         "endpointName": "<the_endpoint_name>",
