@@ -708,7 +708,7 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
     "bubbleData": {
         "endpointType": [ "web" | "unix" ],
         "endpointName": "<the_endpoint_name>",
-        "brokenReason:" [ "lostConnection" | "notResponding" ],
+        "brokenReason": [ "lostConnection" | "notResponding" ],
         "totalEndpoints": <the_number_of_total_endpoints>
     }
 }
