@@ -30,6 +30,7 @@
    + [hiBus 内置事件](#hibus-内置事件)
       * [新行者事件](#新行者事件)
       * [行者断开事件](#行者断开事件)
+      * [丢失事件发生器事件](#丢失事件发生器事件)
 - [架构及关键模块](#架构及关键模块)
    + [架构及服务器模块构成](#架构及服务器模块构成)
    + [命令行](#命令行)
@@ -690,7 +691,9 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 - `peerInfo` 是行者信息；对 WebSocket 连接，为 IP 地址（字符串）；对 UnixSocket 连接，为 PID（整数）。
 - `totalEndpoints` 是整数，表示当前端点数量。
 
-注意：`bubbleData` 将以 JSON 字符串的形式传递，避免在服务器端做额外的解析。
+注意：
+- `bubbleData` 将以 JSON 字符串的形式传递，避免在服务器端做额外的解析。
+- 该事件仅允许本机中的 `cn.fmsoft.hybridos.*` 应用订阅。
 
 #### 行者断开事件
 
@@ -717,7 +720,31 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 - `borkenReason` 是行者的断开原因，取 `lostConnection` 和 `notResponding` 两个值之一。
 - `totalEndpoints` 是整数，表示当前端点数量。
 
-注意：`bubbleData` 将以 JSON 字符串的形式传递，避免在服务器端做额外的解析。
+注意：
+- `bubbleData` 将以 JSON 字符串的形式传递，避免在服务器端做额外的解析。
+- 该事件仅允许本机中的 `cn.fmsoft.hybridos.*` 应用订阅。
+
+#### 丢失事件发生器事件
+
+当某个行者订阅了某个事件，但产生该事件的行者意外断开时，将向订阅者发送 `lostEventGenerator` 事件：
+
+```json
+{
+    "packetType": "event",
+    "eventId": "<hased_event_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+    "fromBubble": "lostEventGenerator",
+    "bubbleData": {
+        "endpointName": "<the_endpoint_name>",
+        "bubbleName:" "<the_bubble_name>",
+    }
+}
+```
+
+其中：
+- `endpointName` 是包含主机名、应用名以及行者名的端点名称。
+- `bubbleName` 泡泡名称。
+
 
 ## 架构及关键模块
 
