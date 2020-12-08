@@ -281,7 +281,8 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 {
     "packetType": "call",
     "callId": "<hased_call_identifier>",
-    "procedure": "@<host_name>/<app_name>/<runner_name>/<method_name>",
+    "toEndpoint": "@<host_name>/<app_name>/<runner_name>",
+    "toMethod": "<method_name>",
     "expectedTime": 30000,
     "authenInfo": {
         ...
@@ -293,7 +294,8 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 其中，
 - `packetType` 表示数据包类型，这里用 `call`，表示过程调用。
 - `callId` 是调用方提供的一个唯一性字符串，用于在调用方标识特定的调用请求。
-- `procedure` 是过程名称，包括主机名、应用名称、行者名称和方法名称。
+- `toEndpoint` 是目标端点名称，包括主机名、应用名称、行者名称。
+- `toMethod` 是要调用的方法名称。
 - `expectedTime` 是期望的执行时间，毫秒为单位，为 0 表示不限（内部上限可在运行时配置，一般取 30s）。
 - `authenInfo` 是可选的用户身份验证信息（如果该过程需要额外的用户身份验证的话）。当前版本暂不考虑。
 - `parameter` 是该过程的执行参数。注意，执行参数以及返回值使用 JSON 表达，但转为字符串传递。由方法处理器和调用者负责解析。
@@ -307,9 +309,8 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
     "packetType": "result",
     "resultId": "<hased_result_identifier>",
     "callId": "<hased_call_identifier>",
-    "fromHost": "<host_name_processed_this_call>",
-    "fromApp": "<app_name_processed_this_call>",
-    "fromRunner": "<runner_name_processed_this_call>",
+    "fromEndpoint": "@<host_name>/<app_name>/<runner_name>",
+    "fromMethod": "<method_name>"
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
@@ -322,9 +323,8 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
 - `packetType` 表示数据包类型，这里用 `result`，表示过程调用结果。
 - `resultId` 是 hiBus 服务器为每个过程调用分配的一个全局唯一字符串，用于跟踪特定的调用。
 - `callId` 是调用方发起过程调用时提供的标识符。
-- `fromHost` 表示处理该调用的主机名称。
-- `fromApp` 表示处理该调用的应用名称。
-- `fromModdule` 表示处理该调用的行者名称。
+- `fromEndpoint` 表示处理该调用端点名称，包括主机名称、应用名称及行者名称。
+- `fromMethod` 表示处理该调用的方法名称。
 - `timeConsumed` 是方法处理器实际消耗的事件；单位秒，浮点数。
 - `timeDiff` 是自收到原始请求到返回该结果的时间差；单位秒，浮点数。
 - `retCode` 取 HTTP 状态码子集，可取如下值：
@@ -384,8 +384,9 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
     "packetType": "call",
     "resultId": "<hased_result_identifier>",
     "callId": "<hased_call_identifier>",
+    "fromEndpoint": "@<host_name>/<app_name>/<runner_name>",
+    "toMethod": "<method_name>",
     "timeDiff": 0.5432,
-    "methodName": "<method_name>",
     "authenInfo": {
         ...
     },
