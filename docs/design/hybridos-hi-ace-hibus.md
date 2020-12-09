@@ -6,7 +6,7 @@
 
 - [hiACEJS中hiBus软件结构](#hiacejs中hibus软件结构)
 - [hiBus Interface](#hibus-interface)
-   + [HiBusCommunicate类](#hibuscommunicate类)
+   + [HiBus类](#hibus类)
    + [代码举例](#代码举例)
 - [hiBus connection](#hibus-connection)
 
@@ -37,26 +37,26 @@
 
 - hiBus Interface，该代码为公共代码，为每个页面调用。为用户JS代码提供接口，包括：
   - 建立到hiBus 总线的连接；
-  - 做为事件订阅者，向hiBus 总线订阅事件，并设置事件处理的回调函数；
+  - 做为事件订阅者，向hiBus 总线订阅事件，并设置事件处理的回调方法；
   - 作为过程调用者，向hiBus 总线发送过程调用请求；
-  - 读hiBus总线数据，解析并调用可能的事件处理函数，以及过程调用函数。
+  - 读hiBus总线数据，解析并调用可能的事件处理方法，以及过程调用方法。
 - hiBus connection，是对JS引擎的扩展，为JS提供了到hiBus的连接与读写的具体实现。该部分不参与任何业务处理。只处理raw data。
 
 
 
 ## hiBus Interface
 
-### HiBusCommunicate类
+### HiBus类
 
-hiBus Interface由HiBusCommunicate对象实现。HiBusCommunicate类如下：
+hiBus Interface由HiBus对象实现。HiBus类如下：
 
 ```
-class HiBusCommunicate {
+class HiBus {
     var hiBusConnection;    // hiBus object for connection to hiBus
     var appName;            // app name
     var runnerName;         // runner name
     
-    constructor(app, runner) { ...... }                 // constructor 
+    constructor(app, runner, pathSocket) { ...... }     // constructor 
     subscribeEvent(app, runner, event, func) { ...... } // subscribe event to hiBus
     unsubscribeEvent(app, runner, event) { ...... }     // unsubscribe event to hiBus
     callProcedure(endpoint, method, param, timeout, func) { ...... }        // call a remote procedure, synchronously
@@ -66,13 +66,14 @@ class HiBusCommunicate {
 
 
 
-HiBusCommunicate类的构造函数，在该函数中，创建hiBusConnection对象。
+HiBus类的构造方法，在该方法中，创建hiBusConnection对象。
 
 ```
-constructor(app, runner) ;
+constructor(app, runner, pathSocket) ;
 参数：
     app：应用名称；
     runner：行者名称；
+    pathSocket：domain socket路径；
 返回值：
     无。如果hiBus连接成功，则hiBusConnection为hiBus对象，否则hiBusConnection为undefined。
 ```
@@ -87,7 +88,7 @@ subscribeEvent(app, runner, event, func);
     app：产生事件的endpoint应用名；
     runner：产生事件的endpoint行者名；
     event：订阅事件的事件名；
-    func：订阅事件的回调函数；
+    func：订阅事件的回调方法，该方法由用户提供，参数为一个Json对象；
 返回值：
     无。
 ```
@@ -111,19 +112,19 @@ unsubscribeEvent(app, runner, event);
 向hiBus发送异步远程过程调用请求
 
 ```
-callProcedure(endpoint, method, param, func);
+callProcedure(endpoint, method, param, timeout, callback);
 参数：
     endpoint：远程调用的endpoint名；
-    method：method_name；
-    param：远程过程参数（Json格式），null表示该过程无需参数；
-    func：远程调用的回调函数，有形如下结构：
+    method：远程调用的方法名；
+    param：远程过程参数（Json对象），null表示该过程无需参数；
+    timeout:远程过程调用的超时值，单位毫秒。如果是0，表示异步请求，忽略callbackObj.type，立刻返回；
+    callback：用于处理远程过程调用结果的对象，有如下结构：
         {
             type:sync,                  // 请求类型：同步、异步
-            timeout: MsTimeout,         // 超时时间，单位毫秒。如果是0，表示异步请求，忽略type的值；
-            success: funcSuccess,       // 回调成功后执行的回调函数
-            error: funcError,           // 回调失败后执行的回调函数
+            success: funcSuccess,       // 回调成功后执行的回调方法，该方法由用户提供，参数为Json对象；
+            error: funcError,           // 回调失败后执行的回调方法，该方法由用户提供，参数为请求的返回值；
         }
-          如果为null，则表示该过程调用忽略timeout参数，是个异步过程。从hiBus获得返回值后，不做任何处理。
+          如果该值为null，则表示该过程调用是个异步过程，且不关心返回值。即使从hiBus获得过程调用的返回值后，也不做任何处理。
 返回值：
     无。
 ```
@@ -133,35 +134,44 @@ callProcedure(endpoint, method, param, func);
 hiBus读入数据处理
 
 ```
-checkPackets();
+checkPackets(timeout);
 参数：
-	无
+	timeout:读hiBus超时，如果是0，则读端口后立刻返回。
 返回值：
 	无
 ```
 
 
 
-用户回调函数，都具有如下的形式：
+除了远程过程调用的错误回调方法外，用户提供的回调方法都具有如下的形式：
 
 ```
-callbackFunction(msgData)	{ ........ }
+callbackFunction(dataJson)	{ ........ }
 ```
 
-参数msgData为一个Json对象。对其的解析由用户回调函数完成，解析内容参见hiBus通信协议。
+参数dataJson为一个Json对象。对其的解析由用户回调方法完成，解析内容参见hiBus通信协议。
+
+远程过程调用的错误回调方法，有如下形式：
+
+```
+funcError(retCode)	{ ........ }
+```
+
+参数retCode为一个整数型返回值。
+
 
 ### 代码举例
 
 用户在JS代码中，使用该接口，有类似如下代码：
 
 ```
-// 创建HiBusCommunicate对象
-var hiBus = new HiBusCommunicate("appagent", "setting");
+// 创建HiBus对象
+var hiBus = new HiBus("cn.fmsoft.hybridos.appagent", "target0");
 
-// 订阅电池监控应用的“batteryquantity”消息
-hiBus.subscribeEvent("batterymanager", "batterychecker", "batteryquantity", display(msgData) { ...... });
+// 订阅浏览器第一个窗口中，URL发生变化的消息
+hiBus.subscribeEvent("cn.fmsoft.hybridos.appagent", "target0", "URLCHANGE", display(msgData) { ...... });
 
-// 读取hiBus总线，解析数据，如果“batteryquantity”消息存在，则执行display(msgData) {}
+// 读取hiBus总线，解析数据，如果收到"URLCHANGE"消息，则执行display(msgData) {}
 hiBus.checkPackets();
 ```
 
@@ -173,9 +183,9 @@ hiBus connection是对JS引擎的扩展，为JS提供了到hiBus的连接与读�
 
 该部分不参与任何业务处理。换句话说，该部分代码读写接口，只处理raw data，不负责任何打包和解析。
 
-该部分代码为JS函数对象的c实现。因此返回值的理解不是c或者c++代码，需要以JS函数来理解。
+该部分代码为JS方法对象的c实现。因此返回值的理解不是c或者c++代码，需要以JS方法来理解。
 
-hiBusConnection类包含三个JS函数的实现，说明如下：
+hiBusConnection类包含三个JS方法的实现，说明如下：
 
 
 
