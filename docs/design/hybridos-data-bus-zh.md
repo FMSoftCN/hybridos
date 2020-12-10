@@ -697,7 +697,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/listEventSubscribers`
 - 参数：
-   + `eventName`：事件名称，含完整的主机名、应用名、行者名以及泡泡名。
+   + `endpointName`：事件所属的行者名称，含主机名、应用名以及行者名。
+   + `bubbleName`：要订阅的泡泡名。
 - 返回值：成功时返回指定事件的订阅者的主机名及应用名清单。
 - 常见错误状态码：
    + `404`：表示未找到指定的事件。
@@ -728,7 +729,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 #### 回声
 
-该过程主要用于测试
+该过程主要用于测试。
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/echo`
 - 参数：
@@ -835,9 +836,11 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 其中 `bubbleData` 中的各参数说明如下：
 - `endpointName` 是包含主机名、应用名以及行者名的端点名称。
 
+注：不可订阅。
+
 #### 撤销泡泡事件
 
-当某个行者订阅了某个事件，但产生事件发生器取消该事件时，将向订阅者发送 `LOSTBUBBLE` 事件：
+当某个行者订阅了某个事件，但事件发生器撤销该事件时，将向订阅者发送 `LOSTBUBBLE` 事件：
 
 ```json
 {
@@ -855,6 +858,8 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 其中 `bubbleData` 中的各参数说明如下：
 - `endpointName` 是包含主机名、应用名以及行者名的端点名称。
 - `bubbleName` 泡泡名称。
+
+注：不可订阅。
 
 ## 架构及关键模块
 
