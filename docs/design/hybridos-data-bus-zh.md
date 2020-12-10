@@ -31,6 +31,7 @@
       * [新行者事件](#新行者事件)
       * [行者断开事件](#行者断开事件)
       * [丢失事件发生器事件](#丢失事件发生器事件)
+      * [撤销泡泡事件](#撤销泡泡事件)
 - [架构及关键模块](#架构及关键模块)
    + [架构及服务器模块构成](#架构及服务器模块构成)
    + [命令行](#命令行)
@@ -617,7 +618,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/subscribeEvent`
 - 参数：
-   + `event`：要订阅的完整事件名称，含主机名、应用名以及泡泡名。
+   + `endpointName`：事件所属的行者名称，含主机名、应用名以及行者名。
+   + `bubbleName`：要订阅的泡泡名。
 - 返回值：无。客户端依据结果的 `retCode` 判断是否订阅成功，可能的值有：
    + `404`：表示未找到指定的事件。
    + `403`：表示事件发生器不允许调用方订阅该事件。
@@ -627,7 +629,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/unsubscribeEvent`
 - 参数：
-   + `event`：要取消订阅的完整事件名称，含主机名、应用名以及泡泡名。
+   + `endpointName`：事件所属的行者名称，含主机名、应用名以及行者名。
+   + `bubbleName`：要订阅的泡泡名。
 - 返回值：无。客户端依据结果的 `retCode` 判断是否取消成功，可能的值有：
    + `404`：表示调用方未订阅指定的事件；或者该事件已经被撤销。
    + `200`：表示成功。
@@ -659,6 +662,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 }
 ```
 
+注意：`retValue` 始终为 JSON 格式的字符串。
+
 #### 列出已注册事件
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/listEvents`
@@ -685,6 +690,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     ],
 }
 ```
+
+注意：`retValue` 始终为 JSON 格式的字符串。
 
 #### 列出事件的订阅者
 
@@ -716,6 +723,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     ],
 }
 ```
+
+注意：`retValue` 始终为 JSON 格式的字符串。
 
 #### 回声
 
@@ -751,14 +760,14 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 
 #### 新行者事件
 
-当一个新的行者成功连入 hibus 服务器时，产生 `newEndpoint` 事件：
+当一个新的行者成功连入 hibus 服务器时，产生 `NEWENDPOINT` 事件：
 
 ```json
 {
     "packetType": "event",
     "eventId": "<unique_event_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
-    "fromBubble": "newEndpoint",
+    "fromBubble": "NEWENDPOINT",
     "bubbleData": {
         "endpointType": [ "web" | "unix" ],
         "endpointName": "<the_endpoint_name>",
@@ -780,14 +789,14 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 
 #### 行者断开事件
 
-当一个行者因为丢失连接或者长时间无响应而移除时，产生 `brokenEndpoint` 事件：
+当一个行者因为丢失连接或者长时间无响应而移除时，产生 `BROKENENDPOINT` 事件：
 
 ```json
 {
     "packetType": "event",
     "eventId": "<unique_event_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
-    "fromBubble": "brokenEndpoint",
+    "fromBubble": "BROKENENDPOINT",
     "bubbleData": {
         "endpointType": [ "web" | "unix" ],
         "endpointName": "<the_endpoint_name>",
@@ -809,14 +818,33 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 
 #### 丢失事件发生器事件
 
-当某个行者订阅了某个事件，但产生该事件的行者意外断开时，将向订阅者发送 `lostEventGenerator` 事件：
+当某个行者订阅了某个事件，但产生该事件的行者意外断开时，将向订阅者发送 `LOSTEVENTGENERATOR` 事件：
 
 ```json
 {
     "packetType": "event",
     "eventId": "<unique_event_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
-    "fromBubble": "lostEventGenerator",
+    "fromBubble": "LOSTEVENTGENERATOR",
+    "bubbleData": {
+        "endpointName": "<the_endpoint_name>",
+    }
+}
+```
+
+其中 `bubbleData` 中的各参数说明如下：
+- `endpointName` 是包含主机名、应用名以及行者名的端点名称。
+
+#### 撤销泡泡事件
+
+当某个行者订阅了某个事件，但产生事件发生器取消该事件时，将向订阅者发送 `LOSTBUBBLE` 事件：
+
+```json
+{
+    "packetType": "event",
+    "eventId": "<unique_event_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+    "fromBubble": "LOSTBUBBLE",
     "bubbleData": {
         "endpointName": "<the_endpoint_name>",
         "bubbleName:" "<the_bubble_name>",
@@ -824,10 +852,9 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 }
 ```
 
-其中：
+其中 `bubbleData` 中的各参数说明如下：
 - `endpointName` 是包含主机名、应用名以及行者名的端点名称。
 - `bubbleName` 泡泡名称。
-
 
 ## 架构及关键模块
 
