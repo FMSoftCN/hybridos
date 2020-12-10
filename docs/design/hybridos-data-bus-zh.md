@@ -31,6 +31,7 @@
       * [新行者事件](#新行者事件)
       * [行者断开事件](#行者断开事件)
       * [丢失事件发生器事件](#丢失事件发生器事件)
+      * [撤销泡泡事件](#撤销泡泡事件)
 - [架构及关键模块](#架构及关键模块)
    + [架构及服务器模块构成](#架构及服务器模块构成)
    + [命令行](#命令行)
@@ -172,6 +173,8 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "packetType": "error",
     "protocolName": "HIBUS",
     "protocolVersion": 90,
+    "causedBy": [ "event" | "call" | "result" ],
+    "causedId": "<event_id> | <call_id> | <result_id> ",
     "retCode": 503,
     "retMsg": "Service Unavailable",
     "extraMsg": "...",
@@ -181,7 +184,9 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 其中，
 - `protocolName`：包含协议名称，当前取 `HIBUS`。
 - `protocolVersion`：包含协议版本号，正整数。
-- `retCode`：包含错误码，可能的取值有（来自 HTTP 状态码）：
+- `causedBy`: 包含导致该错误的数据包类型，可取 `event`、`call`、`result` 等。该字段可选，若缺失，表示不可恢复的一般性错误，这种情况下，服务器通常会断开连接。
+- `causedId`：包含导致该错误的数据包标识符。该字段仅在 `causedBy` 字段存在时出现。
+- `retCode`：包含错误码，一般性错误时，可能的取值有（来自 HTTP 状态码）：
     + 503（Service Unavailable）：达到连接上限。
     + 503（Service Unavailable）：达到连接上限。
     + 505（Internal Server Error）：内部错误。
@@ -281,7 +286,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 ```json
 {
     "packetType": "call",
-    "callId": "<hased_call_identifier>",
+    "callId": "<unique_call_identifier>",
     "toEndpoint": "@<host_name>/<app_name>/<runner_name>",
     "toMethod": "<method_name>",
     "expectedTime": 30000,
@@ -301,6 +306,40 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 - `authenInfo` 是可选的用户身份验证信息（如果该过程需要额外的用户身份验证的话）。当前版本暂不考虑。
 - `parameter` 是该过程的执行参数。注意，执行参数以及返回值使用 JSON 表达，但转为字符串传递。由方法处理器和调用者负责解析。
 
+服务器在处理 `call` 数据包时，若遇错误，则会返回 `error` 数据包给调用者：
+
+```json
+{
+    "packetType": "error",
+    "protocolName": "HIBUS",
+    "protocolVersion": 90,
+    "causedBy": "call",
+    "causedId": "<unique_call_identifier>",
+    "retCode": 503,
+    "retMsg": "Service Unavailable",
+    "extraMsg": "...",
+}
+```
+
+其中，
+- `causedBy` 为 `call`；
+- `causedId` 为 `call` 数据包中传来的调用标识符。
+- `retCode` 的可能取值有：
+   - 400 Bad Request：表示 JSON 格式解析错误。
+   - 401 Unauthorized：表示需要验证用户身份，但未提供。
+   - 403 Forbidden：表示没有权限调用该过程。
+   - 404 Not Found：表示请求的过程无效。
+   - 405 Method Not Allowed：表示不允许调用者调用该方法。
+   - 406 Not Acceptable：表示请求参数不被接受。
+   - 409 Confilct：表示冲突；比如重复注册过程或事件时。
+   - 423 Locked：表示被锁定；比如要撤销的过程尚未结束某个执行。
+   - 500 Internal Server Error：表示服务器内部错误。
+   - 501 Not Implemented：表示未实现。
+   - 502 Bad Gateway：表示执行该调用的过程发生异常。
+   - 503 Service Unavailable：表示服务不可用。
+   - 504 Gateway Timeout：表示执行该调用的过程超时。
+   - 507 Insufficient Storage：表示遇到内存或存储不足的问题。
+
 #### 过程调用结果
 
 hiBus 服务器会首先将过程调用请求转发给过程端点，根据过程处理器的处理结果返回结果标识符、请求标识符、状态码以及可能的结果给调用者。相应的数据包格式如下：
@@ -308,8 +347,8 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
 ```json
 {
     "packetType": "result",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
     "fromEndpoint": "@<host_name>/<app_name>/<runner_name>",
     "fromMethod": "<method_name>"
     "timeConsumed": 0.5432,
@@ -331,20 +370,6 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
 - `retCode` 取 HTTP 状态码子集，可取如下值：
    - 200 Ok：表示过程正常执行并返回了结果。
    - 202 Accepted：表示已提交参数给过程，但该过程可能耗时较长，所以暂时没有返回结果。
-   - 400 Bad Request：表示 JSON 格式解析错误。
-   - 401 Unauthorized：表示需要验证用户身份，但未提供。
-   - 403 Forbidden：表示没有权限调用该过程。
-   - 404 Not Found：表示请求的过程无效。
-   - 405 Method Not Allowed：表示请求参数不被允许。
-   - 406 Not Acceptable：表示请求参数不被接受。
-   - 409 Confilct：表示冲突；比如重复注册过程或事件时。
-   - 423 Locked：表示被锁定；比如要撤销的过程尚未结束某个执行。
-   - 500 Internal Server Error：表示服务器内部错误。
-   - 501 Not Implemented：表示未实现。
-   - 502 Bad Gateway：表示执行该调用的过程发生异常。
-   - 503 Service Unavailable：表示服务不可用。
-   - 504 Gateway Timeout：表示执行该调用的过程超时。
-   - 507 Insufficient Storage：表示遇到内存或存储不足的问题。
 - `retMsg`：对 `retCode` 的可读简短描述。
 - `retValue` 包含过程调用的返回值。只有 `retCode` 为 200 时，返回的数据中才包含有结果数据。注意，执行参数以及返回值使用 JSON 表达，但转为字符串传递。由方法处理器和调用者负责解析。
 
@@ -352,21 +377,34 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
 
 通常，当 `retCode` 为 202 时，调用方应根据 `resultId` 来监视后续从服务器返回的数据包，从而获得最终的执行状态或结果。
 
-注意，过程处理器返回给服务器的结果数据包格式，和上述数据包类似，但缺少 `fromEndpoint` 以及 `timeDiff` 等字段，但包含 `timeConsumed` 字段，表示过程处理器执行该调用消耗的时间。
+注意，过程处理器返回给服务器的结果数据包格式，和上述数据包类似，但缺少 `fromEndpoint` 以及 `timeDiff` 等字段，但包含 `toEndpoint` 和 `timeConsumed` 等字段，表示过程处理器执行该调用消耗的时间。
 
 ```json
 {
     "packetType": "result",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
+    "fromMethod": "<method_name>",
+    "timeConsumed": 1.2345,
     "retCode": 200,
     "retMsg": "Ok",
-    "timeConsumed": 1.2345,
-    "result": {
-        ...
-    }
+    "retValue": "...",
 }
 ```
+
+服务器在成功转发 `result` 数据包后，会返回 `resultSent` 数据包给过程处理器：
+
+```json
+{
+    "packetType": "resultSent",
+    "resultId": "<unique_event_identifier>",
+    "timeDiff": <time_consumed_to_send_event>,
+}
+```
+
+其中，
+- `resultId`：标识结果的一个全局唯一字符串。
+- `timeDiff`：自收到结果数据包到执行转发所经过的时间，浮点数，单位秒。
 
 #### 转发过程调用请求给过程端点
 
@@ -383,8 +421,8 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 ```json
 {
     "packetType": "call",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
     "fromEndpoint": "@<host_name>/<app_name>/<runner_name>",
     "toMethod": "<method_name>",
     "timeDiff": 0.5432,
@@ -407,21 +445,67 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 ```json
 {
     "packetType": "event",
-    "eventId": "<hased_event_identifier>",
+    "eventId": "<unique_event_identifier>",
     "bubbleName": "<bubble_name>",
-    "bubbleData": {
-        ...
-    }
+    "bubbleData": "...",
 }
 ```
 
 其中，
 - `packetType` 表示数据包类型，这里用 `event`，表示这是一个事件。
 - `eventId`：事件发生器为每个事件分配的一个全局唯一字符串。
-- `bubbleName`：事件名称。
-- `bubbleData` 包含真正的事件数据。
+- `bubbleName`：事件泡泡名称。
+- `bubbleData` 包含真正的事件泡泡数据。注意，泡泡数据可使用 JSON 表达，但转为字符串传递，由事件发生器和接收器负责解析。
 
 注意，由于事件发生器所在的行者连接对应了其所在主机、应用以及行者，故而在产生的事件数据包中无需指定这些信息。
+
+服务器在成功处理 `event` 数据包后，会返回 `eventSent` 数据包给事件发生器：
+
+```json
+{
+    "packetType": "eventSent",
+    "eventId": "<unique_event_identifier>",
+    "nrSucceeded": <number_of_succeeded_subscribers>,
+    "nrFailed": <number_of_failed_subscribers>,
+    "timeDiff": <time_consumed_to_send_event>,
+    "timeConsumed": <time_consumed_to_send_event>
+}
+```
+
+其中，
+- `eventId`：标识事件的一个全局唯一字符串。
+- `nrSucceeded`：转发成功的订阅者数量。
+- `nrFailed`：转发失败的订阅者数量。
+- `timeDiff`：自收到事件数据包到开始转发事件所耗时间，浮点数，单位秒。
+- `timeConsumed`：转发事件所耗时间，浮点数，单位秒。
+
+服务器在处理 `event` 数据包时，若遇错误，则会返回 `error` 数据包给事件发生器：
+
+```json
+{
+    "packetType": "error",
+    "protocolName": "HIBUS",
+    "protocolVersion": 90,
+    "causedBy": "event",
+    "causedId": "<unique_event_identifier>",
+    "retCode": 503,
+    "retMsg": "Service Unavailable",
+    "extraMsg": "...",
+}
+```
+
+其中，
+- `causedBy` 为 `event`；
+- `causedId` 为 `event` 数据包中传来的事件标识符。
+- `retCode` 的可能取值有：
+   - 400 Bad Request：表示 `event` 数据包格式错误。
+   - 404 Not Found：表示无效的事件泡泡名。
+   - 500 Internal Server Error：表示服务器内部错误。
+   - 501 Not Implemented：表示未实现。
+   - 502 Bad Gateway：表示执行该调用的过程发生异常。
+   - 503 Service Unavailable：表示服务不可用。
+   - 504 Gateway Timeout：表示执行该调用的过程超时。
+   - 507 Insufficient Storage：表示遇到内存或存储不足的问题。
 
 #### 收到事件
 
@@ -430,7 +514,7 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 ```json
 {
     "packetType": "event",
-    "eventId": "<hased_event_identifier>",
+    "eventId": "<unique_event_identifier>",
     "timeDiff": 0.1234,
     "fromEndpoint": "@<host_name>/<app_name>/<runner_name>",
     "fromBubble": "<bubble_name>",
@@ -446,7 +530,7 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 - `timeDiff` 表示服务器收到该事件到转发该事件的时间差；单位秒，浮点数。
 - `fromEndpoint` 表示发生该事件的端点名称，包括主机名称、应用名称和行者名称。
 - `fromBubble` 是事件的泡泡名称。
-- `bubbleData` 包含真正的事件泡泡数据。
+- `bubbleData` 包含真正的事件泡泡数据。注意，泡泡数据可使用 JSON 表达，但转为字符串传递，由事件发生器和接收器负责解析。
 
 #### 乒乓心跳
 
@@ -472,7 +556,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 ```json
 {
     "packetType": "call",
-    "callId": "<hased_call_identifier>",
+    "callId": "<unique_call_identifier>",
     "toEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "toMethod": "registerProcedure",
     "expectedTime": 30000,
@@ -486,15 +570,15 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 ```json
 {
     "packetType": "result",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "fromMethod": "registerProcedure",
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
     "retCode": 200,
     "retMsg": "Ok",
-    "retValue": "null"
+    "retValue": ""
 }
 ```
 
@@ -534,7 +618,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/subscribeEvent`
 - 参数：
-   + `event`：要订阅的完整事件名称，含主机名、应用名以及泡泡名。
+   + `endpointName`：事件所属的行者名称，含主机名、应用名以及行者名。
+   + `bubbleName`：要订阅的泡泡名。
 - 返回值：无。客户端依据结果的 `retCode` 判断是否订阅成功，可能的值有：
    + `404`：表示未找到指定的事件。
    + `403`：表示事件发生器不允许调用方订阅该事件。
@@ -544,7 +629,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/unsubscribeEvent`
 - 参数：
-   + `event`：要取消订阅的完整事件名称，含主机名、应用名以及泡泡名。
+   + `endpointName`：事件所属的行者名称，含主机名、应用名以及行者名。
+   + `bubbleName`：要订阅的泡泡名。
 - 返回值：无。客户端依据结果的 `retCode` 判断是否取消成功，可能的值有：
    + `404`：表示调用方未订阅指定的事件；或者该事件已经被撤销。
    + `200`：表示成功。
@@ -561,8 +647,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 ```json
 {
     "packetType": "result",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "fromMethod": "listProcedures",
     "timeConsumed": 0.5432,
@@ -576,6 +662,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 }
 ```
 
+注意：`retValue` 始终为 JSON 格式的字符串。
+
 #### 列出已注册事件
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/listEvents`
@@ -588,8 +676,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 ```json
 {
     "packetType": "result",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "fromMethod": "listEvents",
     "timeConsumed": 0.5432,
@@ -603,11 +691,14 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 }
 ```
 
+注意：`retValue` 始终为 JSON 格式的字符串。
+
 #### 列出事件的订阅者
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/listEventSubscribers`
 - 参数：
-   + `eventName`：事件名称，含完整的主机名、应用名、行者名以及泡泡名。
+   + `endpointName`：事件所属的行者名称，含主机名、应用名以及行者名。
+   + `bubbleName`：要订阅的泡泡名。
 - 返回值：成功时返回指定事件的订阅者的主机名及应用名清单。
 - 常见错误状态码：
    + `404`：表示未找到指定的事件。
@@ -619,8 +710,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 ```json
 {
     "packetType": "result",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "fromMethod": "listEventSubscribers",
     "timeConsumed": 0.5432,
@@ -634,9 +725,11 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 }
 ```
 
+注意：`retValue` 始终为 JSON 格式的字符串。
+
 #### 回声
 
-该过程主要用于测试
+该过程主要用于测试。
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/echo`
 - 参数：
@@ -650,8 +743,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 ```json
 {
     "packetType": "result",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "fromMethod": "echo",
     "timeConsumed": 0.5432,
@@ -668,14 +761,14 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 
 #### 新行者事件
 
-当一个新的行者成功连入 hibus 服务器时，产生 `newEndpoint` 事件：
+当一个新的行者成功连入 hibus 服务器时，产生 `NEWENDPOINT` 事件：
 
 ```json
 {
     "packetType": "event",
-    "eventId": "<hased_event_identifier>",
+    "eventId": "<unique_event_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
-    "fromBubble": "newEndpoint",
+    "fromBubble": "NEWENDPOINT",
     "bubbleData": {
         "endpointType": [ "web" | "unix" ],
         "endpointName": "<the_endpoint_name>",
@@ -697,14 +790,14 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 
 #### 行者断开事件
 
-当一个行者因为丢失连接或者长时间无响应而移除时，产生 `brokenEndpoint` 事件：
+当一个行者因为丢失连接或者长时间无响应而移除时，产生 `BROKENENDPOINT` 事件：
 
 ```json
 {
     "packetType": "event",
-    "eventId": "<hased_event_identifier>",
+    "eventId": "<unique_event_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
-    "fromBubble": "brokenEndpoint",
+    "fromBubble": "BROKENENDPOINT",
     "bubbleData": {
         "endpointType": [ "web" | "unix" ],
         "endpointName": "<the_endpoint_name>",
@@ -726,25 +819,47 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 
 #### 丢失事件发生器事件
 
-当某个行者订阅了某个事件，但产生该事件的行者意外断开时，将向订阅者发送 `lostEventGenerator` 事件：
+当某个行者订阅了某个事件，但产生该事件的行者意外断开时，将向订阅者发送 `LOSTEVENTGENERATOR` 事件：
 
 ```json
 {
     "packetType": "event",
-    "eventId": "<hased_event_identifier>",
+    "eventId": "<unique_event_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
-    "fromBubble": "lostEventGenerator",
+    "fromBubble": "LOSTEVENTGENERATOR",
     "bubbleData": {
         "endpointName": "<the_endpoint_name>",
-        "bubbleName:" "<the_bubble_name>",
     }
 }
 ```
 
-其中：
+其中 `bubbleData` 中的各参数说明如下：
+- `endpointName` 是包含主机名、应用名以及行者名的端点名称。
+
+注：不可订阅。
+
+#### 撤销泡泡事件
+
+当某个行者订阅了某个事件，但事件发生器撤销该事件时，将向订阅者发送 `LOSTBUBBLE` 事件：
+
+```json
+{
+    "packetType": "event",
+    "eventId": "<unique_event_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+    "fromBubble": "LOSTBUBBLE",
+    "bubbleData": {
+        "endpointName": "<the_endpoint_name>",
+        "bubbleName": "<the_bubble_name>",
+    }
+}
+```
+
+其中 `bubbleData` 中的各参数说明如下：
 - `endpointName` 是包含主机名、应用名以及行者名的端点名称。
 - `bubbleName` 泡泡名称。
 
+注：不可订阅。
 
 ## 架构及关键模块
 
@@ -1037,27 +1152,29 @@ int hibus_wait_for_packet (hibus_conn* conn, struct timeval *timeout);
 
 一个应用是否可以调用某个特定的过程或者订阅某个特定的事件，可以通过 `forHost` 和 `forApp` 两个参数来指定。
 
-可使用如下的语法来使用通配符（`*` 和 `?`）指定多个主机，亦可用逗号（`,`）指定多个匹配项，如：
+可使用如下的语法来使用通配符（`*` 和 `?`）指定多个主机，亦可用逗号（`,`）指定多个匹配项，称为模式（pattern）列表。如：
 
 ```
-    cn.fmsoft.hybridos.*, *.hybridos.fmsoft.cn
+    cn.fmsoft.hybridos.*, cn.fmsoft.app.*, com.example.a??
 ```
 
-另外，还支持如下特定的模式（pattern）指定方法：
+另外，还支持如下特定的模式指定方法：
 
-1. 使用 `$` 前缀时，视作标量，将使用上下文信息替代相应的变量。如 `$owner` 表示该过程或事件的创建者（主机或应用）。
+1. 使用 `$` 前缀时，视作变量，将使用上下文信息替代相应的变量。目前支持两个变量：
+   - `$self`：表示该过程或事件的创建者所在主机名。
+   - `$owner`：表示创建该过程或者事件的应用名。
 1. 使用 `!` 前缀时，表示排除给定的匹配模式。
 
-如下面的模式，用于匹配当前方法或者事件的所有者，以及 ibus 应用本身：
+如下面的模式列表，用于匹配创建当前方法或者事件的应用，以及 hibus 应用本身：
 
 ```
-    $owner, cn.fmsoft.hybridos.ibus
+    $owner, cn.fmsoft.hybridos.hibus
 ```
 
-如下模式，用于匹配所有不以 `cn.fmsoft.hybridos.` 打头的应用：
+如下模式列表，用于匹配所有不以 `cn.fmsoft.hybridos.` 打头的应用：
 
 ```
-    *, !cn.fmsoft.hybridos.*
+    !cn.fmsoft.hybridos.*, *
 ```
 
 ### 跨设备连接的思考
