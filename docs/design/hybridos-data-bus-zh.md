@@ -172,8 +172,8 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "packetType": "error",
     "protocolName": "HIBUS",
     "protocolVersion": 90,
-    "causeBy": [ "event" | "call" | "result" ],
-    "causeId": "<event_id> | <call_id> | <result_id> ",
+    "causedBy": [ "event" | "call" | "result" ],
+    "causedId": "<event_id> | <call_id> | <result_id> ",
     "retCode": 503,
     "retMsg": "Service Unavailable",
     "extraMsg": "...",
@@ -183,8 +183,8 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 其中，
 - `protocolName`：包含协议名称，当前取 `HIBUS`。
 - `protocolVersion`：包含协议版本号，正整数。
-- `causeBy`: 包含导致该错误的数据包类型，可取 `event`、`call`、`result` 等。该字段可选，若缺失，表示不可恢复的一般性错误，这种情况下，服务器通常会断开连接。
-- `causeId`：包含导致该错误的数据包标识符。该字段仅在 `causeBy` 字段存在时出现。
+- `causedBy`: 包含导致该错误的数据包类型，可取 `event`、`call`、`result` 等。该字段可选，若缺失，表示不可恢复的一般性错误，这种情况下，服务器通常会断开连接。
+- `causedId`：包含导致该错误的数据包标识符。该字段仅在 `causedBy` 字段存在时出现。
 - `retCode`：包含错误码，一般性错误时，可能的取值有（来自 HTTP 状态码）：
     + 503（Service Unavailable）：达到连接上限。
     + 503（Service Unavailable）：达到连接上限。
@@ -312,8 +312,8 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "packetType": "error",
     "protocolName": "HIBUS",
     "protocolVersion": 90,
-    "causeBy": "call",
-    "causeId": "<hased_call_identifier>",
+    "causedBy": "call",
+    "causedId": "<hased_call_identifier>",
     "retCode": 503,
     "retMsg": "Service Unavailable",
     "extraMsg": "...",
@@ -321,8 +321,8 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 ```
 
 其中，
-- `causeBy` 为 `call`；
-- `causeId` 为 `call` 数据包中传来的调用标识符。
+- `causedBy` 为 `call`；
+- `causedId` 为 `call` 数据包中传来的调用标识符。
 - `retCode` 的可能取值有：
    - 400 Bad Request：表示 JSON 格式解析错误。
    - 401 Unauthorized：表示需要验证用户身份，但未提供。
@@ -454,8 +454,8 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
     "packetType": "error",
     "protocolName": "HIBUS",
     "protocolVersion": 90,
-    "causeBy": "event",
-    "causeId": "<hased_event_identifier>",
+    "causedBy": "event",
+    "causedId": "<hased_event_identifier>",
     "retCode": 503,
     "retMsg": "Service Unavailable",
     "extraMsg": "...",
@@ -463,8 +463,8 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 ```
 
 其中，
-- `causeBy` 为 `event`；
-- `causeId` 为 `event` 数据包中传来的事件标识符。
+- `causedBy` 为 `event`；
+- `causedId` 为 `event` 数据包中传来的事件标识符。
 - `retCode` 的可能取值有：
    - 400 Bad Request：表示 `event` 数据包格式错误。
    - 404 Not Found：表示无效的事件泡泡名。
