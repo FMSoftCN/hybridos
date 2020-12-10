@@ -376,19 +376,34 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
 
 通常，当 `retCode` 为 202 时，调用方应根据 `resultId` 来监视后续从服务器返回的数据包，从而获得最终的执行状态或结果。
 
-注意，过程处理器返回给服务器的结果数据包格式，和上述数据包类似，但缺少 `fromEndpoint` 以及 `timeDiff` 等字段，但包含 `timeConsumed` 字段，表示过程处理器执行该调用消耗的时间。
+注意，过程处理器返回给服务器的结果数据包格式，和上述数据包类似，但缺少 `fromEndpoint` 以及 `timeDiff` 等字段，但包含 `toEndpoint` 和 `timeConsumed` 等字段，表示过程处理器执行该调用消耗的时间。
 
 ```json
 {
     "packetType": "result",
     "resultId": "<unique_result_identifier>",
     "callId": "<unique_call_identifier>",
+    "fromMethod": "<method_name>",
     "timeConsumed": 1.2345,
     "retCode": 200,
     "retMsg": "Ok",
     "retValue": "...",
 }
 ```
+
+服务器在成功转发 `result` 数据包后，会返回 `resultSent` 数据包给过程处理器：
+
+```json
+{
+    "packetType": "resultSent",
+    "resultId": "<unique_event_identifier>",
+    "timeDiff": <time_consumed_to_send_event>,
+}
+```
+
+其中，
+- `resultId`：标识结果的一个全局唯一字符串。
+- `timeDiff`：自收到结果数据包到执行转发所经过的时间，浮点数，单位秒。
 
 #### 转发过程调用请求给过程端点
 
@@ -431,9 +446,7 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
     "packetType": "event",
     "eventId": "<unique_event_identifier>",
     "bubbleName": "<bubble_name>",
-    "bubbleData": {
-        ...
-    }
+    "bubbleData": "...",
 }
 ```
 
@@ -444,6 +457,26 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 - `bubbleData` 包含真正的事件泡泡数据。注意，泡泡数据可使用 JSON 表达，但转为字符串传递，由事件发生器和接收器负责解析。
 
 注意，由于事件发生器所在的行者连接对应了其所在主机、应用以及行者，故而在产生的事件数据包中无需指定这些信息。
+
+服务器在成功处理 `event` 数据包后，会返回 `eventSent` 数据包给事件发生器：
+
+```json
+{
+    "packetType": "eventSent",
+    "eventId": "<unique_event_identifier>",
+    "nrSucceeded": <number_of_succeeded_subscribers>,
+    "nrFailed": <number_of_failed_subscribers>,
+    "timeDiff": <time_consumed_to_send_event>,
+    "timeConsumed": <time_consumed_to_send_event>
+}
+```
+
+其中，
+- `eventId`：标识事件的一个全局唯一字符串。
+- `nrSucceeded`：转发成功的订阅者数量。
+- `nrFailed`：转发失败的订阅者数量。
+- `timeDiff`：自收到事件数据包到开始转发事件所耗时间，浮点数，单位秒。
+- `timeConsumed`：转发事件所耗时间，浮点数，单位秒。
 
 服务器在处理 `event` 数据包时，若遇错误，则会返回 `error` 数据包给事件发生器：
 
@@ -544,7 +577,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "timeDiff": 0.1234,
     "retCode": 200,
     "retMsg": "Ok",
-    "retValue": "null"
+    "retValue": ""
 }
 ```
 
