@@ -285,7 +285,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 ```json
 {
     "packetType": "call",
-    "callId": "<hased_call_identifier>",
+    "callId": "<unique_call_identifier>",
     "toEndpoint": "@<host_name>/<app_name>/<runner_name>",
     "toMethod": "<method_name>",
     "expectedTime": 30000,
@@ -313,7 +313,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "protocolName": "HIBUS",
     "protocolVersion": 90,
     "causedBy": "call",
-    "causedId": "<hased_call_identifier>",
+    "causedId": "<unique_call_identifier>",
     "retCode": 503,
     "retMsg": "Service Unavailable",
     "extraMsg": "...",
@@ -346,8 +346,8 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
 ```json
 {
     "packetType": "result",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
     "fromEndpoint": "@<host_name>/<app_name>/<runner_name>",
     "fromMethod": "<method_name>"
     "timeConsumed": 0.5432,
@@ -381,12 +381,12 @@ hiBus 服务器会首先将过程调用请求转发给过程端点，根据过�
 ```json
 {
     "packetType": "result",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
+    "timeConsumed": 1.2345,
     "retCode": 200,
     "retMsg": "Ok",
-    "timeConsumed": 1.2345,
-    "result": {
+    "retValue": {
         ...
     }
 }
@@ -407,8 +407,8 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 ```json
 {
     "packetType": "call",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
     "fromEndpoint": "@<host_name>/<app_name>/<runner_name>",
     "toMethod": "<method_name>",
     "timeDiff": 0.5432,
@@ -431,7 +431,7 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 ```json
 {
     "packetType": "event",
-    "eventId": "<hased_event_identifier>",
+    "eventId": "<unique_event_identifier>",
     "bubbleName": "<bubble_name>",
     "bubbleData": {
         ...
@@ -455,7 +455,7 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
     "protocolName": "HIBUS",
     "protocolVersion": 90,
     "causedBy": "event",
-    "causedId": "<hased_event_identifier>",
+    "causedId": "<unique_event_identifier>",
     "retCode": 503,
     "retMsg": "Service Unavailable",
     "extraMsg": "...",
@@ -482,7 +482,7 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
 ```json
 {
     "packetType": "event",
-    "eventId": "<hased_event_identifier>",
+    "eventId": "<unique_event_identifier>",
     "timeDiff": 0.1234,
     "fromEndpoint": "@<host_name>/<app_name>/<runner_name>",
     "fromBubble": "<bubble_name>",
@@ -524,7 +524,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 ```json
 {
     "packetType": "call",
-    "callId": "<hased_call_identifier>",
+    "callId": "<unique_call_identifier>",
     "toEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "toMethod": "registerProcedure",
     "expectedTime": 30000,
@@ -538,8 +538,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 ```json
 {
     "packetType": "result",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "fromMethod": "registerProcedure",
     "timeConsumed": 0.5432,
@@ -613,8 +613,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 ```json
 {
     "packetType": "result",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "fromMethod": "listProcedures",
     "timeConsumed": 0.5432,
@@ -640,8 +640,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 ```json
 {
     "packetType": "result",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "fromMethod": "listEvents",
     "timeConsumed": 0.5432,
@@ -671,8 +671,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 ```json
 {
     "packetType": "result",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "fromMethod": "listEventSubscribers",
     "timeConsumed": 0.5432,
@@ -702,8 +702,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 ```json
 {
     "packetType": "result",
-    "resultId": "<hased_result_identifier>",
-    "callId": "<hased_call_identifier>",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "fromMethod": "echo",
     "timeConsumed": 0.5432,
@@ -725,7 +725,7 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 ```json
 {
     "packetType": "event",
-    "eventId": "<hased_event_identifier>",
+    "eventId": "<unique_event_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "fromBubble": "newEndpoint",
     "bubbleData": {
@@ -754,7 +754,7 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 ```json
 {
     "packetType": "event",
-    "eventId": "<hased_event_identifier>",
+    "eventId": "<unique_event_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "fromBubble": "brokenEndpoint",
     "bubbleData": {
@@ -783,7 +783,7 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
 ```json
 {
     "packetType": "event",
-    "eventId": "<hased_event_identifier>",
+    "eventId": "<unique_event_identifier>",
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
     "fromBubble": "lostEventGenerator",
     "bubbleData": {
