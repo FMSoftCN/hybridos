@@ -193,7 +193,7 @@ HiBusConn类是对JS引擎的扩展，为JS提供了到hiBus的连接与读写�
 HiBusConn类的构造函数，通过该函数，创建HiBusConn对象，同时建立对HiBus服务器的连接。
 
 ```
-HiBus(appName, runnerName, pathSocket);
+HiBusConn(appName, runnerName, pathSocket);
 参数：
     appName：应用名称；
     runnerName：行者名称；
