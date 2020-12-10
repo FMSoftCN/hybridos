@@ -1037,27 +1037,29 @@ int hibus_wait_for_packet (hibus_conn* conn, struct timeval *timeout);
 
 一个应用是否可以调用某个特定的过程或者订阅某个特定的事件，可以通过 `forHost` 和 `forApp` 两个参数来指定。
 
-可使用如下的语法来使用通配符（`*` 和 `?`）指定多个主机，亦可用逗号（`,`）指定多个匹配项，如：
+可使用如下的语法来使用通配符（`*` 和 `?`）指定多个主机，亦可用逗号（`,`）指定多个匹配项，称为模式（pattern）列表。如：
 
 ```
-    cn.fmsoft.hybridos.*, *.hybridos.fmsoft.cn
+    cn.fmsoft.hybridos.*, cn.fmsoft.app.*, com.example.a??
 ```
 
-另外，还支持如下特定的模式（pattern）指定方法：
+另外，还支持如下特定的模式指定方法：
 
-1. 使用 `$` 前缀时，视作标量，将使用上下文信息替代相应的变量。如 `$owner` 表示该过程或事件的创建者（主机或应用）。
+1. 使用 `$` 前缀时，视作变量，将使用上下文信息替代相应的变量。目前支持两个变量：
+   - `$self`：表示该过程或事件的创建者所在主机名。
+   - `$owner`：表示创建该过程或者事件的应用名。
 1. 使用 `!` 前缀时，表示排除给定的匹配模式。
 
-如下面的模式，用于匹配当前方法或者事件的所有者，以及 ibus 应用本身：
+如下面的模式列表，用于匹配创建当前方法或者事件的应用，以及 hibus 应用本身：
 
 ```
-    $owner, cn.fmsoft.hybridos.ibus
+    $owner, cn.fmsoft.hybridos.hibus
 ```
 
-如下模式，用于匹配所有不以 `cn.fmsoft.hybridos.` 打头的应用：
+如下模式列表，用于匹配所有不以 `cn.fmsoft.hybridos.` 打头的应用：
 
 ```
-    *, !cn.fmsoft.hybridos.*
+    !cn.fmsoft.hybridos.*, *
 ```
 
 ### 跨设备连接的思考
