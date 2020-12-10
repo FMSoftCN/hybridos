@@ -48,49 +48,50 @@
 
 ### HiBus类
 
-hiBus Interface由HiBus对象实现。HiBus类如下：
+#### 构造函数
+
+HiBus类的构造函数，通过该函数，创建HiBus对象。
 
 ```
-class HiBus {
-    var hiBusConnection;    // hiBus object for connection to hiBus
-    var appName;            // app name
-    var runnerName;         // runner name
-    
-    constructor(app, runner, pathSocket) { ...... }     // constructor 
-    subscribeEvent(app, runner, event, func) { ...... } // subscribe event to hiBus
-    unsubscribeEvent(app, runner, event) { ...... }     // unsubscribe event to hiBus
-    callProcedure(endpoint, method, param, timeout, func) { ...... }        // call a remote procedure, synchronously
-    checkPackets() { ...... }   			            // read hiBus, and handle each data package 
-}
-```
-
-
-
-HiBus类的构造方法，在该方法中，创建hiBusConnection对象。
-
-```
-constructor(app, runner, pathSocket) ;
+HiBus(appName, runnerName[, pathSocket]);
 参数：
-    app：应用名称；
-    runner：行者名称；
-    pathSocket：domain socket路径；
+    appName：应用名称；
+    runnerName：行者名称；
+    pathSocket：domain socket路径。如没有该参数，则使用默认路径“/var/run/hibus.sock”；
 返回值：
-    无。如果hiBus连接成功，则hiBusConnection为hiBus对象，否则hiBusConnection为undefined。
+    返回一个HiBus对象。
 ```
 
 
+
+#### 常量
+
+| Constant              | Value |
+| --------------------- | ----- |
+| HiBus.SYNCREMOTECALL  | 0     |
+| HiBus.ASYNCREMOTECALL | 1     |
+
+
+
+#### 属性
+
+HiBus.hiBusConn：HiBusConn对象，用于建立到HiBus的连接，以及数据读写操作。
+
+
+
+#### 方法
 
 订阅一个事件，并发到hiBus总线
 
 ```
-subscribeEvent(app, runner, event, func);
+HiBus.subscribeEvent(appName, runnerName, eventName, funcName);
 参数：
-    app：产生事件的endpoint应用名；
-    runner：产生事件的endpoint行者名；
-    event：订阅事件的事件名；
-    func：订阅事件的回调方法，该方法由用户提供，参数为一个Json对象；
+    appName：产生事件的应用名；
+    runnerName：产生事件的行者名；
+    eventName：订阅事件的事件名；
+    funcName：订阅事件的回调方法，该方法由用户提供，参数为一个Json对象；
 返回值：
-    无。
+    订阅成功返回true，失败返回false。
 ```
 
 
@@ -98,55 +99,57 @@ subscribeEvent(app, runner, event, func);
 取消订阅一个事件，并发到hiBus总线
 
 ```
-unsubscribeEvent(app, runner, event);
+HiBus.unsubscribeEvent(appName, runnerName, eventName);
 参数：
-    app：产生事件的endpoint应用名；
-    runner：产生事件的endpoint行者名；
-    event：订阅事件的事件名；
+    appName：产生事件的应用名；
+    runnerName：产生事件的行者名；
+    eventName：订阅事件的事件名；
 返回值：
-    无。
+    取消订阅，成功返回true，失败返回false。
 ```
 
 
 
-向hiBus发送异步远程过程调用请求
+向hiBus发送远程过程调用请求
 
 ```
-callProcedure(endpoint, method, param, timeout, callback);
+HiBus.callProcedure(endpoint, methodName, param, timeout, callback);
 参数：
     endpoint：远程调用的endpoint名；
-    method：远程调用的方法名；
-    param：远程过程参数（Json对象），null表示该过程无需参数；
-    timeout:远程过程调用的超时值，单位毫秒。如果是0，表示异步请求，忽略callbackObj.type，立刻返回；
+    methodName：远程调用的方法名；
+    param：远程过程参数（Json对象），如无需参数，该参数为一空对象{}；
+    timeout:远程过程调用的超时值，单位毫秒。如果是0，表示异步请求，忽略callback.type，立刻返回；
     callback：用于处理远程过程调用结果的对象，有如下结构：
         {
             type:sync,                  // 请求类型：同步、异步
             success: funcSuccess,       // 回调成功后执行的回调方法，该方法由用户提供，参数为Json对象；
             error: funcError,           // 回调失败后执行的回调方法，该方法由用户提供，参数为请求的返回值；
         }
-          如果该值为null，则表示该过程调用是个异步过程，且不关心返回值。即使从hiBus获得过程调用的返回值后，也不做任何处理。
+        如果该值为null，则表示该过程调用是个异步过程，且不关心返回值。即使从hiBus获得过程调用的返回值后，也不做任何处理。
 返回值：
     无。
 ```
 
 
 
-hiBus读入数据处理
+hiBus读入数据处理。在用户代码中，需定时、或按业务需要，调用该方法。该方法读取HiBus总线传递给该端点的数据，并完成相应处理工作。
 
 ```
-checkPackets(timeout);
+HiBus.checkPackets(timeout);
 参数：
-	timeout:读hiBus超时，如果是0，则读端口后立刻返回。
+	timeout：读hiBus超时值，如果是0，则读端口后立刻返回。
 返回值：
 	无
 ```
 
-
+#### 用户回调方法
 
 除了远程过程调用的错误回调方法外，用户提供的回调方法都具有如下的形式：
 
 ```
-callbackFunction(dataJson)	{ ........ }
+callbackFunction(dataJson)	{ 
+    ........ 
+}
 ```
 
 参数dataJson为一个Json对象。对其的解析由用户回调方法完成，解析内容参见hiBus通信协议。
@@ -154,13 +157,15 @@ callbackFunction(dataJson)	{ ........ }
 远程过程调用的错误回调方法，有如下形式：
 
 ```
-funcError(retCode)	{ ........ }
+funcError(retCode)	{ 
+    ........ 
+}
 ```
 
 参数retCode为一个整数型返回值。
 
 
-### 代码举例
+#### 代码举例
 
 用户在JS代码中，使用该接口，有类似如下代码：
 
@@ -177,52 +182,104 @@ hiBus.checkPackets();
 
 
 
-## hiBus connection
+## HiBusConn类
 
-hiBus connection是对JS引擎的扩展，为JS提供了到hiBus的连接与读写的具体实现。
+HiBusConn类是对JS引擎的扩展，为JS提供了到hiBus的连接与读写服务。该类的对象，作为HiBus类的一个属性，对用户不可见。
 
-该部分不参与任何业务处理。换句话说，该部分代码读写接口，只处理raw data，不负责任何打包和解析。
+该部分代码为JS方法对象的c实现。其c接口视不同JS引擎而不同。下面是对其JS接口的说明。
 
-该部分代码为JS方法对象的c实现。因此返回值的理解不是c或者c++代码，需要以JS方法来理解。
+#### 构造函数
 
-hiBusConnection类包含三个JS方法的实现，说明如下：
-
-
-
-hiBusConnection类的构造函数，创建到hiBus总线的连接
+HiBusConn类的构造函数，通过该函数，创建HiBusConn对象，同时建立对HiBus服务器的连接。
 
 ```
-bool hiBusConnection(char * app_name, char * runner_name, char * path_to_socket);
+HiBus(appName, runnerName, pathSocket);
 参数：
-    app_name：创建该对象的应用名；
-    runner_name：创建该对象的行者名；
-    path_to_socket：socket路径；
+    appName：应用名称；
+    runnerName：行者名称；
+    pathSocket：domain socket路径。
 返回值：
-    成功返回true，失败返回false。
+    返回一个HiBusConn对象。
 ```
 
 
 
-hiBus总线的读操作
+#### 属性
+
+HiBusConn.appName：建立连接端点的应用名；
+
+HiBusConn.runnerName：建立连接端点的行者名；
+
+HiBusConn.pathSocket：domain socket路径；
+
+HiBusConn.status：当前连接状态。
+
+
+
+#### 方法
+
+建立到HiBus总线的连接
 
 ```
-int hiBusReadRaw(char * buffer, int length);
+HiBusConn.connect()；
 参数：
-    buffer：读缓冲区；
-    length：读缓冲区长度；
+    无
 返回值：
-    实际读到的字节数。如果读操作失败，返回-1。
+    连接成功返回true，连接失败返回false。
 ```
 
 
 
-hiBus总线的写操作
+中断到HiBus总线的连接
 
 ```
-int hiBusWriteRaw(char * buffer, int length);
+HiBusConn.disconnect();
 参数：
-    buffer：写缓冲区；
-    length：写缓冲区长度；
+    无；
 返回值：
-    实际写入hiBus总线的字节数。如果写操作失败，返回-1。
+    连接成功返回true，连接失败返回false。
 ```
+
+
+
+发送数据包到HiBus总线
+
+```
+HiBusConn.send(packet, length);
+参数：
+    packet：字符串对象，为JSON结构的序列化。其具体结构，见《合璧操作系统设备端数据总线概要设计》及各软件详细设计；
+    length：packet长度；
+返回值：
+    返回写入HiBus总线的数据长度，如是-1，表示写错误。
+```
+
+
+
+从HiBus总线读取一个数据包
+
+```
+HiBusConn.read(timeout);
+参数：
+    timeout：读取HiBus总线数据的超时值；
+返回值：
+    如果读取成功，则返回对象的类型为字符串类型；如果失败，返回对象的类型为undefined。
+```
+
+
+
+#### C接口
+
+使用jerryscript引擎，c接口具有固定的格式，如下：
+
+```
+static jerry_value_t xxxxx_handler (const jerry_value_t this_obj,
+                                    const jerry_value_t func_obj,
+                                    const jerry_value_t args[],
+                                    const jerry_length_t argc)
+参数：
+	this_obj：
+	func_obj：HiBusConn构造函数对象；
+	args：接口参数列表；
+	argc：接口参数个数。
+```
+
