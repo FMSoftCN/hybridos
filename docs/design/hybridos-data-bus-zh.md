@@ -850,7 +850,7 @@ hiBus 服务器通过 `builtin` 行者产生内置事件。
     "fromBubble": "LOSTBUBBLE",
     "bubbleData": {
         "endpointName": "<the_endpoint_name>",
-        "bubbleName:" "<the_bubble_name>",
+        "bubbleName": "<the_bubble_name>",
     }
 }
 ```
