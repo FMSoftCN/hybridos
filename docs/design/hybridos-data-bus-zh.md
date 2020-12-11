@@ -91,13 +91,13 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 1. 主机（host）：指合璧操作系统设备侧赖以运行的一个计算机主机。
 1. 应用（app）：合璧操作系统中，一个应用由多个不同的行者组成，这些行者可能使用不同的编程语言开发，在系统中以进程或线程的形式运行。
 1. 行者（runner）：行者用来区分一个应用的不同并行运行组件。在合璧操作系统中，一个应用可以有多个行者，通常以独立的进程或者线程形式存在。比如专门用于处理底层设备控制的行者，专门用于处理人机交互的行者。
-1. 事件（event）/泡泡（bubble）：事件名称中包含了主机名称、应用名称、行者名称以及泡泡（即事件发生器）名称。
+1. 事件（event）/泡泡（bubble）：事件名称中包含了主机名称、应用名称、行者名称以及泡泡名称。
 1. 过程（procedure）/方法（method）：过程名称中包含了主机名称、应用名称、行者名称以及方法名称。
 
 在 hiBus 中，一个应用的不同行者都可以作为客户端连接到 hiBus 服务器上；单个应用的不同连接对应一个唯一的行者名称，每个行者都可以扮演如下单个角色或多个角色：
 
-1. 泡泡（bubble）/事件发生器（event generator）：注册事件后，发生新的事件后向服务器写入事件数据。
-1. 方法（method）/过程处理器（procedure handler）：注册过程后，等待调用请求、处理，然后发送处理结果。
+1. 事件发生器（event generator）：注册事件后，发生新的事件后向服务器写入事件数据。
+1. 过程处理器（procedure handler）：注册过程后，等待调用请求、处理，然后发送处理结果。
 1. 事件订阅者（event subscriber）：向服务器订阅指定的事件后，将收到对应的事件。
 1. 过程调用者（procedure caller）：向服务器发送过程调用请求，之后同步等待或者异步等待处理结果。
 
@@ -140,13 +140,12 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 - `<host_name>` 符合 FQDN（Fully Qualified Domain Name）规范。长度不超过 127 字节。
 - `<app_name>` 一个字符串，字母开头，可包含字母、数字和句点，句点不能连续出现；不区分大小写，但习惯上使用全小写字母。类似 Android 的应用名称。长度不超过 127 字节。
-- `<runner_name>`、`<method_name>` 以及 `<bubble_name>` 符合常见编程语言的变量名规范，但不区分大小写。长度不超过 64 字节。
+- `<runner_name>`、`<method_name>` 以及 `<bubble_name>` 符合常见编程语言的变量名规范，但不区分大小写。长度不超过 63 字节。按照惯例，我们一般使用全大写字母来表示泡泡名。
 
 我们保留如下特别的主机名称和应用名称：
 
 - `localhost`：指本机。
-- `cn.fmsoft.hybridos.hibus`：保留的应用名称，指 hiBus 本身，注册或注销事件或过程时，向该应用发送指定的过程调用。该应用也可提供一些一般性的系统操作命令以及事件。
-
+- `cn.fmsoft.hybridos.ibus`：保留的应用名称，指 hiBus 本身，注册或注销事件或过程时，向该应用发送指定的过程调用。该应用也可提供一些一般性的系统操作命令以及事件。
 
 ## 协议及接口
 
@@ -177,7 +176,6 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "causedId": "<event_id> | <call_id> | <result_id> ",
     "retCode": 503,
     "retMsg": "Service Unavailable",
-    "extraMsg": "...",
 }
 ```
 
@@ -191,7 +189,6 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     + 503（Service Unavailable）：达到连接上限。
     + 505（Internal Server Error）：内部错误。
 - `retMsg`：包含简单的信息。
-- `extraMsg`：可选的额外描述信息。
 
 #### 身份识别
 
@@ -231,7 +228,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "protocolName": "HIBUS",
     "protocolVersion": 90,
     "hostName": "localhost",
-    "appName": "cn.fmsoft.hybridos.network",
+    "appName": "cn.fmsoft.hybridos.inetd",
     "runnerName": "self",
     "signature": "...",
     "encodedIn": [ "base64" | "hex" ]
@@ -259,7 +256,6 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "packetType": "authFailed",
     "retCode": 409,
     "retMsg": "Conflict",
-    "extraMsg": "..."
 }
 ```
 
@@ -272,7 +268,6 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     + 409（Conflict）：行者名冲突。
     + 426（Upgrade Required）：客户端版本过低，需要升级。
 - `retMsg`：包含简单的返回信息。
-- `extraMsg`：额外信息（可选）。
 
 在身份验证失败的情况下，服务器将立即断开连接。
 在身份验证未通过之前，客户端发送到服务器所有非用于身份验证的数据包，都将被忽略并致使服务器立即断开连接。
@@ -317,7 +312,6 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "causedId": "<unique_call_identifier>",
     "retCode": 503,
     "retMsg": "Service Unavailable",
-    "extraMsg": "...",
 }
 ```
 
@@ -490,7 +484,6 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
     "causedId": "<unique_event_identifier>",
     "retCode": 503,
     "retMsg": "Service Unavailable",
-    "extraMsg": "...",
 }
 ```
 
