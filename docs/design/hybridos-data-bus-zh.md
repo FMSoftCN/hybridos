@@ -23,6 +23,7 @@
       * [撤销事件](#撤销事件)
       * [订阅事件](#订阅事件)
       * [取消事件订阅](#取消事件订阅)
+      * [列出已连接端点](#列出已连接端点)
       * [列出已注册过程](#列出已注册过程)
       * [列出已注册事件](#列出已注册事件)
       * [列出事件的订阅者](#列出事件的订阅者)
@@ -649,22 +650,24 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "timeDiff": 0.1234,
     "retCode": 200,
     "retMsg": "Ok",
-    "retValue": {
-        "localhost/cn.fmsoft.hybridos.hibus/builtin": {
+    "retValue": [
+        {
+            "endpointName": "localhost/cn.fmsoft.hybridos.hibus/builtin",
             "livingSeconds": 50,
-            "nrProcedures": 10,
-            "nrEvents": 2,
+            "methods": ["foo", "bar"],
+            "bubbles": ["FOO", "BAR"],
             "memUsed": 4526,
-            "peakMemUsed": 4526,
+            "peakMemUsed": 4526
         },
-        "localhost/cn.fmsoft.hybridos.hibus/cmdline": {
+        {
+            "endpointName": "localhost/cn.fmsoft.hybridos.hibus/cmdline",
             "livingSeconds": 20,
-            "nrProcedures": 0,
-            "nrEvents": 0,
+            "methods": ["foo", "bar"],
+            "bubbles": ["FOO", "BAR"],
             "memUsed": 4526,
-            "peakMemUsed": 4526,
+            "peakMemUsed": 4526
         },
-    },
+    ],
 }
 ```
 
@@ -1036,7 +1039,7 @@ void* hibus_read_packet_alloc (hibus_conn* conn, unsigned int *packet_len);
 int hibus_send_text_packet (hibus_conn* conn, const char* text, unsigned int txt_len);
 ```
 
-和 WebSocket 类似，在数据包长度超过 1024 字节时，通过 UnixSocket 发出的数据包也会被分成较小的数据帧（frame）来传输。每个数据帧的大小被限定为 1024 字节，这些函数将自动处理数据包的分片发送或者读取。也会自动处理乒乓心跳数据帧。
+和 WebSocket 类似，在数据包长度超过 4096 字节时，通过 UnixSocket 发出的数据包也会被分成较小的数据帧（frame）来传输。每个数据帧的负载（payload）大小被限定为 4096 字节，这些函数将自动处理数据包的分片发送或者读取。也会自动处理乒乓心跳数据帧。
 
 注意，通常客户端不需要直接调用这几个底层的读写数据包函数。这些函数供 Python、JavaScript 等编程语言实现本地绑定功能时使用。另外，这些函数全部使用阻塞读写模式，故而在调用这些函数，尤其是读取函数之前，应通过 `select` 系统调用判断对应的文件描述符上是否存在相应的可读取数据。
 
