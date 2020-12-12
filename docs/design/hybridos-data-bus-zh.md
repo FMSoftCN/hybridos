@@ -628,6 +628,48 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
    + `404`：表示调用方未订阅指定的事件；或者该事件已经被撤销。
    + `200`：表示成功。
 
+#### 列出已连接端点
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/listEndpoints`
+- 参数：无。
+- 返回值：成功时返回已注册的，且调用方可调用的过程清单。
+- 常见错误状态码：403（Forbidden）。
+- 仅允许 `cn.fmsoft.hybridos.hibus` 应用调用。
+
+下面是一个示例结果：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+    "fromMethod": "listEndpoints",
+    "timeConsumed": 0.5432,
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retMsg": "Ok",
+    "retValue": {
+        "localhost/cn.fmsoft.hybridos.hibus/builtin": {
+            "livingSeconds": 50,
+            "nrProcedures": 10,
+            "nrEvents": 2,
+            "memUsed": 4526,
+            "peakMemUsed": 4526,
+        },
+        "localhost/cn.fmsoft.hybridos.hibus/cmdline": {
+            "livingSeconds": 20,
+            "nrProcedures": 0,
+            "nrEvents": 0,
+            "memUsed": 4526,
+            "peakMemUsed": 4526,
+        },
+    },
+}
+```
+
+注意：`retValue` 始终为 JSON 格式的字符串。
+
 #### 列出已注册过程
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/listProcedures`
