@@ -45,11 +45,12 @@
       * [事件管理](#事件管理)
       * [订阅事件](#订阅事件)
       * [调用过程](#调用过程)
-      * [等待数据包及事件循环](#等待数据包及事件循环)
+      * [等待并分发数据包](#等待并分发数据包)
 - [其他](#其他)
    + [简单的应用管理](#简单的应用管理)
    + [端点权限管理](#端点权限管理)
    + [跨设备连接的思考](#跨设备连接的思考)
+
 
 ## 基本框架及术语
 
@@ -1078,9 +1079,9 @@ char* hibus_assemble_endpoint_alloc (const char* host_name, const char* app_name
 行者可以使用如下的接口注册或撤销过程：
 
 ```c
-typedef hibus_json* (*hibus_method_handler)(hibus_conn* conn,
+typedef char* (*hibus_method_handler)(hibus_conn* conn,
         const char* from_endpoint, const char* method_name,
-        const hibus_json* method_param);
+        const char* method_param);
 
 int hibus_register_procedure (hibus_conn* conn, const char* method_name,
         hibus_method_handler method_handler);
@@ -1100,7 +1101,7 @@ int hibus_register_event (hibus_conn* conn, const char* bubble_name,
         const char* to_host, const char* to_app);
 int hibus_revoke_event (hibus_conn* conn, const char* bubble_name);
 int hibus_fire_event (hibus_conn* conn,
-        const char* bubble_name, const hibus_json* bubble_data);
+        const char* bubble_name, const char* bubble_data);
 ```
 
 `hibus_register_event` 函数用于注册一个事件。
@@ -1116,7 +1117,7 @@ int hibus_fire_event (hibus_conn* conn,
 ```c
 typedef void (*hibus_event_handler)(hibus_conn* conn,
         const char* from_endpoint, const char* bubble_name,
-        const hibus_json* bubble_data);
+        const char* bubble_data);
 
 int hibus_subscribe_event (hibus_conn* conn,
         const char* endpoint, const char* bubble_name,
@@ -1139,23 +1140,23 @@ int hibus_unsubscribe_event (hibus_conn* conn,
 ```c
 typedef void (*hibus_result_handler)(hibus_conn* conn,
         const char* from_endpoint, const char* method_name,
-        int ret_code, const hibus_json* ret_value);
+        int ret_code, const char* ret_value);
 
 int hibus_call_procedure (hibus_conn* conn, const char* endpoint, const char* method_name,
-        const hibus_json* method_praram, time_t ret_time_expected, hibus_result_handler result_handler);
+        const char* method_praram, time_t ret_time_expected, hibus_result_handler result_handler);
 
 int hibus_call_procedure_and_wait (hibus_conn* conn, const char* endpoint, const char* method_name,
-        const hibus_json* method_praram, time_t ret_time_expected, hibus_json** ret_value);
+        const char* method_praram, time_t ret_time_expected, char** ret_value);
 ```
 
 `hibus_call_procedure` 提供了异步调用远程过程的接口：发起调用后会立即返回，然后在回调函数（`result_handler`）中等待结果或错误。此时，需要配合后面讲到的 `hibus_wait_for_packet` 函数使用。
 
 `hibus_call_procedure_and_wait` 提供了同步调用远程过程的接口：发起调用后将等待结果或错误然后返回。注意，在等待返回值的过程中，可能会收到事件，此时，该函数会调用相应的事件处理器。
 
-#### 等待数据包及事件循环
+#### 等待并分发数据包
 
 ```c
-int hibus_wait_for_packet (hibus_conn* conn, struct timeval *timeout);
+int hibus_wait_and_dispatch_packet (hibus_conn* conn, struct timeval *timeout);
 ```
 
 该函数检查服务器发过来的数据，并调用相应的事件处理器或者结果处理器。通常在一个循环中使用，如：
@@ -1167,7 +1168,7 @@ int hibus_wait_for_packet (hibus_conn* conn, struct timeval *timeout);
 
         ...
 
-        hibus_wait_for_packet (conn, &timeout);
+        hibus_wait_and_dispatch_packet (conn, &timeout);
 
         ...
     }
