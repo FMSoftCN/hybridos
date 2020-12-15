@@ -5,6 +5,8 @@
 
   <metamodule id="hybridoshbd-testing-dependencies">
     <dependencies>
+      <dep package="bwrap" />
+      <dep package="cairo"/>
       <dep package="gvfb"/>
       <dep package="minigui"/>
       <dep package="minigui-res"/>
@@ -17,8 +19,6 @@
       <dep package="hidrm"/>
       <dep package="hidrmdrivers"/>
       <dep package="hirsvg"/>
-      <dep package="bwrap" />
-      <dep package="cairo"/>
       <dep package="fonts"/>
       <dep package="dicts"/>
       <dep package="fontconfig"/>
