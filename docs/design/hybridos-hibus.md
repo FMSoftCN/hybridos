@@ -62,18 +62,18 @@
 
 ```
 [system]
-library_path=/home/projects/hibusdaemon/lib		// path of library 
-lib=wifi										// name of library, libwifi.so
-scan_time=30									// interval of scan time. unit: second
-signal_time=10									// inervval of check signal strength. unit: second
+library_path=/home/projects/hibusdaemon/lib     // path of library 
+lib=wifi                                        // name of library, libwifi.so
+scan_time=30                                    // interval of scan time. unit: second
+signal_time=10                                  // inervval of check signal strength. unit: second
 
 [procedure]
-for_host=localhost                              // NULL for all hosts
-for_app=cn.fmsoft.hybridos.appagent				// NULL for all applications
+for_host=localhost                              // empty for all hosts
+for_app=cn.fmsoft.hybridos.appagent             // empty for all applications
 
 [event]
-for_host=localhost								// NULL for all hosts
-for_app=cn.fmsoft.hybridos.appagent				// NULL for all applications
+for_host=localhost                              // empty for all hosts
+for_app=cn.fmsoft.hybridos.appagent             // empty for all applications
 ```
 
 
