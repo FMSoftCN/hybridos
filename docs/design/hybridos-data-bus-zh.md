@@ -23,6 +23,7 @@
       * [撤销事件](#撤销事件)
       * [订阅事件](#订阅事件)
       * [取消事件订阅](#取消事件订阅)
+      * [列出已连接端点](#列出已连接端点)
       * [列出已注册过程](#列出已注册过程)
       * [列出已注册事件](#列出已注册事件)
       * [列出事件的订阅者](#列出事件的订阅者)
@@ -44,11 +45,12 @@
       * [事件管理](#事件管理)
       * [订阅事件](#订阅事件)
       * [调用过程](#调用过程)
-      * [等待数据包及事件循环](#等待数据包及事件循环)
+      * [等待并分发数据包](#等待并分发数据包)
 - [其他](#其他)
    + [简单的应用管理](#简单的应用管理)
    + [端点权限管理](#端点权限管理)
    + [跨设备连接的思考](#跨设备连接的思考)
+
 
 ## 基本框架及术语
 
@@ -91,13 +93,13 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 1. 主机（host）：指合璧操作系统设备侧赖以运行的一个计算机主机。
 1. 应用（app）：合璧操作系统中，一个应用由多个不同的行者组成，这些行者可能使用不同的编程语言开发，在系统中以进程或线程的形式运行。
 1. 行者（runner）：行者用来区分一个应用的不同并行运行组件。在合璧操作系统中，一个应用可以有多个行者，通常以独立的进程或者线程形式存在。比如专门用于处理底层设备控制的行者，专门用于处理人机交互的行者。
-1. 事件（event）/泡泡（bubble）：事件名称中包含了主机名称、应用名称、行者名称以及泡泡（即事件发生器）名称。
+1. 事件（event）/泡泡（bubble）：事件名称中包含了主机名称、应用名称、行者名称以及泡泡名称。
 1. 过程（procedure）/方法（method）：过程名称中包含了主机名称、应用名称、行者名称以及方法名称。
 
 在 hiBus 中，一个应用的不同行者都可以作为客户端连接到 hiBus 服务器上；单个应用的不同连接对应一个唯一的行者名称，每个行者都可以扮演如下单个角色或多个角色：
 
-1. 泡泡（bubble）/事件发生器（event generator）：注册事件后，发生新的事件后向服务器写入事件数据。
-1. 方法（method）/过程处理器（procedure handler）：注册过程后，等待调用请求、处理，然后发送处理结果。
+1. 事件发生器（event generator）：注册事件后，发生新的事件后向服务器写入事件数据。
+1. 过程处理器（procedure handler）：注册过程后，等待调用请求、处理，然后发送处理结果。
 1. 事件订阅者（event subscriber）：向服务器订阅指定的事件后，将收到对应的事件。
 1. 过程调用者（procedure caller）：向服务器发送过程调用请求，之后同步等待或者异步等待处理结果。
 
@@ -140,13 +142,12 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
 
 - `<host_name>` 符合 FQDN（Fully Qualified Domain Name）规范。长度不超过 127 字节。
 - `<app_name>` 一个字符串，字母开头，可包含字母、数字和句点，句点不能连续出现；不区分大小写，但习惯上使用全小写字母。类似 Android 的应用名称。长度不超过 127 字节。
-- `<runner_name>`、`<method_name>` 以及 `<bubble_name>` 符合常见编程语言的变量名规范，但不区分大小写。长度不超过 64 字节。
+- `<runner_name>`、`<method_name>` 以及 `<bubble_name>` 符合常见编程语言的变量名规范，但不区分大小写。长度不超过 63 字节。按照惯例，我们一般使用全大写字母来表示泡泡名。
 
 我们保留如下特别的主机名称和应用名称：
 
 - `localhost`：指本机。
-- `cn.fmsoft.hybridos.hibus`：保留的应用名称，指 hiBus 本身，注册或注销事件或过程时，向该应用发送指定的过程调用。该应用也可提供一些一般性的系统操作命令以及事件。
-
+- `cn.fmsoft.hybridos.ibus`：保留的应用名称，指 hiBus 本身，注册或注销事件或过程时，向该应用发送指定的过程调用。该应用也可提供一些一般性的系统操作命令以及事件。
 
 ## 协议及接口
 
@@ -177,7 +178,6 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "causedId": "<event_id> | <call_id> | <result_id> ",
     "retCode": 503,
     "retMsg": "Service Unavailable",
-    "extraMsg": "...",
 }
 ```
 
@@ -191,7 +191,6 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     + 503（Service Unavailable）：达到连接上限。
     + 505（Internal Server Error）：内部错误。
 - `retMsg`：包含简单的信息。
-- `extraMsg`：可选的额外描述信息。
 
 #### 身份识别
 
@@ -231,7 +230,7 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "protocolName": "HIBUS",
     "protocolVersion": 90,
     "hostName": "localhost",
-    "appName": "cn.fmsoft.hybridos.network",
+    "appName": "cn.fmsoft.hybridos.inetd",
     "runnerName": "self",
     "signature": "...",
     "encodedIn": [ "base64" | "hex" ]
@@ -259,7 +258,6 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "packetType": "authFailed",
     "retCode": 409,
     "retMsg": "Conflict",
-    "extraMsg": "..."
 }
 ```
 
@@ -272,7 +270,6 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     + 409（Conflict）：行者名冲突。
     + 426（Upgrade Required）：客户端版本过低，需要升级。
 - `retMsg`：包含简单的返回信息。
-- `extraMsg`：额外信息（可选）。
 
 在身份验证失败的情况下，服务器将立即断开连接。
 在身份验证未通过之前，客户端发送到服务器所有非用于身份验证的数据包，都将被忽略并致使服务器立即断开连接。
@@ -317,7 +314,6 @@ hiBus 的一些思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递
     "causedId": "<unique_call_identifier>",
     "retCode": 503,
     "retMsg": "Service Unavailable",
-    "extraMsg": "...",
 }
 ```
 
@@ -490,7 +486,6 @@ hiBus 服务器收到执行特定过程的请求后，首先做如下检查：
     "causedId": "<unique_event_identifier>",
     "retCode": 503,
     "retMsg": "Service Unavailable",
-    "extraMsg": "...",
 }
 ```
 
@@ -634,6 +629,50 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 - 返回值：无。客户端依据结果的 `retCode` 判断是否取消成功，可能的值有：
    + `404`：表示调用方未订阅指定的事件；或者该事件已经被撤销。
    + `200`：表示成功。
+
+#### 列出已连接端点
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/listEndpoints`
+- 参数：无。
+- 返回值：成功时返回已注册的，且调用方可调用的过程清单。
+- 常见错误状态码：403（Forbidden）。
+- 仅允许 `cn.fmsoft.hybridos.hibus` 应用调用。
+
+下面是一个示例结果：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+    "fromMethod": "listEndpoints",
+    "timeConsumed": 0.5432,
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retMsg": "Ok",
+    "retValue": [
+        {
+            "endpointName": "localhost/cn.fmsoft.hybridos.hibus/builtin",
+            "livingSeconds": 50,
+            "methods": ["foo", "bar"],
+            "bubbles": ["FOO", "BAR"],
+            "memUsed": 4526,
+            "peakMemUsed": 4526
+        },
+        {
+            "endpointName": "localhost/cn.fmsoft.hybridos.hibus/cmdline",
+            "livingSeconds": 20,
+            "methods": ["foo", "bar"],
+            "bubbles": ["FOO", "BAR"],
+            "memUsed": 4526,
+            "peakMemUsed": 4526
+        },
+    ],
+}
+```
+
+注意：`retValue` 始终为 JSON 格式的字符串。
 
 #### 列出已注册过程
 
@@ -1001,7 +1040,7 @@ void* hibus_read_packet_alloc (hibus_conn* conn, unsigned int *packet_len);
 int hibus_send_text_packet (hibus_conn* conn, const char* text, unsigned int txt_len);
 ```
 
-和 WebSocket 类似，在数据包长度超过 1024 字节时，通过 UnixSocket 发出的数据包也会被分成较小的数据帧（frame）来传输。每个数据帧的大小被限定为 1024 字节，这些函数将自动处理数据包的分片发送或者读取。也会自动处理乒乓心跳数据帧。
+和 WebSocket 类似，在数据包长度超过 4096 字节时，通过 UnixSocket 发出的数据包也会被分成较小的数据帧（frame）来传输。每个数据帧的负载（payload）大小被限定为 4096 字节，这些函数将自动处理数据包的分片发送或者读取。也会自动处理乒乓心跳数据帧。
 
 注意，通常客户端不需要直接调用这几个底层的读写数据包函数。这些函数供 Python、JavaScript 等编程语言实现本地绑定功能时使用。另外，这些函数全部使用阻塞读写模式，故而在调用这些函数，尤其是读取函数之前，应通过 `select` 系统调用判断对应的文件描述符上是否存在相应的可读取数据。
 
@@ -1040,9 +1079,9 @@ char* hibus_assemble_endpoint_alloc (const char* host_name, const char* app_name
 行者可以使用如下的接口注册或撤销过程：
 
 ```c
-typedef hibus_json* (*hibus_method_handler)(hibus_conn* conn,
+typedef char* (*hibus_method_handler)(hibus_conn* conn,
         const char* from_endpoint, const char* method_name,
-        const hibus_json* method_param);
+        const char* method_param);
 
 int hibus_register_procedure (hibus_conn* conn, const char* method_name,
         hibus_method_handler method_handler);
@@ -1062,7 +1101,7 @@ int hibus_register_event (hibus_conn* conn, const char* bubble_name,
         const char* to_host, const char* to_app);
 int hibus_revoke_event (hibus_conn* conn, const char* bubble_name);
 int hibus_fire_event (hibus_conn* conn,
-        const char* bubble_name, const hibus_json* bubble_data);
+        const char* bubble_name, const char* bubble_data);
 ```
 
 `hibus_register_event` 函数用于注册一个事件。
@@ -1078,7 +1117,7 @@ int hibus_fire_event (hibus_conn* conn,
 ```c
 typedef void (*hibus_event_handler)(hibus_conn* conn,
         const char* from_endpoint, const char* bubble_name,
-        const hibus_json* bubble_data);
+        const char* bubble_data);
 
 int hibus_subscribe_event (hibus_conn* conn,
         const char* endpoint, const char* bubble_name,
@@ -1101,23 +1140,23 @@ int hibus_unsubscribe_event (hibus_conn* conn,
 ```c
 typedef void (*hibus_result_handler)(hibus_conn* conn,
         const char* from_endpoint, const char* method_name,
-        int ret_code, const hibus_json* ret_value);
+        int ret_code, const char* ret_value);
 
 int hibus_call_procedure (hibus_conn* conn, const char* endpoint, const char* method_name,
-        const hibus_json* method_praram, time_t ret_time_expected, hibus_result_handler result_handler);
+        const char* method_praram, time_t ret_time_expected, hibus_result_handler result_handler);
 
 int hibus_call_procedure_and_wait (hibus_conn* conn, const char* endpoint, const char* method_name,
-        const hibus_json* method_praram, time_t ret_time_expected, hibus_json** ret_value);
+        const char* method_praram, time_t ret_time_expected, char** ret_value);
 ```
 
 `hibus_call_procedure` 提供了异步调用远程过程的接口：发起调用后会立即返回，然后在回调函数（`result_handler`）中等待结果或错误。此时，需要配合后面讲到的 `hibus_wait_for_packet` 函数使用。
 
 `hibus_call_procedure_and_wait` 提供了同步调用远程过程的接口：发起调用后将等待结果或错误然后返回。注意，在等待返回值的过程中，可能会收到事件，此时，该函数会调用相应的事件处理器。
 
-#### 等待数据包及事件循环
+#### 等待并分发数据包
 
 ```c
-int hibus_wait_for_packet (hibus_conn* conn, struct timeval *timeout);
+int hibus_wait_and_dispatch_packet (hibus_conn* conn, struct timeval *timeout);
 ```
 
 该函数检查服务器发过来的数据，并调用相应的事件处理器或者结果处理器。通常在一个循环中使用，如：
@@ -1129,7 +1168,7 @@ int hibus_wait_for_packet (hibus_conn* conn, struct timeval *timeout);
 
         ...
 
-        hibus_wait_for_packet (conn, &timeout);
+        hibus_wait_and_dispatch_packet (conn, &timeout);
 
         ...
     }
