@@ -62,18 +62,18 @@
 
 ```
 [system]
-library_path=/home/projects/hibusdaemon/lib		// 存储动态库的路径
-lib=wifi										// 动态库名称，libwifi.so
-scan_time=30									// 自动扫描网络时间间隔。单位：秒
-signal_time=10									// 自动检测网络连接信号强度时间间隔。单位：秒
+library_path=/home/projects/hibusdaemon/lib		// path of library 
+lib=wifi										// name of library, libwifi.so
+scan_time=30									// interval of scan time. unit: second
+signal_time=10									// inervval of check signal strength. unit: second
 
 [procedure]
-for_host=localhost								// 如为空，使用默认值：localhost？
-for_app=cn.fmsoft.hybridos.appagent				// 允许调用的应用名。如为空，则表示所有应用都可调用
+for_host=localhost                              // NULL for all hosts
+for_app=cn.fmsoft.hybridos.appagent				// NULL for all applications
 
 [event]
-for_host=localhost								// 如为空，使用默认值：localhost？
-for_app=cn.fmsoft.hybridos.appagent				// 允许订阅的应用名。如为空，则表示所有应用都可调用
+for_host=localhost								// NULL for all hosts
+for_app=cn.fmsoft.hybridos.appagent				// NULL for all applications
 ```
 
 
