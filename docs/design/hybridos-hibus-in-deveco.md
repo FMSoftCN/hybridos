@@ -49,6 +49,33 @@ public:
     NativeapiHiBus() {}
     ~NativeapiHiBus() {}
 
+    // appName property
+    static void RegistPropertyAppName();
+    static JSIValue GetterAppName(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum);
+    static JSIValue SetterAppName(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum);
+
+    // runnerName property
+    static void RegistPropertyRunnerName();
+    static JSIValue GetterRunnerName(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum);
+    static JSIValue SetterRunnerName(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum);
+
+    // pathSocket property
+    static void RegistPropertyPathSocket();
+    static JSIValue GetterPathSocket(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum);
+
+    // status property
+    static void RegistPropertyStatus();
+
+    // connect function
+    static JSIValue Connect(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum);
+    // disconnect function
+    static JSIValue Disconnect(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum);
+    // send function
+    static JSIValue Send(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum);
+    // read function
+    static JSIValue Read(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum);
+
+    // only for test
     static JSIValue printInfo(const JSIValue thisVal, const JSIValue* args, uint8_t argsNum);
 };
 
@@ -60,6 +87,7 @@ void InitHiBusModule(JSIValue exports)
     JSI::SetModuleAPI(exports, "printInfo", NativeapiHiBus::printInfo);
 }
 
+// only for test
 JSIValue NativeapiHiBus::printInfo(const JSIValue thisVal, const JSIValue* args, uint8_t argsNum)
 {
     fprintf(stderr, "nativeapi_hibus printInfo isCalled\n");
