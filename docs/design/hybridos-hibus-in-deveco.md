@@ -42,7 +42,7 @@
 
 例如，注入一个printInfo函数供上层使用:
 
-```C++
+```c++
 // nativeapi_hibus.h
 class NativeapiHiBus {
 public:
