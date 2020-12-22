@@ -6,8 +6,8 @@
 - [基本框架及术语](#基本框架及术语)
 - [各模块的设计](#各模块的设计)
    + [hiAceJs中hibus的js封装](#hiacejs中hibus的js封装)
-   + [hibus-simulator.js](#hibus-simulator.js)
-   + [hibus-wrapper.js](#hibus-wrapper.js)
+   + [hibus-simulator](#hibus-simulator)
+   + [hibus-wrapper](#hibus-wrapper)
 
 
 ## 基本框架及术语
@@ -69,7 +69,7 @@ JSIValue NativeapiHiBus::printInfo(const JSIValue thisVal, const JSIValue* args,
 ```
 
 
-### hibus-simulator.js
+### hibus-simulator
 
 hibus-simulator.js 提供了hibus的接口的模拟实现，用户在开发过程中可以修改该js文件，以提供不同的
 模拟数据。
@@ -85,7 +85,7 @@ export default {
 }
 ```
 
-### hibus-wrapper.js
+### hibus-wrapper
 
 hibus-wrapper 是对 hibus 接口的一层包装，这层包装的目的是为了在DevEoc 开发环境中，在不具备
 hiAceJs的情况下，可以正常的进行开发的测试工作。
