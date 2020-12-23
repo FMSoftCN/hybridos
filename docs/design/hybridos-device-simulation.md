@@ -10,6 +10,9 @@
    + [local-simulator](#local-simulator)
    + [hibus-simulator](#hibus-simulator)
    + [hibus-wrapper](#hibus-wrapper)
+- [设备接口设计](#设备接口设计)
+   + [WiFi](#WiFi)
+   + [Battery](#Battery)
 
 
 ## 基本框架及术语
@@ -292,4 +295,9 @@ export default {
 
 ```
 
+## 设备接口设计
+
+### WiFi
+
+### Battery
 
