@@ -315,6 +315,29 @@ export default {
 
 ### Battery
 
+底层电池相关服务会在电池状态变化(充电状态，电量等)将产生电池状态改变事件,
+App可以通过订阅该事件，获取电池状态信息。
+
+#### 电池状态改变事件
+
+当电池状态发生改变时，产生 `BATTERYCHANGED` 事件:
+
+```json
+{
+    "packetType": "event",
+    "eventId": "<unique_event_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.batttery/",
+    "fromBubble": "BATTERYCHANGED",
+    "bubbleData": {
+        "plugged": [ true | false ],
+        "health": "90%",
+        "temperature": "55℃",
+        "voltage": "4.7V",
+        "level": 75
+    }
+}
+
+
 ## 附：商标声明
 
 _注意：除本说明之外，原样复制，放到文档最后。_
