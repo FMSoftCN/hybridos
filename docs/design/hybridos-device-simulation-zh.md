@@ -53,15 +53,12 @@
 ```
 
 在 HybridOS 中，App 通过 hiBus 来访问设备。在上面的架构图中，wifi.js 和 battery.js 分别
-是针对WiFi设备和电池设备的操作封装。
+是针对WiFi设备和电池设备的操作封装。 
 
 hibus-wrapper.js 是 hiBus 基本功能的包装，包括连接的建立、断开，过程调用，事件订阅等内容。
-
 在真实设备上运行时，hibus-wrapper.js 会通过由 hiAceJs 提供的 system.hibus 来访问 hiBus总线，
-进而操作真实的设备。
-
-在开发环境（包括模拟器）运行时，hibus-wrapper.js 会调用 hibus-simulator.js 的相关接口，以便
-返回模拟数据。
+进而操作真实的设备。在开发环境（包括模拟器）运行时，hibus-wrapper.js 会调用 hibus-simulator.js 
+的相关接口，以便返回模拟数据。
 
 hibus-simulator.js 目前主要通过 local-simulator.json 返回模拟数据；将来可以连接远程云服务
 从而获取更佳的服务和体验。
