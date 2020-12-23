@@ -539,6 +539,22 @@ export default {
 }
 ```
 
+#### WiFi信号改变事件
+
+当前WiFi信号强度改变时，产生 `SIGNALSTRENGTHCHANGED` 事件:
+
+```json
+{
+    "packetType": "event",
+    "eventId": "<unique_event_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromBubble": "SIGNALSTRENGTHCHANGED",
+    "bubbleData": {
+        "signalStrength": 75
+    }
+}
+```
+
 ### Battery
 
 底层电池相关服务会在电池状态变化(充电状态，电量等)将产生电池状态改变事件,
