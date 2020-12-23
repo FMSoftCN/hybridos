@@ -134,16 +134,32 @@ JSIValue NativeapiHiBus::Read(const JSIValue thisVal, const JSIValue* args, uint
 
 ### hibus-simulator
 
-hibus-simulator.js 提供了hibus的接口的模拟实现，用户在开发过程中可以修改该js文件，以提供不同的
-模拟数据。
-将来，可以连接云服务提供更强大的功能模拟。
+hibus-simulator.js 提供了hibus的接口的模拟实现，用户在开发过程中可以修改local-simulator.json文件，
+以提供不同的 模拟数据。 将来可以连接远程云服务从而获取更佳的服务和体验。
 
-例如，hibus提供了一个printInfo函数，测在hibus-simulator.js 中模拟实现如下:
 
 ```js
+import localData from '../../common/local-simulator.json';
+
 export default {
-    printInfo() {
-        console.log('print Info from hibus-simulator');
+    connect() {
+    }
+
+    disconnect() {
+    }
+
+    subscribeEvent(appName, runnerName, eventName, funcName) {
+    }
+
+    unsubscribeEven(appName, runnerName, eventName, funcName) {
+    }
+
+    callProcedure(endpoint, methodName, param, timeout, callback) {
+    }
+
+    checkPackets(timeout) {
+        // get data from localData
+        // callback
     }
 }
 ```
@@ -213,9 +229,11 @@ export default {
     checkPackets(timeout) {
         if (hibus) {
             hibus.read(...);
+            // callback
+            ...
         }
         else {
-            hibusSimulator.checkPackets(appName, runnerName, eventName, funcName);
+            hibusSimulator.checkPackets(...);
         }
     }
 
