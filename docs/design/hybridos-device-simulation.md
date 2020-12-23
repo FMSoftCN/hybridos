@@ -138,8 +138,35 @@ local-simulator.json 提供了本地的模拟数据，用户可以修改该文�
 
 ```json
 {
-  "name":  "cherry",
-  "age":  25
+    "procedure" : [
+        {
+            "name":"procedureName1",
+            "data": {
+                ...
+            }
+        },
+        {
+            "name":"procedureName2",
+            "data": {
+                ...
+            }
+        }
+    ],
+
+    "event" : [
+        {
+            "name":"eventName1",
+            "data": {
+                ...
+            }
+        },
+        {
+            "name":"eventName1",
+            "data": {
+                ...
+            }
+        }
+    ]
 }
 ```
 
