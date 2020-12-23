@@ -228,7 +228,7 @@ hiAceJs的情况下，可以正常的进行开发的测试工作。
 hibus-wrapper.js 调用 hibus-simulator.js提供的接口。
 
 
-例如，hibus提供了一个printInfo函数，则在hibus-wrapper.js 中实现如下:
+例如，hibus提供了一个printInfo过程，则在hibus-wrapper.js 中实现如下:
 
 ```js
 import hibus from '@system.hibus';
@@ -295,7 +295,7 @@ export default {
 }
 ```
 
-在App编程使用时，比如按钮的click事件函数clickButton 如下:
+在App编程使用时，比如按钮的click事件过程clickButton 如下:
 
 ```js
 import device from '@system.device';
@@ -317,10 +317,10 @@ export default {
 
 #### WiFi开启
 
-该函数完成对WIFI设备的初始化。如根据配置文件，搜索并连接默认网络。
+该过程完成对WIFI设备的初始化。如根据配置文件，搜索并连接默认网络。
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/open`
-- 返回值：无。客户端依据结果的 `retCode` 判断是否注册成功：
+- 返回值：无。客户端依据结果的 `retCode` 判断是否成功：
 - 常见错误状态码：
    + `200`：表示成功。
 
@@ -342,10 +342,10 @@ export default {
 
 #### WiFi关闭
 
-该函数关闭WIFI当前连接，同时完成设备相关软、硬件的资源回收。
+该过程关闭WIFI当前连接，同时完成设备相关软、硬件的资源回收。
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/close`
-- 返回值：无。客户端依据结果的 `retCode` 判断是否注册成功：
+- 返回值：无。客户端依据结果的 `retCode` 判断是否成功：
 - 常见错误状态码：
    + `200`：表示成功。
 
@@ -362,6 +362,152 @@ export default {
     "timeDiff": 0.1234,
     "retCode": 200,
     "retMsg": "Ok",
+}
+```
+
+#### 连接热点
+
+该过程将根据参数连接指定的热点。
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/connect`
+- 参数：
+   + `ssid`：网络SSID
+   + `password`：网络的密码，如为NULL，表示不需要密码
+- 返回值：无。客户端依据结果的 `retCode` 判断是否成功：
+- 常见错误状态码：
+   + `200`：表示成功。
+
+下面是一个示例结果：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromMethod": "connect",
+    "timeConsumed": 0.5432,
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retMsg": "Ok",
+}
+```
+
+#### 断开网络连接
+
+该过程将断开网络连接。
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/disconnect`
+- 返回值：无。客户端依据结果的 `retCode` 判断是否成功：
+- 常见错误状态码：
+   + `200`：表示成功。
+
+下面是一个示例结果：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromMethod": "disconnect",
+    "timeConsumed": 0.5432,
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retMsg": "Ok",
+}
+```
+
+#### 获取WiFi信号强度 
+
+该过程将断开网络连接。
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/signalstrength`
+- 返回值：成功时返回信号强度，取值获围0~100。
+- 常见错误状态码：
+   + `200`：表示成功。
+
+下面是一个示例结果：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromMethod": "signalstrength",
+    "timeConsumed": 0.5432,
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retMsg": "Ok",
+    "retValue": 70
+}
+```
+
+#### 扫描WiFi热点
+
+该过程将启动WiFi扫描，扫描结果需要通过过程`@localhost/cn.fmsoft.hybridos.wifi/gethotspots`获取
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/startscan`
+- 返回值：无。客户端依据结果的 `retCode` 判断是否成功：
+- 常见错误状态码：
+   + `200`：表示成功。
+
+下面是一个示例结果：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromMethod": "startscan",
+    "timeConsumed": 0.5432,
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retMsg": "Ok",
+}
+```
+
+
+#### 获取WiFi热点列表
+
+该过程将获取WiFi扫描结果。
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/gethotspots`
+- 返回值：成功时返回扫描到的WiFi热点列表
+- 常见错误状态码：
+   + `200`：表示成功。
+
+下面是一个示例结果：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromMethod": "gethotspots",
+    "timeConsumed": 0.5432,
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retMsg": "Ok",
+    "retValue": [
+        {
+            "bssid": "f0:b4:29:24:18:eb",
+            "ssid": "dev001",
+            "frequency": "2427MHZ",
+            "signalStrength": 70,
+            "capabilities": "[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][WPS][ESS]",
+        },
+        {
+            "bssid": "ea:a8:aa:24:bc:ae",
+            "ssid": "dev002",
+            "frequency": "2427MHZ",
+            "signalStrength": 75,
+            "capabilities": "[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][WPS][ESS]",
+        },
+    ],
 }
 ```
 
