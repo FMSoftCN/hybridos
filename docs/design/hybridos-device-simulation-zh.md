@@ -26,7 +26,7 @@
    + [local-simulator](#local_simulator)
    + [hibus-simulator](#hibus_simulator)
    + [hibus-wrapper](#hibus_wrapper)
-- [设备接口设计](#设备接口设计)
+- [设备操控](#设备操控)
    + [WiFi](#wifi)
    + [Battery](#battery)
 - [附：商标声明](#附商标声明)
@@ -309,7 +309,7 @@ export default {
 
 ```
 
-## 设备接口设计
+## 设备操控
 
 ### WiFi
 
