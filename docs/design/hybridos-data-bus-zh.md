@@ -1,8 +1,24 @@
 # 合璧操作系统设备端数据总线概要设计
 
-魏永明
+【主题】合璧操作系统设备端数据总线概要设计  
+【概要】本文阐述合璧操作系统设备端数据总线（hiBus）设计  
+【版本】1.0  
+【作者】魏永明  
+【日期】2020 年 11 月  
+【状态】定稿  
 
-本文阐述合璧操作系统设备端数据总线（hiBus）1.0 版本的设计。
+**版权声明**
+
+版权所有 &copy; 2020 北京飞漫软件技术有限公司  
+保留所有权利
+
+此文档不受合璧操作系统相关软件开源许可证的管辖。
+
+飞漫软件公开此文档的目标，用于向开发者解释合璧操作系统的设计原理或者相关规范。在未获得飞漫软件书面许可之前，任何人不得复制或者分发本文档的全部或部分内容，或利用本文档描绘的技术思路申请专利、撰写学术论文等。
+
+本文涉及到的飞漫软件或其合作伙伴的注册商标或商标，有关其详细列表，请查阅文档末尾。
+
+**目录**
 
 - [基本框架及术语](#基本框架及术语)
 - [协议及接口](#协议及接口)
@@ -50,7 +66,7 @@
    + [简单的应用管理](#简单的应用管理)
    + [端点权限管理](#端点权限管理)
    + [跨设备连接的思考](#跨设备连接的思考)
-
+- [附：商标声明](#附商标声明)
 
 ## 基本框架及术语
 
@@ -1224,4 +1240,43 @@ int hibus_wait_and_dispatch_packet (hibus_conn* conn, struct timeval *timeout);
 
 1. hiBus 服务器使用 WebSocket 在非回环地址上监听连接请求，另一个主机上的应用通过 WebSocket 直接连接到该服务器。问题：如何对另一台主机上的应用进行身份验证？
 1. 在不同的 hiBus 服务器实例之间建立中继服务，所有针对另一个主机上的请求，由 hiBus 服务器之间通过中继完成，从而实现跨主机的远程过程调用或者事件订阅。此种设计下，身份验证只在 hiBus 服务器之间进行，各主机上的应用身份验证，由本机处理。这样的话，本机 WebSocket 的事件和过程调用端口均只在本地回环地址上提供服务。比如，当过程调用的目标主机非本机时，hiBus 服务器可将该请求转发给目标主机所在的 hiBus 服务器，然后将结果转发给调用者。
+
+## 附：商标声明
+
+_注意：除本说明之外，原样复制，放到文档最后。_
+
+本文提到的产品、技术或者术语名称，涉及北京飞漫软件技术有限公司在中国或其他地区注册的如下商标：
+
+1) 飛漫
+
+![飛漫](https://www.fmsoft.cn/application/files/cache/thumbnails/87f47bb9aeef9d6ecd8e2ffa2f0e2cb6.jpg)
+
+2) FMSoft
+
+![FMSoft](https://www.fmsoft.cn/application/files/cache/thumbnails/44a50f4b2a07e2aef4140a23d33f164e.jpg)
+
+3) 合璧
+
+![合璧](https://www.fmsoft.cn/application/files/cache/thumbnails/9c57dee9df8a6d93de1c6f3abe784229.jpg)
+![合壁](https://www.fmsoft.cn/application/files/cache/thumbnails/f59f58830eccd57e931f3cb61c4330ed.jpg)
+
+4) HybridOS
+
+![HybridOS](https://www.fmsoft.cn/application/files/cache/thumbnails/5a85507f3d48cbfd0fad645b4a6622ad.jpg)
+
+5) HybridRun
+
+![HybridRun](https://www.fmsoft.cn/application/files/cache/thumbnails/84934542340ed662ef99963a14cf31c0.jpg)
+
+6) MiniGUI
+
+![MiniGUI](https://www.fmsoft.cn/application/files/cache/thumbnails/54e87b0c49d659be3380e207922fff63.jpg)
+
+6) xGUI
+
+![xGUI](https://www.fmsoft.cn/application/files/cache/thumbnails/7fbcb150d7d0747e702fd2d63f20017e.jpg)
+
+7) miniStudio
+
+![miniStudio](https://www.fmsoft.cn/application/files/cache/thumbnails/82c3be63f19c587c489deb928111bfe2.jpg)
 
