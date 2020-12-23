@@ -229,8 +229,8 @@ signal_time=10              // inervval of check signal strength. unit: second
 	无
 返回值：
 	{
-	    "SSID":"fmsoft-dev",
-	    "encryption":true,
+		"SSID":"fmsoft-dev",
+		"encryption":true,
 		"signal":65，
 		"MAC":"AB:CD:EF:12:34:56",
 		"IP":"192.168.1.128",
@@ -512,6 +512,6 @@ hotspots数组由动态库维护，负责内存空间的开辟及回收。
 void wifiSetInterval (int scan, int signalStrength);
 参数：
 	int scan：网络扫描的时间间隔。单位：秒；
-    int signalStrength：检测网络信号强度时间间隔。单位：秒。
+	int signalStrength：检测网络信号强度时间间隔。单位：秒。
 ```
 
