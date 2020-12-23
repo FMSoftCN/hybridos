@@ -165,14 +165,60 @@ import hibusSimulator from './hibus-simulator'
 
 export default {
 
-    printInfo() {
+    connect() {
         if (hibus) {
-            hibus.printInfo();
+            hibus.connect();
         }
         else {
-            hibusSimulator.printInfo();
+            hibusSimulator.connect();
         }
     }
+
+    disconnect() {
+        if (hibus) {
+            hibus.disconnect();
+        }
+        else {
+            hibusSimulator.disconnect();
+        }
+    }
+
+    subscribeEvent(appName, runnerName, eventName, funcName) {
+        if (hibus) {
+            hibus.send(...);
+        }
+        else {
+            hibusSimulator.subscribeEvent(appName, runnerName, eventName, funcName);
+        }
+    }
+
+    unsubscribeEven(appName, runnerName, eventName, funcName) {
+        if (hibus) {
+            hibus.send(...);
+        }
+        else {
+            hibusSimulator.unsubscribeEven(appName, runnerName, eventName, funcName);
+        }
+    }
+
+    callProcedure(endpoint, methodName, param, timeout, callback) {
+        if (hibus) {
+            hibus.send(...);
+        }
+        else {
+            hibusSimulator.callProcedure(appName, runnerName, eventName, funcName);
+        }
+    }
+
+    checkPackets(timeout) {
+        if (hibus) {
+            hibus.read(...);
+        }
+        else {
+            hibusSimulator.checkPackets(appName, runnerName, eventName, funcName);
+        }
+    }
+
 }
 ```
 
@@ -184,7 +230,7 @@ import hibus from '../../common/hibus-wrapper';
 
 export default {
     clickButton() {
-        hibus.printInfo();
+        hibus.connect();
     }
 }
 
