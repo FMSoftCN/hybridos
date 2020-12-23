@@ -8,7 +8,7 @@
 - [配置文件](#配置文件)
    + [配置文件的内容](#配置文件的内容)
 - [守护进程接口](#守护进程接口)
-   + [守护进程提供的远程调用](#守护进程提供的远程调用)
+   + [守护进程提供的远程过程](#守护进程提供的远程过程)
    + [守护进程提供的可订阅消息](#守护进程提供的可订阅消息)
 - [守护进程工作流程](#守护进程工作流程)
 - [动态库需要完成的接口](#动态库需要完成的接口)
@@ -38,7 +38,7 @@ inetd在系统中的位置如下图：
 
 - APP层：可以是JS代码，也可以是C代码，通过hiBus总线，完成用户对网络的管理操作；
 - hiBus Server：负责数据通信、消息分发、及连接的管理；
-- inetd daemon：负责对网络设备的监控、连接、中断、切换等。通过hiBus Server，为APP层提供设备事件、以及远程过程调用。其只是一个流程框架，具体任务由下面的动态库层完成；
+- inetd daemon：负责对网络设备的监控、连接、中断、切换等。通过hiBus Server，为APP层提供设备事件、以及远程过程。其只是一个流程框架，具体任务由下面的动态库层完成；
 - libxxx.so：每个动态库完成一种网络类型的具体操作；
 - Linux Kernel / Drivers：对设备的底层操作。
 
@@ -80,7 +80,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 #### 守护进程提供的远程过程
 
-在WiFi操作中，强制规定，远程过程调用的参数，以及执行结果，使用JSON格式字符串。下面仅对每个过程的参数及返回值，进行说明。
+在WiFi操作中，强制规定，远程过程的参数，以及执行结果，使用JSON格式字符串。下面仅对每个过程的参数及返回值，进行说明。
 
 ##### wifiOperateDevice
 
@@ -342,13 +342,13 @@ inetd守护进程，仅仅搭建了一个框架。其具体业务的执行，将
 2. 调用hibus_connect_via_unix_socket()，建立与hiBus服务器的连接；
 3. 读取配置文件，获得各项参数；
 4. 根据配置文件，装载动态库。调用动态库的__wifi_get_Ops()函数，获取hiWiFiManagerOps结构；
-5. 调用hibus_register_procedure()，注册远程过程调用；
+5. 调用hibus_register_procedure()，注册远程过程；
 6. 调用hibus_register_event()，注册可被订阅事件；
 7. 调用hiWifiManagerOps.open()函数，初始化WiFi设备，连接默认网络；
 8. 设置超时时间，循环调用hibus_wait_and_dispatch_packet()函数：
    1. 根据配置文件，计算时间，定时调用hiWiFiManagerOps.wifiScan()、hiWiFiManagerOps.wifiSignalStrength()函数；
    2. 定时调用hiWifiManagerOps.wifiGetStatus()函数，轮询设备的工作状态；
-9. 调用hibus_revoke_event()撤销事件（用不到）、调用hibus_revoke_procedure()撤销远程过程调用（用不到）；
+9. 调用hibus_revoke_event()撤销事件（用不到）、调用hibus_revoke_procedure()撤销远程过程（用不到）；
 10. 调用hibus_disconnect()中断与hiBus服务器的连接（用不到）；
 11. 调用dlclose()，关闭动态库。
 
