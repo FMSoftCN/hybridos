@@ -7,12 +7,11 @@
 - [守护进程inetd的软件结构](#守护进程inetd的软件结构)
 - [配置文件](#配置文件)
    + [配置文件的内容](#配置文件的内容)
-- [守护进程](#守护进程)
-   + [守护进程工作流程](#守护进程工作流程)
-   + [守护进程为动态库提供的接口](#守护进程为动态库提供的接口)
+- [守护进程接口](#守护进程接口)
    + [守护进程提供的远程调用](#守护进程提供的远程调用)
    + [守护进程提供的可订阅消息](#守护进程提供的可订阅消息)
-- [动态库接口](#动态库接口)
+- [守护进程工作流程](#守护进程工作流程)
+- [动态库需要完成的接口](#动态库需要完成的接口)
 
 
 ## 守护进程inetd的软件结构
@@ -218,8 +217,6 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 
 
-
-
 #### 守护进程提供的可订阅消息
 
 ##### wifi_event_device
@@ -281,7 +278,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 	}
 ```
 
-只针对已经连接的网络，才会发送该事件。
+signal取值范围在0——100之间。只针对已经连接的网络，才会发送该事件。
 
 
 
@@ -305,7 +302,7 @@ inetd守护进程，仅仅搭建了一个框架。其具体业务的执行，将
 
 
 
-## 动态库接口
+## 动态库需要完成的接口
 
 每个动态库，必须完成下面的接口
 
@@ -314,16 +311,16 @@ inetd守护进程，仅仅搭建了一个框架。其具体业务的执行，将
 在头文件 inetd.h 中，有如下声明：
 
 ```
-typedef struct _HibusInvokeOps
+typedef struct HiWifiManagerOps
 {
-    int (* open) (void);
-    int (* close) (void);
-    void (* wifi_status) (void);
+    int (* open) (const char * device_name);
+    int (* close) (const char * device_name);
+    int (* wifi_connect) (const char * ssid, const char *password);
+    int (* wifi_disconnect) (const char * ssid);
+    int (* wifi_signal) (void);
     void (* wifi_scan) (wifi_node * wifi, int * number);
-    void (* wifi_signal) (void);
-    int (* wifi_connect) (void);
-    int (* wifi_disconnect) (void);
-} HibusInvokeOps;
+    void (* wifi_status) (int * status, int * void);
+} hiWifiManagerOps;
 ```
 
 动态库需要实现HibusInvokeOps结构中的全部函数。这些函数将被守护进程直接调用，或者被其他端点（endpoint）通过hiBus，远程调用。
@@ -331,11 +328,11 @@ typedef struct _HibusInvokeOps
 守护进程首先调用如下函数，获得工作过程中所需要的全部函数指针。
 
 ```
-HibusInvokeOps * wifi_ops_get();
+HiWifiManagerOps * __wifi_functions_get();
 参数：
 	无；
 返回值：
-	HibusInvokeOps结构指针。	
+	HiWifiManagerOps。	
 ```
 
 
@@ -343,24 +340,24 @@ HibusInvokeOps * wifi_ops_get();
 ##### 设备的打开
 
 ```
-int open_device(int * fd_device);
+int open(const char * device_name);
 参数：
-	fd_device[out]：打开设备的文件描述符指针；
+	const char * device_name：网络设备名；
 返回值：
 	0：设备工作正常
 	其他值：打开设备失败
 ```
 
-该函数完成对WIFI设备的初始化。如根据配置文件，搜索并连接默认网络，设置HiBus通信中，用户自定义数据结构等。
+该函数完成对WIFI设备的初始化。如根据配置文件，搜索并连接默认网络。
 
-在初始化过程中，如需要打开具体设备，fd_device返回打开设备的文件描述符。如不需要，将文件描述符赋值为-1，或不做任何操作即可。
+
 
 ##### 设备的关闭
 
 ```
-int close_device(int fd_device);
+int close(const char * device_name);
 参数：
-	fd_device[in]：打开设备的文件描述符；
+	const char * device_name：网络设备名；
 返回值：
 	0：设备正常关闭
 	其他值：关闭设备失败
@@ -368,24 +365,52 @@ int close_device(int fd_device);
 
 该函数关闭WIFI当前连接，同时完成设备相关软、硬件的资源回收。
 
-##### 设备的读操作
+
+
+##### 网络的连接
 
 ```
-void device_read(void);
+int wifi_connect(const char * ssid, const char *password);
+参数：
+	const char * ssid：网络SSID；
+	const char *password：网络的密码，如为NULL，表示不需要密码；
+返回值：
+	0：网络连接成功
+	其他值：网络连接失败，具体值详见inetd.h。
+```
+
+
+
+##### 网络的断开
+
+```
+int (* wifi_disconnect) (const char * ssid);
+
+参数：
+	const char * ssid：网络SSID；
+返回值：
+	0：网络断开连接成功
+	其他值：网络断开连接失败，具体值详见inetd.h。
+```
+
+
+
+##### WIFI强度
+
+```
+int wifi_signal(void);
 参数：
 	无
 返回值：
-	无
+	int strength：当前网络信号强度。
 ```
 
-如果在open_device()函数中返回的fd_device是一个合法的文件描述符（不等于 -1），则守护进程将通过select系统调用，监视该文件描述符。一旦该端口有数据，则调用动态库的device_read()函数。动态库需对该文件描述符进行读操作，并处理数据。
 
-如果在open_device()函数中返回的fd_device为-1，则不会调用该函数。
 
 ##### WIFI扫描
 
 ```
-void wifi_scan(wifi_node * wifi, int * number);
+void wifi_scan(wifi_hotspot * wifi, int * number);
 参数：
 	wifi_node * wifi[out]：wifi网络描述结构头指针；
 	int * number[out]：发现的wifi网络个数；	
@@ -393,24 +418,8 @@ void wifi_scan(wifi_node * wifi, int * number);
 	无
 ```
 
-守护进程将定时（根据配置文件）调用该函数。该函数负责扫描当前网络，并调用hibus_fire_event()，向hiBus发送“wifi_event_scan”事件。“wifi_event_scan”事件参数见后面的消息接口部分。
 
-##### WIFI强度
 
-```
-void wifi_signal(void);
-参数：
-	无
-返回值：
-	无
-```
-
-守护进程将定时（根据配置文件）调用该函数。该函数负责查询当前连接的信号强度，根据信号强度：
-
-- 如当前无任何网络连接，且没有设置默认连接，不做任何操作，直接返回；
-- 如当前网络有连接，则发送“wifi_event_signal”事件，事件参数包含当前网络信号强度；
-- 如当前网络中断，则发送"wifi_event_broken"事件；
-- 如已经中断的网络信号恢复，且为自动连接，则重新连接网络，并发送"wifi_event_connect"事件；
-- 如已经中断的网络信号恢复，且并未设置自动连接，则发送"wifi_event_resume"事件。
+WIFI状态
 
 
