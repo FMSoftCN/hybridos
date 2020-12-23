@@ -7,8 +7,12 @@
 - [基本框架及术语](#基本框架及术语)
 - [各模块的设计](#各模块的设计)
    + [hiAceJs中hibus的js封装](#hiacejs中hibus的js封装)
+   + [local-simulator](#local-simulator)
    + [hibus-simulator](#hibus-simulator)
    + [hibus-wrapper](#hibus-wrapper)
+- [设备接口设计](#设备接口设计)
+   + [WiFi](#WiFi)
+   + [Battery](#Battery)
 
 
 ## 基本框架及术语
@@ -131,19 +135,72 @@ JSIValue NativeapiHiBus::Read(const JSIValue thisVal, const JSIValue* args, uint
 
 ```
 
+### local-simulator
+
+local-simulator.json 提供了本地的模拟数据，用户可以修改该文件，已提供模拟数据
+
+```json
+{
+    "procedure" : [
+        {
+            "name":"procedureName1",
+            "data": {
+                ...
+            }
+        },
+        {
+            "name":"procedureName2",
+            "data": {
+                ...
+            }
+        }
+    ],
+
+    "event" : [
+        {
+            "name":"eventName1",
+            "data": {
+                ...
+            }
+        },
+        {
+            "name":"eventName1",
+            "data": {
+                ...
+            }
+        }
+    ]
+}
+```
 
 ### hibus-simulator
 
-hibus-simulator.js 提供了hibus的接口的模拟实现，用户在开发过程中可以修改该js文件，以提供不同的
-模拟数据。
-将来，可以连接云服务提供更强大的功能模拟。
+hibus-simulator.js 提供了hibus的接口的模拟实现，用户在开发过程中可以修改local-simulator.json文件，
+以提供不同的 模拟数据。 将来可以连接远程云服务从而获取更佳的服务和体验。
 
-例如，hibus提供了一个printInfo函数，测在hibus-simulator.js 中模拟实现如下:
 
 ```js
+import localData from '../../common/local-simulator.json';
+
 export default {
-    printInfo() {
-        console.log('print Info from hibus-simulator');
+    connect() {
+    }
+
+    disconnect() {
+    }
+
+    subscribeEvent(appName, runnerName, eventName, funcName) {
+    }
+
+    unsubscribeEven(appName, runnerName, eventName, funcName) {
+    }
+
+    callProcedure(endpoint, methodName, param, timeout, callback) {
+    }
+
+    checkPackets(timeout) {
+        // get data from localData
+        // callback
     }
 }
 ```
@@ -165,14 +222,62 @@ import hibusSimulator from './hibus-simulator'
 
 export default {
 
-    printInfo() {
+    connect() {
         if (hibus) {
-            hibus.printInfo();
+            hibus.connect();
         }
         else {
-            hibusSimulator.printInfo();
+            hibusSimulator.connect();
         }
     }
+
+    disconnect() {
+        if (hibus) {
+            hibus.disconnect();
+        }
+        else {
+            hibusSimulator.disconnect();
+        }
+    }
+
+    subscribeEvent(appName, runnerName, eventName, funcName) {
+        if (hibus) {
+            hibus.send(...);
+        }
+        else {
+            hibusSimulator.subscribeEvent(appName, runnerName, eventName, funcName);
+        }
+    }
+
+    unsubscribeEven(appName, runnerName, eventName, funcName) {
+        if (hibus) {
+            hibus.send(...);
+        }
+        else {
+            hibusSimulator.unsubscribeEven(appName, runnerName, eventName, funcName);
+        }
+    }
+
+    callProcedure(endpoint, methodName, param, timeout, callback) {
+        if (hibus) {
+            hibus.send(...);
+        }
+        else {
+            hibusSimulator.callProcedure(appName, runnerName, eventName, funcName);
+        }
+    }
+
+    checkPackets(timeout) {
+        if (hibus) {
+            hibus.read(...);
+            // callback
+            ...
+        }
+        else {
+            hibusSimulator.checkPackets(...);
+        }
+    }
+
 }
 ```
 
@@ -184,10 +289,15 @@ import hibus from '../../common/hibus-wrapper';
 
 export default {
     clickButton() {
-        hibus.printInfo();
+        hibus.connect();
     }
 }
 
 ```
 
+## 设备接口设计
+
+### WiFi
+
+### Battery
 
