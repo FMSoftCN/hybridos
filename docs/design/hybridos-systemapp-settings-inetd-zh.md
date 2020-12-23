@@ -380,14 +380,14 @@ typedef struct __wifi_hotspot
 
 typedef struct __hiWiFiManagerOps
 {
-    int (* open) (const char * device_name, wifi_context ** context);
-    int (* close) (wifi_context * context);
-    int (* wifiConnect) (const char * ssid, const char *password, wifi_context * context);
-    int (* wifiDisconnect) (wifi_context * context);
-    int (* wifiScan) (wifi_context * context);
-    int (* wifiSignalStrength) (wifi_context * context);    
-    int (* wifiGetHotspots) (wifi_status * param, wifi_context * context);
-    void (* wifiSetInterval) (int scan, int signalStrength);
+	int (* open) (const char * device_name, wifi_context ** context);
+	int (* close) (wifi_context * context);
+	int (* wifiConnect) (const char * ssid, const char *password, wifi_context * context);
+	int (* wifiDisconnect) (wifi_context * context);
+	int (* wifiScan) (wifi_context * context);
+	int (* wifiSignalStrength) (wifi_context * context);    
+	int (* wifiGetHotspots) (wifi_status * param, wifi_context * context);
+	void (* wifiSetInterval) (int scan, int signalStrength);
 } hiWiFiManagerOps;
 ```
 
