@@ -102,13 +102,13 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 其中:
 
-​        device：为wifi设备名；
+​		device：为wifi设备名；
 
-​        operation：0表示关闭，1表示打开，2表示状态查询；
+​		operation：0表示关闭，1表示打开，2表示状态查询；
 
-​        status：0表示关闭，1表示打开；
+​		status：0表示关闭，1表示打开；
 
-​        ret_code: 表示开关成功与否，或错误原因。详见 inetd.h。
+​		ret_code: 表示开关成功与否，或错误原因。详见 inetd.h。
 
 
 
@@ -137,7 +137,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ​		status：为1时，表示当前连接，为0时，表示未连接；
 
-​        signal：该网络信号强度，取值范围在0——100之间。
+​		signal：该网络信号强度，取值范围在0——100之间。
 
 该过程调用将立刻返回inetd维护的当前网络列表，然后inetd发起网络搜索过程，通过并通过事件wifi_event_scan，上报搜索结果。
 
@@ -187,7 +187,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 其中：
 
-​        ret_code: 表示连接成功，或者失败的原因。详见 inetd.h。
+​		ret_code: 表示连接成功，或者失败的原因。详见 inetd.h。
 
 
 
@@ -236,9 +236,9 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 其中：
 
-​        status：1表示打开，0表示关闭；
+​		status：1表示打开，0表示关闭；
 
-​        reason：表示设备开关原因，详见 inetd.h。
+​		reason：表示设备开关原因，详见 inetd.h。
 
 
 
@@ -258,15 +258,15 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 其中reason可取以下值：
 
-​        0：网络关闭；
+​		0：网络关闭；
 
-​        1：发现新网络；
+​		1：发现新网络；
 
-​        2：搜索网络过程结束；
+​		2：搜索网络过程结束；
 
-​        10：网络连接成功；
+​		10：网络连接成功；
 
-​        11：网络连接中断。
+​		11：网络连接中断。
 
 
 
