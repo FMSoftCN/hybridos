@@ -313,6 +313,58 @@ export default {
 
 ### WiFi
 
+底层WiFi相关服务提供一系列接口和事件用于对WiFi进行操控。
+
+#### WiFi开启
+
+该函数完成对WIFI设备的初始化。如根据配置文件，搜索并连接默认网络。
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/open`
+- 返回值：无。客户端依据结果的 `retCode` 判断是否注册成功：
+- 常见错误状态码：
+   + `200`：表示成功。
+
+下面是一个示例结果：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromMethod": "open",
+    "timeConsumed": 0.5432,
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retMsg": "Ok",
+}
+```
+
+#### WiFi关闭
+
+该函数关闭WIFI当前连接，同时完成设备相关软、硬件的资源回收。
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/close`
+- 返回值：无。客户端依据结果的 `retCode` 判断是否注册成功：
+- 常见错误状态码：
+   + `200`：表示成功。
+
+下面是一个示例结果：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromMethod": "close",
+    "timeConsumed": 0.5432,
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retMsg": "Ok",
+}
+```
+
 ### Battery
 
 底层电池相关服务会在电池状态变化(充电状态，电量等)将产生电池状态改变事件,
@@ -337,6 +389,7 @@ App可以通过订阅该事件，获取电池状态信息。
     }
 }
 ```
+
 
 
 ## 附：商标声明
