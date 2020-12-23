@@ -504,6 +504,8 @@ int wifiGetHotspots(wifi_hotspot * hotspots);
 
 hotspots数组由动态库维护，负责内存空间的开辟及回收。
 
+当搜索热点完毕后，最后需要发送一个 ssid[0] = 0 的wifi_hotspot结构，以表示搜索过程完毕。
+
 
 
 ##### 设置定时间隔
@@ -513,5 +515,7 @@ void wifiSetInterval (int scan, int signalStrength);
 参数：
 	int scan：网络扫描的时间间隔。单位：秒；
 	int signalStrength：检测网络信号强度时间间隔。单位：秒。
+返回值：
+	无
 ```
 
