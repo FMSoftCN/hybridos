@@ -319,7 +319,7 @@ typedef struct HiWifiManagerOps
     int (* wifi_disconnect) (const char * ssid);
     void (* wifi_scan) (wifi_node * wifi, int * number);
     int (* wifi_signal) (void);    
-    int (* wifi_status) (void * param);
+    int (* wifi_status) (wifi_status * param);
 } hiWifiManagerOps;
 ```
 
@@ -423,11 +423,11 @@ void wifi_scan(wifi_hotspot * wifi, int * number);
 ##### WIFI状态
 
 ```
-int (* wifi_status) (void * param);
+int (* wifi_status) (wifi_status * param);
 参数：
-	void * param：不同的返回状态，对应不同的结构指针
+	wifi_status * param：状态变化结构列表的头指针；
 返回值：
-	int status：返回的状态编码
+	int status：间隔两次wifi_status调用之间，wifi状态变化的个数；
 ```
 
 该函数将被inetd循环调用。以下几个状态的改变，必须通过该函数上报：
