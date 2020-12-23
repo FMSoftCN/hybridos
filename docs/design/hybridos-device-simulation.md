@@ -49,9 +49,8 @@ hibus-simulator.js 目前主要通过 local-simulator.json 返回模拟数据；
 
 ### hiAceJs中hibus的js封装
 
-在hiAceJs中，将hibus的相关接口，封装成js对象，注入JS 引擎(JerryScript)，以供应用层使用。
+在hiAceJs中，将hiBus的相关接口，封装成js对象(system.hibus)，注入JS引擎(JerryScript)，以供应用层使用。
 
-例如，注入一个printInfo函数供上层使用:
 
 ```c++
 // nativeapi_hibus.h
@@ -77,6 +76,8 @@ public:
     // status property
     static void RegistPropertyStatus();
 
+    static void RegistProperty();
+
     // connect function
     static JSIValue Connect(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum);
     // disconnect function
@@ -85,9 +86,6 @@ public:
     static JSIValue Send(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum);
     // read function
     static JSIValue Read(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum);
-
-    // only for test
-    static JSIValue printInfo(const JSIValue thisVal, const JSIValue* args, uint8_t argsNum);
 };
 
 
@@ -95,15 +93,41 @@ public:
 
 void InitHiBusModule(JSIValue exports)
 {
-    JSI::SetModuleAPI(exports, "printInfo", NativeapiHiBus::printInfo);
+    RegistProperty();
+    JSI::SetModuleAPI(exports, "connect", NativeapiHiBus::connect);
+    JSI::SetModuleAPI(exports, "disconnect", NativeapiHiBus::disconnect);
+    JSI::SetModuleAPI(exports, "send", NativeapiHiBus::send);
+    JSI::SetModuleAPI(exports, "read", NativeapiHiBus::read);
 }
 
-// only for test
-JSIValue NativeapiHiBus::printInfo(const JSIValue thisVal, const JSIValue* args, uint8_t argsNum)
+void NativeapiHiBus::RegistProperty()
 {
-    fprintf(stderr, "nativeapi_hibus printInfo isCalled\n");
-    return JSI::CreateUndefined();
+    RegistPropertyAppName();
+    RegistPropertyRunnerName();
+    RegistPropertyPathSocket();
+    RegistPropertyStatus();
 }
+
+JSIValue NativeapiHiBus::Connect(const JSIValue thisVal, const JSIValue* args, uint8_t argsNum)
+{
+    ...
+}
+
+JSIValue NativeapiHiBus::Disconnect(const JSIValue thisVal, const JSIValue* args, uint8_t argsNum)
+{
+    ...
+}
+
+JSIValue NativeapiHiBus::Send(const JSIValue thisVal, const JSIValue* args, uint8_t argsNum)
+{
+    ...
+}
+
+JSIValue NativeapiHiBus::Read(const JSIValue thisVal, const JSIValue* args, uint8_t argsNum)
+{
+    ...
+}
+
 
 ```
 
