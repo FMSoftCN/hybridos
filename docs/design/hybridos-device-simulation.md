@@ -7,6 +7,7 @@
 - [基本框架及术语](#基本框架及术语)
 - [各模块的设计](#各模块的设计)
    + [hiAceJs中hibus的js封装](#hiacejs中hibus的js封装)
+   + [local-simulator](#local-simulator)
    + [hibus-simulator](#hibus-simulator)
    + [hibus-wrapper](#hibus-wrapper)
 
@@ -131,6 +132,16 @@ JSIValue NativeapiHiBus::Read(const JSIValue thisVal, const JSIValue* args, uint
 
 ```
 
+### local-simulator
+
+local-simulator.json 提供了本地的模拟数据，用户可以修改该文件，已提供模拟数据
+
+```json
+{
+  "name":  "cherry",
+  "age":  25
+}
+```
 
 ### hibus-simulator
 
