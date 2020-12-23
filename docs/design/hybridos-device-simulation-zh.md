@@ -511,6 +511,34 @@ export default {
 }
 ```
 
+#### 设置定时间隔
+
+该过程用于设置定时间隔
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/setinterval`
+- 参数：
+   + `scan`：网络扫描的时间间隔。单位：秒
+   + `password`：检测网络信号强度时间间隔。单位：秒
+- 返回值：无。客户端依据结果的 `retCode` 判断是否成功：
+- 常见错误状态码：
+   + `200`：表示成功。
+
+下面是一个示例结果：
+
+```json
+{
+    "packetType": "result",
+    "resultId": "<unique_result_identifier>",
+    "callId": "<unique_call_identifier>",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromMethod": "setinterval",
+    "timeConsumed": 0.5432,
+    "timeDiff": 0.1234,
+    "retCode": 200,
+    "retMsg": "Ok",
+}
+```
+
 ### Battery
 
 底层电池相关服务会在电池状态变化(充电状态，电量等)将产生电池状态改变事件,
