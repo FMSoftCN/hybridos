@@ -20,6 +20,16 @@
 
 **目录**
 
+- [基本框架及术语](#基本框架及术语)
+- [各模块的设计](#各模块的设计)
+   + [hiAceJs中hibus的js封装](#hiacejs中hibus的js封装)
+   + [local-simulator](#local_simulator)
+   + [hibus-simulator](#hibus_simulator)
+   + [hibus-wrapper](#hibus_wrapper)
+- [设备接口设计](#设备接口设计)
+   + [WiFi](#wifi)
+   + [Battery](#battery)
+
 
 ## 基本框架及术语
 
