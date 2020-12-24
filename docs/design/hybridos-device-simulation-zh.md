@@ -47,9 +47,9 @@
 |                hiAceJs                |           hibus-simulator.js           |
  --------------------------------------------------------------------------------
 |                 hiBus                 |                                        |
- ---------------------------------------|         local-simulator.json           |
+ ---------------------------------------|          hibus-simulator-data          |
 |    WiFi Device   |   Battery Device   |                                        |
- -------------------------------------------------------------------------------
+ --------------------------------------------------------------------------------
 ```
 
 在 HybridOS 中，App 通过 hiBus 来访问设备。在上面的架构图中，wifi.js 和 battery.js 分别
@@ -193,7 +193,7 @@ hibus-simulator.js 提供了hibus的接口的模拟实现，用户在开发过�
 
 
 ```js
-import localData from '../../common/local-simulator.json';
+import hibusSimulatorData from './hibus-simulator-data/index.js'
 
 export default {
     connect() {
