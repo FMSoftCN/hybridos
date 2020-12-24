@@ -253,71 +253,51 @@ signal_time=10              // inervval of check signal strength. unit: second
 ​        reason: 表示该过程失败的原因。详见 inetd.h。
 
 
-### 守护进程提供的可订阅消息
+### inetd行者提供的可订阅消息
 
-##### networkDeviceChange
+#### 网络设备发生变化 
 
-```bash
-名称：networkDeviceChange
-参数：
-    {
+- 泡泡名称：`NETWORKDEVICECHANGED`
+- bubbleData：
+   + `device`：网络设备名称；
+   + `status`：设备状态，取值为 on / off；
+```json
+    { 
         "device":"device name",
-        "status":"on",
-        "reason":1000
-    }
-```
-
-其中：
-
-​		status：on / off；
-
-​		reason：表示设备状态变化原因，详见 inetd.h。
-
-
-
-##### networkStatusChange
-
-```bash
-名称：networkStatusChange
-参数：
-    {
-        "nettype":"wifi";
-        "SSID":"fmsoft-dev",
         "status":"on"
-        "reason":1000
     }
 ```
-
-其中：
-
-​		nettype：网络类型。可选值为：wifi / ethernet / mobile；
-
-​		status：on / off；
-
-​		reason：表示设备状态变化原因，详见 inetd.h。
+- 使用描述：
+   + 当网络设备工作状态发生变化时，发送此消息。
 
 
+#### 网络热点发生变化
 
-##### networkHotspotChange
-
-```bash
-名称：networkHotspotChange
-参数：
-    {
-        "SSID":"fmsoft-dev",
+- 泡泡名称：`HOTSPOTCHANGED`
+- bubbleData：
+   + `bssid`：
+   + `ssid`：网络SSID；
+   + `encryption`：网络是否加密；
+   + `capabilities`：网络许可加密方式；
+   + `signalStrength`：取值范围在0——100之间；
+   + `available`：网络是否可被搜索到；
+   + `new`：是否是被新搜索到的网络。
+```json
+    { 
+        "bssid": "f0:b4:29:24:18:eb",
+        "ssid":"fmsoft-dev",
         "encryption":true,
-        "changeType":"visible",
-        "status":"on"
-        "reason":1000
-	}
+        "capabilities": ["WPA-PSK-CCMP+TKIP", "WPA2-PSK-CCMP+TKIP", "WPS", "ESS"]
+        "signalStrength":65,
+        "available":true,
+        "new":true
+    }
 ```
-
-其中：
-
-​		changeType：WiFi热点变化类型。可选值为：visible / connect / scan，对应可查询、连接、搜索；
-
-​		status：对于"changeType"为"scan"时，on表示开始搜索，off表示搜索结束。
-
+- 使用描述：
+   + 当网络信号强度在两次检查过程中，变化值在20以上，视为该网络状态发生变化；
+   + 在一次WiFi搜索时，某个网络不能再被搜索到，视为该网络状态发生变化；
+   + 在一次WiFi搜索时，某个网络的加密方式发生变化，视为该网络状态发生变化？？？
+   + 在一次WiFi搜索时，某个网络的BSSID发生变化，视为该网络状态发生变化？？？
 
 
 #### 网络信号强度
@@ -329,12 +309,12 @@ signal_time=10              // inervval of check signal strength. unit: second
 ```json
     {
         "ssid":"fmsoft-dev",
-        "signalStrength":65，
+        "signalStrength":65
     }
 ```
 - 使用描述：
-   + 当`ssid`不为空，且`signalStrength`不为0时，表明名为“fmsoft-dev”的网络已经连接；
-   + 当`ssid`不为空，且`signalStrength`为0时，表明名为“fmsoft-dev”的网络中断；
+   + `signalStrength`不为0时，表明名为“fmsoft-dev”的网络已经连接；
+   + `signalStrength`为0时，表明名为“fmsoft-dev”的网络中断；
    + 当前网络中断后，不会发送该事件。
 
 
