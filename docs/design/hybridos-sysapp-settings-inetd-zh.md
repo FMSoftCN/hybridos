@@ -75,20 +75,23 @@ wifi=wifi                   // wifi library, libwifi.so
 #mobile=                    // mobile library, libmobile.so
 
 [wifi]
-start=enabled               // whether turn on wifi when device is started
+device0_name=wlp5s0         // WiFi device name
+priority=2                  // the priority of wifi
+start=disabled               // whether turn on wifi when device is started
 scan_time=30                // interval of scan time. unit: second
 signal_time=10              // inervval of check signal strength. unit: second
-device=device0
 
 [ethernet]
+device0_name=eth0           // ethernet device0 name
+device1_name=eth1           // ethernet device1 name
+priority=3                  // the priority of ethernet
+start=enabled               // whether turn on ethernet when device is started
 
 [mobile]
+priority=1                  // the priority of mobile 
+start=disabled              // whether turn on mobile when device is started
 
-[device]
-device0_name=wlp5s0
-device0_type=wifi
-device1_name=eth0
-device1_type=ethernet
+
 ```
 
 ## inetd行者接口
