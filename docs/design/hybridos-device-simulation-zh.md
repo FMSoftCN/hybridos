@@ -159,8 +159,89 @@ hibus-simulator-data
     -- index.js
     -- wifi
         -- wifi-procedure-open.json
-        -- wifi-procedure-close.json
         -- wifi-event-SIGNALSTRENGTHCHANGED.json
+```
+
+hibus-simulator-data/index.js 该文件用于将模拟数据组织成Map。
+
+
+```js
+import wifiProcedureOpen from './wifi/wifi-procedure-open.json'
+import wifiEventSignalStrengthChanged from './wifi/wifi-event-SIGNALSTRENGTHCHANGED.json'
+
+export default {
+    var procedureMap = new Map();
+    var eventMap = new Map();
+
+    procedureMap.add(wifiProcedureOpen.name, wifiProcedureOpen);
+
+    eventMap.add(wifiEventSignalStrengthChanged.name, wifiEventSignalStrengthChanged);
+}
+```
+
+wifi-procedure-open.json 一个Procedure的模拟数据
+
+```
+{
+  "name": "@localhost/cn.fmsoft.hybridos.settings/inetd/open",
+  "mode": ["random", "fixed"],
+  "index" : 0,
+  "value" : [
+    {
+      "packetType": "result",
+      "resultId": "<unique_result_identifier>",
+      "callId": "<unique_call_identifier>",
+      "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
+      "fromMethod": "open",
+      "timeConsumed": 0.5432,
+      "timeDiff": 0.1234,
+      "retCode": 200,
+      "retMsg": "Ok"
+    },
+    {
+      "packetType": "result",
+      "resultId": "<unique_result_identifier>",
+      "callId": "<unique_call_identifier>",
+      "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
+      "fromMethod": "open",
+      "timeConsumed": 0.5432,
+      "timeDiff": 0.1234,
+      "retCode": 400,
+      "retMsg": "Bad Request"
+    }
+  ]
+}
+```
+
+wifi-event-SIGNALSTRENGTHCHANGED.json 一个Event的模似数据
+
+```json
+{
+  "name": "@localhost/cn.fmsoft.hybridos.settings/inetd/SIGNALSTRENGTHCHANGED",
+  "mode": ["random", "fixed"],
+  "index" : 0,
+  "value" : [
+    {
+      "packetType": "event",
+      "eventId": "<unique_event_identifier>",
+      "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
+      "fromBubble": "SIGNALSTRENGTHCHANGED",
+      "bubbleData": {
+        "signalStrength": 75
+      }
+    },
+    {
+      "packetType": "event",
+      "eventId": "<unique_event_identifier>",
+      "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
+      "fromBubble": "SIGNALSTRENGTHCHANGED",
+      "bubbleData": {
+        "signalStrength": 75
+      }
+
+    }
+  ]
+}
 ```
 
 ### hibus-simulator
