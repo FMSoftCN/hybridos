@@ -1193,7 +1193,7 @@ int hibus_wait_and_dispatch_packet (hibus_conn* conn, struct timeval *timeout);
 
 ### 应用及端点权限管理
 
-参阅[合璧操作系统应用管理](hybridos-app-management-zh.md)。
+参阅[合璧操作系统的应用管理](hybridos-app-management-zh.md)。
 
 ### 跨设备连接的思考
 
