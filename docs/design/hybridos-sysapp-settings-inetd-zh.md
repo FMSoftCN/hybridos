@@ -1,5 +1,5 @@
 【主题】合璧操作系统设置应用的网络管理行者设计  
-【摘要】本文阐述了基于hiBus守护进程inetd的实现方式，以及动态库的接口设计。  
+【摘要】本文描述了基于hiBus的行者@localhost/cn.fmsoft.hybridos.settings/inetd，所提供的远程过程及可订阅消息。同时对设备引擎必须完成的接口进行了阐述。  
 【版本】1.0  
 【作者】耿岳  
 【日期】2020 年 12 月  
@@ -40,7 +40,7 @@ inetd在系统中的位置如下图：
  ------------------------------------------------------------
 |                      hiBus Server(hiBusd)                  |
  ------------------------------------------------------------ 
-|                         inetd daemon                       |
+|              cn.fmsoft.hybridos.settings/inetd             |
  ------------------------------------------------------------
 |    libwifi.so    |   libethernet.so   |    libmobile.so    |
  ------------------------------------------------------------
@@ -69,28 +69,24 @@ inetd行者的各项设置，依赖于配置文件。
 配置文件有如下内容：
 
 ```c
-[library]
-wifi=wifi                   // wifi library, libwifi.so
-#ethernet=                  // ethernet library, libethernet.so
-#mobile=                    // mobile library, libmobile.so
+[device]
+device0_name=wlp5s0         // name of network device0
+device1_name=eth0           // name of network device1
+device2_name=eth1           // name of network device2
 
-[wifi]
-device0_name=wlp5s0         // WiFi device name
-priority=2                  // the priority of wifi
-start=disabled               // whether turn on wifi when device is started
+[wlp5s0]
+type=wifi                   // device type
+engine=libwifi.so           // library of device engine
+priority=2                  // priority in switch devices
+start=disabled              // do not start device when power on
 scan_time=30                // interval of scan time. unit: second
 signal_time=10              // inervval of check signal strength. unit: second
 
-[ethernet]
-device0_name=eth0           // ethernet device0 name
-device1_name=eth1           // ethernet device1 name
-priority=3                  // the priority of ethernet
-start=enabled               // whether turn on ethernet when device is started
-
-[mobile]
-priority=1                  // the priority of mobile 
-start=disabled              // whether turn on mobile when device is started
-
+[eth0]
+type=ethernet               // device type
+engine=libethernet.so       // library of device engine
+priority=1                  // priority in switch devices
+start=enabled               // start device when power on
 
 ```
 
@@ -107,7 +103,7 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
 
 该过程负责打开指定的WiFi设备。如果打开设备成功，根据配置判断是否发起WiFi热点搜索过程。
 
-- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiOpenDevice`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/openDevice`
 - parameter：
    + `device`：网络设备名称；
 ```json
@@ -116,18 +112,18 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
     }
 ```
 - retValue：
-   + `errCode`：返回错误编码，200为执行正确；
+   + `errCode`：返回错误编码，0为执行正确；
    + `errMsg`：错误信息；
 ```json
     { 
-        "errCode":200,
+        "errCode":0,
         "errMsg":"OK"
     }
 ```
 
 #### 关闭WiFi设备
 
-- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiCloseDevice`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/closeDevice`
 - parameter：
    + `device`：网络设备名称；
 ```json
@@ -136,33 +132,32 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
     }
 ```
 - retValue：
-   + `errCode`：返回错误编码，200为执行正确；
+   + `errCode`：返回错误编码，0为执行正确；
    + `errMsg`：错误信息；
 ```json
     { 
-        "errCode":200,
+        "errCode":0,
         "errMsg":"OK"
     }
 ```
 
-
 #### 查询网络设备状态
 
-- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiGetDeviceStatus`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/getNetworkDevice`
 - parameter：
-   + `device`：网络设备名称；
-```json
-    { 
-        "device":"device_name",
-    }
-```
+   + 无
 - retValue：
-   + `status`：网络设备状态。取值为 on / off；
+   + `device`：网络设备名；
+   + `type`：网络设备类型，可取值为 wifi / ethernet / mobile；
+   + `status`：网络设备状态。取值为 on / off。
 ```json
     { 
-        "status":"on"
+        "device":"eth0",
+        "type":"ethernet",
+        "status":"off"
     }
 ```
+如没有查到网络设备，则`retValue`为NULL；
 
 
 #### 获得网络热点列表
@@ -170,13 +165,9 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
 - 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiGetHotspots`
 - parameter：
    + `startScan`：获得列表后，inetd是否立刻发起搜索过程；
-   + `fromIndex`：从列表的第几个开始；
-   + `toIndex`：到列表的第几个结束；
 ```json
     {
-        "startScan":true,
-        "fromIndex":0,
-        "toIndex":10
+        "startScan":true
     }
 ```
 - retValue：
@@ -202,19 +193,22 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
     ]
 ```
 
-该过程将立刻返回inetd维护的当前网络列表。网络列表根据信号强度排列，当前连接的网络，排在第一个。
+该过程将立刻返回inetd维护的当前网络列表。网络列表根据信号强度排列，当前连接的网络，排在第一个，其余按照信号强度从大到小排列。
+如没有查到网络热点，则`retValue`为NULL；
 
 
 #### 连接网络热点
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiConnect`
 - parameter：
+   + `device`：网络设备名称；
    + `ssid`：网络名称；
    + `password`：网络密码；
    + `autoConnect`：网络中断后是否自动连接；
    + `default`：是否设置为默认网络，下次开机时自动连接。inetd行者需保存该设置到存储器中。；
 ```json
     {
+        "device":"device_name",
         "SSID":"fmsoft-dev",
         "password":"hybridos-hibus",
         "autoConnect":true,
@@ -222,11 +216,11 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
     }
 ```
 - retValue：
-   + `errCode`：返回错误编码，200为执行正确；
+   + `errCode`：返回错误编码，0为执行正确；
    + `errMsg`：错误信息；
 ```json
     { 
-        "errCode":200,
+        "errCode":0,
         "errMsg":"OK"
     }
 ```
@@ -237,13 +231,18 @@ wifiDisconnect
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiDisconnect`
 - parameter：
-   + 无；
+   + `device`：网络设备名称；
+```json
+    { 
+        "device":"device_name",
+    }
+```
 - retValue：
-   + `errCode`：返回错误编码，200为执行正确；
+   + `errCode`：返回错误编码，0为执行正确；
    + `errMsg`：错误信息；
 ```json
     { 
-        "errCode":200,
+        "errCode":0,
         "errMsg":"OK"
     }
 ```
@@ -254,8 +253,9 @@ wifiDisconnect
 - parameter：
    + 无；
 - retValue：
+   + `device`：网络设备名称；
    + `ssid`：网络名称；
-   + `encryption`：加密方式；
+   + `encryptionType`：加密方式；
    + `signalStrength`：信号强度；
    + `MAC`：MAC地址；
    + `IP`：IP地址；
@@ -265,8 +265,9 @@ wifiDisconnect
 
 ```json
     { 
+        "device":"device_name",
         "ssid":"fmsoft-dev",
-        "encryption":"WPA2",
+        "encryptionType":"WPA2",
         "signalStrength":65，
         "MAC":"AB:CD:EF:12:34:56",
         "IP":"192.168.1.128",
@@ -286,7 +287,7 @@ wifiDisconnect
    + `status`：设备状态，取值为 on / off；
 ```json
     { 
-        "device":"device name",
+        "device":"device_name",
         "status":"on"
     }
 ```
@@ -301,7 +302,7 @@ wifiDisconnect
    + `bssid`：
    + `ssid`：网络SSID；
    + `encryption`：网络是否加密；
-   + `capabilities`：网络许可加密方式；
+   + `capabilities`：设备支持的加密方式；
    + `signalStrength`：取值范围在0——100之间；
    + `available`：网络是否可被搜索到；
 ```json
@@ -323,7 +324,7 @@ wifiDisconnect
    + 当`ssid`为`NULL`时，表示一次搜索过程完毕。
 
 
-#### 网络信号强度
+#### 当前网络信号强度
 
 - 泡泡名称：`SIGNALSTRENGTHCHANGED`
 - bubbleData：
@@ -378,7 +379,7 @@ typedef struct _wifi_hotspot
 	char mac_address[32];
 	char IP_address[24];
 	char gateway[24];
-	char encryption[32];
+	char encryptionType[32];
 	char frenquency[32];
 	char speed[32];
 	int  signal_strength;
