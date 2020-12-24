@@ -319,7 +319,7 @@ export default {
 
 该过程完成对WIFI设备的初始化。如根据配置文件，搜索并连接默认网络。
 
-- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/open`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/open`
 - 返回值：无。客户端依据结果的 `retCode` 判断是否成功：
 - 常见错误状态码：
    + `200`：表示成功。
@@ -331,7 +331,7 @@ export default {
     "packetType": "result",
     "resultId": "<unique_result_identifier>",
     "callId": "<unique_call_identifier>",
-    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
     "fromMethod": "open",
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
@@ -344,7 +344,7 @@ export default {
 
 该过程关闭WIFI当前连接，同时完成设备相关软、硬件的资源回收。
 
-- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/close`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/close`
 - 返回值：无。客户端依据结果的 `retCode` 判断是否成功：
 - 常见错误状态码：
    + `200`：表示成功。
@@ -356,7 +356,7 @@ export default {
     "packetType": "result",
     "resultId": "<unique_result_identifier>",
     "callId": "<unique_call_identifier>",
-    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
     "fromMethod": "close",
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
@@ -369,7 +369,7 @@ export default {
 
 该过程将根据参数连接指定的热点。
 
-- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/connect`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/connect`
 - 参数：
    + `ssid`：网络SSID
    + `password`：网络的密码，如为NULL，表示不需要密码
@@ -384,7 +384,7 @@ export default {
     "packetType": "result",
     "resultId": "<unique_result_identifier>",
     "callId": "<unique_call_identifier>",
-    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
     "fromMethod": "connect",
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
@@ -397,7 +397,7 @@ export default {
 
 该过程将断开网络连接。
 
-- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/disconnect`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/disconnect`
 - 返回值：无。客户端依据结果的 `retCode` 判断是否成功：
 - 常见错误状态码：
    + `200`：表示成功。
@@ -409,7 +409,7 @@ export default {
     "packetType": "result",
     "resultId": "<unique_result_identifier>",
     "callId": "<unique_call_identifier>",
-    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
     "fromMethod": "disconnect",
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
@@ -422,7 +422,7 @@ export default {
 
 该过程将断开网络连接。
 
-- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/signalstrength`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/signalstrength`
 - 返回值：成功时返回信号强度，取值获围0~100。
 - 常见错误状态码：
    + `200`：表示成功。
@@ -434,7 +434,7 @@ export default {
     "packetType": "result",
     "resultId": "<unique_result_identifier>",
     "callId": "<unique_call_identifier>",
-    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
     "fromMethod": "signalstrength",
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
@@ -446,9 +446,9 @@ export default {
 
 #### 扫描WiFi热点
 
-该过程将启动WiFi扫描，扫描结果需要通过过程`@localhost/cn.fmsoft.hybridos.wifi/gethotspots`获取
+该过程将启动WiFi扫描，扫描结果需要通过过程`@localhost/cn.fmsoft.hybridos.settings/inetd/gethotspots`获取
 
-- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/startscan`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/startscan`
 - 返回值：无。客户端依据结果的 `retCode` 判断是否成功：
 - 常见错误状态码：
    + `200`：表示成功。
@@ -460,7 +460,7 @@ export default {
     "packetType": "result",
     "resultId": "<unique_result_identifier>",
     "callId": "<unique_call_identifier>",
-    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
     "fromMethod": "startscan",
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
@@ -474,7 +474,7 @@ export default {
 
 该过程将获取WiFi扫描结果。
 
-- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/gethotspots`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/gethotspots`
 - 返回值：成功时返回扫描到的WiFi热点列表
 - 常见错误状态码：
    + `200`：表示成功。
@@ -486,7 +486,7 @@ export default {
     "packetType": "result",
     "resultId": "<unique_result_identifier>",
     "callId": "<unique_call_identifier>",
-    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
     "fromMethod": "gethotspots",
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
@@ -515,7 +515,7 @@ export default {
 
 该过程用于设置定时间隔
 
-- 过程名称：`@localhost/cn.fmsoft.hybridos.wifi/setinterval`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/setinterval`
 - 参数：
    + `scan`：网络扫描的时间间隔。单位：秒
    + `password`：检测网络信号强度时间间隔。单位：秒
@@ -530,7 +530,7 @@ export default {
     "packetType": "result",
     "resultId": "<unique_result_identifier>",
     "callId": "<unique_call_identifier>",
-    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
     "fromMethod": "setinterval",
     "timeConsumed": 0.5432,
     "timeDiff": 0.1234,
@@ -547,7 +547,7 @@ export default {
 {
     "packetType": "event",
     "eventId": "<unique_event_identifier>",
-    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.wifi",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
     "fromBubble": "SIGNALSTRENGTHCHANGED",
     "bubbleData": {
         "signalStrength": 75
@@ -568,7 +568,7 @@ App可以通过订阅该事件，获取电池状态信息。
 {
     "packetType": "event",
     "eventId": "<unique_event_identifier>",
-    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.batttery/",
+    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/powerd",
     "fromBubble": "BATTERYCHANGED",
     "bubbleData": {
         "plugged": [ true | false ],
