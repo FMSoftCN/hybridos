@@ -324,14 +324,14 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 - 泡泡名称：`SIGNALSTRENGTHCHANGED`
 - bubbleData：
-```json
-{
-    "ssid":"fmsoft-dev",
-    "signalStrength":65，
-}
-```
    + `ssid`：网络SSID；
    + `signalStrength`：取值范围在0——100之间。
+```json
+    {
+        "ssid":"fmsoft-dev",
+        "signalStrength":65，
+    }
+```
 - 使用描述：
    + 当`ssid`不为空，且`signalStrength`不为0时，表明名为“fmsoft-dev”的网络已经连接；
    + 当`ssid`不为空，且`signalStrength`为0时，表明名为“fmsoft-dev”的网络中断；
