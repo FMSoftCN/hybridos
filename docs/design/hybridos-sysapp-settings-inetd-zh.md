@@ -17,18 +17,18 @@
 本文涉及到的飞漫软件或其合作伙伴的注册商标或商标，有关其详细列表，请查阅文档末尾。
 
 **目录**
-- [守护进程inetd的软件结构](#守护进程inetd的软件结构)
+- [inetd行者的软件结构](#inetd行者的软件结构)
 - [配置文件](#配置文件)
    + [配置文件的内容](#配置文件的内容)
-- [守护进程接口](#守护进程接口)
-   + [守护进程提供的远程过程](#守护进程提供的远程过程)
-   + [守护进程提供的可订阅消息](#守护进程提供的可订阅消息)
-- [守护进程工作流程](#守护进程工作流程)
-- [动态库需要完成的接口](#动态库需要完成的接口)
+- [inetd行者接口](#inetd行者接口)
+   + [inetd行者提供的远程过程](#inetd行者提供的远程过程)
+   + [inetd行者供的可订阅消息](#inetd行者提供的可订阅消息)
+- [inetd行者工作流程](#inetd行者工作流程)
+- [设备引擎需要完成的接口](#设备引擎需要完成的接口)
 - [附：商标声明](#附商标声明)
 
 
-## 守护进程inetd的软件结构
+## inetd行者的软件结构
 
 目前各个系统的网络连接方式主要有三种：无线（WiFi）、有线（Ethernet）、手机网络（Mobile）。守护进程inetd主要负责管理这些网络连接，包括：监控、连接、切换等。现阶段首先实现WiFi的各项功能。
 
@@ -52,7 +52,7 @@ inetd在系统中的位置如下图：
 
 - APP层：可以是JS代码，也可以是C代码，通过hiBus总线，完成用户对网络的管理操作；
 - hiBus Server：负责数据通信、消息分发、及连接的管理；
-- inetd daemon：负责对网络设备的监控、连接、中断、切换等。通过hiBus Server，为APP层提供设备事件、以及远程过程。其只是一个流程框架，具体任务由下面的动态库层完成；
+- inetd daemon：负责对网络设备的监控、连接、中断、切换等。通过hiBus Server，为APP层提供设备事件、以及远程过程；
 - libxxx.so：每个动态库完成一种网络类型的具体操作；
 - Linux Kernel / Drivers：对设备的底层操作。
 
@@ -62,7 +62,7 @@ inetd在系统中的位置如下图：
 
 ## 配置文件
 
-守护进程的各项设置，依赖于配置文件。
+inetd行者的各项设置，依赖于配置文件。
 
 ### 配置文件的内容
 
@@ -78,13 +78,18 @@ wifi=wifi                   // wifi library, libwifi.so
 start=enabled               // whether turn on wifi when device is started
 scan_time=30                // interval of scan time. unit: second
 signal_time=10              // inervval of check signal strength. unit: second
+device=device0
 
 [ethernet]
 
 [mobile]
+
+[device]
+device0_name=wlp5s0
+device0_type=wifi
+device1_name=eth0
+device1_type=ethernet
 ```
-
-
 
 ## inetd行者接口
 
@@ -157,20 +162,35 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
 ```
 
 
-##### wifiGetHotspots
+#### 获得网络热点列表
 
-```bash
-名称：wifiScanHotspots
-参数：
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiGetHotspots`
+- parameter：
+   + `startScan`：获得列表后，inetd是否立刻发起搜索过程；
+   + `fromIndex`：从列表的第几个开始；
+   + `toIndex`：到列表的第几个结束；
+```json
     {
-        "startScan":true
+        "startScan":true,
+        "fromIndex":0,
+        "toIndex":10
     }
-返回值：
+```
+- retValue：
+   + `bssid`：
+   + `ssid`：网络名称；
+   + `frequency`：网络频率；
+   + `signalStrength`：网络信号强度；
+   + `capabilities`：可用的加密方式；
+   + `isConnected`：当前是否连接。
+```json
     [
         {
-            "SSID":"fmsoft-dev",
-            "encryptionType":"WPA",
-            "signalStrength":65，
+            "bssid": "f0:b4:29:24:18:eb",
+            "ssid": "fmsoft-dev",
+            "frequency": "2427MHZ",
+            "signalStrength": 65,
+            "capabilities": ["WPA-PSK-CCMP+TKIP","WPA2-PSK-CCMP+TKIP","WPS","ESS"],
             "isConnected":true
         },
         {
@@ -179,87 +199,79 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
     ]
 ```
 
-该过程将立刻返回inetd维护的当前网络列表。如果"startScan"为true，inetd立刻发起网络搜索过程，通过事件networkHotspotChange，上报搜索结果。
-
-其中：
-
-​		startScan：是否要求inetd重新发起网络搜索；
-
-​		signalStrength：整数，网络信号强度，取值范围在0——100之间；
+该过程将立刻返回inetd维护的当前网络列表。网络列表根据信号强度排列，当前连接的网络，排在第一个。
 
 
+#### 连接网络热点
 
-##### wifiConnectHotspot
-
-```bash
-名称：wifiConnectHotspot
-参数：
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiConnect`
+- parameter：
+   + `ssid`：网络名称；
+   + `password`：网络密码；
+   + `autoConnect`：网络中断后是否自动连接；
+   + `default`：是否设置为默认网络，下次开机时自动连接。inetd行者需保存该设置到存储器中。；
+```json
     {
         "SSID":"fmsoft-dev",
         "password":"hybridos-hibus",
-        "autoconn":"enabled",
-        "default":"enabled"
+        "autoConnect":true,
+        "default":true
     }
-返回值：
-    {
-        "reason": 1000
+```
+- retValue：
+   + `errCode`：返回错误编码，200为执行正确；
+   + `errMsg`：错误信息；
+```json
+    { 
+        "errCode":200,
+        "errMsg":"OK"
     }
 ```
 
-其中:
+#### 中断网络连接
 
-​        autoconn：表示网络中断后是否自动连接；
+wifiDisconnect
 
-​        default：表示是否设置为默认网络，下次开机时自动连接。动态库需保存该设置到存储器中。
-
-​        reason: 表示连接成功，或者失败的原因。详见 inetd.h。
-
-
-##### wifiDisconnect
-
-```bash
-名称：wifiDisconnect
-参数：
-    无
-返回值：
-    {
-        "reason": 1000
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiDisconnect`
+- parameter：
+   + 无；
+- retValue：
+   + `errCode`：返回错误编码，200为执行正确；
+   + `errMsg`：错误信息；
+```json
+    { 
+        "errCode":200,
+        "errMsg":"OK"
     }
 ```
 
-其中：
+#### 获得当前网络详细信息
 
-​		reason: 表示连接成功，或者失败的原因。详见 inetd.h。
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiGetNetworkInfo`
+- parameter：
+   + 无；
+- retValue：
+   + `ssid`：网络名称；
+   + `encryption`：加密方式；
+   + `signalStrength`：信号强度；
+   + `MAC`：MAC地址；
+   + `IP`：IP地址；
+   + `frenquency`：网络信号频率；
+   + `speed`：网络速度；
+   + `gateway`：网关。
 
-
-
-##### wifiGetNetworkInfo
-
-```bash
-名称：wifiGetNetworkInfo
-参数：
-    无
-返回值：
-    {
-        "SSID":"fmsoft-dev",
-        "encryption":true,
-        "signal":65，
+```json
+    { 
+        "ssid":"fmsoft-dev",
+        "encryption":"WPA2",
+        "signalStrength":65，
         "MAC":"AB:CD:EF:12:34:56",
         "IP":"192.168.1.128",
-        "type":"WPA2",
         "frenquency":"5 GHz",
         "speed":"650 Mbps"
         "gateway":"192.168.1.1"
-        "reason": 1000
     }
 ```
-
-该过程用于获得当前连接的WiFi网络的具体信息。
-
-其中：
-
-​        reason: 表示该过程失败的原因。详见 inetd.h。
-
 
 ### inetd行者提供的可订阅消息
 
@@ -305,6 +317,7 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
    + 在一次WiFi搜索时，某个网络的加密方式发生变化，视为该网络状态发生变化？？？
    + 在一次WiFi搜索时，某个网络的BSSID发生变化，视为该网络状态发生变化？？？
    + 当`available`为`true`时，表明其为一个新搜索到的网络；为`false`时，表明该网络不可再被搜索到。其余情况该项为`NULL`；
+   + 当`ssid`为`NULL`时，表示一次搜索过程完毕。
 
 
 #### 网络信号强度
