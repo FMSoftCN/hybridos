@@ -173,9 +173,19 @@ export default {
     var procedureMap = new Map();
     var eventMap = new Map();
 
-    procedureMap.add(wifiProcedureOpen.name, wifiProcedureOpen);
+    // for hiBus base method
+    var hiBusConnect;
+    var hiBusDisconnect;
+    var hiBusSubscribeEvent;
+    var hiBusUnsubscribeEven;
 
+    // procedure begin
+    procedureMap.add(wifiProcedureOpen.name, wifiProcedureOpen);
+    // procedure end
+
+    // event begin
     eventMap.add(wifiEventSignalStrengthChanged.name, wifiEventSignalStrengthChanged);
+    // event end
 }
 ```
 
