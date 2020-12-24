@@ -23,9 +23,9 @@
 - [基本框架及术语](#基本框架及术语)
 - [各模块的设计](#各模块的设计)
    + [hiAceJs中hibus的js封装](#hiacejs中hibus的js封装)
-   + [hibus-simulator-data](#hibus_simulator_data)
-   + [hibus-simulator](#hibus_simulator)
-   + [hibus-wrapper](#hibus_wrapper)
+   + [hibus-simulator-data](#hibus-simulator-data)
+   + [hibus-simulator](#hibus-simulator)
+   + [hibus-wrapper](#hibus-wrapper)
 - [设备操控](#设备操控)
    + [WiFi](#wifi)
    + [Battery](#battery)
@@ -162,7 +162,7 @@ hibus-simulator-data
         -- wifi-event-SIGNALSTRENGTHCHANGED.json
 ```
 
-hibus-simulator-data/index.js 该文件用于将模拟数据组织成Map。
+* hibus-simulator-data/index.js 该文件用于将模拟数据组织成Map。
 
 
 ```js
@@ -179,7 +179,7 @@ export default {
 }
 ```
 
-wifi-procedure-open.json 一个Procedure的模拟数据
+* wifi-procedure-open.json 一个Procedure的模拟数据
 
 ```json
 {
@@ -213,7 +213,7 @@ wifi-procedure-open.json 一个Procedure的模拟数据
 }
 ```
 
-wifi-event-SIGNALSTRENGTHCHANGED.json 一个Event的模似数据
+* wifi-event-SIGNALSTRENGTHCHANGED.json 一个Event的模似数据
 
 ```json
 {
