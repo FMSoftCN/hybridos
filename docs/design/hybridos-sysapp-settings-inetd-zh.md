@@ -320,37 +320,38 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 
 
-##### signalStrenthChange
+#### 网络信号强度
 
-```bash
-名称：signalStrenthChange
-参数：
-    {
-        "SSID":"fmsoft-dev",
-        "signalStrength":65，
-    }
+- 泡泡名称：`SIGNALSTRENGTHCHANGED`
+- bubbleData：
+```json
+{
+    "ssid":"fmsoft-dev",
+    "signalStrength":65，
+}
 ```
+   + `ssid`：网络SSID；
+   + `signalStrength`：取值范围在0——100之间。
+- 使用描述：
+   + 当`ssid`不为空，且`signalStrength`不为0时，表明名为“fmsoft-dev”的网络已经连接；
+   + 当`ssid`不为空，且`signalStrength`为0时，表明名为“fmsoft-dev”的网络中断；
+   + 当前网络中断后，不会发送该事件。
 
-其中：
 
-​		signalStrength：取值范围在0——100之间。只针对已经连接的网络，才会发送该事件。
-
-
-
-## 守护进程工作流程
+## inetd行者工作流程
 
 inetd行者工作流程如下：
 
 1. 两次fork操作，成为守护进程；
 2. 调用`hibus_connect_via_unix_socket()`，建立与hiBus服务器的连接；
 3. 读取配置文件，获得各项参数；
-4. 根据配置文件，装载设备引擎。调用`__wifi_device_ops_get()`函数，获取`hiWiFiDeviceOps`结构；
+4. 根据配置文件，装载设备引擎。调用`__wifi_device_ops_get()`函数，获取`hiWiFiDeviceOps`结构指针；
 5. 调用`hibus_register_procedure()`注册远程过程；
 6. 调用`hibus_register_event()`注册可被订阅事件；
-7. 调用`hiWiFiDeviceOps.open()`函数，初始化WiFi设备，连接默认网络；
+7. 调用`hiWiFiDeviceOps->open()`函数，初始化WiFi设备，连接默认网络；
 8. 设置超时时间，循环调用`hibus_wait_and_dispatch_packet()`函数：
-   1. 根据配置文件，计算时间，定时调用`hiWiFiDeviceOps.start_scan()`、`hiWiFiDeviceOps.get_signal_strength()`函数；
-   2. 定时调用`hiWiFiDeviceOps.get_hotspots()`函数，轮询网络状态；
+   1. 根据配置文件，计算时间，定时调用`hiWiFiDeviceOps->start_scan()`、`hiWiFiDeviceOps->get_signal_strength()`函数；
+   2. 定时调用`hiWiFiDeviceOps->get_hotspots()`函数，轮询网络状态；
 9. 调用`hibus_revoke_event()`撤销事件（用不到）、调用`hibus_revoke_procedure()`撤销远程过程（用不到）；
 10. 调用`hibus_disconnect()`中断与hiBus服务器的连接（用不到）；
 11. 调用`dlclose()`，关闭动态库。
@@ -481,7 +482,7 @@ int get_signal_strength(wifi_context * context);
 
 #### 开始WiFi网络扫描
 
-该函数是一个异步过程。inetd行者调用该函数后立刻返回。设备引擎开始扫描，其扫描结果将通过inetd行者调用`wifi_get_info()`函数返回。
+该函数是一个异步过程。inetd行者调用该函数后立刻返回。设备引擎开始扫描，其扫描结果将通过inetd行者调用`hiWiFiDeviceOps->get_hotspots()`函数返回。
 
 ```c
 int start_scan(wifi_context * context);
@@ -521,9 +522,9 @@ int get_hotspots (wifi_context * context, wifi_hotspot ** hotspots);
 
 - 参数：
    + `context`：设备引擎工作的上下文； 
-   + `hotspots`：wifi_hotspot结构数组头指针的指针； 
+   + `hotspots`：`wifi_hotspot`结构数组头指针的指针； 
 - 返回值：
-   + hotspots数组的个数。
+   + `hotspots`数组的个数。
 
 
 
@@ -531,14 +532,8 @@ int get_hotspots (wifi_context * context, wifi_hotspot ** hotspots);
 
 inetd行者根据当前网络状态，动态改变设备引擎扫描网络、检查网络信号强度的时间间隔。
 
-```
+```c
 void set_interval (wifi_context * context, int scan_interval, int signal_interval);
-参数：
-   + `context`：设备引擎工作的上下文； 
-	int scan：网络扫描的时间间隔。单位：秒；
-	int signalStrength：检测网络信号强度时间间隔。单位：秒。
-返回值：
-	无
 ```
 
 - 参数：
@@ -547,6 +542,7 @@ void set_interval (wifi_context * context, int scan_interval, int signal_interva
    + `signal_interval`：检查网络信号强度时间间隔； 
 - 返回值：
    + 无。
+
 
 ## 附：商标声明
 
