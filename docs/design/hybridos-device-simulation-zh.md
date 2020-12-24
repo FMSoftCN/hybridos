@@ -23,7 +23,7 @@
 - [基本框架及术语](#基本框架及术语)
 - [各模块的设计](#各模块的设计)
    + [hiAceJs中hibus的js封装](#hiacejs中hibus的js封装)
-   + [local-simulator](#local_simulator)
+   + [hibus-simulator-data](#hibus_simulator_data)
    + [hibus-simulator](#hibus_simulator)
    + [hibus-wrapper](#hibus_wrapper)
 - [设备操控](#设备操控)
@@ -47,9 +47,9 @@
 |                hiAceJs                |           hibus-simulator.js           |
  --------------------------------------------------------------------------------
 |                 hiBus                 |                                        |
- ---------------------------------------|         local-simulator.json           |
+ ---------------------------------------|          hibus-simulator-data          |
 |    WiFi Device   |   Battery Device   |                                        |
- -------------------------------------------------------------------------------
+ --------------------------------------------------------------------------------
 ```
 
 在 HybridOS 中，App 通过 hiBus 来访问设备。在上面的架构图中，wifi.js 和 battery.js 分别
@@ -60,7 +60,7 @@ hibus-wrapper.js 是 hiBus 基本功能的包装，包括连接的建立、断�
 进而操作真实的设备。在开发环境（包括模拟器）运行时，hibus-wrapper.js 会调用 hibus-simulator.js 
 的相关接口，以便返回模拟数据。
 
-hibus-simulator.js 目前主要通过 local-simulator.json 返回模拟数据。
+hibus-simulator.js 目前主要通过 hibus-simulator-data 返回模拟数据。
 
 ## 各模块的设计
 
@@ -148,52 +148,29 @@ JSIValue NativeapiHiBus::Read(const JSIValue thisVal, const JSIValue* args, uint
 
 ```
 
-### local-simulator
+### hibus-simulator-data
 
-local-simulator.json 提供了本地的模拟数据，用户可以修改该文件，已提供模拟数据
+hibus-simulator-data 提供了本地的模拟数据，用户可以修改该文件，已提供模拟数据
 
-```json
-{
-    "procedure" : [
-        {
-            "name":"procedureName1",
-            "data": {
-                ...
-            }
-        },
-        {
-            "name":"procedureName2",
-            "data": {
-                ...
-            }
-        }
-    ],
+hibus-simulator-data 的目录结构如下:
 
-    "event" : [
-        {
-            "name":"eventName1",
-            "data": {
-                ...
-            }
-        },
-        {
-            "name":"eventName1",
-            "data": {
-                ...
-            }
-        }
-    ]
-}
+```shell
+hibus-simulator-data
+    -- index.js
+    -- wifi
+        -- wifi-procedure-open.json
+        -- wifi-procedure-close.json
+        -- wifi-event-SIGNALSTRENGTHCHANGED.json
 ```
 
 ### hibus-simulator
 
-hibus-simulator.js 提供了hibus的接口的模拟实现，用户在开发过程中可以修改local-simulator.json文件，
+hibus-simulator.js 提供了hibus的接口的模拟实现，用户在开发过程中可以修改hibus-simulator-data中的文件，
 以提供不同的模拟数据。
 
 
 ```js
-import localData from '../../common/local-simulator.json';
+import hibusSimulatorData from './hibus-simulator-data/index.js'
 
 export default {
     connect() {
@@ -212,7 +189,7 @@ export default {
     }
 
     checkPackets(timeout) {
-        // get data from localData
+        // get data from simulator data
         // callback
     }
 }
