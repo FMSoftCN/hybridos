@@ -161,7 +161,7 @@ signal_time=10              // inervval of check signal strength. unit: second
     [
         {
             "SSID":"fmsoft-dev",
-            "encryptionType":“WPA",
+            "encryptionType":"WPA",
             "signalStrength":65，
             "isConnected":true
         },
