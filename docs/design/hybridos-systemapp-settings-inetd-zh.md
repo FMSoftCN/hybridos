@@ -97,7 +97,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### wifiOperateDevice
 
-```bash
+```json
 名称：wifiOperateDevice
 参数：
     {
@@ -124,17 +124,16 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### wifiGetDeviceInfo
 
-```
-名称：
-	wifiGetDeviceInfo
+```json
+名称：wifiGetDeviceInfo
 参数：
-	{
-		"device":"device name",
-	}
+    {
+        "device":"device name",
+    }
 返回值：
-	{
-	    "status":"on"
-	}
+    {
+        "status":"on"
+    }
 ```
 
 该过程用于查询WiFi设备的打开状态。
@@ -150,28 +149,26 @@ signal_time=10              // inervval of check signal strength. unit: second
 ##### 不可见网络的单独接口???
 
 
-
 ##### wifiGetHotspots
 
-```
-名称：
-	wifiScanHotspots
+```json
+名称：wifiScanHotspots
 参数：
-	{
-		"startScan":true
-	}
+    {
+        "startScan":true
+    }
 返回值：
-	[
-		{
-			"SSID":"fmsoft-dev",
-			"encryptionType":“WPA",
-			"signalStrength":65，
-			"isConnected":true
-		},
-		{
-			.....
-		}
-	]
+    [
+        {
+            "SSID":"fmsoft-dev",
+            "encryptionType":“WPA",
+            "signalStrength":65，
+            "isConnected":true
+        },
+        {
+            .....
+        }
+    ]
 ```
 
 该过程将立刻返回inetd维护的当前网络列表。如果"startScan"为true，inetd立刻发起网络搜索过程，通过事件networkHotspotChange，上报搜索结果。
@@ -186,21 +183,19 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### wifiConnectHotspot
 
-```
-名称：
-	wifiConnectHotspot
+```json
+名称：wifiConnectHotspot
 参数：
-	{
-		"SSID":"fmsoft-dev",
-		"password":"hybridos-hibus",
-		"autoconn":"enabled",
-		"default":"enabled"
-	}
+    {
+        "SSID":"fmsoft-dev",
+        "password":"hybridos-hibus",
+        "autoconn":"enabled",
+        "default":"enabled"
+    }
 返回值：
-	{
-		"reason": 1000
-	}
-
+    {
+        "reason": 1000
+    }
 ```
 
 其中:
@@ -212,18 +207,16 @@ signal_time=10              // inervval of check signal strength. unit: second
 ​        reason: 表示连接成功，或者失败的原因。详见 inetd.h。
 
 
-
 ##### wifiDisconnect
 
-```
-名称：
-	wifiDisconnect
+```json
+名称：wifiDisconnect
 参数：
-	无
+    无
 返回值：
-	{
-		"reason": 1000
-	}
+    {
+        "reason": 1000
+    }
 ```
 
 其中：
@@ -234,24 +227,23 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### wifiGetNetworkInfo
 
-```
-名称：
-	wifiGetNetworkInfo
+```json
+名称：wifiGetNetworkInfo
 参数：
-	无
+    无
 返回值：
-	{
-		"SSID":"fmsoft-dev",
-		"encryption":true,
-		"signal":65，
-		"MAC":"AB:CD:EF:12:34:56",
-		"IP":"192.168.1.128",
-		"type":"WPA2",
-		"frenquency":"5 GHz",
-		"speed":"650 Mbps"
-		“gateway”:"192.168.1.1"
-		"reason": 1000
-	}
+    {
+        "SSID":"fmsoft-dev",
+        "encryption":true,
+        "signal":65，
+        "MAC":"AB:CD:EF:12:34:56",
+        "IP":"192.168.1.128",
+        "type":"WPA2",
+        "frenquency":"5 GHz",
+        "speed":"650 Mbps"
+        "gateway":"192.168.1.1"
+        "reason": 1000
+    }
 ```
 
 该过程用于获得当前连接的WiFi网络的具体信息。
@@ -261,19 +253,18 @@ signal_time=10              // inervval of check signal strength. unit: second
 ​        reason: 表示该过程失败的原因。详见 inetd.h。
 
 
-
 ### 守护进程提供的可订阅消息
 
 ##### networkDeviceChange
 
-```
+```json
 名称：networkDeviceChange
 参数：
-	{
-		"device":"device name",
-		"status":"on",
-		"reason":1000
-	}
+    {
+        "device":"device name",
+        "status":"on",
+        "reason":1000
+    }
 ```
 
 其中：
@@ -286,15 +277,15 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### networkStatusChange
 
-```
+```json
 名称：networkStatusChange
 参数：
-	{
-		"nettype":"wifi";
-		"SSID":"fmsoft-dev",
-		"status":"on"
-		"reason":1000
-	}
+    {
+        "nettype":"wifi";
+        "SSID":"fmsoft-dev",
+        "status":"on"
+        "reason":1000
+    }
 ```
 
 其中：
@@ -309,15 +300,15 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### networkHotspotChange
 
-```
+```json
 名称：networkHotspotChange
 参数：
-	{
-		"SSID":"fmsoft-dev",
-		"encryption":true,
-		"changeType":"visible",
-		"status":"on"
-		"reason":1000
+    {
+        "SSID":"fmsoft-dev",
+        "encryption":true,
+        "changeType":"visible",
+        "status":"on"
+        "reason":1000
 	}
 ```
 
@@ -331,13 +322,13 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### signalStrenthChange
 
-```
+```json
 名称：signalStrenthChange
 参数：
-	{
-		"SSID":"fmsoft-dev",
-		"signalStrength":65，
-	}
+    {
+        "SSID":"fmsoft-dev",
+        "signalStrength":65，
+    }
 ```
 
 其中：
