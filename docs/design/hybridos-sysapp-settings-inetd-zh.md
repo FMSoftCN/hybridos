@@ -357,18 +357,19 @@ inetd守护进程，仅仅搭建了一个框架。其具体业务的执行，将
 
 
 
-## 动态库需要完成的接口
+## 设备引擎需要完成的接口
 
-每个动态库，必须完成下面的接口。
+每个设备引擎必须完成如下描述的接口，供inetd行者调用。
 
-
-
-##### 函数集的获得
+#### 函数集的获得
 
 在头文件 inetd.h 中，有如下声明：
 
-```
-typedef struct __wifi_hotspot
+```c
+struct _wifi_context;
+typedef struct _wifi_context wifi_context;
+
+typedef struct _wifi_hotspot
 {
 	unsigned char ssid[40];
 	char mac_address[32];
@@ -377,51 +378,48 @@ typedef struct __wifi_hotspot
 	char encryption[32];
 	char frenquency[32];
 	char speed[32];
-	int signalStrength;
+	int  signal_strength;
 	bool isConnect;
 } wifi_hotspot;
 
-typedef struct __hiWiFiManagerOps
+typedef struct _hiWiFiDeviceOps
 {
-	int (* open) (const char * device_name, wifi_context ** context);
+	wifi_context * (* open) (const char * device_name);
 	int (* close) (wifi_context * context);
-	int (* wifiConnect) (const char * ssid, const char *password, wifi_context * context);
-	int (* wifiDisconnect) (wifi_context * context);
-	int (* wifiScan) (wifi_context * context);
-	int (* wifiSignalStrength) (wifi_context * context);    
-	int (* wifiGetHotspots) (wifi_status * param, wifi_context * context);
-	void (* wifiSetInterval) (int scan, int signalStrength);
-} hiWiFiManagerOps;
+	int (* connect) (const char * ssid, const char *password, wifi_context * context);
+	int (* disconnect) (wifi_context * context);
+	int (* scan_start) (wifi_context * context);
+    int (* scan_stop) (wifi_context * context);
+	int (* get_signal_strength) (wifi_context * context);    
+	int (* get_hotspots) (wifi_context * context, wifi_hotspot ** hotspots);
+	void (* set_interval) (int scan_interval, int signal_interval);
+} hiWiFiDeviceOps;
 ```
 
-动态库需要实现hiWiFiManagerOps结构中的全部函数。这些函数仅被守护进程直接调用。
+设备引擎需要实现__hiWiFiDeviceOps结构中的全部函数。这些函数仅被inetd行者调用。
 
-守护进程首先调用如下函数，获得工作过程中所需要的全部函数指针。
+inetd行者首先调用如下函数，获得操作WiFi设备所需的全部函数指针。
 
+```c
+const hiWiFiDeviceOps * __wifi_device_ops_get();
 ```
-const hiWiFiManagerOps * __wifi_get_Ops();
-参数：
-	无；
-返回值：
-	hiWiFiManagerOps。	
+- 参数：
+   + 无 
+- 返回值：hiWiFiDeviceOps结构指针。如返回值为NULL，表示该函数执行失败。
+
+
+#### 设备的打开
+
+
+```c
+wifi_context * open (const char * device_name);
 ```
+根据WiFi设备名，完成对该设备的初始化。并根据配置文件，搜索并连接默认网络。
 
 
-
-##### 设备的打开
-
-```
-int (* open) (const char * device_name, wifi_context ** context);
-参数：
-	const char * device_name：网络设备名；
-	wifi_context ** context：动态库工作的上下文。wifi_context结构由动态库自行声明及定义；
-返回值：
-	0：设备工作正常
-	其他值：打开设备失败，详见头文件 inetd.h。
-```
-
-该函数完成对WIFI设备的初始化。如根据配置文件，搜索并连接默认网络。
-
+- 参数：
+   + `device_name`：网络设备名； 
+- 返回值：wifi_context结构指针。wifi_context结构由动态库自行声明及定义。如果返回值为NULL，表示该函数执行失败。
 
 
 ##### 设备的关闭
