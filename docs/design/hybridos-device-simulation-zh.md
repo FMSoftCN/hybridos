@@ -46,9 +46,9 @@
  --------------------------------------------------------------------------------
 |                hiAceJs                |           hibus-simulator.js           |
  --------------------------------------------------------------------------------
-|                 hiBus                 |                      |     Remote      |
- ---------------------------------------| local-simulator.json |     Cloud       |
-|    WiFi Device   |   Battery Device   |                      |     Service     |
+|                 hiBus                 |                                        |
+ ---------------------------------------|         local-simulator.json           |
+|    WiFi Device   |   Battery Device   |                                        |
  -------------------------------------------------------------------------------
 ```
 
@@ -60,8 +60,7 @@ hibus-wrapper.js 是 hiBus 基本功能的包装，包括连接的建立、断�
 进而操作真实的设备。在开发环境（包括模拟器）运行时，hibus-wrapper.js 会调用 hibus-simulator.js 
 的相关接口，以便返回模拟数据。
 
-hibus-simulator.js 目前主要通过 local-simulator.json 返回模拟数据；将来可以连接远程云服务
-从而获取更佳的服务和体验。
+hibus-simulator.js 目前主要通过 local-simulator.json 返回模拟数据。
 
 ## 各模块的设计
 
@@ -190,7 +189,7 @@ local-simulator.json 提供了本地的模拟数据，用户可以修改该文�
 ### hibus-simulator
 
 hibus-simulator.js 提供了hibus的接口的模拟实现，用户在开发过程中可以修改local-simulator.json文件，
-以提供不同的 模拟数据。 将来可以连接远程云服务从而获取更佳的服务和体验。
+以提供不同的模拟数据。
 
 
 ```js
