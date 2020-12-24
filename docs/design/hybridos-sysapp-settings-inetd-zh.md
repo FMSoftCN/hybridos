@@ -86,67 +86,75 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 
 
-## 守护进程接口
+## inetd行者接口
 
-守护进程为APP管理和操作WiFi，提供了的远程过程及可订阅事件如下。
+inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件如下。
 
 
-### 守护进程提供的远程过程
+### inetd行者提供的远程过程
 
 在WiFi操作中，强制规定，远程过程的参数，以及执行结果，使用JSON格式字符串。下面仅对每个过程的参数及返回值，进行说明。
 
-##### wifiOperateDevice
+#### 打开WiFi设备
 
-```bash
-名称：wifiOperateDevice
-参数：
-    {
+该过程负责打开指定的WiFi设备。如果打开设备成功，根据配置判断是否发起WiFi热点搜索过程。
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiOpenDevice`
+- parameter：
+   + `device`：网络设备名称；
+```json
+    { 
         "device":"device_name",
-        "operation":"on"
     }
-返回值：
-    {
-        "reason": 1000
+```
+- retValue：
+   + `errCode`：返回错误编码，200为执行正确；
+   + `errMsg`：错误信息；
+```json
+    { 
+        "errCode":200,
+        "errMsg":"OK"
     }
 ```
 
-该过程负责打开或者关闭WiFi设备。打开设备如果成功，立刻发起WiFi热点搜索过程。
+#### 关闭WiFi设备
 
-其中:
-
-​		device：WiFi设备名；
-
-​		operation：on / off；
-
-​		reason: 表示开关成功与否，或错误原因。详见 inetd.h。
-
-
-
-##### wifiGetDeviceInfo
-
-```bash
-名称：wifiGetDeviceInfo
-参数：
-    {
-        "device":"device name",
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiCloseDevice`
+- parameter：
+   + `device`：网络设备名称；
+```json
+    { 
+        "device":"device_name",
     }
-返回值：
-    {
+```
+- retValue：
+   + `errCode`：返回错误编码，200为执行正确；
+   + `errMsg`：错误信息；
+```json
+    { 
+        "errCode":200,
+        "errMsg":"OK"
+    }
+```
+
+
+#### 查询网络设备状态
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiGetDeviceStatus`
+- parameter：
+   + `device`：网络设备名称；
+```json
+    { 
+        "device":"device_name",
+    }
+```
+- retValue：
+   + `status`：网络设备状态。取值为 on / off；
+```json
+    { 
         "status":"on"
     }
 ```
-
-该过程用于查询WiFi设备的打开状态。
-
-其中:
-
-​		device：为WiFi设备名；
-
-​		status：on / off。
-
-
-
-##### 不可见网络的单独接口???
 
 
 ##### wifiGetHotspots
@@ -281,7 +289,6 @@ signal_time=10              // inervval of check signal strength. unit: second
    + `capabilities`：网络许可加密方式；
    + `signalStrength`：取值范围在0——100之间；
    + `available`：网络是否可被搜索到；
-   + `new`：是否是被新搜索到的网络。
 ```json
     { 
         "bssid": "f0:b4:29:24:18:eb",
@@ -289,8 +296,7 @@ signal_time=10              // inervval of check signal strength. unit: second
         "encryption":true,
         "capabilities": ["WPA-PSK-CCMP+TKIP", "WPA2-PSK-CCMP+TKIP", "WPS", "ESS"]
         "signalStrength":65,
-        "available":true,
-        "new":true
+        "available":true
     }
 ```
 - 使用描述：
@@ -298,6 +304,7 @@ signal_time=10              // inervval of check signal strength. unit: second
    + 在一次WiFi搜索时，某个网络不能再被搜索到，视为该网络状态发生变化；
    + 在一次WiFi搜索时，某个网络的加密方式发生变化，视为该网络状态发生变化？？？
    + 在一次WiFi搜索时，某个网络的BSSID发生变化，视为该网络状态发生变化？？？
+   + 当`available`为`true`时，表明其为一个新搜索到的网络；为`false`时，表明该网络不可再被搜索到。其余情况该项为`NULL`；
 
 
 #### 网络信号强度
