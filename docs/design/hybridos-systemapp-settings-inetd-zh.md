@@ -97,7 +97,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### wifiOperateDevice
 
-```json
+```bash
 名称：wifiOperateDevice
 参数：
     {
@@ -124,7 +124,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### wifiGetDeviceInfo
 
-```json
+```bash
 名称：wifiGetDeviceInfo
 参数：
     {
@@ -151,7 +151,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### wifiGetHotspots
 
-```json
+```bash
 名称：wifiScanHotspots
 参数：
     {
@@ -183,7 +183,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### wifiConnectHotspot
 
-```json
+```bash
 名称：wifiConnectHotspot
 参数：
     {
@@ -209,7 +209,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### wifiDisconnect
 
-```json
+```bash
 名称：wifiDisconnect
 参数：
     无
@@ -227,7 +227,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### wifiGetNetworkInfo
 
-```json
+```bash
 名称：wifiGetNetworkInfo
 参数：
     无
@@ -257,7 +257,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### networkDeviceChange
 
-```json
+```bash
 名称：networkDeviceChange
 参数：
     {
@@ -277,7 +277,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### networkStatusChange
 
-```json
+```bash
 名称：networkStatusChange
 参数：
     {
@@ -300,7 +300,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### networkHotspotChange
 
-```json
+```bash
 名称：networkHotspotChange
 参数：
     {
@@ -322,7 +322,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### signalStrenthChange
 
-```json
+```bash
 名称：signalStrenthChange
 参数：
     {
