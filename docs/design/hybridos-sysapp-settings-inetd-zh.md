@@ -339,21 +339,21 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ## 守护进程工作流程
 
-inetd守护进程，仅仅搭建了一个框架。其具体业务的执行，将全部调用动态库提供的接口完成。守护进程的流程如下：
+inetd行者工作流程如下：
 
 1. 两次fork操作，成为守护进程；
-2. 调用hibus_connect_via_unix_socket()，建立与hiBus服务器的连接；
+2. 调用`hibus_connect_via_unix_socket()`，建立与hiBus服务器的连接；
 3. 读取配置文件，获得各项参数；
-4. 根据配置文件，装载动态库。调用动态库的__wifi_get_Ops()函数，获取hiWiFiManagerOps结构；
-5. 调用hibus_register_procedure()，注册远程过程；
-6. 调用hibus_register_event()，注册可被订阅事件；
-7. 调用hiWifiManagerOps.open()函数，初始化WiFi设备，连接默认网络；
-8. 设置超时时间，循环调用hibus_wait_and_dispatch_packet()函数：
-   1. 根据配置文件，计算时间，定时调用hiWiFiManagerOps.wifiScan()、hiWiFiManagerOps.wifiSignalStrength()函数；
-   2. 定时调用hiWifiManagerOps.wifiGetStatus()函数，轮询设备的工作状态；
-9. 调用hibus_revoke_event()撤销事件（用不到）、调用hibus_revoke_procedure()撤销远程过程（用不到）；
-10. 调用hibus_disconnect()中断与hiBus服务器的连接（用不到）；
-11. 调用dlclose()，关闭动态库。
+4. 根据配置文件，装载设备引擎。调用`__wifi_device_ops_get()`函数，获取`hiWiFiDeviceOps`结构；
+5. 调用`hibus_register_procedure()`注册远程过程；
+6. 调用`hibus_register_event()`注册可被订阅事件；
+7. 调用`hiWiFiDeviceOps.open()`函数，初始化WiFi设备，连接默认网络；
+8. 设置超时时间，循环调用`hibus_wait_and_dispatch_packet()`函数：
+   1. 根据配置文件，计算时间，定时调用`hiWiFiDeviceOps.start_scan()`、`hiWiFiDeviceOps.get_signal_strength()`函数；
+   2. 定时调用`hiWiFiDeviceOps.get_hotspots()`函数，轮询网络状态；
+9. 调用`hibus_revoke_event()`撤销事件（用不到）、调用`hibus_revoke_procedure()`撤销远程过程（用不到）；
+10. 调用`hibus_disconnect()`中断与hiBus服务器的连接（用不到）；
+11. 调用`dlclose()`，关闭动态库。
 
 
 
@@ -387,15 +387,15 @@ typedef struct _hiWiFiDeviceOps
 	int (* close) (wifi_context * context);
 	int (* connect) (const char * ssid, const char *password, wifi_context * context);
 	int (* disconnect) (wifi_context * context);
-	int (* scan_start) (wifi_context * context);
-    int (* scan_stop) (wifi_context * context);
 	int (* get_signal_strength) (wifi_context * context);    
+	int (* start_scan) (wifi_context * context);
+    int (* stop_scan) (wifi_context * context);
 	int (* get_hotspots) (wifi_context * context, wifi_hotspot ** hotspots);
 	void (* set_interval) (int scan_interval, int signal_interval);
 } hiWiFiDeviceOps;
 ```
 
-设备引擎需要实现hiWiFiDeviceOps结构中的全部函数。这些函数仅被inetd行者调用。
+设备引擎需要实现`hiWiFiDeviceOps`结构中的全部函数。这些函数仅被inetd行者调用。
 
 #### 函数集的获得
 
@@ -406,7 +406,7 @@ const hiWiFiDeviceOps * __wifi_device_ops_get();
 ```
 - 参数：
    + 无 
-- 返回值：hiWiFiDeviceOps结构指针。如返回值为NULL，表示该函数执行失败。
+- 返回值：`hiWiFiDeviceOps`结构指针。如返回值为NULL，表示该函数执行失败。
 
 
 #### 设备的打开
@@ -419,106 +419,134 @@ wifi_context * open (const char * device_name);
 
 - 参数：
    + `device_name`：网络设备名； 
-- 返回值：wifi_context结构指针。wifi_context结构由动态库自行声明及定义。如果返回值为NULL，表示该函数执行失败。
+- 返回值：
+   + `wifi_context`结构指针，是为设备引擎工作的上下文。该结构由设备引擎自行声明及定义。如果返回值为NULL，表示该函数执行失败。 
 
 
-##### 设备的关闭
+#### 设备的关闭
 
-```
+关闭WIFI当前连接，同时完成设备相关软、硬件的资源回收。
+
+```c
 int close(wifi_context * context);
-参数：
-	wifi_context * context：动态库工作的上下文；
-返回值：
-	0：设备正常关闭
-	其他值：关闭设备失败，详见头文件 inetd.h。
 ```
 
-该函数关闭WIFI当前连接，同时完成设备相关软、硬件的资源回收。
+- 参数：
+   + `context`：设备引擎工作的上下文； 
+- 返回值：
+   + `0`：设备正常关闭；
+   + `-1`：设备操作错误代码。 
 
 
+#### 网络的连接
 
-##### 网络的连接
-
-```
-int wifiConnect(const char * ssid, const char *password, wifi_context * context);
-参数：
-	const char * ssid：网络SSID；
-	const char *password：网络的密码，如为NULL，表示不需要密码；
-	wifi_context * context：动态库工作的上下文；
-返回值：
-	0：网络连接成功
-	其他值：网络连接失败，具体值详见inetd.h。
+```c
+int connect(wifi_context * context, const char * ssid, const char *password);
 ```
 
+- 参数：
+   + `context`：设备引擎工作的上下文； 
+   + `ssid`：网络SSID； 
+   + `password`：网络的密码，如为NULL，表示不需要密码； 
+- 返回值：
+   + `0`：连接指定网络成功；
+   + `-1`：连接操作错误代码。 
 
 
-##### 网络的断开
+#### 网络的断开
 
-```
-int wifiDisconnect(wifi_context * context);
-
-参数：
-	wifi_context * context：动态库工作的上下文；
-返回值：
-	0：网络断开连接成功
-	其他值：网络断开连接失败，具体值详见inetd.h。
-```
-
-
-
-##### WIFI强度
+```c
+int disconnect(wifi_context * context);
 
 ```
-int wifiSignalStrength(wifi_context * context); 
-参数：
-	wifi_context * context：动态库工作的上下文；
-返回值：
-	int strength：当前网络信号强度，取值范围为0——100。
+
+- 参数：
+   + `context`：设备引擎工作的上下文； 
+- 返回值：
+   + `0`：断开连接成功；
+   + `-1`：断开连接操作错误代码。 
+
+
+#### WIFI强度
+
+```c
+int get_signal_strength(wifi_context * context); 
 ```
 
+- 参数：
+   + `context`：设备引擎工作的上下文； 
+- 返回值：
+   + 当前网络信号强度，取值范围为0——100。
 
 
-##### WIFI扫描
+#### 开始WiFi网络扫描
 
-```
-int wifiScan(wifi_context * context);
-参数：
-	wifi_context * context：动态库工作的上下文；
-返回值：
-	0：网络断开连接成功
-	其他值：网络断开连接失败，具体值详见inetd.h。
-```
+该函数是一个异步过程。inetd行者调用该函数后立刻返回。设备引擎开始扫描，其扫描结果将通过inetd行者调用`wifi_get_info()`函数返回。
 
-该函数是一个异步过程。inetd调用该函数后立刻返回。动态库开始扫描，其扫描结果通过inetd调用wifi_get_info()函数返回。
-
-
-
-##### 获得热点信息
-
-```
-int wifiGetHotspots(wifi_hotspot * hotspots);
-参数：
-	wifi_hotspot * hotspots：wifi_hotspot数组的头指针；
-返回值：
-	hotspots数组的个数；
+```c
+int start_scan(wifi_context * context);
 ```
 
-hotspots数组由动态库维护，负责内存空间的开辟及回收。
+- 参数：
+   + `context`：设备引擎工作的上下文； 
+- 返回值：
+   + `0`：开始网络扫描成功；
+   + `-1`：设备操作错误代码。 
 
-当搜索热点完毕后，最后需要发送一个 ssid[0] = 0 的wifi_hotspot结构，以表示搜索过程完毕。
+
+#### 停止WiFi网络扫描
+
+该函数终止正在进行的WiFi网络扫描过程。
+
+```c
+int stop_scan(wifi_context * context);
+```
+
+- 参数：
+   + `context`：设备引擎工作的上下文； 
+- 返回值：
+   + `0`：终止网络扫描成功；
+   + `-1`：设备操作错误代码。 
+
+
+#### 获得热点信息
+
+inetd行者定时调用该函数，获得WiFi热点的信息。`hotspots`数组由设备引擎维护，负责内存空间的开辟及回收。
+当设备引擎搜索热点完毕后，最后需要发送一个 ssid[0] = 0 的`wifi_hotspot`结构，以表示搜索过程完毕。
+
+
+```c
+int get_hotspots (wifi_context * context, wifi_hotspot ** hotspots);
+```
+
+- 参数：
+   + `context`：设备引擎工作的上下文； 
+   + `hotspots`：wifi_hotspot结构数组头指针的指针； 
+- 返回值：
+   + hotspots数组的个数。
 
 
 
 ##### 设置定时间隔
 
+inetd行者根据当前网络状态，动态改变设备引擎扫描网络、检查网络信号强度的时间间隔。
+
 ```
-void wifiSetInterval (int scan, int signalStrength);
+void set_interval (wifi_context * context, int scan_interval, int signal_interval);
 参数：
+   + `context`：设备引擎工作的上下文； 
 	int scan：网络扫描的时间间隔。单位：秒；
 	int signalStrength：检测网络信号强度时间间隔。单位：秒。
 返回值：
 	无
 ```
+
+- 参数：
+   + `context`：设备引擎工作的上下文； 
+   + `scan_interval`：扫描网络时间间隔； 
+   + `signal_interval`：检查网络信号强度时间间隔； 
+- 返回值：
+   + 无。
 
 ## 附：商标声明
 
