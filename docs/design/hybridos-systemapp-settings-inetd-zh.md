@@ -97,9 +97,8 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 ##### wifiOperateDevice
 
-```c
-名称：
-    wifiOperateDevice
+```bash
+名称：wifiOperateDevice
 参数：
     {
         "device":"device_name",
@@ -263,7 +262,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 
 
-### 3.2 守护进程提供的可订阅消息
+### 守护进程提供的可订阅消息
 
 ##### networkDeviceChange
 
@@ -347,7 +346,7 @@ signal_time=10              // inervval of check signal strength. unit: second
 
 
 
-## 4 守护进程工作流程
+## 守护进程工作流程
 
 inetd守护进程，仅仅搭建了一个框架。其具体业务的执行，将全部调用动态库提供的接口完成。守护进程的流程如下：
 
@@ -367,7 +366,7 @@ inetd守护进程，仅仅搭建了一个框架。其具体业务的执行，将
 
 
 
-## 5 动态库需要完成的接口
+## 动态库需要完成的接口
 
 每个动态库，必须完成下面的接口。
 
