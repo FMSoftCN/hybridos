@@ -181,7 +181,7 @@ export default {
 
 wifi-procedure-open.json 一个Procedure的模拟数据
 
-```
+```json
 {
   "name": "@localhost/cn.fmsoft.hybridos.settings/inetd/open",
   "mode": ["random", "fixed"],
