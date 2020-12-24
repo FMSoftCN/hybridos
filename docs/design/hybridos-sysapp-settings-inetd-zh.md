@@ -361,7 +361,6 @@ inetd守护进程，仅仅搭建了一个框架。其具体业务的执行，将
 
 每个设备引擎必须完成如下描述的接口，供inetd行者调用。
 
-#### 函数集的获得
 
 在头文件 inetd.h 中，有如下声明：
 
@@ -396,7 +395,9 @@ typedef struct _hiWiFiDeviceOps
 } hiWiFiDeviceOps;
 ```
 
-设备引擎需要实现__hiWiFiDeviceOps结构中的全部函数。这些函数仅被inetd行者调用。
+设备引擎需要实现hiWiFiDeviceOps结构中的全部函数。这些函数仅被inetd行者调用。
+
+#### 函数集的获得
 
 inetd行者首先调用如下函数，获得操作WiFi设备所需的全部函数指针。
 
@@ -410,12 +411,11 @@ const hiWiFiDeviceOps * __wifi_device_ops_get();
 
 #### 设备的打开
 
+根据WiFi设备名，完成对该设备的初始化。并根据配置文件，搜索并连接默认网络。
 
 ```c
 wifi_context * open (const char * device_name);
 ```
-根据WiFi设备名，完成对该设备的初始化。并根据配置文件，搜索并连接默认网络。
-
 
 - 参数：
    + `device_name`：网络设备名； 
