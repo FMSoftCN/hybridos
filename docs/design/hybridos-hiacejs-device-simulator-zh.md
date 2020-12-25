@@ -374,20 +374,20 @@ App可以通过订阅该事件，获取电池状态信息。
 当电池状态发生改变时，产生 `BATTERYCHANGED` 事件:
 
 * 泡泡名称：`BATTERYCHANGED`
-* bubbleData：
+* 泡泡数据：
    - `plugged`：是否插入充电线，取值 true | false；
-   - `health`：电池健康状态，取值 0% ~ 100%
-   - `temperature`：电池温度，字符串，如 "55℃"
-   - `voltage`：电池电压, 字符串，如 "4.7V"
+   - `health`：电池健康状态，取值 0 ~ 100
+   - `temperature`：电池温度，单位: 摄氏度
+   - `voltage`：电池电压, 单位: 伏特(V)
    - `level`：电量，取值 0 ~ 100
 
 ```json
 {
     "bubbleData": {
         "plugged": < true | false >,
-        "health": "90%",
-        "temperature": "55℃",
-        "voltage": "4.7V",
+        "health": 90,
+        "temperature": 55,
+        "voltage": 4.7,
         "level": 75
     }
 }
