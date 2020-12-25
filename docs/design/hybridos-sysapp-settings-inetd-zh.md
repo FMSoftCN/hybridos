@@ -121,8 +121,6 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
 
 #### 打开网络设备
 
-该过程负责打开指定的网络设备。
-
 - 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/openDevice`
 - 参数：
    + `device`：网络设备名称；
@@ -135,8 +133,8 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
    + `errMsg`：错误信息；
    + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
      + ENODEV：没找到相应的设备；
-     + EACCES：没有操作权限；
-     + EINVAL：参数不合法；
+     + EACCES：没有操作设备权限；
+     + EINVAL：参数不合法。
 ```json
     { 
         "errCode":0,
@@ -158,7 +156,7 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
    + `errMsg`：错误信息；
    + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
      + ENODEV：没找到相应的设备；
-     + EACCES：没有操作权限；
+     + EACCES：没有操作设备权限；
      + EINVAL：参数不合法。
 ```json
     { 
@@ -175,9 +173,8 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
 - 返回值：
    + `data`：返回的数据：
      + `device`：网络设备名；
-     + `device`：网络设备名；
      + `type`：网络设备类型；
-     + `status`：网络设备状态。
+     + `status`：网络设备状态；
    + `errMsg`：错误信息；
    + `errCode`：此过程只返回0，表示执行成功。
 ```json
@@ -220,7 +217,7 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
    + `errMsg`：错误信息；
    + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
      + ENODEV：没找到相应的设备；
-     + EACCES：没有操作权限；
+     + EACCES：没有操作设备权限；
      + EINVAL：参数不合法。
 ```json
     {
@@ -242,13 +239,14 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
     }
 ```
 
-该过程将立刻返回inetd维护的当前网络列表。网络列表根据信号强度从大到小排列，当前连接的网络，排在第一个。
-
-然后发起新一轮WiFi网络扫描，扫描结果通过`WIFINEWHOTSPOTS`泡泡发送。因此调用此过程前，务必订阅`WIFINEWHOTSPOTS`事件。
-
-扫描结束后，inetd行者将停止发送`WIFINEWHOTSPOTS`泡泡，因此应用需取消订阅`WIFINEWHOTSPOTS`泡泡。
-
 如没有查到网络热点，则`data`为空数组。
+
+该过程将立刻返回inetd维护的当前网络列表。网络列表根据信号强度从大到小排列。当前连接的网络，排在第一个。
+
+该过程返回后，随即发起WiFi网络扫描。扫描结果通过`WIFINEWHOTSPOTS`泡泡发送给应用。因此调用此过程前，应用务必订阅`WIFINEWHOTSPOTS`事件。
+
+扫描结束后，inetd行者将停止发送`WIFINEWHOTSPOTS`泡泡，因此应用需取消订阅`WIFINEWHOTSPOTS`事件。
+
 
 #### 停止网络热点扫描 
 
@@ -264,7 +262,7 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
    + `errMsg`：错误信息；
    + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
      + ENODEV：没找到相应的设备；
-     + EACCES：没有操作权限；
+     + EACCES：没有操作设备权限；
      + EINVAL：参数不合法。
 ```json
     {
@@ -272,7 +270,7 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
         "errMsg":"OK"
     }
 ```
-inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWHOTSPOTS`泡泡，因此应用需取消订阅`WIFINEWHOTSPOTS`泡泡。
+inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWHOTSPOTS`泡泡。因此应用调用该过程后，需取消订阅`WIFINEWHOTSPOTS`事件。
 
 
 #### 连接网络热点
@@ -287,7 +285,7 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
 ```json
     {
         "device":"device_name",
-        "SSID":"fmsoft-dev",
+        "ssid":"fmsoft-dev",
         "password":"hybridos-hibus",
         "autoConnect":true,
         "default":true
@@ -297,9 +295,9 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
    + `errMsg`：错误信息；
    + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
      + ENODEV：没找到相应的设备；
-     + EACCES：没有操作权限；
+     + EACCES：没有操作设备权限；
      + EINVAL：参数不合法；
-     + ECONNREFUSED：连接被拒绝。
+     + ECONNREFUSED：因密码不正确，导致连接被拒绝。
 ```json
     { 
         "errCode":0,
@@ -321,7 +319,7 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
    + `errMsg`：错误信息；
    + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
      + ENODEV：没找到相应的设备；
-     + EACCES：没有操作权限；
+     + EACCES：没有操作设备权限；
      + EINVAL：参数不合法。
 ```json
     { 
@@ -348,7 +346,7 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
      + `gateway`：网关。
    + `errMsg`：错误信息；
    + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
-     + EACCES：没有操作权限。
+     + EACCES：没有操作设备权限。
 ```json
     { 
         "data":{
@@ -427,8 +425,8 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
     }
 ```
 - 使用描述：
-   + `signalStrength`不为0时，表明名为“fmsoft-dev”的网络信号强度；
-   + `signalStrength`为0时，表明名为“fmsoft-dev”的网络中断；
+   + `signalStrength`不为0时，表明“fmsoft-dev”的网络信号强度；
+   + `signalStrength`为0时，表明“fmsoft-dev”的网络中断；
    + 当前网络中断后，不会发送该事件。
 
 ## inetd行者工作流程
@@ -447,13 +445,13 @@ inetd行者工作流程如下：
    2. 定时调用`hiWiFiDeviceOps->get_hotspots()`函数，轮询网络状态；
 9. 调用`hibus_revoke_event()`撤销事件（用不到）、调用`hibus_revoke_procedure()`撤销远程过程（用不到）；
 10. 调用`hibus_disconnect()`中断与hiBus服务器的连接（用不到）；
-11. 调用`dlclose()`，关闭动态库。
+11. 调用`dlclose()`，关闭设备引擎。
 
 ## 设备引擎需要完成的接口
 
 ### WiFi设备引擎
 
-每个设备引擎必须完成如下描述的接口，供inetd行者调用。
+设备引擎必须完成如下描述的所有接口，供inetd行者调用。
 
 在头文件 inetd.h 中，有如下声明：
 
@@ -478,7 +476,7 @@ typedef struct _hiWiFiDeviceOps
 {
     wifi_context * (* open) (const char * device_name);
     int (* close) (wifi_context * context);
-    int (* connect) (const char * ssid, const char *password, wifi_context * context);
+    int (* connect) (wifi_context * context, const char * ssid, const char *password);
     int (* disconnect) (wifi_context * context);
     int (* get_signal_strength) (wifi_context * context);    
     int (* start_scan) (wifi_context * context);
@@ -487,14 +485,12 @@ typedef struct _hiWiFiDeviceOps
 } hiWiFiDeviceOps;
 ```
 
-设备引擎需要实现`hiWiFiDeviceOps`结构中的全部函数。这些函数仅被inetd行者调用。
-
 #### 函数集的获得
 
 inetd行者首先调用如下函数，获得操作WiFi设备所需的全部函数指针。
 
 ```c
-const hiWiFiDeviceOps * __wifi_device_ops_get();
+const hiWiFiDeviceOps * __wifi_device_ops_get(void);
 ```
 - 参数：
    + 无 
@@ -503,7 +499,7 @@ const hiWiFiDeviceOps * __wifi_device_ops_get();
 
 #### 打开设备
 
-根据WiFi设备名，完成对该设备的初始化。并根据配置文件，搜索并连接默认网络。
+根据WiFi设备名，完成对该设备的初始化。
 
 ```c
 wifi_context * open (const char * device_name);
@@ -512,12 +508,11 @@ wifi_context * open (const char * device_name);
 - 参数：
    + `device_name`：网络设备名； 
 - 返回值：
-   + `wifi_context`结构指针，是为设备引擎工作的上下文。该结构由设备引擎自行声明及定义。如果返回值为NULL，表示该函数执行失败。 
-
+   + `wifi_context`结构指针，为设备引擎工作的上下文。该结构由设备引擎自行声明及定义。如果返回值为NULL，表示该函数执行失败。 
 
 #### 关闭设备
 
-关闭WiFi当前连接，同时完成设备相关软、硬件的资源回收。
+关闭WiFi设备，同时完成相关软、硬件的资源回收。
 
 ```c
 int close(wifi_context * context);
@@ -528,7 +523,6 @@ int close(wifi_context * context);
 - 返回值：
    + `0`：设备正常关闭；
    + `-1`：设备操作错误代码。 
-
 
 #### 连接网络
 
@@ -544,7 +538,6 @@ int connect(wifi_context * context, const char * ssid, const char *password);
    + `0`：连接指定网络成功；
    + `-1`：连接操作错误代码。 
 
-
 #### 断开网络
 
 ```c
@@ -558,7 +551,6 @@ int disconnect(wifi_context * context);
    + `0`：断开连接成功；
    + `-1`：断开连接操作错误代码。 
 
-
 #### 获取WiFi信号强度
 
 ```c
@@ -569,7 +561,6 @@ int get_signal_strength(wifi_context * context);
    + `context`：设备引擎工作的上下文； 
 - 返回值：
    + 当前网络信号强度，取值范围为0——100。
-
 
 #### 开始WiFi网络扫描
 
@@ -585,7 +576,6 @@ int start_scan(wifi_context * context);
    + `0`：开始网络扫描成功；
    + `-1`：设备操作错误代码。 
 
-
 #### 停止WiFi网络扫描
 
 该函数终止正在进行的WiFi网络扫描过程。
@@ -600,12 +590,10 @@ int stop_scan(wifi_context * context);
    + `0`：终止网络扫描成功；
    + `-1`：设备操作错误代码。 
 
-
 #### 获得热点信息
 
 inetd行者定时调用该函数，获得WiFi热点的信息。`hotspots`数组由设备引擎维护，负责内存空间的开辟及回收。
 当设备引擎搜索热点完毕后，最后需要发送一个 ssid[0] = 0 的`wifi_hotspot`结构，以表示搜索过程完毕。
-
 
 ```c
 int get_hotspots (wifi_context * context, wifi_hotspot ** hotspots);
@@ -616,7 +604,6 @@ int get_hotspots (wifi_context * context, wifi_hotspot ** hotspots);
    + `hotspots`：`wifi_hotspot`结构数组头指针的指针； 
 - 返回值：
    + `hotspots`数组的个数。
-
 
 
 ## 附：商标声明
