@@ -496,7 +496,7 @@ const hiWiFiDeviceOps * __wifi_device_ops_get(void);
 ```
 - 参数：
    + 无 
-- 返回值：`hiWiFiDeviceOps`结构指针。如返回值为NULL，表示该函数执行失败。
+- 返回值：`hiWiFiDeviceOps`结构指针。如返回值为`NULL`，表示该函数执行失败。
 
 
 #### 打开设备
@@ -510,7 +510,7 @@ wifi_context * open (const char * device_name);
 - 参数：
    + `device_name`：网络设备名； 
 - 返回值：
-   + `wifi_context`结构指针，为设备引擎工作的上下文。该结构由设备引擎自行声明及定义。如果返回值为NULL，表示该函数执行失败。 
+   + `wifi_context`结构指针，为设备引擎工作的上下文。该结构由设备引擎自行声明及定义。如果返回值为`NULL`，表示该函数执行失败。 
 
 #### 关闭设备
 
@@ -535,7 +535,7 @@ int connect(wifi_context * context, const char * ssid, const char *password);
 - 参数：
    + `context`：设备引擎工作的上下文； 
    + `ssid`：网络SSID； 
-   + `password`：网络的密码，如为NULL，表示不需要密码； 
+   + `password`：网络的密码，如为`NULL`，表示不需要密码； 
 - 返回值：
    + `0`：连接指定网络成功；
    + `-1`：连接操作错误代码。 
