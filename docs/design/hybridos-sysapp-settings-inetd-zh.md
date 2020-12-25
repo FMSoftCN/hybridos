@@ -158,7 +158,7 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
         "status":"off"
     }
 ```
-如没有查到网络设备，则`retValue`为NULL；
+如没有查到网络设备，则`retValue`为NULL。
 
 
 #### 获得网络热点列表
@@ -195,7 +195,7 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
 ```
 
 该过程将立刻返回inetd维护的当前网络列表。网络列表根据信号强度排列，当前连接的网络，排在第一个，其余按照信号强度从大到小排列。
-如没有查到网络热点，则`retValue`为NULL；
+如没有查到网络热点，则`retValue`为NULL。
 
 
 #### 连接网络热点
@@ -277,6 +277,7 @@ wifiDisconnect
         "gateway":"192.168.1.1"
     }
 ```
+如没有查到当前网络详细信息，则`retValue`为NULL。
 
 ### inetd行者提供的可订阅消息
 
@@ -360,7 +361,6 @@ inetd行者工作流程如下：
 9. 调用`hibus_revoke_event()`撤销事件（用不到）、调用`hibus_revoke_procedure()`撤销远程过程（用不到）；
 10. 调用`hibus_disconnect()`中断与hiBus服务器的连接（用不到）；
 11. 调用`dlclose()`，关闭动态库。
-
 
 
 ## 设备引擎需要完成的接口
@@ -556,8 +556,9 @@ void set_interval (wifi_context * context, int scan_interval, int signal_interva
 | ---------------- | ------- | ------------------------------------ |
 | ERR_NO           | 0       | OK                                   |
 | ERR_NO_DEVICE    | -1      | Can not find the device              |
-| ERR_DEVICE_OPEN  | -2      | Devcie can not be openned.           |
-| ERR_NO_AUTHORITY | -3      | Have no enough authority to operate. |
+| ERR_CANNOT_OPEN  | -2      | Devcie can not be openned.           |
+| ERR_CANNOT_CLOSE | -3      | Devcie can not be closedd.           |
+| ERR_NO_AUTHORITY | -4      | Have no enough authority to acess.   |
 
 
 
