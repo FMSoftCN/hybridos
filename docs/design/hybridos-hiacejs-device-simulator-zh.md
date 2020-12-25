@@ -380,7 +380,7 @@ export default {
 
 ### WiFi
 
-底层WiFi相关服务提供一系列接口和事件用于对WiFi进行操控。
+底层WiFi相关服务提供一系列接口和事件用于对WiFi进行操控, 详细内容见[合璧操作系统设置应用的网络管理行者设计](hybridos-sysapp-settings-inetd-zh.md)。
 
 #### 打开WiFi设备
 
