@@ -53,7 +53,9 @@
 
 ## inetd行者的软件结构
 
-目前各个系统的网络连接方式主要有三种：无线网（WiFi）、以太网（Ethernet）、手机网络（Mobile）。系统设置中的inetd行者，主要负责管理这些网络，包括：连接、监控、切换等。现阶段首先实现WiFi网络管理的各项功能。
+目前各个系统的网络连接方式主要有三种：无线网（WiFi）、以太网（Ethernet）、手机网络（Mobile）。系统设置中的inetd行者，主要负责管理这些网络，包括：连接、监控、切换等。
+
+现阶段首先实现WiFi网络管理的各项功能。
 
 inetd行者在系统中的位置如下图：
 
@@ -75,7 +77,7 @@ inetd行者在系统中的位置如下图：
 
 - APP层：可以是JS代码，也可以是C代码，通过hiBus总线，完成用户对网络的操作；
 - hiBus Server：负责数据通信、消息分发、及连接的管理；
-- cn.fmsoft.hybridos.settings/inetd：负责对网络设备的连接、中断、切换等。通过hiBus Server，为APP层提供设备事件、以及远程过程；
+- cn.fmsoft.hybridos.settings/inetd：inetd行者，负责对网络设备的连接、中断、切换等。通过hiBus Server，为APP层提供设备事件、以及远程过程；
 - libxxx.so：网络设备引擎。每个引擎完成一种类型的网络操作；
 - Linux Kernel / Drivers：对设备的底层操作。
 
@@ -113,7 +115,7 @@ start=enabled               // start device when power on
 
 ## inetd行者提供给应用的接口
 
-inetd负责管理和操作各个网络设备，所提供的远程过程及可订阅事件如下所述。
+inetd负责管理和操作各个网络设备，所提供的远程过程及可订阅事件，如下所述。
 
 ### inetd行者提供的远程过程
 
@@ -183,7 +185,7 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
                     {
                         "device":"eth0",
                         "type":"<wifi|ethernet|mobile>",
-                        "status":"<on|off>"
+                        "status":"<down|up>"
                     },
                     {
                          ......
@@ -380,7 +382,7 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
     { 
         "device":"device_name",
         "type":"<wifi|ethernet|mobile>",
-        "status":"<on|off>"
+        "status":"<down|up>"
     }
 ```
 - 使用描述：
