@@ -219,7 +219,7 @@ export default {
 ```json
 {
   "name": "@localhost/cn.fmsoft.hybridos.settings/inetd/SIGNALSTRENGTHCHANGED",
-  "mode": ["random", "fixed"],
+  "mode": "< random | fixed >",
   "index" : 0,
   "value" : [
     {
