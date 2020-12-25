@@ -1,3 +1,6 @@
+
+
+
 【主题】合璧操作系统设置应用的网络管理行者设计  
 【摘要】本文描述了基于hiBus的行者@localhost/cn.fmsoft.hybridos.settings/inetd，所提供的远程过程及可订阅消息。同时对设备引擎必须完成的接口进行了阐述。  
 【版本】1.0  
@@ -20,7 +23,7 @@
 - [inetd行者的软件结构](#inetd行者的软件结构)
 - [配置文件](#配置文件)
    + [配置文件的内容](#配置文件的内容)
-- [inetd行者接口](#inetd行者接口)
+- [inetd行者提供给应用的接口](#inetd行者提供给应用的接口)
    + [inetd行者提供的远程过程](#inetd行者提供的远程过程)
    + [inetd行者供的可订阅消息](#inetd行者提供的可订阅消息)
 - [inetd行者工作流程](#inetd行者工作流程)
@@ -30,7 +33,7 @@
 
 ## inetd行者的软件结构
 
-目前各个系统的网络连接方式主要有三种：无线（WiFi）、有线（Ethernet）、手机网络（Mobile）。守护进程inetd主要负责管理这些网络连接，包括：监控、连接、切换等。现阶段首先实现WiFi的各项功能。
+目前各个系统的网络连接方式主要有三种：无线网（WiFi）、以太网（Ethernet）、手机网络（Mobile）。守护进程inetd主要负责管理这些网络，包括：监控、连接、切换等。现阶段首先实现WiFi网络的各项功能。
 
 inetd在系统中的位置如下图：
 
@@ -50,21 +53,21 @@ inetd在系统中的位置如下图：
 
 整个系统包含如下：
 
-- APP层：可以是JS代码，也可以是C代码，通过hiBus总线，完成用户对网络的管理操作；
+- APP层：可以是JS代码，也可以是C代码，通过hiBus总线，完成用户对网络的操作；
 - hiBus Server：负责数据通信、消息分发、及连接的管理；
 - inetd daemon：负责对网络设备的监控、连接、中断、切换等。通过hiBus Server，为APP层提供设备事件、以及远程过程；
 - libxxx.so：每个动态库完成一种网络类型的具体操作；
 - Linux Kernel / Drivers：对设备的底层操作。
 
-在不同平台，inetd daemon层代码不会发生任何变化。芯片厂家或用户只需按照动态库接口，完成相应功能即可。
+在不同平台，inetd行者代码不会发生任何变化。芯片厂家或用户只需按照设备引擎接口，完成相应的功能即可。
 
 ## 配置文件
 
-inetd行者的各项设置，依赖于配置文件。
+inetd行者的各项设置，记录在配置文件里。
 
 ### 配置文件的内容
 
-配置文件有如下内容：
+配置文件内容如下：
 
 ```c
 [device]
@@ -88,35 +91,32 @@ start=enabled               // start device when power on
 
 ```
 
-## inetd行者接口
+## inetd行者提供给应用的接口
 
-inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件如下。
+inetd负责管理和操作各个网络设备，所提供的远程过程及可订阅事件如下所述。
 
 ### inetd行者提供的远程过程
 
-在WiFi操作中，强制规定，远程过程的参数，以及执行结果，使用JSON格式字符串。下面仅对每个过程的参数及返回值，进行说明。
+强制规定：远程过程的参数，以及执行结果，使用JSON格式字符串。下面仅对每个过程的参数及返回值，进行说明。
 
-#### 打开WiFi设备
+#### 打开网络设备
 
-该过程负责打开指定的WiFi设备。如果打开设备成功，根据配置判断是否发起WiFi热点搜索过程。
+该过程负责打开指定的网络设备。
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/openDevice`
-- parameter：
+- 参数：
    + `device`：网络设备名称；
 ```json
     { 
         "device":"device_name",
     }
 ```
-- retValue：
+- 返回值：
    + `errMsg`：错误信息；
    + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
      + ENODEV：没找到相应的设备；
      + EACCES：没有操作权限；
      + EINVAL：参数不合法；
-     + ECONNREFUSED：连接被拒绝；
-     + ETIMEDOUT：连接超时；
-     + ENETUNREACH：网络不可达。
 ```json
     { 
         "errCode":0,
@@ -124,17 +124,17 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
     }
 ```
 
-#### 关闭WiFi设备
+#### 关闭网络设备
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/closeDevice`
-- parameter：
+- 参数：
    + `device`：网络设备名称；
 ```json
     { 
-        "device":"device_name",
+        "device":"device_name"
     }
 ```
-- retValue：
+- 返回值：
    + `errMsg`：错误信息；
    + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
      + ENODEV：没找到相应的设备；
@@ -149,21 +149,22 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
 
 #### 查询网络设备状态
 
-- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/getNetworkDevice`
-- parameter：
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/getNetworkDevicesStatus`
+- 参数：
    + 无
-- retValue：
-   + `device`：网络设备名；
-   + `type`：网络设备类型；
-   + `status`：网络设备状态。
+- 返回值：
+   + `data`：返回的数据：
+     + `device`：网络设备名；
+     + `device`：网络设备名；
+     + `type`：网络设备类型；
+     + `status`：网络设备状态。
    + `errMsg`：错误信息；
-   + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
-     + ENOMSG：数据包中无有效数据。
+   + `errCode`：此过程只返回0，表示执行成功。
 ```json
     { 
-        "errCode":0,
-        "errMsg":"OK"
-        "reslut":"[
+        "errCode": 0,
+        "errMsg": "OK"
+        "data":[
                     {
                         "device":"eth0",
                         "type":"<wifi|ethernet|mobile>",
@@ -172,41 +173,41 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
                     {
                          ......
                     }
-                  ]"
+               ]
     }
 ```
-如没有查到网络设备，则`errCode`为`ENOMSG`。
+如没有查到网络设备，则`data`为空数组。
 
 
 #### 开始扫描网络热点
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiStartScanHotspots`
-- parameter：
+- 参数：
    + `device`：网络设备名称；
 ```json
     { 
         "device":"device_name",
     }
 ```
-- retValue：
-   + `bssid`：
-   + `ssid`：网络名称；
-   + `frequency`：网络频率；
-   + `signalStrength`：网络信号强度；
-   + `capabilities`：可用的加密方式；
-   + `isConnected`：当前是否连接。
+- 返回值：
+   + `data`：返回的数据：
+     + `bssid`：
+     + `ssid`：网络名称；
+     + `frequency`：网络频率；
+     + `signalStrength`：网络信号强度；
+     + `capabilities`：可用的加密方式；
+     + `isConnected`：当前是否连接。
    + `errMsg`：错误信息；
    + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
      + ENODEV：没找到相应的设备；
      + EACCES：没有操作权限；
-     + EINVAL：参数不合法；
-     + ENOMSG：数据包中无有效数据。
+     + EINVAL：参数不合法。
 ```json
     {
         "errCode":0,
         "errMsg":"OK"
-        "result": "[
-                     {
+        "data": [
+                    {
                          "bssid": "f0:b4:29:24:18:eb",
                          "ssid": "fmsoft-dev",
                          "frequency": "2427MHZ",
@@ -217,29 +218,29 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
                     {
                          ......
                     }
-                 ]"
+                ]
     }
 ```
 
-该过程将立刻返回inetd维护的当前网络列表。网络列表根据信号强度排列，当前连接的网络，排在第一个，其余按照信号强度从大到小排列。
+该过程将立刻返回inetd维护的当前网络列表。网络列表根据信号强度从大到小排列，当前连接的网络，排在第一个。
 
-然后发起新一轮WiFi网络扫描，扫描结果通过WIFINEWHOTSPOTS泡泡发送。因此APP使用此过程前，务必订阅WIFINEWHOTSPOTS事件。
+然后发起新一轮WiFi网络扫描，扫描结果通过`WIFINEWHOTSPOTS`泡泡发送。因此调用此过程前，务必订阅`WIFINEWHOTSPOTS`事件。
 
-当扫描结束，或者过程@localhost/cn.fmsoft.hybridos.settings/inetd/wifiStopScanHotspots被调用后，将停止发送WIFINEWHOTSPOTS泡泡。
+扫描结束后，inetd行者将停止发送`WIFINEWHOTSPOTS`泡泡，因此应用需取消订阅`WIFINEWHOTSPOTS`泡泡。
 
-如没有查到网络热点，则`errCode`为`ENOMSG`。
+如没有查到网络热点，则`data`为空数组。
 
 #### 停止网络热点扫描 
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiStopScanHotspots`
-- parameter：
+- 参数：
    + `device`：网络设备名称；
 ```json
     { 
         "device":"device_name",
     }
 ```
-- retValue：
+- 返回值：
    + `errMsg`：错误信息；
    + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
      + ENODEV：没找到相应的设备；
@@ -251,13 +252,13 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
         "errMsg":"OK"
     }
 ```
-该过程将停止正在进行的热点扫描操作，并停止发送WIFINEWHOTSPOTS泡泡。
+inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWHOTSPOTS`泡泡，因此应用需取消订阅`WIFINEWHOTSPOTS`泡泡。
 
 
 #### 连接网络热点
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiConnect`
-- parameter：
+- 参数：
    + `device`：网络设备名称；
    + `ssid`：网络名称；
    + `password`：网络密码；
@@ -272,15 +273,13 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
         "default":true
     }
 ```
-- retValue：
+- 返回值：
    + `errMsg`：错误信息；
    + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
      + ENODEV：没找到相应的设备；
      + EACCES：没有操作权限；
      + EINVAL：参数不合法；
-     + ECONNREFUSED：连接被拒绝；
-     + ETIMEDOUT：连接超时；
-     + ENETUNREACH：网络不可达。
+     + ECONNREFUSED：连接被拒绝。
 ```json
     { 
         "errCode":0,
@@ -290,17 +289,15 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
 
 #### 中断网络连接
 
-wifiDisconnect
-
 - 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiDisconnect`
-- parameter：
+- 参数：
    + `device`：网络设备名称；
 ```json
     { 
         "device":"device_name",
     }
 ```
-- retValue：
+- 返回值：
    + `errMsg`：错误信息；
    + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
      + ENODEV：没找到相应的设备；
@@ -316,39 +313,41 @@ wifiDisconnect
 #### 获得当前网络详细信息
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiGetNetworkInfo`
-- parameter：
+- 参数：
    + 无；
-- retValue：
-   + `device`：网络设备名称；
-   + `ssid`：网络名称；
-   + `encryptionType`：加密方式；
-   + `signalStrength`：信号强度；
-   + `MAC`：MAC地址；
-   + `IP`：IP地址；
-   + `frenquency`：网络信号频率；
-   + `speed`：网络速度；
-   + `gateway`：网关。
+- 返回值：
+   + `data`：返回的数据：
+     + `device`：网络设备名称；
+     + `ssid`：网络名称；
+     + `encryptionType`：加密方式；
+     + `signalStrength`：信号强度；
+     + `MAC`：MAC地址；
+     + `IP`：IP地址；
+     + `frenquency`：网络信号频率；
+     + `speed`：网络速度；
+     + `gateway`：网关。
    + `errMsg`：错误信息；
    + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
-     + ENOMSG：数据包中无有效数据。
+     + EACCES：没有操作权限。
 ```json
     { 
         "errCode":0,
         "errMsg":"OK"
-        "result":" {
-                        "device":"device_name",
-                        "ssid":"fmsoft-dev",
-                        "encryptionType":"WPA2",
-                        "signalStrength":65，
-                        "MAC":"AB:CD:EF:12:34:56",
-                        "IP":"192.168.1.128",
-                        "frenquency":"5 GHz",
-                        "speed":"650 Mbps"
-                        "gateway":"192.168.1.1"
-                   }
+        "data":"{
+                    "device":"device_name",
+                    "ssid":"fmsoft-dev",
+                    "encryptionType":"WPA2",
+                    "signalStrength":65，
+                    "MAC":"AB:CD:EF:12:34:56",
+                    "IP":"192.168.1.128",
+                    "frenquency":"5 GHz",
+                    "speed":"650 Mbps"
+                    "gateway":"192.168.1.1"
+                }
     }
 ```
-如没有查到当前网络详细信息，则`errCode`为`ENOMSG`。
+
+如没有查到当前网络详细信息，则`data`为`NULL`。
 
 ### inetd行者提供的可订阅消息
 
@@ -357,18 +356,19 @@ wifiDisconnect
 - 泡泡名称：`NETWORKDEVICECHANGED`
 - bubbleData：
    + `device`：网络设备名称；
-   + `status`：设备状态，取值为 on / off；
+   + `type`：网络类型；
+   + `status`：设备状态。
 ```json
     { 
         "device":"device_name",
-        "status":"on"
+        "type":"<wifi|ethernet|mobile>",
+        "status":"<on|off>"
     }
 ```
 - 使用描述：
    + 当网络设备工作状态发生变化时，发送此消息。
 
-
-#### 网络热点发生变化
+#### 搜索到新的网络热点
 
 - 泡泡名称：`WIFINEWHOTSPOTS`
 - bubbleData：
@@ -376,7 +376,7 @@ wifiDisconnect
    + `ssid`：网络SSID；
    + `encryption`：网络是否加密；
    + `capabilities`：设备支持的加密方式；
-   + `signalStrength`：取值范围在0——100之间；
+   + `signalStrength`：取值范围在0——100之间。
 ```json
     [    
         { 
@@ -394,13 +394,12 @@ wifiDisconnect
 - 使用描述：
    + 当`bubbleData`数组长度为0时，表示一次搜索过程完毕。
 
-
-#### 当前网络信号强度
+#### 当前网络信号强度发生变化
 
 - 泡泡名称：`WIFISIGNALSTRENGTHCHANGED`
 - bubbleData：
    + `ssid`：网络SSID；
-   + `signalStrength`：取值范围在0——100之间。
+   + `signalStrength`：网络信号强度，取值范围在0——100之间。
 ```json
     {
         "ssid":"fmsoft-dev",
@@ -408,10 +407,9 @@ wifiDisconnect
     }
 ```
 - 使用描述：
-   + `signalStrength`不为0时，表明名为“fmsoft-dev”的网络已经连接；
+   + `signalStrength`不为0时，表明名为“fmsoft-dev”的网络信号强度；
    + `signalStrength`为0时，表明名为“fmsoft-dev”的网络中断；
    + 当前网络中断后，不会发送该事件。
-
 
 ## inetd行者工作流程
 
@@ -431,11 +429,9 @@ inetd行者工作流程如下：
 10. 调用`hibus_disconnect()`中断与hiBus服务器的连接（用不到）；
 11. 调用`dlclose()`，关闭动态库。
 
-
 ## 设备引擎需要完成的接口
 
 每个设备引擎必须完成如下描述的接口，供inetd行者调用。
-
 
 在头文件 inetd.h 中，有如下声明：
 
@@ -458,15 +454,14 @@ typedef struct _wifi_hotspot
 
 typedef struct _hiWiFiDeviceOps
 {
-	wifi_context * (* open) (const char * device_name);
-	int (* close) (wifi_context * context);
-	int (* connect) (const char * ssid, const char *password, wifi_context * context);
-	int (* disconnect) (wifi_context * context);
-	int (* get_signal_strength) (wifi_context * context);    
-	int (* start_scan) (wifi_context * context);
+    wifi_context * (* open) (const char * device_name);
+    int (* close) (wifi_context * context);
+    int (* connect) (const char * ssid, const char *password, wifi_context * context);
+    int (* disconnect) (wifi_context * context);
+    int (* get_signal_strength) (wifi_context * context);    
+    int (* start_scan) (wifi_context * context);
     int (* stop_scan) (wifi_context * context);
-	int (* get_hotspots) (wifi_context * context, wifi_hotspot ** hotspots);
-	void (* set_interval) (int scan_interval, int signal_interval);
+    int (* get_hotspots) (wifi_context * context, wifi_hotspot ** hotspots);
 } hiWiFiDeviceOps;
 ```
 
@@ -600,22 +595,6 @@ int get_hotspots (wifi_context * context, wifi_hotspot ** hotspots);
 - 返回值：
    + `hotspots`数组的个数。
 
-
-
-##### 设置定时间隔
-
-inetd行者根据当前网络状态，动态改变设备引擎扫描网络、检查网络信号强度的时间间隔。
-
-```c
-void set_interval (wifi_context * context, int scan_interval, int signal_interval);
-```
-
-- 参数：
-   + `context`：设备引擎工作的上下文； 
-   + `scan_interval`：扫描网络时间间隔； 
-   + `signal_interval`：检查网络信号强度时间间隔； 
-- 返回值：
-   + 无。
 
 
 ## 附：商标声明
