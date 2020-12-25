@@ -241,11 +241,11 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
     }
 ```
 
-如没有查到网络热点，则`data`为空数组。
+如没有网络热点，则`data`为空数组。
 
 该过程将立刻返回inetd维护的当前网络列表。网络列表根据信号强度从大到小排列。当前连接的网络，排在第一个。
 
-该过程返回后，随即发起WiFi网络扫描。扫描结果通过`WIFINEWHOTSPOTS`泡泡发送给应用。因此调用此过程前，应用务必订阅`WIFINEWHOTSPOTS`事件。
+该过程返回后，inetd行者随即发起WiFi网络扫描。扫描结果通过`WIFINEWHOTSPOTS`泡泡发送给应用。因此调用此过程前，应用务必订阅`WIFINEWHOTSPOTS`事件。
 
 扫描结束后，inetd行者将停止发送`WIFINEWHOTSPOTS`泡泡，因此应用需取消订阅`WIFINEWHOTSPOTS`事件。
 
@@ -283,7 +283,7 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
    + `ssid`：网络名称；
    + `password`：网络密码；
    + `autoConnect`：网络中断后是否自动连接；
-   + `default`：是否设置为默认网络，下次开机时自动连接。inetd行者需保存该设置到存储器中。；
+   + `default`：是否设置为默认网络，下次开机时自动连接。
 ```json
     {
         "device":"device_name",
@@ -427,8 +427,8 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
     }
 ```
 - 使用描述：
-   + `signalStrength`不为0时，表明“fmsoft-dev”的网络信号强度；
-   + `signalStrength`为0时，表明“fmsoft-dev”的网络中断；
+   + `signalStrength`为0时，表明网络中断；
+   + 当网络连接成功后，才开始发送该泡泡。可通过是否接受到该泡泡，判断网络是否连接（适用于网络中断自动连接的情况）；
    + 当前网络中断后，不会发送该事件。
 
 ## inetd行者工作流程
@@ -566,7 +566,7 @@ int get_signal_strength(wifi_context * context);
 
 #### 开始WiFi网络扫描
 
-该函数是一个异步过程。inetd行者调用该函数后立刻返回。设备引擎开始扫描，其扫描结果将通过inetd行者调用`hiWiFiDeviceOps->get_hotspots()`函数返回。
+WiFi网络扫描是一个异步过程。inetd行者调用该函数后立刻返回。设备引擎开始扫描，其扫描结果将通过inetd行者调用`hiWiFiDeviceOps->get_hotspots()`函数返回。
 
 ```c
 int start_scan(wifi_context * context);
@@ -595,7 +595,7 @@ int stop_scan(wifi_context * context);
 #### 获得热点信息
 
 inetd行者定时调用该函数，获得WiFi热点的信息。`hotspots`数组由设备引擎维护，负责内存空间的开辟及回收。
-当设备引擎搜索热点完毕后，最后需要发送一个 ssid[0] = 0 的`wifi_hotspot`结构，以表示搜索过程完毕。
+当设备引擎搜索热点完毕后，最后需要发送一个`* hotspots = NULL` 的空指针，表示搜索过程完毕。
 
 ```c
 int get_hotspots (wifi_context * context, wifi_hotspot ** hotspots);
