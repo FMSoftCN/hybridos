@@ -1,7 +1,7 @@
-# 合璧操作系统设备模拟设计
+# 合璧操作系统hiAceJs设备模拟设计
 
-【主题】合璧操作系统设备模拟设计  
-【概要】本文阐述合璧操作系统设备模拟的设计  
+【主题】合璧操作系统hiAceJs设备模拟设计  
+【概要】本文阐述合璧操作系统hiAceJs设备模拟的设计  
 【版本】1.0  
 【作者】薛淑明  
 【日期】2020 年 12 月  
@@ -194,7 +194,7 @@ export default {
 ```json
 {
   "name": "@localhost/cn.fmsoft.hybridos.settings/inetd/open",
-  "mode": ["random", "fixed"],
+  "mode": "< random | fixed >",
   "index" : 0,
   "value" : [
     {
@@ -641,7 +641,7 @@ App可以通过订阅该事件，获取电池状态信息。
     "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/powerd",
     "fromBubble": "BATTERYCHANGED",
     "bubbleData": {
-        "plugged": [ true | false ],
+        "plugged": < true | false >,
         "health": "90%",
         "temperature": "55℃",
         "voltage": "4.7V",
