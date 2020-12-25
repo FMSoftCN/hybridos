@@ -337,11 +337,11 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
                     "device":"device_name",
                     "ssid":"fmsoft-dev",
                     "encryptionType":"WPA2",
-                    "signalStrength":65，
+                    "signalStrength":65,
                     "MAC":"AB:CD:EF:12:34:56",
                     "IP":"192.168.1.128",
                     "frenquency":"5 GHz",
-                    "speed":"650 Mbps"
+                    "speed":"650 Mbps",
                     "gateway":"192.168.1.1"
                 }
     }
