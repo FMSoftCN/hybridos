@@ -476,14 +476,14 @@ typedef struct _wifi_hotspot
 
 typedef struct _hiWiFiDeviceOps
 {
-    wifi_context * (* open) (const char * device_name);
+    int (* open) (const char * device_name, wifi_context ** context);
     int (* close) (wifi_context * context);
     int (* connect) (wifi_context * context, const char * ssid, const char *password);
     int (* disconnect) (wifi_context * context);
     int (* get_signal_strength) (wifi_context * context);    
     int (* start_scan) (wifi_context * context);
     int (* stop_scan) (wifi_context * context);
-    int (* get_hotspots) (wifi_context * context, wifi_hotspot ** hotspots);
+    unsigned int (* get_hotspots) (wifi_context * context, wifi_hotspot ** hotspots);
 } hiWiFiDeviceOps;
 ```
 
@@ -504,13 +504,15 @@ const hiWiFiDeviceOps * __wifi_device_ops_get(void);
 根据WiFi设备名，完成对该设备的初始化。
 
 ```c
-wifi_context * open (const char * device_name);
+int open (const char * device_name, wifi_context ** context);
 ```
 
 - 参数：
    + `device_name`：网络设备名； 
+   + `context`：`* context`为设备引擎工作的上下文结构指针。该结构由设备引擎自行声明及定义。 
 - 返回值：
-   + `wifi_context`结构指针，为设备引擎工作的上下文。该结构由设备引擎自行声明及定义。如果返回值为`NULL`，表示该函数执行失败。 
+   + `0`：设备正常打开；
+   + `-1`：设备操作错误代码。 
 
 #### 关闭设备
 
@@ -597,7 +599,7 @@ int stop_scan(wifi_context * context);
 inetd行者定时调用该函数，获得WiFi热点的信息。
 
 ```c
-int get_hotspots (wifi_context * context, wifi_hotspot ** hotspots);
+unsigned int get_hotspots (wifi_context * context, wifi_hotspot ** hotspots);
 ```
 
 - 参数：
@@ -606,9 +608,10 @@ int get_hotspots (wifi_context * context, wifi_hotspot ** hotspots);
 - 返回值：
    + `hotspots`数组的个数。
 
-`hotspots`数组由设备引擎维护，负责内存空间的开辟及回收。
+`hotspots`数组空间由设备引擎开辟，由调用者（inetd）释放。
 
-当设备引擎搜索热点完毕后，在hotspots数组最后添加一个元素，并赋值`signal_strength = 0`，表示搜索过程完毕。
+当设备引擎搜索热点完毕后，在hotspots数组最后添加一个元素，并赋值`wifi_hotspot.ssid[0] = 0`，表示搜索过程完毕。
+
 
 ## 附：商标声明
 
