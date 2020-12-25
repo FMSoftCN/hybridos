@@ -594,8 +594,7 @@ int stop_scan(wifi_context * context);
 
 #### 获得热点信息
 
-inetd行者定时调用该函数，获得WiFi热点的信息。`hotspots`数组由设备引擎维护，负责内存空间的开辟及回收。
-当设备引擎搜索热点完毕后，最后需要发送一个`* hotspots = NULL` 的空指针，表示搜索过程完毕。
+inetd行者定时调用该函数，获得WiFi热点的信息。
 
 ```c
 int get_hotspots (wifi_context * context, wifi_hotspot ** hotspots);
@@ -607,6 +606,9 @@ int get_hotspots (wifi_context * context, wifi_hotspot ** hotspots);
 - 返回值：
    + `hotspots`数组的个数。
 
+`hotspots`数组由设备引擎维护，负责内存空间的开辟及回收。
+
+当设备引擎搜索热点完毕后，在hotspots数组最后添加一个元素，并赋值`signal_strength = 0`，表示搜索过程完毕。
 
 ## 附：商标声明
 
