@@ -343,7 +343,7 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
                     "frenquency":"5 GHz",
                     "speed":"650 Mbps"
                     "gateway":"192.168.1.1"
-                }
+                }"
     }
 ```
 
