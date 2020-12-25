@@ -25,7 +25,6 @@
    + [inetd行者供的可订阅消息](#inetd行者提供的可订阅消息)
 - [inetd行者工作流程](#inetd行者工作流程)
 - [设备引擎需要完成的接口](#设备引擎需要完成的接口)
-- [错误码表](#错误码表)
 - [附：商标声明](#附商标声明)
 
 
@@ -58,8 +57,6 @@ inetd在系统中的位置如下图：
 - Linux Kernel / Drivers：对设备的底层操作。
 
 在不同平台，inetd daemon层代码不会发生任何变化。芯片厂家或用户只需按照动态库接口，完成相应功能即可。
-
-
 
 ## 配置文件
 
@@ -95,7 +92,6 @@ start=enabled               // start device when power on
 
 inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件如下。
 
-
 ### inetd行者提供的远程过程
 
 在WiFi操作中，强制规定，远程过程的参数，以及执行结果，使用JSON格式字符串。下面仅对每个过程的参数及返回值，进行说明。
@@ -113,8 +109,14 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
     }
 ```
 - retValue：
-   + `errCode`：返回错误编码，0为执行正确；
    + `errMsg`：错误信息；
+   + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
+     + ENODEV：没找到相应的设备；
+     + EACCES：没有操作权限；
+     + EINVAL：参数不合法；
+     + ECONNREFUSED：连接被拒绝；
+     + ETIMEDOUT：连接超时；
+     + ENETUNREACH：网络不可达。
 ```json
     { 
         "errCode":0,
@@ -133,8 +135,11 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
     }
 ```
 - retValue：
-   + `errCode`：返回错误编码，0为执行正确；
    + `errMsg`：错误信息；
+   + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
+     + ENODEV：没找到相应的设备；
+     + EACCES：没有操作权限；
+     + EINVAL：参数不合法。
 ```json
     { 
         "errCode":0,
@@ -149,26 +154,38 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
    + 无
 - retValue：
    + `device`：网络设备名；
-   + `type`：网络设备类型，可取值为 wifi / ethernet / mobile；
-   + `status`：网络设备状态。取值为 on / off。
+   + `type`：网络设备类型；
+   + `status`：网络设备状态。
+   + `errMsg`：错误信息；
+   + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
+     + ENOMSG：数据包中无有效数据。
 ```json
     { 
-        "device":"eth0",
-        "type":"ethernet",
-        "status":"off"
+        "errCode":0,
+        "errMsg":"OK"
+        "reslut":"[
+                    {
+                        "device":"eth0",
+                        "type":"<wifi|ethernet|mobile>",
+                        "status":"<on|off>"
+                    },
+                    {
+                         ......
+                    }
+                  ]"
     }
 ```
-如没有查到网络设备，则`retValue`为NULL。
+如没有查到网络设备，则`errCode`为`ENOMSG`。
 
 
-#### 获得网络热点列表
+#### 更新网络热点
 
-- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiGetHotspots`
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiStartScanHotspots`
 - parameter：
-   + `startScan`：获得列表后，inetd是否立刻发起搜索过程；
+   + `device`：网络设备名称；
 ```json
-    {
-        "startScan":true
+    { 
+        "device":"device_name",
     }
 ```
 - retValue：
@@ -178,24 +195,63 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
    + `signalStrength`：网络信号强度；
    + `capabilities`：可用的加密方式；
    + `isConnected`：当前是否连接。
+   + `errMsg`：错误信息；
+   + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
+     + ENODEV：没找到相应的设备；
+     + EACCES：没有操作权限；
+     + EINVAL：参数不合法；
+     + ENOMSG：数据包中无有效数据。
 ```json
-    [
-        {
-            "bssid": "f0:b4:29:24:18:eb",
-            "ssid": "fmsoft-dev",
-            "frequency": "2427MHZ",
-            "signalStrength": 65,
-            "capabilities": ["WPA-PSK-CCMP+TKIP","WPA2-PSK-CCMP+TKIP","WPS","ESS"],
-            "isConnected":true
-        },
-        {
-            .....
-        }
-    ]
+    {
+        "errCode":0,
+        "errMsg":"OK"
+        "result": "[
+                     {
+                         "bssid": "f0:b4:29:24:18:eb",
+                         "ssid": "fmsoft-dev",
+                         "frequency": "2427MHZ",
+                         "signalStrength": 65,
+                         "capabilities": ["WPA-PSK-CCMP+TKIP","WPA2-PSK-CCMP+TKIP","WPS","ESS"],
+                         "isConnected":true
+                    },
+                    {
+                         ......
+                    }
+                 ]"
+    }
 ```
 
 该过程将立刻返回inetd维护的当前网络列表。网络列表根据信号强度排列，当前连接的网络，排在第一个，其余按照信号强度从大到小排列。
-如没有查到网络热点，则`retValue`为NULL。
+
+然后发起新一轮WiFi网络扫描，扫描结果通过WIFINEWHOTSPOTS泡泡发送。因此APP使用此过程前，务必订阅WIFINEWHOTSPOTS事件。
+
+当扫描结束，或者过程@localhost/cn.fmsoft.hybridos.settings/inetd/wifiStopScanHotspots被调用后，将停止发送WIFINEWHOTSPOTS泡泡。
+
+如没有查到网络热点，则`errCode`为`ENOMSG`。
+
+#### 停止网络热点扫描 
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiStopScanHotspots`
+- parameter：
+   + `device`：网络设备名称；
+```json
+    { 
+        "device":"device_name",
+    }
+```
+- retValue：
+   + `errMsg`：错误信息；
+   + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
+     + ENODEV：没找到相应的设备；
+     + EACCES：没有操作权限；
+     + EINVAL：参数不合法。
+```json
+    {
+        "errCode":0,
+        "errMsg":"OK"
+    }
+```
+该过程将停止正在进行的热点扫描操作，并停止发送WIFINEWHOTSPOTS泡泡。
 
 
 #### 连接网络热点
@@ -217,8 +273,14 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
     }
 ```
 - retValue：
-   + `errCode`：返回错误编码，0为执行正确；
    + `errMsg`：错误信息；
+   + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
+     + ENODEV：没找到相应的设备；
+     + EACCES：没有操作权限；
+     + EINVAL：参数不合法；
+     + ECONNREFUSED：连接被拒绝；
+     + ETIMEDOUT：连接超时；
+     + ENETUNREACH：网络不可达。
 ```json
     { 
         "errCode":0,
@@ -239,8 +301,11 @@ wifiDisconnect
     }
 ```
 - retValue：
-   + `errCode`：返回错误编码，0为执行正确；
    + `errMsg`：错误信息；
+   + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
+     + ENODEV：没找到相应的设备；
+     + EACCES：没有操作权限；
+     + EINVAL：参数不合法。
 ```json
     { 
         "errCode":0,
@@ -263,21 +328,27 @@ wifiDisconnect
    + `frenquency`：网络信号频率；
    + `speed`：网络速度；
    + `gateway`：网关。
-
+   + `errMsg`：错误信息；
+   + `errCode`：返回错误编码，0表示执行成功。可能的错误编码有：
+     + ENOMSG：数据包中无有效数据。
 ```json
     { 
-        "device":"device_name",
-        "ssid":"fmsoft-dev",
-        "encryptionType":"WPA2",
-        "signalStrength":65，
-        "MAC":"AB:CD:EF:12:34:56",
-        "IP":"192.168.1.128",
-        "frenquency":"5 GHz",
-        "speed":"650 Mbps"
-        "gateway":"192.168.1.1"
+        "errCode":0,
+        "errMsg":"OK"
+        "result":" {
+                        "device":"device_name",
+                        "ssid":"fmsoft-dev",
+                        "encryptionType":"WPA2",
+                        "signalStrength":65，
+                        "MAC":"AB:CD:EF:12:34:56",
+                        "IP":"192.168.1.128",
+                        "frenquency":"5 GHz",
+                        "speed":"650 Mbps"
+                        "gateway":"192.168.1.1"
+                   }
     }
 ```
-如没有查到当前网络详细信息，则`retValue`为NULL。
+如没有查到当前网络详细信息，则`errCode`为`ENOMSG`。
 
 ### inetd行者提供的可订阅消息
 
@@ -299,36 +370,34 @@ wifiDisconnect
 
 #### 网络热点发生变化
 
-- 泡泡名称：`HOTSPOTCHANGED`
+- 泡泡名称：`WIFINEWHOTSPOTS`
 - bubbleData：
    + `bssid`：
    + `ssid`：网络SSID；
    + `encryption`：网络是否加密；
    + `capabilities`：设备支持的加密方式；
    + `signalStrength`：取值范围在0——100之间；
-   + `available`：网络是否可被搜索到；
 ```json
-    { 
-        "bssid": "f0:b4:29:24:18:eb",
-        "ssid":"fmsoft-dev",
-        "encryption":true,
-        "capabilities": ["WPA-PSK-CCMP+TKIP", "WPA2-PSK-CCMP+TKIP", "WPS", "ESS"]
-        "signalStrength":65,
-        "available":true
-    }
+    [    
+        { 
+            "bssid": "f0:b4:29:24:18:eb",
+            "ssid":"fmsoft-dev",
+            "encryption":true,
+            "capabilities": ["WPA-PSK-CCMP+TKIP", "WPA2-PSK-CCMP+TKIP", "WPS", "ESS"]
+            "signalStrength":65
+        },
+        {
+            ......
+        }
+    ]
 ```
 - 使用描述：
-   + 当网络信号强度在两次检查过程中，变化值在20以上，视为该网络状态发生变化；
-   + 在一次WiFi搜索时，某个网络不能再被搜索到，视为该网络状态发生变化；
-   + 在一次WiFi搜索时，某个网络的加密方式发生变化，视为该网络状态发生变化？？？
-   + 在一次WiFi搜索时，某个网络的BSSID发生变化，视为该网络状态发生变化？？？
-   + 当`available`为`true`时，表明其为一个新搜索到的网络；为`false`时，表明该网络不可再被搜索到。其余情况该项为`NULL`；
-   + 当`ssid`为`NULL`时，表示一次搜索过程完毕。
+   + 当`bubbleData`数组长度为0时，表示一次搜索过程完毕。
 
 
 #### 当前网络信号强度
 
-- 泡泡名称：`SIGNALSTRENGTHCHANGED`
+- 泡泡名称：`WIFISIGNALSTRENGTHCHANGED`
 - bubbleData：
    + `ssid`：网络SSID；
    + `signalStrength`：取值范围在0——100之间。
@@ -547,21 +616,6 @@ void set_interval (wifi_context * context, int scan_interval, int signal_interva
    + `signal_interval`：检查网络信号强度时间间隔； 
 - 返回值：
    + 无。
-
-
-
-## 错误码表
-
-|                  | errCode | errMsg                               |
-| ---------------- | ------- | ------------------------------------ |
-| ERR_NO           | 0       | OK                                   |
-| ERR_NO_DEVICE    | -1      | Can not find the device              |
-| ERR_CANNOT_OPEN  | -2      | Devcie can not be openned.           |
-| ERR_CANNOT_CLOSE | -3      | Devcie can not be closedd.           |
-| ERR_NO_AUTHORITY | -4      | Have no enough authority to acess.   |
-
-
-
 
 
 ## 附：商标声明
