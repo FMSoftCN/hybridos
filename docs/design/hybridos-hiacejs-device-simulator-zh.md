@@ -384,7 +384,7 @@ App可以通过订阅该事件，获取电池状态信息。
 ```json
 {
     "bubbleData": {
-        "plugged": < true | false >,
+        "plugged": true,
         "health": 90,
         "temperature": 55,
         "voltage": 4.7,
