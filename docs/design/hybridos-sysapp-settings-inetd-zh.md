@@ -1,5 +1,4 @@
-
-
+# 合璧操作系统设置应用的网络管理行者设计
 
 【主题】合璧操作系统设置应用的网络管理行者设计  
 【摘要】本文描述了基于hiBus的行者@localhost/cn.fmsoft.hybridos.settings/inetd，所提供的远程过程及可订阅消息。同时对设备引擎必须完成的接口进行了阐述。  
@@ -25,9 +24,30 @@
    + [配置文件的内容](#配置文件的内容)
 - [inetd行者提供给应用的接口](#inetd行者提供给应用的接口)
    + [inetd行者提供的远程过程](#inetd行者提供的远程过程)
+      * [打开网络设备](#打开网络设备)
+      * [关闭网络设备](#关闭网络设备)
+      * [查询网络设备状态](#查询网络设备状态)
+      * [开始扫描网络热点](#开始扫描网络热点)
+      * [停止网络热点扫描](#停止网络热点扫描)
+      * [连接网络热点](#连接网络热点)
+      * [中断网络连接](#中断网络连接)
+      * [获得当前网络详细信息](#获得当前网络详细信息)
    + [inetd行者供的可订阅消息](#inetd行者提供的可订阅消息)
+      * [网络设备发生变化](#网络设备发生变化)
+      * [搜索到新的网络热点](#搜索到新的网络热点)
+      * [当前网络信号强度发生变化](#当前网络信号强度发生变化)
 - [inetd行者工作流程](#inetd行者工作流程)
 - [设备引擎需要完成的接口](#设备引擎需要完成的接口)
+   + [WiFi设备引擎](#wifi设备引擎)
+      * [函数集的获得](#函数集的获得)
+      * [打开设备](#打开设备)
+      * [关闭设备](#关闭设备)
+      * [连接网络](#连接网络)
+      * [断开网络](#断开网络)
+      * [获取WiFi信号强度](#获取wifi信号强度)
+      * [开始WiFi网络扫描](#开始wifi网络扫描)
+      * [停止WiFi网络扫描](#停止wifi网络扫描)
+      * [获得热点信息](#获得热点信息)
 - [附：商标声明](#附商标声明)
 
 
@@ -162,8 +182,6 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
    + `errCode`：此过程只返回0，表示执行成功。
 ```json
     { 
-        "errCode": 0,
-        "errMsg": "OK"
         "data":[
                     {
                         "device":"eth0",
@@ -173,7 +191,9 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
                     {
                          ......
                     }
-               ]
+               ],
+        "errCode": 0,
+        "errMsg": "OK"
     }
 ```
 如没有查到网络设备，则`data`为空数组。
@@ -204,8 +224,6 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
      + EINVAL：参数不合法。
 ```json
     {
-        "errCode":0,
-        "errMsg":"OK"
         "data": [
                     {
                          "bssid": "f0:b4:29:24:18:eb",
@@ -218,7 +236,9 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
                     {
                          ......
                     }
-                ]
+                ],
+        "errCode":0,
+        "errMsg":"OK"
     }
 ```
 
@@ -331,8 +351,6 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
      + EACCES：没有操作权限。
 ```json
     { 
-        "errCode":0,
-        "errMsg":"OK"
         "data":{
                     "device":"device_name",
                     "ssid":"fmsoft-dev",
@@ -343,7 +361,9 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
                     "frenquency":"5 GHz",
                     "speed":"650 Mbps",
                     "gateway":"192.168.1.1"
-                }
+                },
+        "errCode":0,
+        "errMsg":"OK"
     }
 ```
 
@@ -431,6 +451,8 @@ inetd行者工作流程如下：
 
 ## 设备引擎需要完成的接口
 
+### WiFi设备引擎
+
 每个设备引擎必须完成如下描述的接口，供inetd行者调用。
 
 在头文件 inetd.h 中，有如下声明：
@@ -441,15 +463,15 @@ typedef struct _wifi_context wifi_context;
 
 typedef struct _wifi_hotspot
 {
-	unsigned char ssid[40];
-	char mac_address[32];
-	char IP_address[24];
-	char gateway[24];
-	char encryptionType[32];
-	char frenquency[32];
-	char speed[32];
-	int  signal_strength;
-	bool isConnect;
+    unsigned char ssid[40];
+    char mac_address[32];
+    char IP_address[24];
+    char gateway[24];
+    char encryptionType[32];
+    char frenquency[32];
+    char speed[32];
+    int  signal_strength;
+    bool isConnect;
 } wifi_hotspot;
 
 typedef struct _hiWiFiDeviceOps
@@ -479,7 +501,7 @@ const hiWiFiDeviceOps * __wifi_device_ops_get();
 - 返回值：`hiWiFiDeviceOps`结构指针。如返回值为NULL，表示该函数执行失败。
 
 
-#### 设备的打开
+#### 打开设备
 
 根据WiFi设备名，完成对该设备的初始化。并根据配置文件，搜索并连接默认网络。
 
@@ -493,9 +515,9 @@ wifi_context * open (const char * device_name);
    + `wifi_context`结构指针，是为设备引擎工作的上下文。该结构由设备引擎自行声明及定义。如果返回值为NULL，表示该函数执行失败。 
 
 
-#### 设备的关闭
+#### 关闭设备
 
-关闭WIFI当前连接，同时完成设备相关软、硬件的资源回收。
+关闭WiFi当前连接，同时完成设备相关软、硬件的资源回收。
 
 ```c
 int close(wifi_context * context);
@@ -508,7 +530,7 @@ int close(wifi_context * context);
    + `-1`：设备操作错误代码。 
 
 
-#### 网络的连接
+#### 连接网络
 
 ```c
 int connect(wifi_context * context, const char * ssid, const char *password);
@@ -523,7 +545,7 @@ int connect(wifi_context * context, const char * ssid, const char *password);
    + `-1`：连接操作错误代码。 
 
 
-#### 网络的断开
+#### 断开网络
 
 ```c
 int disconnect(wifi_context * context);
@@ -537,7 +559,7 @@ int disconnect(wifi_context * context);
    + `-1`：断开连接操作错误代码。 
 
 
-#### WIFI强度
+#### 获取WiFi信号强度
 
 ```c
 int get_signal_strength(wifi_context * context); 
