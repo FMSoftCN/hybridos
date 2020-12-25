@@ -198,26 +198,17 @@ export default {
   "index" : 0,
   "value" : [
     {
-      "packetType": "result",
-      "resultId": "<unique_result_identifier>",
-      "callId": "<unique_call_identifier>",
-      "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
-      "fromMethod": "open",
-      "timeConsumed": 0.5432,
-      "timeDiff": 0.1234,
       "retCode": 200,
       "retMsg": "Ok"
+      "retValue": {
+        "errCode": 0,
+        "errMsg": "OK"
+      }
     },
     {
-      "packetType": "result",
-      "resultId": "<unique_result_identifier>",
-      "callId": "<unique_call_identifier>",
-      "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
-      "fromMethod": "open",
-      "timeConsumed": 0.5432,
-      "timeDiff": 0.1234,
       "retCode": 400,
       "retMsg": "Bad Request"
+      "retValue": null
     }
   ]
 }
@@ -232,23 +223,14 @@ export default {
   "index" : 0,
   "value" : [
     {
-      "packetType": "event",
-      "eventId": "<unique_event_identifier>",
-      "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
-      "fromBubble": "SIGNALSTRENGTHCHANGED",
       "bubbleData": {
         "signalStrength": 75
       }
     },
     {
-      "packetType": "event",
-      "eventId": "<unique_event_identifier>",
-      "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/inetd",
-      "fromBubble": "SIGNALSTRENGTHCHANGED",
       "bubbleData": {
         "signalStrength": 75
       }
-
     }
   ]
 }
@@ -393,10 +375,6 @@ App可以通过订阅该事件，获取电池状态信息。
 
 ```json
 {
-    "packetType": "event",
-    "eventId": "<unique_event_identifier>",
-    "fromEndpoint": "@localhost/cn.fmsoft.hybridos.settings/powerd",
-    "fromBubble": "BATTERYCHANGED",
     "bubbleData": {
         "plugged": < true | false >,
         "health": "90%",
