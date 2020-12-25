@@ -25,6 +25,7 @@
    + [inetd行者供的可订阅消息](#inetd行者提供的可订阅消息)
 - [inetd行者工作流程](#inetd行者工作流程)
 - [设备引擎需要完成的接口](#设备引擎需要完成的接口)
+- [错误码表](#错误码表)
 - [附：商标声明](#附商标声明)
 
 
@@ -546,6 +547,20 @@ void set_interval (wifi_context * context, int scan_interval, int signal_interva
    + `signal_interval`：检查网络信号强度时间间隔； 
 - 返回值：
    + 无。
+
+
+
+## 错误码表
+
+|                  | errCode | errMsg                               |
+| ---------------- | ------- | ------------------------------------ |
+| ERR_NO           | 0       | OK                                   |
+| ERR_NO_DEVICE    | -1      | Can not find the device              |
+| ERR_DEVICE_OPEN  | -2      | Devcie can not be openned.           |
+| ERR_NO_AUTHORITY | -3      | Have no enough authority to operate. |
+
+
+
 
 
 ## 附：商标声明
