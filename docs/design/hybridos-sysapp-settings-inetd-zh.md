@@ -178,7 +178,7 @@ inetd行者APP管理和操作WiFi，提供了的远程过程及可订阅事件�
 如没有查到网络设备，则`errCode`为`ENOMSG`。
 
 
-#### 更新网络热点
+#### 开始扫描网络热点
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.settings/inetd/wifiStartScanHotspots`
 - parameter：
