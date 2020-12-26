@@ -461,15 +461,13 @@ inetd行者工作流程如下：
 struct _wifi_context;
 typedef struct _wifi_context wifi_context;
 
+#define HOTSPOT_STRING_LENGTH 40
 typedef struct _wifi_hotspot
 {
-    unsigned char ssid[40];
-    char mac_address[32];
-    char IP_address[24];
-    char gateway[24];
-    char encryptionType[32];
-    char frenquency[32];
-    char speed[32];
+    char bssid[HOTSPOT_STRING_LENGTH];
+    unsigned char ssid[HOTSPOT_STRING_LENGTH];
+    char frenquency[HOTSPOT_STRING_LENGTH];
+    char capabilities[HOTSPOT_STRING_LENGTH];
     int  signal_strength;
     bool isConnect;
 } wifi_hotspot;
@@ -610,7 +608,7 @@ unsigned int get_hotspots (wifi_context * context, wifi_hotspot ** hotspots);
 
 `hotspots`数组空间由设备引擎开辟，由调用者（inetd）释放。
 
-当设备引擎搜索热点完毕后，在hotspots数组最后添加一个元素，并赋值`wifi_hotspot.ssid[0] = 0`，表示搜索过程完毕。
+当设备引擎搜索热点完毕后，在`hotspots`数组最后添加一个元素，该元素的`signal_strength = -1`，表示搜索过程完毕。
 
 
 ## 附：商标声明
