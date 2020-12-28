@@ -608,7 +608,7 @@ unsigned int get_hotspots (wifi_context * context, wifi_hotspot ** hotspots);
 
 `hotspots`数组空间由设备引擎开辟，由调用者（inetd）释放。
 
-当设备引擎搜索热点完毕后，在`hotspots`数组最后添加一个元素，该元素的`signal_strength = -1`，表示搜索过程完毕。
+当设备引擎搜索热点完毕后，在`hotspots`数组最后添加一个元素，该元素的`ssid[0] = 0`，表示搜索过程完毕。
 
 
 ## 附：商标声明
