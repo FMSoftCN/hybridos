@@ -93,14 +93,13 @@
 - [合璧操作系统设备端数据总线概要设计](hybridos-data-bus-zh.md)
 - [合璧操作系统设置应用中网络管理行者的设计](hybridos-sysapp-settings-inetd-zh.md)
 
-
 HybridOS 中其中运行着如下应用：
 
 - 系统应用
    1. `cn.fmsoft.hybridos.hibus`：数据总线服务器应用（hiBus）
    1. `cn.fmsoft.hybridos.settings`：系统设置应用（hiSettings）
    1. `cn.fmsoft.hybridos.appmanager`：用于安装和卸载应用的应用管理器（hiAppManager）
-   1. `cn.fmsoft.hybridos.hishell`：应用外壳（hiShell）
+   1. `cn.fmsoft.hybridos.appshell`：应用外壳（hiShell）
       * `mginit`：MiniGUI 的服务器进程
       * `appagent`：一个 GUI 行者，创建 DockerBar、StatusBar，并负责启动和管理应用的生命周期，传递启动数据等。
 - 普通应用。其 GUI 行者，可选如下两种引擎之一：
@@ -118,7 +117,7 @@ HybridOS 中其中运行着如下应用：
 - 除向左的收起按钮之外，展开的 Docker Bar 上包含四个功能按钮：主页面（Home）、切换主窗口、系统设置、关机。
 - 用户长时间不操作 Docker Bar 时，将自动收起；此时，状态栏同步收起。
 
-进入切换应用主窗口模式时，界面效果类似 iOS：
+进入切换应用主窗口模式时，界面效果类似智能手机：
 
 ![切换应用主窗口模式下的界面效果](hybridos-switch-main-windows.jpg)
 
@@ -138,22 +137,23 @@ HybridOS 中其中运行着如下应用：
 
 以上设计可分阶段完成。
 
-## 第一阶段：单一应用场景
+## 第一阶段：简单应用场景
 
 第一阶段（2021 年 1 月前）主要包括：
 
-1. mginit 进程
+1. hiShell：
+   - MiniGUI 合成器图式下的动态背景渲染进程
+   - mginit 进程
    - 支持应用主窗口切换动画效果的合成器
-1. MiniGUI 合成器图式下的动态背景渲染进程
-1. 系统管理进程：
-   - 简单 StatusBar，仅显示当前最顶应用主窗口的标题以及系统时间的
+   - 简单 StatusBar，仅显示当前最顶应用主窗口的标题以及系统时间
    - 简单 DockerBar
-1. 应用进程：
+1. 普通应用：
    - 功能入口页面
    - 若干 hiWebKit 特色功能展示页面
-   - 一般性网站。
+   - 若干 hiWebKit 特色功能展示页面
+   - 基于 hiACEJS 的白色家电示例应用
 
-## 第二阶段：多应用场景
+## 第二阶段：复杂应用场景
 
 第二阶段（2021 年 2 月前），新增特性主要包括：
 
@@ -172,7 +172,7 @@ HybridOS 中其中运行着如下应用：
    - 若干 hiWebKit 特色功能展示页面
    - 访问一般性网站
 
-## 第三阶段：更完善的多应用场景
+## 第三阶段：更完善的复杂应用场景
 
 第三阶段（待定）新增特性主要包括：
 
