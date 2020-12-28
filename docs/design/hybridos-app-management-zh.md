@@ -22,6 +22,7 @@
 
 - [基本概念及术语](#基本概念及术语)
 - [应用的安装位置及目录树](#应用的安装位置及目录树)
+- [应用 Manifest 文件](#应用-manifest-文件)
 - [系统应用](#系统应用)
 - [应用组验证](#应用组验证)
 - [端点权限管理](#端点权限管理)
@@ -122,7 +123,23 @@ cn.fmsoft.hybridos.hibus/
       "name": "inetd",
       "type": "exectuable",
       "entry": "bin/inetd",
-      "runas": "daemon"
+      "runas": "daemon",
+      "procedures": [
+        {
+            "methodName": "getNetworkDevices",
+            "description": "Get information of all network devices",
+            "host_acl": "localhost, $granted",
+            "app_acl": "cn.fmsoft.hybridos.*, $granted",
+        },
+      ],
+      "events": [
+        {
+            "bubbleName": "WIFINEWHOTSPOTS",
+            "description": "There are new hotspots found",
+            "host_acl": "localhost, $granted",
+            "app_acl": "cn.fmsoft.hybridos.*, $granted",
+        },
+      ],
     },
     {
       "name": "powerd",
