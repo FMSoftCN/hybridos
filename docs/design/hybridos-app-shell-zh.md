@@ -70,7 +70,7 @@
 | Screen Lock, Launcher,  | App GUI Runners   |  N/A      | System Alert Window,  |        - main windows
 | Notification...         |                   |           | ...                   |
  ---------------------------------------------------------------------------------
-|      System Manager     |     App Agent     | Wallpaper | mginit w/ compositor  |____    - hiShell
+|         App Agent (hiwebkit/hiacejs)        | Wallpaper | mginit w/ compositor  |____    - hiShell
  ---------------------------------------------------------------------------------     |
 |                   hiWebKit/hiACEJS          |                                   |    |
  ---------------------------------------------                                    |    |
@@ -93,18 +93,21 @@
 - [合璧操作系统设备端数据总线概要设计](hybridos-data-bus-zh.md)
 - [合璧操作系统设置应用中网络管理行者的设计](hybridos-sysapp-settings-inetd-zh.md)
 
-HybridOS 中其中运行着如下应用：
+一个典型的 HybridOS 设备端系统中安装有如下应用：
 
-- 系统应用
+- 系统应用，如：
    1. `cn.fmsoft.hybridos.hibus`：数据总线服务器应用（hiBus）
    1. `cn.fmsoft.hybridos.settings`：系统设置应用（hiSettings）
    1. `cn.fmsoft.hybridos.appmanager`：用于安装和卸载应用的应用管理器（hiAppManager）
    1. `cn.fmsoft.hybridos.appshell`：应用外壳（hiShell）
       * `mginit`：MiniGUI 的服务器进程
       * `appagent`：一个 GUI 行者，创建 DockerBar、StatusBar，并负责启动和管理应用的生命周期，传递启动数据等。
-- 普通应用。其 GUI 行者，可选如下两种引擎之一：
+- 若干服务器应用，如:
+   1. `cn.fmsoft.hybridos.sever.httpd`: HTTP 服务器
+- 若干普通应用：每个普通应用可包含有自己的守护行者或者普通程序，其 GUI 行者，可选如下两种引擎之一：
    1. 基于 hiWebKit 扩展 Web 引擎，由 `hiwebkit` 负责渲染。
    1. 基于 hiACEJS 的轻量级应用，由 `hiacejs` 负责渲染。
+   1. 未来基于 HVML 的应用。
 
 下图给出了正常运行情况下的界面效果：
 
