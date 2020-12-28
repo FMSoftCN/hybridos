@@ -63,18 +63,103 @@
 
 应用外壳可以使用不同的策略来管理一个运行中的应用之生命周期，比如：
 
-- 在小屏幕设备上，一个普通应用的所有交互行者退出后，应用管理器会杀掉该应用启动的其他进程。但在桌面计算机中，应用管理器会保留这些进程。
-
-当该应用的所有交互进程被关闭后，应用管理器可杀死该应用对应的所有守护进程以及临时进程。
-
-
-启动后的应用之生命周期，由不同应用场景下的应用管理器确定。
+- 在小屏幕设备上，一个普通应用的所有交互行者退出后，应用外壳会杀掉该应用启动的其他进程。但在桌面计算机中，应用外壳会保留这些进程。
 
 ## 应用的安装位置及目录树
+
+在 HybridOS 中，应用统一安装在 `/app` 目录下，以应用名为目录名，下设若干目录，分别存放可执行程序、动态库以及数据等。
+
+```
+cn.fmsoft.hybridos.hibus/
+├── assets
+├── bin
+│   ├── hibus-cl
+│   └── hibusd
+├── lib
+│   └── libhibus-plugin.so
+├── private
+│   ├── hmac-cn.fmsoft.hybridos.hibus.key
+│   └── private-cn.fmsoft.hybridos.hibus.pem
+└── var
+```
+
+上图给出了 hiBus 应用的目录结构。其中，
+
+- `assets/` 中保存有该应用的资源数据，如图标、字体等。
+- `bin/` 中保存有该应用的二进制可执行程序。
+- `lib/` 目录中保存有该应用内部使用的动态库。
+- `private/` 目录中保存有仅该应用可访问的私有数据，如非对称加解密使用的私钥。
+- `var/` 目录中保存该应用以及该应用所在应用组可访问的数据，如数据库等。
+
+
+通常，一个应用的名称（也是该应用的全局唯一标识符）具有类似主机域名那样的形式，如 `cn.fmsoft.hybridos.hibus`。
+
+## 应用 Manifest 文件
+
+每个应用在其安装根目录中包含有一个 `manifest.json` 文件，其中保存有有关该应用图标、名称、行者入口等的各种信息。如：
+
+```json
+{
+  "name": "cn.fmsoft.hybridos.settings",
+  "group": "cn.fmsoft.hybridos",
+  "label": "Settings",
+  "description": "The system settings for HybridOS.",
+  "icons": [
+    {
+      "src": "assets/images/touch/homescreen96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/images/touch/homescreen144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+  ],
+
+  "runners": [
+    {
+      "name": "inetd",
+      "type": "exectuable",
+      "entry": "bin/inetd",
+      "runas": "daemon"
+    },
+    {
+      "name": "powerd",
+      "type": "exectuable",
+      "entry": "bin/powerd",
+      "runas": "daemon"
+    },
+    {
+      "name": "main",
+      "type": "hiwebkit",
+      "entry": "bin/main/index.html",
+      "runas": "default"
+    },
+    {
+      "name": "wifi",
+      "type": "hiwebkit",
+      "entry": "bin/main/wifi.html",
+      "runas": "component"
+    },
+    {
+      "name": "bluetooth",
+      "type": "hiwebkit",
+      "entry": "bin/main/bluetooth.html",
+      "runas": "component"
+    },
+  ]
+}
+```
 
 在没有应用管理器的情况下，可手工使用系统管理员账号（root）完成应用目录的创建、用户名的创建以及公钥的复制。
 
 ## 系统应用
+
+HybridOS 中存在如下系统应用：
+
+- `cn.fmsoft.hybridos.hibus`：数据总线 hiBus 应用；其中包含两个行者：`hibusd`（合璧数据总线服务器）和 `hibus-cl`（合璧数据总线命令行）。
+- `cn.fmsoft.hybridos.settings`：设置应用；其中包含若干个系统设置行者，如 `powerd`（用来监视电源状态的守护进程）以及 `inetd`（用来管理网络设备的守护进程）。
 
 ## 应用组验证
 
