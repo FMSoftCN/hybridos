@@ -119,6 +119,10 @@ hiWebKit 是知名开源浏览器引擎 WebKit 的合璧操作系统派生版本
 
 有关 hiWebKit 扩展技术的细节以及给开发者带来的好处，在公众号专辑[《合璧操作系统的技术突破》](https://mp.weixin.qq.com/mp/appmsgalbum?action=getalbum&album_id=1442713925182767106&__biz=MzA5MTYwNTA3MA==#wechat_redirect)中有介绍，感兴趣的读者可以点击阅读。
 
+hiWebKit 源代码包下载连接：
+
+<https://hybridos.fmsoft.cn/downloads/r2012/hiwebkit-1.0.tar.xz>
+
 ### hiACEJS
 
 hiACEJS 是 OpenHarmony 中 ACELite 的合璧操作系统派生版本，作为运行在合璧操作系统上的一个轻量级应用框架提供给开发者选择。仅使用 hiACEJS 时，HybridOS 包含 Linux 内核、基础库在内的系统整体尺寸将不大于 64MB，其他存储空间可保留给应用程序使用，故而属于一种轻量级应用开发框架。
