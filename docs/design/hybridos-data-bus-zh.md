@@ -1233,8 +1233,6 @@ int hibus_wait_and_dispatch_packet (hibus_conn* conn, struct timeval *timeout);
 
 ## 附：商标声明
 
-_注意：除本说明之外，原样复制，放到文档最后。_
-
 本文提到的产品、技术或者术语名称，涉及北京飞漫软件技术有限公司在中国或其他地区注册的如下商标：
 
 1) 飛漫

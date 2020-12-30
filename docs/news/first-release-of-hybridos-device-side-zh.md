@@ -50,7 +50,43 @@ HybridOS 图形栈基于成熟的开源基础软件构成，提供了软件或�
 
 ### hiBus
 
+在 HybridOS 中，始终贯彻着一个重要的设计思想：数据驱动。而不论是简单的单一应用场景还是复杂的多应用场景，hiBus 将成为 HybridOS 连接 App 和底层功能模块的纽带；甚至在将来，成为连接局域网内不同设备节点的纽带。
+
+hiBus 的一些设计思想来自于 OpenWRT 的 uBus，比如通过 JSON 格式传递数据。但相比 uBus，hiBus 具有如下重要的改进：
+
+- 提供两种类型的底层连接通道：本地的 Unix Domain Socket（简称 UnixSocket）和 WebSocket，以方便使用不同编程语言开发的模块都可以连接到 hiBus 上。
+- 提供基本的安全机制，以决定某个应用或者某个远程节点能否订阅特定的事件，以及能否调用（call）某个特定的过程。
+- 考虑到在未来，hiBus 可通过 WebSocket 向局域网中的其他 IoT 设备节点提供服务。因此，需要在事件订阅以及调用远程过程时包含主机名称信息。
+- 重新设计的通讯协议，可避免出现同一应用扮演不同角色时出现死锁情形。
+
+hiBus 协议以及服务器、客户端接口的设计文档（中文版），可访问如下链接：
+
+<https://github.com/FMSoftCN/hybridos/blob/master/docs/design/hybridos-data-bus-zh.md>
+
+hiBus 的源代码仓库：
+
+<https://github.com/FMSoftCN/hibus>
+
 ### hiShell
+
+hiShell 是合璧操作系统设备端管理应用生命周期的外壳程序，主要由如下功能模块组成：
+
+1. MiniGUI 的 mginit 服务器进程。该进程扮演窗口管理器运行，使用 C/C++ 开发，包括如下模块：
+   - 定制的合成器（compositor），用于提供主窗口启动、关闭和主窗口展示及前后台切换的特效。
+   - 输入法（未来支持）。
+1. MiniGUI 的动态背景程序。该进程动态展示屏幕背景，可展示一个简单的 HybridOS 动画效果。
+1. 应用代理（app agent）。该程序负责创建应用并管理应用的生命周期，同时创建和管理如下系统主窗口：
+   - 一个用作程序坞（Docker Bar）的主窗口，用于呼出主功能（或启动器）、系统设置等。
+   - 一个用作状态栏（Status Bar）的主窗口，用于展示当前活动主窗口的标题（及图标）、时间以及系统电量等状态。
+   - 其他应用，如锁屏、启动器、通知等。
+
+有关 hiShell 的设计文档（中文版），可访问如下链接：
+
+<https://github.com/FMSoftCN/hybridos/blob/master/docs/design/hybridos-app-shell-zh.md>
+
+hiBus 的源代码仓库：
+
+<https://github.com/FMSoftCN/hibus>
 
 ### hiWebKit
 
@@ -64,7 +100,17 @@ hiWebKit 是知名开源浏览器引擎 WebKit 的合璧操作系统派生版本
 1. 用于直接访问 SQL 数据库的扩展图式（LSQL、RSQL 协议）。开发者可以利用这个特性，直接使用 SQL 语句来访问本地或者远程的 SQL 数据库，而无需开发后台脚本。
 1. 用于执行本地系统命令的扩展图式（LCMD 协议）。开发者可以利用这个特性，直接在浏览器中调用本地命令行程序，并将其输出作为网页的输入就地生成页面内容，而无需后台脚本。
 
+有关详情，可阅读文章[《合璧操作系统关键组件 hiWebKit 已发布》](https://www.fmsoft.cn/blog/hiwebkit)获得详细介绍。
+
 ### hiACEJS
+
+hiACEJS 是 OpenHarmony 中 ACELite 的合璧操作系统派生版本，作为运行在合璧操作系统上的一个轻量级应用框架提供给开发者选择。
+
+使用 hiACEJS 时，HybridOS 包含 Linux 内核、基础库在内的系统整体尺寸将不大于 64MB，其他存储空间可保留给应用程序使用，故而属于一种轻量级应用开发框架。
+
+当然，和 hiWebKit 相比，hiACEJS 的图形渲染能力和界面效果，还有很大的差距，但对成本敏感的物联网设备来讲，也算一种较好的选择。
+
+有关详情，可阅读文章[《合璧操作系统关键组件 hiACEJS 已发布》](https://www.fmsoft.cn/blog/hiacejs)获得详细介绍。
 
 ## 关联阅读
 
@@ -80,6 +126,42 @@ hiWebKit 是知名开源浏览器引擎 WebKit 的合璧操作系统派生版本
 
 <https://github.com/FMSoftCN/hybridos/tree/master/device-side>
 
+## 【附】商标声明
+
+本文提到的产品、技术或者术语名称，涉及北京飞漫软件技术有限公司在中国或其他地区注册的如下商标：
+
+1) 飛漫
+
+![飛漫](https://www.fmsoft.cn/application/files/cache/thumbnails/87f47bb9aeef9d6ecd8e2ffa2f0e2cb6.jpg)
+
+2) FMSoft
+
+![FMSoft](https://www.fmsoft.cn/application/files/cache/thumbnails/44a50f4b2a07e2aef4140a23d33f164e.jpg)
+
+3) 合璧
+
+![合璧](https://www.fmsoft.cn/application/files/cache/thumbnails/9c57dee9df8a6d93de1c6f3abe784229.jpg)
+![合壁](https://www.fmsoft.cn/application/files/cache/thumbnails/f59f58830eccd57e931f3cb61c4330ed.jpg)
+
+4) HybridOS
+
+![HybridOS](https://www.fmsoft.cn/application/files/cache/thumbnails/5a85507f3d48cbfd0fad645b4a6622ad.jpg)
+
+5) HybridRun
+
+![HybridRun](https://www.fmsoft.cn/application/files/cache/thumbnails/84934542340ed662ef99963a14cf31c0.jpg)
+
+6) MiniGUI
+
+![MiniGUI](https://www.fmsoft.cn/application/files/cache/thumbnails/54e87b0c49d659be3380e207922fff63.jpg)
+
+6) xGUI
+
+![xGUI](https://www.fmsoft.cn/application/files/cache/thumbnails/7fbcb150d7d0747e702fd2d63f20017e.jpg)
+
+7) miniStudio
+
+![miniStudio](https://www.fmsoft.cn/application/files/cache/thumbnails/82c3be63f19c587c489deb928111bfe2.jpg)
 
 ---
 
