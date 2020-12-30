@@ -6,7 +6,11 @@
 
 在了解具体的技术细节之前，我们先看下面的实拍视频。
 
-下面的视频给出了 HybridOS 运行在两款支持 Linux 的 SoC 开发板上的效果。这两款开发板，分别由飞漫的两个芯片合作伙伴全志及瑞芯提供：
+下面的视频给出了 HybridOS 运行在两款支持 Linux 的 SoC 开发板上的效果。在这两款开发板上，集成了若干基于 hiWebKit 的应用以及两个基于 hiACEJS 的轻量级 JS 应用（类小程序应用）。
+
+（插入 hybridos-on-boards-r2012.mp4 视频。视频下载地址：<https://hybridos.fmsoft.cn/downloads/hybridos-device-side-r2012.zip>）
+
+这两款开发板，分别由飞漫的两个芯片合作伙伴全志及瑞芯提供：
 
 1. 全志 R818 AXP305 开发板，主要硬件配置：
    - Quad-core ARM Cortex-A53 CPU 1.6GHz，含 GPU。
@@ -18,8 +22,6 @@
    - DDR3 2GB
    - 16GB eMMC
    - 屏幕分辨率：1280x800（竖屏）
-
-（插入 hybridos-on-boards-r2012.mp4 视频。视频下载地址：<https://hybridos.fmsoft.cn/downloads/hybridos-device-side-r2012.zip>）
 
 若要尝试自行编译针对上述开发板的合璧操作系统，读者可阅读[《实拍：合璧操作系统运行在两款国产 SoC 开发板上》](https://www.fmsoft.cn/blog/soc)。注意，请将该文章中所有下载链接中包含的 `r2011` 修改为 `r2012`。
 
