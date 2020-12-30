@@ -685,7 +685,7 @@
   </cmake>
 
   <cmake id="hishell">
-    <branch repo="hybridos" module="hishell" checkoutdir="hishell" branch="dev"  revision="dev"/>
+    <branch repo="hybridos" module="hishell" checkoutdir="hishell" branch="master"  revision="master"/>
     <dependencies>
       <dep package="minigui"/>
       <dep package="cairo"/>
