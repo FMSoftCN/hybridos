@@ -19,9 +19,9 @@
    - 16GB eMMC
    - 屏幕分辨率：1280x800（竖屏）
 
-（插入 hybridos-on-boards-r2012.mp4 视频。视频下载地址：<https://hybridos.fmsoft.cn/downloads/hybridos-on-boards-r2012.zip>）
+（插入 hybridos-on-boards-r2012.mp4 视频。视频下载地址：<https://hybridos.fmsoft.cn/downloads/hybridos-device-side-r2012.zip>）
 
-若要尝试自行编译针对上述开发板的合璧操作系统，读者可阅读[《实拍：合璧操作系统运行在两款国产 SoC 开发板上》](https://www.fmsoft.cn/blog/soc)。
+若要尝试自行编译针对上述开发板的合璧操作系统，读者可阅读[《实拍：合璧操作系统运行在两款国产 SoC 开发板上》](https://www.fmsoft.cn/blog/soc)。注意，请将该文章中所有下载链接中包含的 `r2011` 修改为 `r2012`。
 
 ## 关键组件
 
