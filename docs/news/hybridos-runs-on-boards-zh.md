@@ -126,7 +126,7 @@ root@TinaLinux:/mnt/UDISK/sysroot# . ./run.sh  #  运行
 
 ```shell
 # cd /share
-# tar zxf r818.tar.gz
+# tar zxf px30.tar.gz
 ```
 
 3) 参考瑞芯提供的 SDK 文档 `《PX30 MINI EVB硬件操作指南_20180710.pdf》`，将 PC 机通过串口与开发板连接，然后进入串口控制台，并在 PC 机的串口控制台上编辑 `/etc/wpa_supplicant.conf` 文件：

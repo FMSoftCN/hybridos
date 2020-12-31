@@ -125,7 +125,7 @@ Then install HybridOS in the following steps:
 
 ```shell
 # cd /share
-# tar zxf r818.tar.gz
+# tar zxf px30.tar.gz
 ```
 
 3) Refer to the Rockchip's SDK document, connect PC to the board via UART, open the UART console, and edit the file `/etc/wpa_supplicant.conf` on the board:
