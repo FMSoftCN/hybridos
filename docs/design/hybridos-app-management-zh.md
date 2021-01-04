@@ -23,7 +23,13 @@
 - [基本概念及术语](#基本概念及术语)
 - [应用的安装位置及目录树](#应用的安装位置及目录树)
 - [应用 Manifest 文件](#应用-manifest-文件)
+   + [窗口和活动的区别](#窗口和活动的区别)
 - [系统应用](#系统应用)
+- [启动应用](#启动应用)
+   + [启动指定应用](#启动指定应用)
+   + [应用代理和窗口实例间的请求](#应用代理和窗口实例间的请求)
+   + [终止应用](#终止应用)
+   + [窗口实例的展示](#窗口实例的展示)
 - [应用组验证](#应用组验证)
 - [端点权限管理](#端点权限管理)
 - [附：商标声明](#附商标声明)
@@ -111,7 +117,7 @@ cn.fmsoft.hybridos.hibus/
 {
   "name": "cn.fmsoft.hybridos.settings",
   "group": "cn.fmsoft.hybridos",
-  "type": "system, autostart",
+  "type": "system",
   "versionCode": 1,
   "versionName": "1.0",
   "minPlatformVersion": 1,
@@ -208,6 +214,7 @@ cn.fmsoft.hybridos.hibus/
 
 - `name`：全局唯一的应用名称/标识符（字符串，符合合璧应用名称规范）。
 - `group`：应用所在的应用组（字符串）。
+- `type`：应用类型（字符串），可取 `system`，`normal` 等。设备启动时，系统应用会被自动启动。
 - `versionCode`：应用的版本号（正整数）。
 - `versionName`：应用的版本名（字符串）。
 - `minPlatformVersion`：对合璧平台的最低版本号要求（正整数）。
@@ -222,12 +229,29 @@ cn.fmsoft.hybridos.hibus/
       - `hijs`，表示 hiACEJS 的一个页面入口。
    * `entry`：表示该行者的入口，一般给出相对路径，如 `bin/inetd` 等。
    * `runas`：表示该行者的运行模式，可取如下值之一：
-      - `daemon`：表示该行者以守护精灵的形式运行。通常在启动该应用时要自动启动，在应用生命周期结束时，由 hiShell 杀掉。
-      - `activity`：表示该行者以活动的形式运行。如果附加有 `default` 属性，则该活动为该应用的默认活动。
+      - `daemon`：表示该行者以守护进程的形式运行。通常在启动该应用时要自动启动，在应用生命周期结束时，由 hiShell 杀掉。
+      - `activity`：表示该交互行者以活动的形式运行。如果附加有 `default` 属性，则该活动为该应用的默认活动。
+      - `window`：表示该交互行者以窗口的形式运行。如果附加有 `default` 属性，则该窗口为该应用的默认窗口。
    * `visibleProcedures`：空对象（`null`）、空数组（`[]`）或以对象数组形式定义，声明该行者可以提供给所有应用的公共过程。
    * `visibleEvents`：空对象（`null`）、空数组（`[]`）或以对象数组形式定义，声明该行者可以提供给所有应用订阅的公共事件。
 
 注意，一个应用中不需要连接 hiBus 的程序，无需作为行者列出。
+
+### 窗口和活动的区别
+
+当一个交互行者以活动的形式运行时，该行者所属的应用所有活动将公用一个全屏的窗口实例来渲染所有的活动。当一个交互行者以窗口的形式运行时，每个窗口有一个自己的窗口实例。
+
+当交互行者以窗口形式运行时，可以在 manifest 文件中使用 `windowLayoutStyles` 设置窗口的布局样式。窗口的布局样式是 CSS 3.0 的子集，如：
+
+```json
+{
+    "windowLayoutStyles": "postion: relative; width: 50%; height: 50%;"
+}
+```
+
+hiShell 会根据当前应用的所有窗口的大小和位置计算新窗口的大小和位置，创建对应的窗口。
+
+有关合璧应用窗口布局样式的规范，可参阅[合璧操作系统设备端窗口布局样式规范](hybridos-window-layout-styles-zh.md)。
 
 ## 系统应用
 
@@ -235,13 +259,114 @@ HybridOS 中存在如下系统应用：
 
 - `cn.fmsoft.hybridos.hibus`：数据总线 hiBus 应用；其中包含两个行者：`hibusd`（合璧数据总线服务器）和 `hibus-cl`（合璧数据总线命令行）。
 - `cn.fmsoft.hybridos.settings`：设置应用；其中包含若干个系统设置行者，如 `powerd`（用来监视电源状态的守护进程）、`inetd`（用来管理网络设备的守护进程）、`appmgrd`（用来安装、卸载和管理应用权限的应用）等。
-- `cn.fmsoft.hybridos.daemons`：包括若干系统守护精灵行者，这些行者通常没有对应的可交互活动。如日志(`hilogd`）、安全（`hisecd`）等。
+- `cn.fmsoft.hybridos.daemons`：包括若干系统守护进程，这些行者通常没有对应的可交互活动。如日志(`hilogd`）、安全（`hisecd`）等。
 - `cn.fmsoft.hybridos.hishell`：应用外壳应用；其中包含若干普通程序，如 `mginit`、`wallpaper`，以及一个行者 `appagent`。
-- `cn.fmsoft.hybridos.httpd`：一个 HTTP 服务器，一个支持 HTTP 2.0 协议的服务器，用于向其他设备提供通过 Web 页面访问系统信息或进行设置的服务器。
+- `cn.fmsoft.hybridos.servers`：包含 HTTP 服务器等行者。
 
 （细节待续）
 
-## 启动应用或活动
+## 启动应用
+
+合璧操作系统的内核启动之后，会首先启动 hiShell 应用，hiShell 应用按如下顺序启动其他系统应用：
+
+- `cn.fmsoft.hybridos.hibus`：数据总线。问题：若在网络上提供总线服务，则此时网络尚不可用。
+- `cn.fmsoft.hybridos.daemons` 中的精灵行者。
+- `cn.fmsoft.hybridos.settings` 中的精灵行者。
+- `cn.fmsoft.hybridos.servers` 中的精灵行者。
+
+以上应用启动无误后，启动 hiShell 包含的墙纸进程以及 `appagent` 行者等。
+
+hiShell 的 `appagent` 行者为其他行者提供如下的 hiBus 过程，用来启动一个应用或者一个活动：
+
+### 启动指定应用
+
+任何应用，可向 hiShell 调用如下过程来启动一个应用。
+
+- 过程名称：`@localhost/cn.fmsoft.hybridos.hishell/appagent/launchApp`
+- 参数：
+   + `appName`：字符串，应用名称；
+   + `runnerName`：字符串，交互行者的名称，可选。若未定义，则启动默认活动/窗口，或 manifest 文件中定义的第一个交互行者。
+   + `intent`：字符串，用于意图，可以是转义后的 JSON 表达。
+   + 示例如下：
+```json
+    { 
+        "appName": "cn.fmsoft.hybridos.settings",
+        "runnerName": "wifi",
+        "intent": "...",
+    }
+```
+- 返回值：
+   + `errMsg`：错误信息；
+   + `errCode`：返回错误编码，0 表示执行成功。可能的错误编码有：
+     + `ENOENT`：没有指定的应用或者行者。
+     + `EINVAL`：无效参数，尤指意图。
+     + `ENOMEM`：内存不足。
+```json
+    { 
+        "errCode": 0,
+        "errMsg": "OK"
+    }
+```
+
+hiShell 的 `appagent` 行者在收到上述请求后，若行者对应的一个活动，则：
+
+1. 检查指定应用及活动对应的窗口实例是否已经启动，若启动，则向该窗口所属进程发送请求，同时传递意图参数。活动收到该请求后，切换活动对应的窗口实例到Z序顶部，并根据意图做相应的处理。
+1. 如果应用已启动，但没有创建活动对应的窗口实例，则创建一个全屏窗口，并通过命令行发送意图参数。
+1. 如果应用未启动，则检查应用是否已安装，指定的活动是否存在。
+1. 如果一切就绪，则启动应用的守护行者，然后启动指定的交互行者，通过命令行传递意图参数。
+
+若交互行者对应一个窗口，则：
+
+1. 检查指定应用及行者对应的窗口是否已经启动，若启动，则发送请求，同时传递意图参数。窗口收到该请求后，切换行者对应的窗口实例到Z序顶部，并根据意图做相应的处理。
+1. 如果应用已启动，但没有创建行者对应的窗口实例，则根据窗口布局样式，确定新窗口的大小和位置，创建一个窗口，并通过命令行发送意图参数。
+1. 如果应用未启动，则检查应用是否已安装，指定的行者是否存在。
+1. 如果一切就绪，则启动应用的守护行者，然后启动指定的交互行者，并通过命令行传递意图参数。
+
+
+### 应用代理和窗口实例间的请求
+
+所有应用的窗口实例需要连接到 hiShell `appagent` 创建的 Unix Domain Socket 上，并通过该套接字发送请求或者接受请求。注意，为避免冲突，降低复杂性，我们不使用 hiBus。
+
+当窗口实例重新装载了一个新的行者或者重新装载了当前的行者后，应发送 `runnerReloaded` 请求给 hiSHell 的 `appagent`。传递给 `appagent` 的参数需要包括（以 JSON 描述）：
+
+```json
+{
+    "windowHandle": "<the_unique_handle_of_the_window>",
+    "appName": "<the_current_app_name>",
+    "runnerName": "<the_current_runner_name>",
+}
+```
+
+当 `appagent` 要求一个窗口实例装载一个新的行者或者重新当前行者时，应发送 `reloadRunner` 请求给 hiShell 的 `appagent`。传递给 `appagent` 的参数需要包括（以 JSON 描述）：
+
+```json
+{
+    "fromApp": "<the_app_name_emit_this_request>",
+    "fromRunner": "<the_runner_name_emit_this_request>",
+    "runnerName": "<the_target_runner_name>",
+    "intent": "...",
+}
+```
+
+当用户关闭一个窗口实例时，应发送 `runnerClosed` 请求给 hiShell 的 `appagent`。传递给 `appagent` 的参数需要包括（以 JSON 描述）：
+
+```json
+{
+    "windowHandle": "<the_unique_handle_of_the_window>",
+    "appName": "<the_current_app_name>",
+    "runnerName": "<the_current_runner_name>",
+}
+```
+
+### 终止应用
+
+当一个普通（非系统）应用的所有窗口实例被关闭后，hiShell 的 `appagent` 将杀掉该应用的所有其他进程，包括守护行者，正在运行的其他普通进程等。
+
+### 窗口实例的展示
+
+以活动形式运行的窗口，切换到前台时，不需要做特殊处理，将对应窗口至于顶部即可。
+
+以窗口形式运行的交互行者，当切换到前台时，应做特殊处理，从该应用所有窗口的 Z 序底部开始，依次调用底层窗口系统（MiniGUI）的切换到顶部函数（`SetActiveMainWindow`）函数。
 
 ## 应用组验证
 
