@@ -1,5 +1,7 @@
 # hiShell
 
+Deprecated, moved to <https://github.com/FMSoftCN/hishell>
+
 hiShell is the app running enviornment (the shell) for HybridOS Device Side.
 
 - [Introduction](#introduction)

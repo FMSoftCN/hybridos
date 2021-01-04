@@ -76,11 +76,16 @@ cn.fmsoft.hybridos.hibus/
 ├── bin
 │   ├── hibus-cl
 │   └── hibusd
+├── hijs
+├── hiweb
+├── hvml
 ├── lib
 │   └── libhibus-plugin.so
+├── manifest.json
 ├── private
 │   ├── hmac-cn.fmsoft.hybridos.hibus.key
 │   └── private-cn.fmsoft.hybridos.hibus.pem
+├── tmp
 └── var
 ```
 
@@ -88,10 +93,13 @@ cn.fmsoft.hybridos.hibus/
 
 - `assets/` 中保存有该应用的资源数据，如图标、字体等。
 - `bin/` 中保存有该应用的二进制可执行程序。
-- `lib/` 目录中保存有该应用内部使用的动态库。
+- `hijs/` 目录中保存该应用使用 hiACEJS 应用引擎的各页面入口。
+- `hiweb/` 中保存有该应用使用 hiWebKit 应用引擎的各页面入口。
+- `hvml/` 中保存该应用的 HVML 程序。
+- `lib/` 目录中保存有该应用内部使用的动态库，如引擎、插件等。
 - `private/` 目录中保存有仅该应用可访问的私有数据，如非对称加解密使用的私钥。
+- `tmp/` 目录中保存有该应用的临时文件。
 - `var/` 目录中保存该应用以及该应用所在应用组可访问的数据，如数据库等。
-
 
 通常，一个应用的名称（也是该应用的全局唯一标识符）具有类似主机域名那样的形式，如 `cn.fmsoft.hybridos.hibus`。
 
@@ -103,84 +111,137 @@ cn.fmsoft.hybridos.hibus/
 {
   "name": "cn.fmsoft.hybridos.settings",
   "group": "cn.fmsoft.hybridos",
-  "label": "Settings",
-  "description": "The system settings for HybridOS.",
-  "icons": [
-    {
-      "src": "assets/images/touch/homescreen96.png",
-      "sizes": "96x96",
-      "type": "image/png"
-    },
-    {
-      "src": "assets/images/touch/homescreen144.png",
-      "sizes": "144x144",
-      "type": "image/png"
-    },
-  ],
-
+  "type": "system, autostart",
+  "versionCode": 1,
+  "versionName": "1.0",
+  "minPlatformVersion": 1,
+  "label": {
+      "en": "Settings",
+      "zh_CN": "设置",
+      "zh_TW": "設置"
+  },
+  "description": {
+      "en": "The system settings for HybridOS.",
+      "zh_CN": "合璧系统设置",
+      "zh_TW": "合璧系統設置"
+  },
+  "icons": {
+      "ldpi": {
+          "src": "assets/images/appicon72.png",
+          "size": "72x72",
+      },
+      "mdpi": {
+          "src": "assets/images/appicon96.png",
+          "size": "96x96",
+      },
+      "hdpi": {
+          "src": "assets/images/appicon144.png",
+          "size": "144x144",
+      },
+      "xhdpi":{
+          "src": "assets/images/appicon192.png",
+          "size": "192x192",
+      },
+      "xxhdpi":{
+          "src":  "assets/images/appicon288.png",
+          "size": "288x288",
+      },
+  },
   "runners": [
     {
       "name": "inetd",
       "type": "exectuable",
       "entry": "bin/inetd",
       "runas": "daemon",
-      "procedures": [
+      "visibleProcedures": [
         {
             "methodName": "getNetworkDevices",
             "description": "Get information of all network devices",
-            "host_acl": "localhost, $granted",
-            "app_acl": "cn.fmsoft.hybridos.*, $granted",
-        },
+        }
       ],
-      "events": [
+      "visibleEvents": [
         {
-            "bubbleName": "WIFINEWHOTSPOTS",
-            "description": "There are new hotspots found",
-            "host_acl": "localhost, $granted",
-            "app_acl": "cn.fmsoft.hybridos.*, $granted",
-        },
+            "bubbleName": "INTERNETCHANGED",
+            "description": "The internet connection changed",
+        }
       ],
     },
     {
       "name": "powerd",
       "type": "exectuable",
       "entry": "bin/powerd",
-      "runas": "daemon"
+      "runas": "daemon",
+      "visibleEvents": [
+        {
+            "bubbleName": "LOWPOWER",
+            "description": "Low power",
+        },
+        {
+            "bubbleName": "ABOUTTOSHUTDOWN",
+            "description": "The device is about to shutdown",
+        }
+      ],
     },
     {
       "name": "main",
-      "type": "hiwebkit",
-      "entry": "bin/main/index.html",
-      "runas": "default"
+      "type": "hiweb",
+      "entry": "hiweb/index.html",
+      "runas": "activity, default"
     },
     {
       "name": "wifi",
-      "type": "hiwebkit",
-      "entry": "bin/main/wifi.html",
-      "runas": "component"
+      "type": "hiweb",
+      "entry": "hiweb/wifi/index.html",
+      "runas": "activity"
     },
     {
       "name": "bluetooth",
       "type": "hiwebkit",
-      "entry": "bin/main/bluetooth.html",
-      "runas": "component"
+      "entry": "hiweb/bluetooth/index.html",
+      "runas": "activity"
     },
   ]
 }
 ```
 
-如上所示，在 `manifest` 文件中，我们描述了特定应用中所以可为其他应用提供远程过程调用和事件的信息，这方便 hiBus 管理特定过程和事件的访问权限。
+如上所示，在 `manifest.json` 文件中，我们描述了应用的信息，主要包括：
+
+- `name`：全局唯一的应用名称/标识符（字符串，符合合璧应用名称规范）。
+- `group`：应用所在的应用组（字符串）。
+- `versionCode`：应用的版本号（正整数）。
+- `versionName`：应用的版本名（字符串）。
+- `minPlatformVersion`：对合璧平台的最低版本号要求（正整数）。
+- `label`：应用标签（字符串或对象；使用对象时，给出了特定 locale 下的应用标签）。
+- `description`：应用描述（字符串或对象；使用对象时，给出了特定 locale 下的应用标签）。
+- `icons`：应用图标（对象，给出了不同像素密度，如 `ldpi` 或 `hdpi` 下的图标文件及其大小）。
+- `runners`：应用的行者，使用对象数据描述，其中，
+   * `name`：表示行者名称（字符串，符合合璧应用行者名称规范）。
+   * `type`：表示行者的类型，可取如下三者之一：
+      - `executable` 或 `exec`，表示可执行程序，包括 Python 等脚本。
+      - `hiwebkit` 或 `hiweb`，表示 hiWebKit 的一个页面入口。
+      - `hijs`，表示 hiACEJS 的一个页面入口。
+   * `entry`：表示该行者的入口，一般给出相对路径，如 `bin/inetd` 等。
+   * `runas`：表示该行者的运行模式，可取如下值之一：
+      - `daemon`：表示该行者以守护精灵的形式运行。通常在启动该应用时要自动启动，在应用生命周期结束时，由 hiShell 杀掉。
+      - `activity`：表示该行者以活动的形式运行。如果附加有 `default` 属性，则该活动为该应用的默认活动。
+   * `visibleProcedures`：空对象（`null`）、空数组（`[]`）或以对象数组形式定义，声明该行者可以提供给所有应用的公共过程。
+   * `visibleEvents`：空对象（`null`）、空数组（`[]`）或以对象数组形式定义，声明该行者可以提供给所有应用订阅的公共事件。
+
+注意，一个应用中不需要连接 hiBus 的程序，无需作为行者列出。
 
 ## 系统应用
 
 HybridOS 中存在如下系统应用：
 
 - `cn.fmsoft.hybridos.hibus`：数据总线 hiBus 应用；其中包含两个行者：`hibusd`（合璧数据总线服务器）和 `hibus-cl`（合璧数据总线命令行）。
-- `cn.fmsoft.hybridos.settings`：设置应用；其中包含若干个系统设置行者，如 `powerd`（用来监视电源状态的守护进程）以及 `inetd`（用来管理网络设备的守护进程）。
-- `cn.fmsoft.hybridos.daemons`：系统守护进程。
-- `cn.fmsoft.hybridos.httpd`：HTTP 服务器，一个支持 HTTP 2.0 协议的服务器，用于提供 Web 页面服务。
+- `cn.fmsoft.hybridos.settings`：设置应用；其中包含若干个系统设置行者，如 `powerd`（用来监视电源状态的守护进程）、`inetd`（用来管理网络设备的守护进程）、`appmgrd`（用来安装、卸载和管理应用权限的应用）等。
+- `cn.fmsoft.hybridos.daemons`：包括若干系统守护精灵行者，这些行者通常没有对应的可交互活动。如日志(`hilogd`）、安全（`hisecd`）等。
+- `cn.fmsoft.hybridos.hishell`：应用外壳应用；其中包含若干普通程序，如 `mginit`、`wallpaper`，以及一个行者 `appagent`。
+- `cn.fmsoft.hybridos.httpd`：一个 HTTP 服务器，一个支持 HTTP 2.0 协议的服务器，用于向其他设备提供通过 Web 页面访问系统信息或进行设置的服务器。
 
 （细节待续）
+
+## 启动应用或活动
 
 ## 应用组验证
 
