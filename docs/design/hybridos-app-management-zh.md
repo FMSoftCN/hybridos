@@ -248,7 +248,7 @@ cn.fmsoft.hybridos.hibus/
 
 ```json
 {
-  "windowLayoutStyles": "display: box;"
+  "windowLayoutStyles": "display: block;"
   "runners": [
     {
       "name": "wifi",
