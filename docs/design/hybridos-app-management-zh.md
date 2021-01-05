@@ -153,6 +153,7 @@ cn.fmsoft.hybridos.hibus/
           "size": "288x288",
       },
   },
+  "windowLayoutStyles": "display: box;",
   "runners": [
     {
       "name": "inetd",
@@ -221,6 +222,7 @@ cn.fmsoft.hybridos.hibus/
 - `label`：应用标签（字符串或对象；使用对象时，给出了特定 locale 下的应用标签）。
 - `description`：应用描述（字符串或对象；使用对象时，给出了特定 locale 下的应用标签）。
 - `icons`：应用图标（对象，给出了不同像素密度，如 `ldpi` 或 `hdpi` 下的图标文件及其大小）。
+- `windowLayoutStyles`：若使用窗口运行交互行者，则该字段定义窗口的布局样式。
 - `runners`：应用的行者，使用对象数据描述，其中，
    * `name`：表示行者名称（字符串，符合合璧应用行者名称规范）。
    * `type`：表示行者的类型，可取如下三者之一：
@@ -234,6 +236,7 @@ cn.fmsoft.hybridos.hibus/
       - `window`：表示该交互行者以窗口的形式运行。如果附加有 `default` 属性，则该窗口为该应用的默认窗口。
    * `visibleProcedures`：空对象（`null`）、空数组（`[]`）或以对象数组形式定义，声明该行者可以提供给所有应用的公共过程。
    * `visibleEvents`：空对象（`null`）、空数组（`[]`）或以对象数组形式定义，声明该行者可以提供给所有应用订阅的公共事件。
+   * `windowBoxStyles`：若使用窗口运行交互行者，则该字段定义窗口的盒子样式。
 
 注意，一个应用中不需要连接 hiBus 的程序，无需作为行者列出。
 
@@ -241,11 +244,27 @@ cn.fmsoft.hybridos.hibus/
 
 当一个交互行者以活动的形式运行时，该行者所属的应用所有活动将公用一个全屏的窗口实例来渲染所有的活动。当一个交互行者以窗口的形式运行时，每个窗口有一个自己的窗口实例。
 
-当交互行者以窗口形式运行时，可以在 manifest 文件中使用 `windowLayoutStyles` 设置窗口的布局样式。窗口的布局样式是 CSS 3.0 的子集，如：
+当交互行者以窗口形式运行时，可以在 manifest 文件中使用 `windowLayoutStyles` 和 `windowBoxStyles` 设置窗口的布局和盒子样式。窗口的布局样式和盒子样式是 CSS 的子集，如：
 
 ```json
 {
-    "windowLayoutStyles": "postion: relative; width: 50%; height: 50%;"
+  "windowLayoutStyles": "display: box;"
+  "runners": [
+    {
+      "name": "wifi",
+      "type": "hijs",
+      "entry": "hijs/wifi/index.bc",
+      "runas": "window autostart",
+      "windowBoxStyles": "postion: relative; width: 100%; height: 50%;"
+    },
+    {
+      "name": "bluetooth",
+      "type": "hijs",
+      "entry": "hijs/bluetooth/index.bc",
+      "runas": "window autostart"
+      "windowBoxStyles": "postion: relative; width: 100%; height: 50%;"
+    },
+  ]
 }
 ```
 
