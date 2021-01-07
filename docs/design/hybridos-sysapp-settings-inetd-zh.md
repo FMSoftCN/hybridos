@@ -177,6 +177,10 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
      + `device`：网络设备名；
      + `type`：网络设备类型；
      + `status`：网络设备状态；
+     + `mac`：网络设备MAC地址；
+     + `ip`：网络设备IP地址；
+     + `broadcast`：网络设备广播地址；
+     + `subnetmask`：网络设备子网掩码；
    + `errMsg`：错误信息；
    + `errCode`：此过程只返回0，表示执行成功。
 ```json
@@ -184,8 +188,12 @@ inetd负责管理和操作各个网络设备，所提供的远程过程及可订
         "data":[
                     {
                         "device":"eth0",
-                        "type":"<wifi|ethernet|mobile>",
-                        "status":"<down|up>"
+                        "type":"<wifi|ethernet|mobile|lo>",
+                        "status":"<down|up|link|unlink>",
+                        "mac":"AB:CD:EF:12:34:56",
+                        "ip":"192.168.1.128",
+                        "broadcast":"192.168.1.255",
+                        "subnetmask":"155.255.255.0"
                     },
                     {
                          ......
@@ -341,8 +349,8 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
      + `ssid`：网络名称；
      + `encryptionType`：加密方式；
      + `signalStrength`：信号强度；
-     + `MAC`：MAC地址；
-     + `IP`：IP地址；
+     + `mac`：MAC地址；
+     + `ip`：IP地址；
      + `frenquency`：网络信号频率；
      + `speed`：网络速度；
      + `gateway`：网关。
@@ -356,8 +364,8 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
                     "ssid":"fmsoft-dev",
                     "encryptionType":"WPA2",
                     "signalStrength":65,
-                    "MAC":"AB:CD:EF:12:34:56",
-                    "IP":"192.168.1.128",
+                    "mac":"AB:CD:EF:12:34:56",
+                    "ip":"192.168.1.128",
                     "frenquency":"5 GHz",
                     "speed":"650 Mbps",
                     "gateway":"192.168.1.1"
@@ -381,8 +389,8 @@ inetd行者将停止正在进行的热点扫描操作，并停止发送`WIFINEWH
 ```json
     { 
         "device":"device_name",
-        "type":"<wifi|ethernet|mobile>",
-        "status":"<down|up>"
+        "type":"<wifi|ethernet|mobile|lo>",
+        "status":"<down|up|link|unlink>"
     }
 ```
 - 使用描述：
