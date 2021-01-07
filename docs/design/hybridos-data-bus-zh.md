@@ -692,9 +692,10 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 #### 列出已注册过程
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/listProcedures`
-- 参数：无。
+- 参数：空字符串或端点名称；空字符串表明所有端点。
 - 返回值：成功时返回已注册的，且调用方可调用的过程清单。
-- 常见错误状态码：无
+- 常见错误状态码：
+   + 404（Not Found）。
 
 下面是一个示例结果：
 
@@ -710,8 +711,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "retCode": 200,
     "retMsg": "Ok",
     "retValue": [
-        "localhost/cn.fmsoft.hybridos.inetd/getHotSpots",
-        "localhost/cn.fmsoft.hybridos.inetd/connectToHotSpot",
+        "@localhost/cn.fmsoft.hybridos.inetd/getHotSpots",
+        "@localhost/cn.fmsoft.hybridos.inetd/connectToHotSpot",
     ],
 }
 ```
@@ -721,9 +722,10 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 #### 列出已注册事件
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/listEvents`
-- 参数：无。
+- 参数：空字符串或端点名称；空字符串表明所有端点。
 - 返回值：成功时返回已注册的，且调用方可订阅的事件清单。
-- 常见错误状态码：无
+- 常见错误状态码：
+   + 404（Not Found）。
 
 下面是一个示例结果：
 
@@ -1232,8 +1234,6 @@ int hibus_wait_and_dispatch_packet (hibus_conn* conn, struct timeval *timeout);
 1. 在不同的 hiBus 服务器实例之间建立中继服务，所有针对另一个主机上的请求，由 hiBus 服务器之间通过中继完成，从而实现跨主机的远程过程调用或者事件订阅。此种设计下，身份验证只在 hiBus 服务器之间进行，各主机上的应用身份验证，由本机处理。这样的话，本机 WebSocket 的事件和过程调用端口均只在本地回环地址上提供服务。比如，当过程调用的目标主机非本机时，hiBus 服务器可将该请求转发给目标主机所在的 hiBus 服务器，然后将结果转发给调用者。
 
 ## 附：商标声明
-
-_注意：除本说明之外，原样复制，放到文档最后。_
 
 本文提到的产品、技术或者术语名称，涉及北京飞漫软件技术有限公司在中国或其他地区注册的如下商标：
 
