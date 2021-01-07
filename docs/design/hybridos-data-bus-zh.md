@@ -692,9 +692,10 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 #### 列出已注册过程
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/listProcedures`
-- 参数：无。
+- 参数：空字符串或端点名称；空字符串表明所有端点。
 - 返回值：成功时返回已注册的，且调用方可调用的过程清单。
-- 常见错误状态码：无
+- 常见错误状态码：
+   + 404（Not Found）。
 
 下面是一个示例结果：
 
@@ -710,8 +711,8 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "retCode": 200,
     "retMsg": "Ok",
     "retValue": [
-        "localhost/cn.fmsoft.hybridos.inetd/getHotSpots",
-        "localhost/cn.fmsoft.hybridos.inetd/connectToHotSpot",
+        "@localhost/cn.fmsoft.hybridos.inetd/getHotSpots",
+        "@localhost/cn.fmsoft.hybridos.inetd/connectToHotSpot",
     ],
 }
 ```
@@ -721,9 +722,10 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
 #### 列出已注册事件
 
 - 过程名称：`@localhost/cn.fmsoft.hybridos.hibus/builtin/listEvents`
-- 参数：无。
+- 参数：空字符串或端点名称；空字符串表明所有端点。
 - 返回值：成功时返回已注册的，且调用方可订阅的事件清单。
-- 常见错误状态码：无
+- 常见错误状态码：
+   + 404（Not Found）。
 
 下面是一个示例结果：
 
