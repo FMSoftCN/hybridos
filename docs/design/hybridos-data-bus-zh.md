@@ -2,9 +2,9 @@
 
 【主题】合璧操作系统设备端数据总线概要设计  
 【概要】本文阐述合璧操作系统设备端数据总线（hiBus）设计  
-【版本】1.0  
+【版本】1.1  
 【作者】魏永明  
-【日期】2020 年 11 月  
+【日期】2021 年 01 月  
 【状态】定稿  
 
 **版权声明**
@@ -711,8 +711,14 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "retCode": 200,
     "retMsg": "Ok",
     "retValue": [
-        "@localhost/cn.fmsoft.hybridos.inetd/getHotSpots",
-        "@localhost/cn.fmsoft.hybridos.inetd/connectToHotSpot",
+        {
+            "endpointName": "localhost/cn.fmsoft.hybridos.hibus/builtin",
+            "methods": ["foo", "bar"],
+        },
+        {
+            "endpointName": "localhost/cn.fmsoft.hybridos.daemons/inetd",
+            "methods": ["getHotSpots", "connectToHotSpot"],
+        }
     ],
 }
 ```
@@ -741,8 +747,14 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "retCode": 200,
     "retMsg": "Ok",
     "retValue": [
-        "@localhost/cn.fmsoft.hybridos.inetd/NETWORKCHANGED",
-        "@localhost/cn.fmsoft.hybridos.inetd/SIGNALCHANGED",
+        {
+            "endpointName": "localhost/cn.fmsoft.hybridos.hibus/builtin",
+            "bubbles": ["FOO", "BAR"],
+        },
+        {
+            "endpointName": "localhost/cn.fmsoft.hybridos.daemons/inetd",
+            "bubbles": ["FOO", "BAR"],
+        }
     ],
 }
 ```
