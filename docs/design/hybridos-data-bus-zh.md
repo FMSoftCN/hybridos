@@ -668,7 +668,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "retMsg": "Ok",
     "retValue": [
         {
-            "endpointName": "localhost/cn.fmsoft.hybridos.hibus/builtin",
+            "endpointName": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
             "livingSeconds": 50,
             "methods": ["foo", "bar"],
             "bubbles": ["FOO", "BAR"],
@@ -676,7 +676,7 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
             "peakMemUsed": 4526
         },
         {
-            "endpointName": "localhost/cn.fmsoft.hybridos.hibus/cmdline",
+            "endpointName": "@localhost/cn.fmsoft.hybridos.hibus/cmdline",
             "livingSeconds": 20,
             "methods": ["foo", "bar"],
             "bubbles": ["FOO", "BAR"],
@@ -712,12 +712,12 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "retMsg": "Ok",
     "retValue": [
         {
-            "endpointName": "localhost/cn.fmsoft.hybridos.hibus/builtin",
-            "methods": ["foo", "bar"],
+            "endpointName": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+            "methods": ["foo", "bar"]
         },
         {
-            "endpointName": "localhost/cn.fmsoft.hybridos.daemons/inetd",
-            "methods": ["getHotSpots", "connectToHotSpot"],
+            "endpointName": "@localhost/cn.fmsoft.hybridos.daemons/inetd",
+            "methods": ["getHotSpots", "connectToHotSpot"]
         }
     ],
 }
@@ -748,12 +748,12 @@ hiBus 服务器通过内置过程实现注册过程/事件等功能。
     "retMsg": "Ok",
     "retValue": [
         {
-            "endpointName": "localhost/cn.fmsoft.hybridos.hibus/builtin",
-            "bubbles": ["FOO", "BAR"],
+            "endpointName": "@localhost/cn.fmsoft.hybridos.hibus/builtin",
+            "bubbles": ["FOO", "BAR"]
         },
         {
-            "endpointName": "localhost/cn.fmsoft.hybridos.daemons/inetd",
-            "bubbles": ["FOO", "BAR"],
+            "endpointName": "@localhost/cn.fmsoft.hybridos.daemons/inetd",
+            "bubbles": ["FOO", "BAR"]
         }
     ],
 }
