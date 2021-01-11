@@ -177,7 +177,9 @@ cn.fmsoft.hybridos.hibus/
       "name": "powerd",
       "type": "exectuable",
       "entry": "bin/powerd",
-      "runas": "daemon",
+      "runas": "daemon, auto",
+      "properties": "xxx, yyy, zzz"
+      "dependencies": "",
       "visibleEvents": [
         {
             "bubbleName": "LOWPOWER",
@@ -193,19 +195,25 @@ cn.fmsoft.hybridos.hibus/
       "name": "main",
       "type": "hiweb",
       "entry": "hiweb/index.html",
-      "runas": "activity, default"
+      "runas": "activity, default",
+      "properties": "xxx, yyy, zzz",
+      "dependencies": ""
     },
     {
       "name": "wifi",
       "type": "hiweb",
       "entry": "hiweb/wifi/index.html",
-      "runas": "activity"
+      "runas": "activity",
+      "properties": "xxx, yyy, zzz",
+      "dependencies": ""
     },
     {
       "name": "bluetooth",
       "type": "hiwebkit",
       "entry": "hiweb/bluetooth/index.html",
-      "runas": "activity"
+      "runas": "activity",
+      "properties": "xxx, yyy, zzz",
+      "dependencies": ""
     },
   ]
 }
@@ -233,7 +241,9 @@ cn.fmsoft.hybridos.hibus/
    * `runas`：表示该行者的运行模式，可取如下值之一：
       - `daemon`：表示该行者以守护进程的形式运行。通常在启动该应用时要自动启动，在应用生命周期结束时，由 hiShell 杀掉。
       - `activity`：表示该交互行者以活动的形式运行。如果附加有 `default` 属性，则该活动为该应用的默认活动。
-      - `window`：表示该交互行者以窗口的形式运行。如果附加有 `default` 属性，则该窗口为该应用的默认窗口。
+      - `window`：表示该交互行者以窗口的形式运行。如果附加有 `auto` 属性，则该窗口在启动该应用时自动启动。
+   * `properties`：表示该行者的属性列表，可取多个值，以逗号分割。具体属性待定。
+   * `dependencies`：表示该行者依赖的其他行者。启动该行者时，需同时启动依赖的其他行者。
    * `visibleProcedures`：空对象（`null`）、空数组（`[]`）或以对象数组形式定义，声明该行者可以提供给所有应用的公共过程。
    * `visibleEvents`：空对象（`null`）、空数组（`[]`）或以对象数组形式定义，声明该行者可以提供给所有应用订阅的公共事件。
    * `windowBoxStyles`：若使用窗口运行交互行者，则该字段定义窗口的盒子样式。
