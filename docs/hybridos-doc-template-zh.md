@@ -57,6 +57,7 @@ _注意：除本说明之外，原样复制，放到文档最后。_
 
 3) 合璧
 
+![合璧](https://www.fmsoft.cn/application/files/4716/1180/1904/256132.jpg)
 ![合璧](https://www.fmsoft.cn/application/files/cache/thumbnails/9c57dee9df8a6d93de1c6f3abe784229.jpg)
 ![合壁](https://www.fmsoft.cn/application/files/cache/thumbnails/f59f58830eccd57e931f3cb61c4330ed.jpg)
 
