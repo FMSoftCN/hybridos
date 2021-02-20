@@ -724,8 +724,9 @@
   <cmake id="bounds_checking_function">
       <branch repo="hybridos" module="hiACEJS" checkoutdir="bounds_checking_function" branch="master"  revision="master" subdir="src/third_party/bounds_checking_function/"/>
   </cmake>
-  <cmake id="hiACEJS">
-      <branch repo="hybridos" module="hiACEJS" checkoutdir="hiACEJS" branch="master"  revision="master" />
+  <cmake id="hiACEJS"
+         cmakeargs="-DENABLE_SIMPLE_ADAPTIVE_LAYOUT=ON">
+      <branch repo="hybridos" module="hiACEJS" checkoutdir="hiACEJS" branch="hybridos-dev"  revision="hybridos-dev" />
   </cmake>
 
   <cmake id="hishell">
