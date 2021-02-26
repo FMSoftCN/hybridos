@@ -81,9 +81,7 @@ Node.js安装完成后，启动 DevEco Studio，我们需要为 OpenHarmony 应�
 
 ![DevEco Studio SDK安装](deveco-studio-install-sdk.png)
 
-更多有关工具的下载与安装，可以参考 HarmonyOS
-
-[官方网站](https://developer.harmonyos.com/cn/docs/documentation/doc-guides/installation_process-0000001071425528)。
+更多有关工具的下载与安装，可以参考 HarmonyOS [官方网站](https://developer.harmonyos.com/cn/docs/documentation/doc-guides/installation_process-0000001071425528)。
 
 
 ### 使用 DevEco Studio 创建应用程序
