@@ -157,6 +157,7 @@ static cairo_surface_t *create_cairo_surface (HDC hdc, int width, int height)
 
 typedef int (*draw_func_t)(cairo_t *, int, int);
 
+#ifdef CAIRO_HAS_DRM_SURFACE
 static HDC create_memdc_from_drm_surface(cairo_surface_t* drm_surface,
         cairo_surface_t** image_surface)
 {
@@ -191,6 +192,7 @@ static HDC destroy_memdc_for_drm_surface(HDC hdc,
     DeleteMemDC (hdc);
     cairo_drm_surface_unmap(drm_surface, image_surface);
 }
+#endif
 
 static HDC create_memdc_from_image_surface (cairo_surface_t* image_surface)
 {
@@ -278,6 +280,7 @@ static float paint (HWND hwnd, HDC hdc, draw_func_t draw_func,
             _DBG_PRINTF("hicairo: calling create_memdc_from_image_surface\n");
             csdc = create_memdc_from_image_surface (target_surface);
         }
+#ifdef CAIRO_HAS_DRM_SURFACE
         else if (cst == CAIRO_SURFACE_TYPE_DRM) {
             _DBG_PRINTF("hicairo: calling cairo_drm_surface_get_minigui_dc\n");
             csdc = (HDC)cairo_drm_surface_get_minigui_dc (target_surface);
@@ -286,6 +289,7 @@ static float paint (HWND hwnd, HDC hdc, draw_func_t draw_func,
                 csdc = create_memdc_from_drm_surface (target_surface, &image_surface);
             }
         }
+#endif
 
         if (csdc == HDC_INVALID) {
             _ERR_PRINTF("hicairo: failed to get the DC associated with the target surface\n");
@@ -297,11 +301,14 @@ static float paint (HWND hwnd, HDC hdc, draw_func_t draw_func,
             BitBlt(csdc, 0, 0, width, height, hdc, 0, 0, 0);
         }
 
+#ifdef CAIRO_HAS_DRM_SURFACE
         if (image_surface) {
             _DBG_PRINTF("calling destroy_memdc_for_drm_surface\n");
             destroy_memdc_for_drm_surface (csdc, target_surface, image_surface);
         }
-        else if (cst == CAIRO_SURFACE_TYPE_IMAGE) {
+        else
+#endif
+        if (cst == CAIRO_SURFACE_TYPE_IMAGE) {
             destroy_memdc_for_image_surface (csdc, target_surface);
         }
     }
@@ -479,7 +486,9 @@ int MiniGUIMain(int argc, const char *argv[])
     CreateInfo.dwAddData = (DWORD)cr;
     CreateInfo.hHosting = HWND_DESKTOP;
 
-    hMainWnd = CreateMainWindow(&CreateInfo);
+    hMainWnd = CreateMainWindowEx2 (&CreateInfo, 0L, NULL, NULL,
+            ST_PIXEL_XRGB565, MakeRGBA (0x00, 0x00, 0x00, 0xFF),
+            CT_OPAQUE, 0);
 
     if (hMainWnd == HWND_INVALID) {
         retval = 3;

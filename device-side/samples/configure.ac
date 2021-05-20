@@ -58,7 +58,9 @@ AC_ARG_ENABLE([cairo],
     [cairo_enabled="$enableval"],
     [cairo_enabled=auto])
 if test "x$cairo_enabled" != "xno"; then
-    PKG_CHECK_MODULES([HICAIRO], [cairo-minigui >= 2.17.3],
+    PKG_CHECK_MODULES([HICAIROMG], [hicairo-minigui >= 1.16.0],
+        [cairo_enabled=yes], [cairo_enabled=no])
+    PKG_CHECK_MODULES([HICAIRO], [hicairo >= 1.16.0],
         [cairo_enabled=yes], [cairo_enabled=no])
 fi
 
@@ -176,7 +178,7 @@ AC_MSG_NOTICE([
 # Main building configuration:
 
 ## Features:
-  * Cairo:              ${cairo_enabled}
+  * Cairo:              ${cairo_enabled}: ${HICAIRO_LIBS}
   * OpenGL:             ${gl_enabled}
   * OpenGL ES 1.x:      ${glesv1_enabled}
   * OpenGL ES 2.x:      ${glesv2_enabled}
