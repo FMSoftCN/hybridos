@@ -48,11 +48,11 @@ HybridOS Lite 设备侧运行在哪吒开发板上的实拍操作视频如下：
 
 ### 编译并烧写哪吒开发板
 
-1) 访问：<https://open.allwinnertech.com>，注册用户。这里假设用户注册名为：`your_name`；
+1) 访问：<https://open.allwinnertech.com>，注册用户。这里假设用户注册名为： your_name；
 
-2) 下载`SDK`： 请按照：<https://open.allwinnertech.com/#/sdk/264?menuID=36&projectName=D1_Tina_Open&chipId=246> 中的步骤完成操作；
+2) 下载 SDK： 请按照：<https://open.allwinnertech.com/#/sdk/264?menuID=36&projectName=D1_Tina_Open&chipId=246> 中的步骤完成操作；
 
-3) 安装`repo`：
+3) 安装 repo：
 
 ```bash
     $ git clone ssh://your_name@sdk.allwinnertech.com/git_repo/repo.git
@@ -84,9 +84,9 @@ HybridOS Lite 设备侧运行在哪吒开发板上的实拍操作视频如下：
     $ pack
 ```
 
-6) 如果显示输出为`HDMI`，则需修改内核，并将`FrameBuffer`大小于输出一致：
+6) 如果显示输出为 HDMI，则需修改内核，并将 FrameBuffer 大小调整到与显示输出一致：
 
-修改`device/config/chips/d1/configs/nezha/uboot-board.dts`中代码为以下部分：
+修改 device/config/chips/d1/configs/nezha/uboot-board.dts 中代码为以下部分：
 
 ```bash
         dev0_output_type         = <4>;
@@ -210,10 +210,13 @@ HybridOS Lite 设备侧运行在哪吒开发板上的实拍操作视频如下：
 为使用户能够更快的看到 HybridOS Lite 实际使用效果,特提供了相关的开发板映像文件,以及相关文件系统。
 
 1) 下载映像文件和文件系统，下载地址为：
+
 <https://hybridos.fmsoft.cn/downloads/d1-riscv/tina_d1-nezha_uart0.img>
+
 <https://hybridos.fmsoft.cn/downloads/d1-riscv/root.tar.gz>
 
 2) 使用 tina_d1-nezha_uart0.img 烧写开发板,参考文档:
+
 <https://d1.docs.aw-ol.com/study/study_4compile/>
 
 3) 将 root.tar.gz 传送到开发板的 / 目录下:
@@ -253,7 +256,9 @@ $ ./mginit
 
 ## 后续计划
 
-飞漫的研发团队正在快马加鞭的将合璧操作系统设备侧的完全版本(HybridOS)移植到 D1 开发板上。届时将完成 HybridOS 对 RISC-V 体系架构的完全支持。喜欢我们的朋友不会等待太久。
+飞漫的研发团队正在快马加鞭的将合璧操作系统设备侧的完全版本(HybridOS)移植到 D1 开发板上。届时将完成 HybridOS 对 RISC-V 体系架构的完全支持。
+
+喜欢我们的朋友不会等待太久。
 
 **支持合璧操作系统，请点亮 GitHub 上 HybridOS 项目的星星吧：**
 
