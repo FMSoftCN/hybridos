@@ -17,10 +17,6 @@ RISC-V 是一个基于精简指令集（RISC）的开源指令集架构（ISA）
 
 ![哪吒开发板](hybridos-runs-on-riscv-board.png)  
 
-HybridOS Lite 设备侧运行在哪吒开发板上的实拍操作视频如下：
-
-（插入 hybridos-d1.mp4 视频。视频下载地址：<https://hybridos.fmsoft.cn/downloads/hybridos-on-boards-d1.zip>）
-
 ## HybridOS Lite 主要技术特点
 
 1. 多进程模式,解耦模块：
