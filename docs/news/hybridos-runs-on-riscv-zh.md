@@ -14,8 +14,8 @@ RISC-V 是一个基于精简指令集（RISC）的开源指令集架构（ISA）
    - USB2.0 OTG, USB2.0 Host、SDIO 3.0、10/100/1000M EMAC with RMII and RGMII interfaces
 
 下面就是这款风风火火的小哪吒：
+
 ![哪吒开发板](hybridos-runs-on-riscv-board.png)  
-哪吒开发板
 
 HybridOS Lite 设备侧运行在哪吒开发板上的实拍操作视频如下：
 
