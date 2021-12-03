@@ -33,7 +33,9 @@ HybridOS 设备侧 R2011 版本在开发板上，主要使用的软件组件为�
 
 ## 编译并烧写 ROC-RK3308B-CC-Plus 开发板
 
-本次所使用的开发板是`ROC-RK3308B-CC-Plus`发板，并带`7`寸屏。屏幕分辨率为`1024 x 600`。所使用的配置文件为`roc-rk3308b-cc-plus_rgb-7.0inch_qt_release_BoardConfig.mk`。
+本次所使用的开发板是`ROC-RK3308B-CC-Plus`发板，并带`7`寸屏，屏幕分辨率为`1024 x 600`。
+
+因此所使用的配置文件为`roc-rk3308b-cc-plus_rgb-7.0inch_qt_release_BoardConfig.mk`。
 
 #### 代码的获取
 
@@ -139,7 +141,9 @@ HybridOS 设备侧 R2011 版本在开发板上，主要使用的软件组件为�
     $ cd build-hybridos-rootfs
 ```
 
-在编译的过程中，将会下载大量的代码。由于网络状况的不同，经常会发生下载失败的可能。因此我们将所需下载的软件打包，这样可以免去因网络原因导致的编译失败。下载地址为：
+在编译的过程中，将会下载大量的代码。由于网络原因，经常会发生下载失败的情况。
+
+因此我们将所需下载的软件打包，这样可以免去因网络原因导致的编译失败。下载地址为：
 
 <https://hybridos.fmsoft.cn/downloads/rk3308/buildroot-dl.tar.gz>
 
@@ -164,16 +168,11 @@ HybridOS 设备侧 R2011 版本在开发板上，主要使用的软件组件为�
 
 ## 在开发板上运行 HybridOS
 
-- 将`output/target`目录，传送到开发板的`/userdata`目录下：
+- 将`output/target`目录，传送到开发板的`/userdata`目录下，并登录开发板：
 
 ```bash
     $ cd output
     $ adb push target /userdata
-```
-
-- 使用`adb shell`登录开发板：
-
-```bash
     $ adb shell
 ```
 
@@ -188,6 +187,36 @@ HybridOS 设备侧 R2011 版本在开发板上，主要使用的软件组件为�
     // 修改启动脚本
     # cd /etc/init.d/
     # mv S50launcher ../
+    # vi S50launcher
+        #!/bin/sh
+        #
+        # Start linux launcher...
+        #
+
+        export LC_ALL='zh_CN.utf8'
+        export LC_ADDRESS=zh_CN.UTF-8
+        export LC_IDENTIFICATION=zh_CN.UTF-8
+        export LC_MEASUREMENT=zh_CN.UTF-8
+        export LC_MONETARY=zh_CN.UTF-8
+        export LC_NAME=zh_CN.UTF-8
+        export LC_NUMERIC=zh_CN.UTF-8
+        export LC_PAPER=zh_CN.UTF-8
+        export LC_TELEPHONE=zh_CN.UTF-8
+        export LC_TIME=zh_CN.UTF-8
+
+        export LD_LIBRARY_PATH=/userdata/target/usr/lib:/userdata/target/lib:$LD_LIBRARY_PATH
+        export MG_RUNTIME_TMPDIR=/tmp
+
+        cd /userdata/target/usr/sbin
+        ./hibusd -d
+
+        cd /userdata/target/usr/bin
+        ./hiinetd &
+
+        cd /userdata/target/usr/libexec
+        ./mginit &
+
+        exit 0
 
     // 设置字体
     # cd /usr/share
