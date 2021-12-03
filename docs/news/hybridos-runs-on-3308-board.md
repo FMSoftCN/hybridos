@@ -14,7 +14,7 @@
 
 下面就是这款开发板：
 
-![RK3308开发板](hybridos-runs-on-3308-board.png)◇◇
+![RK3308开发板](hybridos-runs-on-3308-board.png)
 
 ## HybridOS 主要技术特点
 
