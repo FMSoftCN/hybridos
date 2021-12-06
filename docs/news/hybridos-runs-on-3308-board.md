@@ -160,7 +160,7 @@ HybridOS 设备侧 R2011 版本在开发板上，主要使用的软件组件为�
 
 ```bash
     $ source build/envsetup.sh
-    $ lunch             选择: 10. rk3308_hybridos
+    $ lunch             选择: rk3308_hybridos
     $ make -j4
 ```
 
