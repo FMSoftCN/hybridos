@@ -71,7 +71,7 @@ to implement a security policy.
 
 Some ideas from the blockchain technology may change this. The decentralized
 design of the blockchain provides another way to enhance the security of IoT.
-HybridOS will try to utilize the some parts of blockchain technology and
+HybridOS will try to utilize some parts of blockchain technology and
 the mature and successful practice from the industry to improve the security
 of IoT.
 
